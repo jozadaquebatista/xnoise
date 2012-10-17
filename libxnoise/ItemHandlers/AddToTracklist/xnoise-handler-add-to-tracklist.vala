@@ -62,7 +62,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         xn = Main.instance;
         
         add = new Action(); 
-        add.action = on_mediabrowser_activated;
+        add.action = on_add_activated;
         add.info = EMPTYSTRING;
         add.name = this.bname;
         add.context = ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED;
@@ -342,7 +342,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         return false;
     }
     
-    private void on_mediabrowser_activated(Item item, GLib.Value? data) {
+    private void on_add_activated(Item item, GLib.Value? data) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_item_job);
         job.item = item;
         db_worker.push_job(job);
@@ -359,6 +359,9 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
                 append_tracks(ref job.track_dat, true);
                 return false;
             });
+        }
+        else {
+            print("converted item result was null\n");
         }
         return false;
     }

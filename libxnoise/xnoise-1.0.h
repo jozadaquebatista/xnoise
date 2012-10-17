@@ -1168,6 +1168,7 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	GtkToggleButton* album_view_toggle;
 	gboolean quit_if_closed;
 	GtkScrolledWindow* musicBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;

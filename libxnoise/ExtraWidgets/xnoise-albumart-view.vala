@@ -94,6 +94,41 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             }
             if(logo.get_width() != ICONSIZE)
                 logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
+            
+            global.sign_searchtext_changed.connect( (s,t) => {
+                if(main_window.album_view_toggle.get_active()) {
+                    if(search_idlesource != 0)
+                        Source.remove(search_idlesource);
+                    search_idlesource = Timeout.add(180, () => {
+                        this.filter();
+                        search_idlesource = 0;
+                        return false;
+                    });
+                }
+                else {
+                    if(search_idlesource != 0)
+                        Source.remove(search_idlesource);
+                    search_idlesource = Timeout.add_seconds(1, () => {
+                        this.filter();
+                        search_idlesource = 0;
+                        return false;
+                    });
+                }
+            });
+//          TODO
+//            MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
+//            cbr.cb = reset_change_cb;
+//            media_importer.register_reset_callback(cbr);
+            
+        }
+
+        private uint search_idlesource = 0;
+        
+        public void filter() {
+            //print("filter\n");
+            view.set_model(null);
+            this.clear();
+            this.populate_model();
         }
         
         private bool populating_model = false;
@@ -111,7 +146,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         
         private bool populate_job(Worker.Job job) {
             return_if_fail(db_worker.is_same_thread());
-            AlbumData[] ad_list = db_reader.get_all_albums_with_search("");
+            AlbumData[] ad_list = db_reader.get_all_albums_with_search(global.searchtext);
             foreach(AlbumData ad in ad_list) {
                 IconState st = IconState.UNRESOLVED;
                 string albumname = Markup.printf_escaped("<b>%s</b>\n", ad.album) + 
@@ -128,7 +163,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 
                 string ar = ad.artist;
                 string al = ad.album;
-                Item? it = ad.item;
+                Item? it  = ad.item;
                 Idle.add(() => {
                     TreeIter iter;
                     this.append(out iter);
@@ -224,7 +259,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             update_icons_source = 0;
             return false;
         });
-        return base.draw(cr);;
+        return base.draw(cr);
     }
     
     public void update_visible_icons() {

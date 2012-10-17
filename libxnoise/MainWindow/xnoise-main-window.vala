@@ -51,7 +51,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posY;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
-    private ToggleButton tbx;
     private ToolItem eqButtonTI;
     private SerialButton sbuttonTL;
     private SerialButton sbuttonLY;
@@ -81,6 +80,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private AlbumArtView album_cover_view;
     private Gtk.Notebook bottom_notebook;
     private AlbumImage albumimage;
+    private Gtk.Entry album_search_entry;
+    internal ToggleButton album_view_toggle;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
@@ -778,6 +779,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             case Gdk.Key.f: {
                 if((e.state & ModifierType.CONTROL_MASK) == ModifierType.CONTROL_MASK) {
+                    if(album_view_toggle.get_active()) {
+                        album_search_entry.grab_focus();
+                        return true;
+                    }
                     search_entry.grab_focus();
                     return true;
                 }
@@ -1679,24 +1684,13 @@ print("on close 2\n");
             eqButtonTI.set_no_show_all(true);
             eqButtonTI.add(eqButton);
             
-            album_cover_view = new AlbumArtView();
-            var aa_contr_bx = new Box(Orientation.HORIZONTAL, 0);
-            aa_contr_bx.pack_start(new Entry(), false, false, 0);
-            aa_contr_bx.pack_start(new Label(""), true, true, 0);
-            var aabx = new Box(Orientation.VERTICAL, 0);
-            aabx.pack_start(aa_contr_bx, false, false, 2);
-            var aasw = new ScrolledWindow(null, null);
-            aasw.set_shadow_type(ShadowType.IN);
-            aasw.add(album_cover_view);
-            aabx.pack_start(aasw, true, true, 2);
-            bottom_notebook.append_page(aabx);
             var albumart_toggleb = new ToolItem();
             var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
-            tbx = new ToggleButton();
-            tbx.add(aart_im);
-            albumart_toggleb.add(tbx);
-            tbx.notify["active"].connect( () => {
-                if(tbx.active) {
+            album_view_toggle = new ToggleButton();
+            album_view_toggle.add(aart_im);
+            albumart_toggleb.add(album_view_toggle);
+            album_view_toggle.notify["active"].connect( () => {
+                if(album_view_toggle.active) {
                     bottom_notebook.set_current_page(1);
                 }
                 else {
@@ -1750,17 +1744,6 @@ print("on close 2\n");
             this.search_entry = msw.search_entry;
             
             mbbox01.pack_start(msw, true, true, 0);
-            this.search_entry.key_release_event.connect( (s, e) => {
-                var entry = (Entry)s;
-                global.searchtext = entry.text;
-                if(entry.text != EMPTYSTRING) {
-                    colorize_search_background(true);
-                }
-                else {
-                    colorize_search_background(false);
-                }
-                return false;
-            });
             
             this.search_entry.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event
@@ -1771,6 +1754,45 @@ print("on close 2\n");
                 }
             });
             
+            album_cover_view = new AlbumArtView();
+            var aa_contr_bx = new Box(Orientation.HORIZONTAL, 0);
+            
+            //Both searches shall share the same buffer
+            var entry_buffer = msw.search_entry.get_buffer();
+            entry_buffer.notify["text"].connect( () => { 
+                //print("buffer text changed\n");
+                global.searchtext = entry_buffer.text;
+                if(entry_buffer.text != EMPTYSTRING) {
+                    colorize_search_background(true);
+                }
+                else {
+                    colorize_search_background(false);
+                }
+            });
+            album_search_entry = new Entry.with_buffer(entry_buffer);
+            album_search_entry.width_chars = 24;
+            album_search_entry.secondary_icon_stock = Gtk.Stock.CLEAR;
+            album_search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
+            album_search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
+            album_search_entry.set_sensitive(true);
+            album_search_entry.set_placeholder_text (_("Search..."));
+            album_search_entry.icon_press.connect( (s, p0, p1) => { 
+                // s:Entry, p0:Position, p1:Gdk.Event
+                if(p0 == Gtk.EntryIconPosition.SECONDARY) {
+                    ((Entry)s).text = EMPTYSTRING;
+                    global.searchtext = EMPTYSTRING;
+                }
+            });
+            aa_contr_bx.pack_start(album_search_entry, false, false, 0);
+            aa_contr_bx.pack_start(new Label(""), true, true, 0);
+            var aabx = new Box(Orientation.VERTICAL, 0);
+            aabx.pack_start(aa_contr_bx, false, false, 2);
+            var aasw = new ScrolledWindow(null, null);
+            aasw.set_shadow_type(ShadowType.IN);
+            aasw.add(album_cover_view);
+            aabx.pack_start(aasw, true, true, 2);
+            bottom_notebook.append_page(aabx);
+
             //Fullscreen window
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
             this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
@@ -1823,11 +1845,11 @@ print("on close 2\n");
     }
     
     private void toggle_bottom_view() {
-        tbx.set_active(!tbx.get_active());
+        album_view_toggle.set_active(!album_view_toggle.get_active());
     }
     
     internal void set_bottom_view(int tab) {
-        tbx.set_active(tab == 0 ? false : true);
+        album_view_toggle.set_active(tab == 0 ? false : true);
     }
     
     internal void show_status_info(Xnoise.InfoBar bar) {

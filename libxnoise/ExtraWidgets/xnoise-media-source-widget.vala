@@ -406,7 +406,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
     }
 
     private void setup_widgets() {
-        this.search_entry = new Gtk.Entry(); // media_source_widget.search_entry;
+        var buff = new Gtk.EntryBuffer(null);
+        this.search_entry = new Gtk.Entry.with_buffer(buff); // media_source_widget.search_entry;
         this.search_entry.secondary_icon_stock = Gtk.Stock.CLEAR;
         this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
         this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);

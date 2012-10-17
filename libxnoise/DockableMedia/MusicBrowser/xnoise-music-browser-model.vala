@@ -80,7 +80,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         
         global.sign_searchtext_changed.connect( (s,t) => {
             //print("stc this.dock.name():%s global.active_dockable_media_name: %s\n", this.dock.name(), global.active_dockable_media_name);
-            if(this.dock.name() != global.active_dockable_media_name) {
+            if(this.dock.name() != global.active_dockable_media_name ||
+               main_window.album_view_toggle.get_active()) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Timeout.add_seconds(1, () => { //late search, if widget is not visible
