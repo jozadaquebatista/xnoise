@@ -1106,6 +1106,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static string check_album_name (string? artistname, string? albumname);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.AlbumData copy_albumdata (Xnoise.AlbumData? ad);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData? td);

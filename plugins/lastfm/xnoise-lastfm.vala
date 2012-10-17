@@ -219,7 +219,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     private string artist;
     private string album;
     private File f = null;
-    private string image_path;
+//    private string image_path;
     private string[] sizes;
     private File[] image_sources;
     private uint timeout;
@@ -233,10 +233,10 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
         this.album  = _album;
         this.session = session;
         
-        image_path = GLib.Path.build_filename(data_folder(),
-                                              "album_images",
-                                              null
-                                              );
+//        image_path = GLib.Path.build_filename(data_folder(),
+//                                              "album_images",
+//                                              null
+//                                              );
         image_sources = {};
         sizes = {"medium", "extralarge"}; //Two are enough
         timeout = 0;
@@ -249,16 +249,17 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
             string uri_image;
             foreach(string s in sizes) {
                 f = get_albumimage_for_artistalbum(artist, album, s);
-                if(default_size == s) uri_image = f.get_path();
+                if(default_size == s)
+                    uri_image = f.get_path();
                 
-                string pth = EMPTYSTRING;
+//                string pth = EMPTYSTRING;
                 File f_path = f.get_parent();
                 if(!f_path.query_exists(null)) {
                     try {
                         f_path.make_directory_with_parents(null);
                     }
                     catch(GLib.Error e) {
-                        print("Error with create image directory: %s\npath: %s", e.message, pth);
+                        print("Error with create image directory: %s\npath: %s", e.message, f_path.get_path());
                         remove_timeout();
                         this.unref();
                         return;
@@ -323,10 +324,15 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
         int i = 0;
         string reply_artist = _reply_artist;
         string reply_album = _reply_album;
+
+        if((prepare_for_comparison(artist) != prepare_for_comparison(_reply_artist))||
+           (prepare_for_comparison(check_album_name(artist, album))  != 
+                prepare_for_comparison(check_album_name(_reply_artist, _reply_album)))) 
+            return false;
         
         foreach(File f in image_sources) {
             var s = sizes[i];
-            destination = get_albumimage_for_artistalbum(reply_artist, reply_album, s);
+            destination = get_albumimage_for_artistalbum(artist, album, s);
             try {
                 if(f.query_exists(null)) { //remote file exist
                     
@@ -347,7 +353,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
         }
         Idle.add( () => {
             // signal finish with artist, album in order to identify the sent image
-            sign_image_fetched(reply_artist, reply_album, default_path);
+            sign_image_fetched(artist, album, default_path);
             remove_timeout();
             
             if(!this.timeout_done) {

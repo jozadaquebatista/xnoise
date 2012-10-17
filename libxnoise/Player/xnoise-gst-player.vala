@@ -959,6 +959,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                     taglist_buffer.get_string(Gst.TAG_ALBUM, out al);
                     Gdk.Pixbuf pix = extract_embedded_image(taglist_buffer);
                     if(pix != null) {
+                        File? pf2 = null;
                         File? pf = get_albumimage_for_artistalbum(ar, al, "embedded");
                         if(pf == null) {
                             print("could not save embedded image\n");
@@ -971,7 +972,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                                 if(!parentpath.query_exists(null))
                                     parentpath.make_directory_with_parents(null);
                                 pix.save(pf.get_path(), "jpeg");
-                                File pf2 =
+                                pf2 =
                                     File.new_for_path(pf.get_path().replace("_embedded", "_extralarge"));
                                 if(!pf2.query_exists(null)) {
                                     pix.save(pf2.get_path(), "jpeg");
@@ -985,7 +986,8 @@ public class Xnoise.GstPlayer : GLib.Object {
                         }
                         sign_found_embedded_image(this.uri, ar, al);
                         Idle.add( () => {
-                            global.sign_album_image_fetched(ar, al, pf.get_path());
+                            if(pf2 != null) 
+                                global.sign_album_image_fetched(ar, al, pf2.get_path());
                             return false;
                         });
                     }

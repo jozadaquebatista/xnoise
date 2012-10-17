@@ -47,14 +47,16 @@ namespace Xnoise {
             return null;
         if(size == null || size == EMPTYSTRING)
             size = "medium";
-        string escaped_album = escape_album_for_local_folder_search(artist, album);
+        string escaped_artist = (escape_for_local_folder_search(artist.down()));      //.normalize();
+        string escaped_album = (escape_album_for_local_folder_search(artist, album)); //.normalize();
         File f = File.new_for_path(data_folder() + "/album_images/" +
-                                   escape_for_local_folder_search(artist.down()) + "/" +
+                                   escaped_artist + "/" +
                                    escaped_album + "/" +
                                    escaped_album +
                                    "_" +
                                    size
                                    );
+//        print("path: %s\n", f.get_path());
         return f;
     }
     
@@ -71,8 +73,6 @@ namespace Xnoise {
 
     private static string escape_for_local_folder_search(string? _val) {
         // transform the name to match the naming scheme
-
-        // transform the name to match the naming scheme
         string val = _val;
         string tmp = EMPTYSTRING;
         if(val == null)
@@ -80,16 +80,8 @@ namespace Xnoise {
         
         tmp = val.strip().down(); //check_album_name(artist, album_name);
         
-        try {
-            var r = new GLib.Regex("\n");
-            tmp = r.replace(tmp, -1, 0, "_");
-            r = new GLib.Regex(" ");
-            tmp = r.replace(tmp, -1, 0, "_");
-        }
-        catch(RegexError e) {
-            print("%s\n", e.message);
-            return EMPTYSTRING;
-        }
+        replace_accents(ref tmp);
+        
         if(tmp.contains("/")) {
             string[] a = tmp.split("/", 20);
             tmp = EMPTYSTRING;
@@ -110,6 +102,7 @@ namespace Xnoise {
             return (owned)tmp;
         
         tmp = check_album_name(artist, album_name);
+        replace_accents(ref tmp);
         
         try {
             var r = new GLib.Regex("\n");
@@ -130,8 +123,26 @@ namespace Xnoise {
         }
         return (owned)tmp;
     }
+    
+    private static void replace_accents(ref string str) {
+        str = str.replace("\n", "_")
+                 .replace("é", "e")
+                 .replace("í", "i")
+                 .replace("à", "a")
+                 .replace("å", "a")
+                 .replace("ç", "c")
+                 .replace("ñ", "n")
+                 .replace("è", "e")
+                 .replace("ö", "o")
+                 .replace("ü", "u")
+                 .replace("â", "a")
+                 .replace("û", "u")
+                 .replace("ß", "ss")
+                 .replace("ø", "o")
+                 .replace(" ", "_");
+    }
 
-    private static string check_album_name(string? artistname, string? albumname) {
+    public static string check_album_name(string? artistname, string? albumname) {
         if(albumname == null || albumname == EMPTYSTRING)
             return EMPTYSTRING;
         if(artistname == null || artistname == EMPTYSTRING)
