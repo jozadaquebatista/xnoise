@@ -734,6 +734,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {
+            case Gdk.Key.b: {
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                    return false;
+                toggle_bottom_view();
+                return true;
+            }
             case Gdk.Key.c: {
                 if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK)
                     return false;
@@ -1814,6 +1820,10 @@ print("on close 2\n");
         this.delete_event.connect(this.on_close); //only send to tray
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
+    }
+    
+    private void toggle_bottom_view() {
+        tbx.set_active(!tbx.get_active());
     }
     
     internal void set_bottom_view(int tab) {
