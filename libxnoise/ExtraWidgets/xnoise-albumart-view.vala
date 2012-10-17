@@ -46,6 +46,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     
     private static IconCache icon_cache;
     private IconsModel icons_model;
+    private uint col_count_source = 0;
+    private uint update_icons_source = 0;
     
     public int get_model_item_column() {
         return (int)IconsModel.Column.ITEM;
@@ -92,33 +94,13 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             }
             if(logo.get_width() != ICONSIZE)
                 logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
-//            TreeIter iter;
-            Timeout.add_seconds(1, () => {
-                populate_model();
-                return false;
-            });
-            //icon_cache.sign_new_album_art_loaded.connect(on_new_album_art_loaded);
         }
-        
-//        private uint update_delay_source = 0;
-//        private void on_new_album_art_loaded(string name) {
-//            return_if_fail(Main.instance.is_same_thread());
-//            if(populating_model)
-//                return;
-//            if(update_delay_source != 0)
-//                Source.remove(update_delay_source);
-//            update_delay_source = Timeout.add(500, () => {
-//                this.clear();
-//                populate_model();
-//                update_delay_source = 0;
-//                return false;
-//            });
-//        }
         
         private bool populating_model = false;
         internal void populate_model() {
             if(populating_model)
                 return;
+            print("populate model\n");
             populating_model = true;
             //print("populate_model\n");
             var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_job);
@@ -189,7 +171,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_width(icons_model.ICONSIZE + 40);
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
-            this.queue_draw();
+            this.icons_model.populate_model();
         });
         this.item_activated.connect(this.on_row_activated);
     }
@@ -228,104 +210,62 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             });
         }
     }
-//    Timer t2 = new Timer();
+    
     public override bool draw(Cairo.Context cr) {
-        bool retv;
-        double seconds = 0;
-        ulong microseconds = 0;
-//        t2.start();
-        Idle.add(set_column_count_idle);
-        Idle.add( () => {
+        
+        if(col_count_source != 0)
+            Source.remove(col_count_source);
+        col_count_source = Timeout.add(100, set_column_count_idle);
+        
+        if(update_icons_source != 0)
+            Source.remove(update_icons_source);
+        update_icons_source = Timeout.add(100, () => {
             update_visible_icons();
+            update_icons_source = 0;
             return false;
         });
-        retv = base.draw(cr);
-//        print("draw..\n");
-//        t2.stop();
-//        seconds = t2.elapsed(out microseconds);
-//        print("draw %lf  :: %lu\n", seconds, microseconds);
-//        t2.reset();
-        return retv;
+        return base.draw(cr);;
     }
     
     public void update_visible_icons() {
-//        Timer t1 = new Timer();
-//        double seconds = 0;
-//        ulong microseconds = 0;
         TreePath? start_path = null, end_path = null;
         TreeIter iter;
         Xnoise.AlbumArtView.IconState state;
         string artist, album, pth;
         if(this.get_visible_range(out start_path, out end_path)) {
-//            bool new_icons = false;
             do {
                 this.icons_model.get_iter(out iter, start_path);
                 start_path.next();
                 
-//                t1.start();
                 this.icons_model.get(iter,
                                      IconsModel.Column.STATE, out state,
                                      IconsModel.Column.ARTIST, out artist,
                                      IconsModel.Column.ALBUM, out album,
                                      IconsModel.Column.IMAGE_PATH, out pth
                 );
-//                t1.stop();
-//                seconds = t1.elapsed(out microseconds);
-//                print("##1 %lf  :: %lu\n", seconds, microseconds);
-//                t1.reset();
-                
                 if(state == IconState.RESOLVED)
                     continue;
                 
-//                t1.start();
                 Gdk.Pixbuf? art = null;
                 File? f = null;
                 if(pth != null && pth != "")
                     f = File.new_for_path(pth);
-//                else
-//                    f = get_albumimage_for_artistalbum(artist, album, "extralarge");
-//                t1.stop();
                 
-//                seconds = t1.elapsed(out microseconds);
-//                string s1 = (f != null ? f.get_path() : "--");
-//                print("##2 %lf  :: %lu  %s\n", seconds, microseconds, s1);
-//                t1.reset();
                 if(f == null) {
-                    print("\n");
                     continue;
                 }
-
-//                t1.start();
+                
                 art = icon_cache.get_image(f.get_path());
-//                t1.stop();
-//                seconds = t1.elapsed(out microseconds);
-//                print("##3 %lf  :: %lu\n", seconds, microseconds);
-//                t1.reset();
                 if(art == null) {
-                    print("\n");
                     continue;
                 }
                 else {
-//                    print("pix in buffer\n");
-//                    if(art.get_width() != icons_model.ICONSIZE)
-//                        art = art.scale_simple(icons_model.ICONSIZE,
-//                                               icons_model.ICONSIZE,
-//                                               Gdk.InterpType.BILINEAR);
-//                    t1.start();
                     this.icons_model.set(iter, 
                                          IconsModel.Column.ICON, art,
                                          IconsModel.Column.STATE, IconState.RESOLVED
                     );
-//                    new_icons = true;
-//                    t1.stop();
-//                    seconds = t1.elapsed(out microseconds);
-//                    print("##4 %lf  :: %lu\n", seconds, microseconds);
-//                    t1.reset();
                 }
             } while(start_path != null && start_path.get_indices()[0] <= end_path.get_indices()[0]);
-            print("\n");
-//            if(new_icons)
-//                queue_draw();
         }
     }
     
@@ -333,8 +273,10 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     private int w_last = 0;
     private bool set_column_count_idle() {
         w = this.get_allocated_width();
-        if(w == w_last)
+        if(w == w_last) {
+            col_count_source = 0;
             return false;
+        }
             
         //TODO Improve size calculation
 //        print("item width: %d   margin: %d   padding: %d    spaceing: %d\n", this.get_item_width(),
@@ -367,6 +309,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         //print("w: %d   xw: %d\n", w, xw);
         this.set_columns(c);
         w_last = w;
+        col_count_source = 0;
         return false;
     }
 }
@@ -409,17 +352,11 @@ private class Xnoise.IconCache : GLib.Object {
            (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
                 prepare_for_comparison(check_album_name(_artist, _album)))) 
             return;
-//        print("  ..  comply\n");
         File f = File.new_for_path(image_path);
         if(!f.query_exists(null)) 
             return;
         string p1 = f.get_path();
-        if(p1.has_suffix("_medium")) {
-            p1 = p1.replace("_medium", "_extralarge");
-        }
-//        if(p1.has_suffix("_embedded")) {
-//            p1 = p1.replace("_embedded", "_extralarge");
-//        }
+        p1 = p1.replace("_medium", "_extralarge"); // medium images are reported, extralarge not
         Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
         fjob.set_arg("file", p1);
         fjob.cancellable = this.cancellable;
@@ -429,7 +366,6 @@ private class Xnoise.IconCache : GLib.Object {
     private void on_loading_finished() {
         return_if_fail(Main.instance.is_same_thread());
         loading_done();
-//        print("inital_import_done\n");
     }
     
     private bool populate_cache(Worker.Job job) {
@@ -466,9 +402,10 @@ private class Xnoise.IconCache : GLib.Object {
                     read_recoursive(file, job);
                 }
                 else {
-                    Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+                    var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
                     fjob.set_arg("file", file.get_path());
                     fjob.cancellable = this.cancellable;
+                    import_job_count++;
                     io_worker.push_job(fjob);
                 }
             }
@@ -478,42 +415,57 @@ private class Xnoise.IconCache : GLib.Object {
         }
         job.big_counter[0]--;
         if(job.big_counter[0] == 0) {
-            Idle.add(() => {
-//                inital_import_done = true;
-                print("inital_import_done\n");
+            all_jobs_in_queue = true;
+        }
+    }
+    
+    private int import_job_count;
+    private bool all_jobs_in_queue;
+
+    private void import_job_count_dec_and_test() {
+        assert(io_worker.is_same_thread());
+        import_job_count--;
+        if(all_jobs_in_queue && import_job_count <=0) {
+            Timeout.add(100, () => {
+                print("Icon Cache: inital import done.\n");
                 on_loading_finished();
                 return false;
             });
         }
     }
-
+    
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(io_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-        if(!file.get_path().has_suffix("_extralarge") && !file.get_path().has_suffix("_embedded"))
+        if(!file.get_path().has_suffix("_extralarge") && !file.get_path().has_suffix("_embedded")) {
+            import_job_count_dec_and_test();
             return false;
-        if(!file.query_exists(null))
+        }
+        if(!file.query_exists(null)) {
+            import_job_count_dec_and_test();
             return false;
+        }
         Gdk.Pixbuf? px = null;
         try {
             px = new Gdk.Pixbuf.from_file(file.get_path());
         }
         catch(Error e) {
             print("%s\n", e.message);
+            import_job_count_dec_and_test();
             return false;
         }
         if(px == null) {
+            import_job_count_dec_and_test();
             return false;
         }
         else {
-//            px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.BILINEAR);
+            //px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.BILINEAR);
             px = add_shadow(px, icon_size);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
+        import_job_count_dec_and_test();
         return false;
     }
-    
-//    private bool inital_import_done = false;
     
     public Gdk.Pixbuf? get_image(string path) {
         Gdk.Pixbuf? p = null;
@@ -535,18 +487,13 @@ private class Xnoise.IconCache : GLib.Object {
         lock(cache) {
             cache.insert(name, pix);
         }
-//        if(!inital_import_done)
-//            return;
-//        Idle.add(() => {
-//            sign_new_album_art_loaded(name);
-//            return false;
-//        });
     }
 
     private Gdk.Pixbuf? shadow = null;
     
-    public Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size) {
-        assert(size > 1);
+    private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size) {
+        if(size <= 34)
+            return pixbuf;
         int shadow_size = 16;
         Gdk.Pixbuf? pix = pixbuf;
         var surface = new ImageSurface(Format.ARGB32, size, size);
@@ -575,6 +522,6 @@ private class Xnoise.IconCache : GLib.Object {
         cr.paint();
         
         pix = Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size);
-        return pix;
+        return (owned)pix;
     }
 }
