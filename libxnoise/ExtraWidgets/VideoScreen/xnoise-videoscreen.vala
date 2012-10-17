@@ -317,7 +317,13 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
                 cr.fill();
                 if(logo_pixb == null)
-                    logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
+                    try {
+                        logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                        return true;
+                    }
                 logo = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.8), (int)(logo_pixb.get_height() * 0.8), Gdk.InterpType.HYPER);
                 y_offset = (int)((h * 0.5) - (logo.get_height() * 0.4));
                 x_offset = (int)((w  * 0.5) - (logo.get_width()  * 0.4));

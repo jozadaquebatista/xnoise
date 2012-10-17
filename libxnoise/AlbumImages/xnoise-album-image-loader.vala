@@ -37,22 +37,23 @@ using Xnoise.PluginModule;
 
 namespace Xnoise {
     public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {
-        if(artist == null || artist == UNKNOWN_ARTIST)
+        if(album == null)
             return null;
-        if(album == null  || album == UNKNOWN_ALBUM)
+        if(artist == null)
             return null;
-        if(size == null   || size == EMPTYSTRING)
+        if(artist == UNKNOWN_ARTIST)
+            return null;
+        if(album == UNKNOWN_ALBUM)
+            return null;
+        if(size == null || size == EMPTYSTRING)
             size = "medium";
-        File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(data_folder(),
-                                                                                     "album_images",
-                                                                                     null
-                                                                                     ),
-                                   escape_for_local_folder_search(artist.down()),
-                                   escape_album_for_local_folder_search(artist, album),
-                                   escape_album_for_local_folder_search(artist, album) +
+        string escaped_album = escape_album_for_local_folder_search(artist, album);
+        File f = File.new_for_path(data_folder() + "/album_images/" +
+                                   escape_for_local_folder_search(artist.down()) + "/" +
+                                   escaped_album + "/" +
+                                   escaped_album +
                                    "_" +
-                                   size,
-                                   null)
+                                   size
                                    );
         return f;
     }

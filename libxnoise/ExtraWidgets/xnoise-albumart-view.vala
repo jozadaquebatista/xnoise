@@ -63,7 +63,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             STATE,
             ARTIST,
             ALBUM,
-            ITEM
+            ITEM,
+            IMAGE_PATH
         }
 
         private GLib.Type[] col_types = new GLib.Type[] {
@@ -72,7 +73,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             typeof(Xnoise.AlbumArtView.IconState),// STATE
             typeof(string),      // ARTIST
             typeof(string),      // ALBUM
-            typeof(Xnoise.Item?) // ITEM
+            typeof(Xnoise.Item?),// ITEM
+            typeof(string)       //IMAGE_PATH
         };
 
         private Gdk.Pixbuf? logo = null;
@@ -92,27 +94,26 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
 //            TreeIter iter;
             Timeout.add_seconds(1, () => {
-                this.clear();
                 populate_model();
                 return false;
             });
-            icon_cache.sign_new_album_art_loaded.connect(on_new_album_art_loaded);
+            //icon_cache.sign_new_album_art_loaded.connect(on_new_album_art_loaded);
         }
         
-        private uint update_delay_source = 0;
-        private void on_new_album_art_loaded(string name) {
-            return_if_fail(Main.instance.is_same_thread());
-            if(populating_model)
-                return;
-            if(update_delay_source != 0)
-                Source.remove(update_delay_source);
-            update_delay_source = Timeout.add(500, () => {
-                this.clear();
-                populate_model();
-                update_delay_source = 0;
-                return false;
-            });
-        }
+//        private uint update_delay_source = 0;
+//        private void on_new_album_art_loaded(string name) {
+//            return_if_fail(Main.instance.is_same_thread());
+//            if(populating_model)
+//                return;
+//            if(update_delay_source != 0)
+//                Source.remove(update_delay_source);
+//            update_delay_source = Timeout.add(500, () => {
+//                this.clear();
+//                populate_model();
+//                update_delay_source = 0;
+//                return false;
+//            });
+//        }
         
         private bool populating_model = false;
         internal void populate_model() {
@@ -155,7 +156,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                              Column.STATE, st,
                              Column.ARTIST, ar,
                              Column.ALBUM,  al,
-                             Column.ITEM,  it
+                             Column.ITEM,  it,
+                             Column.IMAGE_PATH, (f != null ? f.get_path() : null)
                     );
                     return false;
                 });
@@ -191,7 +193,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         });
         this.item_activated.connect(this.on_row_activated);
     }
-    
+
     private void on_row_activated(Gtk.IconView sender, TreePath path) {
         Item? item = Item(ItemType.UNKNOWN);
         TreeIter iter;
@@ -226,56 +228,104 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             });
         }
     }
-    
+//    Timer t2 = new Timer();
     public override bool draw(Cairo.Context cr) {
+        bool retv;
+        double seconds = 0;
+        ulong microseconds = 0;
+//        t2.start();
         Idle.add(set_column_count_idle);
-        Idle.add(() => {
+        Idle.add( () => {
             update_visible_icons();
             return false;
         });
-        return base.draw(cr);
+        retv = base.draw(cr);
+//        print("draw..\n");
+//        t2.stop();
+//        seconds = t2.elapsed(out microseconds);
+//        print("draw %lf  :: %lu\n", seconds, microseconds);
+//        t2.reset();
+        return retv;
     }
     
     public void update_visible_icons() {
+//        Timer t1 = new Timer();
+//        double seconds = 0;
+//        ulong microseconds = 0;
         TreePath? start_path = null, end_path = null;
         TreeIter iter;
         Xnoise.AlbumArtView.IconState state;
-        string artist, album;
+        string artist, album, pth;
         if(this.get_visible_range(out start_path, out end_path)) {
+//            bool new_icons = false;
             do {
                 this.icons_model.get_iter(out iter, start_path);
                 start_path.next();
                 
+//                t1.start();
                 this.icons_model.get(iter,
                                      IconsModel.Column.STATE, out state,
                                      IconsModel.Column.ARTIST, out artist,
-                                     IconsModel.Column.ALBUM, out album
+                                     IconsModel.Column.ALBUM, out album,
+                                     IconsModel.Column.IMAGE_PATH, out pth
                 );
+//                t1.stop();
+//                seconds = t1.elapsed(out microseconds);
+//                print("##1 %lf  :: %lu\n", seconds, microseconds);
+//                t1.reset();
                 
                 if(state == IconState.RESOLVED)
                     continue;
                 
+//                t1.start();
                 Gdk.Pixbuf? art = null;
-                File f = get_albumimage_for_artistalbum(artist, album, "extralarge");
-                if(f == null)
+                File? f = null;
+                if(pth != null && pth != "")
+                    f = File.new_for_path(pth);
+//                else
+//                    f = get_albumimage_for_artistalbum(artist, album, "extralarge");
+//                t1.stop();
+                
+//                seconds = t1.elapsed(out microseconds);
+//                string s1 = (f != null ? f.get_path() : "--");
+//                print("##2 %lf  :: %lu  %s\n", seconds, microseconds, s1);
+//                t1.reset();
+                if(f == null) {
+                    print("\n");
                     continue;
+                }
+
+//                t1.start();
                 art = icon_cache.get_image(f.get_path());
+//                t1.stop();
+//                seconds = t1.elapsed(out microseconds);
+//                print("##3 %lf  :: %lu\n", seconds, microseconds);
+//                t1.reset();
                 if(art == null) {
-//                    print("pix not in buffer\n");
+                    print("\n");
                     continue;
                 }
                 else {
 //                    print("pix in buffer\n");
-                    if(art.get_width() != icons_model.ICONSIZE)
-                        art = art.scale_simple(icons_model.ICONSIZE,
-                                               icons_model.ICONSIZE,
-                                               Gdk.InterpType.BILINEAR);
+//                    if(art.get_width() != icons_model.ICONSIZE)
+//                        art = art.scale_simple(icons_model.ICONSIZE,
+//                                               icons_model.ICONSIZE,
+//                                               Gdk.InterpType.BILINEAR);
+//                    t1.start();
                     this.icons_model.set(iter, 
                                          IconsModel.Column.ICON, art,
                                          IconsModel.Column.STATE, IconState.RESOLVED
                     );
+//                    new_icons = true;
+//                    t1.stop();
+//                    seconds = t1.elapsed(out microseconds);
+//                    print("##4 %lf  :: %lu\n", seconds, microseconds);
+//                    t1.reset();
                 }
             } while(start_path != null && start_path.get_indices()[0] <= end_path.get_indices()[0]);
+            print("\n");
+//            if(new_icons)
+//                queue_draw();
         }
     }
     
@@ -430,6 +480,7 @@ private class Xnoise.IconCache : GLib.Object {
         if(job.big_counter[0] == 0) {
             Idle.add(() => {
 //                inital_import_done = true;
+                print("inital_import_done\n");
                 on_loading_finished();
                 return false;
             });
@@ -456,7 +507,7 @@ private class Xnoise.IconCache : GLib.Object {
         }
         else {
 //            px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.BILINEAR);
-            px = add_shadow(px, icon_size);//px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
+            px = add_shadow(px, icon_size);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         return false;
@@ -523,40 +574,7 @@ private class Xnoise.IconCache : GLib.Object {
         Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size, shadow_size);
         cr.paint();
         
-        var rendering_surface = new ImageSurface(Format.ARGB32, size, size);
-        var ct = new Cairo.Context(rendering_surface);
-        
-        ct.set_operator(Operator.SOURCE);
-        ct.set_source_surface(surface, 0, 0);
-        ct.paint();
-        pix = new Gdk.Pixbuf(Gdk.Colorspace.RGB, true, 8, size, size);
-        pix.fill(0);
-        
-        uint8 *surface_data   = rendering_surface.get_data();
-        uint8 *pixel = pix.get_pixels();
-        int length = size * size;
-        
-        if(rendering_surface.get_format() == Format.ARGB32) {
-            for(int i = 0; i < length; i++) {
-                if(surface_data[3] > 0) {
-                    pixel[0] =(uint8)(surface_data[2] * 255 / surface_data[3]);
-                    pixel[1] =(uint8)(surface_data[1] * 255 / surface_data[3]);
-                    pixel[2] =(uint8)(surface_data[0] * 255 / surface_data[3]);
-                    pixel[3] = surface_data[3];
-                }
-                pixel += 4;
-                surface_data += 4;
-            }
-        } else if(rendering_surface.get_format() == Format.RGB24) {
-            for(int i = 0; i < length; i++) {
-                pixel[0] = surface_data[2];
-                pixel[1] = surface_data[1];
-                pixel[2] = surface_data[0];
-                pixel[3] = surface_data[3];
-                pixel += 4;
-                surface_data += 4;
-            }
-        }
+        pix = Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size);
         return pix;
     }
 }
