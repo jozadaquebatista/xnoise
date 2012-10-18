@@ -196,6 +196,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
         this.set_column_spacing(60);
+        this.set_margin(20);
         this.set_row_spacing(40);
         if(icon_cache == null) {
             File album_image_dir =
@@ -245,7 +246,12 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             });
         }
     }
-    
+
+    public override void get_preferred_width(out int minimum_width,
+                                             out int natural_width) {
+        natural_width = minimum_width = 600;
+    }
+
     public override bool draw(Cairo.Context cr) {
         
         if(col_count_source != 0)
@@ -307,22 +313,28 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     private int w = 0;
     private int w_last = 0;
     private bool set_column_count_idle() {
-        w = this.get_allocated_width();
+        w = this.get_allocated_width(); // Maybe use owner here
         if(w == w_last) {
             col_count_source = 0;
             return false;
         }
-            
+        double marg = (double)this.get_margin();
+        double iwidth = (double)this.get_item_width() + (double)this.get_item_padding() * 2.0;
+        double spac = (double)this.get_column_spacing();
+        int c = (int)( ((double)w - (2.0 * marg) / (iwidth + spac)) + (1.0/ ((iwidth/spac) + 1.0)) );
+//        w - (2 * this.margin)
+//        natural = item_nat * colcount + spacing * (colcount - 1) + 2* margin
+//        item_nat * colcount + spacing * (colcount - 1) = natural - 2 * margin
         //TODO Improve size calculation
 //        print("item width: %d   margin: %d   padding: %d    spaceing: %d\n", this.get_item_width(),
 //                                                                             this.get_margin(),
 //                                                                             this.get_item_padding(),
 //                                                                             this.get_column_spacing());
-        int c = (int)((w + (this.get_column_spacing() + this.get_item_padding()) )/ 
-                                (this.get_item_width() + 
-                                ( 2 * this.get_margin()) +
-                                (2 * this.get_item_padding()) +
-                                (this.get_column_spacing())));
+//        int c = (int)((w + (this.get_column_spacing() + this.get_item_padding()) )/ 
+//                                (this.get_item_width() + 
+//                                ( 2 * this.get_margin()) +
+//                                (2 * this.get_item_padding()) +
+//                                (this.get_column_spacing())));
 //        int c = (int)((w) ) / ( this.get_item_width() + 
 //                                (2 * this.get_margin()) +
 //                                (2 * this.get_item_padding()) );
@@ -337,12 +349,12 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
 //                 ((c - 1) * this.get_column_spacing());
 //        if(w2 > w)
 //            c = c - 1;
-        if(c < 1)
-            c = 1;
+//        if(c < 1)
+//            c = 1;
 //        print("w: %d  w2: %d   c: %d\n", w, w2, c);
         //int xw = c * this.get_item_width() + c * 2 * this.get_margin() + int.max(0, (c - 1) * this.get_column_spacing());
         //print("w: %d   xw: %d\n", w, xw);
-        this.set_columns(c);
+        this.set_columns(-1);
         w_last = w;
         col_count_source = 0;
         return false;
