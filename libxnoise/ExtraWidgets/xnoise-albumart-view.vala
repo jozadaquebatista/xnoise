@@ -394,6 +394,7 @@ private class Xnoise.IconCache : GLib.Object {
         p1 = p1.replace("_medium", "_extralarge"); // medium images are reported, extralarge not
         Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
         fjob.set_arg("file", p1);
+        fjob.set_arg("initial_import", false);
         fjob.cancellable = this.cancellable;
         io_worker.push_job(fjob);
     }
@@ -439,6 +440,7 @@ private class Xnoise.IconCache : GLib.Object {
                 else {
                     var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
                     fjob.set_arg("file", file.get_path());
+                    fjob.set_arg("initial_import", true);
                     fjob.cancellable = this.cancellable;
                     import_job_count++;
                     io_worker.push_job(fjob);
@@ -457,7 +459,9 @@ private class Xnoise.IconCache : GLib.Object {
     private int import_job_count;
     private bool all_jobs_in_queue;
 
-    private void import_job_count_dec_and_test() {
+    private void import_job_count_dec_and_test(Worker.Job job) {
+        if(!((bool)job.get_arg("initial_import")))
+            return;
         assert(io_worker.is_same_thread());
         import_job_count--;
         if(all_jobs_in_queue && import_job_count <=0) {
@@ -473,11 +477,11 @@ private class Xnoise.IconCache : GLib.Object {
         return_val_if_fail(io_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
         if(!file.get_path().has_suffix("_extralarge") && !file.get_path().has_suffix("_embedded")) {
-            import_job_count_dec_and_test();
+            import_job_count_dec_and_test(job);
             return false;
         }
         if(!file.query_exists(null)) {
-            import_job_count_dec_and_test();
+            import_job_count_dec_and_test(job);
             return false;
         }
         Gdk.Pixbuf? px = null;
@@ -486,11 +490,11 @@ private class Xnoise.IconCache : GLib.Object {
         }
         catch(Error e) {
             print("%s\n", e.message);
-            import_job_count_dec_and_test();
+            import_job_count_dec_and_test(job);
             return false;
         }
         if(px == null) {
-            import_job_count_dec_and_test();
+            import_job_count_dec_and_test(job);
             return false;
         }
         else {
@@ -498,7 +502,7 @@ private class Xnoise.IconCache : GLib.Object {
             px = add_shadow(px, icon_size);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
-        import_job_count_dec_and_test();
+        import_job_count_dec_and_test(job);
         return false;
     }
     
