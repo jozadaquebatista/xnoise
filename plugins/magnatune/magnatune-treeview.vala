@@ -245,7 +245,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 sku = this.mag_model.dbreader.get_sku_for_album(job.item.db_id);
                 TrackData[]? tda = null;
-                tda = this.mag_model.dbreader.get_trackdata_by_albumid(EMPTYSTRING, job.item.db_id);
+                tda = this.mag_model.dbreader.get_trackdata_by_albumid(EMPTYSTRING, job.item.db_id, job.item.stamp);
                 if(tda != null && tda.length > 0) {
                     artist = tda[0].artist;
                     album  = tda[0].album;
@@ -254,7 +254,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             case ItemType.STREAM:
                 sku = this.mag_model.dbreader.get_sku_for_title(job.item.db_id);
                 TrackData? td = null;
-                td = this.mag_model.dbreader.get_trackdata_by_titleid(EMPTYSTRING, job.item.db_id);
+                td = this.mag_model.dbreader.get_trackdata_by_titleid(EMPTYSTRING, job.item.db_id, job.item.stamp);
                 artist = td.artist;
                 album  = td.album;
                 break;

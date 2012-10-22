@@ -36,14 +36,12 @@ namespace Xnoise {
             this.db_id = _db_id;
             this.uri   = _uri;
         }
-        public ItemType  type;
-        
-        public uint32     stamp;      // db import state
-        
+        public ItemType type;
+        public uint32    stamp;      // db import state
         public int32     db_id;      // the id in the database or -1
         public string?   uri;        // uri of item
         public string?   text;       // some text for any purpose
-        public int source_id;        // data source id refering to Xnoise.DataSource
+        public int       source_id;  // data source id refering to Xnoise.DataSource
     }
 
     public enum ItemType {

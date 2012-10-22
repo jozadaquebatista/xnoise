@@ -129,7 +129,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private bool add_imported_artist_job(Worker.Job job) {
-        job.item = db_reader.get_artistitem_by_artistid(global.searchtext, job.item.db_id); // necessary because of search
+        job.item = db_reader.get_artistitem_by_artistid(global.searchtext,
+                                                        job.item.db_id,
+                                                        job.item.stamp);
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
         Idle.add( () => {
@@ -352,6 +354,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             //job.cancellable = populate_model_cancellable;
             job.set_arg("treerowref", treerowref);
             job.set_arg("id", item.db_id);
+            job.set_arg("stamp", item.stamp);
             db_worker.push_job(job);
         }
     }
@@ -359,7 +362,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool load_artists_job(Worker.Job job) {
         if(this.populating_model)
             return false;
-        job.items = db_reader.get_albums_with_search(global.searchtext, (int32)job.get_arg("id"));
+        job.items = db_reader.get_albums_with_search(global.searchtext,
+                                                     (int32)job.get_arg("id"),
+                                                     (uint32)job.get_arg("stamp"));
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -408,6 +413,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 job_title.set_arg("treerowref", treerowref);
                 job_title.set_arg("artist", artist.db_id);
                 job_title.set_arg("album", album.db_id);
+                job_title.set_arg("stamp", album.stamp);
                 db_worker.push_job(job_title);
             }
             remove_loader_child(ref iter_artist);
@@ -501,7 +507,10 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(this.populating_model)
             return false;
         int32 al = (int32)job.get_arg("album");
-        job.track_dat = db_reader.get_trackdata_by_albumid(global.searchtext, al);
+        job.track_dat = db_reader.get_trackdata_by_albumid(global.searchtext,
+                                                           al,
+                                                           (uint32)job.get_arg("stamp")
+        );
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
@@ -532,7 +541,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(item != null && item.type != ItemType.UNKNOWN) {
             int id = -1;
             id = db_reader.get_source_id();
-            DndData dnd_data = { item.db_id, item.type, id };
+            DndData dnd_data = { item.db_id, item.type, id, item.stamp };
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;

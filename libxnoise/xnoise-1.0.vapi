@@ -13,10 +13,10 @@ namespace Xnoise {
 			public uint count_lastused_items ();
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
-			public override Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
+			public override Xnoise.Item[] get_albums_with_search (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
-			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
+			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item[] get_artists_with_search (string searchtext);
 			public override unowned string get_datasource_name ();
 			public Xnoise.Item[]? get_last_played (string searchtext);
@@ -26,11 +26,11 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
-			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val);
+			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val, uint32 stmp);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
-			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
-			public override Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
-			public override Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id);
+			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stmp);
+			public override Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stmp);
+			public override Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
@@ -511,16 +511,16 @@ namespace Xnoise {
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
-		public abstract Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
+		public abstract Xnoise.Item[] get_albums_with_search (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.TrackData[]? get_all_tracks (string searchtext);
-		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
+		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
 		public abstract unowned string get_datasource_name ();
 		public int get_source_id ();
-		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp);
-		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
-		public abstract Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
-		public abstract Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id);
+		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp, uint32 stamp);
+		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stamp);
+		public abstract Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stamp);
+		public abstract Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id, uint32 stamp);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 		public void set_source_id (int id);
 	}
@@ -992,6 +992,7 @@ namespace Xnoise {
 		public int32 db_id;
 		public Xnoise.ItemType mediatype;
 		public int source_id;
+		public uint32 stamp;
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct Item {

@@ -54,7 +54,8 @@ public class Xnoise.ItemConverter : Object {
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
-                    TrackData? tmp = ds.get_trackdata_by_titleid(global.searchtext, item.db_id);
+                    assert(get_current_stamp(ds.get_source_id()) == item.stamp);
+                    TrackData? tmp = ds.get_trackdata_by_titleid(global.searchtext, item.db_id, item.stamp);
                     if(tmp == null)
                         break;
                     result += tmp;
@@ -63,6 +64,7 @@ public class Xnoise.ItemConverter : Object {
                     TrackData? tmp = null;
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
+                    assert(get_current_stamp(ds.get_source_id()) == item.stamp);
                     if(db_worker.is_same_thread() && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
                         if(tmp != null) {
                             if(tmp.item.type == ItemType.UNKNOWN)
@@ -99,7 +101,8 @@ public class Xnoise.ItemConverter : Object {
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
-                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id);
+                    assert(get_current_stamp(ds.get_source_id()) == item.stamp);
+                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id, item.stamp);
                     break;
                 }
                 break;
@@ -107,7 +110,9 @@ public class Xnoise.ItemConverter : Object {
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
-                    result = ds.get_trackdata_by_artistid(global.searchtext, item.db_id);
+                    print("get_current_stamp(ds.get_source_id()): %d   item.stamp: %d\n", (int)get_current_stamp(ds.get_source_id()), (int)item.stamp);
+                    assert(get_current_stamp(ds.get_source_id()) == item.stamp);
+                    result = ds.get_trackdata_by_artistid(global.searchtext, item.db_id, item.stamp);
                     break;
                 }
                 break;
@@ -116,8 +121,9 @@ public class Xnoise.ItemConverter : Object {
                 //print("CONV STREAM %d\n", item.source_id);
                 DataSource ds = get_data_source(item.source_id);
                 assert(ds != null);
+                assert(get_current_stamp(ds.get_source_id()) == item.stamp);
                 if(item.db_id > -1) {
-                    if(db_worker.is_same_thread() && ds.get_stream_td_for_id(item.db_id, out tmp)) {
+                    if(db_worker.is_same_thread() && ds.get_stream_td_for_id(item.db_id, out tmp, item.stamp)) {
                         result += tmp;
                         return result;
                     }

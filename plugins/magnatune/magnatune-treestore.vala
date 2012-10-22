@@ -297,6 +297,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
             job.set_arg("treerowref", treerowref);
             job.set_arg("artist_id", item.db_id);
+            job.set_arg("stamp", item.stamp);
             db_worker.push_job(job);
         }
     }
@@ -304,7 +305,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool load_album_and_tracks_job(Worker.Job job) {
         if(this.cancel.is_cancelled())
             return false;
-        job.items = dbreader.get_albums_with_search(global.searchtext, (int32)job.get_arg("artist_id")); 
+        job.items = dbreader.get_albums_with_search(global.searchtext, (int32)job.get_arg("artist_id"), (uint32)job.get_arg("stamp")); 
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -367,6 +368,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                                                this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
                 job_title.set_arg("albumid",  album.db_id);
+                job_title.set_arg("stamp",  album.stamp);
                 db_worker.push_job(job_title);
             }
             remove_loader_child(ref iter_artist);
@@ -378,7 +380,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool populate_title_job(Worker.Job job) {
         if(this.cancel.is_cancelled())
             return false;
-        job.track_dat = dbreader.get_trackdata_by_albumid(global.searchtext, (int32)job.get_arg("albumid"));
+        job.track_dat = dbreader.get_trackdata_by_albumid(global.searchtext, (int32)job.get_arg("albumid"), (uint32)job.get_arg("stamp"));
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
@@ -389,7 +391,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             foreach(TrackData td in job.track_dat) {
                 if(this.cancel.is_cancelled())
                     return false;
-                this.prepend(out iter_title, iter_album);
+                this.append(out iter_title, iter_album);
                 this.set(iter_title,
                               Column.ICON, title_icon,
                               Column.VIS_TEXT, td.title,
@@ -457,7 +459,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         if(item != null && item.type != ItemType.UNKNOWN) {
             int id = -1;
             id = dbreader.get_source_id();
-            DndData dnd_data = { item.db_id, item.type, id };
+            DndData dnd_data = { item.db_id, item.type, id, item.stamp };
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;

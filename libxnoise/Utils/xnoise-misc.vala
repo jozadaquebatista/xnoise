@@ -300,6 +300,7 @@ public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32 db_id;
     public ItemType mediatype;
     public int source_id; // use for registered data sources
+    public uint32 stamp;
 }
 
 

@@ -728,6 +728,7 @@ public class Xnoise.TrackList : TreeView, IParams {
         foreach(DndData ix in ids) {
             Item i = Item(ix.mediatype, null, ix.db_id);
             i.source_id = ix.source_id;
+            i.stamp = ix.stamp;
             print("insert type %s\n", i.type.to_string());
             TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext);
             if(tmp != null) {
