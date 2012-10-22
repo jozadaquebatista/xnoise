@@ -1688,13 +1688,16 @@ print("on close 2\n");
             var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
             album_view_toggle = new ToggleButton();
             album_view_toggle.add(aart_im);
+            album_view_toggle.can_focus = false;
             albumart_toggleb.add(album_view_toggle);
             album_view_toggle.notify["active"].connect( () => {
                 if(album_view_toggle.active) {
                     bottom_notebook.set_current_page(1);
+                    album_cover_view.grab_focus();
                 }
                 else {
                     bottom_notebook.set_current_page(0);
+                    tl.grab_focus();
                 }
             });
             //VOLUME SLIDE BUTTON
