@@ -324,7 +324,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                         print("%s\n", e.message);
                         return true;
                     }
-                logo = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.8), (int)(logo_pixb.get_height() * 0.8), Gdk.InterpType.HYPER);
+                logo = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.8),
+                                              (int)(logo_pixb.get_height() * 0.8),
+                                              Gdk.InterpType.HYPER);
                 y_offset = (int)((h * 0.5) - (logo.get_height() * 0.4));
                 x_offset = (int)((w  * 0.5) - (logo.get_width()  * 0.4));
                 Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
@@ -388,7 +390,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 Pango.cairo_show_layout(cr, pango_layout);
                 cr.restore();
                 
-                double alpha = 0.6;
+                double alpha = 0.3;
                 double step = 1.0 / this.imageHeight;
                 
                 cr.translate(0.0, 2.0 * this.imageHeight);
@@ -399,7 +401,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                     cr.save();
                     cr.clip();
                     cr.set_source_surface(this.surface, 0, 0);
-                    alpha = alpha - 1.8 * step;
+                    alpha = alpha - 1.3 * step;
+                    alpha = double.max(0.0, alpha);
                     cr.paint_with_alpha(alpha);
                     cr.restore();
                 }
