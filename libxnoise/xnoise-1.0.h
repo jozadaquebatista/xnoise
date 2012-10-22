@@ -1102,6 +1102,7 @@ struct _XnoiseTreeQueryableIface {
 	GTypeInterface parent_iface;
 	gint (*get_model_item_column) (XnoiseTreeQueryable* self);
 	GtkTreeModel* (*get_queryable_model) (XnoiseTreeQueryable* self);
+	GList* (*query_selection) (XnoiseTreeQueryable* self);
 };
 
 struct _XnoiseILyricsIface {
@@ -1880,6 +1881,7 @@ GType xnoise_dyn_playlist_type_get_type (void) G_GNUC_CONST;
 GType xnoise_tree_queryable_get_type (void) G_GNUC_CONST;
 gint xnoise_tree_queryable_get_model_item_column (XnoiseTreeQueryable* self);
 GtkTreeModel* xnoise_tree_queryable_get_queryable_model (XnoiseTreeQueryable* self);
+GList* xnoise_tree_queryable_query_selection (XnoiseTreeQueryable* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);

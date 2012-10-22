@@ -229,21 +229,21 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
 
     private void on_menu_add(Item item, GLib.Value? data) {
-        TreeView tv = (TreeView)data;
+        Gtk.Widget tv = (TreeView)data;
         TreeQueryable tq = tv as TreeQueryable;
         if(tv == null || tq == null)
             return;
-        if(!(tv is TreeView))
+        if(!(tv is Widget))
             return;
         if(!(tq is TreeQueryable))
             return;
         //print("okokok\n");
         GLib.List<TreePath> list;
-        list = tv.get_selection().get_selected_rows(null);
+        list = tq.query_selection();
         if(list.length() == 0)
             return;
         
-        var mod = tv.get_model();
+        var mod = tq.get_queryable_model();
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
         Item[] items = {};

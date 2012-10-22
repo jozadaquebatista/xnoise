@@ -57,7 +57,11 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         TreeModel? tm = this.get_model();
         return tm;
     }
-    
+
+    public GLib.List<TreePath>? query_selection() {
+        return this.get_selected_items();
+    }
+
     private class IconsModel : Gtk.ListStore, Gtk.TreeModel {
         public enum Column {
             ICON = 0,
@@ -210,6 +214,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             this.icons_model.populate_model();
         });
         this.item_activated.connect(this.on_row_activated);
+        this.button_press_event.connect(this.on_button_press);
+        this.key_release_event.connect(this.on_key_released);
     }
 
     private void on_row_activated(Gtk.IconView sender, TreePath path) {
@@ -305,6 +311,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         }
     }
     
+    private Gtk.Menu menu;
+    
     private int w = 0;
     private int w_last = 0;
     private bool set_column_count_idle() {
@@ -318,6 +326,94 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         w_last = w;
         col_count_source = 0;
         return false;
+    }
+
+    private bool on_button_press(Gdk.EventButton e) {
+        Gtk.TreePath treepath = null;
+        Gtk.TreeViewColumn column;
+        GLib.List<TreePath> selection = this.get_selected_items();
+        int x = (int)e.x;
+        int y = (int)e.y;
+        int cell_x, cell_y;
+        
+        if((treepath = this.get_path_at_pos(x, y)) == null)
+            return true;
+        
+        switch(e.button) {
+            case 1:
+                break;
+            case 3: {
+                TreeIter iter;
+                this.get_model().get_iter(out iter, treepath);
+                bool in_sel = false;
+                foreach(var px in selection) {
+                    if(treepath == px) {
+                        in_sel = true;
+                        break;
+                    }
+                }
+                if(!(in_sel)) {
+                    this.unselect_all();
+                    this.select_path(treepath);
+                }
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+            default: {
+                break;
+            }
+        }
+        if(selection.length() <= 0 )
+            this.select_path(treepath);
+        return false;
+    }
+
+    private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+//        print("%d\n",(int)e.keyval);
+        Gtk.TreeModel m;
+        switch(e.keyval) {
+            case Gdk.Key.Menu: {
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void rightclick_menu_popup(uint activateTime) {
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
+    }
+
+    private Gtk.Menu create_rightclick_menu() {
+        TreeIter iter;
+        var rightmenu = new Gtk.Menu();
+        GLib.List<TreePath> list;
+        list = this.get_selected_items();
+        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+        if(list.length() > 1)
+            itemselection = ItemSelectionType.MULTIPLE;
+        Item? item = null;
+        Array<unowned Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        this.get_model().get_iter(out iter, path);
+        this.get_model().get(iter, IconsModel.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
+        for(int i =0; i < array.length; i++) {
+            unowned Action x = array.index(i);
+            //print("%s\n", x.name);
+            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
+            menu_item.set_label(x.info);
+            menu_item.activate.connect( () => {
+                x.action(item, this);
+            });
+            rightmenu.append(menu_item);
+        }
+        rightmenu.show_all();
+        return rightmenu;
     }
 }
 

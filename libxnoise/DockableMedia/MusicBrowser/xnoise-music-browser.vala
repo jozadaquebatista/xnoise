@@ -283,6 +283,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         return tm;
     }
     
+    public GLib.List<TreePath>? query_selection() {
+        return this.get_selection().get_selected_rows(null);
+    }
+
     private Gtk.Menu create_rightclick_menu() {
         TreeIter iter;
         var rightmenu = new Gtk.Menu();

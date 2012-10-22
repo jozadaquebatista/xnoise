@@ -371,7 +371,11 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
         TreeModel? tm = this.get_model();
         return tm;
     }
-    
+
+    public GLib.List<TreePath>? query_selection() {
+        return this.get_selection().get_selected_rows(null);
+    }
+
     private void rightclick_menu_popup(uint activateTime) {
         menu = create_rightclick_menu();
         if(menu != null)
