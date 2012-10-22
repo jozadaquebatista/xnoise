@@ -996,6 +996,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct Item {
 		public Xnoise.ItemType type;
+		public uint32 stamp;
 		public int32 db_id;
 		public string? uri;
 		public string? text;
@@ -1116,9 +1117,13 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static uint32 get_current_stamp (int source);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.DataSource? get_data_source (int source_number);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.DataSource? get_data_source_by_name (string? name);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static int get_data_source_id_by_name (string? name);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static string? get_data_source_name (int source_number);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1127,6 +1132,8 @@ namespace Xnoise {
 	public static void remove_data_source (Xnoise.DataSource source);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static void remove_data_source_by_id (int id);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static void renew_stamp (string source_name);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }

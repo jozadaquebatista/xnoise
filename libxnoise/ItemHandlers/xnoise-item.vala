@@ -37,7 +37,10 @@ namespace Xnoise {
             this.uri   = _uri;
         }
         public ItemType  type;
-        public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
+        
+        public uint32     stamp;      // db import state
+        
+        public int32     db_id;      // the id in the database or -1
         public string?   uri;        // uri of item
         public string?   text;       // some text for any purpose
         public int source_id;        // data source id refering to Xnoise.DataSource

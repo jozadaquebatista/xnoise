@@ -49,7 +49,7 @@ namespace Xnoise {
     public static HashTable<int, Xnoise.DataSource>       data_source_registry;
 
     public static Database.Reader db_reader;
-    public static Database.Writer  db_writer;
+    public static Database.Writer db_writer;
     
     private static Statistics statistics;
     
@@ -72,11 +72,13 @@ namespace Xnoise {
     private static MediaStreamSchemes   _media_stream_schemes;
     private static DesktopNotifications _notifications;
     
+    private static HashTable<int, uint32> _current_stamps;
+    
     /*
      * This function is used to create static instances of Params
      * and GlobalInfo in the xnoise namespace.
      */
-    internal static void initialize(out bool is_first_start) {
+    private static void initialize(out bool is_first_start) {
         is_first_start = false;
         
         if(!verify_xnoise_directories()) {
@@ -86,6 +88,8 @@ namespace Xnoise {
         
         dockable_media_sources = new HashTable<string, DockableMedia> (str_hash, str_equal);
         data_source_registry   = new HashTable<int, Xnoise.DataSource>(direct_hash, direct_equal);
+        
+        _current_stamps   = new HashTable<int, uint32>(direct_hash, direct_equal);
         
         icon_repo = new IconRepo();
         
@@ -192,6 +196,18 @@ namespace Xnoise {
         return null;
     }
 
+    public static int get_data_source_id_by_name(string? name) {
+        if(name == null || name == EMPTYSTRING)
+            return -1;
+        assert(data_source_registry != null);
+        foreach(int i in data_source_registry.get_keys()) {
+            DataSource? ret = data_source_registry.lookup(i);
+            if(ret != null && ret.get_datasource_name() == name)
+                return i;
+        }
+        return -1;
+    }
+
     // A data source is an implementor of DataSoure abstr.class
     // (e.g the Database.Reader)
     public static string? get_data_source_name(int source_number) {
@@ -218,6 +234,7 @@ namespace Xnoise {
         }
         source.set_source_id(idx);
         data_source_registry.insert(idx, source);
+        _current_stamps.insert(source.get_source_id(), Random.next_int());
         return idx;
     }
     
@@ -239,6 +256,16 @@ namespace Xnoise {
         if(id < 0)
             return;
         data_source_registry.remove(id);
+    }
+    
+    public uint32 get_current_stamp(int source) {
+        return _current_stamps.lookup(source);
+    }
+
+    public void renew_stamp(string source_name) {
+        int source_id = get_data_source_id_by_name(source_name);
+        assert(source_id > -1);
+        _current_stamps.insert(source_id, Random.next_int());
     }
 }
 

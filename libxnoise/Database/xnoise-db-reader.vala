@@ -189,6 +189,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             if(i.type == ItemType.LOCAL_AUDIO_TRACK)
                 i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
             else
@@ -219,6 +220,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             if(i.type == ItemType.LOCAL_AUDIO_TRACK)
                 i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
             else
@@ -256,6 +258,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             val.length      = stmt.column_int(6);
             val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
             val.item.source_id = get_source_id();
+            val.item.stamp = get_current_stamp(get_source_id());
             val.genre       = stmt.column_text(8);
             val.year        = stmt.column_int(9);
             if((val.artist==EMPTYSTRING) || (val.artist==null)) {
@@ -300,6 +303,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             i = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
             i.text = stmt.column_text(2);
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
         }
         return (owned)i;
     }
@@ -324,6 +328,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             val.item        = Item(ItemType.STREAM, stmt.column_text(1), id);
             val.item.text   = stmt.column_text(0);
             val.item.source_id = get_source_id();
+            val.item.stamp = get_current_stamp(get_source_id());
         }
         else {
             print("get_stream_td_for_id: track is not in db. ID: %d\n", id);
@@ -354,6 +359,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             val.length      = stmt.column_int(4);
             val.item        = Item((ItemType)stmt.column_int(5), uri, stmt.column_int(6));
             val.item.source_id = get_source_id();
+            val.item.stamp = get_current_stamp(get_source_id());
             val.genre       = stmt.column_text(7);
             val.year        = stmt.column_int(8);
             retval = true;
@@ -393,6 +399,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 continue;
             Item? i = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             i.text = stmt.column_text(0);
             mfolders += i;
         }
@@ -415,6 +422,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             Item? item = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
             item.text = stmt.column_text(2);
+            item.stamp = get_current_stamp(get_source_id());
             item.source_id = get_source_id();
             vals += item;
         }
@@ -442,6 +450,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             var td = new TrackData();
             td.item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
             td.item.text   = stmt.column_text(3);
+            td.item.stamp  = get_current_stamp(get_source_id());
             td.artist      = stmt.column_text(4);
             td.album       = stmt.column_text(5);
             td.title       = stmt.column_text(6);
@@ -491,6 +500,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             td.name        = stmt.column_text(1);
             td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
             td.item.source_id = get_source_id();
+            td.item.stamp = get_current_stamp(get_source_id());
             td.item.text      = stmt.column_text(2);
             val += td;
         }
@@ -515,6 +525,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             Item i = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
             i.source_id = get_source_id();
             i.text = stmt.column_text(0);
+            i.stamp = get_current_stamp(get_source_id());
             val += i;
         }
         if(val.length == 0)
@@ -547,6 +558,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             td.name        = stmt.column_text(0);
             td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
             td.item.source_id = get_source_id();
+            td.item.stamp = get_current_stamp(get_source_id());
             val += td;
         }
         return (owned)val;
@@ -578,6 +590,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             td.name        = stmt.column_text(0);
             td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
             td.item.source_id = get_source_id();
+            td.item.stamp = get_current_stamp(get_source_id());
             val += td;
         }
         return (owned)val;
@@ -604,6 +617,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
             td.item.text   = stmt.column_text(2);
             td.item.source_id = get_source_id();
+            td.item.stamp = get_current_stamp(get_source_id());
             val += td;
         }
         return (owned)val;
@@ -635,6 +649,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
                 i.text = get_artists_with_search_stmt.column_text(1);
                 i.source_id = get_source_id();
+                i.stamp = get_current_stamp(get_source_id());
                 val += i;
             }
         }
@@ -648,6 +663,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search2_stmt.column_int(0));
                 i.text = get_artists_with_search2_stmt.column_text(1);
                 i.source_id = get_source_id();
+                i.stamp = get_current_stamp(get_source_id());
                 val += i;
             }
         }
@@ -686,6 +702,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             TrackData td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -732,6 +749,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             TrackData td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -761,6 +779,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
             i.text = stmt.column_text(1);
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
         }
         return (owned)i;
     }
@@ -797,6 +816,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, id);
             i.text = stmt.column_text(0);
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
         }
         return (owned)i;
     }
@@ -818,6 +838,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
             i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -862,6 +883,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
             i.text = stmt.column_text(0);
+            i.stamp = get_current_stamp(get_source_id());
             i.source_id = get_source_id();
             val += i;
         }
@@ -894,6 +916,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             AlbumData ad = new AlbumData();
             Item? it = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
+            it.stamp = get_current_stamp(get_source_id());
             ad.item  = it;
             ad.artist = stmt.column_text(2);
             ad.album  = stmt.column_text(0);

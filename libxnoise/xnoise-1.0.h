@@ -807,6 +807,7 @@ typedef enum  {
 
 struct _XnoiseItem {
 	XnoiseItemType type;
+	guint32 stamp;
 	gint32 db_id;
 	gchar* uri;
 	gchar* text;
@@ -2424,10 +2425,13 @@ extern XnoiseTrackListModel* xnoise_tlm;
 extern XnoiseTrayIcon* xnoise_tray_icon;
 XnoiseDataSource* xnoise_get_data_source (gint source_number);
 XnoiseDataSource* xnoise_get_data_source_by_name (const gchar* name);
+gint xnoise_get_data_source_id_by_name (const gchar* name);
 gchar* xnoise_get_data_source_name (gint source_number);
 gint xnoise_register_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source_by_id (gint id);
+guint32 xnoise_get_current_stamp (gint source);
+void xnoise_renew_stamp (const gchar* source_name);
 gchar* xnoise_imain_view_get_view_name (XnoiseIMainView* self);
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;
 guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
