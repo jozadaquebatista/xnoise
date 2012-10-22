@@ -363,8 +363,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 Gdk.cairo_set_source_pixbuf(ct, logo, 0, 0);
                 ct.paint(); // paint on external context
                 
-                y_offset = (int)((h * 0.4)  - (imageHeight * 0.5));
-                x_offset = (int)((w  * 0.5));
+                y_offset = (int)((h * 0.5)  - (imageHeight * 0.5));
+                x_offset = (int)((w  * 0.45));
                 
                 cr.translate(x_offset, y_offset);
                 
@@ -378,8 +378,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 var font_description = new Pango.FontDescription();
                 font_description.set_family(font_family);
                 font_description.set_size((int)(font_size * Pango.SCALE));
-
-                layout_width  = (int) (w/2 - (2 * MIN_BORDER_DIST));
+                
+                layout_width  = (int) (x_offset - (2 * MIN_BORDER_DIST));
                 var pango_layout = Pango.cairo_create_layout(cr);
                 pango_layout.set_font_description(font_description);
                 pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
