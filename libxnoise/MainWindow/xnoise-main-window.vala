@@ -199,7 +199,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), "<Control>p", N_("Go to previous track"), menu_prev },
             { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), "<Control>KP_Space", N_("Toggle playback status"), menutoggle_playpause },
             { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), "<Control>n", N_("Go to next track"), menu_next },
-            { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
+            { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit },
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
@@ -1326,6 +1326,7 @@ print("on close 2\n");
     }
     
     private void on_settings_edit() {
+        album_view_toggle.set_active(false);
         settings_widget.select_general_tab();
         mainview_box.select_main_view(settings_widget.get_view_name());
     }
