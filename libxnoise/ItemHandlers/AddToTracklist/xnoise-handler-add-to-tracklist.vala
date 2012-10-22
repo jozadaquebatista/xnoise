@@ -367,6 +367,8 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
     
     private void append_tracks(ref TrackData[]? tda, bool immediate_play = true) {
+        assert(Main.instance.is_same_thread());
+        
         if(tda == null || tda[0] == null) 
             return;
         
@@ -396,8 +398,10 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             if(action != null)
                 action.action(tda[0].item, null);
         }
-        if(immediate_play)
+        if(immediate_play) {
             tl.set_focus_on_iter(ref iter_2);
+            //print("set focus on iter\n");
+        }
     }
 }
 

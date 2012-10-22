@@ -1084,17 +1084,20 @@ public class Xnoise.TrackList : TreeView, IParams {
     internal void set_focus_on_iter(ref TreeIter iter) {
         TreePath start_path, end_path;
         TreePath current_path = tracklistmodel.get_path(iter);
-
+        
         if(!this.get_visible_range(out start_path, out end_path))
             return;
-
+        
         unowned int[] start   = start_path.get_indices();
         unowned int[] end     = end_path.get_indices();
         unowned int[] current = current_path.get_indices();
-
+        
         if(!((start[0] < current[0])&&
-            (current[0] < end[0])))
+            (current[0] < end[0]))) {
             this.scroll_to_cell(current_path, null, true, (float)0.3, (float)0.0);
+        }
+        this.get_selection().unselect_all();
+        this.get_selection().select_path(current_path);
     }
 
     public void remove_uri_rows(string uri) {
