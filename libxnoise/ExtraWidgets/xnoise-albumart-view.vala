@@ -124,13 +124,19 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             media_importer.register_reset_callback(cbr);
             global.notify["media-import-in-progress"].connect( () => {
                 if(!global.media_import_in_progress) {
-                    this.filter();
+                    Idle.add(() => {
+                        this.filter();
+                        return false;
+                    });
                 }
             });
         }
         
         private void reset_change_cb() {
-            this.remove_all();
+            Idle.add(() => {
+                this.remove_all();
+                return false;
+            });
         }
         
         public void remove_all() {
