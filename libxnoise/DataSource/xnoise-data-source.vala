@@ -32,6 +32,8 @@
 
 
 public abstract class Xnoise.DataSource : GLib.Object {
+    public signal void refreshed_stamp(uint32 new_stamp);
+    
     protected int source_id;
     public void set_source_id(int id) {
         source_id = id;

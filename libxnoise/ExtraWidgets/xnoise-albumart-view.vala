@@ -119,13 +119,26 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                     });
                 }
             });
-//          TODO
-//            MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
-//            cbr.cb = reset_change_cb;
-//            media_importer.register_reset_callback(cbr);
-            
+            MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
+            cbr.cb = reset_change_cb;
+            media_importer.register_reset_callback(cbr);
+            global.notify["media-import-in-progress"].connect( () => {
+                if(!global.media_import_in_progress) {
+                    this.filter();
+                }
+            });
         }
-
+        
+        private void reset_change_cb() {
+            this.remove_all();
+        }
+        
+        public void remove_all() {
+            view.set_model(null);
+            this.clear();
+            view.set_model(this);
+        }
+        
         private uint search_idlesource = 0;
         
         public void filter() {

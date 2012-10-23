@@ -225,6 +225,9 @@ public class Xnoise.MediaImporter : GLib.Object {
                     cxd.cb();
                 }
             }
+            renew_stamp(db_reader.get_datasource_name());
+            print("+++new stam for db\n");
+            db_reader.refreshed_stamp(get_current_stamp(db_reader.get_source_id()));
             
             job = new Worker.Job(Worker.ExecutionType.ONCE, reset_local_data_library_job);
             db_worker.push_job(job);

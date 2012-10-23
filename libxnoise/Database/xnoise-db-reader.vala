@@ -104,6 +104,14 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return data_source_name;
     }
 
+//    public override uint32 stored_stamp { 
+//        get {
+//            return 0;
+//        }
+//        set {
+//        }
+//    }
+
     private string dbFileName() {
         return GLib.Path.build_filename(data_folder(), MAIN_DATABASE_NAME, null);
     }

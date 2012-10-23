@@ -72,11 +72,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         set_column_types(col_types);
         create_icons();
         
-        if(dbreader == null)
+        if(dbreader == null) {
             dbreader = new MagnatuneDatabaseReader(cancel);
+        }
         if(dbreader == null)
             assert_not_reached();
-        
+        dbreader.refreshed_stamp.connect( () => {
+            this.filter();
+        });
         data_source_id = register_data_source(dbreader);
         
         global.sign_searchtext_changed.connect( (s,t) => {

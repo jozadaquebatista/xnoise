@@ -360,7 +360,8 @@ public class Xnoise.Database.Writer : GLib.Object {
             // change notification
             foreach(NotificationData cxd in change_callbacks) {
                 Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
-//                item.source_id = db_browser.get_source_id();
+                item.source_id = db_reader.get_source_id();
+                item.stamp = get_current_stamp(db_reader.get_source_id());
                 item.text = artist.strip();
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_ARTIST, item);
@@ -891,6 +892,8 @@ public class Xnoise.Database.Writer : GLib.Object {
                 return false;
             }
             Item? item = Item(ItemType.LOCAL_VIDEO_TRACK, td.item.uri, idv);
+            item.source_id = db_reader.get_source_id();
+            item.stamp = get_current_stamp(db_reader.get_source_id());
             foreach(NotificationData cxd in change_callbacks) {
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_VIDEO, item);
@@ -938,6 +941,8 @@ public class Xnoise.Database.Writer : GLib.Object {
             if(stream_id > -1) {
                 Item? item = Item(ItemType.STREAM, i.uri, stream_id);
                 item.text = i.text;
+                item.source_id = db_reader.get_source_id();
+                item.stamp = get_current_stamp(db_reader.get_source_id());
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_STREAM, item);
             }

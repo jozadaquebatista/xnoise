@@ -523,6 +523,7 @@ namespace Xnoise {
 		public abstract Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id, uint32 stamp);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 		public void set_source_id (int id);
+		public signal void refreshed_stamp (uint32 new_stamp);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {

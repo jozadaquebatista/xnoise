@@ -119,8 +119,17 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         
         username = Xnoise.Params.get_string_value("magnatune_user");
         password = Xnoise.Params.get_string_value("magnatune_pass");
+        
+        this.notify["login-data-available"].connect( () => {
+            if(login_data_available && !login_data_available_last) {
+                renew_stamp(get_datasource_name());
+                refreshed_stamp(get_current_stamp(get_source_id()));
+            }
+            login_data_available_last = _login_data_available;
+        });
     }
 
+    private bool login_data_available_last;
     private static void utf8_lower(Sqlite.Context context,
                                    [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
         context.result_text(values[0].to_text().down());
