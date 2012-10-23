@@ -312,7 +312,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT name, uri FROM streams WHERE id = ?";
 
     public override bool get_stream_td_for_id(int32 id, out TrackData val, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), false);
         Statement stmt;
         val = new TrackData();
         this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
@@ -651,7 +651,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
                 i.text = get_artists_with_search_stmt.column_text(1);
                 i.source_id = get_source_id();
-                print("gaws current_stamp : %d   source_id:%d\n", (int)stmp, get_source_id());
                 i.stamp = stmp;
                 val += i;
             }
@@ -666,7 +665,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search2_stmt.column_int(0));
                 i.text = get_artists_with_search2_stmt.column_text(1);
                 i.source_id = get_source_id();
-                print("gaws current_stamp : %d   source_id:%d\n", (int)stmp, get_source_id());
                 i.stamp = stmp;
                 val += i;
             }
@@ -681,7 +679,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -729,7 +727,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -797,7 +795,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
     public override Item? get_artistitem_by_artistid(string searchtext, int32 id, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
         if(searchtext != EMPTYSTRING) {
@@ -832,7 +830,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
         
     public override TrackData? get_trackdata_by_titleid(string searchtext, int32 id, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         
         Statement stmt;
         this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
@@ -867,7 +865,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     public override Item[] get_albums_with_search(string searchtext, int32 id, uint32 stmp) {
-        assert(stmp == get_current_stamp(get_source_id()));
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         Item[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {

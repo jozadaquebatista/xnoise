@@ -277,7 +277,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -327,7 +327,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
     public override Item? get_artistitem_by_artistid(string searchtext, int32 id, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
         i.source_id = get_source_id();
@@ -400,7 +400,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -450,7 +450,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     public override Item[] get_albums_with_search(string searchtext, int32 id, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         Item[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -488,7 +488,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
         
     public override TrackData? get_trackdata_by_titleid(string searchtext, int32 id, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         Statement stmt;
         
         this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
@@ -521,7 +521,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 //        "SELECT name, uri FROM streams WHERE id = ?";
 
     public override bool get_stream_td_for_id(int32 id, out TrackData val, uint32 stamp) {
-        assert(get_current_stamp(get_source_id()) == stamp);
+        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, false);
         
         val = get_trackdata_by_titleid("", id, stamp);
         
