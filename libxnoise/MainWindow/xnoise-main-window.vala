@@ -1127,7 +1127,7 @@ print("on close 2\n");
             return;
         global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
         if(global.player_state == PlayerState.PLAYING) {
-            trackList.set_focus_on_iter(ref iter);
+            trackList.scroll_to_iter(ref iter);
         }
         if(path.to_string() == tmp_path.to_string()) {
             if((repeatState == PlayerRepeatMode.SINGLE)||((repeatState == PlayerRepeatMode.ALL && rowcount == 1))) {
