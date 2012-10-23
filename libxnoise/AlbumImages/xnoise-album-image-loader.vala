@@ -177,16 +177,17 @@ namespace Xnoise {
     }
 
     internal class AlbumImageLoader : GLib.Object {
-        private static IAlbumCoverImageProvider provider;
+//        private static IAlbumCoverImageProvider provider;
+        private static GLib.List<IAlbumCoverImageProvider> providers;
         private static Main xn;
-        private uint backend_iter;
-        public string artist;
-        public string album;
+        internal string artist;
+        internal string album;
     
         public AlbumImageLoader() {
             xn = Main.instance;
             plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
-            backend_iter = 0;
+            plugin_loader.sign_plugin_deactivated.connect(AlbumImageLoader.on_backend_deactivated);
+//            backend_iter = 0;
         }
 
         private static void on_plugin_activated(Container p) {
@@ -197,8 +198,8 @@ namespace Xnoise {
             if(provider == null) 
                 return;
         
-            AlbumImageLoader.provider = provider;
-            p.sign_deactivated.connect(AlbumImageLoader.on_backend_deactivated);
+//            AlbumImageLoader.provider = provider;
+            providers.prepend(provider);
         }
     
         //forward signal from current provider
@@ -206,17 +207,28 @@ namespace Xnoise {
             global.sign_album_image_fetched(_artist, _album, _image_path);
         }
 
-        private static void on_backend_deactivated() {
-            AlbumImageLoader.provider = null;
+        private static void on_backend_deactivated(Container p) {
+            if(!p.is_album_image_plugin) 
+                return;
+            
+            IAlbumCoverImageProvider provider = p.loaded_plugin as IAlbumCoverImageProvider;
+            if(provider == null) 
+                return;
+            providers.remove(provider);
         }
 
+        private uint backend_iter = 0;
+        
         internal bool fetch_image() {
-            if(this.provider == null) {
+            if(providers == null) {
                 global.sign_album_image_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
                 return false;
             }
             Idle.add( () => {
-                var album_image_provider = this.provider.from_tags(artist, check_album_name(artist, album));
+                var album_image_provider = providers.nth_data(backend_iter).from_tags(artist,
+                                                                                      check_album_name(artist,
+                                                                                                       album)
+                                                                                      );
                 if(album_image_provider == null)
                     return false;
                 album_image_provider.sign_image_fetched.connect(on_image_fetched);

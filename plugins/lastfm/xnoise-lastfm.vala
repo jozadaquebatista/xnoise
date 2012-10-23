@@ -215,7 +215,6 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     private const int SECONDS_FOR_TIMEOUT = 12;
     
-    private const string INIFOLDER = ".xnoise";
     private string artist;
     private string album;
     private File f = null;
