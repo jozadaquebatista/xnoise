@@ -768,13 +768,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case Gdk.Key.plus: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
                     return false;
-                change_volume(0.1);
+                change_volume(0.04);
                 return true;
             }
             case Gdk.Key.minus: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                     return false;
-                change_volume(-0.1);
+                change_volume(-0.04);
                 return true;
             }
             case Gdk.Key.f: {
@@ -1214,6 +1214,7 @@ print("on close 2\n");
     }
 
     private void on_menu_add() {
+        album_view_toggle.set_active(false);
         this.mainview_box.select_main_view(settings_widget.get_view_name());
         settings_widget.select_media_tab();
     }
