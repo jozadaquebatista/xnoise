@@ -32,19 +32,19 @@ using Gtk;
 
 internal class Xnoise.HandlerEditTags : ItemHandler {
     private Action edit_title_tracklist;
-    private const string tltitleinfo = _("Edit metadata for track");
+    private const string tltitleinfo = _("Edit data for track");
     private const string tltitlename = "HandlerEditTagsActionTitleTL";
 
     private Action edit_title_mediabrowser;
-    private const string titleinfo = _("Edit metadata for track");
+    private const string titleinfo = _("Edit data for track");
     private const string titlename = "HandlerEditTagsActionTitle";
     
     private Action edit_album_mediabrowser;
-    private const string albuminfo = _("Change album name");
+    private const string albuminfo = _("Change album data");
     private const string albumname = "HandlerEditTagsActionAlbum";
     
     private Action edit_artist_mediabrowser;
-    private const string artistinfo = _("Change artist name");
+    private const string artistinfo = _("Change artist data");
     private const string artistname = "HandlerEditTagsActionArtist";
     
     private const string name = "HandlerEditTags";
