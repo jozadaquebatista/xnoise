@@ -30,6 +30,7 @@
 			<menuitem action="ShowLyricsAction"/>
 			<separator />
 			<menuitem action="ShowMediaBrowserAction"/>
+			<menuitem action="ShowAlbumArtViewAction"/>
 			<separator />
 			<menuitem action="VideoFullscreenAction"/>
 		</menu>

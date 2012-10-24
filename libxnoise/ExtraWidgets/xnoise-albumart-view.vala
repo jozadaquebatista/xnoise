@@ -349,11 +349,9 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
 
     private bool on_button_press(Gdk.EventButton e) {
         Gtk.TreePath treepath = null;
-        Gtk.TreeViewColumn column;
         GLib.List<TreePath> selection = this.get_selected_items();
         int x = (int)e.x;
         int y = (int)e.y;
-        int cell_x, cell_y;
         
         if((treepath = this.get_path_at_pos(x, y)) == null)
             return true;
@@ -389,7 +387,6 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //        print("%d\n",(int)e.keyval);
-        Gtk.TreeModel m;
         switch(e.keyval) {
             case Gdk.Key.Menu: {
                 rightclick_menu_popup(e.time);

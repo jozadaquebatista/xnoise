@@ -288,6 +288,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         ta.callback = toggle_fullscreen;
         ta.is_active = fullscreenwindowvisible;
         toggle_action_entries += ta;
+
+        ta = ToggleActionEntry();
+        ta.name = "ShowAlbumArtViewAction";
+        ta.stock_id = Gtk.Stock.ORIENTATION_PORTRAIT;
+        ta.label =  N_("Show _Album Art view");
+        ta.accelerator = "<Ctrl>B";
+        ta.callback = toggle_bottom_view;
+        ta.is_active = Params.get_bool_value("album_art_view_visible");
+        toggle_action_entries += ta;
         
         setup_widgets();
         
@@ -1696,10 +1705,14 @@ print("on close 2\n");
                 if(album_view_toggle.active) {
                     bottom_notebook.set_current_page(1);
                     album_cover_view.grab_focus();
+                    update_toggle_action_state("ShowAlbumArtViewAction", true);
+                    Params.set_bool_value("album_art_view_visible", true);
                 }
                 else {
                     bottom_notebook.set_current_page(0);
                     tl.grab_focus();
+                    update_toggle_action_state("ShowAlbumArtViewAction", false);
+                    Params.set_bool_value("album_art_view_visible", false);
                 }
             });
             //VOLUME SLIDE BUTTON
@@ -1797,7 +1810,12 @@ print("on close 2\n");
             aasw.add(album_cover_view);
             aabx.pack_start(aasw, true, true, 2);
             bottom_notebook.append_page(aabx);
-
+            if(Params.get_bool_value("album_art_view_visible")) {
+                Idle.add(() => {
+                    album_view_toggle.set_active(true);
+                    return false;
+                });
+            }
             //Fullscreen window
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
             this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
@@ -1850,7 +1868,11 @@ print("on close 2\n");
     }
     
     private void toggle_bottom_view() {
+        if(in_update_toggle_action)
+            return;
         album_view_toggle.set_active(!album_view_toggle.get_active());
+        update_toggle_action_state("ShowAlbumArtViewAction", album_view_toggle.get_active());
+        Params.set_bool_value("album_art_view_visible", album_view_toggle.get_active());
     }
     
     internal void set_bottom_view(int tab) {
