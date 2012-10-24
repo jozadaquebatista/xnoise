@@ -1,4 +1,4 @@
-/* xnoise-tag-artistalbum-editor.vala
+/* xnoise-tag-album-editor.vala
  *
  * Copyright (C) 2011 - 2012  Jörn Magens
  *
@@ -28,6 +28,7 @@
  *     Jörn Magens
  */
 
+
 using Gtk;
 
 using Xnoise;
@@ -35,11 +36,13 @@ using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
-private class Xnoise.TagArtistAlbumEditor : GLib.Object {
+
+private class Xnoise.TagAlbumEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
     private string new_content_name = null;
+    private uint new_year = 0;
     private unowned MusicBrowserModel mbm = null;
     
     private Entry entry;
@@ -49,7 +52,7 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
     
     public signal void sign_finish();
 
-    public TagArtistAlbumEditor(Item _item) {
+    public TagAlbumEditor(Item _item) {
         this.item = _item;
         xn = Main.instance;
         td_old = {};
@@ -81,21 +84,23 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
-        td_old = item_converter.to_trackdata(this.item, global.searchtext);
+        td_old = item_converter.to_trackdata(this.item, "");
         
         TrackData td = td_old[0];
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
-                Idle.add( () => {
-                    // put data to entry
-                    entry.text  = td.artist;
-                    return false;
-                });
-                break;
+//            case ItemType.COLLECTION_CONTAINER_ARTIST:
+//                Idle.add( () => {
+//                    // put data to entry
+//                    entry.text  = td.artist;
+//                    return false;
+//                });
+//                break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 Idle.add( () => {
                     // put data to entry
                     entry.text  = td.album;
+                    year_entry.text = (td.year > 0 ? td.year.to_string() : "");
+                    albumimage = new Image.from_stock(Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
                     return false;
                 });
                 break;
@@ -110,6 +115,8 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
     }
 
     private Label infolabel;
+    private Entry year_entry;
+    private Image albumimage;
     private void setup_widgets() {
         try {
             dialog = new Dialog();
@@ -117,33 +124,32 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
             dialog.set_modal(true);
             dialog.set_transient_for(main_window);
             
-            builder.add_from_file(Config.XN_UIDIR + "metadat_artist_album.ui");
+            builder.add_from_file(Config.XN_UIDIR + "metadata_album.ui");
             
             var mainvbox           = builder.get_object("vbox1")           as Gtk.Box;
             var okbutton           = builder.get_object("okbutton")        as Gtk.Button;
             var cancelbutton       = builder.get_object("cancelbutton")    as Gtk.Button;
             entry                  = builder.get_object("entry1")          as Gtk.Entry;
+            year_entry             = builder.get_object("year_entry")      as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
             var explainer_label    = builder.get_object("explainer_label") as Gtk.Label;
             var content_label      = builder.get_object("content_label")   as Gtk.Label;
-            
+            var year_label         = builder.get_object("year_label")      as Gtk.Label;
+            albumimage             = builder.get_object("albumimage")      as Gtk.Image;
             ((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
             okbutton.clicked.connect(on_ok_button_clicked);
             cancelbutton.clicked.connect(on_cancel_button_clicked);
             
             this.dialog.set_default_icon_name("xnoise");
-            this.dialog.set_title(_("xnoise - Edit metadata"));
+            this.dialog.set_title(_("Album data"));
             switch(item.type) {
-                case ItemType.COLLECTION_CONTAINER_ARTIST:
-                    explainer_label.label = _("Type new artist name.");
-                    content_label.label = _("Artist:");
-                    break;
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
-                    explainer_label.label = _("Type new album name.");
-                    content_label.label = _("Album:");
+                    explainer_label.label = _("Please enter new album data.");
+                    content_label.label   = _("Album:");
+                    year_label.label      = _("Year:");
                     break;
                 default:
-                    break;    
+                    break;
             }
         }
         catch (GLib.Error e) {
@@ -167,13 +173,16 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
             return;
         }
         infolabel.label = EMPTYSTRING;
-        if(entry.text != null && entry.text.strip() != EMPTYSTRING)
+        if(entry.text != null && entry.text.strip() != EMPTYSTRING) {
             new_content_name = entry.text.strip();
+            new_year = (uint)int.parse(year_entry.text.strip());
+            //print("new_year val : %u\n", new_year);
+        }
         // TODO: UTF-8 validation
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
-                do_artist_rename();
-                break;
+//            case ItemType.COLLECTION_CONTAINER_ARTIST:
+//                do_artist_rename();
+//                break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 do_album_rename();
                 break;
@@ -282,42 +291,46 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //        }
 //    }
 
-    private void do_artist_rename() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-        job.set_arg("new_content_name", new_content_name);
-        job.item = this.item;
-        db_worker.push_job(job);
-    }
+//    private void do_artist_rename() {
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
+//        job.set_arg("new_content_name", new_content_name);
+//        job.item = this.item;
+//        db_worker.push_job(job);
+//    }
 
     private void do_album_rename() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
         job.set_arg("new_content_name", new_content_name);
+        job.set_arg("new_year", new_year);
         job.item = this.item;
         db_worker.push_job(job);
     }
 
 
     private bool update_tags_job(Worker.Job tag_job) {
-        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+//        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+//            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
+//            //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
+//            job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
+//            if(job.track_dat == null)
+//                return false;
+//            job.item = tag_job.item;
+//            foreach(TrackData td in job.track_dat)
+//                td.artist = new_content_name;
+//            print("push filetags job\n");
+//            io_worker.push_job(job);
+//        }
+//        else 
+        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
             job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;
-            foreach(TrackData td in job.track_dat)
-                td.artist = new_content_name;
-            print("push filetags job\n");
-            io_worker.push_job(job);
-        }
-        else if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
-            if(job.track_dat == null)
-                return false;
-            job.item = tag_job.item;
-            foreach(TrackData td in job.track_dat)
+            foreach(TrackData td in job.track_dat) {
                 td.album = new_content_name;
+                td.year  = new_year;
+            }
             io_worker.push_job(job);
         }
         return false;
@@ -334,10 +347,12 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
             var tw = new TagWriter();
             bool ret = false;
             //print("%s\n", job.item.type.to_string());
-            if(job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
-                ret = tw.write_artist(f, job.track_dat[i].artist);
-            if(job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM)
+//            if(job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
+//                ret = tw.write_artist(f, job.track_dat[i].artist);
+            if(job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
                 ret = tw.write_album(f, job.track_dat[i].album);
+                ret |= tw.write_year(f, job.track_dat[i].year);
+            }
             if(ret) {
                 var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
                 TrackData td = job.track_dat[i];
@@ -384,5 +399,4 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
         });
     }
 }
-
 

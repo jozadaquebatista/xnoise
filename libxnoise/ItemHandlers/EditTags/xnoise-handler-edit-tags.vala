@@ -171,6 +171,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     private TagArtistAlbumEditor tae;
+    private TagAlbumEditor taled;
     
     private void open_tagartist_changer(Item item) {
         tae = new TagArtistAlbumEditor(item);
@@ -180,9 +181,9 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     private void open_tagalbum_changer(Item item) {
-        tae = new TagArtistAlbumEditor(item);
-        tae.sign_finish.connect( () => {
-            tae = null;
+        taled = new TagAlbumEditor(item);
+        taled.sign_finish.connect( () => {
+            taled = null;
         });
     }
 }

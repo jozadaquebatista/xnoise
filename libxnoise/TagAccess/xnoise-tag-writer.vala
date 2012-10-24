@@ -135,5 +135,31 @@ public class Xnoise.TagAccess.TagWriter {
         taglib_file = null;
         return retval;
     }
+
+    public bool write_year(File? file, uint year) {
+        // does writes for values that are different from default values
+        if(file == null)
+            return false;
+//        if(album == null)
+//            return false;
+        bool retval = false;
+
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
+        
+        TagLib.File taglib_file = null;
+        taglib_file = new TagLib.File(path);
+        if(taglib_file!=null) {
+            unowned TagLib.Tag tag = taglib_file.tag;
+            if(tag != null) {
+                tag.year = year;
+                retval = taglib_file.save();
+            }
+        }
+        taglib_file = null;
+        return retval;
+    }
 }
 

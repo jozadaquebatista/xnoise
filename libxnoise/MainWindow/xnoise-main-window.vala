@@ -169,6 +169,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         } 
         set {
             _media_browser_visible = value;
+            if(!value) {
+                hpaned_position_buffer = hpaned.get_position(); // buffer last position
+                mbbox01.hide();
+                hpaned.set_position(0);
+            }
+            else {
+                mbbox01.show();
+                if(hpaned_position_buffer > 20) { // min value
+                    hpaned.set_position(hpaned_position_buffer);
+                }
+                else {
+                    hpaned.set_position(200); //use this if nothing else is available
+                }
+            }
             Params.set_bool_value("media_browser_hidden", !value);
         }
     }
@@ -547,7 +561,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private FirstStartWidget first_start_widget = null;
     
     internal void ask_for_initial_media_import() {
-        toggle_media_browser_visibility();
+        Idle.add(() => {
+            album_view_toggle.set_active(false);
+            media_browser_visible = false;
+            return false;
+        });
         first_start_widget = new FirstStartWidget();
         if(first_start_widget.parent == null)
             this.mainview_box.add_main_view(first_start_widget);
@@ -569,7 +587,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         a.sensitive = true;
                     }
                 }
-                toggle_media_browser_visibility();
+                media_browser_visible = true;
                 return false;
             });
         });
@@ -590,7 +608,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         a.sensitive = true;
                     }
                 }
-                toggle_media_browser_visibility();
+                media_browser_visible = true;
                 return false;
             });
         });
@@ -1170,19 +1188,19 @@ print("on close 2\n");
         if(in_update_toggle_action)
             return;
         if(media_browser_visible) {
-            hpaned_position_buffer = hpaned.get_position(); // buffer last position
-            mbbox01.hide();
-            hpaned.set_position(0);
+//            hpaned_position_buffer = hpaned.get_position(); // buffer last position
+//            mbbox01.hide();
+//            hpaned.set_position(0);
             media_browser_visible = false;
         }
         else {
-            mbbox01.show();
-            if(hpaned_position_buffer > 20) { // min value
-                hpaned.set_position(hpaned_position_buffer);
-            }
-            else {
-                hpaned.set_position(200); //use this if nothing else is available
-            }
+//            mbbox01.show();
+//            if(hpaned_position_buffer > 20) { // min value
+//                hpaned.set_position(hpaned_position_buffer);
+//            }
+//            else {
+//                hpaned.set_position(200); //use this if nothing else is available
+//            }
             media_browser_visible = true;
         }
         update_toggle_action_state("ShowMediaBrowserAction", _media_browser_visible);
@@ -1830,11 +1848,11 @@ print("on close 2\n");
 
             bool tmp_media_browser_visible = !Params.get_bool_value("media_browser_hidden");
             if(!tmp_media_browser_visible) {
-                hpaned_position_buffer = Params.get_int_value("hp_position");
-                hpaned.set_position(0);
+//                hpaned_position_buffer = Params.get_int_value("hp_position");
+//                hpaned.set_position(0);
                 Idle.add( () => {
-                    mbbox01.hide();
-                    hpaned.set_position(0);
+//                    mbbox01.hide();
+//                    hpaned.set_position(0);
                     media_browser_visible = false;
                     return false;
                 });

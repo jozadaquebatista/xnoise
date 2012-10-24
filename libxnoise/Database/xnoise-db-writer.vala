@@ -59,8 +59,9 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement delete_items_statement;
     private Statement delete_uris_statement;
     private Statement delete_genres_statement;
-    private static Statement delete_uri_statement;
-    private static Statement delete_item_statement;
+//    private static Statement delete_uri_statement;
+//    private static Statement delete_item_statement;
+    private Statement update_album_statement;
 
     private Statement get_artist_for_uri_id_statement;
     private Statement count_artist_in_items_statement;
@@ -135,8 +136,6 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT * FROM media_folders";
     private static const string STMT_INSERT_ARTIST =
         "INSERT INTO artists (name) VALUES (?)";
-    private static const string STMT_INSERT_ALBUM =
-        "INSERT INTO albums (artist, name) VALUES (?, ?)";
     private static const string STMT_GET_URI_ID =
         "SELECT id FROM uris WHERE name = ?";
     private static const string STMT_INSERT_URI =
@@ -258,6 +257,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_INSERT_ARTIST, -1, out this.insert_artist_statement);
         this.db.prepare_v2(STMT_GET_ALBUM_ID, -1, out this.get_album_id_statement);
         this.db.prepare_v2(STMT_INSERT_ALBUM, -1, out this.insert_album_statement);
+        this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out this.update_album_statement);
         this.db.prepare_v2(STMT_GET_URI_ID, -1, out this.get_uri_id_statement);
         this.db.prepare_v2(STMT_INSERT_URI, -1, out this.insert_uri_statement);
         this.db.prepare_v2(STMT_GET_GENRE_ID, -1, out this.get_genre_id_statement);
@@ -272,8 +272,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
         this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
         this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
-        this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
-        this.db.prepare_v2(STMT_DEL_ITEM , -1, out this.delete_item_statement);
+//        this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
+//        this.db.prepare_v2(STMT_DEL_ITEM , -1, out this.delete_item_statement);
         this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1, out this.get_album_for_uri_id_statement);
         this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out this.count_album_in_items_statement);
         this.db.prepare_v2(STMT_DEL_ALBUM , -1, out this.delete_album_statement);
@@ -466,36 +466,93 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT MAX(id) FROM albums";
     private static const string STMT_GET_ALBUM_ID =
         "SELECT id FROM albums WHERE artist = ? AND utf8_lower(name) = ?";
-    private static const string STMT_UPDATE_ALBUM_NAME = 
-        "UPDATE albums SET name=? WHERE id=?";
-    private int handle_album(ref int artist_id, ref string album, bool update_album = false) {
-        get_album_id_statement.reset();
-        if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
-           get_album_id_statement.bind_text(2, album != null ? album.down().strip() : EMPTYSTRING) != Sqlite.OK ) {
-            this.db_error();
-            return -1;
-           }
-        if(get_album_id_statement.step() == Sqlite.ROW)
-            return get_album_id_statement.column_int(0);
-        
-        // Insert album
-        insert_album_statement.reset();
-        if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
-           insert_album_statement.bind_text(2, album.strip()) != Sqlite.OK ) {
-            this.db_error();
-            return -1;
+    private static const string STMT_UPDATE_ALBUM = 
+        "UPDATE albums SET name=?, year=? WHERE id=?";
+    private static const string STMT_INSERT_ALBUM =
+        "INSERT INTO albums (artist, name, year) VALUES (?, ?, ?)";
+    
+    private int handle_album(ref int artist_id, ref TrackData td, bool update_album) {
+        if(update_album == false) {
+            get_album_id_statement.reset();
+            if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
+               get_album_id_statement.bind_text(2, td.album != null ? 
+                                                      td.album.down().strip() : 
+                                                      EMPTYSTRING) != Sqlite.OK ) {
+                this.db_error();
+                return -1;
+            }
+            if(get_album_id_statement.step() == Sqlite.ROW)
+                return get_album_id_statement.column_int(0);
+            
+            // Insert album
+            insert_album_statement.reset();
+            if(insert_album_statement.bind_int (1, artist_id)        != Sqlite.OK ||
+               insert_album_statement.bind_text(2, td.album.strip()) != Sqlite.OK ||
+               insert_album_statement.bind_int (3, (int)td.year)     != Sqlite.OK) {
+                this.db_error();
+                return -1;
+            }
+            if(insert_album_statement.step() != Sqlite.DONE) {
+                this.db_error();
+                return -1;
+            }
+            
+            //Return id
+            get_albums_max_id_statement.reset();
+            if(get_albums_max_id_statement.step() == Sqlite.ROW)
+                return get_albums_max_id_statement.column_int(0);
+            else
+                return -1;
         }
-        if(insert_album_statement.step() != Sqlite.DONE) {
-            this.db_error();
-            return -1;
+        else {
+            get_album_id_statement.reset();
+            if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
+               get_album_id_statement.bind_text(2, td.album != null ? 
+                                                      td.album.down().strip() : 
+                                                      EMPTYSTRING) != Sqlite.OK ) {
+                this.db_error();
+                return -1;
+            }
+            int alb_id = -1;
+            if(get_album_id_statement.step() == Sqlite.ROW)
+                alb_id = get_album_id_statement.column_int(0);
+            
+            if(alb_id == -1) {
+                // Insert album
+                insert_album_statement.reset();
+                if(insert_album_statement.bind_int (1, artist_id)        != Sqlite.OK ||
+                   insert_album_statement.bind_text(2, td.album.strip()) != Sqlite.OK ||
+                   insert_album_statement.bind_int (3, (int)td.year)     != Sqlite.OK) {
+                    this.db_error();
+                    return -1;
+                }
+                if(insert_album_statement.step() != Sqlite.DONE) {
+                    this.db_error();
+                    return -1;
+                }
+                
+                //Return id
+                get_albums_max_id_statement.reset();
+                if(get_albums_max_id_statement.step() == Sqlite.ROW)
+                    return get_albums_max_id_statement.column_int(0);
+                else
+                    return -1;
+            }
+            else {
+                update_album_statement.reset();
+                if(update_album_statement.bind_text(1, td.album.strip()) != Sqlite.OK ||
+                   update_album_statement.bind_int (2, (int)td.year)     != Sqlite.OK ||
+                   update_album_statement.bind_int (3, alb_id)           != Sqlite.OK) {
+                    this.db_error();
+                    return -1;
+                }
+                if(update_album_statement.step() != Sqlite.DONE) {
+                    this.db_error();
+                    return -1;
+                }
+                return alb_id;
+            }
         }
-        
-        //Return id
-        get_albums_max_id_statement.reset();
-        if(get_albums_max_id_statement.step() == Sqlite.ROW)
-            return get_albums_max_id_statement.column_int(0);
-        else
-            return -1;
     }
 
     private static const string STMT_GET_URI_MAX_ID =
@@ -576,8 +633,11 @@ public class Xnoise.Database.Writer : GLib.Object {
         return retval;
     }
 
-    private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=?, genre=?, year=?, tracknumber=? WHERE id=?";
-    private static const string STMT_UPDATE_ARTISTALBUM = "UPDATE items SET artist=?, album=? WHERE id=?";
+    private static const string STMT_UPDATE_TITLE =
+        "UPDATE items SET artist=?, album=?, title=?, genre=?, year=?, tracknumber=? WHERE id=?";
+    private static const string STMT_UPDATE_ARTISTALBUM =
+        "UPDATE items SET artist=?, album=? WHERE id=?";
+    
     public bool update_title(ref Item? item, ref TrackData td) {
         if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
            item.type != ItemType.LOCAL_VIDEO_TRACK) {
@@ -588,7 +648,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 print("Error updating artist for '%s' ! \n", td.artist);
                 return false;
             }
-            int album_id = handle_album(ref artist_id, ref td.album, true);
+            int album_id = handle_album(ref artist_id, ref td, true);
             if(album_id == -1) {
                 print("Error updating album for '%s' ! \n", td.album);
                 return false;
@@ -656,7 +716,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 print("Error updating artist for '%s' ! \n", td.artist);
                 return false;
             }
-            int album_id = handle_album(ref artist_id, ref td.album, false);
+            int album_id = handle_album(ref artist_id, ref td, false);
             if(album_id == -1) {
                 print("Error updating album for '%s' ! \n", td.album);
                 return false;
@@ -840,7 +900,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
             return false;
         }
-        td.dat2 = handle_album(ref td.dat1, ref td.album);
+        td.dat2 = handle_album(ref td.dat1, ref td, false);
         if(td.dat2 == -1) {
             print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
             return false;

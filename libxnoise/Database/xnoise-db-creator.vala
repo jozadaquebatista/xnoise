@@ -53,7 +53,7 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_ARTISTS =
         "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
     private static const string STMT_CREATE_ALBUMS =
-        "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT);";
+        "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, year INTEGER);";
     private static const string STMT_CREATE_URIS =
         "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
     private static const string STMT_CREATE_STATISTICS =
@@ -137,15 +137,6 @@ private class Xnoise.Database.DbCreator {
                 stmt.reset();
                 while(stmt.step() == Sqlite.ROW) {
                     if(stmt.column_int(0) != DB_VERSION_MAJOR) {
-                        //if(DB_VERSION_MAJOR == 5 && stmt.column_int(0) == 4) {
-                        //    if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     )   { reset(); return; }
-                        //    if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     )   { reset(); return; }
-                        //    if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS))   { reset(); return; }
-                        //    if(!exec_stmnt_string(STMT_ADD_INT_ADDTIME_TO_ITEMS)) { reset(); return; }
-                        //    exec_stmnt_string("DELETE FROM version;");
-                        //    exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
-                        //}
-                        //else {
                         print("Wrong major db version. Updating...\n");
                         //newly create db if major version is devating
                         db = null;
