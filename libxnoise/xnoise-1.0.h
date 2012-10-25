@@ -371,6 +371,16 @@ typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
+#define XNOISE_TYPE_ALBUM_ART_VIEW (xnoise_album_art_view_get_type ())
+#define XNOISE_ALBUM_ART_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtView))
+#define XNOISE_ALBUM_ART_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtViewClass))
+#define XNOISE_IS_ALBUM_ART_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_ART_VIEW))
+#define XNOISE_IS_ALBUM_ART_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_ART_VIEW))
+#define XNOISE_ALBUM_ART_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtViewClass))
+
+typedef struct _XnoiseAlbumArtView XnoiseAlbumArtView;
+typedef struct _XnoiseAlbumArtViewClass XnoiseAlbumArtViewClass;
+
 #define XNOISE_TYPE_FULLSCREEN_TOOLBAR (xnoise_fullscreen_toolbar_get_type ())
 #define XNOISE_FULLSCREEN_TOOLBAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_FULLSCREEN_TOOLBAR, XnoiseFullscreenToolbar))
 #define XNOISE_FULLSCREEN_TOOLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_FULLSCREEN_TOOLBAR, XnoiseFullscreenToolbarClass))
@@ -1171,6 +1181,7 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	XnoiseAlbumArtView* album_art_view;
 	GtkToggleButton* album_view_toggle;
 	gboolean quit_if_closed;
 	GtkScrolledWindow* musicBrScrollWin;
@@ -1912,6 +1923,7 @@ gboolean xnoise_main_is_same_thread (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+GType xnoise_album_art_view_get_type (void) G_GNUC_CONST;
 gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
 void xnoise_fullscreen_toolbar_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_fullscreen_toolbar (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);

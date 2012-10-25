@@ -77,10 +77,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool window_maximized;
     private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
-    private AlbumArtView album_cover_view;
     private Gtk.Notebook bottom_notebook;
     private AlbumImage albumimage;
     private Gtk.Entry album_search_entry;
+    internal AlbumArtView album_art_view;
     internal ToggleButton album_view_toggle;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
@@ -659,8 +659,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             mainview_page_buffer = TRACKLIST_VIEW_NAME;
             mainview_box.select_main_view(mainview_page_buffer);
-//            sbuttonVI.select(mainview_page_buffer, true);
-
         }
         else {
             this.videoscreen.get_window().unfullscreen();
@@ -1732,7 +1730,7 @@ print("on close 2\n");
             album_view_toggle.notify["active"].connect( () => {
                 if(album_view_toggle.active) {
                     bottom_notebook.set_current_page(1);
-                    album_cover_view.grab_focus();
+                    album_art_view.grab_focus();
                     update_toggle_action_state("ShowAlbumArtViewAction", true);
                 }
                 else {
@@ -1798,7 +1796,7 @@ print("on close 2\n");
                 }
             });
             
-            album_cover_view = new AlbumArtView();
+            album_art_view = new AlbumArtView();
             var album_art_overlay = new Overlay();
             
             var spinner = new Spinner();
@@ -1808,12 +1806,12 @@ print("on close 2\n");
             spinner.halign = Align.CENTER;
             spinner.valign = Align.CENTER;
             spinner.set_no_show_all(true);
-            album_cover_view.show();
+            album_art_view.show();
             spinner.show();
-            album_cover_view.notify.connect( (s,p) => {
+            album_art_view.notify.connect( (s,p) => {
                 if(p.name != "in-loading" && p.name != "in-import")
                     return;
-                if(album_cover_view.in_loading || album_cover_view.in_import) {
+                if(album_art_view.in_loading || album_art_view.in_import) {
                     spinner.start();
                     spinner.set_no_show_all(false);
                     spinner.show_all();
@@ -1858,7 +1856,7 @@ print("on close 2\n");
             aabx.pack_start(aa_contr_bx, false, false, 2);
             var aasw = new ScrolledWindow(null, null);
             aasw.set_shadow_type(ShadowType.IN);
-            aasw.add(album_cover_view);
+            aasw.add(album_art_view);
             album_art_overlay.add(aasw);
             aabx.pack_start(album_art_overlay, true, true, 2);
             bottom_notebook.append_page(aabx);

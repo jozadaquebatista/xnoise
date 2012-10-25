@@ -63,17 +63,12 @@ private class Xnoise.IconCache : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
-        global.sign_album_image_fetched.connect(on_album_image_fetched);
+//        global.sign_album_image_fetched.connect(on_album_image_fetched);
     }
-    
-    private void on_album_image_fetched(string _artist, string _album, string image_path) {
+
+    public void handle_image(string image_path) {
 //        print("on_image_fetched aav %s - %s : %s", _artist, _album, image_path);
         if(image_path == EMPTYSTRING) 
-            return;
-        
-        if((prepare_for_comparison(global.current_artist) != prepare_for_comparison(_artist))||
-           (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
-                prepare_for_comparison(check_album_name(_artist, _album)))) 
             return;
         
         File f = File.new_for_path(image_path);
@@ -87,6 +82,28 @@ private class Xnoise.IconCache : GLib.Object {
         fjob.cancellable = this.cancellable;
         io_worker.push_job(fjob);
     }
+    
+//    private void on_album_image_fetched(string _artist, string _album, string image_path) {
+////        print("on_image_fetched aav %s - %s : %s", _artist, _album, image_path);
+//        if(image_path == EMPTYSTRING) 
+//            return;
+//        
+//        if((prepare_for_comparison(global.current_artist) != prepare_for_comparison(_artist))||
+//           (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
+//                prepare_for_comparison(check_album_name(_artist, _album)))) 
+//            return;
+//        
+//        File f = File.new_for_path(image_path);
+//        if(f == null || f.get_path() == null)
+//            return;
+//        string p1 = f.get_path();
+//        p1 = p1.replace("_medium", "_extralarge"); // medium images are reported, extralarge not
+//        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+//        fjob.set_arg("file", p1);
+//        fjob.set_arg("initial_import", false);
+//        fjob.cancellable = this.cancellable;
+//        io_worker.push_job(fjob);
+//    }
 
     private void on_loading_finished() {
         return_if_fail(Main.instance.is_same_thread());

@@ -281,6 +281,7 @@ private class Xnoise.AlbumImage : Gtk.Image {
         fjob.set_arg("file", f);
         io_worker.push_job(fjob);
         
+        main_window.album_art_view.icon_cache.handle_image(f.get_path());
     }
     
     private bool read_file_job(Worker.Job job) {
