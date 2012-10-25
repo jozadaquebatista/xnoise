@@ -731,10 +731,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void colorize_search_background(bool colored = false) {
-        if(colored)
-            search_entry.get_style_context().add_provider(css_provider_search, STYLE_PROVIDER_PRIORITY_APPLICATION);
-        else
-            search_entry.get_style_context().remove_provider(css_provider_search);
+        if(colored) {
+            search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
+            album_search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
+        }
+        else {
+            search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
+            album_search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
+        }
     }
     
     private void menutoggle_playpause() {
