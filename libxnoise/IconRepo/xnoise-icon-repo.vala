@@ -50,6 +50,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf symbolic_pause_icon         { get; private set; }
     internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
     internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
+    
     internal Gdk.Pixbuf albumart                    { get; private set; }
     
     internal signal void icon_theme_changed();
@@ -115,28 +116,40 @@ internal class Xnoise.IconRepo : GLib.Object {
             if(theme.has_icon("xn-local-collection"))
                 local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             else
-                local_collection_icon = theme.load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
+                local_collection_icon = theme.load_icon("xn-local-collection",
+                                                        iconheight,
+                                                        IconLookupFlags.FORCE_SIZE);
             
             if(theme.has_icon("xn-current-position"))
-                selected_collection_icon = theme.load_icon("xn-current-position", iconheight, IconLookupFlags.FORCE_SIZE);
+                selected_collection_icon = theme.load_icon("xn-current-position",
+                                                           iconheight,
+                                                           IconLookupFlags.FORCE_SIZE);
             else
                 selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
             
             if(theme.has_icon("media-playback-start-symbolic"))
-                symbolic_play_icon = theme.load_icon("media-playback-start-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+                symbolic_play_icon = theme.load_icon("media-playback-start-symbolic",
+                                                     iconheight,
+                                                     IconLookupFlags.FORCE_SIZE);
             else
                 symbolic_play_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON);
             
             if(theme.has_icon("media-playback-pause-symbolic"))
-                symbolic_pause_icon = theme.load_icon("media-playback-pause-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+                symbolic_pause_icon = theme.load_icon("media-playback-pause-symbolic",
+                                                      iconheight,
+                                                      IconLookupFlags.FORCE_SIZE);
             else
                 symbolic_pause_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON);
             if(theme.has_icon("folder-symbolic"))
-                folder_symbolic_icon = theme.load_icon("folder-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+                folder_symbolic_icon = theme.load_icon("folder-symbolic",
+                                                       iconheight,
+                                                       IconLookupFlags.FORCE_SIZE);
             else
                 folder_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.BUTTON);
             if(theme.has_icon("network-transmit-symbolic"))
-                network_symbolic_icon = theme.load_icon("network-transmit-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+                network_symbolic_icon = theme.load_icon("network-transmit-symbolic",
+                                                        iconheight,
+                                                        IconLookupFlags.FORCE_SIZE);
             else
                 network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
             

@@ -75,6 +75,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
     ExtraWidgets/xnoise-volume-slider-button.vala \
     GlobalAccess/xnoise-global-access.vala \
+    IconRepo/xnoise-icon-cache.vala \
     IconRepo/xnoise-icon-repo.vala \
     ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \

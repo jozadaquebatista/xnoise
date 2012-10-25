@@ -309,7 +309,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         ta.label =  N_("Show _Album Art view");
         ta.accelerator = "<Ctrl>B";
         ta.callback = toggle_bottom_view;
-        ta.is_active = Params.get_bool_value("album_art_view_visible");
+        ta.is_active = false;
         toggle_action_entries += ta;
         
         setup_widgets();
@@ -653,6 +653,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 this.videoscreen.trigger_expose();
                 return false;
             });
+            if(aimage_timeout != 0) {
+                Source.remove(aimage_timeout);
+                aimage_timeout = 0;
+            }
+            mainview_page_buffer = TRACKLIST_VIEW_NAME;
+            mainview_box.select_main_view(mainview_page_buffer);
+//            sbuttonVI.select(mainview_page_buffer, true);
+
         }
         else {
             this.videoscreen.get_window().unfullscreen();
@@ -1656,6 +1664,8 @@ print("on close 2\n");
             xb.leave_notify_event.connect( (s, e) => {
                 if(not_show_art_on_hover_image)
                     return false;
+                if(fullscreenwindowvisible)
+                    return false;
                 if(aimage_timeout != 0) {
                     Source.remove(aimage_timeout);
                     aimage_timeout = 0;
@@ -1724,13 +1734,11 @@ print("on close 2\n");
                     bottom_notebook.set_current_page(1);
                     album_cover_view.grab_focus();
                     update_toggle_action_state("ShowAlbumArtViewAction", true);
-                    Params.set_bool_value("album_art_view_visible", true);
                 }
                 else {
                     bottom_notebook.set_current_page(0);
                     tl.grab_focus();
                     update_toggle_action_state("ShowAlbumArtViewAction", false);
-                    Params.set_bool_value("album_art_view_visible", false);
                 }
             });
             //VOLUME SLIDE BUTTON
@@ -1791,6 +1799,31 @@ print("on close 2\n");
             });
             
             album_cover_view = new AlbumArtView();
+            var album_art_overlay = new Overlay();
+            
+            var spinner = new Spinner();
+            spinner.start();
+            spinner.set_size_request(160, 160);
+            album_art_overlay.add_overlay(spinner);
+            spinner.halign = Align.CENTER;
+            spinner.valign = Align.CENTER;
+            spinner.set_no_show_all(true);
+            album_cover_view.show();
+            spinner.show();
+            album_cover_view.notify.connect( (s,p) => {
+                if(p.name != "in-loading" && p.name != "in-import")
+                    return;
+                if(album_cover_view.in_loading || album_cover_view.in_import) {
+                    spinner.start();
+                    spinner.set_no_show_all(false);
+                    spinner.show_all();
+                }
+                else {
+                    spinner.stop();
+                    spinner.hide();
+                    spinner.set_no_show_all(true);
+                }
+            });
             var aa_contr_bx = new Box(Orientation.HORIZONTAL, 0);
             
             //Both searches shall share the same buffer
@@ -1826,14 +1859,9 @@ print("on close 2\n");
             var aasw = new ScrolledWindow(null, null);
             aasw.set_shadow_type(ShadowType.IN);
             aasw.add(album_cover_view);
-            aabx.pack_start(aasw, true, true, 2);
+            album_art_overlay.add(aasw);
+            aabx.pack_start(album_art_overlay, true, true, 2);
             bottom_notebook.append_page(aabx);
-            if(Params.get_bool_value("album_art_view_visible")) {
-                Idle.add(() => {
-                    album_view_toggle.set_active(true);
-                    return false;
-                });
-            }
             //Fullscreen window
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
             this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
@@ -1890,7 +1918,6 @@ print("on close 2\n");
             return;
         album_view_toggle.set_active(!album_view_toggle.get_active());
         update_toggle_action_state("ShowAlbumArtViewAction", album_view_toggle.get_active());
-        Params.set_bool_value("album_art_view_visible", album_view_toggle.get_active());
     }
     
     internal void set_bottom_view(int tab) {
@@ -1914,6 +1941,8 @@ print("on close 2\n");
     
     private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
         if(not_show_art_on_hover_image)
+            return false;
+        if(fullscreenwindowvisible)
             return false;
         aimage_timeout = Timeout.add(300, () => {
             mainview_page_buffer = this.mainview_box.get_current_main_view_name();
