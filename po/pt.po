@@ -8,14 +8,13 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
-"Language: \n"
+"Language: Portuguese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: Portugal\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
 msgid "Xnoise"
@@ -349,19 +348,16 @@ msgstr "Número da faixa"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
-#, fuzzy
 msgid "Edit data for track"
-msgstr "Editar detalhes da faixa"
+msgstr "Editar dados da faixa"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
-#, fuzzy
 msgid "Change album data"
-msgstr "Alterar nome do álbum"
+msgstr "Alterar dados do álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
-#, fuzzy
 msgid "Change artist data"
-msgstr "Alterar nome do artista"
+msgstr "Alterar dados do artista"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:54
@@ -557,7 +553,7 @@ msgstr "Mostrar _vídeos em ecrã completo"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:309
 msgid "Show _Album Art view"
-msgstr ""
+msgstr "Mostr_ar vista de álbuns"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:509
 #, c-format
