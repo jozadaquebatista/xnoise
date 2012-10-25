@@ -99,6 +99,7 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
     private const double MIN_BORDER_DIST = 10;
+    private const double MAX_UPSCALE_RATIO = 2.0;
     private Gdk.Pixbuf logo_pixb;
     private Gdk.Pixbuf cover_image_pixb;
     private unowned Main xn;
@@ -346,7 +347,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 else
                     ratio = (double) w/((2 * imageWidth) + MIN_BORDER_DIST);
                 
-                ratio = double.min(ratio, 1.2);
+                ratio = double.min(ratio, MAX_UPSCALE_RATIO);
                 //print("ratio : %lf\n", ratio);
                 
                 imageWidth  = (int)(imageWidth  * ratio);
@@ -427,14 +428,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 filename = Markup.escape_text(filename);
             }
         }
-    
-        //if neither title nor artist are known, show filename instead
-        //if there is no title, the title is the same as the filename
-        //shouldn't global rather return null if there is no title?
-    
         //todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
-        if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/)) {
-            result = "<b>" + prepare_name_from_filename(filename) + " </b>";
+        if((title == null && artist == null && filename != null) || (filename == title)) {
+            result = "";//"<b>" + prepare_name_from_filename(filename) + " </b>";
         }
         else {
             if(album == null)
@@ -450,9 +446,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             
             result = "<span size=\"large\" rise=\"8000\" weight=\"bold\">" + 
                       title +   "</span>\n" +
-                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span>".printf(_("by")) + 
+                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span>".printf(_("by")) +
                       artist + "\n" +
-                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span> ".printf(_("on")) + 
+                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span> ".printf(_("on")) +
                       album;
         }
         return (owned)result;

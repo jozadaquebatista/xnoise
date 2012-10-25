@@ -271,14 +271,31 @@ private class Xnoise.AlbumImage : Gtk.Image {
            (prepare_for_comparison(check_album_name(artist, album))  != 
                 prepare_for_comparison(check_album_name(_artist, _album)))) 
             return;
-        //print("  ..  comply\n");
+        
         File f = File.new_for_path(image_path);
-        if(!f.query_exists(null)) 
+        
+        if(f == null || f.get_path() == null)
             return;
         
-        global.check_image_for_current_track();
-        set_image_via_idle(image_path);
+        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+        fjob.set_arg("file", f);
+        io_worker.push_job(fjob);
+        
+    }
+    
+    private bool read_file_job(Worker.Job job) {
+        File f = (File)job.get_arg("file");
+        
+        if(f == null || !f.query_exists(null)) 
+            return false;
+        
+        Idle.add(() => {
+            global.check_image_for_current_track();
+            set_image_via_idle(f.get_path());
+            return false;
+        });
         using_thumbnail = false;
+        return false;
     }
     
     private bool using_thumbnail = false;

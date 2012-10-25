@@ -158,9 +158,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         internal void populate_model() {
             if(populating_model)
                 return;
-            print("populate model\n");
+            //print("populate model\n");
             populating_model = true;
-            //print("populate_model\n");
             var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_job);
             db_worker.push_job(a_job);
             a_job.finished.connect(on_populate_finished);
@@ -231,6 +230,10 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
             this.icons_model.populate_model();
+        });
+        icon_cache.sign_new_album_art_loaded.connect( (p) => {
+            print("queue_draw\n");
+            queue_draw();
         });
         this.item_activated.connect(this.on_row_activated);
         this.button_press_event.connect(this.on_button_press);
@@ -471,12 +474,13 @@ private class Xnoise.IconCache : GLib.Object {
            (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
                 prepare_for_comparison(check_album_name(_artist, _album)))) 
             return;
+        
         File f = File.new_for_path(image_path);
-        if(!f.query_exists(null)) 
+        if(f == null || f.get_path() == null)
             return;
         string p1 = f.get_path();
         p1 = p1.replace("_medium", "_extralarge"); // medium images are reported, extralarge not
-        Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
         fjob.set_arg("file", p1);
         fjob.set_arg("initial_import", false);
         fjob.cancellable = this.cancellable;
@@ -544,8 +548,14 @@ private class Xnoise.IconCache : GLib.Object {
     private bool all_jobs_in_queue;
 
     private void import_job_count_dec_and_test(Worker.Job job) {
-        if(!((bool)job.get_arg("initial_import")))
+        if(!((bool)job.get_arg("initial_import"))) {
+            string p = (string)job.get_arg("file");
+            Idle.add(() => {
+                sign_new_album_art_loaded(p);
+                return false;
+            });
             return;
+        }
         assert(io_worker.is_same_thread());
         import_job_count--;
         if(all_jobs_in_queue && import_job_count <=0) {
@@ -560,7 +570,10 @@ private class Xnoise.IconCache : GLib.Object {
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(io_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-        if(!file.get_path().has_suffix("_extralarge") && !file.get_path().has_suffix("_embedded")) {
+        job.set_arg("file", file.get_path());
+        if(file == null ||
+            (!file.get_path().has_suffix("_extralarge") &&
+             !file.get_path().has_suffix("_embedded"))) {
             import_job_count_dec_and_test(job);
             return false;
         }
