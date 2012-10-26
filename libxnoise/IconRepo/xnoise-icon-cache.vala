@@ -38,19 +38,25 @@ using Xnoise.Utilities;
 
 private class Xnoise.IconCache : GLib.Object {
     
+    private Gdk.Pixbuf? shadow = null;
     private static HashTable<string,Gdk.Pixbuf> cache;
     
     private File dir;
     private int icon_size;
+    private int import_job_count;
+    private bool all_jobs_in_queue;
     
     public Cancellable cancellable;
     
     public signal void sign_new_album_art_loaded(string path);
     public signal void loading_done();
     
+    public bool loading_in_progress { get; private set; }
+    
     
     public IconCache(File dir, int icon_size = 220) {
         assert(io_worker != null);
+        assert(dir.get_path() != null);
         lock(cache) {
             if(cache == null) {
                 cache = new HashTable<string,Gdk.Pixbuf>(str_hash, str_equal);
@@ -59,15 +65,25 @@ private class Xnoise.IconCache : GLib.Object {
         this.cancellable = global.main_cancellable;
         this.dir = dir;
         this.icon_size = icon_size;
+        if(shadow == null) {
+            try {
+                if(IconTheme.get_default().has_icon("xn-shadow"))
+                    shadow = IconTheme.get_default().load_icon("xn-shadow",
+                                                               icon_size,
+                                                               IconLookupFlags.FORCE_SIZE);
+            }
+            catch(Error e) {
+                print("Shadow icon missing. %s\n", e.message);
+                shadow = null;
+            }
+        }
         loading_in_progress = true;
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
-//        global.sign_album_image_fetched.connect(on_album_image_fetched);
     }
 
     public void handle_image(string image_path) {
-//        print("on_image_fetched aav %s - %s : %s", _artist, _album, image_path);
         if(image_path == EMPTYSTRING) 
             return;
         
@@ -83,28 +99,6 @@ private class Xnoise.IconCache : GLib.Object {
         io_worker.push_job(fjob);
     }
     
-//    private void on_album_image_fetched(string _artist, string _album, string image_path) {
-////        print("on_image_fetched aav %s - %s : %s", _artist, _album, image_path);
-//        if(image_path == EMPTYSTRING) 
-//            return;
-//        
-//        if((prepare_for_comparison(global.current_artist) != prepare_for_comparison(_artist))||
-//           (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
-//                prepare_for_comparison(check_album_name(_artist, _album)))) 
-//            return;
-//        
-//        File f = File.new_for_path(image_path);
-//        if(f == null || f.get_path() == null)
-//            return;
-//        string p1 = f.get_path();
-//        p1 = p1.replace("_medium", "_extralarge"); // medium images are reported, extralarge not
-//        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
-//        fjob.set_arg("file", p1);
-//        fjob.set_arg("initial_import", false);
-//        fjob.cancellable = this.cancellable;
-//        io_worker.push_job(fjob);
-//    }
-
     private void on_loading_finished() {
         return_if_fail(Main.instance.is_same_thread());
         loading_done();
@@ -162,9 +156,6 @@ private class Xnoise.IconCache : GLib.Object {
         }
     }
     
-    private int import_job_count;
-    private bool all_jobs_in_queue;
-
     private void import_job_count_dec_and_test(Worker.Job job) {
         assert(io_worker.is_same_thread());
         if(!((bool)job.get_arg("initial_import"))) {
@@ -185,8 +176,6 @@ private class Xnoise.IconCache : GLib.Object {
             });
         }
     }
-    
-    public bool loading_in_progress { get; private set; }
     
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(io_worker.is_same_thread(), false);
@@ -216,7 +205,7 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = add_shadow(px, icon_size);
+            px = add_shadow(px, icon_size, 22);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         import_job_count_dec_and_test(job);
@@ -245,34 +234,26 @@ private class Xnoise.IconCache : GLib.Object {
         }
     }
 
-    private Gdk.Pixbuf? shadow = null;
-    
-    private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size) {
-        if(size <= 34)
+    private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size, int shadow_size = 22) {
+        if(shadow == null)
             return pixbuf;
-        int shadow_size = 16;
-        Gdk.Pixbuf? pix = pixbuf;
+        if(shadow_size <= 3)
+            return pixbuf;
+        if(size <= ((2* shadow_size) + 2))
+            return pixbuf;
+        
+        Gdk.Pixbuf? pix;
         var surface = new ImageSurface(Format.ARGB32, size, size);
         var cr = new Cairo.Context(surface);
         cr.rectangle(0, 0, size, size);
-        if(shadow == null) {
-            try {
-                if(IconTheme.get_default().has_icon("xn-shadow"))
-                    shadow = IconTheme.get_default().load_icon("xn-shadow",
-                                                               size,
-                                                               IconLookupFlags.FORCE_SIZE);
-            }
-            catch(Error e) {
-                print("%s\n", e.message);
-                return pixbuf;
-            }
-        }
         Gdk.cairo_set_source_pixbuf(cr, shadow, 0, 0);
         cr.paint();
         
         int imagesize = size -(2 * shadow_size);
         if(pixbuf.get_width() != imagesize || pixbuf.get_height() != imagesize)
-            pix = pix.scale_simple(imagesize, imagesize, Gdk.InterpType.BILINEAR);
+            pix = pixbuf.scale_simple(imagesize, imagesize, Gdk.InterpType.BILINEAR);
+        else
+            pix = pixbuf;
         
         Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size, shadow_size);
         cr.paint();

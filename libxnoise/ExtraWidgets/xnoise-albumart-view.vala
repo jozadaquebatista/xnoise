@@ -81,7 +81,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         };
 
         private Gdk.Pixbuf? logo = null;
-        public const int ICONSIZE = 180;
+        public const int ICONSIZE = 250;
         private unowned AlbumArtView view;
         
         public IconsModel(AlbumArtView view) {
@@ -220,9 +220,10 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_markup_column(IconsModel.Column.TEXT);
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
-        this.set_column_spacing(60);
-        this.set_margin(20);
-        this.set_row_spacing(40);
+        this.set_column_spacing(15);
+        this.set_margin(0);
+        this.set_item_padding(0);
+        this.set_row_spacing(15);
         if(icon_cache == null) {
             File album_image_dir =
                 File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
@@ -235,7 +236,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 in_loading = false;
         });
         icons_model = new IconsModel(this);
-        this.set_item_width(icons_model.ICONSIZE + 40);
+        this.set_item_width(icons_model.ICONSIZE);
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
             this.icons_model.populate_model();
