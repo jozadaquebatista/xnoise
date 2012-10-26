@@ -307,6 +307,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     }
     
     private Gdk.Rectangle rect;
+    private const int frame_width = 1;
     
     public override bool draw(Cairo.Context cr) {
         w = this.get_allocated_width();
@@ -357,19 +358,25 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                     // Do not paint for small pictures
                     return true;
                 }
-                logo = logo.scale_simple(imageWidth, imageHeight, Gdk.InterpType.HYPER);
+                logo = logo.scale_simple(imageWidth  - 2 * frame_width,
+                                         imageHeight - 2 * frame_width,
+                                         Gdk.InterpType.HYPER);
                 
-                this.surface = new ImageSurface(0, logo.get_width(), logo.get_height());
-                Cairo.Context ct = new Cairo.Context(surface);
-                Gdk.cairo_set_source_pixbuf(ct, logo, 0, 0);
-                ct.paint(); // paint on external context
-                
-                y_offset = (int)((h * 0.5)  - (imageHeight * 0.5));
+                y_offset = (int)((h * 0.45)  - (imageHeight * 0.5));
                 x_offset = (int)((w  * 0.45));
                 
-                cr.translate(x_offset, y_offset);
+                this.surface = new ImageSurface(0, imageWidth, imageHeight);
+                Cairo.Context ct = new Cairo.Context(surface);
+                ct.set_source_rgb(0.9, 0.9, 0.9);
+                ct.set_line_width(0);
+                ct.rectangle(0, 0, imageWidth, imageWidth);
+                ct.fill();
+                Gdk.cairo_set_source_pixbuf(ct, logo, frame_width, frame_width);
+                ct.paint(); // paint on external context
                 
-                cr.paint();
+                cr.paint(); // black background
+                
+                cr.translate(x_offset, y_offset);
                 
                 cr.set_source_surface(this.surface, 0, 0);
                 cr.paint();
@@ -391,8 +398,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 Pango.cairo_show_layout(cr, pango_layout);
                 cr.restore();
                 
-                double alpha = 0.3;
-                double step = 1.0 / this.imageHeight;
+                double alpha = 0.35;
+                double step = 1.3 * (1.0 / this.imageHeight);
                 
                 cr.translate(0.0, 2.0 * this.imageHeight);
                 cr.scale(1, -1);
@@ -402,7 +409,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                     cr.save();
                     cr.clip();
                     cr.set_source_surface(this.surface, 0, 0);
-                    alpha = alpha - 1.3 * step;
+                    alpha = alpha - step;
                     alpha = double.max(0.0, alpha);
                     cr.paint_with_alpha(alpha);
                     cr.restore();
