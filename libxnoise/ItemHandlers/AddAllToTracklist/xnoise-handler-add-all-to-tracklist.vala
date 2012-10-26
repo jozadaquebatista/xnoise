@@ -165,13 +165,8 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     }
 
     private void on_menu_add(Item item, GLib.Value? data) {
-        TreeView tv = (TreeView)data;
-        if(tv == null)
-            return;
-        TreeQueryable tq = tv as TreeQueryable;
-        if(tv == null)
-            return;
-        if(!(tv is TreeView))
+        TreeQueryable? tq = data as TreeQueryable;
+        if(tq == null)
             return;
         if(!(tq is TreeQueryable))
             return;
