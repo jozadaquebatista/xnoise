@@ -97,10 +97,12 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
             
             global.sign_searchtext_changed.connect( (s,t) => {
+                if(!cache_ready)
+                    return;
                 if(main_window.album_view_toggle.get_active()) {
                     if(search_idlesource != 0)
                         Source.remove(search_idlesource);
-                    search_idlesource = Timeout.add(180, () => {
+                    search_idlesource = Timeout.add(500, () => {
                         this.filter();
                         search_idlesource = 0;
                         return false;
@@ -130,6 +132,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             });
         }
         
+        public bool cache_ready = false;
         
         private void reset_change_cb() {
             Idle.add(() => {
@@ -249,6 +252,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_width(icons_model.ICONSIZE);
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
+            icons_model.cache_ready = true;
             this.icons_model.populate_model();
         });
         icon_cache.sign_new_album_art_loaded.connect( (p) => {

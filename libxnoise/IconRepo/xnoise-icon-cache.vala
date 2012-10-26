@@ -146,7 +146,9 @@ private class Xnoise.IconCache : GLib.Object {
                     fjob.set_arg("file", file.get_path());
                     fjob.set_arg("initial_import", true);
                     fjob.cancellable = this.cancellable;
-                    import_job_count++;
+                    lock(import_job_count) {
+                        import_job_count++;
+                    }
                     cache_worker.push_job(fjob);
                 }
             }
@@ -156,7 +158,9 @@ private class Xnoise.IconCache : GLib.Object {
         }
         job.big_counter[0]--;
         if(job.big_counter[0] == 0) {
-            all_jobs_in_queue = true;
+            lock(all_jobs_in_queue) {
+                all_jobs_in_queue = true;
+            }
         }
     }
     
@@ -170,8 +174,22 @@ private class Xnoise.IconCache : GLib.Object {
             });
             return;
         }
-        import_job_count--;
-        if(all_jobs_in_queue && import_job_count <=0) {
+        bool res_flag = false;
+        lock(import_job_count) {
+            import_job_count--;
+            if(import_job_count <=0) {
+                res_flag = true;
+            }
+        }
+        lock(all_jobs_in_queue) {
+            if(all_jobs_in_queue && res_flag) {
+                res_flag = true;
+            }
+            else {
+                res_flag = false;
+            }
+        }
+        if(res_flag) {
             Timeout.add(100, () => {
                 print("Icon Cache: inital import done.\n");
                 loading_in_progress = false;
