@@ -208,31 +208,49 @@ private class Xnoise.AlbumImage : Gtk.Image {
     }
     
     internal void load_default_image() {
-        this.set_size_request(SIZE, SIZE);
-        this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
-        current_path = "default";
+        Idle.add(() => {
+            this.set_size_request(SIZE, SIZE);
+            this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
+            current_path = "default";
+            return false;
+        });
     }
 
     private void set_albumimage_from_path(string? image_path) {
         if(MainContext.current_source().is_destroyed())
             return;
         
-        if(image_path == null) {
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_albumimage_file_job);
+        job.set_arg("image_path", image_path);
+        io_worker.push_job(job);
+        
+    }
+    
+    private bool load_albumimage_file_job(Worker.Job job) {
+        string? image_path = (string?)job.get_arg("image_path");
+        
+        if(image_path == null || image_path == EMPTYSTRING) {
             load_default_image();
-            return;
+            return false;
         }
         File f = File.new_for_path(image_path);
         if(!f.query_exists(null)) {
             load_default_image();
-            return;
+            return false;
         }
-        this.set_from_file(image_path);
+        Idle.add(() => {
+            this.set_from_file(image_path);
+            return false;
+        });
         current_path = image_path;
-        Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-        this.set_from_pixbuf(temp);
+        Idle.add(() => {
+            Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+            this.set_from_pixbuf(temp);
+            return false;
+        });
         current_path = image_path;
         if(!using_thumbnail) {
-            Timeout.add_seconds(2, () => {
+            Timeout.add_seconds(1, () => {
                 var fileout  = get_albumimage_for_artistalbum(global.current_artist,
                                                               global.current_album,
                                                               "medium");
@@ -241,8 +259,9 @@ private class Xnoise.AlbumImage : Gtk.Image {
                                                               "embedded");
                 if(fileout == null && fileout2 == null) {
                     //print("image not fitting. set default\n");
-                    if(current_path != "default")
+                    if(current_path != "default") {
                         load_default_image();
+                    }
                     return false;
                 }
                 if(fileout.get_path() != current_path && fileout2.get_path() != current_path) {
@@ -258,6 +277,7 @@ private class Xnoise.AlbumImage : Gtk.Image {
                 return false;
             });
         }
+        return false;
     }
 
     private uint source = 0;
@@ -312,6 +332,7 @@ private class Xnoise.AlbumImage : Gtk.Image {
             
         source = Timeout.add(200, () => {
             this.set_albumimage_from_path(image_path);
+            source = 0;
             return false;
         });
     }

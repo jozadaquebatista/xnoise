@@ -84,7 +84,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                main_window.album_view_toggle.get_active()) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add_seconds(1, () => { //late search, if widget is not visible
+                search_idlesource = Timeout.add_seconds(2, () => { //late search, if widget is not visible
                     //print("timeout search started\n");
                     filter();
                     search_idlesource = 0;
@@ -94,7 +94,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             else {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add(180, () => {
+                search_idlesource = Timeout.add(500, () => {
                     this.filter();
                     search_idlesource = 0;
                     return false;
