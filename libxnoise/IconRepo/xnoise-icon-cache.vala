@@ -53,7 +53,7 @@ private class Xnoise.IconCache : GLib.Object {
     
     public bool loading_in_progress { get; private set; }
     
-    public Gdk.Pixbuf? album_art { get; private set; default = null; }
+    public Gdk.Pixbuf? album_art { get; private set; }
     
 //    private Gdk.Pixbuf albumart_raw;
     
@@ -79,10 +79,7 @@ private class Xnoise.IconCache : GLib.Object {
         catch(Error e) {
             print("Shadow icon missing. %s\n", e.message);
         }
-        assert(dummy_pixbuf is Gdk.Pixbuf);
-        if(album_art == null) {
-            this.album_art = add_shadow(dummy_pixbuf, icon_size, SHADOW_SIZE);
-        }
+        this.album_art = add_shadow(dummy_pixbuf, icon_size, SHADOW_SIZE);
         
         loading_in_progress = true;
         
