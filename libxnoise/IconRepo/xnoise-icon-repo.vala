@@ -51,8 +51,6 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
     internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
     
-    internal Gdk.Pixbuf albumart                    { get; private set; }
-    
     internal signal void icon_theme_changed();
     
     construct {
@@ -152,9 +150,6 @@ internal class Xnoise.IconRepo : GLib.Object {
                                                         IconLookupFlags.FORCE_SIZE);
             else
                 network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
-            
-            if(theme.has_icon("xn-albumart"))
-                albumart = theme.load_icon("xn-albumart", 180, IconLookupFlags.FORCE_SIZE);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);

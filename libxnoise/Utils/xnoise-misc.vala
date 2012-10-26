@@ -42,6 +42,8 @@ namespace Xnoise {
     public static UserInfo userinfo = null;
     public static Worker db_worker = null;
     public static Worker io_worker = null;
+    public static Worker cache_worker = null;
+    
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
@@ -101,8 +103,9 @@ namespace Xnoise {
         media_importer = new MediaImporter();
         
         // WORKERS
-        db_worker = new Worker(MainContext.default());
-        io_worker = new Worker(MainContext.default());
+        db_worker    = new Worker(MainContext.default());
+        io_worker    = new Worker(MainContext.default());
+        cache_worker = new Worker(MainContext.default());
         
         // THUMBNAILER DBUS PROXY
         thumbnailer = new DbusThumbnailer();

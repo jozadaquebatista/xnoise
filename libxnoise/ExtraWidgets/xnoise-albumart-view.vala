@@ -88,7 +88,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             this.set_column_types(col_types);
             this.view = view;
             try {
-                logo = icon_repo.albumart;
+                logo = view.icon_cache.album_art;
             }
             catch(Error e) {
                 print("%s\n", e.message);
@@ -221,13 +221,23 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
         this.set_column_spacing(15);
-        this.set_margin(0);
+        this.set_margin(10);
         this.set_item_padding(0);
         this.set_row_spacing(15);
+        Gdk.Pixbuf? a_art_pixb = null;
+        try {
+            if(IconTheme.get_default().has_icon("xn-albumart"))
+                a_art_pixb = IconTheme.get_default().load_icon("xn-albumart",
+                                                           icons_model.ICONSIZE,
+                                                           IconLookupFlags.FORCE_SIZE);
+        }
+        catch(Error e) {
+            print("albumart icon missing. %s\n", e.message);
+        }
         if(icon_cache == null) {
             File album_image_dir =
                 File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
-            icon_cache = new IconCache(album_image_dir, icons_model.ICONSIZE);
+            icon_cache = new IconCache(album_image_dir, icons_model.ICONSIZE, a_art_pixb);
         }
         icon_cache.notify["loading-in-progress"].connect( () => {
             if(icon_cache.loading_in_progress)

@@ -367,7 +367,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 
                 this.surface = new ImageSurface(0, imageWidth, imageHeight);
                 Cairo.Context ct = new Cairo.Context(surface);
-                ct.set_source_rgb(0.9, 0.9, 0.9);
+                ct.set_source_rgb(0.8, 0.8, 0.8);
                 ct.set_line_width(0);
                 ct.rectangle(0, 0, imageWidth, imageWidth);
                 ct.fill();

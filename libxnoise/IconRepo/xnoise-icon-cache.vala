@@ -37,7 +37,7 @@ using Xnoise.Utilities;
 
 
 private class Xnoise.IconCache : GLib.Object {
-    
+    private const int SHADOW_SIZE = 22;
     private Gdk.Pixbuf? shadow = null;
     private static HashTable<string,Gdk.Pixbuf> cache;
     
@@ -53,9 +53,14 @@ private class Xnoise.IconCache : GLib.Object {
     
     public bool loading_in_progress { get; private set; }
     
+    public Gdk.Pixbuf? album_art { get; private set; default = null; }
     
-    public IconCache(File dir, int icon_size = 220) {
+//    private Gdk.Pixbuf albumart_raw;
+    
+    
+    public IconCache(File dir, int icon_size = 250, Gdk.Pixbuf dummy_pixbuf) {
         assert(io_worker != null);
+        assert(cache_worker != null);
         assert(dir.get_path() != null);
         lock(cache) {
             if(cache == null) {
@@ -65,24 +70,27 @@ private class Xnoise.IconCache : GLib.Object {
         this.cancellable = global.main_cancellable;
         this.dir = dir;
         this.icon_size = icon_size;
-        if(shadow == null) {
-            try {
-                if(IconTheme.get_default().has_icon("xn-shadow"))
-                    shadow = IconTheme.get_default().load_icon("xn-shadow",
-                                                               icon_size,
-                                                               IconLookupFlags.FORCE_SIZE);
-            }
-            catch(Error e) {
-                print("Shadow icon missing. %s\n", e.message);
-                shadow = null;
-            }
+        try {
+            if(IconTheme.get_default().has_icon("xn-shadow"))
+                shadow = IconTheme.get_default().load_icon("xn-shadow",
+                                                           icon_size,
+                                                           IconLookupFlags.FORCE_SIZE);
         }
+        catch(Error e) {
+            print("Shadow icon missing. %s\n", e.message);
+        }
+        assert(dummy_pixbuf is Gdk.Pixbuf);
+        if(album_art == null) {
+            this.album_art = add_shadow(dummy_pixbuf, icon_size, SHADOW_SIZE);
+        }
+        
         loading_in_progress = true;
+        
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
     }
-
+    
     public void handle_image(string image_path) {
         if(image_path == EMPTYSTRING) 
             return;
@@ -96,7 +104,7 @@ private class Xnoise.IconCache : GLib.Object {
         fjob.set_arg("file", p1);
         fjob.set_arg("initial_import", false);
         fjob.cancellable = this.cancellable;
-        io_worker.push_job(fjob);
+        cache_worker.push_job(fjob);
     }
     
     private void on_loading_finished() {
@@ -116,7 +124,6 @@ private class Xnoise.IconCache : GLib.Object {
     private void read_recoursive(File dir, Worker.Job job) {
         //this function shall run in the io thread
         return_val_if_fail(io_worker.is_same_thread(), false);
-        
         FileEnumerator enumerator;
         string attr = FileAttribute.STANDARD_NAME + "," +
                       FileAttribute.STANDARD_TYPE;
@@ -143,7 +150,7 @@ private class Xnoise.IconCache : GLib.Object {
                     fjob.set_arg("initial_import", true);
                     fjob.cancellable = this.cancellable;
                     import_job_count++;
-                    io_worker.push_job(fjob);
+                    cache_worker.push_job(fjob);
                 }
             }
         }
@@ -157,7 +164,7 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private void import_job_count_dec_and_test(Worker.Job job) {
-        assert(io_worker.is_same_thread());
+        assert(cache_worker.is_same_thread());
         if(!((bool)job.get_arg("initial_import"))) {
             string p = (string)job.get_arg("file");
             Idle.add(() => {
@@ -178,7 +185,7 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private bool read_file_job(Worker.Job job) {
-        return_val_if_fail(io_worker.is_same_thread(), false);
+        return_val_if_fail(cache_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
         job.set_arg("file", file.get_path());
         if(file == null ||
@@ -205,7 +212,7 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = add_shadow(px, icon_size, 22);
+            px = add_shadow(px, icon_size, SHADOW_SIZE);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         import_job_count_dec_and_test(job);
@@ -234,9 +241,13 @@ private class Xnoise.IconCache : GLib.Object {
         }
     }
 
+    private const int frame_width = 1;
+    
     private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size, int shadow_size = 22) {
-        if(shadow == null)
+        if(shadow == null) {
+            print("shadow is null\n");
             return pixbuf;
+        }
         if(shadow_size <= 3)
             return pixbuf;
         if(size <= ((2* shadow_size) + 2))
@@ -245,17 +256,22 @@ private class Xnoise.IconCache : GLib.Object {
         Gdk.Pixbuf? pix;
         var surface = new ImageSurface(Format.ARGB32, size, size);
         var cr = new Cairo.Context(surface);
-        cr.rectangle(0, 0, size, size);
         Gdk.cairo_set_source_pixbuf(cr, shadow, 0, 0);
         cr.paint();
         
-        int imagesize = size -(2 * shadow_size);
+        int imagesize = size - (2 * shadow_size) - (2 * frame_width);
+        
         if(pixbuf.get_width() != imagesize || pixbuf.get_height() != imagesize)
             pix = pixbuf.scale_simple(imagesize, imagesize, Gdk.InterpType.BILINEAR);
         else
             pix = pixbuf;
         
-        Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size, shadow_size);
+        cr.set_source_rgb(0.8, 0.8, 0.8);
+        cr.set_line_width(0);
+        cr.rectangle(shadow_size, shadow_size, size - (2 * shadow_size), size - (2 * shadow_size));
+        cr.fill();
+        
+        Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size + frame_width, shadow_size + frame_width);
         cr.paint();
         
         pix = Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size);

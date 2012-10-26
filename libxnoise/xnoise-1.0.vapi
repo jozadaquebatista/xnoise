@@ -1075,6 +1075,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.Worker cache_worker;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.HashTable<int,Xnoise.DataSource> data_source_registry;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Database.Reader db_reader;
