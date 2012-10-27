@@ -399,9 +399,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 cr.restore();
                 
                 double alpha = 0.35;
-                double step = 1.3 * (1.0 / this.imageHeight);
+                double step = 1.1 * (1.0 / this.imageHeight);
                 
-                cr.translate(0.0, 2.0 * this.imageHeight);
+                cr.translate(0.0, 2.0 * this.imageHeight + 3);
                 cr.scale(1, -1);
                 
                 for(int i = 0; i < imageHeight; i++) {
