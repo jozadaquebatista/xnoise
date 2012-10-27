@@ -64,6 +64,7 @@ namespace Xnoise.Resources {
 
     internal const string COPYRIGHT    = "Copyright \xc2\xa9 2008-2012 Jörn Magens";
     internal const string PROGRAM_NAME = "xnoise";
-    internal const string WEBSITE      = "http://www.xnoise-media-player.com/";
-    internal const string WEB_FAQ      = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
+    internal const string WEBSITE         = "http://www.xnoise-media-player.com/";
+    internal const string WEB_FAQ         = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
+    internal const string WEB_KEYBOARD_SC = "https://github.com/shuerhaaken/xnoise/wiki/KeyBindings";
 }

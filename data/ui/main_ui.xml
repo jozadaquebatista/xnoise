@@ -39,6 +39,7 @@
 		
 		<menu name="HelpMenu" action="HelpMenuAction">
 			<menuitem action="HelpFAQ"/>
+			<menuitem action="HelpKeyboard"/>
 			<placeholder name="HelpOps"/>
 			<separator/>
 			<menuitem action="AboutAction"/>

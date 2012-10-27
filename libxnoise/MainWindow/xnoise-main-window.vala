@@ -222,6 +222,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
             { "HelpFAQ", Gtk.Stock.DIALOG_QUESTION, N_("_Frequently Asked Questions"), null, N_("_Open Frequently Asked Questions in web browser"), on_help_faq },
+            { "HelpKeyboard", Gtk.Stock.DIALOG_QUESTION, N_("_Keyboard Shortcuts"), null, N_("_Open Keyboard Shortcuts in web browser"), on_keyboard_shortcuts_web },
         { "ConfigMenuAction", null, N_("_Config") }
     };
 
@@ -458,6 +459,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private void on_caught_eos_from_player() {
         this.change_track(ControlButton.Direction.NEXT, true);
+    }
+
+    private void on_keyboard_shortcuts_web() {
+        try {
+            Gtk.show_uri(get_window().get_screen(), WEB_KEYBOARD_SC, Gdk.CURRENT_TIME);
+        } 
+        catch(Error e) {
+            print("Unable to display xnoise keyboard shortcuts: %s\n", e.message);
+        }
     }
 
     private void on_help_faq() {
