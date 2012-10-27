@@ -382,12 +382,12 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 cr.paint();
                 cr.save();
                 
-                cr.move_to(-(x_offset), imageHeight/3.0);
+                cr.move_to(-(x_offset) + MIN_BORDER_DIST, imageHeight/3.0);
                 var font_description = new Pango.FontDescription();
                 font_description.set_family(font_family);
                 font_description.set_size((int)(font_size * Pango.SCALE));
                 
-                layout_width  = (int) (x_offset - (2 * MIN_BORDER_DIST));
+                layout_width  = (int) (x_offset - (3 * MIN_BORDER_DIST));
                 var pango_layout = Pango.cairo_create_layout(cr);
                 pango_layout.set_font_description(font_description);
                 pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
