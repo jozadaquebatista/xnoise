@@ -379,18 +379,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return false;
         });
         this.window_state_event.connect(on_window_state_event);
+        Idle.add(() => {
+            window_in_foreground = true;
+            return false;
+        });
     }
     
-    public bool window_in_foreground { get; private set; }
+    public bool window_in_foreground { get; private set; default = true; }
     
-    private bool on_window_state_event (Gdk.EventWindowState e) {
+    private bool on_window_state_event(Gdk.EventWindowState e) {
         if((e.new_window_state & Gdk.WindowState.MAXIMIZED) == Gdk.WindowState.MAXIMIZED) {
             window_maximized = true;
         }
         else {
             window_maximized = false;
         }
-        if((e.new_window_state & Gdk.WindowState.FOCUSED) == Gdk.WindowState.FOCUSED) {
+        if(this.is_active) {
             window_in_foreground = true;
         }
         else {
