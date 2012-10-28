@@ -61,8 +61,6 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     public AlbumArtView(CellArea area) {
         GLib.Object(cell_area:area);
         this.area = area;
-//        this.set_pixbuf_column(IconsModel.Column.ICON);
-//        this.set_markup_column(IconsModel.Column.TEXT);
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
         this.set_column_spacing(15);
@@ -149,6 +147,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             
             Idle.add(() => {
                 main_window.set_bottom_view(0);
+                main_window.reset_mainview_to_tracklist();
                 return false;
             });
             Idle.add(() => {

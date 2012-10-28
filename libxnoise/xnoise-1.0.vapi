@@ -722,6 +722,7 @@ namespace Xnoise {
 		public bool is_fullscreen;
 		public Xnoise.MediaSoureWidget msw;
 		public MainWindow ();
+		public void reset_mainview_to_tracklist ();
 		public void show_window ();
 		public void toggle_fullscreen ();
 		public void toggle_window_visbility ();

@@ -1810,8 +1810,7 @@ print("on close 2\n");
                     colorize_search_background(false);
                 }
             });
-            var area = new Xnoise.AlbumArtCellArea();
-            album_art_view = new AlbumArtView(area);
+            album_art_view = new AlbumArtView(new AlbumArtCellArea());
             var album_art_overlay = new Overlay();
             
             var spinner = new Spinner();
@@ -1924,6 +1923,10 @@ print("on close 2\n");
         this.delete_event.connect(this.on_close); //only send to tray
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
+    }
+    
+    public void reset_mainview_to_tracklist() {
+        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
     }
     
     private void toggle_bottom_view() {

@@ -1941,6 +1941,7 @@ XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_show_window (XnoiseMainWindow* self);
+void xnoise_main_window_reset_mainview_to_tracklist (XnoiseMainWindow* self);
 XnoiseLyricsView* xnoise_main_window_get_lyricsView (XnoiseMainWindow* self);
 XnoiseMainViewNotebook* xnoise_main_window_get_mainview_box (XnoiseMainWindow* self);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);

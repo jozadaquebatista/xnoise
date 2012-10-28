@@ -528,7 +528,7 @@ echo "
     
     ${bold}Music Store Plugins:${normal}
     Ubuntu One Music Store         ${enable_ubuntuone}
-    Magntune Music Store           ${enable_magnatune}
+    Magnatune Music Store          ${enable_magnatune}
     
     ${bold}Lyrics Provider Plugins:${normal}
     DatabaseLyrics (Buffer)        yes (always)
