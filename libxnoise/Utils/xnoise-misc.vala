@@ -50,6 +50,11 @@ namespace Xnoise {
     public static HashTable<string,Xnoise.DockableMedia>  dockable_media_sources;
     public static HashTable<int, Xnoise.DataSource>       data_source_registry;
 
+    public static PatternSpec pattern_audio;
+    public static PatternSpec pattern_video;
+
+    private static HashTable<string,int> supported_types;
+
     public static Database.Reader db_reader;
     public static Database.Writer db_writer;
     
@@ -87,6 +92,8 @@ namespace Xnoise {
             Main.instance.quit();
             return;
         }
+        
+        setup_pattern_specs();
         
         dockable_media_sources = new HashTable<string, DockableMedia> (str_hash, str_equal);
         data_source_registry   = new HashTable<int, Xnoise.DataSource>(direct_hash, direct_equal);
@@ -269,6 +276,26 @@ namespace Xnoise {
         int source_id = get_data_source_id_by_name(source_name);
         assert(source_id > -1);
         _current_stamps.insert(source_id, Random.next_int());
+    }
+    
+    private static void setup_pattern_specs() {
+        if(supported_types == null) {
+            // some extra mime types
+            supported_types = new HashTable<string,int>(str_hash, str_equal);
+            supported_types.insert("application/vnd.rn-realmedia", 1);
+            supported_types.insert("application/ogg", 1);
+            supported_types.insert("application/x-extension-m4a", 1);
+            supported_types.insert("application/x-extension-mp4", 1);
+            supported_types.insert("application/x-flac", 1);
+            supported_types.insert("application/x-flash-video", 1);
+            supported_types.insert("application/x-matroska", 1);
+            supported_types.insert("application/x-ogg", 1);
+            supported_types.insert("application/x-troff-msvideo", 1);
+            supported_types.insert("application/xspf+xml", 1);
+            
+            pattern_video = new PatternSpec("video*");
+            pattern_audio = new PatternSpec("audio*");
+        }
     }
 }
 

@@ -162,6 +162,18 @@ namespace Xnoise {
         string mime;
         var psVideo = new PatternSpec("video*");
         var psAudio = new PatternSpec("audio*");
+        HashTable<string,int> supported_types = 
+            new HashTable<string,int>(str_hash, str_equal);
+        supported_types.insert("application/vnd.rn-realmedia", 1);
+        supported_types.insert("application/ogg", 1);
+        supported_types.insert("application/x-extension-m4a", 1);
+        supported_types.insert("application/x-extension-mp4", 1);
+        supported_types.insert("application/x-flac", 1);
+        supported_types.insert("application/x-flash-video", 1);
+        supported_types.insert("application/x-matroska", 1);
+        supported_types.insert("application/x-ogg", 1);
+        supported_types.insert("application/x-troff-msvideo", 1);
+        supported_types.insert("application/xspf+xml", 1);
         string attr = FileAttribute.STANDARD_TYPE + "," +
                       FileAttribute.STANDARD_CONTENT_TYPE;
         if(_fileargs != null) {
@@ -175,13 +187,16 @@ namespace Xnoise {
                 string urischeme = current_file.get_uri_scheme();
                 string content = null;
                 if(urischeme in ls) {
+                    //print("current_file.get_uri(): %s\n", current_file.get_uri());
                     try {
                         FileInfo info = current_file.query_info(attr, FileQueryInfoFlags.NONE, null);
                         content = info.get_content_type();
                         mime = GLib.ContentType.get_mime_type(content);
                         
-                        if((psAudio.match_string(mime))||
-                           (psVideo.match_string(mime))) {
+                        if(psAudio.match_string(mime)||
+                           psVideo.match_string(mime) ||
+                           supported_types.lookup(mime) == 1) {
+                            //print("%s is supported\n", current_file.get_uri());
                             sa_args += current_file.get_uri();
                         }
                     }

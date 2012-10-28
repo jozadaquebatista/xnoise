@@ -150,6 +150,7 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
 public class Xnoise.TrackList : TreeView, IParams {
     private Main xn;
     private unowned IconTheme theme = null;
+
     private const TargetEntry[] src_target_entries = {
         {"text/uri-list", Gtk.TargetFlags.SAME_WIDGET, 0}
     };
@@ -219,6 +220,7 @@ public class Xnoise.TrackList : TreeView, IParams {
     public TrackList() {
         this.xn = Main.instance;
         theme = IconTheme.get_default();
+        
         if(tlm == null)
             print("tracklist model instance not available\n");
         
@@ -971,8 +973,6 @@ public class Xnoise.TrackList : TreeView, IParams {
         FileType filetype;
         string mime;
         
-        var psVideo = new PatternSpec("video*");
-        var psAudio = new PatternSpec("audio*");
         string attr = FileAttribute.STANDARD_TYPE + "," +
                       FileAttribute.STANDARD_CONTENT_TYPE;
         try {
@@ -989,10 +989,12 @@ public class Xnoise.TrackList : TreeView, IParams {
             print("%s\n", e.message);
             return;
         }
+        print("mime: %s\n", mime);
         bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(file.get_uri()));
         if(filetype == GLib.FileType.REGULAR &&
-           (psAudio.match_string(mime)||
-            psVideo.match_string(mime)||
+           (pattern_audio.match_string(mime)||
+            pattern_video.match_string(mime)||
+            supported_types.lookup(mime) == 1 ||
             is_playlist)) {
             if(is_playlist) {
                 Reader reader = new Reader();

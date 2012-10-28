@@ -249,8 +249,7 @@ public class Xnoise.Application : GLib.Application {
         string[] uris = {};
         File f = null;
         string mime;
-        var psVideo = new PatternSpec("video*");
-        var psAudio = new PatternSpec("audio*");
+        setup_pattern_specs();
         string attr = FileAttribute.STANDARD_TYPE + "," +
                       FileAttribute.STANDARD_CONTENT_TYPE;
         if(_fileargs != null) {
@@ -267,8 +266,9 @@ public class Xnoise.Application : GLib.Application {
                         content = info.get_content_type();
                         mime = GLib.ContentType.get_mime_type(content);
                         
-                        if((psAudio.match_string(mime))||
-                           (psVideo.match_string(mime))) {
+                        if(pattern_audio.match_string(mime) ||
+                           pattern_video.match_string(mime) ||
+                           supported_types.lookup(mime) == 1) {
                             uris += f.get_uri();
                         }
                     }

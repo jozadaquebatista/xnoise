@@ -1104,6 +1104,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static GLib.PatternSpec pattern_audio;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static GLib.PatternSpec pattern_video;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.PluginModule.Loader plugin_loader;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackList tl;

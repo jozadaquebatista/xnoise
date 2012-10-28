@@ -98,16 +98,13 @@ namespace Xnoise {
             print("testfunc %d\n", cnt++);
         }
         
-        
         private static string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
-
-        private static PatternSpec psVideo;// = new PatternSpec("video*");
-        private static PatternSpec psAudio;// = new PatternSpec("audio*");
         
         public static Item? create_item(string? uri) {
             if(uri == null)
                 return Item(ItemType.UNKNOWN);
             Item? item = Item(ItemType.UNKNOWN, uri);
+            item.stamp = get_current_stamp(0); // dummy
             File f = File.new_for_uri(uri);
             string scheme = f.get_uri_scheme();
             if(scheme in get_remote_schemes()) {
@@ -143,12 +140,9 @@ namespace Xnoise {
                 return item;
             string content = info.get_content_type();
             string mime = GLib.ContentType.get_mime_type(content);
-            if(psVideo == null)
-                psVideo = new PatternSpec("video*");
-            if(psAudio == null)
-                psAudio = new PatternSpec("audio*");
+            setup_pattern_specs();
             bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()));
-            if(psAudio.match_string(mime)|| is_playlist == true ) {
+            if(pattern_audio.match_string(mime)|| is_playlist == true || supported_types.lookup(mime) == 1 ) {
                 if(is_playlist == true) {
                     item.type = Xnoise.ItemType.PLAYLIST;
                 }
@@ -161,7 +155,7 @@ namespace Xnoise {
                     }
                 }
             }
-            else if(psVideo.match_string(mime)) {
+            else if(pattern_video.match_string(mime)) {
                     if(scheme in get_local_schemes()) {
                         item.type = ItemType.LOCAL_VIDEO_TRACK;
                     }

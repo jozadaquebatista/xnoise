@@ -2433,6 +2433,8 @@ extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GHashTable* xnoise_dockable_media_sources;
 extern GHashTable* xnoise_data_source_registry;
+extern GPatternSpec* xnoise_pattern_audio;
+extern GPatternSpec* xnoise_pattern_video;
 extern XnoiseDatabaseReader* xnoise_db_reader;
 extern XnoiseDatabaseWriter* xnoise_db_writer;
 extern XnoiseGstPlayer* xnoise_gst_player;

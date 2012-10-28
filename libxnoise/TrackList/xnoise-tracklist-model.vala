@@ -589,8 +589,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         File file;
         string mime;
         
-        var psVideo = new PatternSpec("video*");
-        var psAudio = new PatternSpec("audio*");
         string attr = FileAttribute.STANDARD_TYPE + "," +
                   FileAttribute.STANDARD_CONTENT_TYPE;
         
@@ -614,8 +612,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             }
             bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(file.get_uri()));
             if((filetype == GLib.FileType.REGULAR)&&
-               (psAudio.match_string(mime)||
-                psVideo.match_string(mime)||
+               (pattern_audio.match_string(mime)||
+                pattern_video.match_string(mime)||
+                supported_types.lookup(mime) == 1 ||
                 is_playlist == true)) {
                 
                 if(is_playlist) {
