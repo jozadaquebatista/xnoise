@@ -331,6 +331,8 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
         }
         for(int i = 0; i<job.track_dat.length; i++) {
             File f = File.new_for_uri(job.track_dat[i].item.uri);
+            if(!f.query_exists(null))
+                continue;
             var tw = new TagWriter();
             bool ret = false;
             //print("%s\n", job.item.type.to_string());

@@ -217,10 +217,12 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         }
         for(int i = 0; i<job.track_dat.length; i++) {
             File f = File.new_for_uri(job.track_dat[i].item.uri);
+            if(!f.query_exists(null))
+                continue;
             var tw = new TagWriter();
             bool ret = false;
             if(job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-                ret = tw.write_album(f, job.track_dat[i].album);
+                ret =  tw.write_album(f, job.track_dat[i].album);
                 ret |= tw.write_year(f, job.track_dat[i].year);
             }
             if(ret) {

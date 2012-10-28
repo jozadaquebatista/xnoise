@@ -245,6 +245,8 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         if(tag_job.track_dat[0].item.type == ItemType.LOCAL_AUDIO_TRACK ||
            tag_job.track_dat[0].item.type == ItemType.LOCAL_VIDEO_TRACK) {
             File f = File.new_for_uri(tag_job.track_dat[1].item.uri);
+            if(!f.query_exists(null))
+                return false;
             var tw = new TagWriter();
             bool ret = false;
             //print("%s\n", tag_job.item.type.to_string());
