@@ -100,7 +100,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
     private const double MIN_BORDER_DIST = 10;
     private const double MAX_UPSCALE_RATIO = 2.0;
-    private Gdk.Pixbuf logo_pixb;
+    private Gdk.Pixbuf default_image;
     private Gdk.Pixbuf cover_image_pixb;
     private unowned Main xn;
     private bool cover_image_available;
@@ -134,7 +134,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
-        refresh_source = Timeout.add_seconds(1, () => {
+        refresh_source = Timeout.add(500, () => {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
             io_worker.push_job(job);
             refresh_source = 0;
@@ -255,7 +255,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
-        refresh_source = Timeout.add_seconds(1, () => {
+        refresh_source = Timeout.add(500, () => {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
             io_worker.push_job(job);
             refresh_source = 0;
@@ -274,11 +274,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 return false;
             }
             cover_image_available = true;
-//            if(this.visible) {
-//                Gdk.Window w = this.get_window();
-//                if(w != null) 
-//                    w.invalidate_rect(null, false);
-//            }
             Idle.add(() => {
                 queue_draw();
                 return false;
@@ -298,11 +293,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 queue_draw();
                 return false;
             });
-//            if(this.visible) {
-//                Gdk.Window w = this.get_window();
-//                if(w != null) 
-//                    w.invalidate_rect(null, false);
-//            }
         }
         else {
             cover_image_pixb = null;
@@ -322,15 +312,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                         Gdk.EventMask.POINTER_MOTION_MASK |
                         Gdk.EventMask.ENTER_NOTIFY_MASK);
         try {
-            logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
+            default_image = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
         }
         catch(GLib.Error e) {
             print("%s\n", e.message);
             return;
         }
-        logo_pixb = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.9),
-                                           (int)(logo_pixb.get_height() * 0.9),
-                                           Gdk.InterpType.HYPER);
+        default_image = default_image.scale_simple((int)(default_image.get_width()  * 0.8),
+                                                   (int)(default_image.get_height() * 0.8),
+                                                   Gdk.InterpType.HYPER);
     }
     
     private Gdk.Rectangle rect;
@@ -345,20 +335,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 cr.set_source_rgb(0.0f, 0.0f, 0.0f);
                 cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
                 cr.fill();
-                if(logo_pixb == null)
-                    try {
-                        logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                        return true;
-                    }
-//                logo = logo_pixb;//.scale_simple((int)(logo_pixb.get_width() * 0.8),
-//                                              (int)(logo_pixb.get_height() * 0.8),
-//                                              Gdk.InterpType.HYPER);
-                y_offset = (int)((h * 0.5) - (logo_pixb.get_height() * 0.4));
-                x_offset = (int)((w  * 0.5) - (logo_pixb.get_width()  * 0.4));
-                Gdk.cairo_set_source_pixbuf(cr, logo_pixb, x_offset, y_offset);
+                y_offset = (int)((h * 0.5)  - (default_image.get_height() * 0.4));
+                x_offset = (int)((w  * 0.5) - (default_image.get_width()  * 0.4));
+                Gdk.cairo_set_source_pixbuf(cr, default_image, x_offset, y_offset);
                 cr.paint();
                 return true;
             }
