@@ -398,8 +398,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 Pango.cairo_show_layout(cr, pango_layout);
                 cr.restore();
                 
-                double alpha = 0.35;
-                double step = 1.1 * (1.0 / this.imageHeight);
+                double alpha = 0.2;
+                double step = 0.5 * (1.0 / this.imageHeight);
                 
                 cr.translate(0.0, 2.0 * this.imageHeight + 3);
                 cr.scale(1, -1);
