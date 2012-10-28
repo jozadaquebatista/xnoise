@@ -1664,17 +1664,17 @@ print("on close 2\n");
             
             //PLAYING TITLE IMAGE
             this.albumimage = new AlbumImage();
-            EventBox xb = new EventBox();
-            xb.set_visible_window(false);
-            xb.border_width = 1;
-            xb.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
-            xb.add(albumimage);
+//            EventBox xb = new EventBox();
+//            xb.set_visible_window(false);
+//            xb.border_width = 1;
+//            xb.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+//            xb.add(albumimage);
             ToolItem albumimageTI = new ToolItem();
-            albumimageTI.add(xb);
+            albumimageTI.add(albumimage);
             aimage_timeout = 0;
-            xb.button_press_event.connect(ai_button_clicked);
-            xb.enter_notify_event.connect(ai_ebox_enter);
-            xb.leave_notify_event.connect( (s, e) => {
+            albumimage.button_press_event.connect(ai_button_clicked);
+            albumimage.enter_notify_event.connect(ai_ebox_enter);
+            albumimage.leave_notify_event.connect( (s, e) => {
                 if(not_show_art_on_hover_image)
                     return false;
                 if(fullscreenwindowvisible)

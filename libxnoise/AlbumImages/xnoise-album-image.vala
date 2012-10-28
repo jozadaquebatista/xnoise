@@ -36,22 +36,26 @@ using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Utilities;
 
-private class Xnoise.AlbumImage : Gtk.Image {
-    private const int SIZE = 48;
+private class Xnoise.AlbumImage : Gtk.EventBox {
+    internal static const int SIZE = 48;
     private AlbumImageLoader loader = null;
-    private Main xn;
     private string artist = EMPTYSTRING;
     private string album = EMPTYSTRING;
     private static uint timeout = 0;
     private string default_size = "medium";
     private string? current_path = null;
+    
+    private Gdk.Pixbuf? pixbuf = null;
 
     public AlbumImage() {
-        xn = Main.instance;
+        this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
         this.set_size_request(SIZE, SIZE);
-        this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
-        current_path = "default";
-        
+        this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK |
+                        Gdk.EventMask.ENTER_NOTIFY_MASK |
+                        Gdk.EventMask.LEAVE_NOTIFY_MASK
+        );
+        this.load_default_image();
         loader = new AlbumImageLoader();
         global.sign_album_image_fetched.connect(on_album_image_fetched);
         global.uri_changed.connect(on_uri_changed);
@@ -60,6 +64,7 @@ private class Xnoise.AlbumImage : Gtk.Image {
             using_thumbnail = false;
         });
         gst_player.sign_found_embedded_image.connect(load_embedded);
+        this.set_visible_window(false);
     }
 
     private void load_embedded(Object sender, string uri, string _artist, string _album) {
@@ -125,6 +130,25 @@ private class Xnoise.AlbumImage : Gtk.Image {
             }
         }
         return false;
+    }
+    
+    public override bool draw(Cairo.Context cr) {
+        if(this.pixbuf == null) {
+            Gdk.cairo_set_source_pixbuf(cr, icon_repo.album_art_default_icon, 0, 0);
+        }
+        else {
+            cr.set_source_rgb(0.8, 0.8, 0.8);
+            cr.set_line_width(0);
+            cr.rectangle(0, 0, SIZE, SIZE);
+            cr.fill();
+            cr.set_source_rgb(0.0, 0.0, 0.0);
+            cr.rectangle(1, 1, SIZE - 2, SIZE - 2);
+            cr.fill();
+            Gdk.cairo_set_source_pixbuf(cr, pixbuf, 2, 2);
+        }
+        
+        cr.paint();
+        return true;
     }
 
     // Startes via timeout because gst_player is sending the tag_changed signals
@@ -218,10 +242,12 @@ private class Xnoise.AlbumImage : Gtk.Image {
     }
     
     internal void load_default_image() {
+        this.pixbuf = null;
         Idle.add(() => {
             this.set_size_request(SIZE, SIZE);
-            this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
+//            this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
             current_path = "default";
+            queue_draw();
             return false;
         });
     }
@@ -238,7 +264,6 @@ private class Xnoise.AlbumImage : Gtk.Image {
     
     private bool load_albumimage_file_job(Worker.Job job) {
         string? image_path = (string?)job.get_arg("image_path");
-        
         if(image_path == null || image_path == EMPTYSTRING) {
             load_default_image();
             return false;
@@ -248,17 +273,30 @@ private class Xnoise.AlbumImage : Gtk.Image {
             load_default_image();
             return false;
         }
+        Gdk.Pixbuf? px = null;
+        try {
+            px = new Gdk.Pixbuf.from_file(image_path);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+            this.pixbuf = null;
+            image_path = "default";
+            return false;
+        }
+        
+        px = px.scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.BILINEAR);
+//        current_path = image_path;
+        
         Idle.add(() => {
-            this.set_from_file(image_path);
+//            this.set_from_file(image_path);
+//            
+//            Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.BILINEAR);
+////            this.set_from_pixbuf(temp);
+            this.pixbuf = px;
+            current_path = image_path;
+            queue_draw();
             return false;
         });
-        current_path = image_path;
-        Idle.add(() => {
-            Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-            this.set_from_pixbuf(temp);
-            return false;
-        });
-        current_path = image_path;
         if(!using_thumbnail) {
             Timeout.add_seconds(1, () => {
                 var fileout  = get_albumimage_for_artistalbum(global.current_artist,

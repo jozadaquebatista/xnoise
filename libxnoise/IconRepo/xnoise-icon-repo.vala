@@ -50,6 +50,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf symbolic_pause_icon         { get; private set; }
     internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
     internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
+    internal Gdk.Pixbuf album_art_default_icon      { get; private set; }
     
     internal signal void icon_theme_changed();
     
@@ -112,11 +113,11 @@ internal class Xnoise.IconRepo : GLib.Object {
             loading_icon = w.render_icon_pixbuf(Gtk.Stock.REFRESH , IconSize.BUTTON);
             
             if(theme.has_icon("xn-local-collection"))
-                local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
-            else
                 local_collection_icon = theme.load_icon("xn-local-collection",
                                                         iconheight,
                                                         IconLookupFlags.FORCE_SIZE);
+            else
+                local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             
             if(theme.has_icon("xn-current-position"))
                 selected_collection_icon = theme.load_icon("xn-current-position",
@@ -150,6 +151,11 @@ internal class Xnoise.IconRepo : GLib.Object {
                                                         IconLookupFlags.FORCE_SIZE);
             else
                 network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
+            
+            if(theme.has_icon("xnoise-grey"))
+                album_art_default_icon = theme.load_icon("xnoise-grey",
+                                                        AlbumImage.SIZE,
+                                                        IconLookupFlags.FORCE_SIZE);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
