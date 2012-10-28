@@ -143,6 +143,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    private void set_sensitive_toggle_action_state(string name, bool state) {
+//        in_update_toggle_action = true;
+        Idle.add( () => {
+            unowned Gtk.ToggleAction? tax = null;
+            foreach(Gtk.Action a in action_group.list_actions()) {
+                tax = a as Gtk.ToggleAction;
+                
+                if(tax != null && tax.name == name) {
+                    tax.set_sensitive(state);
+                    break;
+                }
+            }
+//            Idle.add( () => {
+//                in_update_toggle_action = false;
+//                return false;
+//            });
+            return false;
+        });
+    }
+
     internal void update_toggle_action_state(string name, bool state) {
         in_update_toggle_action = true;
         Idle.add( () => {
@@ -215,7 +235,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), "<Control>n", N_("Go to next track"), menu_next },
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit },
         { "ViewMenuAction", null, N_("_View") },
-            { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
+            { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked },
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
             { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
                N_("Go to the 'Now Playing' screen in the main window."), on_show_video_menu_clicked},
@@ -905,6 +925,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_video_menu_clicked() {
         Idle.add( () => {
+            album_view_toggle.set_active(false);
             mainview_page_buffer = VIDEOVIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -917,6 +938,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_tracklist_menu_clicked() {
         Idle.add( () => {
+            album_view_toggle.set_active(false);
             mainview_page_buffer = TRACKLIST_VIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -929,6 +951,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_lyrics_menu_clicked() {
         Idle.add( () => {
+            album_view_toggle.set_active(false);
             mainview_page_buffer = LYRICS_VIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -1664,11 +1687,6 @@ print("on close 2\n");
             
             //PLAYING TITLE IMAGE
             this.albumimage = new AlbumImage();
-//            EventBox xb = new EventBox();
-//            xb.set_visible_window(false);
-//            xb.border_width = 1;
-//            xb.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
-//            xb.add(albumimage);
             ToolItem albumimageTI = new ToolItem();
             albumimageTI.add(albumimage);
             aimage_timeout = 0;
@@ -1747,11 +1765,13 @@ print("on close 2\n");
                     bottom_notebook.set_current_page(1);
                     album_art_view.grab_focus();
                     update_toggle_action_state("ShowAlbumArtViewAction", true);
+                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
                 }
                 else {
                     bottom_notebook.set_current_page(0);
                     tl.grab_focus();
                     update_toggle_action_state("ShowAlbumArtViewAction", false);
+                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
                 }
             });
             //VOLUME SLIDE BUTTON

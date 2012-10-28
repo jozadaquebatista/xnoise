@@ -1,6 +1,6 @@
 /* xnoise-album-image.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -146,7 +146,6 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.fill();
             Gdk.cairo_set_source_pixbuf(cr, pixbuf, 2, 2);
         }
-        
         cr.paint();
         return true;
     }
@@ -284,14 +283,9 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             return false;
         }
         
-        px = px.scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.BILINEAR);
-//        current_path = image_path;
+        px = px.scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.HYPER);
         
         Idle.add(() => {
-//            this.set_from_file(image_path);
-//            
-//            Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.BILINEAR);
-////            this.set_from_pixbuf(temp);
             this.pixbuf = px;
             current_path = image_path;
             queue_draw();
