@@ -1810,8 +1810,8 @@ print("on close 2\n");
                     colorize_search_background(false);
                 }
             });
-            
-            album_art_view = new AlbumArtView();
+            var area = new Xnoise.AlbumArtCellArea();
+            album_art_view = new AlbumArtView(area);
             var album_art_overlay = new Overlay();
             
             var spinner = new Spinner();
