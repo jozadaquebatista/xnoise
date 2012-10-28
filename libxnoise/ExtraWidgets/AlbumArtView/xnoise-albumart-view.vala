@@ -325,29 +325,3 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     }
 }
 
-private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
-    public AlbumArtCellArea() {
-        var renderer_pixbuf = new CellRendererPixbuf();
-        var renderer_text   = new CellRendererText();
-        renderer_text.alignment = Pango.Alignment.CENTER;
-        renderer_text.width = IconsModel.ICONSIZE;
-        renderer_text.wrap_mode = Pango.WrapMode.WORD;
-        renderer_text.wrap_width = IconsModel.ICONSIZE;
-        renderer_text.xalign = 0.5f;
-        renderer_text.yalign = 0.0f;
-        
-        this.pack_start(renderer_pixbuf, false);
-        this.pack_start(renderer_text, false);
-        this.attribute_connect(renderer_pixbuf, "pixbuf", IconsModel.Column.ICON);
-        this.attribute_connect(renderer_text, "markup", IconsModel.Column.TEXT);
-    }
-    
-    public override void get_preferred_width(Gtk.CellAreaContext context,
-                                             Gtk.Widget widget,
-                                             out int minimum_width,
-                                             out int natural_width) {
-        //print("get_preferred_width\n");
-        minimum_width = natural_width = IconsModel.ICONSIZE;
-    }
-}
-

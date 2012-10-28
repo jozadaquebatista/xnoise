@@ -63,6 +63,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala \
     ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
+    ExtraWidgets/AlbumArtView/xnoise-albumart-cellarea.vala \
     ExtraWidgets/AlbumArtView/xnoise-albumart-view.vala \
     ExtraWidgets/AlbumArtView/xnoise-icons-model.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
