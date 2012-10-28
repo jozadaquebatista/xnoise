@@ -69,7 +69,6 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         hide_button.add(hide_button_image);
         hide_button.can_focus = false;
         hide_button.clicked.connect(win.toggle_media_browser_visibility);
-        var toolbutton = new Gtk.ToolItem();
         hide_button.set_relief(ReliefStyle.NONE);
         var tbx = new Box(Orientation.HORIZONTAL, 0);
         tbx.pack_start(hide_button, false, false, 0);
@@ -134,16 +133,6 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             }
         });
     }
-
-    private CssProvider provider;
-
-    private static const string CSS = """
-            * {
-                background-image: none;
-                background-color: rgba (0, 0, 0, 0.8);
-                color: rgba (0, 0, 0, 0.8);
-            }
-    """;
 }
 
 

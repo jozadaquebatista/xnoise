@@ -72,13 +72,7 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     public SettingsWidget() {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
-        try {
-            this.setup_widgets();
-        }
-        catch(Error e) {
-            print("Error setting up settings dialog: %s\n", e.message);
-                return;
-        }
+        this.setup_widgets();
         initialize_members();
         connect_signals();
     }

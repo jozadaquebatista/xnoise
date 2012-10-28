@@ -32,15 +32,15 @@ using Gtk;
 
 private class Xnoise.TextColumn : Xnoise.TrackListColumn {
     //private int last_size = 0;
-    private TrackListModel.Column _id;
+//    private TrackListModel.Column _id;
     
-    public TrackListModel.Column get_id() {
-        return _id;
-    }
+//    public TrackListModel.Column get_id() {
+//        return _id;
+//    }
     
     public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
         this.set_title(title);
-        this._id = col_id;
+//        this._id = col_id;
         this.pack_start(renderer, true);
         //this.last_size = this.width;
         //this.notify["visible"].connect(on_visibility_changed);

@@ -151,7 +151,7 @@ namespace Xnoise {
             print("%s", e.message);
             return;
         }
-        int dbid = register_data_source(db_reader);
+        register_data_source(db_reader);
         //print("source id: %d\n", dbid);
         
         statistics = new Statistics();

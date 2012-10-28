@@ -78,8 +78,6 @@ public class Xnoise.ItemConverter : Object {
                     }
                     else {
                         print("Using tag reader in item converter.\n");
-                        string? yearString = null;
-                        uint tracknumb = 0;
                         File file = File.new_for_uri(item.uri);
                         if(!file.query_exists(null))
                             return null;

@@ -464,10 +464,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
     }
 
-    internal void restore_last_view() {
-        mainview_box.select_main_view(mainview_page_buffer);
-        sbuttonTL.select(mainview_page_buffer, false);
-    }
+    //internal void restore_last_view() {
+    //    mainview_box.select_main_view(mainview_page_buffer);
+    //    sbuttonTL.select(mainview_page_buffer, false);
+    //}
     
     internal void restore_tab() {
         if(temporary_mainview_name != TRACKLIST_VIEW_NAME) {

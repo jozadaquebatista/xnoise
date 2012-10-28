@@ -63,21 +63,21 @@ internal class Xnoise.SerialButton : Gtk.Box {
         get { return (int)this.get_children().length(); }
     }
 
-    public bool has_item(string? name) {
-        if(name == null)
-            return false;
-        
-        if(sitems.lookup(name) == null)
-            return false;
-        return true;
-    }
+    //public bool has_item(string? name) {
+    //    if(name == null)
+    //        return false;
+    //    
+    //    if(sitems.lookup(name) == null)
+    //        return false;
+    //    return true;
+    //}
 
-    public string? get_active_name() {
-        if(active_item == null)
-            return null;
-        else
-            return active_item.item_name;
-    }
+    //public string? get_active_name() {
+    //    if(active_item == null)
+    //        return null;
+    //    else
+    //        return active_item.item_name;
+    //}
 
     public bool insert(string? name, string? txt) {
         if(txt == null || name == null)

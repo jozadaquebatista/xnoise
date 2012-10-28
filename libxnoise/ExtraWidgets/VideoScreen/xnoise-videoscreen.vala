@@ -468,13 +468,11 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         return (owned)result;
     }
     
-
     public string font_family    { get; set; default = "Sans"; }
     public double font_size      { get; set; default = 15; }
     public string text           { get; set; }
     
     private int layout_width     = 100;
-    private int layout_height    = 100;
 
     public void trigger_expose() {
         this.queue_draw();

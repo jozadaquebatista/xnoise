@@ -340,19 +340,8 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             radiodialog = null;
             return true;
         });
-        try {
-            radiodialog.set_icon_name(XNOISEICON);
-            radiodialog.set_title(_("Add internet radio link"));
-        }
-        catch(GLib.Error e) {
-            var msg = new Gtk.MessageDialog(null,
-                                            Gtk.DialogFlags.MODAL,
-                                            Gtk.MessageType.ERROR,
-                                            Gtk.ButtonsType.CANCEL,
-                                            "Failed set icon! %s\n".printf(e.message)
-                                            );
-            msg.run();
-        }
+        radiodialog.set_icon_name(XNOISEICON);
+        radiodialog.set_title(_("Add internet radio link"));
         radiodialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
         radiodialog.show_all();
     }
