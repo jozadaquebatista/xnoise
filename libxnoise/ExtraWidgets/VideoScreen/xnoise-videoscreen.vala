@@ -134,8 +134,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
-        refresh_source = Timeout.add(300, () => {
-            trigger_expose();
+        refresh_source = Timeout.add_seconds(1, () => {
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
+            io_worker.push_job(job);
             refresh_source = 0;
             return false;
         });
@@ -251,36 +252,57 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     }
 
     private void on_image_path_changed() {
-        //print("on_image_path_changed %s\n", global.image_path_embedded);
+        if(refresh_source != 0)
+            Source.remove(refresh_source);
+        
+        refresh_source = Timeout.add_seconds(1, () => {
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
+            io_worker.push_job(job);
+            refresh_source = 0;
+            return false;
+        });
+    }
+    
+    private bool load_image_from_path_job(Worker.Job job) {
         if(global.image_path_embedded != null) {
             try {
                 cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_embedded);
             }
             catch(GLib.Error e) {
-                print("%s\n", e.message);
-                return;
+                cover_image_available = false;
+                cover_image_pixb = null;
+                return false;
             }
             cover_image_available = true;
-            if(this.visible) {
-                Gdk.Window w = this.get_window();
-                if(w != null) 
-                    w.invalidate_rect(null, false);
-            }
+//            if(this.visible) {
+//                Gdk.Window w = this.get_window();
+//                if(w != null) 
+//                    w.invalidate_rect(null, false);
+//            }
+            Idle.add(() => {
+                queue_draw();
+                return false;
+            });
         }
         else if(global.image_path_large != null) {
             try {
                 cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
             }
             catch(GLib.Error e) {
-                print("%s\n", e.message);
-                return;
+                cover_image_available = false;
+                cover_image_pixb = null;
+                return false;
             }
             cover_image_available = true;
-            if(this.visible) {
-                Gdk.Window w = this.get_window();
-                if(w != null) 
-                    w.invalidate_rect(null, false);
-            }
+            Idle.add(() => {
+                queue_draw();
+                return false;
+            });
+//            if(this.visible) {
+//                Gdk.Window w = this.get_window();
+//                if(w != null) 
+//                    w.invalidate_rect(null, false);
+//            }
         }
         else {
             cover_image_pixb = null;
@@ -290,6 +312,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 return false;
             });
         }
+        return false;
     }
     
     private void init_video_screen() {
@@ -303,7 +326,11 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         }
         catch(GLib.Error e) {
             print("%s\n", e.message);
+            return;
         }
+        logo_pixb = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.9),
+                                           (int)(logo_pixb.get_height() * 0.9),
+                                           Gdk.InterpType.HYPER);
     }
     
     private Gdk.Rectangle rect;
@@ -314,7 +341,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         h = this.get_allocated_height();
             
         if(!gst_player.current_has_video_track) {
-            if(!cover_image_available) {
+            if(!cover_image_available || cover_image_pixb == null) {
                 cr.set_source_rgb(0.0f, 0.0f, 0.0f);
                 cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
                 cr.fill();
@@ -326,12 +353,12 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                         print("%s\n", e.message);
                         return true;
                     }
-                logo = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.8),
-                                              (int)(logo_pixb.get_height() * 0.8),
-                                              Gdk.InterpType.HYPER);
-                y_offset = (int)((h * 0.5) - (logo.get_height() * 0.4));
-                x_offset = (int)((w  * 0.5) - (logo.get_width()  * 0.4));
-                Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
+//                logo = logo_pixb;//.scale_simple((int)(logo_pixb.get_width() * 0.8),
+//                                              (int)(logo_pixb.get_height() * 0.8),
+//                                              Gdk.InterpType.HYPER);
+                y_offset = (int)((h * 0.5) - (logo_pixb.get_height() * 0.4));
+                x_offset = (int)((w  * 0.5) - (logo_pixb.get_width()  * 0.4));
+                Gdk.cairo_set_source_pixbuf(cr, logo_pixb, x_offset, y_offset);
                 cr.paint();
                 return true;
             }
@@ -343,7 +370,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 this.imageWidth  = logo.get_width();
                 this.imageHeight = logo.get_height();
                 
-                if((double) w/((2 * imageWidth) + MIN_BORDER_DIST) > (double) h/((1.5 * imageHeight) + MIN_BORDER_DIST))
+                if((double) w/((2 * imageWidth) + MIN_BORDER_DIST) > 
+                    (double) h/((1.5 * imageHeight) + MIN_BORDER_DIST))
                     ratio = (double) h/((1.5 * imageHeight) + MIN_BORDER_DIST);
                 else
                     ratio = (double) w/((2 * imageWidth) + MIN_BORDER_DIST);
@@ -358,21 +386,21 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                     // Do not paint for small pictures
                     return true;
                 }
-                logo = logo.scale_simple(imageWidth  - 2 * frame_width,
-                                         imageHeight - 2 * frame_width,
-                                         Gdk.InterpType.HYPER);
+                logo = cover_image_pixb.scale_simple(imageWidth  - 2 * frame_width,
+                                                     imageHeight - 2 * frame_width,
+                                                     Gdk.InterpType.HYPER);
                 
                 y_offset = (int)((h * 0.45)  - (imageHeight * 0.5));
                 x_offset = (int)((w  * 0.45));
                 
                 this.surface = new ImageSurface(0, imageWidth, imageHeight);
-                Cairo.Context ct = new Cairo.Context(surface);
-                ct.set_source_rgb(0.8, 0.8, 0.8);
-                ct.set_line_width(0);
-                ct.rectangle(0, 0, imageWidth, imageWidth);
-                ct.fill();
-                Gdk.cairo_set_source_pixbuf(ct, logo, frame_width, frame_width);
-                ct.paint(); // paint on external context
+                Cairo.Context extra_context = new Cairo.Context(surface);
+                extra_context.set_source_rgb(0.8, 0.8, 0.8);
+                extra_context.set_line_width(0);
+                extra_context.rectangle(0, 0, imageWidth, imageWidth);
+                extra_context.fill();
+                Gdk.cairo_set_source_pixbuf(extra_context, logo, frame_width, frame_width);
+                extra_context.paint(); // paint on external context
                 
                 cr.paint(); // black background
                 
