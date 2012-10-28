@@ -156,6 +156,10 @@ libxnoise_la_VALAFLAGS = \
     @XNOISE_PACKAGES@ \
     $(NULL)
 
+if HAVE_MIN_GTK_34
+    libxnoise_la_VALAFLAGS+= -D HAVE_MIN_GTK_34
+endif
+
 libxnoise_la_LDFLAGS = \
     $(PLUGIN_LIBTOOL_FLAGS) \
     -export-dynamic \

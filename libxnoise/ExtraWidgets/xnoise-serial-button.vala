@@ -54,7 +54,9 @@ internal class Xnoise.SerialButton : Gtk.Box {
     public SerialButton() {
         GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
         this.set_homogeneous(true);
+#if HAVE_MIN_GTK_34
         this.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
+#endif
     }
 
     public int item_count {

@@ -399,6 +399,24 @@ dnl ================================================================
 
 
 
+dnl ================================================================
+dnl check for gtk version > 3.4
+PKG_CHECK_MODULES(GTK_EXTRA, \
+                  gtk+-3.0 >= 3.4.0, \
+                  have_gtk_v34=yes, \
+                  have_gtk_v34=no)
+if test "x$have_gtk_v34" = "xyes"; then
+    AC_MSG_NOTICE([Some extra features of Gtk >= 3.4 will be used. ])
+else
+    AC_MSG_NOTICE([Some extra features of Gtk >= 3.4 will not be used. ])
+fi
+AM_CONDITIONAL(HAVE_MIN_GTK_34, test x"$have_gtk_v34" = "xyes")
+dnl ================================================================
+
+
+
+
+
 XNOISE_PACKAGES="\
     --pkg config \
     --pkg gdk-3.0 \
