@@ -104,7 +104,7 @@ internal class Xnoise.HandlerMoveToTrash : ItemHandler {
     }
     
     private void delete_from_database() {
-        Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
         job.finished.connect(on_delete_finished);
         db_worker.push_job(job);
     }

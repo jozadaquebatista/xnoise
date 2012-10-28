@@ -109,8 +109,7 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
     }
     
     private void populate() {
-        Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
         db_worker.push_job(job);
     }
     

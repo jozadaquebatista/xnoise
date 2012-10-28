@@ -605,7 +605,9 @@ public class Xnoise.TrackList : TreeView, IParams {
                     if(path != null)
                         row_ref = new TreeRowReference(this.model, path);
                     
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.insert_dnd_data_job);
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
+                                             this.insert_dnd_data_job
+                    );
                     job.set_arg("row_ref", row_ref);
                     job.set_arg("drop_pos", drop_pos);
                     job.dnd_data = ids;
@@ -717,13 +719,9 @@ public class Xnoise.TrackList : TreeView, IParams {
     }
 
     private bool insert_dnd_data_job(Worker.Job job) {
+        assert(db_worker.is_same_thread());
         DndData[] ids = job.dnd_data;
         bool is_first = true;
-        TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
-        TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
-        TreePath path = null;
-        if(row_ref != null && row_ref.valid())
-            path = row_ref.get_path();
         TrackData[] localarray = {};
         foreach(DndData ix in ids) {
             Item i = Item(ix.mediatype, null, ix.db_id);
@@ -745,6 +743,11 @@ public class Xnoise.TrackList : TreeView, IParams {
         
         if(job.track_dat != null) { // && job.track_dat.length > 0) {
             Idle.add( () => {
+                TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
+                TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
+                TreePath path = null;
+                if(row_ref != null && row_ref.valid())
+                    path = row_ref.get_path();
                 foreach(TrackData tdx in job.track_dat) {
                     TreeIter iter, new_iter;
                     TreeIter first_iter = TreeIter();

@@ -110,8 +110,7 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
         if(populating_model)
             return;
         populating_model = true;
-        Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);
         db_worker.push_job(job);
     }
     
@@ -148,8 +147,7 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
                     print("GOT -1\n");
                     return;
                 }
-                Worker.Job job;
-                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_imported_job);
+                var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_imported_job);
                 job.item = item;
                 db_worker.push_job(job);
                 break;

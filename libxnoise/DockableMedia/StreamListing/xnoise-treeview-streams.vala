@@ -98,7 +98,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
                     TreeViewStreamsModel.Column.ITEM,       item
             );
             global.cellrenderer_in_edit = false;
-            Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, update_stream_name_job);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, update_stream_name_job);
             job.item = item;
             db_worker.push_job(job);
         });

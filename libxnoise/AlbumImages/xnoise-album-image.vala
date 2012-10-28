@@ -77,22 +77,32 @@ private class Xnoise.AlbumImage : Gtk.Image {
     }
 
     private void on_uri_changed(string? uri) {
-        string current_uri = uri;
+        global.check_image_for_current_track();
         Timeout.add(200, () => {
-            global.check_image_for_current_track();
-            if(global.image_path_small == null) {
-                File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.handle_uri_changed_job);
+            job.set_arg("uri", uri);
+            io_worker.push_job(job);
+            return false;
+        });
+    }
+    
+    private bool handle_uri_changed_job(Worker.Job job) {
+        assert(io_worker.is_same_thread());
+        string current_uri = (string)job.get_arg("uri");
+        if(global.image_path_small == null) {
+            File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
+            if(f != null && f.query_exists(null)) {
+                return false;
+            }
+            else {
+                f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
                 if(f != null && f.query_exists(null)) {
                     return false;
                 }
-                else {
-                    f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
-                    if(f != null && f.query_exists(null)) {
-                        return false;
-                    }
-                }
-                string current_uri1 = current_uri;
-                load_default_image();
+            }
+            string current_uri1 = current_uri;
+            load_default_image();
+            Idle.add(() => {
                 if(timeout != 0) {
                     Source.remove(timeout);
                     timeout = 0;
@@ -101,19 +111,20 @@ private class Xnoise.AlbumImage : Gtk.Image {
                     search_image(current_uri1);
                     return false;
                 });
+                return false;
+            });
+        }
+        else {
+            File f = File.new_for_path(global.image_path_small);
+            if(!f.query_exists(null)) {
+                load_default_image();
             }
             else {
-                File f = File.new_for_path(global.image_path_small);
-                if(!f.query_exists(null)) {
-                    load_default_image();
-                }
-                else {
-                    set_image_via_idle(global.image_path_small);
-                    using_thumbnail = false;
-                }
+                set_image_via_idle(global.image_path_small);
+                using_thumbnail = false;
             }
-            return false;
-        });
+        }
+        return false;
     }
 
     // Startes via timeout because gst_player is sending the tag_changed signals
@@ -150,7 +161,6 @@ private class Xnoise.AlbumImage : Gtk.Image {
         
         artist = remove_linebreaks(global.current_artist);
         album  = remove_linebreaks(global.current_album );
-        
         
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
         job.set_arg("artist", artist);

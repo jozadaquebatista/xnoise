@@ -134,7 +134,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     }
     
     private bool populate_job(Worker.Job job) {
-        return_if_fail(db_worker.is_same_thread());
+        return_val_if_fail(db_worker.is_same_thread(), false);
         AlbumData[] ad_list = db_reader.get_all_albums_with_search(global.searchtext);
         foreach(AlbumData ad in ad_list) {
             IconState st = IconState.UNRESOLVED;
