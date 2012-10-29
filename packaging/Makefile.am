@@ -15,19 +15,6 @@ noinst_DATA = \
     debian/debian/xnoise-plugins.install \
     debian/debian/source/format \
     debian/debian/source/include-binaries \
-    ubuntu/oneiric/debian/changelog \
-    ubuntu/oneiric/debian/compat \
-    ubuntu/oneiric/debian/control \
-    ubuntu/oneiric/debian/copyright \
-    ubuntu/oneiric/debian/docs \
-    ubuntu/oneiric/debian/rules \
-    ubuntu/oneiric/debian/watch \
-    ubuntu/oneiric/debian/xnoise.1 \
-    ubuntu/oneiric/debian/xnoise-dev.install \
-    ubuntu/oneiric/debian/xnoise.install \
-    ubuntu/oneiric/debian/xnoise.manpages \
-    ubuntu/oneiric/debian/source/format \
-    ubuntu/oneiric/debian/source/include-binaries \
     ubuntu/precise/debian/changelog \
     ubuntu/precise/debian/compat \
     ubuntu/precise/debian/control \

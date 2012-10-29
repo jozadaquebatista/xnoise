@@ -1,3 +1,15 @@
+commit 1c89a62e0c440a224683d22e1126cca4db7c4b65
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 29 12:25:36 2012 +0100
+
+    update packaging data
+
+commit f98095afd95c7d0ac31c4de5cbf9a5a882ab0964
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Mon Oct 29 11:38:39 2012 +0100
+
+    update po/pt.po
+
 commit b44efacc7562c83c92801bf8854d4921f986078d
 Author: Petr Simacek <psimacek@radiobeat.cz>
 Date:   Mon Oct 29 08:12:27 2012 +0100
