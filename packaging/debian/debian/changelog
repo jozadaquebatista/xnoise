@@ -1,22 +1,15 @@
-xnoise (0.2.12) unstable; urgency=low
-  * Integrate Unity quicklists
-  * Add new application icon
-  * Add new first-start-widget for initial media import
-  * Redo Settings dialog with integration of plugins
-  * Redo Add-Media dialog
-  * Add preamp to equalizer
-  * Replace libotify based notifications with dbus based notifications
-  * Remove libnotify dependency
-  * Code cleanup
-  * Improve loading of embedded images
-  * Add keyboard shortcuts for various control actions
-  * Double-click on album image now toggles video fullscreen
-  * Add menu entry for fullscreen video and update translations
-  * Hide track progressbar in fullscreen window for streams
-  * Speed up album art update
-  * Do not import playlist files when scanning local folders
-  * Update translatations
+xnoise (0.2.13) unstable; urgency=low
+  * Add new Album Art view with search
+  * New Xnoise Icon (icon by Reda Lazri)
+  * Recreated 'Now Playing' image rendering with reflections
+  * Add weblink to keyboard shortcuts in help menu
+  * Add Ctr-B keybinding for toggling album art view
+  * Use symbolic icon in volume slider
+  * Implement MPRIS 2 seek
+  * Mingw compatibility fixes
+  * Enable support for more media types
+  * Update translations
   * Bug fixes
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 02 Oct 2012 14:15:46 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 29 Oct 2012 17:10:15 +0100

@@ -1,3 +1,493 @@
+commit b44efacc7562c83c92801bf8854d4921f986078d
+Author: Petr Simacek <psimacek@radiobeat.cz>
+Date:   Mon Oct 29 08:12:27 2012 +0100
+
+    update po/cs.po
+
+commit 1514be0a0a2ab345486489c9b17ed877de6b9f97
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 21:42:33 2012 +0100
+
+    update strings
+
+commit 44960caa603c09b878d5bc1750b0971972ca304a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 21:38:08 2012 +0100
+
+    fix multiple warnings
+
+commit c3c000c6ad7f5545482597ca31a20c417a54f146
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 20:40:36 2012 +0100
+
+    enable support for more media types,  fixes Issue #42
+
+commit cc0b24177039588850c98eaacb46b72709b06376
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 19:36:14 2012 +0100
+
+    add checks for file existance on rename, Fixes Issue #40
+
+commit 3586f412cb8c7ac9a71b222bcae55f6f98c5e96b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 19:24:04 2012 +0100
+
+    remove reference to GDK_WINDOW_STATE_FOCUSED, as it is unavailable in gtk+-3.2
+
+commit dbf6d1d61e4ac76bbae820e8fa62513a6961ddb2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 19:22:39 2012 +0100
+
+    adjust timeout in 'Now Playing' view
+
+commit 7eec9364e4fa8f7bdbbd71e55f56fe909075720e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 18:50:23 2012 +0100
+
+    avoid flickering in 'now playing view'
+
+commit 8e890ba25b987e3e756403e703c12c4a7b3ed282
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 17:55:01 2012 +0100
+
+    update albumart; show main view on menu selection
+
+commit 1dcd0761c92324a8b0b5ab67ffaef7cf61578162
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 17:05:49 2012 +0100
+
+    change albimage rendering in main window toolbar
+
+commit 597089a938c545e12b641b87f7b24d56ad168c97
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 15:46:46 2012 +0100
+
+    check some threading contexts
+
+commit f075d1e2e060b51c4ead47724d9668f2ea346181
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 15:06:47 2012 +0100
+
+    activating item in album art view sets main view to tracklist
+
+commit c73e083a9ab84e1d6b447ac73aea73b6e9aa5ded
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 14:52:54 2012 +0100
+
+    move custom CellArea to separate file
+
+commit e8ddb48bd6496714fbafdabe4de2bf910c409235
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 14:38:36 2012 +0100
+
+    add fixed size CellArea 2 + add forgotten files
+
+commit 095da2908e7de63c820cebbba3c7a8651f0461a7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 14:37:00 2012 +0100
+
+    add fixed size CellArea
+
+commit c62e50acb772cafac1a4bac9305b47c94b5c4004
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 12:17:37 2012 +0100
+
+    change album art rendering
+
+commit 363f97c5f3f9a7a24ce681877b3cdaee94b17f20
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 28 12:14:41 2012 +0100
+
+    honor some gtk version specific feature
+
+commit f513d3dea5b2a3b55964fedbe73a847a47665ef2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 27 15:44:54 2012 +0200
+
+    add weblink to keyboard shortcuts on help menu
+
+commit 2f07ec01189bed4b43858628969fbbad8ac081b3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 27 11:04:05 2012 +0200
+
+    add gap between album art and reflection in 'Now Plaing' view
+
+commit c43d3eb7d59651f2b9b59084ff843c543eb11c24
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 27 10:58:45 2012 +0200
+
+    fix width of text rendering in 'Now Playing' view
+
+commit bec0c2eb12eed9b04be4adcc9fef79c1e8b74673
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 16:59:41 2012 +0200
+
+    move some album art loading from AlbumImage to io_worker
+
+commit 8f600da3c8dd9c70817b60e28ab900ef95c861bb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 16:34:15 2012 +0200
+
+    add larger search delay for album art view
+
+commit 03523950bea6413bc51d7746af593fa1a9e8067a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 16:14:16 2012 +0200
+
+    remove obsolete null check
+
+commit 6a8ced834efa625527c34170c8e2aca4e004ff6b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 16:07:13 2012 +0200
+
+    add extra background worker for caching purpose
+
+commit a73e21958a95b7cb76339f42411e361ee86c8983
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 13:59:23 2012 +0200
+
+    change album art rendering in 'Now Playing' screen
+
+commit c75f9c9da9106edea4152a3c37d6a911ef8b06f2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 11:03:30 2012 +0200
+
+    fix item handler 'add all' for album art view
+
+commit 604e0eda6e0a516c289c631f7d5dacdc7fc45f8d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Oct 26 10:44:14 2012 +0200
+
+    increase size of album art in album art view
+
+commit a5dbf6d111ce6b584d063a48ec0b3c598897ea6a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 18:24:21 2012 +0200
+
+    use a different way of coloring search entry backgrounds
+
+commit 2763aef4b68eac4107d9ef99df16830baf86f691
+Merge: b5f7fe6 eb9914f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 18:05:46 2012 +0200
+
+    Merge branch 'master' of github.com:shuerhaaken/xnoise
+
+commit b5f7fe6c19607fe638b516580e0dc35bf2f679e0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 18:05:20 2012 +0200
+
+    switch to tracklist view on media reimport
+
+commit 59c7abe685bdf879788e7e02a9e670f5c4213d0b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 16:24:55 2012 +0200
+
+    simplify loading of newly downloaded album images
+
+commit 5fb739219e18f57d6a92de2063d2bfbf862f9070
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 16:09:41 2012 +0200
+
+    show spinner on album art view while loading; fix fullscreen issue
+
+commit d566e11da06490ce08cd8e8228eaf47c21ee1234
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 13:53:14 2012 +0200
+
+    various small fixes
+
+commit eb9914fd6bbd508bdc60f146bc06d4526dc633ae
+Merge: 569d347 3d7ebc3
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Thu Oct 25 02:03:08 2012 -0700
+
+    Merge pull request #41 from smarquespt/master
+    
+    Portuguese translation update
+
+commit 3d7ebc37369f5ba394acea47ced5c5603e51ba8b
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Wed Oct 24 17:31:17 2012 +0100
+
+    Update for Portuguese language
+
+commit 569d347fa9d2507121589060b90623ed714c5c7c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 24 14:31:11 2012 +0200
+
+    remove old code
+
+commit 5d10dd35b8520ed6005971606fb5ef0320ea53fe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 24 14:18:52 2012 +0200
+
+    add new strings
+
+commit 71703c9fb14e99849cea3d32d4e3ae2eb26f86ac
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 24 14:13:28 2012 +0200
+
+    start extending the tag editing possibilities
+
+commit 045da80dfea6e9fc70fcf085f00730353e73202a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 24 10:22:36 2012 +0200
+
+    add view menu entry for album art view
+
+commit 885881e32f088e322f2ba2364bdff6cc30873895
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 14:41:52 2012 +0200
+
+    on trakchange only scroll to position without selection
+
+commit 32631a5415df7ece78db7ffce78fd98ae199a16b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 14:27:15 2012 +0200
+
+    more finegrained control for volume changes
+
+commit e6f78e45548a7a0013fc300e8d202cd3f70cfd6a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 14:26:41 2012 +0200
+
+    update in idle
+
+commit a17e8352952e73a968188af87ba62e2a69eecf8f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 13:12:27 2012 +0200
+
+    reset data sources on import; reset album art view on data import
+
+commit 7508d6d247b47511bd4067a60c0f9146eba2f1cc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 11:38:39 2012 +0200
+
+    use stamp in streams, videos and playlists
+
+commit 31432464db0a50189a51ad96b98fb2b03ca1e078
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 23 11:15:36 2012 +0200
+
+    prepare use of multiple album art providers
+
+commit 27aa632be3e4d982bbaba9cfa60127361057c487
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 15:26:45 2012 +0200
+
+    add context menus for album art view
+
+commit a54635e1343f1861ff8968a8361fb5c2cde2402d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 14:30:01 2012 +0200
+
+    adjust album art positioning in 'now playing' view
+
+commit 7d5700b178076a7a6e95bf95b8ccd1a3b7204b7f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 14:22:11 2012 +0200
+
+    make more use of stamp
+
+commit 107633b598ed1982bb92b26714c8ac690f837b79
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 12:59:21 2012 +0200
+
+    add stamp to Item
+
+commit 50ea70e64a98bdee49916178bdc940ac39748b5f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 12:08:07 2012 +0200
+
+    improve reflection in 'Now Playing' view
+
+commit 65b3830d06bcedb754469ab765d804e4f80e1af1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 11:58:45 2012 +0200
+
+    correctly show settings after selection
+
+commit 4d8aafd26d2fe197992e22a3b5f959a5b5d833d6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 11:22:39 2012 +0200
+
+    change focus behaviour after switching between album art view and normal view
+
+commit 72d93ec193664551cb8a90a38c46462a83f373c6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 22 11:14:11 2012 +0200
+
+    set focus on tracks added to tracklist
+
+commit 8e1e84726774e74ec19f7b9fe8215cf7edcbb81f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Oct 21 23:27:53 2012 +0200
+
+    clean up
+
+commit 9b786c300d05f1d45fb0c2cce837e6253406c96b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 18 14:10:09 2012 +0200
+
+    try to improve automatic column count processing in album art view
+
+commit f714b117329afbd2e88223ce409cc0e4d1036f51
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 18 11:14:00 2012 +0200
+
+    fix updating of newly downloaded album art in album art view
+
+commit 537efcf8a75843c982a8734f8aa66a835de2bd51
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 17 16:15:07 2012 +0200
+
+    add search for albumart view
+
+commit 60bcfab0cac9145050481bf7f373eb950d1aa10e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 17 14:45:53 2012 +0200
+
+    improve accent handling in album art names
+
+commit e798531b5cd9a8c72de15b2d2636565f87670006
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 17 10:29:35 2012 +0200
+
+    Add Ctr-B keybinding for toggling album art view
+
+commit 58b6ad677c32de1453d1e6dd73fadb08aabfda39
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 17 10:17:52 2012 +0200
+
+    populate album art view after initial loading of icon cache
+
+commit f9ec072016225e3595d7e0e85c67ff22da868139
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 17 09:08:33 2012 +0200
+
+    tests and improval for pixbuf rendering
+
+commit 6ce798b49cf13f3c652dbc5dc86afac44439a685
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 16:03:45 2012 +0200
+
+    improve album art loading
+
+commit cc67387eebb5557dc8722d5d80d26576dd147bb4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 15:01:34 2012 +0200
+
+    improve inital album art caching
+
+commit a3bc24e10bead46f9da9300c89eb93edd2330a8d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 13:57:16 2012 +0200
+
+    add dummy entry
+
+commit 216a8a7e756dc6e6a7461b3124cecb984df4908e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 13:41:24 2012 +0200
+
+    render shadows around album art
+
+commit 3c740b495e7d1e2390c68d17c9edd595bba13d28
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 12:39:38 2012 +0200
+
+    fix some warnings
+
+commit b2eea82684b348d770c4a4cbdb0e2d21862ed68b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 12:27:50 2012 +0200
+
+    fix item handler for activation on playlist trees
+
+commit d71b04bc2809a8715e2daeb777865004ebd1813c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 11:42:53 2012 +0200
+
+    load new images into album art view after fetching
+
+commit 072d3c1afba79b6ee622998de803f8d4e6dcbee2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 16 09:32:05 2012 +0200
+
+    fix issue with TreeQueryable interface; Do not show notifications if main window is focused
+
+commit 69115756200f5163ec88b5b21a976d2dddf22869
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 15 19:39:17 2012 +0200
+
+    add comment and header
+
+commit 8dce6c3a3d687da325a0cf331c85dad5b16790a3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 15 19:37:06 2012 +0200
+
+    add album art view
+
+commit 90f0b158594d40c060784f0bd5711eb651c93f5d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 13 20:28:58 2012 +0200
+
+    change alpha step
+
+commit 1d36fb3ec76bb78dcbe79f02840e3675643b7e58
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 13 20:22:31 2012 +0200
+
+    add reflection on album cover view
+
+commit 8778e9364dca68a50b56a657dda6c15046b62755
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Oct 13 09:13:13 2012 +0200
+
+    adapt 'now playing' logo
+
+commit 6edfec8790caf2c0035bf5653b22bbb28cef4852
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 18:01:39 2012 +0200
+
+    use style class for linked buttons
+
+commit b06d45d1d06a10fc675e890484fbae5fd5866ba4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 15:14:17 2012 +0200
+
+    use symbolic icon in volume slider
+
+commit 5b374811ebd25cbc11ddbb378d687acade2bf6d1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 14:50:33 2012 +0200
+
+    derrive all icon sizes from scalable
+
+commit 4a3a5e27f62bdaf8b88847cded87cad4d2c3d6a2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 14:32:23 2012 +0200
+
+    set align for selection icon
+
+commit e70e40c29fec65d27ff5c2fc99e719091c5a9447
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 14:12:59 2012 +0200
+
+    make trackinfobar private
+
+commit 6dd1243918c1c5cdd5fdd321e492da3486b1546b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 12:51:51 2012 +0200
+
+    remove overlays
+
+commit d6f22e5b71b386cccb350d93d46ac49d23b50b55
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 11 09:30:51 2012 +0200
+
+    check
+
 commit 399f940e283c5583f642fb8e3838db1e87d3cca7
 Merge: 9104d75 542789a
 Author: shuerhaaken <shuerhaaken@googlemail.com>

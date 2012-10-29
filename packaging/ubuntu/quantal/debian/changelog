@@ -1,3 +1,19 @@
+xnoise (0.2.13-1ppa1~quantal) quantal; urgency=low
+  * Add new Album Art view with search
+  * New Xnoise Icon (icon by Reda Lazri)
+  * Recreated 'Now Playing' image rendering with reflections
+  * Add weblink to keyboard shortcuts in help menu
+  * Add Ctr-B keybinding for toggling album art view
+  * Use symbolic icon in volume slider
+  * Implement MPRIS 2 seek
+  * Mingw compatibility fixes
+  * Enable support for more media types
+  * Update translations
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 29 Oct 2012 17:10:15 +0100
+
+
 xnoise (0.2.12-1ppa1~quantal) quantal; urgency=low
   * Integrate Unity quicklists
   * Add new application icon
