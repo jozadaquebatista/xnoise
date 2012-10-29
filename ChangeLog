@@ -1,3 +1,9 @@
+commit f97ae644e1b62867df48529eed829d42ba7e658d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 29 14:11:05 2012 +0100
+
+    fix makefile
+
 commit 1c89a62e0c440a224683d22e1126cca4db7c4b65
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Mon Oct 29 12:25:36 2012 +0100
