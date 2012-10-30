@@ -3,7 +3,7 @@ AC_PREREQ([2.68])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 2)
-m4_define(xnoise_micro_version, 13)
+m4_define(xnoise_micro_version, 14)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 m4_define([xnoise_name], [xnoise])
 
@@ -36,7 +36,7 @@ GSTREAMER_REQUIRED=0.10.23
 GLIB_REQUIRED=TARGET_GLIB_VERSION
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=TARGET_GLIB_VERSION
-GTK_REQUIRED=3.0.0
+GTK_REQUIRED=3.2.0
 SQLITE_REQUIRED=3.6
 TAGLIB_C_REQUIRED=1.6.0
 
