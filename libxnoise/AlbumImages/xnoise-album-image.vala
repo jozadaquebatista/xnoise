@@ -84,7 +84,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     private void on_uri_changed(string? uri) {
         global.check_image_for_current_track();
         Timeout.add(200, () => {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.handle_uri_changed_job);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_uri_changed_job);
             job.set_arg("uri", uri);
             io_worker.push_job(job);
             return false;
@@ -255,7 +255,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         if(MainContext.current_source().is_destroyed())
             return;
         
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_albumimage_file_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_albumimage_file_job);
         job.set_arg("image_path", image_path);
         io_worker.push_job(job);
         
@@ -339,7 +339,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         if(f == null || f.get_path() == null)
             return;
         
-        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+        var fjob = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.read_file_job);
         fjob.set_arg("file", f);
         io_worker.push_job(fjob);
         

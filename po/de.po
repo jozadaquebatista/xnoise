@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-10-30 19:30+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -26,19 +26,16 @@ msgstr "Medien-Wiedergabe"
 msgid "Organize and play your music and video collections"
 msgstr "Verwalte und spiele deine Musik- und Videosammlungen"
 
-#: ../libxnoise/Application/xnoise-application.vala:209
-#: ../src/xnoise.vala:140
+#: ../libxnoise/Application/xnoise-application.vala:209 ../src/xnoise.vala:140
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise ist ein Medien-Abspieler für Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:210
-#: ../src/xnoise.vala:141
+#: ../libxnoise/Application/xnoise-application.vala:210 ../src/xnoise.vala:141
 msgid "It uses the gstreamer framework."
 msgstr "Er benutzt das GStreamer Rahmenwerk."
 
-#: ../libxnoise/Application/xnoise-application.vala:211
-#: ../src/xnoise.vala:142
+#: ../libxnoise/Application/xnoise-application.vala:211 ../src/xnoise.vala:142
 msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
@@ -134,10 +131,12 @@ msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
 msgstr ""
-"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek hinzuzufügen. \n"
+"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek "
+"hinzuzufügen. \n"
 "Alle Medien werden in der Bibliothek zur Verfügung gestellt."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
 msgid "Location"
 msgstr "Ort"
 
@@ -148,6 +147,7 @@ msgid "Importing media data. This may take some time..."
 msgstr "Import von Mediendaten läuft. Dies könnte ein Weilchen dauern..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr "Wähle Medienordner"
 
@@ -264,6 +264,44 @@ msgstr "Voreinstellung:"
 msgid "Volume"
 msgstr "Lautstärke"
 
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#, fuzzy
+msgid "Add more media folders"
+msgstr "Ordner hinzufügen"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#, fuzzy
+msgid "Media Folders:"
+msgstr "Medien-Wiedergabe"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#, fuzzy
+msgid "Do you want to import media into your library?"
+msgstr ""
+"Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in "
+"die Bibliothek importieren? "
+
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
 msgstr "Alle Titel zur Titelliste hinzufügen"
@@ -291,13 +329,20 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht warten willst."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht "
+"warten willst."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht warten willst."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht "
+"warten willst."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -561,8 +606,12 @@ msgstr "Zeige die _Album Übersicht"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:543
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ "
+"große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 msgid "no repeat"
@@ -642,8 +691,11 @@ msgid "Default"
 msgstr "Werkeinstellung"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:227
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere Untertitel-Datei"
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
+"Untertitel-Datei"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:697
 #, c-format
@@ -653,7 +705,8 @@ msgstr "Fehlendes GStreamer Plugin konnte installiert werden"
 #: ../libxnoise/Player/xnoise-gst-player.vala:701
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
+msgstr ""
+"Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:705
 #, c-format
@@ -678,7 +731,8 @@ msgstr "Automatische Suche nach fehlendem Codec wird nicht unterstützt"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:769
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
+msgstr ""
+"Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:782
 msgid "Trying to install missing gstreamer plugin"
@@ -791,8 +845,10 @@ msgid "%u tracks found"
 msgstr "%u Titel gefunden"
 
 #: ../src/xnoise.vala:151
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
@@ -839,7 +895,9 @@ msgstr "Passwort:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:510
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu erstellen)"
+msgstr ""
+"Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu "
+"erstellen)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
@@ -1042,10 +1100,3 @@ msgstr "UbuntuOne Musik zeigen"
 
 #~ msgid "Add media"
 #~ msgstr "Medien hinzufügen"
-
-#~ msgid ""
-#~ "You started xnoise for the first time. Do you want to import media into "
-#~ "the library?"
-#~ msgstr ""
-#~ "Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in "
-#~ "die Bibliothek importieren? "

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-10-30 19:30+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -134,6 +134,7 @@ msgstr ""
 "所有的媒体源需 xnoise 库可访问。"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
 msgid "Location"
 msgstr "位置"
 
@@ -144,6 +145,7 @@ msgid "Importing media data. This may take some time..."
 msgstr "导入媒体数据。这将花费一段时间..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr "选择媒体文件夹"
 
@@ -259,6 +261,42 @@ msgstr "预设："
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
 msgstr "音量"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#, fuzzy
+msgid "Add more media folders"
+msgstr "添加本地文件夹"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#, fuzzy
+msgid "Media Folders:"
+msgstr "媒体播放器"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#, fuzzy
+msgid "Do you want to import media into your library?"
+msgstr "这是您第一次启动 xnoise。您希望将媒体导入到库中吗？"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -1046,11 +1084,6 @@ msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Add media"
 #~ msgstr "添加媒体"
-
-#~ msgid ""
-#~ "You started xnoise for the first time. Do you want to import media into "
-#~ "the library?"
-#~ msgstr "这是您第一次启动 xnoise。您希望将媒体导入到库中吗？"
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "切换媒体浏览器可见性"

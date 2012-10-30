@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-10-30 19:30+0100\n"
 "PO-Revision-Date: 2012-10-01 22:23+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -146,6 +146,7 @@ msgstr ""
 "כל מקורות המדיה יהיו זמינים בספריית Xnoise."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
 msgid "Location"
 msgstr "מיקום"
 
@@ -156,6 +157,7 @@ msgid "Importing media data. This may take some time..."
 msgstr "מייבא מידע מדיה. זה עלול לקחת קצת זמן..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr "בחירת תיקיית מדיה"
 
@@ -271,6 +273,42 @@ msgstr "קבוע מראש:"
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
 msgstr "עוצמה"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#, fuzzy
+msgid "Add more media folders"
+msgstr "הוספת תיקיית מקומית"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#, fuzzy
+msgid "Media Folders:"
+msgstr "נגן המדיה"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#, fuzzy
+msgid "Do you want to import media into your library?"
+msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -1060,11 +1098,6 @@ msgstr "הצג את החנות UbuntuOne"
 
 #~ msgid "Add media"
 #~ msgstr "הוספת מדיה"
-
-#~ msgid ""
-#~ "You started xnoise for the first time. Do you want to import media into "
-#~ "the library?"
-#~ msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "הצג/החבא את דפדפן המדיה."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-10-30 19:30+0100\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -135,6 +135,7 @@ msgstr ""
 "所有媒體來源都可以通過 xnoise 的收藏庫來使用。"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
 msgid "Location"
 msgstr "位置"
 
@@ -145,6 +146,7 @@ msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr "選取媒體資料夾"
 
@@ -270,6 +272,42 @@ msgstr "預置："
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
 msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#, fuzzy
+msgid "Add more media folders"
+msgstr "加入本機資料夾"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#, fuzzy
+msgid "Media Folders:"
+msgstr "媒體播放器"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#, fuzzy
+msgid "Do you want to import media into your library?"
+msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -1071,11 +1109,6 @@ msgstr "顯示 UbuntuOne 商店"
 
 #~ msgid "Add media"
 #~ msgstr "加入媒體"
-
-#~ msgid ""
-#~ "You started xnoise for the first time. Do you want to import media into "
-#~ "the library?"
-#~ msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #~ msgid "Hide Media"
 #~ msgstr "隱藏媒體"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-10-30 19:30+0100\n"
 "PO-Revision-Date: 2012-07-13 17:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: as_IN \n"
@@ -132,6 +132,7 @@ msgid ""
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
 msgid "Location"
 msgstr ""
 
@@ -142,6 +143,7 @@ msgid "Importing media data. This may take some time..."
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr ""
 
@@ -257,6 +259,39 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+msgid "Add more media folders"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+msgid "Media Folders:"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+msgid "Do you want to import media into your library?"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
