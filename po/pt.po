@@ -267,41 +267,36 @@ msgstr "Volume"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
 msgid "Done"
-msgstr ""
+msgstr "Terminado"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
 msgid "Please wait while media is added to your library!"
-msgstr ""
+msgstr "Por favor aguarde o preenchimento da coleção!"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
+msgstr "Pode começar a ouvir músicas se selecionar %s"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
-#, fuzzy
 msgid "Add more media folders"
-msgstr "Adicionar pasta local"
+msgstr "Adicionar mais pastas"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
-#, fuzzy
 msgid "Media Folders:"
-msgstr "Reprodutor multimédia"
+msgstr "Pastas multimédia:"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
 msgid "Welcome to Xnoise!\n"
-msgstr ""
+msgstr "Bem-vindo ao Xnoise!\n"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
 msgid "This is the first time you start xnoise."
-msgstr ""
+msgstr "Esta é a primeira vez que utiliza o xnoise."
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
-#, fuzzy
 msgid "Do you want to import media into your library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgstr "Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
