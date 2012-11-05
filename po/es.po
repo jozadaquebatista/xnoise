@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 19:30+0100\n"
+"POT-Creation-Date: 2012-11-05 10:37+0100\n"
 "PO-Revision-Date: 2012-10-01 23:41-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -143,7 +143,7 @@ msgstr ""
 "Toda la biblioteca multimedia estará disponible en el explorador de medios."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:187
 #, fuzzy
 msgid "Location"
 msgstr "_Abrir Ubicación"
@@ -271,7 +271,7 @@ msgid "Devices"
 msgstr "Dispositivos"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -283,38 +283,47 @@ msgstr "Preset:"
 msgid "Volume"
 msgstr "Volumen"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:114
+#, fuzzy
+msgid "Add Media"
+msgstr "Agregar medios de reproducción"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
+msgid "Skip"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:121
 msgid "Done"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:129
 msgid "Please wait while media is added to your library!"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:130
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:136
 #, fuzzy
 msgid "Add more media folders"
 msgstr "Agregar carpeta local"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:159
 #, fuzzy
 msgid "Media Folders:"
 msgstr "Reproductor Multimedia"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:197
 msgid "Welcome to Xnoise!\n"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
 msgid "This is the first time you start xnoise."
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
 #, fuzzy
 msgid "Do you want to import media into your library?"
 msgstr ""
@@ -344,10 +353,12 @@ msgid "Type new album name."
 msgstr "Ingrese el nombre del álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:140
 msgid "Album:"
 msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:160
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
@@ -357,12 +368,28 @@ msgstr ""
 "usted no desea esperar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 "Por favor espere mientras se importan los medios. O cancele, si usted no "
 "desea esperar."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:136
+#, fuzzy
+msgid "Album data"
+msgstr "Cambiar nombre del álbum"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:139
+#, fuzzy
+msgid "Please enter new album data."
+msgstr "Cambiar nombre del álbum"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:141
+#, fuzzy
+msgid "Year:"
+msgstr "Año"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -672,7 +699,7 @@ msgid "Equalizer"
 msgstr "Ecualizador"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1802
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
 msgid "Show application main menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
@@ -1135,9 +1162,6 @@ msgstr "Mostrar UbuntuOne Store"
 
 #~ msgid "Compact layout"
 #~ msgstr "Diseño compacto"
-
-#~ msgid "Add media"
-#~ msgstr "Agregar medios de reproducción"
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "Alternar visibilidad del explorador"

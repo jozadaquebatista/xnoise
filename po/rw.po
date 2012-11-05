@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 19:30+0100\n"
+"POT-Creation-Date: 2012-11-05 10:37+0100\n"
 "PO-Revision-Date: 2005-03-28 19:34-0700\n"
 "Last-Translator: \n"
 "Language-Team: Kinyarwanda\n"
@@ -130,7 +130,7 @@ msgid ""
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:184
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:187
 msgid "Location"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgid "Devices"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
 msgid "Search..."
 msgstr ""
 
@@ -258,36 +258,44 @@ msgstr ""
 msgid "Volume"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:114
+msgid "Add Media"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
+msgid "Skip"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:121
 msgid "Done"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:126
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:129
 msgid "Please wait while media is added to your library!"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:127
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:130
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:133
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:136
 msgid "Add more media folders"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:156
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:159
 msgid "Media Folders:"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:194
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:197
 msgid "Welcome to Xnoise!\n"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:196
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
 msgid "This is the first time you start xnoise."
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:198
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
 msgid "Do you want to import media into your library?"
 msgstr ""
 
@@ -313,10 +321,12 @@ msgid "Type new album name."
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:140
 msgid "Album:"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:160
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
@@ -324,9 +334,22 @@ msgid ""
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:136
+msgid "Album data"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:139
+msgid "Please enter new album data."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:141
+msgid "Year:"
 msgstr ""
 
 #. ARTIST
@@ -622,7 +645,7 @@ msgid "Equalizer"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1802
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
 msgid "Show application main menu"
 msgstr ""
 

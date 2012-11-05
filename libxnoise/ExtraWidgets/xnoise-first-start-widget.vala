@@ -111,7 +111,10 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
             top_box = gb.get_object("topbox") as Gtk.Box;
             button_add_folder = gb.get_object("button_add_folder") as Button;
             button_add_folder.clicked.connect(on_add_folder_clicked);
+            button_add_folder.label = _("Add Media");
             closebutton = gb.get_object("button2") as Gtk.Button;
+            closebutton.label = _("Skip");
+            
             infobox = gb.get_object("infobox") as Gtk.Box;
             bigbox = gb.get_object("box7") as Gtk.Box;
             finish_button = gb.get_object("finish_button") as Gtk.Button;
@@ -123,8 +126,8 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
             import_label.justify = Justification.CENTER;
             import_label.label = 
                 "<span size=\"large\">" + 
-                Markup.printf_escaped(_("Please wait while media is added to your library!")) + "\n" +
-                Markup.printf_escaped(_("You can start listening to your music by selecting '%s'").printf(
+                Markup.printf_escaped( _("Please wait while media is added to your library!")) + "\n" +
+                Markup.printf_escaped( _("You can start listening to your music by selecting '%s'").printf(
                     Markup.printf_escaped(finish_button.label))) +
                 "</span>";
             waitbox.pack_start(spinner, true, true, 0);
@@ -153,7 +156,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
             imported_folders_label.use_markup = true;
             imported_folders_label.label = 
                 "<span size=\"large\"><b>" + 
-                Markup.printf_escaped(_("Media Folders:")) +
+                Markup.printf_escaped( _("Media Folders:")) +
                 "</b></span>";
             addmore_button.clicked.connect(on_add_folder_clicked);
             imported_box = gb.get_object("imported_box") as Gtk.Box;

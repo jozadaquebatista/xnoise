@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"POT-Creation-Date: 2012-11-05 10:37+0100\n"
 "PO-Revision-Date: 2012-11-04 21:24+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
@@ -25,19 +25,16 @@ msgstr "Multimedia-erreproduzitzailea"
 msgid "Organize and play your music and video collections"
 msgstr "Kudeatu eta erreproduzitu zure musika eta bideo bildumak"
 
-#: ../libxnoise/Application/xnoise-application.vala:209
-#: ../src/xnoise.vala:140
+#: ../libxnoise/Application/xnoise-application.vala:209 ../src/xnoise.vala:140
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise Gtk+entzako multimedia-erreproduzitzaile bat da."
 
-#: ../libxnoise/Application/xnoise-application.vala:210
-#: ../src/xnoise.vala:141
+#: ../libxnoise/Application/xnoise-application.vala:210 ../src/xnoise.vala:141
 msgid "It uses the gstreamer framework."
 msgstr "Gstreamer framework-a darabil."
 
-#: ../libxnoise/Application/xnoise-application.vala:211
-#: ../src/xnoise.vala:142
+#: ../libxnoise/Application/xnoise-application.vala:211 ../src/xnoise.vala:142
 msgid "More information on the project website:"
 msgstr "Informazio gehiago proiektuaren webgunean:"
 
@@ -110,7 +107,8 @@ msgstr "Gehitu edo kendu multimedia"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
-msgstr "Hautatuta badago, multimedia karpeta guztiak osorik berreskaneatuko dira"
+msgstr ""
+"Hautatuta badago, multimedia karpeta guztiak osorik berreskaneatuko dira"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
@@ -137,6 +135,7 @@ msgstr ""
 "Multimedia-jatorri guztiak eskuragarri egongo dira xnoise-ren liburutegian."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:187
 msgid "Location"
 msgstr "Kokalekua"
 
@@ -147,6 +146,7 @@ msgid "Importing media data. This may take some time..."
 msgstr "Multimedia-datuak inportatzen. Honek bere denbora beharko du..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:74
 msgid "Select media folder"
 msgstr "Hautatu multimedia karpeta"
 
@@ -251,7 +251,7 @@ msgid "Devices"
 msgstr "Gailuak"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
 msgid "Search..."
 msgstr "Bilatu..."
 
@@ -262,6 +262,51 @@ msgstr "Aurrezarpena:"
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
 msgstr "Bolumena"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:114
+#, fuzzy
+msgid "Add Media"
+msgstr "Multimedia"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
+msgid "Skip"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:121
+msgid "Done"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:129
+msgid "Please wait while media is added to your library!"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:130
+#, c-format
+msgid "You can start listening to your music by selecting '%s'"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:136
+#, fuzzy
+msgid "Add more media folders"
+msgstr "Gehitu karpeta lokala"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:159
+#, fuzzy
+msgid "Media Folders:"
+msgstr "Multimedia-erreproduzitzailea"
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:197
+msgid "Welcome to Xnoise!\n"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
+msgid "This is the first time you start xnoise."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
+#, fuzzy
+msgid "Do you want to import media into your library?"
+msgstr "Hautaturiko elementua zakarrontzira bota nahi duzu?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -285,18 +330,42 @@ msgid "Type new album name."
 msgstr "Idatzi albumaren izena."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:140
 msgid "Album:"
 msgstr "Albuma:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:160
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Itxaron multimedia-arakatzailea bete artean. Edo ezeztatu, ez baduzu itxaron nahi."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Itxaron multimedia-arakatzailea bete artean. Edo ezeztatu, ez baduzu itxaron "
+"nahi."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Itxaron multimedia inportatu artean. Edo ezeztatu, ez baduzu itxaron nahi."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Itxaron multimedia inportatu artean. Edo ezeztatu, ez baduzu itxaron nahi."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:136
+#, fuzzy
+msgid "Album data"
+msgstr "Aldatu albumaren datuak"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:139
+#, fuzzy
+msgid "Please enter new album data."
+msgstr "Aldatu albumaren datuak"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:141
+#, fuzzy
+msgid "Year:"
+msgstr "Urtea"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -560,8 +629,12 @@ msgstr "Erakutsi _album-irudien ikuspegia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:543
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "Pista-zerrendako %u pista berreskuratzen. Kopuru hau handia da, eta xnoise-ren abioa moteldu dezake."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"Pista-zerrendako %u pista berreskuratzen. Kopuru hau handia da, eta xnoise-"
+"ren abioa moteldu dezake."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 msgid "no repeat"
@@ -592,7 +665,7 @@ msgid "Equalizer"
 msgstr "Ekualizadorea"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1802
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
 msgid "Show application main menu"
 msgstr "Erakutsi aplikazioaren menu nagusia"
 
@@ -641,8 +714,11 @@ msgid "Default"
 msgstr "Lehenetsia"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:227
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "Azpitituluaren izena ez dator bat bideoaren izenarekin! Ez da azpititulu-fitxategia erabiliko."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"Azpitituluaren izena ez dator bat bideoaren izenarekin! Ez da azpititulu-"
+"fitxategia erabiliko."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:697
 #, c-format
@@ -790,8 +866,11 @@ msgid "%u tracks found"
 msgstr "%u pista aurkitu dira"
 
 #: ../src/xnoise.vala:151
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Exekutatu 'xnoise --help' agindu-lerroko aukera erabilgarrien zerrenda ikusteko.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Exekutatu 'xnoise --help' agindu-lerroko aukera erabilgarrien zerrenda "
+"ikusteko.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
@@ -1020,4 +1099,3 @@ msgstr "Erakutsi _UbuntuOne denda"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Erakutsi UbuntuOne denda"
-

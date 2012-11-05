@@ -136,9 +136,9 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             this.dialog.set_title(_("Album data"));
             switch(item.type) {
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
-                    explainer_label.label = _("Please enter new album data.");
-                    content_label.label   = _("Album:");
-                    year_label.label      = _("Year:");
+                    explainer_label.label =  _("Please enter new album data.");
+                    content_label.label   =  _("Album:");
+                    year_label.label      =  _("Year:");
                     break;
                 default:
                     break;
