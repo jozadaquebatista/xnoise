@@ -1761,6 +1761,7 @@ print("on close 2\n");
             var albumart_toggleb = new ToolItem();
             var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
             album_view_toggle = new ToggleButton();
+            album_view_toggle.set_relief(ReliefStyle.NONE);
             album_view_toggle.add(aart_im);
             album_view_toggle.can_focus = false;
             albumart_toggleb.add(album_view_toggle);
