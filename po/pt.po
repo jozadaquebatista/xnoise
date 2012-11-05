@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -177,7 +177,8 @@ msgid "Show picture on hover album image"
 msgstr "Mostrar imagem ao passar na capa do album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-msgid "Use Application Menu"
+#, fuzzy
+msgid "Use Compact Menu"
 msgstr "Utilizar menu da aplicação"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

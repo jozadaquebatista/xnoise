@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2012-10-01 23:41-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -190,7 +190,7 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

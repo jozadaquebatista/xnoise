@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -179,7 +179,7 @@ msgstr "當停留在專輯圖片時，不顯示影片畫面"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr "顯示應用的主選單"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

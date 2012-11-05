@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2012-07-05 14:17+0100\n"
 "Last-Translator: Aurélien Rivière <aurelien.riv@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -181,7 +181,7 @@ msgstr "Ne pas afficher l'écran vidéo lors du survol de l'image de l'album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr "Afficher le menu principal"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

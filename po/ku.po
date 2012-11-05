@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: glib.glib-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2006-04-20 17:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Kurdish\n"
@@ -171,7 +171,7 @@ msgid "Show picture on hover album image"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

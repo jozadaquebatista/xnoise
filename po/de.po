@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -178,8 +178,8 @@ msgid "Show picture on hover album image"
 msgstr "Zeige Bild, wenn Mauszeiger über dem Albumbild ist"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-msgid "Use Application Menu"
-msgstr "Verwende Anwendungsmenü"
+msgid "Use Compact Menu"
+msgstr "Verwende kompaktes Menü (Taste)"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"

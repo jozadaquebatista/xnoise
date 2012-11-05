@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2012-02-25 01:05+0330\n"
 "Last-Translator: \n"
 "Language-Team: Persian \n"
@@ -171,7 +171,7 @@ msgid "Show picture on hover album image"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322

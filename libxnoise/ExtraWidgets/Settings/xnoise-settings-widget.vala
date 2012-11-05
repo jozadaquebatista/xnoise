@@ -313,7 +313,7 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             switch_compact = this.builder.get_object("switch_compact") as Gtk.Switch;
             switch_compact.can_focus = false;
             var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
-            label_compact.label = _("Use Application Menu");
+            label_compact.label = _("Use Compact Menu");
             plugin_label_sizegroup.add_widget(label_compact);
             
             switch_usestop = this.builder.get_object("switch_usestop") as Gtk.Switch;

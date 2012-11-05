@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 10:37+0100\n"
+"POT-Creation-Date: 2012-11-05 13:15+0100\n"
 "PO-Revision-Date: 2011-10-03 11:00+0100\n"
 "Last-Translator: Andrea Ranaldi <andrea.ranaldi@gmail.com>\n"
 "Language-Team: shkn <xnoise@googlegroups.com>\n"
@@ -187,7 +187,7 @@ msgstr "Non mostrare il video durante la visualizzazione delle immagini album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
-msgid "Use Application Menu"
+msgid "Use Compact Menu"
 msgstr "Mostra il menu principale"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
