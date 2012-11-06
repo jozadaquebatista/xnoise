@@ -121,7 +121,7 @@ public class Xnoise.ItemConverter : Object {
                 assert(ds != null);
                 return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
                 if(item.db_id > -1) {
-                    if(db_worker.is_same_thread() && ds.get_stream_td_for_id(item.db_id, out tmp, item.stamp)) {
+                    if(db_worker.is_same_thread() && ds.get_stream_trackdata_for_item(item, out tmp)) {
                         result += tmp;
                         return result;
                     }

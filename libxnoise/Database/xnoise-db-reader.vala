@@ -318,14 +318,14 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private static const string STMT_STREAM_TD_FOR_ID =
         "SELECT name, uri FROM streams WHERE id = ?";
 
-    public override bool get_stream_td_for_id(int32 id, out TrackData val, uint32 stmp) {
-        return_val_if_fail(stmp == get_current_stamp(get_source_id()), false);
+    public override bool get_stream_trackdata_for_item(Item? item, out TrackData val) {
+        return_val_if_fail(item.stamp == get_current_stamp(get_source_id()), false);
         Statement stmt;
         val = new TrackData();
         this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
             
         stmt.reset();
-        if(stmt.bind_int (1, id) != Sqlite.OK) {
+        if(stmt.bind_int (1, item.db_id) != Sqlite.OK) {
             this.db_error();
             return false;
         }
@@ -333,13 +333,13 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             val.artist      = EMPTYSTRING;
             val.album       = EMPTYSTRING;
             val.title       = stmt.column_text(0);
-            val.item        = Item(ItemType.STREAM, stmt.column_text(1), id);
+            val.item        = Item(ItemType.STREAM, stmt.column_text(1), item.db_id);
             val.item.text   = stmt.column_text(0);
             val.item.source_id = get_source_id();
-            val.item.stamp = stmp;
+            val.item.stamp = item.stamp;
         }
         else {
-            print("get_stream_td_for_id: track is not in db. ID: %d\n", id);
+            print("get_stream_td_for_id: track is not in db. ID: %d\n", item.db_id);
             return false;
         }
         return true;
@@ -541,7 +541,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_VIDEO_DATA =
-        "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 ASC";
 
     public TrackData[] get_video_data(string searchtext) {
         TrackData[] val = {};

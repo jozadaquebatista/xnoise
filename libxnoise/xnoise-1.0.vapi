@@ -26,7 +26,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
-			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val, uint32 stmp);
+			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
 			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stmp);
@@ -518,7 +518,7 @@ namespace Xnoise {
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
 		public abstract unowned string get_datasource_name ();
 		public int get_source_id ();
-		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp, uint32 stamp);
+		public abstract bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData tmp);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.TrackData? get_trackdata_for_item (Xnoise.Item? item);
