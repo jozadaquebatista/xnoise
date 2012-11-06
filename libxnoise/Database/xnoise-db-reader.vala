@@ -540,36 +540,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)val;
     }
 
-    private static const string STMT_GET_VIDEO_DATA =
-        "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 ASC";
-
-    public TrackData[] get_video_data(string searchtext) {
-        TrackData[] val = {};
-        Statement stmt;
-        
-        this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, out stmt);
-        
-        if(stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
-            this.db_error();
-            return (owned)val;
-        }
-        while(stmt.step() == Sqlite.ROW) {
-            TrackData td = new TrackData();
-            td.artist      = stmt.column_text(3);
-            td.album       = null;//stmt.column_text(5);
-            td.title       = stmt.column_text(0);
-//            td.tracknumber = stmt.column_int(2);
-            td.length      = stmt.column_int(4);
-//            td.genre       = stmt.column_text(7);
-            td.name        = stmt.column_text(0);
-            td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
-            td.item.source_id = get_source_id();
-            td.item.stamp  = get_current_stamp(get_source_id());
-            val += td;
-        }
-        return (owned)val;
-    }
-
     private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
         "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 ASC";
 //TODO is this function doing the same as the one before?
@@ -579,20 +549,15 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         
         this.db.prepare_v2(STMT_GET_TRACKDATA_FOR_VIDEO, -1, out stmt);
         
-        if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
-           (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
+        if(stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
             this.db_error();
             return (owned)val;
         }
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
             td.artist      = stmt.column_text(3);
-//            td.album       = stmt.column_text(5);
             td.title       = stmt.column_text(0);
-//            td.tracknumber = stmt.column_int(2);
             td.length      = stmt.column_int(4);
-//            td.genre       = stmt.column_text(7);
-//            td.year        = stmt.column_int(8);
             td.name        = stmt.column_text(0);
             td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
             td.item.source_id = get_source_id();

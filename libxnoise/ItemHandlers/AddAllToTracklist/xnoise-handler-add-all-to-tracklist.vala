@@ -229,7 +229,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
                 job.track_dat = db_reader.get_all_tracks(global.searchtext);
                 break;
             case ItemType.LOCAL_VIDEO_TRACK:
-                job.track_dat = db_reader.get_video_data(global.searchtext);
+                job.track_dat = db_reader.get_trackdata_for_video(global.searchtext);
                 break;
             case ItemType.STREAM:
                 job.track_dat = db_reader.get_trackdata_for_streams(global.searchtext);

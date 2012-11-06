@@ -1712,7 +1712,6 @@ XnoiseTrackData** xnoise_database_reader_get_some_lastused_items (XnoiseDatabase
 guint xnoise_database_reader_count_lastused_items (XnoiseDatabaseReader* self);
 XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_video_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_reader_get_video_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);

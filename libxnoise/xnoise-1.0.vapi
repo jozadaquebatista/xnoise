@@ -34,7 +34,6 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
-			public Xnoise.TrackData[] get_video_data (string searchtext);
 			public Xnoise.Item[]? get_video_items (string searchtext);
 			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
