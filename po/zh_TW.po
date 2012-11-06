@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 13:15+0100\n"
+"POT-Creation-Date: 2012-11-06 09:46+0100\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -261,7 +261,7 @@ msgid "Devices"
 msgstr "裝置"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
 msgid "Search..."
 msgstr "搜尋..."
 
@@ -650,20 +650,29 @@ msgstr ""
 "正在復原 %u 個曲目在曲目清單。 這是很大的數量，可能會使 xnoise 啟動較慢。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
-msgid "no repeat"
-msgstr "不要重複"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+msgid "Playback mode: "
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+msgid "No repeat, one after another"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
-msgid "repeat single"
+#, fuzzy
+msgid "Repeat single track"
 msgstr "重複單曲"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-msgid "repeat all"
+#, fuzzy
+msgid "Repeat all"
 msgstr "重複所有"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
-msgid "random play"
-msgstr "隨機播放"
+msgid "Random playlist track playing"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
@@ -673,12 +682,25 @@ msgstr "輸入用於播放的網址"
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1737
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+#, fuzzy
+msgid "Open equalizer"
+msgstr "使用等化器"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
 msgid "Equalizer"
 msgstr "等化器"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+msgid "Toggle visibility of album art view"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+msgid "<Ctrl+B>"
+msgstr ""
+
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
 msgid "Show application main menu"
 msgstr "顯示應用的主選單"
 
@@ -1118,6 +1140,12 @@ msgstr "顯示 UbuntuOne 商店(_U)"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "顯示 UbuntuOne 商店"
+
+#~ msgid "no repeat"
+#~ msgstr "不要重複"
+
+#~ msgid "random play"
+#~ msgstr "隨機播放"
 
 #~ msgid "Open _Location"
 #~ msgstr "開啟位置(_L)"

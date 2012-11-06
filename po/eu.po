@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 13:15+0100\n"
+"POT-Creation-Date: 2012-11-06 09:46+0100\n"
 "PO-Revision-Date: 2012-11-04 21:24+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
@@ -252,7 +252,7 @@ msgid "Devices"
 msgstr "Gailuak"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
 msgid "Search..."
 msgstr "Bilatu..."
 
@@ -638,20 +638,29 @@ msgstr ""
 "ren abioa moteldu dezake."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
-msgid "no repeat"
-msgstr "ez errepikatu"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+msgid "Playback mode: "
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+msgid "No repeat, one after another"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
-msgid "repeat single"
+#, fuzzy
+msgid "Repeat single track"
 msgstr "errepikatu bakarra"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-msgid "repeat all"
+#, fuzzy
+msgid "Repeat all"
 msgstr "errepikatu guztia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
-msgid "random play"
-msgstr "ausaz erreproduzitu"
+msgid "Random playlist track playing"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
@@ -661,12 +670,25 @@ msgstr "Sartu erreproduzitzeko URLa"
 msgid "Select media file"
 msgstr "Hautatu multimedia-fitxategia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1737
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+#, fuzzy
+msgid "Open equalizer"
+msgstr "Erabili ekualizadorea"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
 msgid "Equalizer"
 msgstr "Ekualizadorea"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+msgid "Toggle visibility of album art view"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+msgid "<Ctrl+B>"
+msgstr ""
+
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
 msgid "Show application main menu"
 msgstr "Erakutsi aplikazioaren menu nagusia"
 
@@ -1100,3 +1122,9 @@ msgstr "Erakutsi _UbuntuOne denda"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Erakutsi UbuntuOne denda"
+
+#~ msgid "no repeat"
+#~ msgstr "ez errepikatu"
+
+#~ msgid "random play"
+#~ msgstr "ausaz erreproduzitu"

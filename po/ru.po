@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 13:15+0100\n"
+"POT-Creation-Date: 2012-11-06 09:46+0100\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -273,7 +273,7 @@ msgid "Devices"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
 msgid "Search..."
 msgstr ""
 
@@ -673,20 +673,29 @@ msgstr ""
 "может увеличить время запуска xnoise"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
-msgid "no repeat"
-msgstr "без повтора"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+msgid "Playback mode: "
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+msgid "No repeat, one after another"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
-msgid "repeat single"
+#, fuzzy
+msgid "Repeat single track"
 msgstr "повторять трек"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-msgid "repeat all"
+#, fuzzy
+msgid "Repeat all"
 msgstr "повторять все"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
-msgid "random play"
-msgstr "случайный порядок"
+msgid "Random playlist track playing"
+msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
@@ -696,12 +705,24 @@ msgstr "Введите URL для проигрывания"
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1737
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+msgid "Open equalizer"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
 msgid "Equalizer"
 msgstr ""
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+msgid "Toggle visibility of album art view"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+msgid "<Ctrl+B>"
+msgstr ""
+
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 
@@ -1141,6 +1162,12 @@ msgstr ""
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr ""
+
+#~ msgid "no repeat"
+#~ msgstr "без повтора"
+
+#~ msgid "random play"
+#~ msgstr "случайный порядок"
 
 #~ msgid "Open _Location"
 #~ msgstr "Открыть _местоположение"

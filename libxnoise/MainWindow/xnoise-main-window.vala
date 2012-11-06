@@ -729,25 +729,25 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case PlayerRepeatMode.NOT_AT_ALL : {
                 //TODO: create some other images
                 repeatimage.set_from_icon_name("xn-no-repeat", IconSize.LARGE_TOOLBAR);
-                repeatButton.set_tooltip_text(_("no repeat"));
+                repeatButton.set_tooltip_text(_("Playback mode: ") + _("No repeat, one after another"));
                 break;
             }
             case PlayerRepeatMode.SINGLE : {
                 repeatimage.set_from_icon_name("xn-repeat-single", IconSize.LARGE_TOOLBAR);
                 repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("repeat single"));
+                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat single track"));
                 break;
             }
             case PlayerRepeatMode.ALL : {
                 repeatimage.set_from_icon_name("xn-repeat-all", IconSize.LARGE_TOOLBAR);
                 repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("repeat all"));
+                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat all"));
                 break;
             }
             case PlayerRepeatMode.RANDOM : {
                 repeatimage.set_from_icon_name("xn-shuffle", IconSize.LARGE_TOOLBAR);
                 repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("random play"));
+                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Random playlist track playing"));
                 break;
             }
         }
@@ -1720,6 +1720,7 @@ print("on close 2\n");
             
             eqButtonTI = new ToolItem();
             var eqButton = new Button();
+            eqButton.set_tooltip_text(_("Open equalizer"));
             var eqi = new Image.from_icon_name("xn-equalizer", IconSize.LARGE_TOOLBAR);
             eqi.show();
             eqButton.add(eqi);
@@ -1762,6 +1763,10 @@ print("on close 2\n");
             var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
             album_view_toggle = new ToggleButton();
             album_view_toggle.set_relief(ReliefStyle.NONE);
+            album_view_toggle.set_tooltip_text(_("Toggle visibility of album art view") +
+                                               "\n" +
+                                               _("<Ctrl+B>")
+            );
             album_view_toggle.add(aart_im);
             album_view_toggle.can_focus = false;
             albumart_toggleb.add(album_view_toggle);

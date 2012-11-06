@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 13:15+0100\n"
+"POT-Creation-Date: 2012-11-06 09:46+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -254,7 +254,7 @@ msgid "Devices"
 msgstr "Geräte"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
 msgid "Search..."
 msgstr "Suche..."
 
@@ -623,20 +623,27 @@ msgid "Restoring %u tracks in the tracklist. This is a large number and can make
 msgstr "%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
-msgid "no repeat"
-msgstr "Nichts Wiederholen"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+msgid "Playback mode: "
+msgstr "Abspielmodus: "
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+msgid "No repeat, one after another"
+msgstr "Keine Wiederholung, Einer nach dem anderen"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
-msgid "repeat single"
-msgstr "Wiederhole Einzelnen"
+msgid "Repeat single track"
+msgstr "Wiederhole einzelnen Titel"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-msgid "repeat all"
-msgstr "Wiederhole Alle"
+msgid "Repeat all"
+msgstr "Wiederhole alle Titel"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
-msgid "random play"
-msgstr "Zufall"
+msgid "Random playlist track playing"
+msgstr "Zufallstitel aus der Abspielliste spielen"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
@@ -646,12 +653,24 @@ msgstr "URL Adresse zum Öffnen eingeben"
 msgid "Select media file"
 msgstr "Wähle Mediendatei"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1737
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+msgid "Open equalizer"
+msgstr "Zeige den Equalizer"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
 msgid "Equalizer"
 msgstr "Equalizer"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+msgid "Toggle visibility of album art view"
+msgstr "Umschalten der Anzeige der Albumbild-Übersicht"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+msgid "<Ctrl+B>"
+msgstr "<Strg+B>"
+
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
 msgid "Show application main menu"
 msgstr "Zeige Hauptmenü der Anwendung"
 
@@ -1079,6 +1098,12 @@ msgstr "UbuntuOne Musik zeigen"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "UbuntuOne Musik zeigen"
+
+#~ msgid "no repeat"
+#~ msgstr "Nichts Wiederholen"
+
+#~ msgid "random play"
+#~ msgstr "Zufall"
 
 #~ msgid "Open _Location"
 #~ msgstr "_Ort öffnen"
