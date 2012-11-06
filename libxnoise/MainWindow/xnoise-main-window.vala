@@ -1597,6 +1597,8 @@ print("on close 2\n");
             sbuttonTL.select(name, false);
             this.mainview_box.select_main_view(name);
         }
+        if(name == TRACKLIST_VIEW_NAME)
+            tl.grab_focus();
     }
     
     private void setup_widgets() {
