@@ -177,9 +177,8 @@ msgid "Show picture on hover album image"
 msgstr "Mostrar imagem ao passar na capa do album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-#, fuzzy
 msgid "Use Compact Menu"
-msgstr "Utilizar menu da aplicação"
+msgstr "Utilizar menu compacto"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
@@ -267,13 +266,12 @@ msgid "Volume"
 msgstr "Volume"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:114
-#, fuzzy
 msgid "Add Media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
 msgid "Skip"
-msgstr ""
+msgstr "Ignorar"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:121
 msgid "Done"
@@ -352,19 +350,16 @@ msgstr ""
 "Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:136
-#, fuzzy
 msgid "Album data"
-msgstr "Alterar dados do álbum"
+msgstr "Dados do álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:139
-#, fuzzy
 msgid "Please enter new album data."
-msgstr "Alterar dados do álbum"
+msgstr "Por favor indique os dados do álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:141
-#, fuzzy
 msgid "Year:"
-msgstr "Ano"
+msgstr "Ano:"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -640,25 +635,23 @@ msgstr ""
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
 msgid "Playback mode: "
-msgstr ""
+msgstr "Modo de reprodução:"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 msgid "No repeat, one after another"
-msgstr ""
+msgstr "Sem repetição"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
-#, fuzzy
 msgid "Repeat single track"
-msgstr "repetir uma"
+msgstr "Repetir uma faixa"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-#, fuzzy
 msgid "Repeat all"
-msgstr "repetir tudo"
+msgstr "Repetir todas"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
 msgid "Random playlist track playing"
-msgstr ""
+msgstr "Reprodução aleatória de faixas"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
@@ -669,9 +662,8 @@ msgid "Select media file"
 msgstr "Selecione o ficheiro"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
-#, fuzzy
 msgid "Open equalizer"
-msgstr "Utilizar equalizador"
+msgstr "Abrir equalizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
 msgid "Equalizer"
@@ -679,11 +671,11 @@ msgstr "Equalizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
 msgid "Toggle visibility of album art view"
-msgstr ""
+msgstr "Alternar visibilidade da vista de álbuns"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
 msgid "<Ctrl+B>"
-msgstr ""
+msgstr "<Ctrl+B>"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
