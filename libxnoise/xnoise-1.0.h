@@ -876,7 +876,7 @@ struct _XnoiseDataSourceClass {
 	XnoiseItem* (*get_artistitem_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseTrackData** (*get_trackdata_by_albumid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
 	XnoiseItem* (*get_albums_with_search) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-	XnoiseTrackData* (*get_trackdata_by_titleid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
+	XnoiseTrackData* (*get_trackdata_for_item) (XnoiseDataSource* self, XnoiseItem* item);
 	gboolean (*get_stream_td_for_id) (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp, guint32 stamp);
 	XnoiseTrackData** (*get_all_tracks) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 };
@@ -1756,7 +1756,7 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource
 XnoiseItem* xnoise_data_source_get_artistitem_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_albumid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
 XnoiseItem* xnoise_data_source_get_albums_with_search (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-XnoiseTrackData* xnoise_data_source_get_trackdata_by_titleid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
+XnoiseTrackData* xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item);
 gboolean xnoise_data_source_get_stream_td_for_id (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);

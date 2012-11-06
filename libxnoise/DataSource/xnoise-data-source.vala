@@ -54,7 +54,8 @@ public abstract class Xnoise.DataSource : GLib.Object {
     public abstract TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stamp);
     public abstract Item[] get_albums_with_search(string searchtext, int32 id, uint32 stamp);
     
-    public abstract TrackData? get_trackdata_by_titleid(string searchtext, int32 id, uint32 stamp);
+//    public abstract TrackData? get_trackdata_by_titleid(string searchtext, int32 id, uint32 stamp);
+    public abstract TrackData? get_trackdata_for_item(Item? item);
     
     public abstract bool get_stream_td_for_id(int32 id, out TrackData tmp, uint32 stamp);
     

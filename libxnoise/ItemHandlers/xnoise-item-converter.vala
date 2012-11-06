@@ -55,7 +55,8 @@ public class Xnoise.ItemConverter : Object {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
-                    TrackData? tmp = ds.get_trackdata_by_titleid(global.searchtext, item.db_id, item.stamp);
+                    print("call get_trackdata_for_item\n");
+                    TrackData? tmp = ds.get_trackdata_for_item(item);
                     if(tmp == null)
                         break;
                     result += tmp;

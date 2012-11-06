@@ -37,7 +37,7 @@ using Xnoise.Utilities;
 public class Xnoise.Database.Writer : GLib.Object {
     private Sqlite.Database db = null;
     private Statement insert_lastused_entry_statement;
-    private Statement add_radio_statement;
+    private Statement add_stream_statement;
     private Statement begin_statement;
     private Statement commit_statement;
     private Statement write_media_folder_statement;
@@ -53,6 +53,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement get_genre_id_statement;
     private Statement insert_genre_statement;
     private Statement insert_title_statement;
+    private Statement insert_video_statement;
     private Statement get_title_id_statement;
     private Statement delete_artists_statement;
     private Statement delete_albums_statement;
@@ -63,7 +64,7 @@ public class Xnoise.Database.Writer : GLib.Object {
 //    private static Statement delete_item_statement;
     private Statement update_album_statement;
 
-    private Statement get_artist_for_uri_id_statement;
+//    private Statement get_artist_for_uri_id_statement;
     private Statement count_artist_in_items_statement;
     private Statement delete_artist_statement;
 
@@ -120,18 +121,18 @@ public class Xnoise.Database.Writer : GLib.Object {
         "BEGIN";
     private static const string STMT_COMMIT =
         "COMMIT";
-    private static const string STMT_CHECK_TRACK_EXISTS =
-        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
+//    private static const string STMT_CHECK_TRACK_EXISTS =
+//        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
     private static const string STMT_DEL_MEDIA_FOLDERS =
         "DELETE FROM media_folders";
     private static const string STMT_DEL_RADIO_STREAM =
         "DELETE FROM streams;";
-    private static const string STMT_DEL_MEDIAFILES =
-        "DELETE FROM media_files;";
-    private static const string STMT_ADD_RADIO =
+//    private static const string STMT_DEL_MEDIAFILES =
+//        "DELETE FROM media_files;";
+    private static const string STMT_ADD_STREAM =
         "INSERT INTO streams (name, uri) VALUES (?, ?)";
-    private static const string STMT_ADD_MFILE =
-        "INSERT INTO media_files (name) VALUES (?)";
+//    private static const string STMT_ADD_MFILE =
+//        "INSERT INTO media_files (name) VALUES (?)";
     private static const string STMT_GET_MEDIA_FOLDERS =
         "SELECT * FROM media_folders";
     private static const string STMT_INSERT_ARTIST =
@@ -162,8 +163,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         "DELETE FROM items WHERE uri = ?";
     private static const string STMT_TRACKDATA_FOR_STREAM =
         "SELECT st.id, st.name FROM streams st WHERE st.name = ?";
-    private static const string STMT_GET_ARTIST_FOR_URI_ID =
-        "SELECT artist FROM items WHERE uri = ?";
+//    private static const string STMT_GET_ARTIST_FOR_URI_ID =
+//        "SELECT artist FROM items WHERE uri = ?";
     private static const string STMT_COUNT_ARTIST_IN_ITEMS =
         "SELECT COUNT(id) FROM items WHERE artist = ?";
     private static const string STMT_DEL_ARTIST = 
@@ -251,7 +252,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out this.get_media_folder_statement);
         this.db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out this.write_media_folder_statement);
         this.db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1, out this.del_media_folder_statement);
-        this.db.prepare_v2(STMT_ADD_RADIO, -1, out this.add_radio_statement);
+        this.db.prepare_v2(STMT_ADD_STREAM, -1, out this.add_stream_statement);
         this.db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, out this.del_streams_statement);
         this.db.prepare_v2(STMT_GET_ARTIST_ID, -1, out this.get_artist_id_statement);
         this.db.prepare_v2(STMT_INSERT_ARTIST, -1, out this.insert_artist_statement);
@@ -263,13 +264,14 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_GET_GENRE_ID, -1, out this.get_genre_id_statement);
         this.db.prepare_v2(STMT_INSERT_GENRE, -1, out this.insert_genre_statement);
         this.db.prepare_v2(STMT_INSERT_TITLE, -1, out this.insert_title_statement);
+        this.db.prepare_v2(STMT_INSERT_VIDEO, -1, out this.insert_video_statement);
         this.db.prepare_v2(STMT_GET_TITLE_ID, -1, out this.get_title_id_statement);
         this.db.prepare_v2(STMT_DEL_ARTISTS, -1, out this.delete_artists_statement);
         this.db.prepare_v2(STMT_DEL_ALBUMS, -1, out this.delete_albums_statement);
         this.db.prepare_v2(STMT_DEL_ITEMS, -1, out this.delete_items_statement);
         this.db.prepare_v2(STMT_DEL_URIS, -1, out this.delete_uris_statement);
         this.db.prepare_v2(STMT_DEL_GENRES, -1, out this.delete_genres_statement);
-        this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
+//        this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
         this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
         this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
 //        this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
@@ -884,82 +886,114 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
     }
 
-    private static const string STMT_GET_GET_ITEM_ID = 
-        "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
-    
     private static const string STMT_INSERT_TITLE =
-        "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate, mimetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, length, bitrate, mimetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
-    private static const string STMT_GET_ITEM_ID =
-        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
+//    private static const string STMT_GET_GET_ITEM_ID = 
+//        "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
+    
+//    private static const string STMT_GET_ITEM_ID =
+//        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
+    
+    private static const string STMT_GET_VIDEO_ID =
+        "SELECT v.id FROM videos v, uris u WHERE v.uri = u.id AND u.id = ?";
+    
+    private static const string STMT_INSERT_VIDEO =
+        "INSERT INTO videos (artist, title, uri, length, mimetype) VALUES (?, ?, ?, ?, ?)";
     
     public bool insert_title(ref TrackData td) { // , string uri
-        // make entries in other tables and get references from there
-        td.dat1 = handle_artist(ref td.artist);
-        if(td.dat1 == -1) {
-            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
-            return false;
-        }
-        td.dat2 = handle_album(ref td.dat1, ref td, false);
-        if(td.dat2 == -1) {
-            print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
-            return false;
-        }
-        int uri_id = handle_uri(td.item.uri);
-        if(uri_id == -1) {
-            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
-            return false;
-        }
-        int genre_id = handle_genre(ref td.genre);
-        if(genre_id == -1) {
-            print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
-            return false;
-        }
-        //print("insert_title td.item.type %s\n", td.item.type.to_string());
-        insert_title_statement.reset();
-        if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
-           insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
-           insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
-           insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
-           insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-           insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
-           insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-           insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
-           insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
-           insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK ||
-           insert_title_statement.bind_text(11, td.mimetype)         != Sqlite.OK) {
-            this.db_error();
-            return false;
-        }
-        
-        if(insert_title_statement.step()!=Sqlite.DONE) {
-            this.db_error();
-            return false;
-        }
-        if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-            Statement stmt;
-            this.db.prepare_v2(STMT_GET_ITEM_ID , -1, out stmt);
-            if(stmt.bind_int (1,uri_id) != Sqlite.OK) {
-                this.db_error();
+        assert(td.item != null);
+        switch(td.item.type) {
+            case ItemType.LOCAL_AUDIO_TRACK: {
+                // make entries in other tables and get references from there
+                td.dat1 = handle_artist(ref td.artist);
+                if(td.dat1 == -1) {
+                    print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
+                    return false;
+                }
+                td.dat2 = handle_album(ref td.dat1, ref td, false);
+                if(td.dat2 == -1) {
+                    print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
+                    return false;
+                }
+                int uri_id = handle_uri(td.item.uri);
+                if(uri_id == -1) {
+                    //print("Error importing uri for %s : '%s' ! \n", uri, uri);
+                    return false;
+                }
+                int genre_id = handle_genre(ref td.genre);
+                if(genre_id == -1) {
+                    print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
+                    return false;
+                }
+                //print("insert_title td.item.type %s\n", td.item.type.to_string());
+                insert_title_statement.reset();
+                if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
+                   insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
+                   insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
+                   insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
+                   insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
+                   insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
+                   insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
+                   insert_title_statement.bind_int (8,  td.length)           != Sqlite.OK ||
+                   insert_title_statement.bind_int (9, td.bitrate)          != Sqlite.OK ||
+                   insert_title_statement.bind_text(10, td.mimetype)         != Sqlite.OK) {
+                    this.db_error();
+                    return false;
+                }
+                
+                if(insert_title_statement.step()!=Sqlite.DONE) {
+                    this.db_error();
+                    return false;
+                }
+                return true;
+            }
+            case ItemType.LOCAL_VIDEO_TRACK: {
+                int uri_id = handle_uri(td.item.uri); // TODO function shall handle mediatype, too
+                if(uri_id == -1) {
+                    //print("Error importing uri for %s : '%s' ! \n", uri, uri);
+                    return false;
+                }
+                insert_video_statement.reset();
+                if(insert_video_statement.bind_text(1,  td.artist)  != Sqlite.OK ||
+                   insert_video_statement.bind_text(2,  td.title)   != Sqlite.OK ||
+                   insert_video_statement.bind_int (3,  uri_id)     != Sqlite.OK ||
+                   insert_video_statement.bind_int (4,  td.length)  != Sqlite.OK ||
+                   insert_video_statement.bind_text(5,  td.mimetype) != Sqlite.OK) {
+                    this.db_error();
+                    return false;
+                }
+                
+                if(insert_video_statement.step()!=Sqlite.DONE) {
+                    this.db_error();
+                    return false;
+                }
+                Statement stmt;
+                this.db.prepare_v2(STMT_GET_VIDEO_ID , -1, out stmt);
+                if(stmt.bind_int (1, uri_id) != Sqlite.OK) {
+                    this.db_error();
+                    return false;
+                }
+                int32 idv = -1;
+                if(stmt.step() == Sqlite.ROW) {
+                    idv = (int32)stmt.column_int(0);
+                }
+                else {
+                    this.db_error();
+                    return false;
+                }
+                Item? item = Item(ItemType.LOCAL_VIDEO_TRACK, td.item.uri, idv);
+                item.source_id = db_reader.get_source_id();
+                item.stamp     = get_current_stamp(db_reader.get_source_id());
+                foreach(NotificationData cxd in change_callbacks) {
+                    if(cxd.cb != null)
+                        cxd.cb(ChangeType.ADD_VIDEO, item);
+                }
+                return true;
+            }
+            default:
                 return false;
-            }
-            int32 idv = -1;
-            if(stmt.step() == Sqlite.ROW) {
-                idv = (int32)stmt.column_int(0);
-            }
-            else {
-                this.db_error();
-                return false;
-            }
-            Item? item = Item(ItemType.LOCAL_VIDEO_TRACK, td.item.uri, idv);
-            item.source_id = db_reader.get_source_id();
-            item.stamp = get_current_stamp(db_reader.get_source_id());
-            foreach(NotificationData cxd in change_callbacks) {
-                if(cxd.cb != null)
-                    cxd.cb(ChangeType.ADD_VIDEO, item);
-            }
         }
-        return true;
     }
 
     private static const string STMT_GET_STREAM_ID_BY_URI =
@@ -977,13 +1011,13 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(i.text == null || i.text == EMPTYSTRING)
             i.text = i.uri;
         
-        add_radio_statement.reset();
-        if(add_radio_statement.bind_text(1, i.text) != Sqlite.OK||
-           add_radio_statement.bind_text(2, i.uri)  != Sqlite.OK) {
+        add_stream_statement.reset();
+        if(add_stream_statement.bind_text(1, i.text) != Sqlite.OK||
+           add_stream_statement.bind_text(2, i.uri)  != Sqlite.OK) {
             this.db_error();
             return false;
         }
-        if(add_radio_statement.step() != Sqlite.DONE) {
+        if(add_stream_statement.step() != Sqlite.DONE) {
             this.db_error();
             return false;
         }
