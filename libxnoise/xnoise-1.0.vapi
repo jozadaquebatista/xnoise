@@ -13,12 +13,15 @@ namespace Xnoise {
 			public uint count_lastused_items ();
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
+			public Xnoise.Item[] get_albums_with_genre_and_search (string searchtext, Xnoise.Item? artist, Xnoise.Item? genre);
 			public override Xnoise.Item[] get_albums_with_search (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
+			public Xnoise.Item[] get_artists_with_genre_and_search (string searchtext, Xnoise.Item? genre);
 			public override Xnoise.Item[] get_artists_with_search (string searchtext);
 			public override unowned string get_datasource_name ();
+			public Xnoise.Item[] get_genres_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);
 			public bool get_lyrics (string artist, string title, out string txt, out string cred, out string ident);
 			public Xnoise.Item[] get_media_folders ();
@@ -560,6 +563,7 @@ namespace Xnoise {
 		public void reset_position_reference ();
 		public void stop ();
 		public string active_dockable_media_name { get; set; }
+		public Xnoise.CollectionSortMode collection_sort_mode { get; set; }
 		public string current_album { get; set; }
 		public string current_artist { get; set; }
 		public string current_genre { get; set; }
@@ -1024,6 +1028,11 @@ namespace Xnoise {
 		QUERYABLE_PLAYLIST_MENU_QUERY,
 		QUERYABLE_EXTERNAL_ITEM_ACTIVATED,
 		QUERYABLE_EXTERNAL_MENU_QUERY
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public enum CollectionSortMode {
+		ARTIST_ALBUM_TITLE,
+		GENRE_ARTIST_ALBUM
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum DynPlaylistType {

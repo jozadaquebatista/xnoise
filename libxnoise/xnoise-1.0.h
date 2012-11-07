@@ -245,6 +245,8 @@ typedef struct _XnoiseGlobalAccess XnoiseGlobalAccess;
 typedef struct _XnoiseGlobalAccessClass XnoiseGlobalAccessClass;
 typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
+#define XNOISE_TYPE_COLLECTION_SORT_MODE (xnoise_collection_sort_mode_get_type ())
+
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 
 #define XNOISE_TYPE_EXTERN_QUERYABLE (xnoise_extern_queryable_get_type ())
@@ -1014,6 +1016,11 @@ struct _XnoiseGlobalAccessClass {
 };
 
 typedef enum  {
+	XNOISE_COLLECTION_SORT_MODE_ARTIST_ALBUM_TITLE = 0,
+	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM
+} XnoiseCollectionSortMode;
+
+typedef enum  {
 	XNOISE_PLAYER_STATE_STOPPED = 0,
 	XNOISE_PLAYER_STATE_PLAYING,
 	XNOISE_PLAYER_STATE_PAUSED
@@ -1714,7 +1721,10 @@ XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* 
 XnoiseItem* xnoise_database_reader_get_video_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_artists_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* genre, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_genres_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
+XnoiseItem* xnoise_database_reader_get_albums_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* artist, XnoiseItem* genre, int* result_length1);
 gpointer xnoise_album_data_ref (gpointer instance);
 void xnoise_album_data_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_album_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -1826,6 +1836,9 @@ const gchar* xnoise_global_access_get_active_dockable_media_name (XnoiseGlobalAc
 void xnoise_global_access_set_active_dockable_media_name (XnoiseGlobalAccess* self, const gchar* value);
 gint xnoise_global_access_get_fontsize_dockable (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_fontsize_dockable (XnoiseGlobalAccess* self, gint value);
+GType xnoise_collection_sort_mode_get_type (void) G_GNUC_CONST;
+XnoiseCollectionSortMode xnoise_global_access_get_collection_sort_mode (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_collection_sort_mode (XnoiseGlobalAccess* self, XnoiseCollectionSortMode value);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;
 XnoisePlayerState xnoise_global_access_get_player_state (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_player_state (XnoiseGlobalAccess* self, XnoisePlayerState value);

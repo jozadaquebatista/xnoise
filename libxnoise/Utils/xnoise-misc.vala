@@ -135,7 +135,10 @@ namespace Xnoise {
         // PARAMS
         Params.init();
         int v = Params.get_int_value("fontsizeMB");
+        // some early initializations
         global.fontsize_dockable = ((v >= 7 && v < 18) ? v : 10);
+        global.collection_sort_mode = 
+            (CollectionSortMode)Params.get_int_value("collection_sort_mode");
         
         // DESKTOP NOTIFICATIONS
         _notifications = new DesktopNotifications();
@@ -320,6 +323,12 @@ public enum Xnoise.PlayerState {
     PLAYING,
     PAUSED
 }
+
+public enum Xnoise.CollectionSortMode {
+    ARTIST_ALBUM_TITLE = 0,
+    GENRE_ARTIST_ALBUM
+}
+
 
 
 

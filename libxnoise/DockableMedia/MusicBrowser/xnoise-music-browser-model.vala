@@ -66,6 +66,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     public MusicBrowserModel(DockableMedia dock) {
         this.dock = dock;
+        global.collection_sort_mode = CollectionSortMode.GENRE_ARTIST_ALBUM;
         icon_repo.icon_theme_changed.connect(update_pixbufs);
         set_column_types(col_types);
         global.notify["image-path-small"].connect( () => {
@@ -254,10 +255,24 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         populating_model = true;
         //print("populate_model\n");
         main_window.musicBr.set_model(null);
-        var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
-        a_job.cancellable = populate_model_cancellable;
-        db_worker.push_job(a_job);
-        a_job.finished.connect(on_populate_finished);
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+                print("GENRE_ARTIST_ALBUM\n");
+                var g_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                           this.populate_genres_job);
+                g_job.cancellable = populate_model_cancellable;
+                db_worker.push_job(g_job);
+                g_job.finished.connect(on_populate_finished);
+                break;
+            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            default:
+                var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                           this.populate_artists_job);
+                a_job.cancellable = populate_model_cancellable;
+                db_worker.push_job(a_job);
+                a_job.finished.connect(on_populate_finished);
+                break;
+        }
         return false;
     }
 
@@ -267,6 +282,40 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         sender.finished.disconnect(on_populate_finished);
         main_window.musicBr.set_model(this);
         populating_model = false;
+    }
+    
+    // used for populating the data model
+    private bool populate_genres_job(Worker.Job job) {
+        if(job.cancellable.is_cancelled())
+            return false;
+        job.items = db_reader.get_genres_with_search(global.searchtext);
+        //print("job.items.length = %d\n", job.items.length);
+        Idle.add( () => {
+            if(job.cancellable.is_cancelled())
+                return false;
+            TreeIter iter_artist, iter_search;
+            foreach(Item? artist in job.items) {
+                if(job.cancellable.is_cancelled())
+                    break;
+                this.prepend(out iter_artist, null);
+                this.set(iter_artist,
+                         Column.ICON, icon_repo.artist_icon,
+                         Column.VIS_TEXT, artist.text,
+                         Column.ITEM, artist,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_search, iter_artist);
+                this.set(iter_search,
+                         Column.ICON, icon_repo.loading_icon,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+            }
+            return false;
+        });
+        return false;
     }
     
     // used for populating the data model
@@ -312,23 +361,31 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private const string LOADING = _("Loading ...");
     
     internal void unload_children(ref TreeIter iter) {
-        TreeIter iter_loader;
-        Item? item = Item(ItemType.UNKNOWN);
-        this.get(iter, Column.ITEM, out item);
-        if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
-            return;
-        Item? loader_item = Item(ItemType.LOADER);
-        this.append(out iter_loader, iter);
-        this.set(iter_loader,
-                 Column.ICON, icon_repo.loading_icon,
-                 Column.VIS_TEXT, LOADING,
-                 Column.ITEM, loader_item,
-                 Column.LEVEL, 1
-                 );
-        TreeIter child;
-        for(int i = (this.iter_n_children(iter) -2); i >= 0 ; i--) {
-            this.iter_nth_child(out child, iter, i);
-            this.remove(child);
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+                print("GENRE_ARTIST_ALBUM not implemented\n");
+                break;
+            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            default:
+                TreeIter iter_loader;
+                Item? item = Item(ItemType.UNKNOWN);
+                this.get(iter, Column.ITEM, out item);
+                if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+                    return;
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_loader, iter);
+                this.set(iter_loader,
+                         Column.ICON, icon_repo.loading_icon,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+                TreeIter child;
+                for(int i = (this.iter_n_children(iter) -2); i >= 0 ; i--) {
+                    this.iter_nth_child(out child, iter, i);
+                    this.remove(child);
+                }
+                break;
         }
     }
     
@@ -347,76 +404,151 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         TreeRowReference treerowref = new TreeRowReference(this, path);
         this.get(iter, Column.ITEM, out item);
         //print("item.type: %s\n", item.type.to_string());
-        if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_artists_job);
-            //job.cancellable = populate_model_cancellable;
-            job.set_arg("treerowref", treerowref);
-            job.set_arg("id", item.db_id);
-            job.set_arg("stamp", item.stamp);
-            db_worker.push_job(job);
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+                if(item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.load_genres_content_job);
+                    job.set_arg("treerowref", treerowref);
+                    job.item = item;
+                    db_worker.push_job(job);
+                }
+                break;
+            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            default:
+                if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.load_artist_content_job);
+                    job.set_arg("treerowref", treerowref);
+                    job.set_arg("id", item.db_id);
+                    job.set_arg("stamp", item.stamp);
+                    db_worker.push_job(job);
+                }
+                break;
         }
     }
 
-    private bool load_artists_job(Worker.Job job) {
+    private bool load_genres_content_job(Worker.Job job) {
         if(this.populating_model)
             return false;
-        job.items = db_reader.get_albums_with_search(global.searchtext,
-                                                     (int32)job.get_arg("id"),
-                                                     (uint32)job.get_arg("stamp"));
-        //print("job.items cnt = %d\n", job.items.length);
-        Idle.add( () => {
-            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
-            if(row_ref == null || !row_ref.valid())
-                return false;
-            TreePath p = row_ref.get_path();
-            TreeIter iter_artist, iter_album;
-            this.get_iter(out iter_artist, p);
-            Item? artist;
-            string artist_name;
-            this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
-            foreach(Item? album in job.items) {     //ALBUMS
-                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
-                Gdk.Pixbuf albumimage = null;
-                if(albumimage_file != null) {
-                    if(albumimage_file.query_exists(null)) {
-                        try {
-                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
-                        }
-                        catch(Error e) {
-                            albumimage = null;
-                        }
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+                job.items = db_reader.get_artists_with_genre_and_search(global.searchtext,
+                                                                        job.item);
+                //print("gaa soted job.items cnt = %d\n", job.items.length);
+                Idle.add( () => {
+                    TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+                    if(row_ref == null || !row_ref.valid())
+                        return false;
+                    TreePath p = row_ref.get_path();
+                    TreeIter iter_genre, iter_artist;
+                    this.get_iter(out iter_genre, p);
+                    Item? genre;
+                    string genre_name;
+                    this.get(iter_genre, Column.ITEM, out genre, Column.VIS_TEXT, out genre_name);
+                    foreach(Item? artist in job.items) {     //ARTISTS
+//                        File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
+                        this.append(out iter_artist, iter_genre);
+                        this.set(iter_artist,
+                                 Column.ICON, icon_repo.artist_icon,
+                                 Column.VIS_TEXT, artist.text,
+                                 Column.ITEM, artist,
+                                 Column.LEVEL, 1
+                                 );
+                        Gtk.TreePath p1 = this.get_path(iter_artist);
+                        TreeRowReference treerowref = new TreeRowReference(this, p1);
+                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                                       this.load_albums_job);
+                        job_album.set_arg("treerowref", treerowref);
+                        Item[] temp_items = new Item[2];
+                        temp_items[0] = artist;
+                        temp_items[1] = genre;
+                        job_album.items = temp_items;
+//                        job_album.set_arg("genre", genre.db_id);
+//                        job_album.set_arg("artist", artist.db_id);
+//                        job_album.set_arg("stamp", artist.stamp);
+                        db_worker.push_job(job_album);
                     }
-                    else {
-                        albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
-                       if(albumimage_file.query_exists(null)) {
-                            try {
-                                albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
-                            }
-                            catch(Error e) {
-                                albumimage = null;
-                            }
-                        }
-                    }
-                }
-                this.append(out iter_album, iter_artist);
-                this.set(iter_album,
-                         Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
-                         Column.VIS_TEXT, album.text,
-                         Column.ITEM, album,
-                         Column.LEVEL, 1
-                         );
-                Gtk.TreePath p1 = this.get_path(iter_album);
-                TreeRowReference treerowref = new TreeRowReference(this, p1);
-                var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_title_job);
-                job_title.set_arg("treerowref", treerowref);
-                job_title.set_arg("artist", artist.db_id);
-                job_title.set_arg("album", album.db_id);
-                job_title.set_arg("stamp", album.stamp);
-                db_worker.push_job(job_title);
-            }
-            remove_loader_child(ref iter_artist);
+                    remove_loader_child(ref iter_genre);
+                    return false;
+                });
+                break;
+            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+                assert_not_reached();
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private bool load_artist_content_job(Worker.Job job) {
+        if(this.populating_model)
             return false;
-        });
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+                print("GENRE_ARTIST_ALBUM not implemented\n");
+                break;
+            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            default:
+                job.items = db_reader.get_albums_with_search(global.searchtext,
+                                                             (int32)job.get_arg("id"),
+                                                             (uint32)job.get_arg("stamp"));
+                //print("job.items cnt = %d\n", job.items.length);
+                Idle.add( () => {
+                    TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+                    if(row_ref == null || !row_ref.valid())
+                        return false;
+                    TreePath p = row_ref.get_path();
+                    TreeIter iter_artist, iter_album;
+                    this.get_iter(out iter_artist, p);
+                    Item? artist;
+                    string artist_name;
+                    this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
+                    foreach(Item? album in job.items) {     //ALBUMS
+                        File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
+                        Gdk.Pixbuf albumimage = null;
+                        if(albumimage_file != null) {
+                            if(albumimage_file.query_exists(null)) {
+                                try {
+                                    albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                                }
+                                catch(Error e) {
+                                    albumimage = null;
+                                }
+                            }
+                            else {
+                                albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
+                               if(albumimage_file.query_exists(null)) {
+                                    try {
+                                        albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                                    }
+                                    catch(Error e) {
+                                        albumimage = null;
+                                    }
+                                }
+                            }
+                        }
+                        this.append(out iter_album, iter_artist);
+                        this.set(iter_album,
+                                 Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                                 Column.VIS_TEXT, album.text,
+                                 Column.ITEM, album,
+                                 Column.LEVEL, 1
+                                 );
+                        Gtk.TreePath p1 = this.get_path(iter_album);
+                        TreeRowReference treerowref = new TreeRowReference(this, p1);
+                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_titles_job);
+                        job_title.set_arg("treerowref", treerowref);
+                        job_title.set_arg("artist", artist.db_id);
+                        job_title.set_arg("album", album.db_id);
+                        job_title.set_arg("stamp", album.stamp);
+                        db_worker.push_job(job_title);
+                    }
+                    remove_loader_child(ref iter_artist);
+                    return false;
+                });
+                break;
+        }
         return false;
     }
     
@@ -455,7 +587,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(albumimage_file != null) {
                 if(albumimage_file.query_exists(null)) {
                     try {
-                        albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(),
+                                                                       30, 30, true);
                     }
                     catch(Error e) {
                         albumimage = null;
@@ -465,7 +598,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
                     if(albumimage_file.query_exists(null)) {
                         try {
-                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(),
+                                                                           30, 30, true);
                         }
                         catch(Error e) {
                             albumimage = null;
@@ -500,8 +634,61 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         }
     }
     
+    private bool load_albums_job(Worker.Job job) {
+        if(this.populating_model)
+            return false;
+//        int32 ar = (int32)job.get_arg("artist");
+        string artist_name = job.items[0].text;
+        job.items = db_reader.get_albums_with_genre_and_search(global.searchtext,
+                                                               job.items[0],
+                                                               job.items[1]
+        );
+        Idle.add( () => {
+            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+            if((row_ref == null) || (!row_ref.valid()))
+                return false;
+            TreePath p = row_ref.get_path();
+            TreeIter iter_artist, iter_album;
+            this.get_iter(out iter_artist, p);
+            foreach(Item it in job.items) {
+                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, it.text, "embedded");
+                Gdk.Pixbuf albumimage = null;
+                if(albumimage_file != null) {
+                    if(albumimage_file.query_exists(null)) {
+                        try {
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        }
+                        catch(Error e) {
+                            albumimage = null;
+                        }
+                    }
+                    else {
+                        albumimage_file = get_albumimage_for_artistalbum(artist_name, it.text, null);
+                       if(albumimage_file.query_exists(null)) {
+                            try {
+                                albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            }
+                            catch(Error e) {
+                                albumimage = null;
+                            }
+                        }
+                    }
+                }
+                this.append(out iter_album, iter_artist);
+                this.set(iter_album,
+                         Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                         Column.VIS_TEXT, it.text,
+                         Column.ITEM, it,
+                         Column.LEVEL, 2
+                         );
+            }
+            return false;
+        });
+        return false;
+    }
+
     //Used for populating model
-    private bool populate_title_job(Worker.Job job) {
+    private bool load_titles_job(Worker.Job job) {
         if(this.populating_model)
             return false;
         int32 al = (int32)job.get_arg("album");
