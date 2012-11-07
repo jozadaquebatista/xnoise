@@ -876,8 +876,8 @@ struct _XnoiseDataSourceClass {
 	XnoiseItem* (*get_artistitem_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseTrackData** (*get_trackdata_by_albumid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
 	XnoiseItem* (*get_albums_with_search) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-	XnoiseTrackData* (*get_trackdata_by_titleid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
-	gboolean (*get_stream_td_for_id) (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp, guint32 stamp);
+	XnoiseTrackData* (*get_trackdata_for_item) (XnoiseDataSource* self, XnoiseItem* item);
+	gboolean (*get_stream_trackdata_for_item) (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 	XnoiseTrackData** (*get_all_tracks) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 };
 
@@ -1712,7 +1712,6 @@ XnoiseTrackData** xnoise_database_reader_get_some_lastused_items (XnoiseDatabase
 guint xnoise_database_reader_count_lastused_items (XnoiseDatabaseReader* self);
 XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_video_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_reader_get_video_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
@@ -1756,8 +1755,8 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource
 XnoiseItem* xnoise_data_source_get_artistitem_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_albumid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
 XnoiseItem* xnoise_data_source_get_albums_with_search (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-XnoiseTrackData* xnoise_data_source_get_trackdata_by_titleid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
-gboolean xnoise_data_source_get_stream_td_for_id (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp, guint32 stamp);
+XnoiseTrackData* xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item);
+gboolean xnoise_data_source_get_stream_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
 GType xnoise_music_browser_model_get_type (void) G_GNUC_CONST;

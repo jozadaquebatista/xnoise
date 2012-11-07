@@ -26,15 +26,14 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
-			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val, uint32 stmp);
+			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
 			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stmp);
-			public override Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id, uint32 stmp);
+			public override Xnoise.TrackData? get_trackdata_for_item (Xnoise.Item? item);
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
-			public Xnoise.TrackData[] get_video_data (string searchtext);
 			public Xnoise.Item[]? get_video_items (string searchtext);
 			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
@@ -518,10 +517,10 @@ namespace Xnoise {
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
 		public abstract unowned string get_datasource_name ();
 		public int get_source_id ();
-		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp, uint32 stamp);
+		public abstract bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData td);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id, uint32 stamp);
-		public abstract Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id, uint32 stamp);
+		public abstract Xnoise.TrackData? get_trackdata_for_item (Xnoise.Item? item);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 		public void set_source_id (int id);
 		public signal void refreshed_stamp (uint32 new_stamp);

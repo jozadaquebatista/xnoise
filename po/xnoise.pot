@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 09:46+0100\n"
+"POT-Creation-Date: 2012-11-07 11:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,7 +252,7 @@ msgid "Devices"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1891
 msgid "Search..."
 msgstr ""
 
@@ -652,24 +652,24 @@ msgstr ""
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1725
 msgid "Open equalizer"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1740
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
 msgid "Toggle visibility of album art view"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1770
 msgid "<Ctrl+B>"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1810
 msgid "Show application main menu"
 msgstr ""
 

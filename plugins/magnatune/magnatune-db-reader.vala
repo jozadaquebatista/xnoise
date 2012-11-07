@@ -496,13 +496,13 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private static const string STMT_GET_TRACKDATA_BY_TITLEID =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
         
-    public override TrackData? get_trackdata_by_titleid(string searchtext, int32 id, uint32 stamp) {
-        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
+    public override TrackData? get_trackdata_for_item(Item? item) {
+        return_val_if_fail(item != null && get_current_stamp(get_source_id()) == item.stamp, null);
         Statement stmt;
         
         this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
         
-        if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+        if((stmt.bind_int(1, item.db_id)!=Sqlite.OK)) {
             this.db_error();
             return null;
         }
@@ -512,7 +512,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             //print("transform_mag_url(stmt.column_text(4)) : %s\n", transform_mag_url(stmt.column_text(4)));
             Item? i = Item((ItemType)stmt.column_int(1), transform_mag_url(stmt.column_text(4)), stmt.column_int(2));
             i.source_id = get_source_id();
-            i.stamp = stamp;
+            i.stamp = item.stamp;
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -529,10 +529,10 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 //    private static const string STMT_STREAM_TD_FOR_ID =
 //        "SELECT name, uri FROM streams WHERE id = ?";
 
-    public override bool get_stream_td_for_id(int32 id, out TrackData val, uint32 stamp) {
-        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, false);
+    public override bool get_stream_trackdata_for_item(Item? item, out TrackData val) {
+        return_val_if_fail(item != null && get_current_stamp(get_source_id()) == item.stamp, false);
         
-        val = get_trackdata_by_titleid("", id, stamp);
+        val = get_trackdata_for_item(item);
         
         if(val == null)
             return false;

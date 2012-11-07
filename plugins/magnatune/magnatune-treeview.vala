@@ -254,7 +254,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             case ItemType.STREAM:
                 sku = this.mag_model.dbreader.get_sku_for_title(job.item.db_id);
                 TrackData? td = null;
-                td = this.mag_model.dbreader.get_trackdata_by_titleid(EMPTYSTRING, job.item.db_id, job.item.stamp);
+                td = this.mag_model.dbreader.get_trackdata_for_item(job.item);
                 artist = td.artist;
                 album  = td.album;
                 break;
@@ -737,5 +737,4 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         return false;
     }
 }
-
 
