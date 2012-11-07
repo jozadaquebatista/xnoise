@@ -610,15 +610,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 mainview_box.remove_main_view(first_start_widget);
                 first_start_widget.destroy();
                 first_start_widget = null;
-                if(actions_list == null)
-                    actions_list = action_group.list_actions();
-                foreach(Gtk.Action a in actions_list) {
-                    if(a.name == "AddRemoveAction" ||
-                       a.name == "RescanLibraryAction"||
-                       a.name == "ShowTracklistAction"||
-                       a.name == "ShowLyricsAction"||
-                       a.name == "ShowVideoAction") {
-                        a.sensitive = true;
+                if(!global.media_import_in_progress) {
+                    if(actions_list == null)
+                        actions_list = action_group.list_actions();
+                    foreach(Gtk.Action a in actions_list) {
+                        if(a.name == "AddRemoveAction" ||
+                           a.name == "RescanLibraryAction"||
+                           a.name == "ShowTracklistAction"||
+                           a.name == "ShowLyricsAction"||
+                           a.name == "ShowVideoAction") {
+                            a.sensitive = true;
+                        }
                     }
                 }
                 media_browser_visible = true;
@@ -631,15 +633,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 mainview_box.remove_main_view(first_start_widget);
                 first_start_widget.destroy();
                 first_start_widget = null;
-                if(actions_list == null)
-                    actions_list = action_group.list_actions();
-                foreach(Gtk.Action a in actions_list) {
-                    if(a.name == "AddRemoveAction" ||
-                       a.name == "RescanLibraryAction"||
-                       a.name == "ShowTracklistAction"||
-                       a.name == "ShowLyricsAction"||
-                       a.name == "ShowVideoAction") {
-                        a.sensitive = true;
+                if(!global.media_import_in_progress) {
+                    if(actions_list == null)
+                        actions_list = action_group.list_actions();
+                    foreach(Gtk.Action a in actions_list) {
+                        if(a.name == "AddRemoveAction" ||
+                           a.name == "RescanLibraryAction"||
+                           a.name == "ShowTracklistAction"||
+                           a.name == "ShowLyricsAction"||
+                           a.name == "ShowVideoAction") {
+                        print("set actions to sensitive\n");
+                            a.sensitive = true;
+                        }
                     }
                 }
                 media_browser_visible = true;
@@ -656,6 +661,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                    a.name == "ShowTracklistAction"||
                    a.name == "ShowLyricsAction"||
                    a.name == "ShowVideoAction") {
+                    print("set actions to not sensitive\n");
                     a.sensitive = false;
                 }
             }
