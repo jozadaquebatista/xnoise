@@ -42,15 +42,9 @@ public errordomain Xnoise.Database.DbError {
 public class Xnoise.Database.Reader : Xnoise.DataSource {
     private string DATABASE;
     private Sqlite.Database db;
-
-//    private static const string STMT_GET_RADIOS =
-//        "SELECT name, uri FROM streams";
-//    private static const string STMT_GET_MEDIA_FOLDERS =
-//        "SELECT * FROM media_folders";
-//    private static const string STMT_GET_MEDIA_FILES =
-//        "SELECT * FROM media_files";
-//    private static const string STMT_GET_RADIO_DATA    =
-//        "SELECT DISTINCT id, name, uri FROM streams WHERE utf8_lower(name) LIKE ? ORDER BY name COLLATE CUSTOM01 DESC";
+    private Statement get_artists_with_search_stmt;
+    private Statement get_artists_with_search2_stmt;
+    
 
     public Reader() throws DbError {
         DATABASE = dbFileName();
@@ -103,14 +97,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     public override unowned string get_datasource_name() {
         return data_source_name;
     }
-
-//    public override uint32 stored_stamp { 
-//        get {
-//            return 0;
-//        }
-//        set {
-//        }
-//    }
 
     private string dbFileName() {
         return GLib.Path.build_filename(data_folder(), MAIN_DATABASE_NAME, null);
@@ -394,7 +380,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT name FROM media_folders";
+        "SELECT name FROM media_folders GROUP BY utf8_lower(name)";
 
     public Item[] get_media_folders() {
         Statement stmt;
@@ -606,9 +592,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 
     private static const string STMT_GET_ARTISTS =
         "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t WHERE t.artist = ar.id AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
-    
-    private Statement get_artists_with_search_stmt;
-    private Statement get_artists_with_search2_stmt;
     
     public override Item[] get_artists_with_search(string searchtext) {
         Item[] val = {};

@@ -37,7 +37,7 @@ using Xnoise.Utilities;
 public class Xnoise.Database.Writer : GLib.Object {
     private Sqlite.Database db = null;
     private Statement insert_lastused_entry_statement;
-    private Statement add_radio_statement;
+    private Statement add_stream_statement;
     private Statement begin_statement;
     private Statement commit_statement;
     private Statement write_media_folder_statement;
@@ -59,19 +59,14 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement delete_items_statement;
     private Statement delete_uris_statement;
     private Statement delete_genres_statement;
-//    private static Statement delete_uri_statement;
-//    private static Statement delete_item_statement;
     private Statement update_album_statement;
 
-    private Statement get_artist_for_uri_id_statement;
     private Statement count_artist_in_items_statement;
     private Statement delete_artist_statement;
 
-    private Statement get_album_for_uri_id_statement;
     private Statement count_album_in_items_statement;
     private Statement delete_album_statement;
 
-    private Statement get_genre_for_uri_id_statement;
     private Statement count_genre_in_items_statement;
     private Statement delete_genre_statement;
 
@@ -120,18 +115,12 @@ public class Xnoise.Database.Writer : GLib.Object {
         "BEGIN";
     private static const string STMT_COMMIT =
         "COMMIT";
-    private static const string STMT_CHECK_TRACK_EXISTS =
-        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
     private static const string STMT_DEL_MEDIA_FOLDERS =
         "DELETE FROM media_folders";
     private static const string STMT_DEL_RADIO_STREAM =
         "DELETE FROM streams;";
-    private static const string STMT_DEL_MEDIAFILES =
-        "DELETE FROM media_files;";
-    private static const string STMT_ADD_RADIO =
+    private static const string STMT_ADD_STREAM =
         "INSERT INTO streams (name, uri) VALUES (?, ?)";
-    private static const string STMT_ADD_MFILE =
-        "INSERT INTO media_files (name) VALUES (?)";
     private static const string STMT_GET_MEDIA_FOLDERS =
         "SELECT * FROM media_folders";
     private static const string STMT_INSERT_ARTIST =
@@ -245,48 +234,43 @@ public class Xnoise.Database.Writer : GLib.Object {
     }
 
     private void prepare_statements() {
-        this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, out this.insert_lastused_entry_statement);
-        this.db.prepare_v2(STMT_BEGIN, -1, out this.begin_statement);
-        this.db.prepare_v2(STMT_COMMIT, -1, out this.commit_statement);
-        this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out this.get_media_folder_statement);
-        this.db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out this.write_media_folder_statement);
-        this.db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1, out this.del_media_folder_statement);
-        this.db.prepare_v2(STMT_ADD_RADIO, -1, out this.add_radio_statement);
-        this.db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, out this.del_streams_statement);
-        this.db.prepare_v2(STMT_GET_ARTIST_ID, -1, out this.get_artist_id_statement);
-        this.db.prepare_v2(STMT_INSERT_ARTIST, -1, out this.insert_artist_statement);
-        this.db.prepare_v2(STMT_GET_ALBUM_ID, -1, out this.get_album_id_statement);
-        this.db.prepare_v2(STMT_INSERT_ALBUM, -1, out this.insert_album_statement);
-        this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out this.update_album_statement);
-        this.db.prepare_v2(STMT_GET_URI_ID, -1, out this.get_uri_id_statement);
-        this.db.prepare_v2(STMT_INSERT_URI, -1, out this.insert_uri_statement);
-        this.db.prepare_v2(STMT_GET_GENRE_ID, -1, out this.get_genre_id_statement);
-        this.db.prepare_v2(STMT_INSERT_GENRE, -1, out this.insert_genre_statement);
-        this.db.prepare_v2(STMT_INSERT_TITLE, -1, out this.insert_title_statement);
-        this.db.prepare_v2(STMT_GET_TITLE_ID, -1, out this.get_title_id_statement);
-        this.db.prepare_v2(STMT_DEL_ARTISTS, -1, out this.delete_artists_statement);
-        this.db.prepare_v2(STMT_DEL_ALBUMS, -1, out this.delete_albums_statement);
-        this.db.prepare_v2(STMT_DEL_ITEMS, -1, out this.delete_items_statement);
-        this.db.prepare_v2(STMT_DEL_URIS, -1, out this.delete_uris_statement);
-        this.db.prepare_v2(STMT_DEL_GENRES, -1, out this.delete_genres_statement);
-        this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
-        this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
-        this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
-//        this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
-//        this.db.prepare_v2(STMT_DEL_ITEM , -1, out this.delete_item_statement);
-        this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1, out this.get_album_for_uri_id_statement);
-        this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out this.count_album_in_items_statement);
-        this.db.prepare_v2(STMT_DEL_ALBUM , -1, out this.delete_album_statement);
-        this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1, out this.get_genre_for_uri_id_statement);
-        this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out this.count_genre_in_items_statement);
-        this.db.prepare_v2(STMT_DEL_GENRE , -1, out this.delete_genre_statement);
-        this.db.prepare_v2(STMT_GET_STATISTICS_ID , -1, out this.get_statistics_id_statement);
-        this.db.prepare_v2(STMT_ADD_STATISTIC , -1, out this.add_statistic_statement);
-        this.db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out this.update_playtime_statement);
-        this.db.prepare_v2(STMT_GET_ARTIST_MAX_ID, -1, out get_artist_max_id_statement);
-        this.db.prepare_v2(STMT_GET_URI_MAX_ID, -1, out get_uri_max_id_statement);
-        this.db.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out get_genre_max_id_statement);
-        this.db.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out get_albums_max_id_statement);
+        db.prepare_v2(STMT_INSERT_LASTUSED, -1, out insert_lastused_entry_statement);
+        db.prepare_v2(STMT_BEGIN, -1, out begin_statement);
+        db.prepare_v2(STMT_COMMIT, -1, out commit_statement);
+        db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out get_media_folder_statement);
+        db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out write_media_folder_statement);
+        db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1, out del_media_folder_statement);
+        db.prepare_v2(STMT_ADD_STREAM, -1, out add_stream_statement);
+        db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, out del_streams_statement);
+        db.prepare_v2(STMT_GET_ARTIST_ID, -1, out get_artist_id_statement);
+        db.prepare_v2(STMT_INSERT_ARTIST, -1, out insert_artist_statement);
+        db.prepare_v2(STMT_GET_ALBUM_ID, -1, out get_album_id_statement);
+        db.prepare_v2(STMT_INSERT_ALBUM, -1, out insert_album_statement);
+        db.prepare_v2(STMT_UPDATE_ALBUM, -1, out update_album_statement);
+        db.prepare_v2(STMT_GET_URI_ID, -1, out get_uri_id_statement);
+        db.prepare_v2(STMT_INSERT_URI, -1, out insert_uri_statement);
+        db.prepare_v2(STMT_GET_GENRE_ID, -1, out get_genre_id_statement);
+        db.prepare_v2(STMT_INSERT_GENRE, -1, out insert_genre_statement);
+        db.prepare_v2(STMT_INSERT_TITLE, -1, out insert_title_statement);
+        db.prepare_v2(STMT_GET_TITLE_ID, -1, out get_title_id_statement);
+        db.prepare_v2(STMT_DEL_ARTISTS, -1, out delete_artists_statement);
+        db.prepare_v2(STMT_DEL_ALBUMS, -1, out delete_albums_statement);
+        db.prepare_v2(STMT_DEL_ITEMS, -1, out delete_items_statement);
+        db.prepare_v2(STMT_DEL_URIS, -1, out delete_uris_statement);
+        db.prepare_v2(STMT_DEL_GENRES, -1, out delete_genres_statement);
+        db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out count_artist_in_items_statement);
+        db.prepare_v2(STMT_DEL_ARTIST , -1, out delete_artist_statement);
+        db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out count_album_in_items_statement);
+        db.prepare_v2(STMT_DEL_ALBUM , -1, out delete_album_statement);
+        db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out count_genre_in_items_statement);
+        db.prepare_v2(STMT_DEL_GENRE , -1, out delete_genre_statement);
+        db.prepare_v2(STMT_GET_STATISTICS_ID , -1, out get_statistics_id_statement);
+        db.prepare_v2(STMT_ADD_STATISTIC , -1, out add_statistic_statement);
+        db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out update_playtime_statement);
+        db.prepare_v2(STMT_GET_ARTIST_MAX_ID, -1, out get_artist_max_id_statement);
+        db.prepare_v2(STMT_GET_URI_MAX_ID, -1, out get_uri_max_id_statement);
+        db.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out get_genre_max_id_statement);
+        db.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out get_albums_max_id_statement);
     }
 
     public struct NotificationData {
@@ -314,7 +298,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     public string? get_uri_for_item_id(int32 id) {
         string? val = null;
         Statement stmt;
-        this.db.prepare_v2(STMT_GET_URI_FOR_ITEM_ID, -1, out stmt);
+        db.prepare_v2(STMT_GET_URI_FOR_ITEM_ID, -1, out stmt);
         stmt.reset();
         if(stmt.bind_int(1, id)!= Sqlite.OK ) {
             this.db_error();
@@ -369,7 +353,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
         if(update_artist) {
             Statement stmt;
-            this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
+            db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
             stmt.reset();
             if(stmt.bind_text(1, artist)    != Sqlite.OK ||
                stmt.bind_int (2, artist_id) != Sqlite.OK ) {
@@ -392,7 +376,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         
         Statement stmt;
         
-        this.db.prepare_v2(STMT_INC_PLAYCOUNT, -1, out stmt);
+        db.prepare_v2(STMT_INC_PLAYCOUNT, -1, out stmt);
         
         stmt.reset();
         if(stmt.bind_int(1, id) != Sqlite.OK) {
@@ -619,7 +603,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         Statement stmt;
         bool retval = false;
         val = new TrackData();
-        this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, out stmt);
+        db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, out stmt);
             
         stmt.reset();
         if(stmt.bind_text(1, uri) != Sqlite.OK) {
@@ -654,7 +638,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 return false;
             }
             Statement stmt;
-            this.db.prepare_v2(STMT_UPDATE_ARTISTALBUM, -1, out stmt);
+            db.prepare_v2(STMT_UPDATE_ARTISTALBUM, -1, out stmt);
         
             if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
                stmt.bind_int (2, album_id)      != Sqlite.OK ||
@@ -727,7 +711,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 return false;
             }
             Statement stmt;
-            this.db.prepare_v2(STMT_UPDATE_TITLE, -1, out stmt);
+            db.prepare_v2(STMT_UPDATE_TITLE, -1, out stmt);
             
             if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
                stmt.bind_int (2, album_id)      != Sqlite.OK ||
@@ -787,7 +771,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private void get_ids_for_item(Item? item, out int32 old_artist_id, out int32 old_album_id) {
         old_artist_id = old_album_id = -1;
         Statement stmt;
-        this.db.prepare_v2(STMT_GET_ARTIST_AND_ALBUM_IDS, -1, out stmt);
+        db.prepare_v2(STMT_GET_ARTIST_AND_ALBUM_IDS, -1, out stmt);
         if(stmt.bind_int (1, item.db_id) != Sqlite.OK) {
             this.db_error();
             return;
@@ -938,7 +922,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
         if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
             Statement stmt;
-            this.db.prepare_v2(STMT_GET_ITEM_ID , -1, out stmt);
+            db.prepare_v2(STMT_GET_ITEM_ID , -1, out stmt);
             if(stmt.bind_int (1,uri_id) != Sqlite.OK) {
                 this.db_error();
                 return false;
@@ -977,18 +961,18 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(i.text == null || i.text == EMPTYSTRING)
             i.text = i.uri;
         
-        add_radio_statement.reset();
-        if(add_radio_statement.bind_text(1, i.text) != Sqlite.OK||
-           add_radio_statement.bind_text(2, i.uri)  != Sqlite.OK) {
+        add_stream_statement.reset();
+        if(add_stream_statement.bind_text(1, i.text) != Sqlite.OK||
+           add_stream_statement.bind_text(2, i.uri)  != Sqlite.OK) {
             this.db_error();
             return false;
         }
-        if(add_radio_statement.step() != Sqlite.DONE) {
+        if(add_stream_statement.step() != Sqlite.DONE) {
             this.db_error();
             return false;
         }
         Statement stmt;
-        this.db.prepare_v2(STMT_GET_STREAM_ID_BY_URI, -1, out stmt);
+        db.prepare_v2(STMT_GET_STREAM_ID_BY_URI, -1, out stmt);
         if(stmt.bind_text(1, i.uri) != Sqlite.OK) {
             this.db_error();
             return false;
@@ -1016,7 +1000,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(item == null)
             return;
         Statement stmt;
-        this.db.prepare_v2(STMT_UPDATE_STREAM_NAME, -1, out stmt);
+        db.prepare_v2(STMT_UPDATE_STREAM_NAME, -1, out stmt);
         if(stmt.bind_text(1, item.text) != Sqlite.OK ||
            stmt.bind_text(2, item.uri ) != Sqlite.OK) {
             this.db_error();
