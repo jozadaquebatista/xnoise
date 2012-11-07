@@ -738,4 +738,3 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     }
 }
 
-

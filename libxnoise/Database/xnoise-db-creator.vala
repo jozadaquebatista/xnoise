@@ -28,6 +28,7 @@
  *     Jörn Magens
  */
 
+
 using Sqlite;
 
 using Xnoise;
@@ -42,20 +43,20 @@ private class Xnoise.Database.DbCreator {
 
 
     //CREATE TABLE STATEMENTS
-    private static const string STMT_CREATE_LASTUSED =
+    private static const string STMT_CREATE_LASTUSED_2 =
         "CREATE TABLE lastused(tracknumber TEXT, mediatype INTEGER, title TEXT, album TEXT, artist TEXT, length TEXT, genre TEXT, year TEXT, id INTEGER, uri TEXT, source TEXT);";
     private static const string STMT_CREATE_MEDIAFOLDERS =
         "CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
-//    private static const string STMT_CREATE_MEDIAFILES =
-//        "CREATE TABLE media_files(name TEXT PRIMARY KEY);";
-    private static const string STMT_CREATE_STREAMS =
+    private static const string STMT_CREATE_MEDIAFILES =
+        "CREATE TABLE media_files(name TEXT PRIMARY KEY);";
+    private static const string STMT_CREATE_RADIO =
         "CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
     private static const string STMT_CREATE_ARTISTS =
         "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
     private static const string STMT_CREATE_ALBUMS =
         "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, year INTEGER);";
     private static const string STMT_CREATE_URIS =
-        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER, mediatype INTEGER);";
+        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
     private static const string STMT_CREATE_STATISTICS =
         "CREATE TABLE statistics (id INTEGER PRIMARY KEY, uri TEXT UNIQUE, uris_id INTEGER, playcount INTEGER, rating INTEGER, lastplayTime INTEGER, addTime INTEGER);";
     private static const string STMT_CREATE_USER_LISTS =
@@ -65,9 +66,9 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_GENRES =
         "CREATE TABLE genres (id integer primary key, name TEXT);";
     private static const string STMT_CREATE_ITEMS =
-        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
-    private static const string STMT_CREATE_VIDEOS =
-        "CREATE TABLE videos (id INTEGER PRIMARY KEY, artist TEXT, title TEXT, uri INTEGER, length INTEGER, mimetype TEXT, usertags TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
+        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
+    private static const string STMT_ADD_INT_ADDTIME_TO_ITEMS =
+        "ALTER TABLE items ADD addTimeUnix INTEGER;";
     private static const string STMT_CREATE_VERSION =
         "CREATE TABLE version (major INTEGER, minor INTEGER);";
     private static const string STMT_GET_VERSION =
@@ -155,17 +156,19 @@ private class Xnoise.Database.DbCreator {
                 }
             }
             else {
-                //create Tables
-                if(!exec_stmnt_string(STMT_CREATE_LASTUSED)       ) { reset(); return; }
+            //create Tables if not existant
+                if(!exec_stmnt_string(STMT_CREATE_LASTUSED_2)       ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS)   ) { reset(); return; }
-                if(!exec_stmnt_string(STMT_CREATE_STREAMS)        ) { reset(); return; }
+                if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)     ) { reset(); return; }
+                if(!exec_stmnt_string(STMT_CREATE_RADIO)          ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ARTISTS)        ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ALBUMS)         ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_URIS)           ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ITEMS)          ) { reset(); return; }
-                if(!exec_stmnt_string(STMT_CREATE_VIDEOS)         ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_GENRES)         ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_VERSION)        ) { reset(); return; }
+                
+                // new with db version 4 -> 5 update
                 if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS)) { reset(); return; }

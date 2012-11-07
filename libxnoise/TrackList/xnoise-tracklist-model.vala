@@ -131,15 +131,16 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         this.@foreach( (m,p,i) => {
             if(ntags == null)
                 return true;
+            unowned TreeIter? it = null;
+            it = i;
+            if(!(it == null || it.user_data != null)) {
+                print("Iter issue!\n");
+                return true;
+            }
             string? u = null;
             if((u = ntags.lookup(Column.ITEM)) == null)
                 return true;
             Item? item;
-            unowned TreeIter? it = i;
-            if(!(it == null || it.user_data != null)) {
-                print("iter problem\n");
-                return true;
-            }
             this.get(i, Column.ITEM, out item);
             if(item.uri == u && item.type != ItemType.STREAM) {
                 string? title = ntags.lookup(Column.TITLE);

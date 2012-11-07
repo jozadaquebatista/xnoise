@@ -353,8 +353,8 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         //print("item.type is %s\n", item.type.to_string());
         
         job.track_dat = item_converter.to_trackdata(item, global.searchtext);
+        
         if(job.track_dat != null) {
-            //print("ACTIVATED len: %d  %s\n", job.track_dat.length, job.item.type.to_string());
             Idle.add( () => {
                 append_tracks(ref job.track_dat, true);
                 return false;

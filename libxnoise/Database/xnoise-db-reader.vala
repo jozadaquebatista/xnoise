@@ -129,7 +129,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             cb(db);
     }
 
-    private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (v.id) FROM videos v WHERE (utf8_lower(v.title) LIKE ?)";
+    private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND (utf8_lower(t.title) LIKE ?)";
     public int32 count_videos(string searchtext) {
         Statement stmt;
         int count = 0;
@@ -180,7 +180,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
     
     private static const string STMT_GET_LAST_PLAYED =
-        "SELECT ar.name, t.title, t.id, t.id, u.name, st.lastplayTime FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.lastplayTime > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.lastplayTime DESC LIMIT 100";
+        "SELECT ar.name, t.title, t.mediatype, t.id, u.name, st.lastplayTime FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.lastplayTime > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.lastplayTime DESC LIMIT 100";
     
     public Item[]? get_last_played(string searchtext) {
         Statement stmt;
@@ -211,7 +211,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     
     
     private static const string STMT_GET_MOST_PLAYED =
-        "SELECT ar.name, t.title, t.id, t.id, u.name, st.playcount FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.playcount DESC LIMIT 100";
+        "SELECT ar.name, t.title, t.mediatype, t.id, u.name, st.playcount FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.playcount DESC LIMIT 100";
 
     public Item[]? get_most_played(string searchtext) {
         Statement stmt;
@@ -241,7 +241,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
     
     private static const string STMT_ALL_TRACKDATA =
-        "SELECT ar.name, al.name, t.title, t.tracknumber, u.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
+        "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
     
     public override TrackData[]? get_all_tracks(string searchtext) {
         Statement stmt;
@@ -252,7 +252,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if((stmt.bind_text(1, st) != Sqlite.OK) ||
            (stmt.bind_text(2, st) != Sqlite.OK) ||
            (stmt.bind_text(3, st) != Sqlite.OK) ||
-           (stmt.bind_text(4, st) != Sqlite.OK)) {
+           (stmt.bind_text(4, st) != Sqlite.OK) ||
+           (stmt.bind_int (5, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK)) {
             this.db_error();
             return null;
         }
@@ -346,7 +347,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_TRACKDATA_FOR_URI =
-        "SELECT ar.name, al.name, t.title, t.tracknumber, t.length, u.mediatype, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND u.name = ?";
+        "SELECT ar.name, al.name, t.title, t.tracknumber, t.length, t.mediatype, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND u.name = ?";
 
     public override bool get_trackdata_for_uri(ref string? uri, out TrackData val) {
         bool retval = false;
@@ -516,7 +517,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_VIDEO_ITEMS =
-        "SELECT DISTINCT v.title, v.id, u.name FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT t.title, t.id, u.name FROM items t, uris u WHERE t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 DESC";
 
     public Item[]? get_video_items(string searchtext) {
         Item[] val = {};
@@ -524,7 +525,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         
         this.db.prepare_v2(STMT_GET_VIDEO_ITEMS, -1, out stmt);
         
-        if(stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
+        if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
+           (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
             this.db_error();
             return (owned)val;
         }
@@ -541,25 +543,30 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
-        "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND (utf8_lower(v.title) LIKE ?) GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 ASC";
-//TODO is this function doing the same as the one before?
+        "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 ASC";
+
     public TrackData[] get_trackdata_for_video(string searchtext) {
         TrackData[] val = {};
         Statement stmt;
         
         this.db.prepare_v2(STMT_GET_TRACKDATA_FOR_VIDEO, -1, out stmt);
         
-        if(stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
+        if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
+           (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
             this.db_error();
             return (owned)val;
         }
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
-            td.artist      = stmt.column_text(3);
+            td.artist      = stmt.column_text(4);
+            td.album       = stmt.column_text(5);
             td.title       = stmt.column_text(0);
-            td.length      = stmt.column_int(4);
+            td.tracknumber = stmt.column_int(2);
+            td.length      = stmt.column_int(6);
+            td.genre       = stmt.column_text(7);
+            td.year        = stmt.column_int(8);
             td.name        = stmt.column_text(0);
-            td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
+            td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
             td.item.source_id = get_source_id();
             td.item.stamp = get_current_stamp(get_source_id());
             val += td;
@@ -595,10 +602,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
 
     private static const string STMT_GET_ARTISTS =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t WHERE t.artist = ar.id ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t WHERE t.artist = ar.id AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
     
     private Statement get_artists_with_search_stmt;
     private Statement get_artists_with_search2_stmt;
@@ -612,7 +619,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             if(get_artists_with_search_stmt.bind_text(1, st) != Sqlite.OK ||
                get_artists_with_search_stmt.bind_text(2, st) != Sqlite.OK ||
                get_artists_with_search_stmt.bind_text(3, st) != Sqlite.OK ||
-               get_artists_with_search_stmt.bind_text(4, st) != Sqlite.OK) {
+               get_artists_with_search_stmt.bind_text(4, st) != Sqlite.OK ||
+               get_artists_with_search_stmt.bind_int (5, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
@@ -626,6 +634,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         else {
             get_artists_with_search2_stmt.reset();
+            if(get_artists_with_search2_stmt.bind_int(1, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
+                this.db_error();
+                return (owned)val;
+            }
             while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search2_stmt.column_int(0));
                 i.text = get_artists_with_search2_stmt.column_text(1);
@@ -638,10 +650,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-        "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01  ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-        "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stmp) {
         return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
@@ -650,46 +662,48 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
-            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-               (stmt.bind_text(2, st) != Sqlite.OK) ||
-               (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK) ||
-               (stmt.bind_text(5, st) != Sqlite.OK)) {
+            if(stmt.bind_int (1, id) != Sqlite.OK ||
+               stmt.bind_text(2, st) != Sqlite.OK ||
+               stmt.bind_text(3, st) != Sqlite.OK ||
+               stmt.bind_text(4, st) != Sqlite.OK ||
+               stmt.bind_text(5, st) != Sqlite.OK ||
+               stmt.bind_int (6, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
         }
         else {
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID, -1, out stmt);
-            if((stmt.bind_int(1, id) != Sqlite.OK)) {
+            if(stmt.bind_int(1, id) != Sqlite.OK ||
+               stmt.bind_int(2, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return null;
             }
         }
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
-            Item? i = Item(ItemType.LOCAL_AUDIO_TRACK, stmt.column_text(3), stmt.column_int(1));
+            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
             i.source_id = get_source_id();
             i.stamp = stmp;
             
-            td.artist      = stmt.column_text(4);
-            td.album       = stmt.column_text(5);
+            td.artist      = stmt.column_text(5);
+            td.album       = stmt.column_text(6);
             td.title       = stmt.column_text(0);
             td.item        = i;
-            td.tracknumber = stmt.column_int(2);
-            td.length      = stmt.column_int(6);
-            td.genre       = stmt.column_text(7);
-            td.year        = stmt.column_int(8);
+            td.tracknumber = stmt.column_int(3);
+            td.length      = stmt.column_int(7);
+            td.genre       = stmt.column_text(8);
+            td.year        = stmt.column_int(9);
             val += td;
         }
         return (owned)val;
     }
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-        "SELECT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
-        "SELECT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id, uint32 stmp) {
         return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
@@ -698,43 +712,45 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
-            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-               (stmt.bind_text(2, st) != Sqlite.OK) ||
-               (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK) ||
-               (stmt.bind_text(5, st) != Sqlite.OK)) {
+            if(stmt.bind_int (1, id) != Sqlite.OK ||
+               stmt.bind_text(2, st) != Sqlite.OK ||
+               stmt.bind_text(3, st) != Sqlite.OK ||
+               stmt.bind_text(4, st) != Sqlite.OK ||
+               stmt.bind_text(5, st) != Sqlite.OK ||
+               stmt.bind_int (6, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
         }
         else {
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID, -1, out stmt);
-            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+            if(stmt.bind_int(1, id)!=Sqlite.OK ||
+               stmt.bind_int(2, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return null;
             }
         }        
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
-            Item? i = Item(ItemType.LOCAL_AUDIO_TRACK, stmt.column_text(3), stmt.column_int(1));
+            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
             i.source_id = get_source_id();
             i.stamp = stmp;
             
-            td.artist      = stmt.column_text(4);
-            td.album       = stmt.column_text(5);
+            td.artist      = stmt.column_text(5);
+            td.album       = stmt.column_text(6);
             td.title       = stmt.column_text(0);
             td.item        = i;
-            td.tracknumber = stmt.column_int(2);
-            td.length      = stmt.column_int(6);
-            td.genre       = stmt.column_text(7);
-            td.year        = stmt.column_int(8);
+            td.tracknumber = stmt.column_int(3);
+            td.length      = stmt.column_int(7);
+            td.genre       = stmt.column_text(8);
+            td.year        = stmt.column_int(9);
             val += td;
         }
         return (owned)val;
     }
 
     private static const string STMT_GET_VIDEOITEM_BY_ID =
-        "SELECT DISTINCT v.id, v.title, u.name FROM videos v, uris u WHERE v.uri = u.id AND v.id = ?";
+        "SELECT DISTINCT t.id, t.title, u.name, t.mediatype FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
     
     public Item? get_videoitem_by_id(int32 id) {
         Statement stmt;
@@ -745,7 +761,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             return (owned)i;
         }
         if(stmt.step() == Sqlite.ROW) {
-            i = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(0));
+            i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
             i.text = stmt.column_text(1);
             i.source_id = get_source_id();
             i.stamp = get_current_stamp(get_source_id());
@@ -759,6 +775,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
+    // function used only to verify if an item matches the searchtext
     public override Item? get_artistitem_by_artistid(string searchtext, int32 id, uint32 stmp) {
         return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
         Statement stmt;
@@ -790,74 +807,44 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         return (owned)i;
     }
-    
-    private static const string STMT_GET_TRACKDATA_BY_VIDEOID =
-        "SELECT DISTINCT v.title, v.id, u.name, v.artist, v.length FROM videos v, uris u WHERE v.uri = u.id AND v.id = ? GROUP BY utf8_lower(v.title) ORDER BY utf8_lower(v.title) COLLATE CUSTOM01 DESC";
 
     private static const string STMT_GET_TRACKDATA_BY_TITLEID =
-        "SELECT DISTINCT t.title, t.id, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?"; //TODO remove searchtext because it's unused
     
     public override TrackData? get_trackdata_for_item(Item? item) {
         return_val_if_fail(item != null && item.stamp == get_current_stamp(get_source_id()), null);
-        switch(item.type) {
-            case ItemType.LOCAL_AUDIO_TRACK: {
-                Statement stmt;
-                this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
-                
-                if((stmt.bind_int(1, item.db_id)!=Sqlite.OK)) {
-                    this.db_error();
-                    return null;
-                }
-                TrackData td = null; 
-                if(stmt.step() == Sqlite.ROW) {
-                    td = new TrackData();
-                    Item? i = Item(ItemType.LOCAL_AUDIO_TRACK, stmt.column_text(4), stmt.column_int(2));
-                    i.source_id = get_source_id();
-                    i.stamp = item.stamp;
-                    
-                    td.artist      = stmt.column_text(5);
-                    td.album       = stmt.column_text(6);
-                    td.title       = stmt.column_text(0);
-                    td.item        = i;
-                    td.tracknumber = stmt.column_int(3);
-                    td.length      = stmt.column_int(7);
-                    td.genre       = stmt.column_text(8);
-                    td.year        = stmt.column_int(9);
-                }
-                return (owned)td;
-            }
-            case ItemType.LOCAL_VIDEO_TRACK: {
-                Statement stmt;
-                this.db.prepare_v2(STMT_GET_TRACKDATA_BY_VIDEOID, -1, out stmt);
-                
-                if((stmt.bind_int(1, item.db_id)!=Sqlite.OK)) {
-                    this.db_error();
-                    return null;
-                }
-                TrackData td = null; 
-                if(stmt.step() == Sqlite.ROW) {
-                    td = new TrackData();
-                    Item? i = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
-                    i.source_id = get_source_id();
-                    i.stamp = item.stamp;
-                    
-                    td.artist      = stmt.column_text(3);
-                    td.title       = stmt.column_text(0);
-                    td.item        = i;
-                    td.length      = stmt.column_int(4);
-                }
-                return (owned)td;
-            }
-        default: 
+        
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
+        
+        if((stmt.bind_int(1, item.db_id)!=Sqlite.OK)) {
+            this.db_error();
             return null;
         }
+        TrackData td = null; 
+        if(stmt.step() == Sqlite.ROW) {
+            td = new TrackData();
+            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            i.source_id = get_source_id();
+            i.stamp = item.stamp;
+            
+            td.artist      = stmt.column_text(5);
+            td.album       = stmt.column_text(6);
+            td.title       = stmt.column_text(0);
+            td.item        = i;
+            td.tracknumber = stmt.column_int(3);
+            td.length      = stmt.column_int(7);
+            td.genre       = stmt.column_text(8);
+            td.year        = stmt.column_int(9);
+        }
+        return (owned)td;
     }
 
     private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY al.year ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY al.year ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     private static const string STMT_GET_ALBUMS =
-        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY al.year ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = al.artist AND al.id = t.album AND ar.id = ? AND t.mediatype = ? ORDER BY al.year ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     public override Item[] get_albums_with_search(string searchtext, int32 id, uint32 stmp) {
         return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
@@ -866,18 +853,20 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, out stmt);
-            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-               (stmt.bind_text(2, st) != Sqlite.OK) ||
-               (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK) ||
-               (stmt.bind_text(5, st) != Sqlite.OK)) {
+            if(stmt.bind_int (1, id) != Sqlite.OK ||
+               stmt.bind_text(2, st) != Sqlite.OK ||
+               stmt.bind_text(3, st) != Sqlite.OK ||
+               stmt.bind_text(4, st) != Sqlite.OK ||
+               stmt.bind_text(5, st) != Sqlite.OK ||
+               stmt.bind_int (6, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
         }
         else {
             this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
-            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+            if((stmt.bind_int(1, id)!=Sqlite.OK) ||
+               stmt.bind_int (2, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
@@ -893,10 +882,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_ALL_ALBUMS_WITH_SEARCH =
-        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     private static const string STMT_GET_ALL_ALBUMS =
-        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al WHERE ar.id = al.artist ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t WHERE ar.id = al.artist AND al.id = t.album AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     public AlbumData[] get_all_albums_with_search(string searchtext) {
         AlbumData[] list = {};
@@ -904,16 +893,21 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_ALL_ALBUMS_WITH_SEARCH, -1, out stmt);
-            if((stmt.bind_text(1, st) != Sqlite.OK) ||
-               (stmt.bind_text(2, st) != Sqlite.OK) ||
-               (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK)) {
+            if(stmt.bind_text(1, st) != Sqlite.OK ||
+               stmt.bind_text(2, st) != Sqlite.OK ||
+               stmt.bind_text(3, st) != Sqlite.OK ||
+               stmt.bind_text(4, st) != Sqlite.OK ||
+               stmt.bind_int (5, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)list;
             }
         }
         else {
             this.db.prepare_v2(STMT_GET_ALL_ALBUMS, -1, out stmt);
+            if(stmt.bind_int(1, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
+                this.db_error();
+                return (owned)list;
+            }
         }
         while(stmt.step() == Sqlite.ROW) {
             AlbumData ad = new AlbumData();

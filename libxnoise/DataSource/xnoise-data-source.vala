@@ -31,6 +31,7 @@
 
 
 
+
 public abstract class Xnoise.DataSource : GLib.Object {
     public signal void refreshed_stamp(uint32 new_stamp);
     
@@ -56,7 +57,7 @@ public abstract class Xnoise.DataSource : GLib.Object {
     
     public abstract TrackData? get_trackdata_for_item(Item? item);
     
-    public abstract bool get_stream_trackdata_for_item(Item? item, out TrackData tmp);
+    public abstract bool get_stream_trackdata_for_item(Item? item, out TrackData td);
     
     public abstract TrackData[]? get_all_tracks(string searchtext);
 }
