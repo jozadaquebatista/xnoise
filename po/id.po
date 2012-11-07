@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: glib master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 09:46+0100\n"
+"POT-Creation-Date: 2012-11-07 15:28+0100\n"
 "PO-Revision-Date: 2011-09-06 16:47+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -41,7 +41,7 @@ msgid "More information on the project website:"
 msgstr ""
 
 #. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Database/xnoise-db-reader.vala:171
+#: ../libxnoise/Database/xnoise-db-reader.vala:157
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:177
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
@@ -49,10 +49,10 @@ msgstr ""
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1470
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1512
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1542
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1448
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1476
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1518
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -62,10 +62,10 @@ msgstr ""
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1444
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1472
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1514
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1544
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1450
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1478
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1550
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -251,7 +251,7 @@ msgid "Devices"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1889
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1905
 msgid "Search..."
 msgstr ""
 
@@ -621,56 +621,66 @@ msgid ""
 "startup of xnoise slower."
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:756
 msgid "Playback mode: "
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
 msgid "No repeat, one after another"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Repeat single track"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
 msgid "Repeat all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:756
 msgid "Random playlist track playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1354
 msgid "Enter the URL for playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1364
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1370
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1723
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1731
 msgid "Open equalizer"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1738
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1746
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1766
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1774
 msgid "Toggle visibility of album art view"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1768
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1776
 msgid "<Ctrl+B>"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1816
 msgid "Show application main menu"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1840
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1901
+msgid "Select search with <Ctrl-F>"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1842
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1903
+msgid "Remove search filter with <Ctrl-D>"
 msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:148

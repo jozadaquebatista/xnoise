@@ -1837,6 +1837,10 @@ print("on close 2\n");
             
             msw = new MediaSoureWidget(this);
             this.search_entry = msw.search_entry;
+            this.search_entry.set_tooltip_text(_("Select search with <Ctrl-F>") +
+                                               "\n"+
+                                               _("Remove search filter with <Ctrl-D>")
+            );
             
             mbbox01.pack_start(msw, true, true, 0);
             
@@ -1894,6 +1898,10 @@ print("on close 2\n");
             album_search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
             album_search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
             album_search_entry.set_sensitive(true);
+            album_search_entry.set_tooltip_text(_("Select search with <Ctrl-F>") +
+                                                "\n"+
+                                                _("Remove search filter with <Ctrl-D>")
+            );
             album_search_entry.set_placeholder_text (_("Search..."));
             album_search_entry.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event

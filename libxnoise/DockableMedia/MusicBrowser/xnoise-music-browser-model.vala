@@ -94,7 +94,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             else {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add(500, () => {
+                search_idlesource = Timeout.add(700, () => {
                     this.filter();
                     search_idlesource = 0;
                     return false;

@@ -81,7 +81,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             if(main_window.album_view_toggle.get_active()) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add(500, () => {
+                search_idlesource = Timeout.add(700, () => {
                     this.filter();
                     search_idlesource = 0;
                     return false;
@@ -90,7 +90,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             else {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add_seconds(1, () => {
+                search_idlesource = Timeout.add_seconds(2, () => {
                     this.filter();
                     search_idlesource = 0;
                     return false;
