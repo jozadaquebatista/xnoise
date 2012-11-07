@@ -183,60 +183,60 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         "SELECT ar.name, t.title, t.id, t.id, u.name, st.lastplayTime FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.lastplayTime > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.lastplayTime DESC LIMIT 100";
     
     public Item[]? get_last_played(string searchtext) {
-//        Statement stmt;
+        Statement stmt;
         Item[] retv = {};
-//        string st = "%%%s%%".printf(searchtext);
-//        this.db.prepare_v2(STMT_GET_LAST_PLAYED , -1, out stmt);
-//        if((stmt.bind_text(1, st) != Sqlite.OK) ||
-//           (stmt.bind_text(2, st) != Sqlite.OK) ||
-//           (stmt.bind_text(3, st) != Sqlite.OK) ||
-//           (stmt.bind_text(4, st) != Sqlite.OK)) {
-//            this.db_error();
-//            return null;
-//        }
-//        while(stmt.step() == Sqlite.ROW) {
-//            Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
-//            i.source_id = get_source_id();
-//            i.stamp = get_current_stamp(get_source_id());
-//            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
-//                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
-//            else
-//                i.text = stmt.column_text(1);
-//            retv += i;
-//        }
-//        if(retv.length == 0)
-//            return null;
+        string st = "%%%s%%".printf(searchtext);
+        this.db.prepare_v2(STMT_GET_LAST_PLAYED , -1, out stmt);
+        if((stmt.bind_text(1, st) != Sqlite.OK) ||
+           (stmt.bind_text(2, st) != Sqlite.OK) ||
+           (stmt.bind_text(3, st) != Sqlite.OK) ||
+           (stmt.bind_text(4, st) != Sqlite.OK)) {
+            this.db_error();
+            return null;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
+            i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
+            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
+                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            else
+                i.text = stmt.column_text(1);
+            retv += i;
+        }
+        if(retv.length == 0)
+            return null;
         return (owned)retv;
     }
     
     
     private static const string STMT_GET_MOST_PLAYED =
-        "SELECT ar.name, t.title, t.id, t.id, u.name, u.playcount FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.playcount DESC LIMIT 100";
+        "SELECT ar.name, t.title, t.id, t.id, u.name, st.playcount FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY st.playcount DESC LIMIT 100";
 
     public Item[]? get_most_played(string searchtext) {
-//        Statement stmt;
+        Statement stmt;
         Item[] retv = {};
-//        string st = "%%%s%%".printf(searchtext);
-//        this.db.prepare_v2(STMT_GET_MOST_PLAYED , -1, out stmt);
-//        if((stmt.bind_text(1, st) != Sqlite.OK) ||
-//           (stmt.bind_text(2, st) != Sqlite.OK) ||
-//           (stmt.bind_text(3, st) != Sqlite.OK) ||
-//           (stmt.bind_text(4, st) != Sqlite.OK)) {
-//            this.db_error();
-//            return null;
-//        }
-//        while(stmt.step() == Sqlite.ROW) {
-//            Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
-//            i.source_id = get_source_id();
-//            i.stamp = get_current_stamp(get_source_id());
-//            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
-//                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
-//            else
-//                i.text = stmt.column_text(1);
-//            retv += i;
-//        }
-//        if(retv.length == 0)
-//            return null;
+        string st = "%%%s%%".printf(searchtext);
+        this.db.prepare_v2(STMT_GET_MOST_PLAYED , -1, out stmt);
+        if((stmt.bind_text(1, st) != Sqlite.OK) ||
+           (stmt.bind_text(2, st) != Sqlite.OK) ||
+           (stmt.bind_text(3, st) != Sqlite.OK) ||
+           (stmt.bind_text(4, st) != Sqlite.OK)) {
+            this.db_error();
+            return null;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
+            i.source_id = get_source_id();
+            i.stamp = get_current_stamp(get_source_id());
+            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
+                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            else
+                i.text = stmt.column_text(1);
+            retv += i;
+        }
+        if(retv.length == 0)
+            return null;
         return (owned)retv;
     }
     
@@ -626,10 +626,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         else {
             get_artists_with_search2_stmt.reset();
-//            if(get_artists_with_search2_stmt.bind_int(1, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
             while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search2_stmt.column_int(0));
                 i.text = get_artists_with_search2_stmt.column_text(1);

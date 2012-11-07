@@ -271,11 +271,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_DEL_ITEMS, -1, out this.delete_items_statement);
         this.db.prepare_v2(STMT_DEL_URIS, -1, out this.delete_uris_statement);
         this.db.prepare_v2(STMT_DEL_GENRES, -1, out this.delete_genres_statement);
-//        this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
         this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
         this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
-//        this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
-//        this.db.prepare_v2(STMT_DEL_ITEM , -1, out this.delete_item_statement);
         this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1, out this.get_album_for_uri_id_statement);
         this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out this.count_album_in_items_statement);
         this.db.prepare_v2(STMT_DEL_ALBUM , -1, out this.delete_album_statement);
@@ -888,12 +885,6 @@ public class Xnoise.Database.Writer : GLib.Object {
 
     private static const string STMT_INSERT_TITLE =
         "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, length, bitrate, mimetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-//    private static const string STMT_GET_GET_ITEM_ID = 
-//        "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
-    
-//    private static const string STMT_GET_ITEM_ID =
-//        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
     
     private static const string STMT_GET_VIDEO_ID =
         "SELECT v.id FROM videos v, uris u WHERE v.uri = u.id AND u.id = ?";
