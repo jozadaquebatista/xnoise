@@ -138,8 +138,8 @@ namespace Xnoise {
         // some early initializations
         global.fontsize_dockable = ((v >= 7 && v < 18) ? v : 10);
         global.collection_sort_mode = 
-            CollectionSortMode.GENRE_ARTIST_ALBUM;
-            //(CollectionSortMode)Params.get_int_value("collection_sort_mode");
+            (CollectionSortMode)Params.get_int_value("collection_sort_mode");
+            //CollectionSortMode.GENRE_ARTIST_ALBUM;
         
         // DESKTOP NOTIFICATIONS
         _notifications = new DesktopNotifications();

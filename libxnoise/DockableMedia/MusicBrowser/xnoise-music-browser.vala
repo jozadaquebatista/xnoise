@@ -333,12 +333,14 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         item.set_label(_("ARTIST-ALBUM-TITLE"));
         item.activate.connect( () => {
             global.collection_sort_mode = CollectionSortMode.ARTIST_ALBUM_TITLE;
+            Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
         });
         m.append(item);
         item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         item.set_label(_("GENRE-ARTIST-ALBUM"));
         item.activate.connect( () => {
             global.collection_sort_mode = CollectionSortMode.GENRE_ARTIST_ALBUM;
+            Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
         });
         m.append(item);
         return m;
