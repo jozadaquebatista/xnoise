@@ -319,10 +319,31 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             this.collapse_all();
         });
         rightmenu.append(collapse_item);
+        var sort_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        sort_item.set_label(_("Sort Mode"));
+        sort_item.set_submenu(get_sort_submenu());
+        rightmenu.append(sort_item);
         rightmenu.show_all();
         return rightmenu;
     }
 
+    private Gtk.Menu get_sort_submenu() {
+        Gtk.Menu m = new Gtk.Menu();
+        var item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        item.set_label(_("ARTIST-ALBUM-TITLE"));
+        item.activate.connect( () => {
+            global.collection_sort_mode = CollectionSortMode.ARTIST_ALBUM_TITLE;
+        });
+        m.append(item);
+        item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        item.set_label(_("GENRE-ARTIST-ALBUM"));
+        item.activate.connect( () => {
+            global.collection_sort_mode = CollectionSortMode.GENRE_ARTIST_ALBUM;
+        });
+        m.append(item);
+        return m;
+    }
+    
     private void on_drag_begin(Gtk.Widget sender, DragContext context) {
         this.dragging = true;
         List<unowned TreePath> treepaths;

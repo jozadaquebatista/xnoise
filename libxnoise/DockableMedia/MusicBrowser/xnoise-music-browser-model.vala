@@ -104,6 +104,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
         cbr.cb = reset_change_cb;
         media_importer.register_reset_callback(cbr);
+        global.notify["collection-sort-mode"].connect( () => {
+            filter();
+        });
     }
     
     private void reset_change_cb() {
@@ -418,16 +421,15 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 }
                 break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
-            default:
                 if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
                     var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                              this.load_artist_content_job);
                     job.set_arg("treerowref", treerowref);
-//                    job.set_arg("id", item.db_id);
-//                    job.set_arg("stamp", item.stamp);
                     job.item = item;
                     db_worker.push_job(job);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -446,7 +448,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                                   global.collection_sort_mode,
                                                   item_ht
                                                   );
-                print("gaa soted job.items cnt = %d\n", job.items.length);
+                //print("gaa soted job.items cnt = %d\n", job.items.length);
                 Idle.add( () => {
                     TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
                     if(row_ref == null || !row_ref.valid())
@@ -497,19 +499,14 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             return false;
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
-//                print("GENRE_ARTIST_ALBUM not implemented\n");
                 break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
-            default:
                 HashTable<ItemType,Item?>? item_ht = 
                     new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                 item_ht.insert(job.item.type, job.item);
                 job.items = db_reader.get_albums(global.searchtext,
                                                  global.collection_sort_mode,
                                                  item_ht);
-//                job.items = db_reader.get_albums_with_search(global.searchtext,
-//                                                             (int32)job.get_arg("id"),
-//                                                             (uint32)job.get_arg("stamp"));
                 //print("job.items cnt = %d\n", job.items.length);
                 Idle.add( () => {
                     TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -557,15 +554,14 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                                        this.load_titles_job);
                         job_title.set_arg("treerowref", treerowref);
-//                        job_title.set_arg("artist", artist.db_id);
-//                        job_title.set_arg("album", album.db_id);
-//                        job_title.set_arg("stamp", album.stamp);
                         job_title.item = album;
                         db_worker.push_job(job_title);
                     }
                     remove_loader_child(ref iter_artist);
                     return false;
                 });
+                break;
+            default:
                 break;
         }
         return false;
@@ -711,17 +707,12 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool load_titles_job(Worker.Job job) {
         if(this.populating_model)
             return false;
-        int32 al = (int32)job.get_arg("album");
         HashTable<ItemType,Item?>? item_ht =
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
         item_ht.insert(job.item.type, job.item);
         job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
                                                           CollectionSortMode.ARTIST_ALBUM_TITLE,
                                                           item_ht);
-//        job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
-//                                                          al,
-//                                                          (uint32)job.get_arg("stamp")
-//        );
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
