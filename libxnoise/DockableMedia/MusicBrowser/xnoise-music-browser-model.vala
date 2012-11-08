@@ -554,11 +554,13 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                  );
                         Gtk.TreePath p1 = this.get_path(iter_album);
                         TreeRowReference treerowref = new TreeRowReference(this, p1);
-                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_titles_job);
+                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                                       this.load_titles_job);
                         job_title.set_arg("treerowref", treerowref);
-                        job_title.set_arg("artist", artist.db_id);
-                        job_title.set_arg("album", album.db_id);
-                        job_title.set_arg("stamp", album.stamp);
+//                        job_title.set_arg("artist", artist.db_id);
+//                        job_title.set_arg("album", album.db_id);
+//                        job_title.set_arg("stamp", album.stamp);
+                        job_title.item = album;
                         db_worker.push_job(job_title);
                     }
                     remove_loader_child(ref iter_artist);
@@ -710,10 +712,16 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(this.populating_model)
             return false;
         int32 al = (int32)job.get_arg("album");
-        job.track_dat = db_reader.get_trackdata_by_albumid(global.searchtext,
-                                                           al,
-                                                           (uint32)job.get_arg("stamp")
-        );
+        HashTable<ItemType,Item?>? item_ht =
+            new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+        item_ht.insert(job.item.type, job.item);
+        job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
+                                                          CollectionSortMode.ARTIST_ALBUM_TITLE,
+                                                          item_ht);
+//        job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
+//                                                          al,
+//                                                          (uint32)job.get_arg("stamp")
+//        );
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))

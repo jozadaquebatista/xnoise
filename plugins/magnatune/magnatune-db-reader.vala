@@ -414,14 +414,17 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
-    public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stamp) {
-        return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
+    public override TrackData[]? get_trackdata_for_album(string searchtext,
+                                                         CollectionSortMode sort_mode,
+                                                         HashTable<ItemType,Item?>? items) {
+        Item? album = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
+        return_val_if_fail(get_current_stamp(get_source_id()) == album.stamp, null);
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
-            if((stmt.bind_int (1, id) != Sqlite.OK) ||
+            if((stmt.bind_int (1, album.db_id) != Sqlite.OK) ||
                (stmt.bind_text(2, st) != Sqlite.OK) ||
                (stmt.bind_text(3, st) != Sqlite.OK) ||
                (stmt.bind_text(4, st) != Sqlite.OK) ||
@@ -432,7 +435,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         }
         else {
             this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID, -1, out stmt);
-            if((stmt.bind_int(1, id) != Sqlite.OK)) {
+            if((stmt.bind_int(1, album.db_id) != Sqlite.OK)) {
                 this.db_error();
                 return null;
             }
@@ -441,7 +444,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             TrackData td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), transform_mag_url(stmt.column_text(4)), stmt.column_int(2));
             i.source_id = get_source_id();
-            i.stamp = stamp;
+            i.stamp = album.stamp;
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -455,8 +458,6 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         }
         return (owned)val;
     }
-    
-
 
     private static const string STMT_GET_ALBUMS_WITH_SEARCH =
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";

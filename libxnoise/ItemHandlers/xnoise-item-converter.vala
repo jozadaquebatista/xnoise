@@ -100,7 +100,18 @@ public class Xnoise.ItemConverter : Object {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
-                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id, item.stamp);
+//                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id, item.stamp);
+                    HashTable<ItemType,Item?>? item_ht =
+                        new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                    item_ht.insert(item.type, item);
+                    if(extra_items != null) {
+                        Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+                        print("inserting genre item\n");
+                        item_ht.insert(genre.type, genre);
+                    }
+                    result = ds.get_trackdata_for_album(global.searchtext,
+                                                        global.collection_sort_mode,
+                                                        item_ht);
                     break;
                 }
                 break;
@@ -114,7 +125,7 @@ public class Xnoise.ItemConverter : Object {
                     item_ht.insert(item.type, item);
                     if(extra_items != null) {
                         Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                        print("inserting genre item\n");
+                        //print("inserting genre item\n");
                         item_ht.insert(genre.type, genre);
                     }
                     result = ds.get_trackdata_for_artist(global.searchtext,

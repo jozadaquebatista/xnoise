@@ -30,7 +30,7 @@ namespace Xnoise {
 			public Xnoise.Item[]? get_stream_items (string searchtext);
 			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
-			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stmp);
+			public override Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[] get_trackdata_for_item (string searchtext, Xnoise.Item? item);
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
@@ -520,7 +520,7 @@ namespace Xnoise {
 		public abstract unowned string get_datasource_name ();
 		public int get_source_id ();
 		public abstract bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData td);
-		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id, uint32 stamp);
+		public abstract Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[] get_trackdata_for_item (string searchterm, Xnoise.Item? item);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);

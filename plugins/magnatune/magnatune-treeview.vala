@@ -245,7 +245,14 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 sku = this.mag_model.dbreader.get_sku_for_album(job.item.db_id);
                 TrackData[]? tda = null;
-                tda = this.mag_model.dbreader.get_trackdata_by_albumid(EMPTYSTRING, job.item.db_id, job.item.stamp);
+
+                HashTable<ItemType,Item?>? item_ht =
+                    new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                item_ht.insert(job.item.type, job.item);
+                tda = this.mag_model.dbreader.get_trackdata_for_album(EMPTYSTRING,
+                                                                      CollectionSortMode.ARTIST_ALBUM_TITLE,
+                                                                      item_ht);
+//                tda = this.mag_model.dbreader.get_trackdata_by_albumid(EMPTYSTRING, job.item.db_id, job.item.stamp);
                 if(tda != null && tda.length > 0) {
                     artist = tda[0].artist;
                     album  = tda[0].album;

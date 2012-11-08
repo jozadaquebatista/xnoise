@@ -375,8 +375,9 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                                this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
-                job_title.set_arg("albumid",  album.db_id);
-                job_title.set_arg("stamp",  album.stamp);
+                job.item = album;
+//                job_title.set_arg("albumid",  album.db_id);
+//                job_title.set_arg("stamp",  album.stamp);
                 db_worker.push_job(job_title);
             }
             remove_loader_child(ref iter_artist);
@@ -388,7 +389,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool populate_title_job(Worker.Job job) {
         if(this.cancel.is_cancelled())
             return false;
-        job.track_dat = dbreader.get_trackdata_by_albumid(global.searchtext, (int32)job.get_arg("albumid"), (uint32)job.get_arg("stamp"));
+        
+        HashTable<ItemType,Item?>? item_ht =
+            new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+        item_ht.insert(job.item.type, job.item);
+        job.track_dat = dbreader.get_trackdata_for_album(global.searchtext,
+                                                          CollectionSortMode.ARTIST_ALBUM_TITLE,
+                                                          item_ht);
+//        job.track_dat = dbreader.get_trackdata_for_album(global.searchtext, (int32)job.get_arg("albumid"), (uint32)job.get_arg("stamp"));
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
