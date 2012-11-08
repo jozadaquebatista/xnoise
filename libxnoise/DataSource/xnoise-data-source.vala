@@ -36,7 +36,7 @@ public abstract class Xnoise.DataSource : GLib.Object {
     public signal void refreshed_stamp(uint32 new_stamp);
     
     protected int source_id;
-    public void set_source_id(int id) {
+    internal void set_source_id(int id) {
         source_id = id;
     }
     
@@ -48,14 +48,21 @@ public abstract class Xnoise.DataSource : GLib.Object {
     
     public abstract bool get_trackdata_for_uri(ref string? uri, out TrackData val);
     
-    public abstract Item[] get_artists_with_search(string searchtext);
-    public abstract TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id, uint32 stamp);
+    public abstract Item[] get_artists(string searchtext,
+                                       CollectionSortMode sort_mode,
+                                       HashTable<ItemType,Item?>? items);
+    
+    public abstract TrackData[]? get_trackdata_for_artist(string searchtext,
+                                                         CollectionSortMode sort_mode,
+                                                         HashTable<ItemType,Item?>? items);
     public abstract Item? get_artistitem_by_artistid(string searchtext, int32 id, uint32 stamp);
     
     public abstract TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id, uint32 stamp);
-    public abstract Item[] get_albums_with_search(string searchtext, int32 id, uint32 stamp);
+    public abstract Item[] get_albums(string searchtext,
+                                      CollectionSortMode sort_mode,
+                                      HashTable<ItemType,Item?>? items);
     
-    public abstract TrackData? get_trackdata_for_item(Item? item);
+    public abstract TrackData[] get_trackdata_for_item(string searchterm, Item? item);
     
     public abstract bool get_stream_trackdata_for_item(Item? item, out TrackData td);
     

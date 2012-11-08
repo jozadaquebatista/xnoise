@@ -108,6 +108,8 @@ typedef struct _XnoiseDataSource XnoiseDataSource;
 typedef struct _XnoiseDataSourceClass XnoiseDataSourceClass;
 typedef struct _XnoiseDataSourcePrivate XnoiseDataSourcePrivate;
 
+#define XNOISE_TYPE_COLLECTION_SORT_MODE (xnoise_collection_sort_mode_get_type ())
+
 #define XNOISE_DATABASE_TYPE_READER (xnoise_database_reader_get_type ())
 #define XNOISE_DATABASE_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_READER, XnoiseDatabaseReader))
 #define XNOISE_DATABASE_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_READER, XnoiseDatabaseReaderClass))
@@ -244,8 +246,6 @@ typedef struct _XnoiseMediaSoureWidgetPrivate XnoiseMediaSoureWidgetPrivate;
 typedef struct _XnoiseGlobalAccess XnoiseGlobalAccess;
 typedef struct _XnoiseGlobalAccessClass XnoiseGlobalAccessClass;
 typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
-
-#define XNOISE_TYPE_COLLECTION_SORT_MODE (xnoise_collection_sort_mode_get_type ())
 
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 
@@ -831,6 +831,9 @@ struct _XnoiseDndData {
 	XnoiseItemType mediatype;
 	gint source_id;
 	guint32 stamp;
+	gint32 extra_db_id[4];
+	XnoiseItemType extra_mediatype[4];
+	guint32 extra_stamps[4];
 };
 
 typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
@@ -863,6 +866,11 @@ typedef enum  {
 	XNOISE_DATABASE_DB_ERROR_FAILED
 } XnoiseDatabaseDbError;
 #define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
+typedef enum  {
+	XNOISE_COLLECTION_SORT_MODE_ARTIST_ALBUM_TITLE = 0,
+	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM
+} XnoiseCollectionSortMode;
+
 struct _XnoiseDataSource {
 	GObject parent_instance;
 	XnoiseDataSourcePrivate * priv;
@@ -873,12 +881,12 @@ struct _XnoiseDataSourceClass {
 	GObjectClass parent_class;
 	const gchar* (*get_datasource_name) (XnoiseDataSource* self);
 	gboolean (*get_trackdata_for_uri) (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
-	XnoiseItem* (*get_artists_with_search) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
-	XnoiseTrackData** (*get_trackdata_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
+	XnoiseItem* (*get_artists) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+	XnoiseTrackData** (*get_trackdata_for_artist) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseItem* (*get_artistitem_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseTrackData** (*get_trackdata_by_albumid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-	XnoiseItem* (*get_albums_with_search) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-	XnoiseTrackData* (*get_trackdata_for_item) (XnoiseDataSource* self, XnoiseItem* item);
+	XnoiseItem* (*get_albums) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+	XnoiseTrackData** (*get_trackdata_for_item) (XnoiseDataSource* self, const gchar* searchterm, XnoiseItem* item, int* result_length1);
 	gboolean (*get_stream_trackdata_for_item) (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 	XnoiseTrackData** (*get_all_tracks) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 };
@@ -1014,11 +1022,6 @@ struct _XnoiseGlobalAccess {
 struct _XnoiseGlobalAccessClass {
 	GObjectClass parent_class;
 };
-
-typedef enum  {
-	XNOISE_COLLECTION_SORT_MODE_ARTIST_ALBUM_TITLE = 0,
-	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM
-} XnoiseCollectionSortMode;
 
 typedef enum  {
 	XNOISE_PLAYER_STATE_STOPPED = 0,
@@ -1703,6 +1706,7 @@ guint xnoise_worker_job_get_timer_seconds (XnoiseWorkerJob* self);
 XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob* self);
 GQuark xnoise_database_db_error_quark (void);
 GType xnoise_data_source_get_type (void) G_GNUC_CONST;
+GType xnoise_collection_sort_mode_get_type (void) G_GNUC_CONST;
 GType xnoise_database_reader_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseReader* xnoise_database_reader_new (GError** error);
 XnoiseDatabaseReader* xnoise_database_reader_construct (GType object_type, GError** error);
@@ -1721,7 +1725,6 @@ XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* 
 XnoiseItem* xnoise_database_reader_get_video_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-XnoiseItem* xnoise_database_reader_get_artists_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* genre, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_genres_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
 XnoiseItem* xnoise_database_reader_get_albums_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* artist, XnoiseItem* genre, int* result_length1);
@@ -1756,16 +1759,15 @@ void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self,
 void xnoise_database_writer_begin_transaction (XnoiseDatabaseWriter* self);
 void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
 gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
-void xnoise_data_source_set_source_id (XnoiseDataSource* self, gint id);
 gint xnoise_data_source_get_source_id (XnoiseDataSource* self);
 const gchar* xnoise_data_source_get_datasource_name (XnoiseDataSource* self);
 gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
-XnoiseItem* xnoise_data_source_get_artists_with_search (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
-XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
+XnoiseItem* xnoise_data_source_get_artists (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+XnoiseTrackData** xnoise_data_source_get_trackdata_for_artist (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseItem* xnoise_data_source_get_artistitem_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_albumid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-XnoiseItem* xnoise_data_source_get_albums_with_search (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp, int* result_length1);
-XnoiseTrackData* xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item);
+XnoiseItem* xnoise_data_source_get_albums (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+XnoiseTrackData** xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* self, const gchar* searchterm, XnoiseItem* item, int* result_length1);
 gboolean xnoise_data_source_get_stream_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
@@ -1836,7 +1838,6 @@ const gchar* xnoise_global_access_get_active_dockable_media_name (XnoiseGlobalAc
 void xnoise_global_access_set_active_dockable_media_name (XnoiseGlobalAccess* self, const gchar* value);
 gint xnoise_global_access_get_fontsize_dockable (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_fontsize_dockable (XnoiseGlobalAccess* self, gint value);
-GType xnoise_collection_sort_mode_get_type (void) G_GNUC_CONST;
 XnoiseCollectionSortMode xnoise_global_access_get_collection_sort_mode (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_collection_sort_mode (XnoiseGlobalAccess* self, XnoiseCollectionSortMode value);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;
@@ -1875,7 +1876,7 @@ gint xnoise_extern_queryable_get_model_item_column (XnoiseExternQueryable* self)
 XnoiseDataSource* xnoise_extern_queryable_get_data_source (XnoiseExternQueryable* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
-XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, const gchar* searchtext, int* result_length1);
+XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, const gchar* searchtext, GHashTable* extra_items, int* result_length1);
 XnoiseItemConverter* xnoise_item_converter_new (void);
 XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;

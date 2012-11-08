@@ -36,7 +36,7 @@ using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {
 
-    public TrackData[]? to_trackdata(Item? item, string? searchtext) {
+    public TrackData[]? to_trackdata(Item? item, string? searchtext, HashTable<ItemType,Item?>? extra_items = null) {
         
         //this function uses the database so use it in the database thread
         
@@ -55,10 +55,10 @@ public class Xnoise.ItemConverter : Object {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
-                    TrackData? tmp = ds.get_trackdata_for_item(item);
-                    if(tmp == null)
+                    TrackData[] tmp = ds.get_trackdata_for_item(global.searchtext, item);
+                    if(tmp == null || tmp.length == 0 || tmp[0] == null)
                         break;
-                    result += tmp;
+                    result += tmp[0];
                 }
                 else if(item.uri != null) {
                     TrackData? tmp = null;
@@ -109,7 +109,18 @@ public class Xnoise.ItemConverter : Object {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
-                    result = ds.get_trackdata_by_artistid(global.searchtext, item.db_id, item.stamp);
+                    HashTable<ItemType,Item?>? item_ht =
+                        new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                    item_ht.insert(item.type, item);
+                    if(extra_items != null) {
+                        Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+                        print("inserting genre item\n");
+                        item_ht.insert(genre.type, genre);
+                    }
+                    result = ds.get_trackdata_for_artist(global.searchtext,
+                                                         global.collection_sort_mode,
+                                                         item_ht
+                    );
                     break;
                 }
                 break;
@@ -166,6 +177,15 @@ public class Xnoise.ItemConverter : Object {
                 else {
                     return null;
                 }
+            case ItemType.COLLECTION_CONTAINER_GENRE:
+                if(item.db_id > -1 && db_worker.is_same_thread()) {
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
+                    result = ds.get_trackdata_for_item(global.searchtext, item);
+                    break;
+                }
+                break;
             case ItemType.LOCAL_FOLDER:
                 break;
             default:

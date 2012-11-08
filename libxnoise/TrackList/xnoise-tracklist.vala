@@ -602,6 +602,7 @@ public class Xnoise.TrackList : TreeView, IParams {
                     job.set_arg("row_ref", row_ref);
                     job.set_arg("drop_pos", drop_pos);
                     job.dnd_data = ids;
+//                    print("dnd data get %d  %s\n", ids[0].db_id, ids[0].items[0].type.to_string());
                     db_worker.push_job(job);
                     break;
                 case 1: // uri list from outside
@@ -718,8 +719,16 @@ public class Xnoise.TrackList : TreeView, IParams {
             Item i = Item(ix.mediatype, null, ix.db_id);
             i.source_id = ix.source_id;
             i.stamp = ix.stamp;
-            print("insert type %s\n", i.type.to_string());
-            TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext);
+            //print("insert type %s\n", i.type.to_string());
+            Item? oo = null;
+            HashTable<ItemType,Item?>? extra_items = null;
+            if(ix.extra_db_id[0] > -1) {
+                oo = Item(ix.extra_mediatype[0], null, ix.extra_db_id[0]);
+                oo.stamp = ix.extra_stamps[0];
+                extra_items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                extra_items.insert(oo.type, oo);
+            }
+            TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext, extra_items);
             if(tmp != null) {
                 foreach(TrackData tmpdata in tmp) {
                     if(tmpdata == null) {

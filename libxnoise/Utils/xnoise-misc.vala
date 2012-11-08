@@ -138,7 +138,8 @@ namespace Xnoise {
         // some early initializations
         global.fontsize_dockable = ((v >= 7 && v < 18) ? v : 10);
         global.collection_sort_mode = 
-            (CollectionSortMode)Params.get_int_value("collection_sort_mode");
+            CollectionSortMode.GENRE_ARTIST_ALBUM;
+            //(CollectionSortMode)Params.get_int_value("collection_sort_mode");
         
         // DESKTOP NOTIFICATIONS
         _notifications = new DesktopNotifications();
@@ -329,6 +330,10 @@ public enum Xnoise.CollectionSortMode {
     GENRE_ARTIST_ALBUM
 }
 
+//public enum Xnoise.SortDirection {
+//    ASCENDING,
+//    DESCENDING
+//}
 
 
 
@@ -336,10 +341,14 @@ public enum Xnoise.CollectionSortMode {
 // STRUCTS
 
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
-    public int32 db_id;
+    public int32    db_id;
     public ItemType mediatype;
-    public int source_id; // use for registered data sources
-    public uint32 stamp;
+    public int      source_id; // use for registered data sources
+    public uint32   stamp;
+    
+    public int32    extra_db_id[4];
+    public ItemType extra_mediatype[4];
+    public uint32   extra_stamps[4];
 }
 
 

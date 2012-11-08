@@ -358,7 +358,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             //TreePath tp = filtermodel.convert_path_to_child_path(treepath);
             DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref treepath); 
             foreach(DndData u in l) {
-                //print("dnd data get %d  %s\n", u.db_id, u.mediatype.to_string());
+                //print("dnd data get %d  %s\n", u.db_id, u.items[0].type.to_string());
                 ids += u; // this is necessary, if more than one path can be selected
             }
         }

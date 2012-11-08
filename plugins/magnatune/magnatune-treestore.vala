@@ -299,8 +299,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         if(path.get_depth() == 1) {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
             job.set_arg("treerowref", treerowref);
-            job.set_arg("artist_id", item.db_id);
-            job.set_arg("stamp", item.stamp);
+            job.item = item;
             db_worker.push_job(job);
         }
     }
@@ -308,8 +307,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool load_album_and_tracks_job(Worker.Job job) {
         if(this.cancel.is_cancelled())
             return false;
-        job.items = dbreader.get_albums_with_search(global.searchtext, (int32)job.get_arg("artist_id"), (uint32)job.get_arg("stamp")); 
-        //print("job.items cnt = %d\n", job.items.length);
+        HashTable<ItemType,Item?>? item_ht = 
+            new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+        item_ht.insert(job.item.type, job.item);
+        
+        job.items = dbreader.get_albums(global.searchtext,
+                                        global.collection_sort_mode,
+                                        item_ht);
+        //print("xx1 job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if(row_ref == null || !row_ref.valid())
@@ -420,7 +425,11 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool populate_artists_job(Worker.Job job) {
         if(this.cancel.is_cancelled())
             return false;
-        job.items = dbreader.get_artists_with_search(global.searchtext);
+        job.items = dbreader.get_artists(global.searchtext,
+                                         global.collection_sort_mode,
+                                         null
+                                         );
+//        job.items = dbreader.get_artists_with_search(global.searchtext);
         //print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
             if(this == null)
