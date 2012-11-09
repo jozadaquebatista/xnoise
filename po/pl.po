@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-07 15:28+0100\n"
+"POT-Creation-Date: 2012-11-09 14:00+0100\n"
 "PO-Revision-Date: 2012-09-01 13:00+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -45,7 +45,7 @@ msgid "More information on the project website:"
 msgstr "Więcej informacji na stronie projektu:"
 
 #. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Database/xnoise-db-reader.vala:157
+#: ../libxnoise/Database/xnoise-db-reader.vala:171
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:177
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
@@ -85,12 +85,24 @@ msgstr "Ostatnio odtwarzane"
 msgid "Music"
 msgstr "Muzyka"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:317
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:332
 #: ../plugins/magnatune/magnatune-treeview.vala:217
 msgid "Collapse all"
 msgstr "Zwiń wszystko"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:312
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:337
+msgid "Sort Mode"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:348
+msgid "ARTIST-ALBUM-TITLE"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:355
+msgid "GENRE-ARTIST-ALBUM"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:367
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
 msgstr "Wczytywanie ..."
@@ -382,27 +394,27 @@ msgstr "Rok"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1301
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1431
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1310
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1440
 msgid "Artist"
 msgstr "Wykonawca"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1277
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1440
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1286
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1449
 msgid "Album"
 msgstr "Album"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1262
 msgid "Title"
 msgstr "Tytuł"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1347
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1449
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1356
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1458
 msgid "Genre"
 msgstr "Gatunek"
 
@@ -412,14 +424,14 @@ msgstr "Uri"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1371
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1458
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1380
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1467
 msgid "Year"
 msgstr "Rok"
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1422
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1431
 msgid "Tracknumber"
 msgstr "Numer utworu"
 
@@ -868,8 +880,8 @@ msgid "Jump to current position"
 msgstr "Skocz do odtwarzanego utworu"
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1323
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1467
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1332
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1476
 msgid "Length"
 msgstr "Długość"
 
@@ -1041,15 +1053,15 @@ msgstr "Magnatune"
 msgid "Download whole album to disk"
 msgstr "Pobierz album na dysk"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:268
+#: ../plugins/magnatune/magnatune-treeview.vala:276
 msgid "Downloading album "
 msgstr "Pobieranie albumu"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:270
+#: ../plugins/magnatune/magnatune-treeview.vala:278
 msgid "This may take some time..."
 msgstr "Może zająć chwilę.."
 
-#: ../plugins/magnatune/magnatune-treeview.vala:384
+#: ../plugins/magnatune/magnatune-treeview.vala:392
 msgid "Download finished for \""
 msgstr "Zakończono pobieranie dla \""
 
