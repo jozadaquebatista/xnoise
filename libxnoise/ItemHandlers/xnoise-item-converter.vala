@@ -104,10 +104,11 @@ public class Xnoise.ItemConverter : Object {
                     HashTable<ItemType,Item?>? item_ht =
                         new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                     item_ht.insert(item.type, item);
-                    if(extra_items != null) {
+                    if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM &&
+                       extra_items != null) {
                         Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                        print("inserting genre item\n");
-                        item_ht.insert(genre.type, genre);
+                        if(genre != null)
+                            item_ht.insert(genre.type, genre);
                     }
                     result = ds.get_trackdata_for_album(global.searchtext,
                                                         global.collection_sort_mode,
@@ -125,8 +126,8 @@ public class Xnoise.ItemConverter : Object {
                     item_ht.insert(item.type, item);
                     if(extra_items != null) {
                         Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                        //print("inserting genre item\n");
-                        item_ht.insert(genre.type, genre);
+                        if(genre != null)
+                            item_ht.insert(genre.type, genre);
                     }
                     result = ds.get_trackdata_for_artist(global.searchtext,
                                                          global.collection_sort_mode,

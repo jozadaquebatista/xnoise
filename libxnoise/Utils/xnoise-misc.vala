@@ -339,7 +339,7 @@ public enum Xnoise.CollectionSortMode {
 
 
 // STRUCTS
-
+[CCode (destroy_function = "xnoise_dnd_data_destroy")]
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32    db_id;
     public ItemType mediatype;
@@ -349,7 +349,29 @@ public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32    extra_db_id[4];
     public ItemType extra_mediatype[4];
     public uint32   extra_stamps[4];
+    
+    //public static DndData copy(DndData dat) {
+    //    DndData ret   = DndData();
+    //    ret.db_id     = dat.db_id;
+    //    ret.mediatype = dat.mediatype;
+    //    ret.source_id = dat.source_id;
+    //    ret.stamp     = dat.stamp;
+    //    ret.extra_db_id[0] = dat.extra_db_id[0];
+    //    ret.extra_db_id[1] = dat.extra_db_id[1];
+    //    ret.extra_db_id[2] = dat.extra_db_id[2];
+    //    ret.extra_db_id[3] = dat.extra_db_id[3];
+    //    ret.extra_mediatype[0] = dat.extra_mediatype[0];
+    //    ret.extra_mediatype[1] = dat.extra_mediatype[1];
+    //    ret.extra_mediatype[2] = dat.extra_mediatype[2];
+    //    ret.extra_mediatype[3] = dat.extra_mediatype[3];
+    //    ret.extra_stamps[0] = dat.extra_stamps[0];
+    //    ret.extra_stamps[1] = dat.extra_stamps[1];
+    //    ret.extra_stamps[2] = dat.extra_stamps[2];
+    //    ret.extra_stamps[3] = dat.extra_stamps[3];
+    //    return ret;
+    //}
 }
+
 
 
 // INTERFACES

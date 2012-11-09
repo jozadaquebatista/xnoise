@@ -120,22 +120,22 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         return null;
     }
 
-    private void on_edit_title_mediabrowser(Item item, GLib.Value? data) {
+    private void on_edit_title_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         if(item.type == ItemType.LOCAL_AUDIO_TRACK)
             this.open_tagtitle_changer(item);
     }
 
-    private void on_edit_album_mediabrowser(Item item, GLib.Value? data) {
+    private void on_edit_album_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM)
             this.open_tagalbum_changer(item);
     }
 
-    private void on_edit_artist_mediabrowser(Item item, GLib.Value? data) {
+    private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
             this.open_tagartist_changer(item);
     }
     
-    private void on_edit_title_tracklist(Item item, GLib.Value? data) {
+    private void on_edit_title_tracklist(Item item, GLib.Value? data, GLib.Value? data2) {
         if(global.media_import_in_progress)
             return;
         if(item.type == ItemType.LOCAL_AUDIO_TRACK)

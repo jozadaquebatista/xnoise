@@ -668,7 +668,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                 return;
             unowned Action? action = tmp.get_action(item2.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
             if(action != null)
-                action.action(item2, null);
+                action.action(item2, null, null);
         }
         tl.set_focus_on_iter(ref iter_2);
     }

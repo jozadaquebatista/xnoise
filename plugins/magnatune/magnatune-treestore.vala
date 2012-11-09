@@ -375,9 +375,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                                this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
-                job.item = album;
-//                job_title.set_arg("albumid",  album.db_id);
-//                job_title.set_arg("stamp",  album.stamp);
+                job_title.item = album;
                 db_worker.push_job(job_title);
             }
             remove_loader_child(ref iter_artist);

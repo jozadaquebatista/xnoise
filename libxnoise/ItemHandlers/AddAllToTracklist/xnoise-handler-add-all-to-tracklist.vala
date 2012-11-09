@@ -93,7 +93,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         return null;
     }
 
-    private void on_menu_add_from_extern(Item item, GLib.Value? data) {
+    private void on_menu_add_from_extern(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeView tv = (TreeView)data;
         if(tv == null)
             return;
@@ -132,7 +132,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         return false;
     }
 
-    private void on_menu_add_from_playlist(Item item, GLib.Value? data) {
+    private void on_menu_add_from_playlist(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeView tv = (TreeView)data;
         if(tv == null)
             return;
@@ -164,7 +164,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
 
-    private void on_menu_add(Item item, GLib.Value? data) {
+    private void on_menu_add(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeQueryable? tq = data as TreeQueryable;
         if(tq == null)
             return;

@@ -178,7 +178,7 @@ namespace Xnoise {
                 unowned Action current = item_actions.index(i);
                 if(current.action != null) {
                     print("  %s\n", current.name);
-                    current.action(item, data);
+                    current.action(item, data, null);
                 }
             }
         }

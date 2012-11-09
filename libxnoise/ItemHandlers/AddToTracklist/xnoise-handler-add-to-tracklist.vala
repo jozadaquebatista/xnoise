@@ -134,7 +134,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         return null;
     }
 
-    private void on_menu_add_from_extern(Item item, GLib.Value? data) {
+    private void on_menu_add_from_extern(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeView tv = (TreeView)data;
         if(tv == null)
             return;
@@ -168,7 +168,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
 
-    private void on_activated_from_playlist(Item item, GLib.Value? data) {
+    private void on_activated_from_playlist(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeView tv = (TreeView)data;
         PlaylistQueryable tq = tv as PlaylistQueryable;
         if(tv == null || tq == null)
@@ -198,7 +198,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
     
-    private void on_menu_add_from_playlist(Item item, GLib.Value? data) {
+    private void on_menu_add_from_playlist(Item item, GLib.Value? data, GLib.Value? data2) {
         TreeView tv = (TreeView)data;
         PlaylistQueryable tq = tv as PlaylistQueryable;
         if(tv == null || tq == null)
@@ -228,7 +228,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
 
-    private void on_menu_add(Item item, GLib.Value? data) {
+    private void on_menu_add(Item item, GLib.Value? data, GLib.Value? data2) {
         Gtk.Widget tv = (TreeView)data;
         TreeQueryable tq = tv as TreeQueryable;
         if(tv == null || tq == null)
@@ -254,6 +254,14 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             items += ix;
         }
         job.items = items;
+        job.item = null;
+        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+            Item? i = null;
+            if(data2 != null) {
+                i = (Item)data2;
+                job.item = i;
+            }
+        }
         db_worker.push_job(job);
     }
 
@@ -305,7 +313,12 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         TrackData[] tmp = {};
         TrackData[] tda = {};
         foreach(Item item in job.items) {
-            tmp = item_converter.to_trackdata(item, global.searchtext);
+            HashTable<ItemType,Item?>? extra_items = null;
+            if(job.item != null) {
+                extra_items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                extra_items.insert(job.item.type, job.item);
+            }
+            tmp = item_converter.to_trackdata(item, global.searchtext, extra_items);
             if(tmp == null)
                 continue;
             foreach(TrackData td in tmp) {
@@ -323,7 +336,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         return false;
     }
     
-    private void on_request(Item item, GLib.Value? data) {
+    private void on_request(Item item, GLib.Value? data, GLib.Value? data2) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_job);
         job.item = item;
         db_worker.push_job(job);
@@ -342,17 +355,29 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         return false;
     }
     
-    private void on_add_activated(Item item, GLib.Value? data) {
+    private void on_add_activated(Item item, GLib.Value? data, GLib.Value? data2) {
+        Item? i = null;
+        if(data != null) {
+            i = (Item)data;
+        }
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_item_job);
         job.item = item;
+        if(i != null) {
+            job.items = new Item[1];
+            job.items[0] = i;
+        }
         db_worker.push_job(job);
     }
 
     private bool add_item_job(Worker.Job job) {
-        Item? item = job.item;//(Item?)job.get_arg("item");
+//        Item? item = job.item;//(Item?)job.get_arg("item");
         //print("item.type is %s\n", item.type.to_string());
-        
-        job.track_dat = item_converter.to_trackdata(item, global.searchtext);
+        HashTable<ItemType,Item?>? extra_items = null;
+        if(job.items != null && job.items.length > 0) {
+            extra_items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+            extra_items.insert(job.items[0].type, job.items[0]);
+        }
+        job.track_dat = item_converter.to_trackdata(job.item, global.searchtext, extra_items);
         
         if(job.track_dat != null) {
             Idle.add( () => {
@@ -396,7 +421,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
                 return;
             unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
             if(action != null)
-                action.action(tda[0].item, null);
+                action.action(tda[0].item, null, null);
         }
         if(immediate_play) {
             tl.set_focus_on_iter(ref iter_2);

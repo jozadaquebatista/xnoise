@@ -80,7 +80,7 @@ private class Xnoise.HandlerShowInFileManager : ItemHandler {
         return null;
     }
 
-    private void show_uri(Item item, GLib.Value? data) { 
+    private void show_uri(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
             return;
         string? nautilus_install_path = Environment.find_program_in_path("nautilus");

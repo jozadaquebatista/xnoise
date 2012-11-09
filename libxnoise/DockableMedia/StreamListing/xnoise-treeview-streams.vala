@@ -125,7 +125,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
             unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
-                action.action(item, null);
+                action.action(item, null, null);
             else
                 print("action was null\n");
         });
@@ -402,7 +402,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
             var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
-                x.action(item, this);
+                x.action(item, this, null);
             });
             rightmenu.append(menu_item);
         }

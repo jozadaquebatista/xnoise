@@ -273,7 +273,17 @@ typedef struct _XnoiseItemConverterPrivate XnoiseItemConverterPrivate;
 #define XNOISE_TYPE_ITEM_SELECTION_TYPE (xnoise_item_selection_type_get_type ())
 
 #define XNOISE_TYPE_ITEM_HANDLER_TYPE (xnoise_item_handler_type_get_type ())
+
+#define XNOISE_TYPE_ACTION (xnoise_action_get_type ())
+#define XNOISE_ACTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ACTION, XnoiseAction))
+#define XNOISE_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ACTION, XnoiseActionClass))
+#define XNOISE_IS_ACTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ACTION))
+#define XNOISE_IS_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ACTION))
+#define XNOISE_ACTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ACTION, XnoiseActionClass))
+
 typedef struct _XnoiseAction XnoiseAction;
+typedef struct _XnoiseActionClass XnoiseActionClass;
+typedef struct _XnoiseActionPrivate XnoiseActionPrivate;
 
 #define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
 #define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
@@ -1079,8 +1089,11 @@ typedef enum  {
 	XNOISE_ITEM_HANDLER_TYPE_PLAY_NOW
 } XnoiseItemHandlerType;
 
-typedef void (*XnoiseItemHandlerActionType) (XnoiseItem* item, GValue* data, void* user_data);
+typedef void (*XnoiseItemHandlerActionType) (XnoiseItem* item, GValue* data_1, GValue* data_2, void* user_data);
 struct _XnoiseAction {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseActionPrivate * priv;
 	XnoiseItemHandlerActionType action;
 	gpointer action_target;
 	const gchar* name;
@@ -1088,6 +1101,11 @@ struct _XnoiseAction {
 	const gchar* text;
 	const gchar* stock_item;
 	XnoiseActionContext context;
+};
+
+struct _XnoiseActionClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseAction *self);
 };
 
 struct _XnoiseItemHandler {
@@ -1698,6 +1716,8 @@ GType xnoise_track_data_get_type (void) G_GNUC_CONST;
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
+void xnoise_dnd_data_copy (const XnoiseDndData* self, XnoiseDndData* dest);
+void xnoise_dnd_data_destroy (XnoiseDndData* self);
 XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
 XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
 void xnoise_worker_job_set_arg (XnoiseWorkerJob* self, const gchar* name, GValue* val);
@@ -1882,9 +1902,15 @@ XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;
 GType xnoise_item_selection_type_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
-void xnoise_action_free (XnoiseAction* self);
+gpointer xnoise_action_ref (gpointer instance);
+void xnoise_action_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_action (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_action (GValue* value, gpointer v_object);
+void xnoise_value_take_action (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_action (const GValue* value);
+GType xnoise_action_get_type (void) G_GNUC_CONST;
 XnoiseAction* xnoise_action_new (void);
-XnoiseAction* xnoise_action_new (void);
+XnoiseAction* xnoise_action_construct (GType object_type);
 GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHandlerManager* _uhm);

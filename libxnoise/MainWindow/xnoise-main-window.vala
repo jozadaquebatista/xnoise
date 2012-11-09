@@ -1336,7 +1336,7 @@ print("on close 2\n");
                 unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
                 
                 if(action != null) {
-                    action.action(item, null);
+                    action.action(item, null, null);
                 }
                 else {
                     print("action was null\n");
@@ -1395,7 +1395,7 @@ print("on close 2\n");
                     unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
                     
                     if(action != null) {
-                        action.action(item, null);
+                        action.action(item, null, null);
                     }
                     else {
                         print("action was null\n");

@@ -97,7 +97,7 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
             unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
-                action.action(item, this);
+                action.action(item, this, null);
             else
                 print("action was null\n");
         });
@@ -216,7 +216,7 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
                                                          null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
-                x.action(item, this);
+                x.action(item, this, null);
             });
             rightmenu.append(menu_item);
         }

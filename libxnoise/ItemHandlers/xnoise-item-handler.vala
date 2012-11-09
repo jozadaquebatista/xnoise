@@ -66,7 +66,6 @@ namespace Xnoise {
     }
 
 
-    [Compact]
     public class Action {
         public unowned ItemHandler.ActionType? action = null;
         public unowned string name;
@@ -81,7 +80,7 @@ namespace Xnoise {
     // base class
     // ItemHandler provides the right Action for the given ActionContext
     public abstract class ItemHandler : Object {
-        public delegate void ActionType(Item item, GLib.Value? data);
+        public delegate void ActionType(Item item, GLib.Value? data_1, GLib.Value? data_2);
         
         protected unowned ItemHandlerManager uhm = null;
         

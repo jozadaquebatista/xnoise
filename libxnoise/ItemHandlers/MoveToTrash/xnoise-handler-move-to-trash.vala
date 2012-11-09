@@ -78,7 +78,7 @@ internal class Xnoise.HandlerMoveToTrash : ItemHandler {
     
     private string? uri = null;
     
-    private void trash_item(Item item, GLib.Value? data) { 
+    private void trash_item(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
             return;
         this.uri = item.uri;

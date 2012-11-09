@@ -301,13 +301,28 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         mediabrowsermodel.get_iter(out iter, path);
         mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
+        Item? parent_item = null;
+        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+            TreePath treepath = path.copy();
+            while(treepath.get_depth() > 1) {
+                if(treepath.get_depth() > 1) {
+                    treepath.up();
+                }
+                else {
+                    break;
+                }
+            }
+            mediabrowsermodel.get_iter(out iter, treepath);
+            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
+            print("parent_item type : %s\n", parent_item.type.to_string());
+        }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
             //print("%s\n", x.name);
             var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
-                x.action(item, this);
+                x.action(item, this, parent_item);
             });
             rightmenu.append(menu_item);
         }
@@ -319,8 +334,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             this.collapse_all();
         });
         rightmenu.append(collapse_item);
-        var sort_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
-        sort_item.set_label(_("Sort Mode"));
+        var sort_item = new Gtk.MenuItem.with_label(_("Sort Mode"));
+//        sort_item.set_label(_("Sort Mode"));
         sort_item.set_submenu(get_sort_submenu());
         rightmenu.append(sort_item);
         rightmenu.show_all();
@@ -412,10 +427,25 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
-            
+            unowned Action? action = tmp.get_action(item.type,
+                                                    ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED,
+                                                    ItemSelectionType.SINGLE
+            );
+            TreePath path = treepath.copy();
+            while(path.get_depth() > 1) {
+                if(path.get_depth() > 1) {
+                    path.up();
+                }
+                else {
+                    break;
+                }
+            }
+            Item? parent_item = null;
+            mediabrowsermodel.get_iter(out iter, path);
+            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
+            Value? val = parent_item;
             if(action != null)
-                action.action(item, null);
+                action.action(item, val, null);
             else
                 print("action was null\n");
         }

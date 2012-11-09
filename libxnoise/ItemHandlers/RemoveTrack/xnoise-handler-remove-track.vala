@@ -63,7 +63,7 @@ internal class Xnoise.HandlerRemoveTrack : ItemHandler {
             return null;
     }
 
-    private void remove_track_from_tracklist(Item item, GLib.Value? data) { // forward playlists to parser
+    private void remove_track_from_tracklist(Item item, GLib.Value? data, GLib.Value? data2) { // forward playlists to parser
         print("remove_track    %s\n", item.type.to_string());
         tl.remove_selected_rows();
     }

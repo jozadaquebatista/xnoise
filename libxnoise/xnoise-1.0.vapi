@@ -479,7 +479,6 @@ namespace Xnoise {
 		public static bool verify_xnoise_directories ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	[Compact]
 	public class Action {
 		public weak Xnoise.ItemHandler.ActionType? action;
 		public Xnoise.ActionContext context;
@@ -660,7 +659,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class ItemHandler : GLib.Object {
-		public delegate void ActionType (Xnoise.Item item, GLib.Value? data);
+		public delegate void ActionType (Xnoise.Item item, GLib.Value? data_1, GLib.Value? data_2);
 		protected weak Xnoise.ItemHandlerManager uhm;
 		public ItemHandler ();
 		public abstract unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
@@ -992,7 +991,7 @@ namespace Xnoise {
 		public abstract Gtk.TreeModel? get_queryable_model ();
 		public abstract GLib.List<Gtk.TreePath>? query_selection ();
 	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
+	[CCode (cheader_filename = "xnoise-1.0.h", destroy_function = "xnoise_dnd_data_destroy")]
 	public struct DndData {
 		public int32 db_id;
 		public Xnoise.ItemType mediatype;

@@ -207,7 +207,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
-                x.action(item, this);
+                x.action(item, this, null);
             });
             rightmenu.append(menu_item);
         }
@@ -516,7 +516,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             unowned Xnoise.Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_EXTERNAL_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
-                action.action(item, null);
+                action.action(item, null, null);
             else
                 print("action was null\n");
         }

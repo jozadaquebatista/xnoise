@@ -166,7 +166,7 @@ public class Xnoise.Main : GLib.Object {
         unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
         
         if(action != null) {
-            action.action(item, null);
+            action.action(item, null, null);
         }
         else {
             print("action was null\n");

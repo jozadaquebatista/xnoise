@@ -349,7 +349,7 @@ public class Xnoise.TrackList : TreeView, IParams {
             //Value? v = list;
             unowned Action x = array.index(i);
             menu_item.activate.connect( () => {
-                x.action(item, null);
+                x.action(item, null, null);
             });
             rightmenu.append(menu_item);
         }
@@ -1205,7 +1205,7 @@ public class Xnoise.TrackList : TreeView, IParams {
             unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
 
             if(action != null)
-                action.action(item, null);
+                action.action(item, null, null);
         }
         
         TreeIter iter;
