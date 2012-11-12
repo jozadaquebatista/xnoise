@@ -46,13 +46,14 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private unowned MusicBrowserModel mbm = null;
     
     private Entry entry;
-    
+    private HashTable<ItemType,Item?>? restrictions;
     private Item? item;
     
     public signal void sign_finish();
 
-    public TagAlbumEditor(Item _item) {
+    public TagAlbumEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
         this.item = _item;
+        this.restrictions = restrictions;
         xn = Main.instance;
         td_old = {};
         builder = new Gtk.Builder();
@@ -83,8 +84,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
-        td_old = item_converter.to_trackdata(this.item, "");
-        
+        td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
+        assert(td_old != null && td_old[0] != null);
         TrackData td = td_old[0];
         switch(item.type) {
             case ItemType.COLLECTION_CONTAINER_ALBUM:

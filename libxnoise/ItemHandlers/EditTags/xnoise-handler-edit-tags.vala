@@ -126,13 +126,39 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     private void on_edit_album_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
+        Item? i = null;
+        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+            if(data2 != null) {
+                i = (Item)data2;
+                assert(i.type == ItemType.COLLECTION_CONTAINER_GENRE);
+            }
+            else {
+                assert_not_reached();
+            }
+        }
+        HashTable<ItemType,Item?>? item_ht = null;
+        if(i != null) {
+            item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+            item_ht.insert(i.type, i);
+        }
         if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM)
-            this.open_tagalbum_changer(item);
+            this.open_tagalbum_changer(item, item_ht);
     }
 
     private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
+        Item? i = null;
+        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+            if(data2 != null) {
+                i = (Item)data2;
+            }
+        }
+        HashTable<ItemType,Item?>? item_ht = null;
+        if(i != null) {
+            item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+            item_ht.insert(i.type, i);
+        }
         if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
-            this.open_tagartist_changer(item);
+            this.open_tagartist_changer(item, item_ht);
     }
     
     private void on_edit_title_tracklist(Item item, GLib.Value? data, GLib.Value? data2) {
@@ -173,15 +199,15 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     private TagArtistAlbumEditor tae;
     private TagAlbumEditor taled;
     
-    private void open_tagartist_changer(Item item) {
-        tae = new TagArtistAlbumEditor(item);
+    private void open_tagartist_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
+        tae = new TagArtistAlbumEditor(item, restrictions);
         tae.sign_finish.connect( () => {
             tae = null;
         });
     }
 
-    private void open_tagalbum_changer(Item item) {
-        taled = new TagAlbumEditor(item);
+    private void open_tagalbum_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
+        taled = new TagAlbumEditor(item, restrictions);
         taled.sign_finish.connect( () => {
             taled = null;
         });

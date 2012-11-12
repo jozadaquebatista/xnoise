@@ -97,18 +97,20 @@ public class Xnoise.ItemConverter : Object {
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
-                    DataSource ds = get_data_source(item.source_id);
+                    DataSource? ds = get_data_source(item.source_id);
                     assert(ds != null);
                     return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
 //                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id, item.stamp);
                     HashTable<ItemType,Item?>? item_ht =
                         new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                     item_ht.insert(item.type, item);
-                    if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM &&
-                       extra_items != null) {
-                        Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                        if(genre != null)
-                            item_ht.insert(genre.type, genre);
+                    if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                        if(extra_items != null) {
+                            Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+                            if(genre != null) {
+                                item_ht.insert(genre.type, genre);
+                            }
+                        }
                     }
                     result = ds.get_trackdata_for_album(global.searchtext,
                                                         global.collection_sort_mode,
