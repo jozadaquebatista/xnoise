@@ -854,11 +854,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(album == null || 
            album.stamp != get_current_stamp(get_source_id()))
             return null;
-        switch(sort_mode) {
-            case CollectionSortMode.GENRE_ARTIST_ALBUM:
-                Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                if(genre == null) 
-                    return null;
+        Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+//        switch(sort_mode) {
+        if(genre != null) {
+//            case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(genre.stamp != get_current_stamp(get_source_id()))
                     return null;
                 if(searchtext != EMPTYSTRING) {
@@ -901,7 +900,9 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     val += td;
                 }
                 return (owned)val;
-           case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            }
+            else {
+//           case CollectionSortMode.ARTIST_ALBUM_TITLE:
                 if(searchtext != EMPTYSTRING) {
                     string st = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
@@ -940,8 +941,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     val += td;
                 }
                 return (owned)val;
-            default:
-                break;
+//            default:
+//                break;
         }
         return (owned)val;
     }
@@ -967,13 +968,13 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(artist == null || 
            artist.stamp != get_current_stamp(get_source_id()))
             return null;
-        switch(sort_mode) {
-            case CollectionSortMode.GENRE_ARTIST_ALBUM:
-                Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                if(genre == null) 
-                    return null;
-                if(genre.stamp != get_current_stamp(get_source_id()))
-                    return null;
+        Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+//        if(genre == null) 
+//            return null;
+        if(genre != null) {
+            if(genre.stamp != get_current_stamp(get_source_id()))
+                return null;
+//            case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(searchtext != EMPTYSTRING) {
                     string st = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE_AND_SEARCH, -1, out stmt);
@@ -1014,7 +1015,9 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     val += td;
                 }
                 return (owned)val;
-            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+            }
+            else {
+//            case CollectionSortMode.ARTIST_ALBUM_TITLE:
                 if(searchtext != EMPTYSTRING) {
                     string st = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
@@ -1053,8 +1056,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     val += td;
                 }
                 return (owned)val;
-            default:
-                break;
+//            default:
+//                break;
         }
         return (owned)val;
     }

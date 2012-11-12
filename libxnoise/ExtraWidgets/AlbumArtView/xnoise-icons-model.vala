@@ -31,10 +31,6 @@
 using Gtk;
 
 using Xnoise;
-//using Xnoise.Resources;
-//using Xnoise.Utilities;
-
-
 
 
 private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
@@ -57,7 +53,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf),  // ICON
         typeof(string),      // TEXT
-        typeof(IconState),// STATE
+        typeof(IconState),   // STATE
         typeof(string),      // ARTIST
         typeof(string),      // ALBUM
         typeof(Xnoise.Item?),// ITEM
