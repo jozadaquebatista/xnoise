@@ -38,6 +38,8 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
     public AlbumArtCellArea() {
         var renderer_pixbuf = new CellRendererPixbuf();
         var renderer_text   = new CellRendererText();
+        renderer_text.size = Params.get_int_value("fontsizeMB") * Pango.SCALE;
+        renderer_text.size_set = true;
         renderer_text.alignment = Pango.Alignment.CENTER;
         renderer_text.width = IconsModel.ICONSIZE;
         renderer_text.wrap_mode = Pango.WrapMode.WORD;
@@ -48,7 +50,7 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
         this.pack_start(renderer_pixbuf, false);
         this.pack_start(renderer_text, false);
         this.attribute_connect(renderer_pixbuf, "pixbuf", IconsModel.Column.ICON);
-        this.attribute_connect(renderer_text, "markup", IconsModel.Column.TEXT);
+        this.attribute_connect(renderer_text,   "markup", IconsModel.Column.TEXT);
     }
     
     public override void get_preferred_width(Gtk.CellAreaContext context,

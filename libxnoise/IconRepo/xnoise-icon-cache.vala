@@ -37,7 +37,7 @@ using Xnoise.Utilities;
 
 
 private class Xnoise.IconCache : GLib.Object {
-    private const int SHADOW_SIZE = 22;
+    private int shadow_size;
     private Gdk.Pixbuf? shadow = null;
     private static HashTable<string,Gdk.Pixbuf> cache;
     
@@ -55,13 +55,14 @@ private class Xnoise.IconCache : GLib.Object {
     
     public Gdk.Pixbuf? album_art { get; private set; }
     
-//    private Gdk.Pixbuf albumart_raw;
     
-    
-    public IconCache(File dir, int icon_size = 250, Gdk.Pixbuf dummy_pixbuf) {
+    public IconCache(File dir, int icon_size, Gdk.Pixbuf dummy_pixbuf) {
         assert(io_worker != null);
         assert(cache_worker != null);
         assert(dir.get_path() != null);
+        assert(icon_size >= 22);
+//        shadow_size = (int) ((icon_size / 10) - 2);
+        shadow_size = 8;//int.max(shadow_size, 3);
         lock(cache) {
             if(cache == null) {
                 cache = new HashTable<string,Gdk.Pixbuf>(str_hash, str_equal);
@@ -79,13 +80,19 @@ private class Xnoise.IconCache : GLib.Object {
         catch(Error e) {
             print("Shadow icon missing. %s\n", e.message);
         }
-        this.album_art = add_shadow(dummy_pixbuf, icon_size, SHADOW_SIZE);
+        this.album_art = add_shadow(dummy_pixbuf, icon_size, shadow_size);
         
-        loading_in_progress = true;
-        
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
-        job.cancellable = this.cancellable;
-        io_worker.push_job(job);
+//        loading_in_progress = true;
+//        
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
+//        job.cancellable = this.cancellable;
+//        io_worker.push_job(job);
+        Timeout.add(100, () => {
+            print("Icon Cache: inital import done.\n");
+            loading_in_progress = false;
+            on_loading_finished();
+            return false;
+        });
     }
     
     public void handle_image(string image_path) {
@@ -110,93 +117,101 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private bool populate_cache_job(Worker.Job job) {
-        if(job.cancellable.is_cancelled())
-            return false;
-        return_val_if_fail(io_worker.is_same_thread(), false);
-        read_recoursive(this.dir, job);
+//        Timeout.add(100, () => {
+//            print("Icon Cache: inital import done.\n");
+//            loading_in_progress = false;
+//            on_loading_finished();
+//            return false;
+//        });
+
+//        if(job.cancellable.is_cancelled())
+//            return false;
+//        return_val_if_fail(io_worker.is_same_thread(), false);
+//        read_recoursive(this.dir, job);
         return false;
     }
     
-    // running in io thread
-    private void read_recoursive(File dir, Worker.Job job) {
-        //this function shall run in the io thread
-        return_val_if_fail(io_worker.is_same_thread(), false);
-        FileEnumerator enumerator;
-        string attr = FileAttribute.STANDARD_NAME + "," +
-                      FileAttribute.STANDARD_TYPE;
-        try {
-            enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
-        } 
-        catch(Error e) {
-            return;
-        }
-        job.big_counter[0]++;
-        GLib.FileInfo info;
-        try {
-            while((info = enumerator.next_file()) != null) {
-                string filename = info.get_name();
-                string filepath = GLib.Path.build_filename(dir.get_path(), filename);
-                File file = File.new_for_path(filepath);
-                FileType filetype = info.get_file_type();
-                if(filetype == FileType.DIRECTORY) {
-                    read_recoursive(file, job);
-                }
-                else {
-                    var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
-                    fjob.set_arg("file", file.get_path());
-                    fjob.set_arg("initial_import", true);
-                    fjob.cancellable = this.cancellable;
-                    lock(import_job_count) {
-                        import_job_count++;
-                    }
-                    cache_worker.push_job(fjob);
-                }
-            }
-        }
-        catch(Error e) {
-            print("%s\n", e.message);
-        }
-        job.big_counter[0]--;
-        if(job.big_counter[0] == 0) {
-            lock(all_jobs_in_queue) {
-                all_jobs_in_queue = true;
-            }
-        }
-    }
+//    // running in io thread
+//    private void read_recoursive(File dir, Worker.Job job) {
+//        //this function shall run in the io thread
+//        return_val_if_fail(io_worker.is_same_thread(), false);
+//        FileEnumerator enumerator;
+//        string attr = FileAttribute.STANDARD_NAME + "," +
+//                      FileAttribute.STANDARD_TYPE;
+//        try {
+//            enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
+//        } 
+//        catch(Error e) {
+//            return;
+//        }
+//        job.big_counter[0]++;
+//        GLib.FileInfo info;
+//        try {
+//            while((info = enumerator.next_file()) != null) {
+//                string filename = info.get_name();
+//                string filepath = GLib.Path.build_filename(dir.get_path(), filename);
+//                File file = File.new_for_path(filepath);
+//                FileType filetype = info.get_file_type();
+//                if(filetype == FileType.DIRECTORY) {
+//                    read_recoursive(file, job);
+//                }
+//                else {
+//                    var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+//                    fjob.set_arg("file", file.get_path());
+//                    fjob.set_arg("initial_import", true);
+//                    fjob.cancellable = this.cancellable;
+//                    lock(import_job_count) {
+//                        import_job_count++;
+//                    }
+//                    cache_worker.push_job(fjob);
+//                }
+//            }
+//        }
+//        catch(Error e) {
+//            print("%s\n", e.message);
+//        }
+//        job.big_counter[0]--;
+//        if(job.big_counter[0] == 0) {
+//            lock(all_jobs_in_queue) {
+//                all_jobs_in_queue = true;
+//            }
+//        }
+//    }
     
     private void import_job_count_dec_and_test(Worker.Job job) {
-        assert(cache_worker.is_same_thread());
-        if(!((bool)job.get_arg("initial_import"))) {
-            string p = (string)job.get_arg("file");
-            Idle.add(() => {
-                sign_new_album_art_loaded(p);
-                return false;
-            });
-            return;
-        }
-        bool res_flag = false;
-        lock(import_job_count) {
-            import_job_count--;
-            if(import_job_count <=0) {
-                res_flag = true;
-            }
-        }
-        lock(all_jobs_in_queue) {
-            if(all_jobs_in_queue && res_flag) {
-                res_flag = true;
-            }
-            else {
-                res_flag = false;
-            }
-        }
-        if(res_flag) {
-            Timeout.add(100, () => {
-                print("Icon Cache: inital import done.\n");
-                loading_in_progress = false;
-                on_loading_finished();
-                return false;
-            });
-        }
+        return;
+//        assert(cache_worker.is_same_thread());
+//        if(!((bool)job.get_arg("initial_import"))) {
+//            string p = (string)job.get_arg("file");
+//            Idle.add(() => {
+//                sign_new_album_art_loaded(p);
+//                return false;
+//            });
+//            return;
+//        }
+//        bool res_flag = false;
+//        lock(import_job_count) {
+//            import_job_count--;
+//            if(import_job_count <=0) {
+//                res_flag = true;
+//            }
+//        }
+//        lock(all_jobs_in_queue) {
+//            if(all_jobs_in_queue && res_flag) {
+//                res_flag = true;
+//            }
+//            else {
+//                res_flag = false;
+//            }
+//        }
+//        if(res_flag) {
+//            Timeout.add(100, () => {
+//                print("Icon Cache: inital import done.\n");
+//                loading_in_progress = false;
+//                on_loading_finished();
+//                return false;
+//            });
+//        }
     }
     
     private bool read_file_job(Worker.Job job) {
@@ -227,7 +242,7 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = add_shadow(px, icon_size, SHADOW_SIZE);
+            px = add_shadow(px, icon_size, shadow_size);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         import_job_count_dec_and_test(job);
@@ -238,6 +253,9 @@ private class Xnoise.IconCache : GLib.Object {
         Gdk.Pixbuf? p = null;
         lock(cache) {
             p = cache.lookup(path);
+        }
+        if(p == null) {
+            handle_image(path);
         }
         return p;
     }
@@ -257,13 +275,14 @@ private class Xnoise.IconCache : GLib.Object {
     }
 
     private const int frame_width = 1;
+    private const int shadow_offset = 3;
     
     private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size, int shadow_size = 22) {
         if(shadow == null) {
             print("shadow is null\n");
             return pixbuf;
         }
-        if(shadow_size <= 3)
+        if(shadow_size < 3)
             return pixbuf;
         if(size <= ((2* shadow_size) + 2))
             return pixbuf;
@@ -271,7 +290,7 @@ private class Xnoise.IconCache : GLib.Object {
         Gdk.Pixbuf? pix;
         var surface = new ImageSurface(Format.ARGB32, size, size);
         var cr = new Cairo.Context(surface);
-        Gdk.cairo_set_source_pixbuf(cr, shadow, 0, 0);
+        Gdk.cairo_set_source_pixbuf(cr, shadow, shadow_offset, shadow_offset);
         cr.paint();
         
         int imagesize = size - (2 * shadow_size) - (2 * frame_width);
