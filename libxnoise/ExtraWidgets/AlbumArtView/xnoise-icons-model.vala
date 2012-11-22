@@ -61,7 +61,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     };
 
     private Gdk.Pixbuf? logo = null;
-    public const int ICONSIZE = 120;
+    public const int ICONSIZE = 250;
     private unowned AlbumArtView view;
     
     public IconsModel(AlbumArtView view) {
@@ -133,13 +133,13 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                                Markup.printf_escaped("<i>%s</i>", ad.artist);
             Gdk.Pixbuf? art = null;
             File? f = get_albumimage_for_artistalbum(ad.artist, ad.album, "extralarge");
-//            if(f != null)
-//                art = view.icon_cache.get_image(f.get_path());
-//            
-//            if(art == null)
+            if(f != null)
+                art = view.icon_cache.get_image(f.get_path());
+            
+            if(art == null)
                 art = logo;
-//            else
-//                st = IconState.RESOLVED;
+            else
+                st = IconState.RESOLVED;
             
             string ar = ad.artist;
             string al = ad.album;
