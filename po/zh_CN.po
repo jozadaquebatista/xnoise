@@ -84,15 +84,15 @@ msgstr "折叠全部"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:337
 msgid "Sort Mode"
-msgstr ""
+msgstr "排序模式"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:348
 msgid "ARTIST-ALBUM-TITLE"
-msgstr ""
+msgstr "艺术家-专辑-标题"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:355
 msgid "GENRE-ARTIST-ALBUM"
-msgstr ""
+msgstr "流派-艺术家-专辑"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:367
 #: ../plugins/magnatune/magnatune-treestore.vala:43
@@ -112,9 +112,8 @@ msgid "Videos"
 msgstr "视频"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
-#, fuzzy
 msgid "Add or Remove media"
-msgstr "添加或删除媒体(_A)"
+msgstr "添加或删除媒体"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
@@ -133,7 +132,6 @@ msgid "Remove"
 msgstr "移除"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
-#, fuzzy
 msgid "Do full rescan"
 msgstr "全部重新扫描"
 
@@ -186,9 +184,8 @@ msgid "Show picture on hover album image"
 msgstr "当悬停在专辑封面上时显示图片"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-#, fuzzy
 msgid "Use Compact Menu"
-msgstr "使用应用程序菜单"
+msgstr "使用紧凑菜单"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
@@ -276,49 +273,45 @@ msgid "Volume"
 msgstr "音量"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:114
-#, fuzzy
 msgid "Add Media"
 msgstr "添加媒体"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
 msgid "Skip"
-msgstr ""
+msgstr "跳过"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:121
 msgid "Done"
-msgstr ""
+msgstr "完成"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:129
 msgid "Please wait while media is added to your library!"
-msgstr ""
+msgstr "当往库中添加媒体时请稍等片刻！"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:130
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
+msgstr "您可以选择”%s“开始音乐聆听之旅"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:136
-#, fuzzy
 msgid "Add more media folders"
-msgstr "添加本地文件夹"
+msgstr "添加更多媒体文件夹"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:159
-#, fuzzy
 msgid "Media Folders:"
-msgstr "媒体播放器"
+msgstr "媒体文件夹："
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:197
 msgid "Welcome to Xnoise!\n"
-msgstr ""
+msgstr "欢迎使用 Xnoise！\n"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
 msgid "This is the first time you start xnoise."
-msgstr ""
+msgstr "这是您第一次启动 xnoise 哟。"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
-#, fuzzy
 msgid "Do you want to import media into your library?"
-msgstr "这是您第一次启动 xnoise。您希望将媒体导入到库中吗？"
+msgstr "您希望将媒体导入到库中吗？"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -362,19 +355,16 @@ msgid ""
 msgstr "当导入媒体时请等待。或者如果不想等待，直接取消。"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:136
-#, fuzzy
 msgid "Album data"
-msgstr "更改专辑名称"
+msgstr "专辑数据"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:139
-#, fuzzy
 msgid "Please enter new album data."
-msgstr "更改专辑名称"
+msgstr "请输入新专辑数据。"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:141
-#, fuzzy
 msgid "Year:"
-msgstr "年份"
+msgstr "年份："
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -421,19 +411,16 @@ msgstr "轨段编号"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
-#, fuzzy
 msgid "Edit data for track"
-msgstr "编辑音轨元数据"
+msgstr "编辑音轨数据"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
-#, fuzzy
 msgid "Change album data"
-msgstr "更改专辑名称"
+msgstr "更改专辑数据"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
-#, fuzzy
 msgid "Change artist data"
-msgstr "更改艺术家名称"
+msgstr "更改艺术家数据"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:54
@@ -617,12 +604,11 @@ msgstr "在网络浏览器中打开 FAQ(_O)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "快捷键(_K)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:245
-#, fuzzy
 msgid "_Open Keyboard Shortcuts in web browser"
-msgstr "在网络浏览器中打开 FAQ(_O)"
+msgstr "在网络浏览器中打开快捷键(_O)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:246
 msgid "_Config"
@@ -638,7 +624,7 @@ msgstr "全屏显示视频(_V)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:330
 msgid "Show _Album Art view"
-msgstr ""
+msgstr "显示专辑封面(_A)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:543
 #, c-format
@@ -652,25 +638,23 @@ msgstr "恢复播放列表中的 %u 音轨。数量巨大，xnoise 启动时速�
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:756
 msgid "Playback mode: "
-msgstr ""
+msgstr "播放模式："
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:738
 msgid "No repeat, one after another"
-msgstr ""
+msgstr "不重复，连续播放"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
-#, fuzzy
 msgid "Repeat single track"
 msgstr "单曲循环"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:750
-#, fuzzy
 msgid "Repeat all"
 msgstr "重复全部"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:756
 msgid "Random playlist track playing"
-msgstr ""
+msgstr "随机列表播放"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1354
 msgid "Enter the URL for playing"
@@ -681,9 +665,8 @@ msgid "Select media file"
 msgstr "选择媒体文件"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1731
-#, fuzzy
 msgid "Open equalizer"
-msgstr "使用均衡器"
+msgstr "打开均衡器"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1746
 msgid "Equalizer"
@@ -691,11 +674,11 @@ msgstr "均衡器"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1774
 msgid "Toggle visibility of album art view"
-msgstr ""
+msgstr "切换专辑封面视图"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1776
 msgid "<Ctrl+B>"
-msgstr ""
+msgstr "<Ctrl+B>"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1816
@@ -705,12 +688,12 @@ msgstr "显示应用程序主菜单"
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1840
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1901
 msgid "Select search with <Ctrl-F>"
-msgstr ""
+msgstr "使用 <Ctrl-F> 选择搜索"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1842
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1903
 msgid "Remove search filter with <Ctrl-D>"
-msgstr ""
+msgstr "使用 <Ctrl-D> 移除搜索过滤器"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:148
 msgid "Dance"
@@ -722,7 +705,7 @@ msgstr "流行乐"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:156
 msgid "Techno"
-msgstr ""
+msgstr "电子乐"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:160
 msgid "Club"
