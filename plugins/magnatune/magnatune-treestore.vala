@@ -255,7 +255,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         TreeIter child;
         for(int i = (this.iter_n_children(iter) -2); i >= 0 ; i--) {
             this.iter_nth_child(out child, iter, i);
-            this.remove(child);
+            this.remove(ref child);
         }
     }
     
@@ -266,7 +266,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             this.iter_nth_child(out child, iter, i);
             this.get(child, Column.ITEM, out item);
             if(item.type == ItemType.LOADER) {
-                this.remove(child);
+                this.remove(ref child);
                 return;
             }
         }

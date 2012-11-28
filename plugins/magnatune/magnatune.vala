@@ -147,7 +147,7 @@ public class MagnatuneSettings : Gtk.Box {
         else {
             feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
         }
-        if(magn_plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
         b.clicked.connect(on_entry_changed);
         on_entry_changed();
@@ -155,9 +155,9 @@ public class MagnatuneSettings : Gtk.Box {
 
     //show if user is logged in
     private void do_user_feedback() {
-        if(magn_plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return;
         print("do_user_feedback\n");
         if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
@@ -175,7 +175,7 @@ public class MagnatuneSettings : Gtk.Box {
     
     private void on_entry_changed() {
         print("take over entry\n");
-        if(magn_plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
         string username = EMPTYSTRING, password = EMPTYSTRING;
         if(user_entry.text != null)
@@ -189,7 +189,7 @@ public class MagnatuneSettings : Gtk.Box {
             username_last = username;
             password_last = password;
             Idle.add( () => {
-                if(magn_plugin.cancel.is_cancelled())
+                if(MagnatunePlugin.cancel.is_cancelled())
                     return false;
                 Xnoise.Params.write_all_parameters_to_file();
                 return false;
@@ -205,9 +205,9 @@ public class MagnatuneSettings : Gtk.Box {
     }
     
     private void setup_widgets() {
-        if(magn_plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return;
         var headline_label = new Gtk.Label("");
         headline_label.margin_top    = 5;

@@ -38,10 +38,10 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     private Xnoise.Action menu_add_from_playlist;
     private Xnoise.Action menu_add_from_extern;
     
-    private const string ainfo = _("Add all tracks to tracklist");
-    private const string aname = "HandlerAddAllToTracklistAction";
+    private static const string ainfo = _("Add all tracks to tracklist");
+    private static const string aname = "HandlerAddAllToTracklistAction";
     
-    private const string name = "HandlerAddAllToTracklist";
+    private static const string name = "HandlerAddAllToTracklist";
     private unowned Main xn;
     
     public HandlerAddAllToTracklist() {
@@ -50,22 +50,22 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         
         menu_add = new Action(); 
         menu_add.action = on_menu_add;
-        menu_add.info = this.ainfo;
-        menu_add.name = this.aname;
+        menu_add.info = ainfo;
+        menu_add.name = aname;
         menu_add.stock_item = Gtk.Stock.DND_MULTIPLE;
         menu_add.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         menu_add_from_playlist = new Action(); 
         menu_add_from_playlist.action = on_menu_add_from_playlist;
-        menu_add_from_playlist.info = this.ainfo;
-        menu_add_from_playlist.name = this.aname;
+        menu_add_from_playlist.info = ainfo;
+        menu_add_from_playlist.name = aname;
         menu_add_from_playlist.stock_item = Gtk.Stock.DND_MULTIPLE;
         menu_add_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY;
 
         menu_add_from_extern = new Action(); 
         menu_add_from_extern.action = on_menu_add_from_extern;
-        menu_add_from_extern.info = this.ainfo;
-        menu_add_from_extern.name = this.aname;
+        menu_add_from_extern.info = ainfo;
+        menu_add_from_extern.name = aname;
         menu_add_from_extern.stock_item = Gtk.Stock.DND_MULTIPLE;
         menu_add_from_extern.context = ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");

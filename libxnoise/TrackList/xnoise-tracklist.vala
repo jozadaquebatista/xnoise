@@ -226,14 +226,14 @@ public class Xnoise.TrackList : TreeView, IParams {
         
         Gtk.drag_source_set(this,
                             Gdk.ModifierType.BUTTON1_MASK,
-                            this.src_target_entries,
+                            src_target_entries,
                             Gdk.DragAction.COPY|
                             Gdk.DragAction.MOVE
                             );
         
         Gtk.drag_dest_set(this,
                           Gtk.DestDefaults.ALL,
-                          this.dest_target_entries,
+                          dest_target_entries,
                           Gdk.DragAction.COPY|
                           Gdk.DragAction.DEFAULT
                           );
@@ -519,7 +519,7 @@ public class Xnoise.TrackList : TreeView, IParams {
         this.unset_rows_drag_dest();
         Gtk.drag_dest_set(this,
                           Gtk.DestDefaults.ALL,
-                          this.dest_target_entries,
+                          dest_target_entries,
                           Gdk.DragAction.COPY|
                           Gdk.DragAction.MOVE
                           );

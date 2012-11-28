@@ -182,7 +182,7 @@ public class Xnoise.Application : GLib.Application {
             Gtk.init(ref args);
             Gst.init(ref args);
             Xnoise.Application.xn = Xnoise.Main.instance;
-            Xnoise.Main.instance.app = this;
+            Xnoise.Main.app = this;
             main_window.show_all();
         }
         else {

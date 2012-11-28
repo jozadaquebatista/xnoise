@@ -698,7 +698,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 }
                 return (owned)val;
         }
-        return (owned)val;
     }
     
 //    public Item[] get_artists(string searchtext = EMPTYSTRING,
@@ -944,7 +943,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //            default:
 //                break;
         }
-        return (owned)val;
     }
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE_AND_SEARCH =
@@ -1059,7 +1057,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //            default:
 //                break;
         }
-        return (owned)val;
     }
 
     private static const string STMT_GET_VIDEOITEM_BY_ID =

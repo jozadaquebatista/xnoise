@@ -324,9 +324,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
                     TreeIter parent_iter;
                     m.get_iter(out parent_iter, pc);
                     if(m.iter_n_children(parent_iter) == 1)
-                        ((TreeStore)m).remove(parent_iter);
+                        ((TreeStore)m).remove(ref parent_iter);
                     else
-                        ((TreeStore)m).remove(i);
+                        ((TreeStore)m).remove(ref i);
                     DockableMedia? d = dockable_media_sources.lookup(name);
                     if(d != null) {
                         d.remove_main_view();

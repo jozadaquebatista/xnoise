@@ -431,14 +431,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         Gtk.drag_dest_set(
             videoscreen,
             Gtk.DestDefaults.MOTION,
-            this.target_list,
+            target_list,
             Gdk.DragAction.COPY|
             Gdk.DragAction.DEFAULT
         );
         Gtk.drag_dest_set(
             lyricsView,
             Gtk.DestDefaults.MOTION,
-            this.target_list,
+            target_list,
             Gdk.DragAction.COPY|
             Gdk.DragAction.DEFAULT
         );
@@ -1640,7 +1640,7 @@ print("on close 2\n");
             
             this.mainvbox = gb.get_object("mainvbox") as Gtk.Box;
             this.title = "xnoise media player";
-            this.set_default_icon_name("xnoise");
+            set_default_icon_name("xnoise");
             
             this.infobox = gb.get_object("infobox") as Gtk.Box;
             
@@ -1937,7 +1937,6 @@ print("on close 2\n");
             //Fullscreen window
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
             this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
-            this.fullscreenwindow.set_default_icon_name("xnoise");
             this.fullscreenwindow.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
             this.fullscreenwindow.realize();
 

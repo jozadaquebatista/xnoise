@@ -32,27 +32,27 @@
 // provides the right Action for the given ActionContext/ItemType
 private class Xnoise.HandlerShowInFileManager : ItemHandler {
     private Action a;
-    private const string ainfo = _("Show in parent folder");
-    private const string aname = "A HandlerShowInFileManagername";
+    private static const string ainfo = _("Show in parent folder");
+    private static const string aname = "A HandlerShowInFileManagername";
 
     private Action b;
-    private const string binfo = _("Show in parent folder");
-    private const string bname = "B HandlerShowInFileManagername";
+    private static const string binfo = _("Show in parent folder");
+    private static const string bname = "B HandlerShowInFileManagername";
     
-    private const string name = "HandlerShowInFileManager";
+    private static const string name = "HandlerShowInFileManager";
     
     public HandlerShowInFileManager() {
         a = new Action();
         a.action = show_uri;
-        a.info = this.ainfo;
-        a.name = this.aname;
+        a.info = ainfo;
+        a.name = aname;
         a.stock_item = Gtk.Stock.OPEN;
         a.context = ActionContext.TRACKLIST_MENU_QUERY;
 
         b = new Action();
         b.action = show_uri;
-        b.info = this.binfo;
-        b.name = this.bname;
+        b.info = binfo;
+        b.name = bname;
         b.stock_item = Gtk.Stock.OPEN;
         b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         

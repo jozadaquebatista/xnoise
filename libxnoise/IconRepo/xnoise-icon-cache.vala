@@ -67,7 +67,7 @@ private class Xnoise.IconCache : GLib.Object {
                 cache = new HashTable<string,Gdk.Pixbuf>(str_hash, str_equal);
             }
         }
-        this.cancellable = global.main_cancellable;
+        this.cancellable = GlobalAccess.main_cancellable;
         this.dir = dir;
         this.icon_size = icon_size;
         try {

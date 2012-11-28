@@ -108,13 +108,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
 
         Gtk.drag_source_set(this,
                             Gdk.ModifierType.BUTTON1_MASK,
-                            this.src_target_entries,
+                            src_target_entries,
                             Gdk.DragAction.COPY
                             );
 
         Gtk.drag_dest_set(this,
                           Gtk.DestDefaults.ALL,
-                          this.dest_target_entries,
+                          dest_target_entries,
                           Gdk.DragAction.COPY
                           );
         
@@ -412,7 +412,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.unset_rows_drag_dest();
         Gtk.drag_dest_set(this,
                           Gtk.DestDefaults.ALL,
-                          this.dest_target_entries,
+                          dest_target_entries,
                           Gdk.DragAction.COPY|
                           Gdk.DragAction.MOVE
                           );

@@ -133,7 +133,6 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             okbutton.clicked.connect(on_ok_button_clicked);
             cancelbutton.clicked.connect(on_cancel_button_clicked);
             
-            this.dialog.set_default_icon_name("xnoise");
             this.dialog.set_title(_("Album data"));
             switch(item.type) {
                 case ItemType.COLLECTION_CONTAINER_ALBUM:

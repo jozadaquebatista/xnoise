@@ -32,16 +32,16 @@
 // provides the right Action for the given ActionContext/ItemType
 internal class Xnoise.HandlerRemoveTrack : ItemHandler {
     private Action a;
-    private const string ainfo = _("Remove selected track");
-    private const string aname = "HandlerRemoveTrack";
+    private static const string ainfo = _("Remove selected track");
+    private static const string aname = "HandlerRemoveTrack";
     
-    private const string name = "HandlerRemoveTrack";
+    private static const string name = "HandlerRemoveTrack";
     
     public HandlerRemoveTrack() {
         a = new Action();
         a.action     = remove_track_from_tracklist;
-        a.info       = this.ainfo;
-        a.name       = this.aname;
+        a.info       = ainfo;
+        a.name       = aname;
         a.stock_item = Gtk.Stock.DELETE;
         a.context    = ActionContext.TRACKLIST_MENU_QUERY;
         

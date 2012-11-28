@@ -38,16 +38,16 @@ using Xnoise;
 // provides the right Action for the given ActionContext/ItemType
 internal class Xnoise.HandlerMoveToTrash : ItemHandler {
     private Action a;
-    private const string ainfo = _("Move to trash");
-    private const string aname = "A HandlerMoveToTrash";
+    private static const string ainfo = _("Move to trash");
+    private static const string aname = "A HandlerMoveToTrash";
     
-    private const string name = "HandlerMoveToTrash";
+    private static const string name = "HandlerMoveToTrash";
     
     public HandlerMoveToTrash() {
         a = new Action();
         a.action = trash_item;
-        a.info = this.ainfo;
-        a.name = this.aname;
+        a.info = ainfo;
+        a.name = aname;
         a.stock_item = Gtk.Stock.DELETE;
         a.context = ActionContext.TRACKLIST_MENU_QUERY;
     }

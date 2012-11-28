@@ -34,24 +34,19 @@ public class Xnoise.Main : GLib.Object {
     private static Main _instance;
     private unowned Thread _thread;
     internal static Xnoise.Dbus dbus;
-//    private int _thread_id = 0;
     internal static bool show_plugin_state;
     internal static bool no_plugins;
     internal static bool no_dbus;
     
     internal static unowned Xnoise.Application app;
     
-//    public int thread_id { get { return _thread_id; } }
 
     internal bool use_notifications { get; set; }
 
     public Main() {
-        //Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
         _instance = this;
         
-//        _thread_id = (int)Linux.gettid();
         _thread = Thread.self<int>();
-        //message( "background worker thread %d", (int)Linux.gettid() );
         
         bool is_first_start;
         Xnoise.initialize(out is_first_start);
@@ -215,12 +210,12 @@ public class Xnoise.Main : GLib.Object {
     private static bool preparing_quit = false;
     
     private bool quit_job(Worker.Job job) {
-        this.app.release();
+        app.release();
         return false;
     }
     
     public void quit() {
-        global.main_cancellable.cancel();
+        GlobalAccess.main_cancellable.cancel();
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;
         Source.remove(cyclic_save_source);
@@ -228,7 +223,7 @@ public class Xnoise.Main : GLib.Object {
         var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
         io_worker.push_job(jx);
         jx.finished.connect( () => {
-            this.app.release();
+            app.release();
             preparing_quit = false;
         });
         print ("closing...\n");
@@ -243,7 +238,7 @@ public class Xnoise.Main : GLib.Object {
         Timeout.add(100, () => {
             if(preparing_quit)
                 return true;
-            this.app.release();
+            app.release();
             return false;
         });
     }

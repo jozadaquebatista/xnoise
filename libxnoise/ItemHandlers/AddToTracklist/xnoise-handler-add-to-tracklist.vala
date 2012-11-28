@@ -40,21 +40,21 @@ using Xnoise.Resources;
 // has one or more Actions
 internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     private Action add;
-    private const string bname = "HandlerAddToTracklistAction1";
+    private static const string bname = "HandlerAddToTracklistAction1";
     
     private Xnoise.Action menu_add_from_playlist;
     private Xnoise.Action activated_from_playlist;
     private Xnoise.Action menu_add_from_extern;
 
     private Action menu_add;
-    private const string ainfo = _("Add to tracklist");
-    private const string aname = "HandlerAddToTracklistAction2";
+    private static const string ainfo = _("Add to tracklist");
+    private static const string aname = "HandlerAddToTracklistAction2";
     
     private Action request_add;
-    private const string cinfo = _("Add to tracklist");
-    private const string cname = "HandlerAddToTracklistAction3";
+    private static const string cinfo = _("Add to tracklist");
+    private static const string cname = "HandlerAddToTracklistAction3";
     
-    private const string name = "HandlerAddToTracklist";
+    private static const string name = "HandlerAddToTracklist";
     private unowned Main xn;
     
     public HandlerAddToTracklist() {
@@ -64,42 +64,42 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         add = new Action(); 
         add.action = on_add_activated;
         add.info = EMPTYSTRING;
-        add.name = this.bname;
+        add.name = bname;
         add.context = ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED;
         
         menu_add = new Action(); 
         menu_add.action = on_menu_add;
-        menu_add.info = this.ainfo;
-        menu_add.name = this.aname;
+        menu_add.info = ainfo;
+        menu_add.name = aname;
         menu_add.stock_item = Gtk.Stock.ADD;
         menu_add.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");
         
         menu_add_from_playlist = new Action(); 
         menu_add_from_playlist.action = on_menu_add_from_playlist;
-        menu_add_from_playlist.info = this.ainfo;
-        menu_add_from_playlist.name = this.aname;
+        menu_add_from_playlist.info = ainfo;
+        menu_add_from_playlist.name = aname;
         menu_add_from_playlist.stock_item = Gtk.Stock.ADD;
         menu_add_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY;
         
         activated_from_playlist = new Action(); 
         activated_from_playlist.action = on_activated_from_playlist;
-        activated_from_playlist.info = this.ainfo;
-        activated_from_playlist.name = this.aname;
+        activated_from_playlist.info = ainfo;
+        activated_from_playlist.name = aname;
         activated_from_playlist.stock_item = Gtk.Stock.MEDIA_PLAY;
         activated_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED;
 
         menu_add_from_extern = new Action(); 
         menu_add_from_extern.action = on_menu_add_from_extern;
-        menu_add_from_extern.info = this.ainfo;
-        menu_add_from_extern.name = this.aname;
+        menu_add_from_extern.info = ainfo;
+        menu_add_from_extern.name = aname;
         menu_add_from_extern.stock_item = Gtk.Stock.ADD;
         menu_add_from_extern.context = ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY;
         
         request_add = new Action(); 
         request_add.action = on_request;
-        request_add.info = this.cinfo;
-        request_add.name = this.cname;
+        request_add.info = cinfo;
+        request_add.name = cname;
         request_add.context = ActionContext.REQUESTED;
 
     }

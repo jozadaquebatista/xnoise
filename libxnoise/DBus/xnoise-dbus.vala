@@ -222,7 +222,7 @@ private class PlayerDbusService : GLib.Object {
         changed_properties = null;
         
         Variant[] arg_tuple = {
-            new Variant("s", this.INTERFACE_NAME),
+            new Variant("s", PlayerDbusService.INTERFACE_NAME),
             builder.end(),
             invalidated_builder.end()
         };

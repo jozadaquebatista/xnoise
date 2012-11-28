@@ -71,7 +71,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         try {
             if(IconTheme.get_default().has_icon("xn-albumart"))
                 a_art_pixb = IconTheme.get_default().load_icon("xn-albumart",
-                                                           icons_model.ICONSIZE,
+                                                           IconsModel.ICONSIZE,
                                                            IconLookupFlags.FORCE_SIZE);
         }
         catch(Error e) {
@@ -80,7 +80,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         if(icon_cache == null) {
             File album_image_dir =
                 File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
-            icon_cache = new IconCache(album_image_dir, icons_model.ICONSIZE, a_art_pixb);
+            icon_cache = new IconCache(album_image_dir, IconsModel.ICONSIZE, a_art_pixb);
         }
         icon_cache.notify["loading-in-progress"].connect( () => {
             if(icon_cache.loading_in_progress)
@@ -89,7 +89,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 in_loading = false;
         });
         icons_model = new IconsModel(this);
-        this.set_item_width(icons_model.ICONSIZE);
+        this.set_item_width(IconsModel.ICONSIZE);
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
             icons_model.cache_ready = true;

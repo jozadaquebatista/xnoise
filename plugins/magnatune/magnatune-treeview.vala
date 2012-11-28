@@ -65,11 +65,11 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         setup_view();
         Idle.add(this.populate_model);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
         Gtk.drag_source_set(this,
                             Gdk.ModifierType.BUTTON1_MASK,
-                            this.src_target_entries,
+                            src_target_entries,
                             Gdk.DragAction.COPY
                             );
         
@@ -526,7 +526,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     }
 
     private MagnatuneTreeStore? create_model() {
-        return new MagnatuneTreeStore(this.dock, this, this.plugin.cancel);
+        return new MagnatuneTreeStore(this.dock, this, MagnatunePlugin.cancel);
     }
 
     private bool in_update_view = false;
@@ -739,7 +739,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     }
     
     private bool populate_model() {
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
         mag_model.filter();
         return false;

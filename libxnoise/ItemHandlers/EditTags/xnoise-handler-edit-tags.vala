@@ -32,51 +32,51 @@ using Gtk;
 
 internal class Xnoise.HandlerEditTags : ItemHandler {
     private Action edit_title_tracklist;
-    private const string tltitleinfo = _("Edit data for track");
-    private const string tltitlename = "HandlerEditTagsActionTitleTL";
+    private static const string tltitleinfo = _("Edit data for track");
+    private static const string tltitlename = "HandlerEditTagsActionTitleTL";
 
     private Action edit_title_mediabrowser;
-    private const string titleinfo = _("Edit data for track");
-    private const string titlename = "HandlerEditTagsActionTitle";
+    private static const string titleinfo = _("Edit data for track");
+    private static const string titlename = "HandlerEditTagsActionTitle";
     
     private Action edit_album_mediabrowser;
-    private const string albuminfo = _("Change album data");
-    private const string albumname = "HandlerEditTagsActionAlbum";
+    private static const string albuminfo = _("Change album data");
+    private static const string albumname = "HandlerEditTagsActionAlbum";
     
     private Action edit_artist_mediabrowser;
-    private const string artistinfo = _("Change artist data");
-    private const string artistname = "HandlerEditTagsActionArtist";
+    private static const string artistinfo = _("Change artist data");
+    private static const string artistname = "HandlerEditTagsActionArtist";
     
-    private const string name = "HandlerEditTags";
+    private static const string name = "HandlerEditTags";
     
     
     public HandlerEditTags() {
         
         edit_title_mediabrowser = new Action(); 
         edit_title_mediabrowser.action = on_edit_title_mediabrowser;
-        edit_title_mediabrowser.info = this.titleinfo;
-        edit_title_mediabrowser.name = this.titlename;
+        edit_title_mediabrowser.info = titleinfo;
+        edit_title_mediabrowser.name = titlename;
         edit_title_mediabrowser.stock_item = Gtk.Stock.EDIT;
         edit_title_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_album_mediabrowser = new Action(); 
         edit_album_mediabrowser.action = on_edit_album_mediabrowser;
-        edit_album_mediabrowser.info = this.albuminfo;
-        edit_album_mediabrowser.name = this.albumname;
+        edit_album_mediabrowser.info = albuminfo;
+        edit_album_mediabrowser.name = albumname;
         edit_album_mediabrowser.stock_item = Gtk.Stock.EDIT;
         edit_album_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_artist_mediabrowser = new Action(); 
         edit_artist_mediabrowser.action = on_edit_artist_mediabrowser;
-        edit_artist_mediabrowser.info = this.artistinfo;
-        edit_artist_mediabrowser.name = this.artistname;
+        edit_artist_mediabrowser.info = artistinfo;
+        edit_artist_mediabrowser.name = artistname;
         edit_artist_mediabrowser.stock_item = Gtk.Stock.EDIT;
         edit_artist_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_title_tracklist = new Action(); 
         edit_title_tracklist.action = on_edit_title_tracklist;
-        edit_title_tracklist.info = this.tltitleinfo;
-        edit_title_tracklist.name = this.tltitlename;
+        edit_title_tracklist.info = tltitleinfo;
+        edit_title_tracklist.name = tltitlename;
         edit_title_tracklist.stock_item = Gtk.Stock.EDIT;
         edit_title_tracklist.context = ActionContext.TRACKLIST_MENU_QUERY;
 

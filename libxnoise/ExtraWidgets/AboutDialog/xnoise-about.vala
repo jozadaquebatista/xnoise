@@ -42,7 +42,7 @@ private class Xnoise.AboutDialog : Gtk.AboutDialog {
         this.set_transient_for(main_window);
         this.logo_icon_name = PROGRAM_NAME;
         
-        this.set_default_icon_name(PROGRAM_NAME);
+        set_default_icon_name(PROGRAM_NAME);
         this.set_logo_icon_name(PROGRAM_NAME);
 
         this.program_name     = PROGRAM_NAME;

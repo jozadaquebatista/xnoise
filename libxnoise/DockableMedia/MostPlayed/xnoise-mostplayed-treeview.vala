@@ -103,7 +103,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         });
         Gtk.drag_source_set(this,
                             Gdk.ModifierType.BUTTON1_MASK,
-                            this.src_target_entries,
+                            src_target_entries,
                             Gdk.DragAction.COPY
         );
         this.drag_begin.connect(this.on_drag_begin);

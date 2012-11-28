@@ -32,16 +32,16 @@
 // provides the right Action for the given ActionContext/ItemType
 internal class Xnoise.HandlerPlayItem : ItemHandler {
     private Action a;
-    private const string ainfo = _("Play");
-    private const string aname = "A HandlerPlayItemname";
+    private static const string ainfo = _("Play");
+    private static const string aname = "A HandlerPlayItemname";
     
-    private const string name = "HandlerPlayItem";
+    private static const string name = "HandlerPlayItem";
     
     public HandlerPlayItem() {
         a = new Action();
         a.action = play_uri;
-        a.info = this.ainfo;
-        a.name = this.aname;
+        a.info = ainfo;
+        a.name = aname;
         a.context = ActionContext.NONE;
         
         //print("constructed HandlerPlayItem\n");

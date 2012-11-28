@@ -68,7 +68,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     public IconsModel(AlbumArtView view) {
         this.set_column_types(col_types);
         this.view = view;
-        logo = view.icon_cache.album_art;
+        logo = AlbumArtView.icon_cache.album_art;
         if(logo.get_width() != ICONSIZE)
             logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
         
@@ -180,7 +180,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             Gdk.Pixbuf? art = null;
             File? f = get_albumimage_for_artistalbum(ad.artist, ad.album, "extralarge");
             if(f != null)
-                art = view.icon_cache.get_image(f.get_path());
+                art = AlbumArtView.icon_cache.get_image(f.get_path());
             
             if(art == null)
                 art = logo;

@@ -67,7 +67,7 @@ private class MagnatuneWidget : Gtk.Box {
         public bool is_uptodate(Cancellable cancel) {
             if(cancel == null || cancel.is_cancelled())
                 return false;
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return false;
             string? wget_install_path = Environment.find_program_in_path("wget");
             if(wget_install_path != null) {
@@ -122,9 +122,9 @@ private class MagnatuneWidget : Gtk.Box {
     }
     
     private void load_db() {
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return;
         File dbf = File.new_for_path(CONVERTED_DB);
         if(!dbf.query_exists()) {
@@ -144,18 +144,18 @@ private class MagnatuneWidget : Gtk.Box {
     
     private bool check_online_hash_job(Worker.Job job) {
         // check hash
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
         string old_hash = (string)job.get_arg("old_hash");
         var cd = new MagnatuneChangeDetector(old_hash);
-        if(cd.is_uptodate(this.plugin.cancel)) {
+        if(cd.is_uptodate(MagnatunePlugin.cancel)) {
             print("magnatune database is up to date\n");
             database_available = true;
             new_hash = cd.new_hash;
            Timeout.add_seconds(1, () => {
-                if(this.plugin.cancel.is_cancelled())
+                if(MagnatunePlugin.cancel.is_cancelled())
                     return false;
                 add_tree();
                 return false;
@@ -163,21 +163,21 @@ private class MagnatuneWidget : Gtk.Box {
             return true;
         }
         else {
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             print("magnatune database is NOT up to date.\n");
             File fx = File.new_for_path(CONVERTED_DB);
             try {
-                if(fx.query_exists(this.plugin.cancel))
-                    fx.delete(this.plugin.cancel);
+                if(fx.query_exists(MagnatunePlugin.cancel))
+                    fx.delete(MagnatunePlugin.cancel);
             }
             catch(Error e) {
                 print("##5%s\n", e.message);
             }
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             new_hash = cd.new_hash;
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             var xjob = new Worker.Job(Worker.ExecutionType.ONCE, copy_db_job);
             io_worker.push_job(xjob);
@@ -186,17 +186,22 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool copy_db_job(Worker.Job job) {
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
-        bool res = false;
         string? wget_install_path = Environment.find_program_in_path("wget");
         if(wget_install_path != null) {
             File mag_db = File.new_for_uri("http://he3.magnatune.com/info/sqlite_magnatune.db.gz");
             File d   = File.new_for_path("/tmp/xnoise_magnatune_db_zipped");
-            if(d.query_exists(this.plugin.cancel))
-                d.delete(this.plugin.cancel);
+            if(d.query_exists(MagnatunePlugin.cancel)) {
+                try {
+                    d.delete(MagnatunePlugin.cancel);
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                }
+            }
             try {
                 string[] argv = {
                    wget_install_path,
@@ -218,21 +223,21 @@ private class MagnatuneWidget : Gtk.Box {
                 print("%s\n", e.message);
                 return false;
             }
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return false;
-            if(d.query_exists(this.plugin.cancel)) {
+            if(d.query_exists(MagnatunePlugin.cancel)) {
                 Idle.add(() => {
-                    if(this.plugin.cancel.is_cancelled())
+                    if(MagnatunePlugin.cancel.is_cancelled())
                         return false;
                     label.label = _("download finished...");
                     Idle.add( () => {
-                        if(this.plugin.cancel.is_cancelled())
+                        if(MagnatunePlugin.cancel.is_cancelled())
                             return false;
                         label.label = _("decompressing...");
                         var decomp_job = new Worker.Job(Worker.ExecutionType.ONCE, decompress_db_job);
-                        if(this.plugin.cancel.is_cancelled())
+                        if(MagnatunePlugin.cancel.is_cancelled())
                             return false;
                         io_worker.push_job(decomp_job);
                         return false;
@@ -245,7 +250,7 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool decompress_db_job(Worker.Job job) {
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
         File source = File.new_for_path(ZIPPED_DB);
         File dest   = File.new_for_path(UNZIPPED_DB);
@@ -255,9 +260,9 @@ private class MagnatuneWidget : Gtk.Box {
         FileOutputStream dst_stream = null;
         ConverterOutputStream conv_stream = null;
         try {
-            if(dest.query_exists(this.plugin.cancel))
-                dest.delete(this.plugin.cancel);
-            src_stream = source.read(this.plugin.cancel);
+            if(dest.query_exists(MagnatunePlugin.cancel))
+                dest.delete(MagnatunePlugin.cancel);
+            src_stream = source.read(MagnatunePlugin.cancel);
             dst_stream = dest.replace(null, false, 0);
             if(dst_stream == null) {
                 print("Could not create output stream!\n");
@@ -268,9 +273,9 @@ private class MagnatuneWidget : Gtk.Box {
             print("Error decompressing! %s\n", e.message);
             return false;
         }
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
         var zlc = new ZlibDecompressor(ZlibCompressorFormat.GZIP);
         conv_stream = new ConverterOutputStream(dst_stream, zlc);
@@ -282,7 +287,7 @@ private class MagnatuneWidget : Gtk.Box {
             return false;
         }
         Idle.add(() => {
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             label.label = _("decompressing finished...");
             var conv_job = new Worker.Job(Worker.ExecutionType.ONCE, convert_db_job);
@@ -298,17 +303,17 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool convert_db_job(Worker.Job job) {
-        if(this.plugin.cancel.is_cancelled())
+        if(MagnatunePlugin.cancel.is_cancelled())
             return false;
-        if(global.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
         Idle.add(() => {
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             label.label = _("Please wait while\nconverting database.");
             return false;
         });
-        var conv = new MagnatuneDatabaseConverter(this.plugin.cancel);
+        var conv = new MagnatuneDatabaseConverter(MagnatunePlugin.cancel);
         conv.progress.connect(on_db_conversion_progress);
         conv.move_data();
         conv.progress.disconnect(on_db_conversion_progress);
@@ -316,7 +321,7 @@ private class MagnatuneWidget : Gtk.Box {
         File fx = File.new_for_path(CONVERTED_DB);
         if(fx.query_exists(null)) {
             Idle.add( () => {
-                if(this.plugin.cancel.is_cancelled())
+                if(MagnatunePlugin.cancel.is_cancelled())
                     return false;
                 database_available = true;
                 add_tree();
@@ -328,14 +333,14 @@ private class MagnatuneWidget : Gtk.Box {
         }
         try {
             var source = File.new_for_path(UNZIPPED_DB);
-            source.delete(this.plugin.cancel);
+            source.delete(MagnatunePlugin.cancel);
         }
         catch(Error e) {
         }
         Idle.add(() => {
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return false;
             if(new_hash != null)
                 Params.set_string_value("magnatune_collection_hash", new_hash);
@@ -348,9 +353,9 @@ private class MagnatuneWidget : Gtk.Box {
     
     private void on_db_conversion_progress(MagnatuneDatabaseConverter sender, int c) {
         Idle.add(() => {
-            if(this.plugin.cancel.is_cancelled())
+            if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return false;
             label.label = _("Please wait while\nconverting database.\nDone for %d tracks.").printf(c);
             return false;
