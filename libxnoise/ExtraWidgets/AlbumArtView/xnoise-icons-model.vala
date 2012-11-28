@@ -31,6 +31,7 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.Resources;
 
 
 private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
@@ -93,6 +94,47 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 });
             }
         });
+        Idle.add(() => {
+            //print("restore aa sort\n");
+            if(main_window.album_view_sorting == null)
+                return true;
+            string? name = Params.get_string_value("album_art_view_sorting");
+            if(name == null || name == EMPTYSTRING)
+                name = "ARTIST";
+            main_window.album_view_sorting.select(name, false);
+            string? dir = Params.get_string_value("album_art_view_direction");
+            if(dir == null || dir == EMPTYSTRING)
+                dir = "ASC";
+            main_window.album_view_direction.select(dir, false);
+            return false;
+        });
+        Timeout.add_seconds(3, () => {
+            main_window.album_view_sorting.sign_selected.connect( (sender,nme) => {
+                Params.set_string_value("album_art_view_sorting", nme);
+                if(!cache_ready)
+                    return;
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Idle.add( () => {
+                    this.filter();
+                    search_idlesource = 0;
+                    return false;
+                });
+            });
+            main_window.album_view_direction.sign_selected.connect( (sender,nme) => {
+                Params.set_string_value("album_art_view_direction", nme);
+                if(!cache_ready)
+                    return;
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Idle.add( () => {
+                    this.filter();
+                    search_idlesource = 0;
+                    return false;
+                });
+            });
+            return false;
+        });
     }
     
     public bool cache_ready = false;
@@ -126,7 +168,11 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     
     private bool populate_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
-        AlbumData[] ad_list = db_reader.get_all_albums_with_search(global.searchtext);
+        AlbumData[] ad_list = db_reader.get_all_albums_with_search(
+                global.searchtext,
+                main_window.album_view_sorting.get_active_name(),
+                main_window.album_view_direction.get_active_name()
+        );
         foreach(AlbumData ad in ad_list) {
             IconState st = IconState.UNRESOLVED;
             string albumname = Markup.printf_escaped("<b>%s</b>\n", ad.album) + 

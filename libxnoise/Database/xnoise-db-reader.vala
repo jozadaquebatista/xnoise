@@ -1375,17 +1375,26 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //    }
 
     private static const string STMT_GET_ALL_ALBUMS_WITH_SEARCH =
-        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ?";
 
     private static const string STMT_GET_ALL_ALBUMS =
-        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t WHERE ar.id = al.artist AND al.id = t.album AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t WHERE ar.id = al.artist AND al.id = t.album AND t.mediatype = ?";
 
-    public AlbumData[] get_all_albums_with_search(string searchtext) {
+    public AlbumData[] get_all_albums_with_search(string searchtext, 
+                                                  string? sorting = "ARTIST",
+                                                  string? direction = "ASC") {
         AlbumData[] list = {};
         Statement stmt;
+        string? dir = direction;
+        if(dir == null || dir == EMPTYSTRING)
+            dir = "ASC";
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
-            this.db.prepare_v2(STMT_GET_ALL_ALBUMS_WITH_SEARCH, -1, out stmt);
+            string sql = STMT_GET_ALL_ALBUMS_WITH_SEARCH +
+                         (sorting == "ALBUM" ?
+                            " ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 %s".printf(dir) : 
+                            " ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 %s, utf8_lower(al.name) COLLATE CUSTOM01 %s".printf(dir, dir));
+            this.db.prepare_v2(sql, -1, out stmt);
             if(stmt.bind_text(1, st) != Sqlite.OK ||
                stmt.bind_text(2, st) != Sqlite.OK ||
                stmt.bind_text(3, st) != Sqlite.OK ||
@@ -1396,7 +1405,11 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             }
         }
         else {
-            this.db.prepare_v2(STMT_GET_ALL_ALBUMS, -1, out stmt);
+            string sql = STMT_GET_ALL_ALBUMS +
+                         (sorting == "ALBUM" ?
+                            " ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 %s".printf(dir) : 
+                            " ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 %s, utf8_lower(al.name) COLLATE CUSTOM01 %s".printf(dir, dir));
+            this.db.prepare_v2(sql, -1, out stmt);
             if(stmt.bind_int(1, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
                 this.db_error();
                 return (owned)list;

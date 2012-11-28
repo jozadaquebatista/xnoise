@@ -310,14 +310,25 @@ public class MagnatuneSettings : Gtk.Box {
 private class MagMusicStore : GLib.Object {
     private DockableMagnatuneMS msd;
     private unowned MagnatunePlugin plugin;
+    private static uint dock_source;
     
     public MagMusicStore(MagnatunePlugin plugin) {
         this.plugin = plugin;
         msd = new DockableMagnatuneMS(this.plugin);
-        main_window.msw.insert_dockable(msd);
+        if(dock_source != 0)
+            Source.remove(dock_source);
+        dock_source = Idle.add(() => {
+            assert(main_window.msw != null);
+            assert(msd != null);
+            main_window.msw.insert_dockable(msd);
+            dock_source = 0;
+            return false;
+        });
     }
     
     ~MagMusicStore() {
+        if(dock_source != 0)
+            Source.remove(dock_source);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         if(msd == null)
             return;

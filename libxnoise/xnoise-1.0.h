@@ -383,6 +383,16 @@ typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
+#define XNOISE_TYPE_SERIAL_BUTTON (xnoise_serial_button_get_type ())
+#define XNOISE_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButton))
+#define XNOISE_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+#define XNOISE_IS_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_IS_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_SERIAL_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+
+typedef struct _XnoiseSerialButton XnoiseSerialButton;
+typedef struct _XnoiseSerialButtonClass XnoiseSerialButtonClass;
+
 #define XNOISE_TYPE_ALBUM_ART_VIEW (xnoise_album_art_view_get_type ())
 #define XNOISE_ALBUM_ART_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtView))
 #define XNOISE_ALBUM_ART_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtViewClass))
@@ -1209,6 +1219,8 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	XnoiseSerialButton* album_view_sorting;
+	XnoiseSerialButton* album_view_direction;
 	XnoiseAlbumArtView* album_art_view;
 	GtkToggleButton* album_view_toggle;
 	gboolean quit_if_closed;
@@ -1755,7 +1767,7 @@ void xnoise_value_set_album_data (GValue* value, gpointer v_object);
 void xnoise_value_take_album_data (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_album_data (const GValue* value);
 GType xnoise_album_data_get_type (void) G_GNUC_CONST;
-XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
+XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, const gchar* sorting, const gchar* direction, int* result_length1);
 GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);
@@ -1962,6 +1974,7 @@ gboolean xnoise_main_is_same_thread (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
 GType xnoise_album_art_view_get_type (void) G_GNUC_CONST;
 gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
 void xnoise_fullscreen_toolbar_unref (gpointer instance);

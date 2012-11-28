@@ -80,6 +80,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Gtk.Notebook bottom_notebook;
     private AlbumImage albumimage;
     private Gtk.Entry album_search_entry;
+    internal SerialButton album_view_sorting;
+    internal SerialButton album_view_direction;
     internal AlbumArtView album_art_view;
     internal ToggleButton album_view_toggle;
     internal bool quit_if_closed;
@@ -1724,6 +1726,16 @@ print("on close 2\n");
             mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
             hpaned.remove(mbbox01);
             this.hpaned.pack1(mbbox01, false, false);
+            
+            msw = new MediaSoureWidget(this);
+            this.search_entry = msw.search_entry;
+            this.search_entry.set_tooltip_text(_("Select search with <Ctrl-F>") +
+                                               "\n"+
+                                               _("Remove search filter with <Ctrl-D>")
+            );
+            
+            mbbox01.pack_start(msw, true, true, 0);
+            
             //----------------
             
             eqButtonTI = new ToolItem();
@@ -1835,15 +1847,6 @@ print("on close 2\n");
             main_toolbar.can_focus = false;
             
             
-            msw = new MediaSoureWidget(this);
-            this.search_entry = msw.search_entry;
-            this.search_entry.set_tooltip_text(_("Select search with <Ctrl-F>") +
-                                               "\n"+
-                                               _("Remove search filter with <Ctrl-D>")
-            );
-            
-            mbbox01.pack_start(msw, true, true, 0);
-            
             this.search_entry.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event
                 if(p0 == Gtk.EntryIconPosition.SECONDARY) {
@@ -1912,6 +1915,17 @@ print("on close 2\n");
             });
             aa_contr_bx.pack_start(album_search_entry, false, false, 0);
             aa_contr_bx.pack_start(new Label(""), true, true, 0);
+            album_view_sorting = new SerialButton();
+            album_view_sorting.insert("ARTIST", _("Artist"));
+            album_view_sorting.insert("ALBUM" , _("Album") );
+            aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
+            album_view_direction = new SerialButton();
+            album_view_direction.insert("ASC", _("Ascending"));
+            album_view_direction.insert("DESC" , _("Descending") );
+            aa_contr_bx.pack_start(album_view_direction, false, false, 1);
+            var sg01 = new SizeGroup(SizeGroupMode.HORIZONTAL);
+            sg01.add_widget(album_view_sorting);
+            sg01.add_widget(album_view_direction);
             var aabx = new Box(Orientation.VERTICAL, 0);
             aabx.pack_start(aa_contr_bx, false, false, 2);
             var aasw = new ScrolledWindow(null, null);
