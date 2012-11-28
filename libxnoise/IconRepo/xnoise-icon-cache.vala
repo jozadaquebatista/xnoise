@@ -37,7 +37,7 @@ using Xnoise.Utilities;
 
 
 private class Xnoise.IconCache : GLib.Object {
-    private const int SHADOW_SIZE = 22;
+    private const int SHADOW_SIZE = 12;
     private Gdk.Pixbuf? shadow = null;
     private static HashTable<string,Gdk.Pixbuf> cache;
     
@@ -58,7 +58,7 @@ private class Xnoise.IconCache : GLib.Object {
 //    private Gdk.Pixbuf albumart_raw;
     
     
-    public IconCache(File dir, int icon_size = 250, Gdk.Pixbuf dummy_pixbuf) {
+    public IconCache(File dir, int icon_size = 140, Gdk.Pixbuf dummy_pixbuf) {
         assert(io_worker != null);
         assert(cache_worker != null);
         assert(dir.get_path() != null);

@@ -61,7 +61,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     };
 
     private Gdk.Pixbuf? logo = null;
-    public const int ICONSIZE = 250;
+    public const int ICONSIZE = 180;
     private unowned AlbumArtView view;
     
     public IconsModel(AlbumArtView view) {
@@ -77,7 +77,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             if(main_window.album_view_toggle.get_active()) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add(700, () => {
+                search_idlesource = Timeout.add(700, () => { // give the user time for typing
                     this.filter();
                     search_idlesource = 0;
                     return false;
