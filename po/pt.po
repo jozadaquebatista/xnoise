@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 14:33+0100\n"
+"POT-Creation-Date: 2012-11-28 15:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -180,30 +180,37 @@ msgstr "Definições"
 msgid "Media"
 msgstr "Multimédia"
 
+#. var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 msgid "Grid lines in media browser"
 msgstr "Linhas de grelha no explorador"
 
+#. var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Show picture on hover album image"
 msgstr "Mostrar imagem ao passar na capa do album"
 
+#. var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Use Compact Menu"
 msgstr "Utilizar menu compacto"
 
+#. var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
 msgstr "Mostrar o botão \"Parar\""
 
+#. var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Quit on window close"
 msgstr "Sair ao fechar a janela"
 
+#. var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 msgid "Use desktop notifications"
 msgstr "Utilizar notificações do ambiente de trabalho"
 
+#. var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr "Utilizar equalizador"
@@ -217,19 +224,23 @@ msgid "Media browser fontsize"
 msgstr "Tamanho da letra do explorador"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
-msgid "User Interface"
+#, fuzzy
+msgid "User Interface:"
 msgstr "Interface:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-msgid "Lyric Providers"
-msgstr "Fornecedores das letras"
+#, fuzzy
+msgid "Lyrics:"
+msgstr "Letras musicais"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-msgid "Additional"
+#, fuzzy
+msgid "Additional:"
 msgstr "Outros"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
-msgid "Music Stores"
+#, fuzzy
+msgid "Music Stores:"
 msgstr "Lojas de música"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
@@ -811,7 +822,7 @@ msgstr "Legenda #"
 msgid "Audio Track #"
 msgstr "Faixa áudio #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 msgid "(Plugin)"
 msgstr "(Extras)"
 
@@ -1142,6 +1153,9 @@ msgstr "Mostrar loja _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Mostrar loja UbuntuOne"
+
+#~ msgid "Lyric Providers"
+#~ msgstr "Fornecedores das letras"
 
 #~ msgid "no repeat"
 #~ msgstr "sem repetição"

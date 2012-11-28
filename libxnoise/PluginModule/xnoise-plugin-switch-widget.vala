@@ -34,9 +34,9 @@ using Xnoise;
 
 private class Xnoise.PluginSwitch : Gtk.Box {
     private string plugin_name;
-    private Gtk.Switch pswitch;
     private weak PluginModule.Container pc = null;
     private Gtk.SizeGroup label_sizegroup;
+    private CheckButton cb;
     
     public PluginCategory plugin_category { 
         get { return pc.info.category; }
@@ -61,23 +61,29 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     
     
     private void init_value() {
-        this.pswitch.set_active(pc.activated);
+        cb.set_active(pc.activated);
     }
+    
+    private bool frozen = false;
     
     private void connect_signals() {
         if(pc == null)
             return;
         pc.sign_activated.connect( () => {
+            if(frozen)
+                return;
+            frozen = true;
             print("p sign act switch\n");
-            this.pswitch.freeze_notify();
-            this.pswitch.set_active(true);
-            this.pswitch.thaw_notify();
+            cb.set_active(true);
+            frozen = false;
         });
         pc.sign_deactivated.connect( () => {
+            if(frozen)
+                return;
             print("p sign deact switch\n");
-            this.pswitch.freeze_notify();
-            this.pswitch.set_active(false);
-            this.pswitch.thaw_notify();
+            frozen = true;
+            cb.set_active(false);
+            frozen = false;
         });
     }
     
@@ -89,23 +95,11 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     }
     
     private void setup_widgets() {
-        var label = new Gtk.Label(pc.info.pretty_name + " " + _("(Plugin)"));
-        label.set_alignment(0.0f, 0.5f);
-        label.justify = Justification.LEFT;
-        label.xpad = 6;
-        label.set_line_wrap_mode(Pango.WrapMode.WORD);
-        label.set_line_wrap(true);
-        this.pack_start(label, false, false, 0);
-        pswitch = new Gtk.Switch();
-        pswitch.margin_left = 2;
-        var bx = new Box(Orientation.VERTICAL, 0);
-        bx.pack_start(new DrawingArea(), false, true, 0);
-        bx.pack_start(pswitch, false, false, 0);
-        bx.pack_start(new DrawingArea(), false, true, 0);
-        this.pack_start(bx, false, false, 0);
-        label_sizegroup.add_widget(label);
-        pswitch.notify["active"].connect( () => {
-            if(pswitch.get_active()) {
+        cb = new Gtk.CheckButton.with_label(pc.info.pretty_name + " " + _("(Plugin)"));
+        this.pack_start(cb, false, false, 0);
+        label_sizegroup.add_widget(cb);
+        cb.clicked.connect( () => {
+            if(cb.get_active()) {
                 plugin_loader.activate_single_plugin(plugin_name);
                 sign_plugin_activestate_changed(plugin_name);
             }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 14:33+0100\n"
+"POT-Creation-Date: 2012-11-28 15:37+0100\n"
 "PO-Revision-Date: 2012-10-01 23:41-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
@@ -193,11 +193,13 @@ msgstr "Configuracion"
 msgid "Media"
 msgstr "Mostrar medios"
 
+#. var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Activar las líneas de cuadrícula en el explorador de medios"
 
+#. var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 #, fuzzy
 msgid "Show picture on hover album image"
@@ -205,25 +207,30 @@ msgstr ""
 "No volver a mostrar la pantalla de vídeo mientras se cierne la imagen del "
 "álbum"
 
+#. var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
 msgid "Use Compact Menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
+#. var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Mostrar el botón detener"
 
+#. var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Salir de la aplicación cuando se cierre la ventana"
 
+#. var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 msgid "Use desktop notifications"
 msgstr "Usar notificaciones de escritorio"
 
+#. var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr "Usar Ecualizador"
@@ -239,20 +246,22 @@ msgstr "Tamaño de fuente en el explorador de medios:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
 #, fuzzy
-msgid "User Interface"
+msgid "User Interface:"
 msgstr "Usuario:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-msgid "Lyric Providers"
-msgstr "Proveedor de letras"
+#, fuzzy
+msgid "Lyrics:"
+msgstr "_Letra"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-msgid "Additional"
+#, fuzzy
+msgid "Additional:"
 msgstr "Adicional"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
 #, fuzzy
-msgid "Music Stores"
+msgid "Music Stores:"
 msgstr "Tiendas"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
@@ -873,7 +882,7 @@ msgstr "Subtítulo #"
 msgid "Audio Track #"
 msgstr "Pista de audio #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 #, fuzzy
 msgid "(Plugin)"
 msgstr "(Complemento)"
@@ -1220,6 +1229,9 @@ msgstr "Mostrar tienda _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Mostrar tienda UbuntuOne"
+
+#~ msgid "Lyric Providers"
+#~ msgstr "Proveedor de letras"
 
 #~ msgid "no repeat"
 #~ msgstr "no repetir"

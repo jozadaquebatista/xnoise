@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 14:33+0100\n"
+"POT-Creation-Date: 2012-11-28 15:37+0100\n"
 "PO-Revision-Date: 2012-10-29 05:19+0100\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -179,31 +179,38 @@ msgstr "Nastavení"
 msgid "Media"
 msgstr "Media"
 
+#. var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 msgid "Grid lines in media browser"
 msgstr "Mřížka v prohlížeči médií"
 
+#. var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Show picture on hover album image"
 msgstr "Zobrazit obrázek při přejetí přebalu alba myší"
 
+#. var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
 msgid "Use Compact Menu"
 msgstr "Použít menu aplikací"
 
+#. var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
 msgstr "Zobrazit tlačítko pro zastavení"
 
+#. var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Quit on window close"
 msgstr "Ukončit při zavření okna"
 
+#. var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 msgid "Use desktop notifications"
 msgstr "Použít systémová oznámení."
 
+#. var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr "Použít ekvalizér"
@@ -217,19 +224,23 @@ msgid "Media browser fontsize"
 msgstr "Velikost písma v prohlížeči skladeb"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
-msgid "User Interface"
+#, fuzzy
+msgid "User Interface:"
 msgstr "Uživatelské rozhraní"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-msgid "Lyric Providers"
-msgstr "Poskytovatelé textů skladeb "
+#, fuzzy
+msgid "Lyrics:"
+msgstr "Texty"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-msgid "Additional"
+#, fuzzy
+msgid "Additional:"
 msgstr "Další"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
-msgid "Music Stores"
+#, fuzzy
+msgid "Music Stores:"
 msgstr "Hudební obchody"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
@@ -832,7 +843,7 @@ msgstr "Titulek #"
 msgid "Audio Track #"
 msgstr "Zvuková stopa #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 msgid "(Plugin)"
 msgstr "(Přídavný modul)"
 
@@ -1164,6 +1175,9 @@ msgstr "Zobrazit _hudební obchod Ubuntu"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Zobrazit hudební obchod Ubuntu"
+
+#~ msgid "Lyric Providers"
+#~ msgstr "Poskytovatelé textů skladeb "
 
 #~ msgid "no repeat"
 #~ msgstr "Neopakovat"

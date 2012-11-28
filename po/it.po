@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 14:33+0100\n"
+"POT-Creation-Date: 2012-11-28 15:37+0100\n"
 "PO-Revision-Date: 2011-10-03 11:00+0100\n"
 "Last-Translator: Andrea Ranaldi <andrea.ranaldi@gmail.com>\n"
 "Language-Team: shkn <xnoise@googlegroups.com>\n"
@@ -187,36 +187,43 @@ msgstr ""
 msgid "Media"
 msgstr "Mostra media"
 
+#. var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Utilizza guide nel media browser"
 
+#. var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "Non mostrare il video durante la visualizzazione delle immagini album"
 
+#. var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
 msgid "Use Compact Menu"
 msgstr "Mostra il menu principale"
 
+#. var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Usa il bottone stop"
 
+#. var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Esci dall'applicazione se la finestra è chiusa"
 
+#. var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 #, fuzzy
 msgid "Use desktop notifications"
 msgstr "notifiche"
 
+#. var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr ""
@@ -231,19 +238,20 @@ msgid "Media browser fontsize"
 msgstr "Dimensione carattere media browser:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
-msgid "User Interface"
+msgid "User Interface:"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-msgid "Lyric Providers"
-msgstr ""
+#, fuzzy
+msgid "Lyrics:"
+msgstr "_Testi"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-msgid "Additional"
+msgid "Additional:"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
-msgid "Music Stores"
+msgid "Music Stores:"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
@@ -853,7 +861,7 @@ msgstr "Sottotitoli #"
 msgid "Audio Track #"
 msgstr "Traccia audio #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 #, fuzzy
 msgid "(Plugin)"
 msgstr "Plugins"

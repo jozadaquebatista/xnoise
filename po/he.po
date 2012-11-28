@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 14:33+0100\n"
+"POT-Creation-Date: 2012-11-28 15:37+0100\n"
 "PO-Revision-Date: 2012-11-04 15:13+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -189,31 +189,38 @@ msgstr "הגדרות"
 msgid "Media"
 msgstr "מדיה"
 
+#. var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 msgid "Grid lines in media browser"
 msgstr "שורות הרשת בדפדפן המדיה"
 
+#. var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Show picture on hover album image"
 msgstr "הצג תמונה כשהסמן מרחף על תמונת האלבום"
 
+#. var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
 msgid "Use Compact Menu"
 msgstr "השתמש בתפריט הראשי"
 
+#. var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
 msgstr "שימוש בכפתור עצירה"
 
+#. var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Quit on window close"
 msgstr "צא מהתכנה בסגירת חלון"
 
+#. var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 msgid "Use desktop notifications"
 msgstr "שימוש בהתראות לשולחן העבודה"
 
+#. var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr "שימוש באיקולייזר"
@@ -227,19 +234,23 @@ msgid "Media browser fontsize"
 msgstr "גודל גופן דפדפן המדיה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
-msgid "User Interface"
+#, fuzzy
+msgid "User Interface:"
 msgstr "ממשק משתמש"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-msgid "Lyric Providers"
-msgstr "ספקי מילות השיר"
+#, fuzzy
+msgid "Lyrics:"
+msgstr "מילות השיר"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-msgid "Additional"
+#, fuzzy
+msgid "Additional:"
 msgstr "נוספים"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
-msgid "Music Stores"
+#, fuzzy
+msgid "Music Stores:"
 msgstr "חנויות מוסיקה"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
@@ -825,7 +836,7 @@ msgstr "כתוביות #"
 msgid "Audio Track #"
 msgstr "רצועת שמע #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 msgid "(Plugin)"
 msgstr "(פלאגין)"
 
@@ -1155,6 +1166,9 @@ msgstr "הצג את החנות _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "הצג את החנות UbuntuOne"
+
+#~ msgid "Lyric Providers"
+#~ msgstr "ספקי מילות השיר"
 
 #~ msgid "no repeat"
 #~ msgstr "ללא חזרה"

@@ -41,13 +41,13 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private Notebook notebook;
     private SpinButton sb;
     private int fontsizeMB;
-    private Switch switch_showL;
-    private Switch switch_compact;
-    private Switch switch_usestop;
-    private Switch switch_hoverimage;
-    private Switch switch_quitifclosed;
-    private Switch switch_use_notifications;
-    private Switch switch_equalizer;
+    private CheckButton switch_showL;
+    private CheckButton switch_compact;
+    private CheckButton switch_usestop;
+    private CheckButton switch_hoverimage;
+    private CheckButton switch_quitifclosed;
+    private CheckButton switch_use_notifications;
+    private CheckButton switch_equalizer;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
     
@@ -83,25 +83,25 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     private void connect_signals() {
         assert(switch_usestop != null);
-        switch_usestop.notify["active"].connect(this.on_checkbutton_usestop_clicked);
+        switch_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
         
         assert(switch_showL != null);
-        switch_showL.notify["active"].connect(this.on_checkbutton_show_lines_clicked);
+        switch_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
         
         assert(switch_hoverimage != null);
-        switch_hoverimage.notify["active"].connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+        switch_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
         
         assert(switch_compact != null);
-        switch_compact.notify["active"].connect(this.on_checkbutton_compact_clicked);
+        switch_compact.clicked.connect(this.on_checkbutton_compact_clicked);
         
         assert(switch_quitifclosed != null);
-        switch_quitifclosed.notify["active"].connect(this.on_checkbutton_quitifclosed_clicked);
+        switch_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
         
         assert(switch_equalizer != null);
-        switch_equalizer.notify["active"].connect(this.on_switch_use_equalizer_clicked);
+        switch_equalizer.clicked.connect(this.on_switch_use_equalizer_clicked);
         
         assert(switch_use_notifications != null);
-        switch_use_notifications.notify["active"].connect(this.on_switch_use_notifications_clicked);
+        switch_use_notifications.clicked.connect(this.on_switch_use_notifications_clicked);
         
         sb.changed.connect(this.on_mb_font_changed);
     }
@@ -298,47 +298,47 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             
             plugin_label_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             
-            switch_showL = this.builder.get_object("switch_showlines") as Gtk.Switch;
+            switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
             switch_showL.can_focus = false;
-            var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
-            label_showL.label = _("Grid lines in media browser");
-            plugin_label_sizegroup.add_widget(label_showL);
+//            var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
+            switch_showL.set_label(_("Grid lines in media browser"));
+//            plugin_label_sizegroup.add_widget(label_showL);
             
-            switch_hoverimage = this.builder.get_object("switch_hoverimage") as Gtk.Switch;
+            switch_hoverimage = this.builder.get_object("cb_hoverimage") as CheckButton;
             switch_hoverimage.can_focus = false;
-            var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
-            label_hoverimage.label = _("Show picture on hover album image");
-            plugin_label_sizegroup.add_widget(label_hoverimage);
+//            var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
+            switch_hoverimage.set_label(_("Show picture on hover album image"));
+//            plugin_label_sizegroup.add_widget(label_hoverimage);
             
-            switch_compact = this.builder.get_object("switch_compact") as Gtk.Switch;
+            switch_compact = this.builder.get_object("cb_compact") as CheckButton;
             switch_compact.can_focus = false;
-            var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
-            label_compact.label = _("Use Compact Menu");
-            plugin_label_sizegroup.add_widget(label_compact);
+//            var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
+            switch_compact.set_label(_("Use Compact Menu"));
+//            plugin_label_sizegroup.add_widget(label_compact);
             
-            switch_usestop = this.builder.get_object("switch_usestop") as Gtk.Switch;
+            switch_usestop = this.builder.get_object("cb_usestop") as CheckButton;
             switch_usestop.can_focus = false;
-            var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
-            label_usestop.label = _("Show Stop button");
-            plugin_label_sizegroup.add_widget(label_usestop);
+//            var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
+            switch_usestop.set_label(_("Show Stop button"));
+//            plugin_label_sizegroup.add_widget(label_usestop);
             
-            switch_quitifclosed = this.builder.get_object("switch_quitifclosed") as Gtk.Switch;
+            switch_quitifclosed = this.builder.get_object("cb_quitifclosed") as CheckButton;
             switch_quitifclosed.can_focus = false;
-            var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
-            label_quitifclosed.label = _("Quit on window close");
-            plugin_label_sizegroup.add_widget(label_quitifclosed);
+//            var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
+            switch_quitifclosed.set_label(_("Quit on window close"));
+//            plugin_label_sizegroup.add_widget(label_quitifclosed);
 
-            switch_use_notifications = this.builder.get_object("switch_use_notifications") as Gtk.Switch;
+            switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
             switch_use_notifications.can_focus = false;
-            var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
-            label_use_notifications.label = _("Use desktop notifications");
-            plugin_label_sizegroup.add_widget(label_use_notifications);
+//            var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
+            switch_use_notifications.set_label(_("Use desktop notifications"));
+//            plugin_label_sizegroup.add_widget(label_use_notifications);
             
-            switch_equalizer = this.builder.get_object("switch_equalizer") as Gtk.Switch;
+            switch_equalizer = this.builder.get_object("cb_equalizer") as CheckButton;
             switch_equalizer.can_focus = false;
-            var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
-            label_equalizer.label = _("Use Equalizer");
-            plugin_label_sizegroup.add_widget(label_equalizer);
+//            var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
+            switch_equalizer.set_label(_("Use Equalizer"));
+//            plugin_label_sizegroup.add_widget(label_equalizer);
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             
@@ -376,19 +376,19 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             //Category headlines
             var gui_label = this.builder.get_object("label2") as Gtk.Label;
             gui_label.use_markup = true;
-            gui_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("User Interface")));
+            gui_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("User Interface:")));
             
             var lyric_provider_label = this.builder.get_object("lyric_provider_label") as Gtk.Label;
             lyric_provider_label.use_markup = true;
-            lyric_provider_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Lyric Providers")));
+            lyric_provider_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Lyrics:")));
             
             var additionals_label = this.builder.get_object("additionals_label") as Gtk.Label;
             additionals_label.use_markup = true;
-            additionals_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Additional")));
+            additionals_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Additional:")));
             
             var music_store_label = this.builder.get_object("music_store_label") as Gtk.Label;
             music_store_label.use_markup = true;
-            music_store_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Music Stores").strip()));
+            music_store_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Music Stores:").strip()));
             
             Timeout.add_seconds(1, () => {
                 if(plugin_loader.loaded == false) {
