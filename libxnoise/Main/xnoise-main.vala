@@ -125,6 +125,11 @@ public class Xnoise.Main : GLib.Object {
             main_window.restore_tracks();
             return false;
         });
+        
+        Timeout.add_seconds(1, () => {
+            device_manager = new DeviceManager();
+            return false;
+        });
     }
     
     private uint cyclic_save_source = 0;

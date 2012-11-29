@@ -62,6 +62,7 @@ namespace Xnoise {
     
     internal static IconRepo icon_repo;
     internal static DbusThumbnailer thumbnailer = null;
+    internal static DeviceManager device_manager;
     
     public static GstPlayer gst_player;
     

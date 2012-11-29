@@ -41,6 +41,9 @@ libxnoise_la_SOURCES = \
     DBus/xnoise-dbus.vala \
     DBus/xnoise-dbus-thumbnailer.vala \
     DBus/xnoise-desktop-notifications.vala \
+    Devices/xnoise-audio-player-device.vala \
+    Devices/xnoise-device.vala \
+    Devices/xnoise-device-manager.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
@@ -193,15 +196,16 @@ DISTCLEANFILES = \
     AlbumImages/*.c \
     Application/*.c \
     BackgroundWorker/*.c \
+    Database/*.c \
+    DataSource/*.c \
+    DBus/*.c \
+    Devices/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
     DockableMedia/MusicBrowser/*.c \
     DockableMedia/MostPlayed/*.c \
     DockableMedia/StreamListing/*.c \
     DockableMedia/VideoListing/*.c \
-    Database/*.c \
-    DataSource/*.c \
-    DBus/*.c \
     ExtraWidgets/*.c \
     ExtraWidgets/AboutDialog/*.c \
     ExtraWidgets/AddMedia/*.c \
@@ -209,6 +213,7 @@ DISTCLEANFILES = \
     ExtraWidgets/Settings/*.c \
     ExtraWidgets/VideoScreen/*.c \
     GlobalAccess/*.c \
+    IconRepo/*.c \
     ItemHandlers/*.c \
     ItemHandlers/AddAllToTracklist/*.c \
     ItemHandlers/AddToTracklist/*.c \
