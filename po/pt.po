@@ -89,15 +89,15 @@ msgstr "Recolher"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:337
 msgid "Sort Mode"
-msgstr ""
+msgstr "Ordenação"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:348
 msgid "ARTIST-ALBUM-TITLE"
-msgstr ""
+msgstr "Artista-Álbum-Título"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:355
 msgid "GENRE-ARTIST-ALBUM"
-msgstr ""
+msgstr "Género-Artista-Álbum"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:367
 #: ../plugins/magnatune/magnatune-treestore.vala:43
@@ -224,24 +224,20 @@ msgid "Media browser fontsize"
 msgstr "Tamanho da letra do explorador"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
-#, fuzzy
 msgid "User Interface:"
 msgstr "Interface:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
-#, fuzzy
 msgid "Lyrics:"
-msgstr "Letras musicais"
+msgstr "Letras musicais:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
-#, fuzzy
 msgid "Additional:"
-msgstr "Outros"
+msgstr "Outros:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
-#, fuzzy
 msgid "Music Stores:"
-msgstr "Lojas de música"
+msgstr "Lojas de música:"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
 msgid "Select external subtitle file"
@@ -719,11 +715,11 @@ msgstr "Mostrar menu principal"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1923
 msgid "Ascending"
-msgstr ""
+msgstr "Ascendente"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1924
 msgid "Descending"
-msgstr ""
+msgstr "Descendente"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:148
 msgid "Dance"
