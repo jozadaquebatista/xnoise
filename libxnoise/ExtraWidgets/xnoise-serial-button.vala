@@ -106,6 +106,10 @@ internal class Xnoise.SerialButton : Gtk.Box {
 
     private unowned SerialItem? active_item = null;
 
+    public bool has_item(string name) {
+        return sitems.lookup(name) != null;
+    }
+
     public void select_first() {
         GLib.List<Widget> l = this.get_children();
         if(l.length() == 0)

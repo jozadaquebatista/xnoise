@@ -52,9 +52,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
     private ToolItem eqButtonTI;
-    private SerialButton sbuttonTL;
-    private SerialButton sbuttonLY;
-    private SerialButton sbuttonVI;
+    internal SerialButton sbuttonTL;
+    internal SerialButton sbuttonLY;
+    internal SerialButton sbuttonVI;
     private Button repeatButton;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
@@ -125,7 +125,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
         set {
             if(value == true) {
-                if(sbuttonTL.item_count < 3) {
+                if(!sbuttonTL.has_item(LYRICS_VIEW_NAME)) {
                     sbuttonTL.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
                     sbuttonLY.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
                     sbuttonVI.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
@@ -1591,6 +1591,7 @@ print("on close 2\n");
     
     private void on_serial_button_clicked(SerialButton sender, string name) {
         if(sender == this.sbuttonTL) {
+        print("sbuttontl selected %s\n", name);
             sbuttonVI.select(name, false);
             sbuttonLY.select(name, false);
             this.mainview_box.select_main_view(name);

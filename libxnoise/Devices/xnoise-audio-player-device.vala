@@ -37,6 +37,7 @@ using Xnoise;
 private class Xnoise.AudioPlayerDevice : Xnoise.Device {
     
     private string uri;
+    private AudioPlayerMainView view;
     
     
     public AudioPlayerDevice(Mount _mount) {
@@ -46,7 +47,11 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
     }
     
     ~AudioPlayerDevice() {
-        print("DTOR AudioPlayerDevice\n");
+        main_window.sbuttonTL.del(this.get_identifier());
+        main_window.sbuttonLY.del(this.get_identifier());
+        main_window.sbuttonVI.del(this.get_identifier());
+        main_window.mainview_box.remove_main_view(view);
+        print("removed audio player %s\n", get_identifier());
     }
     
     
@@ -56,11 +61,27 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
                 DeviceType.ANDROID :
                 DeviceType.GENERIC_PLAYER
             );
+        Idle.add(() => {
+            main_window.mainview_box.add_main_view(this.get_main_view_widget());
+            if(!main_window.sbuttonTL.has_item(this.get_identifier())) {
+                string playername = "Player";
+                main_window.sbuttonTL.insert(this.get_identifier(), playername);
+                main_window.sbuttonLY.insert(this.get_identifier(), playername);
+                main_window.sbuttonVI.insert(this.get_identifier(), playername);
+            }
+            return false;
+        });
         return true;
     }
     
     public override string get_uri() {
         return uri;
+    }
+    
+    public override IMainView? get_main_view_widget() {
+        view = new AudioPlayerMainView(this);
+        view.show_all();
+        return view;
     }
 }
 
@@ -69,15 +90,22 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
 private class Xnoise.AudioPlayerMainView : Gtk.Box, IMainView {
     
     private uint32 id;
+    private unowned AudioPlayerDevice audio_player_device;
     
-    public AudioPlayerMainView() {
+    
+    public AudioPlayerMainView(AudioPlayerDevice audio_player_device) {
         GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
+        this.audio_player_device = audio_player_device;
         this.id = Random.next_int();
         setup_widgets();
     }
     
+    ~AudioPlayerMainView() {
+        print("DTOR AudioPlayerMainView\n");
+    }
+    
     public string get_view_name() {
-        return _("Player") + id.to_string();
+        return audio_player_device.get_identifier();
     }
     
     private void setup_widgets() {

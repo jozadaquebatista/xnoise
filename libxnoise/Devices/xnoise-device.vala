@@ -39,6 +39,7 @@ private enum Xnoise.DeviceType {
     CDROM
 }
 
+
 private abstract class Xnoise.Device : GLib.Object {
     
     private string? identifier = null;
@@ -50,6 +51,7 @@ private abstract class Xnoise.Device : GLib.Object {
     
     public abstract bool initialize();
     public abstract string get_uri();
+    public abstract IMainView? get_main_view_widget();
     
     public virtual string get_identifier() {
         if(identifier != null)
@@ -68,3 +70,4 @@ private abstract class Xnoise.Device : GLib.Object {
         return ret;
     }
 }
+

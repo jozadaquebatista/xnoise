@@ -1219,6 +1219,9 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	XnoiseSerialButton* sbuttonTL;
+	XnoiseSerialButton* sbuttonLY;
+	XnoiseSerialButton* sbuttonVI;
 	XnoiseSerialButton* album_view_sorting;
 	XnoiseSerialButton* album_view_direction;
 	XnoiseAlbumArtView* album_art_view;
