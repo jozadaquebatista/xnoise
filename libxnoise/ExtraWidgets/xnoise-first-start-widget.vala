@@ -34,7 +34,7 @@ using Gtk;
 using Xnoise;
 
 
-private class Xnoise.FirstStartWidget : Box, IMainView {
+private class Xnoise.FirstStartWidget : Box {
     private const string WELCOME_UI_FILE = Config.XN_UIDIR + "first_start.ui";
     private CssProvider provider;
 
@@ -63,9 +63,9 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
     ~FirstStartWidget() {
     }
     
-    public string get_view_name() {
-        return "FirstStartWidget";
-    }
+//    public string get_view_name() {
+//        return "FirstStartWidget";
+//    }
     
     private HashTable<string,string> ht = new HashTable<string,string>(str_hash, str_equal);
     
@@ -89,7 +89,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
                               Column.ICON, icon_repo.folder_symbolic_icon,
                               Column.LOCATION,  f.get_path()
                               );
-                media_importer.import_media_folder(f.get_path(), false, true);
+                media_importer.import_media_folder(f.get_path(), true, true);
                 nb.set_current_page(1);
             }
         }

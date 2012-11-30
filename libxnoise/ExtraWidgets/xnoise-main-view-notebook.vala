@@ -70,7 +70,7 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
             print("Selected main view is not available\n");
             return false;
         }
-        print("select %s on page %d\n", name, this.page_num(main_views.lookup(name)));
+        //print("select %s on page %d\n", name, this.page_num(main_views.lookup(name)));
         this.set_current_page(this.page_num(main_views.lookup(name)));
         current_name = name;
         return true;
