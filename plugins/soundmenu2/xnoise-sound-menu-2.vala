@@ -89,7 +89,10 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
     
     private void on_name_vanished(DBusConnection conn, string name) {
         //stdout.printf("%s vanished\n", name);
-        tray_icon.visible = true;
+        if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
+            tray_icon = new TrayIcon();
+        }
+        tray_icon.visible = !Params.get_bool_value("quit_if_closed");
     }
 
     private uint watch;
@@ -118,7 +121,10 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
     public void uninit() {
         //print("try remove xnoise from soundmenu\n");
         addremove_xnoise_player_to_blacklist(true);
-        tray_icon.visible = true;
+        if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
+            tray_icon = new TrayIcon();
+        }
+        tray_icon.visible = !Params.get_bool_value("quit_if_closed");;
         if(watch != 0) {
             Bus.unwatch_name(watch);
             watch = 0;
@@ -146,7 +152,10 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
         if(old == false && nw == false) {
             if(this.owner != null)
                 Idle.add( () => {
-                    tray_icon.visible = true;
+                    if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
+                        tray_icon = new TrayIcon();
+                    }
+                    tray_icon.visible = !Params.get_bool_value("quit_if_closed");;
                     owner.deactivate();
                     return false;
                 }); 

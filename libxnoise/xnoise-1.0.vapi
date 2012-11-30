@@ -93,7 +93,7 @@ namespace Xnoise {
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stamp);
-			public override Xnoise.Item[] get_artists (string searchtext = EMPTYSTRING, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
+			public override Xnoise.Item[] get_artists (string searchtext = "", Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
 			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public override Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);

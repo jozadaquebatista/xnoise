@@ -188,7 +188,8 @@ namespace Xnoise {
         tlm = new TrackListModel();
         tl = new TrackList();
         main_window = new MainWindow();
-        tray_icon = new TrayIcon();
+        if(!Params.get_bool_value("quit_if_closed"))
+            tray_icon = new TrayIcon();
     }
     
     // A data source is an implementor of DataSoure abstr.class

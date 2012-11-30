@@ -41,6 +41,7 @@ public class Xnoise.TrayIcon : StatusIcon {
     private Image playpause_popup_image;
     
     public TrayIcon() {
+        this.visible = false;
         this.icon_name = "xnoise";
         this.has_tooltip = true;
         xn = Main.instance;
@@ -126,7 +127,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         exitItem.add(exitHbox);
         exitItem.activate.connect(xn.quit);
         traymenu.append(exitItem);
-
+        
         traymenu.show_all();
     }
 

@@ -193,10 +193,16 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private void on_checkbutton_quitifclosed_clicked() {
         if(this.switch_quitifclosed.active) {
             Params.set_bool_value("quit_if_closed", true);
+            if(tray_icon != null)
+                tray_icon.visible = false;
             main_window.quit_if_closed = true;
         }
         else {
             Params.set_bool_value("quit_if_closed", false);
+            if(tray_icon == null) {
+                tray_icon = new TrayIcon();
+            }
+            tray_icon.visible = true;
             main_window.quit_if_closed = false;
         }
     }

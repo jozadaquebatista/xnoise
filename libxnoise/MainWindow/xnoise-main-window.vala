@@ -984,16 +984,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     public void toggle_window_visbility() {
-print("on close 1\n");
         if(this.has_toplevel_focus && this.visible) {
             this.get_position(out _posX, out _posY);
             this.hide();
-print("on close 2\n");
             window_in_foreground = false;
         }
         if(window_in_foreground) {
             window_in_foreground = false;
-            print("window_in_foreground is now false\n");
+            //print("window_in_foreground is now false\n");
         }
         if(active_notifier != 0) {
             this.disconnect(active_notifier);
@@ -1070,6 +1068,9 @@ print("on close 2\n");
             return false;
         });
         quit_if_closed              = Params.get_bool_value("quit_if_closed");
+        if(!quit_if_closed)
+            tray_icon = new TrayIcon();
+        tray_icon.visible           = !quit_if_closed;
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
