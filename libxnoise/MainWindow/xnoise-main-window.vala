@@ -52,9 +52,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
     private ToolItem eqButtonTI;
-    internal SerialButton sbuttonTL;
-    internal SerialButton sbuttonLY;
-    internal SerialButton sbuttonVI;
+//    internal SerialButton sbuttonTL;
+//    internal SerialButton sbuttonLY;
+//    internal SerialButton sbuttonVI;
     private Button repeatButton;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
@@ -125,16 +125,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
         set {
             if(value == true) {
-                if(!sbuttonTL.has_item(LYRICS_VIEW_NAME)) {
-                    sbuttonTL.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-                    sbuttonLY.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-                    sbuttonVI.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+                if(!main_view_sbutton.has_item(LYRICS_VIEW_NAME)) {
+                    main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+//                    sbuttonLY.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+//                    sbuttonVI.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
                 }
             }
             else {
-                sbuttonTL.del(LYRICS_VIEW_NAME);
-                sbuttonLY.del(LYRICS_VIEW_NAME);
-                sbuttonVI.del(LYRICS_VIEW_NAME);
+                main_view_sbutton.del(LYRICS_VIEW_NAME);
+//                sbuttonLY.del(LYRICS_VIEW_NAME);
+//                sbuttonVI.del(LYRICS_VIEW_NAME);
             }
             Idle.add( () => {
                 foreach(Gtk.Action a in action_group.list_actions())
@@ -366,7 +366,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     }
                     return false;
                 });
-                sbuttonTL.select(VIDEOVIEW_NAME, true);
+                main_view_sbutton.select(VIDEOVIEW_NAME, true);
             }
         });
         css_provider_search = new CssProvider();
@@ -446,7 +446,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         sign_drag_over_content_area.connect(() => {
             //switch to tracklist for dropping
             if(!fullscreenwindowvisible) {
-                sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
+                main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
             }
         });
         videoscreen.drag_motion.connect( (sender,context,x,y,t) => {
@@ -475,9 +475,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(temporary_mainview_name != TRACKLIST_VIEW_NAME) {
             mainview_box.select_main_view(temporary_mainview_name);
             if(temporary_mainview_name == VIDEOVIEW_NAME)
-                sbuttonTL.select(temporary_mainview_name, true);
+                main_view_sbutton.select(temporary_mainview_name, true);
             else if(temporary_mainview_name == LYRICS_VIEW_NAME)
-                sbuttonTL.select(temporary_mainview_name, true);
+                main_view_sbutton.select(temporary_mainview_name, true);
             
             temporary_mainview_name = TRACKLIST_VIEW_NAME;
         }
@@ -510,9 +510,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(fullscreenwindowvisible)
             global.player_state_changed.connect(handle_screensaver);
         
-        sbuttonVI.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
-        sbuttonTL.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
-        sbuttonLY.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
+        main_view_sbutton.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
+//        sbuttonTL.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
+//        sbuttonLY.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
     }
     
     private void handle_screensaver() {
@@ -608,7 +608,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         first_start_widget.show();
         first_start_widget.finish_button.clicked.connect( () =>  {
             Idle.add(() => {
-                sbuttonTL.select(TRACKLIST_VIEW_NAME);
+                main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 mainview_box.remove_main_view(first_start_widget);
                 first_start_widget.destroy();
                 first_start_widget = null;
@@ -631,7 +631,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         });
         first_start_widget.closebutton.clicked.connect( () => {
             Idle.add(() => {
-                sbuttonTL.select(TRACKLIST_VIEW_NAME);
+                main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 mainview_box.remove_main_view(first_start_widget);
                 first_start_widget.destroy();
                 first_start_widget = null;
@@ -687,7 +687,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.videoscreen.reparent(fullscreenwindow);
             this.videoscreen.get_window().process_updates(true);
             
-            sbuttonVI.select(TRACKLIST_VIEW_NAME);
+            main_view_sbutton.select(TRACKLIST_VIEW_NAME);
             
             fullscreenwindowvisible = true;
             fullscreentoolbar.show();
@@ -709,7 +709,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             videoscreen.set_vexpand(true);
             videoscreen.set_hexpand(true);
             
-            sbuttonTL.select(VIDEOVIEW_NAME);
+            main_view_sbutton.select(VIDEOVIEW_NAME);
             
             fullscreenwindowvisible = false;
             this.videovbox.show_all();
@@ -945,7 +945,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        sbuttonTL.select(VIDEOVIEW_NAME, true);
+        main_view_sbutton.select(VIDEOVIEW_NAME, true);
     }
 
     private void on_show_tracklist_menu_clicked() {
@@ -958,7 +958,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
+        main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
     }
 
     private void on_show_lyrics_menu_clicked() {
@@ -971,7 +971,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        sbuttonTL.select(LYRICS_VIEW_NAME, true);
+        main_view_sbutton.select(LYRICS_VIEW_NAME, true);
     }
 
     // This is used for the main window
@@ -1064,23 +1064,23 @@ print("on close 2\n");
             string x = Params.get_string_value("MainViewName");
             switch(x) {
                 case TRACKLIST_VIEW_NAME: {
-                    sbuttonTL.select(TRACKLIST_VIEW_NAME, false);
-                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
-                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
+                    main_view_sbutton.select(TRACKLIST_VIEW_NAME, false);
+//                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
+//                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
                 case VIDEOVIEW_NAME: {
-                    sbuttonTL.select(VIDEOVIEW_NAME, false);
-                    sbuttonVI.select(VIDEOVIEW_NAME, false);
-                    sbuttonLY.select(VIDEOVIEW_NAME, false);
+                    main_view_sbutton.select(VIDEOVIEW_NAME, false);
+//                    sbuttonVI.select(VIDEOVIEW_NAME, false);
+//                    sbuttonLY.select(VIDEOVIEW_NAME, false);
                     this.mainview_box.select_main_view(VIDEOVIEW_NAME);
                     break;
                 }
                 default: {
-                    sbuttonTL.select(TRACKLIST_VIEW_NAME, false);
-                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
-                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
+                    main_view_sbutton.select(TRACKLIST_VIEW_NAME, false);
+//                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
+//                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
@@ -1590,26 +1590,28 @@ print("on close 2\n");
     }
     
     private void on_serial_button_clicked(SerialButton sender, string name) {
-        if(sender == this.sbuttonTL) {
-        print("sbuttontl selected %s\n", name);
-            sbuttonVI.select(name, false);
-            sbuttonLY.select(name, false);
+//        if(sender == this.sbuttonTL) {
+//        print("sbuttontl selected %s\n", name);
+//            sbuttonVI.select(name, false);
+//            sbuttonLY.select(name, false);
             this.mainview_box.select_main_view(name);
-        }
-        if(sender == this.sbuttonVI) {
-            sbuttonTL.select(name, false);
-            sbuttonLY.select(name, false);
-            this.mainview_box.select_main_view(name);
-        }
-        if(sender == this.sbuttonLY) {
-            sbuttonVI.select(name, false);
-            sbuttonTL.select(name, false);
-            this.mainview_box.select_main_view(name);
-        }
+//        }
+//        if(sender == this.sbuttonVI) {
+//            sbuttonTL.select(name, false);
+//            sbuttonLY.select(name, false);
+//            this.mainview_box.select_main_view(name);
+//        }
+//        if(sender == this.sbuttonLY) {
+//            sbuttonVI.select(name, false);
+//            sbuttonTL.select(name, false);
+//            this.mainview_box.select_main_view(name);
+//        }
         if(name == TRACKLIST_VIEW_NAME)
             tl.grab_focus();
     }
     
+    internal SerialButton main_view_sbutton;
+
     private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
@@ -1649,6 +1651,97 @@ print("on close 2\n");
             mainview_box = new MainViewNotebook();
             contentvbox.pack_start(mainview_box, true, true, 0);
             
+            
+            var hide_button = new Gtk.Button();
+            var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+            hide_button.add(hide_button_image);
+            hide_button.can_focus = false;
+            hide_button.clicked.connect(this.toggle_media_browser_visibility);
+            hide_button.set_relief(ReliefStyle.NONE);
+            var tbx = new Box(Orientation.HORIZONTAL, 0);
+            tbx.pack_start(hide_button, false, false, 0);
+            var removeSelectedButton = new Gtk.Button();
+            var remsel_button_image = new Gtk.Image.from_stock(Stock.DELETE, IconSize.MENU);
+            removeSelectedButton.add(remsel_button_image);
+            removeSelectedButton.can_focus = false;
+            removeSelectedButton.set_relief(ReliefStyle.NONE);
+            tbx.pack_start(removeSelectedButton, false, false, 0);
+            removeSelectedButton.clicked.connect( () => {
+                tl.remove_selected_rows();
+            });
+            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+            
+            //REMOVE TITLE OR ALL TITLES BUTTONS
+            var removeAllButton = new Gtk.Button();
+            var remove_button_image = new Gtk.Image.from_stock(Stock.CLEAR, IconSize.MENU);
+            removeAllButton.add(remove_button_image);
+            removeAllButton.can_focus      = false;
+            removeAllButton.set_relief(ReliefStyle.NONE);
+            tbx.pack_start(removeAllButton, false, false, 0);
+            removeAllButton.clicked.connect( () => {
+                global.position_reference = null;
+                var store = (ListStore)tlm;
+                store.clear();
+            });
+            removeAllButton.set_tooltip_text(_("Remove all"));
+            var posjumper = new Gtk.Button();
+            var posjumper_image = new Gtk.Image.from_stock(Stock.JUSTIFY_FILL, IconSize.MENU);
+            posjumper.add(posjumper_image);
+            posjumper.can_focus      = false;
+            posjumper.set_relief(ReliefStyle.NONE);
+            tbx.pack_start(posjumper, false, false, 0);
+            posjumper.clicked.connect( () => {
+                if(global.position_reference == null || !global.position_reference.valid())
+                    return;
+                TreePath path = global.position_reference.get_path();
+                var store = (ListStore)tlm;
+                TreeIter iter;
+                store.get_iter(out iter, path);
+                tl.set_focus_on_iter(ref iter);
+            });
+            posjumper.set_tooltip_text(_("Jump to current position"));
+            var bottom_box = new Box(Orientation.HORIZONTAL, 0);
+            bottom_box.pack_start(tbx, false, false, 0);
+            main_view_sbutton = new SerialButton();
+            main_view_sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+            main_view_sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+            main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+            
+            bottom_box.pack_start(new Label(""), true, true, 0);
+            bottom_box.pack_start(main_view_sbutton, false, false, 0);
+            contentvbox.pack_start(bottom_box, false, false, 0);
+            this.notify["media-browser-visible"].connect( (s, val) => {
+                if(this.media_browser_visible == true) {
+                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+                    hide_button.set_tooltip_text(HIDE_LIBRARY);
+                }
+                else {
+                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+                    hide_button.set_tooltip_text(SHOW_LIBRARY);
+                }
+            });
+            
+            
+            mainview_box.notify["current-name"].connect( () => {
+                if(mainview_box.current_name == TRACKLIST_VIEW_NAME) {
+                    removeSelectedButton.set_no_show_all(false);
+                    removeSelectedButton.show_all();
+                    posjumper.set_no_show_all(false);
+                    posjumper.show_all();
+                    removeAllButton.set_no_show_all(false);
+                    removeAllButton.show_all();
+                }
+                else {
+                    removeSelectedButton.set_no_show_all(true);
+                    removeSelectedButton.hide();
+                    posjumper.set_no_show_all(true);
+                    posjumper.hide();
+                    removeAllButton.set_no_show_all(true);
+                    removeAllButton.hide();
+                }
+            });
+            
+            
             ///Tracklist (right)
             this.trackList = tl;
             tracklistview_widget = new TrackListViewWidget(this);
@@ -1680,13 +1773,14 @@ print("on close 2\n");
             main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
             //-----------------
             
-            sbuttonTL = tracklistview_widget.sbutton;
-            sbuttonVI = videoview_widget.sbutton;
-            sbuttonLY = lyricsview_widget.sbutton;
-            
-            sbuttonTL.sign_selected.connect(on_serial_button_clicked);
-            sbuttonVI.sign_selected.connect(on_serial_button_clicked);
-            sbuttonLY.sign_selected.connect(on_serial_button_clicked);
+//            sbuttonTL = tracklistview_widget.sbutton;
+//            sbuttonVI = videoview_widget.sbutton;
+//            sbuttonLY = lyricsview_widget.sbutton;
+
+            main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
+//            sbuttonTL.sign_selected.connect(on_serial_button_clicked);
+//            sbuttonVI.sign_selected.connect(on_serial_button_clicked);
+//            sbuttonLY.sign_selected.connect(on_serial_button_clicked);
             //---------------------
             
             //REPEAT MODE SELECTOR
@@ -1718,7 +1812,8 @@ print("on close 2\n");
                     return false;
                 }
                 mainview_box.select_main_view(mainview_page_buffer);
-                sbuttonVI.select(mainview_page_buffer, true);
+main_view_sbutton.select(mainview_page_buffer, true);
+//                sbuttonVI.select(mainview_page_buffer, true);
                 return false;
             });
             //--------------------
@@ -1975,7 +2070,8 @@ print("on close 2\n");
             string? nme = null;
             if(np == null || (nme = mv.get_view_name()) == null)
                 return;
-            sbuttonTL.select(nme, false);
+            main_view_sbutton.select(nme, false);
+//            sbuttonTL.select(nme, false);
             global.sign_main_view_changed(nme);
             Params.set_string_value("MainViewName", nme);
         });
@@ -1986,7 +2082,8 @@ print("on close 2\n");
     }
     
     public void reset_mainview_to_tracklist() {
-        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
+//        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
+        main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
     }
     
     private void toggle_bottom_view() {
@@ -2022,7 +2119,8 @@ print("on close 2\n");
             return false;
         aimage_timeout = Timeout.add(300, () => {
             mainview_page_buffer = this.mainview_box.get_current_main_view_name();
-            sbuttonTL.select(VIDEOVIEW_NAME, true);
+            main_view_sbutton.select(VIDEOVIEW_NAME, true);
+//            sbuttonTL.select(VIDEOVIEW_NAME, true);
             this.aimage_timeout = 0;
             return false;
         });

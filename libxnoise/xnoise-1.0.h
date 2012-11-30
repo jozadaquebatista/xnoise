@@ -1219,9 +1219,6 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
-	XnoiseSerialButton* sbuttonTL;
-	XnoiseSerialButton* sbuttonLY;
-	XnoiseSerialButton* sbuttonVI;
 	XnoiseSerialButton* album_view_sorting;
 	XnoiseSerialButton* album_view_direction;
 	XnoiseAlbumArtView* album_art_view;
@@ -1244,6 +1241,7 @@ struct _XnoiseMainWindow {
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
 	GtkWindow* fullscreenwindow;
+	XnoiseSerialButton* main_view_sbutton;
 };
 
 struct _XnoiseMainWindowClass {
@@ -1844,6 +1842,8 @@ void xnoise_main_view_notebook_add_main_view (XnoiseMainViewNotebook* self, Xnoi
 void xnoise_main_view_notebook_remove_main_view (XnoiseMainViewNotebook* self, XnoiseIMainView* view);
 gboolean xnoise_main_view_notebook_select_main_view (XnoiseMainViewNotebook* self, const gchar* name);
 gchar* xnoise_main_view_notebook_get_current_main_view_name (XnoiseMainViewNotebook* self);
+const gchar* xnoise_main_view_notebook_get_current_name (XnoiseMainViewNotebook* self);
+void xnoise_main_view_notebook_set_current_name (XnoiseMainViewNotebook* self, const gchar* value);
 GType xnoise_media_soure_widget_get_type (void) G_GNUC_CONST;
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow);
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow);

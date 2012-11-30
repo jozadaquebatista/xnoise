@@ -35,6 +35,8 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
     
     private HashTable<string,IMainView> main_views = new HashTable<string,IMainView>(str_hash, str_equal);
     
+    public string current_name { get; set; }
+    
     public MainViewNotebook() {
         this.set_border_width(0);
         this.show_border = false;
@@ -70,6 +72,7 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
         }
         print("select %s on page %d\n", name, this.page_num(main_views.lookup(name)));
         this.set_current_page(this.page_num(main_views.lookup(name)));
+        current_name = name;
         return true;
     }
 

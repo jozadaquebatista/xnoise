@@ -43,7 +43,6 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     
     private unowned MainWindow win;
     internal ScrolledWindow scrolled_window;
-    internal SerialButton sbutton;
     
     public TrackListViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
@@ -57,81 +56,81 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     
     
     private void setup_widgets() {
-        Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);
+//        Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);
         scrolled_window = new ScrolledWindow(null, null);
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
         scrolled_window.set_shadow_type(Gtk.ShadowType.IN);
         scrolled_window.add(tl);
-        inner_box.pack_start(scrolled_window, true, true, 0);
-        this.pack_start(inner_box, true, true, 0);
-        var hide_button = new Gtk.Button();
-        var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
-        hide_button.add(hide_button_image);
-        hide_button.can_focus = false;
-        hide_button.clicked.connect(win.toggle_media_browser_visibility);
-        hide_button.set_relief(ReliefStyle.NONE);
-        var tbx = new Box(Orientation.HORIZONTAL, 0);
-        tbx.pack_start(hide_button, false, false, 0);
-        var removeSelectedButton = new Gtk.Button();
-        var remsel_button_image = new Gtk.Image.from_stock(Stock.DELETE, IconSize.MENU);
-        removeSelectedButton.add(remsel_button_image);
-        removeSelectedButton.can_focus = false;
-        removeSelectedButton.set_relief(ReliefStyle.NONE);
-        tbx.pack_start(removeSelectedButton, false, false, 0);
-        removeSelectedButton.clicked.connect( () => {
-            tl.remove_selected_rows();
-        });
-        removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
-        
-        //REMOVE TITLE OR ALL TITLES BUTTONS
-        var removeAllButton = new Gtk.Button();
-        var remove_button_image = new Gtk.Image.from_stock(Stock.CLEAR, IconSize.MENU);
-        removeAllButton.add(remove_button_image);
-        removeAllButton.can_focus      = false;
-        removeAllButton.set_relief(ReliefStyle.NONE);
-        tbx.pack_start(removeAllButton, false, false, 0);
-        removeAllButton.clicked.connect( () => {
-            global.position_reference = null;
-            var store = (ListStore)tlm;
-            store.clear();
-        });
-        removeAllButton.set_tooltip_text(_("Remove all"));
-        var posjumper = new Gtk.Button();
-        var posjumper_image = new Gtk.Image.from_stock(Stock.JUSTIFY_FILL, IconSize.MENU);
-        posjumper.add(posjumper_image);
-        posjumper.can_focus      = false;
-        posjumper.set_relief(ReliefStyle.NONE);
-        tbx.pack_start(posjumper, false, false, 0);
-        posjumper.clicked.connect( () => {
-            if(global.position_reference == null || !global.position_reference.valid())
-                return;
-            TreePath path = global.position_reference.get_path();
-            var store = (ListStore)tlm;
-            TreeIter iter;
-            store.get_iter(out iter, path);
-            tl.set_focus_on_iter(ref iter);
-        });
-        posjumper.set_tooltip_text(_("Jump to current position"));
-        var bottom_box = new Box(Orientation.HORIZONTAL, 0);
-        bottom_box.pack_start(tbx, false, false, 0);
-        sbutton = new SerialButton();
-        sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
-        sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
-        sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+//        inner_box.pack_start(scrolled_window, true, true, 0);
+        this.pack_start(scrolled_window, true, true, 0);
+//        var hide_button = new Gtk.Button();
+//        var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+//        hide_button.add(hide_button_image);
+//        hide_button.can_focus = false;
+//        hide_button.clicked.connect(win.toggle_media_browser_visibility);
+//        hide_button.set_relief(ReliefStyle.NONE);
+//        var tbx = new Box(Orientation.HORIZONTAL, 0);
+//        tbx.pack_start(hide_button, false, false, 0);
+//        var removeSelectedButton = new Gtk.Button();
+//        var remsel_button_image = new Gtk.Image.from_stock(Stock.DELETE, IconSize.MENU);
+//        removeSelectedButton.add(remsel_button_image);
+//        removeSelectedButton.can_focus = false;
+//        removeSelectedButton.set_relief(ReliefStyle.NONE);
+//        tbx.pack_start(removeSelectedButton, false, false, 0);
+//        removeSelectedButton.clicked.connect( () => {
+//            tl.remove_selected_rows();
+//        });
+//        removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+//        
+//        //REMOVE TITLE OR ALL TITLES BUTTONS
+//        var removeAllButton = new Gtk.Button();
+//        var remove_button_image = new Gtk.Image.from_stock(Stock.CLEAR, IconSize.MENU);
+//        removeAllButton.add(remove_button_image);
+//        removeAllButton.can_focus      = false;
+//        removeAllButton.set_relief(ReliefStyle.NONE);
+//        tbx.pack_start(removeAllButton, false, false, 0);
+//        removeAllButton.clicked.connect( () => {
+//            global.position_reference = null;
+//            var store = (ListStore)tlm;
+//            store.clear();
+//        });
+//        removeAllButton.set_tooltip_text(_("Remove all"));
+//        var posjumper = new Gtk.Button();
+//        var posjumper_image = new Gtk.Image.from_stock(Stock.JUSTIFY_FILL, IconSize.MENU);
+//        posjumper.add(posjumper_image);
+//        posjumper.can_focus      = false;
+//        posjumper.set_relief(ReliefStyle.NONE);
+//        tbx.pack_start(posjumper, false, false, 0);
+//        posjumper.clicked.connect( () => {
+//            if(global.position_reference == null || !global.position_reference.valid())
+//                return;
+//            TreePath path = global.position_reference.get_path();
+//            var store = (ListStore)tlm;
+//            TreeIter iter;
+//            store.get_iter(out iter, path);
+//            tl.set_focus_on_iter(ref iter);
+//        });
+//        posjumper.set_tooltip_text(_("Jump to current position"));
+//        var bottom_box = new Box(Orientation.HORIZONTAL, 0);
+//        bottom_box.pack_start(tbx, false, false, 0);
+//        sbutton = new SerialButton();
+//        sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+//        sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+//        sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
 
-        bottom_box.pack_start(new Label(""), true, true, 0);
-        bottom_box.pack_start(sbutton, false, false, 0);
-        inner_box.pack_start(bottom_box, false, false, 0);
-        win.notify["media-browser-visible"].connect( (s, val) => {
-            if(win.media_browser_visible == true) {
-                hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
-                hide_button.set_tooltip_text(HIDE_LIBRARY);
-            }
-            else {
-                hide_button_image.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
-                hide_button.set_tooltip_text(SHOW_LIBRARY);
-            }
-        });
+//        bottom_box.pack_start(new Label(""), true, true, 0);
+//        bottom_box.pack_start(sbutton, false, false, 0);
+////        inner_box.pack_start(bottom_box, false, false, 0);
+//        win.notify["media-browser-visible"].connect( (s, val) => {
+//            if(win.media_browser_visible == true) {
+//                hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+//                hide_button.set_tooltip_text(HIDE_LIBRARY);
+//            }
+//            else {
+//                hide_button_image.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+//                hide_button.set_tooltip_text(SHOW_LIBRARY);
+//            }
+//        });
     }
 }
 
