@@ -56,40 +56,11 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     }
     
     private void setup_widgets() {
-//        Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);
         var scrolledlyricsview = new ScrolledWindow(null, null);
         this.lyricsView = new LyricsView();
         scrolledlyricsview.add(lyricsView);
         scrolledlyricsview.set_shadow_type(Gtk.ShadowType.IN);
-//        inner_box.pack_start(scrolledlyricsview, true, true, 0);
         this.pack_start(scrolledlyricsview, true, true, 0);
-        
-//        var hide_button_2 = new Gtk.Button();
-//        var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
-//        hide_button_2.add(hide_button_image);
-//        hide_button_2.can_focus = false;
-//        hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
-//        hide_button_2.set_relief(ReliefStyle.NONE);
-//        var bottom_box = new Box(Orientation.HORIZONTAL, 0);
-//        bottom_box.pack_start(hide_button_2, false, false, 0);
-//        bottom_box.pack_start(new Label(""), true, true, 0);
-//        sbutton = new SerialButton();
-//        sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
-//        sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
-//        sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-//        bottom_box.pack_start(sbutton, false, false, 0);
-//        inner_box.pack_start(bottom_box, false, false, 0);
-//        
-//        win.notify["media-browser-visible"].connect( (s, val) => {
-//            if(win.media_browser_visible == true) {
-//                hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
-//                hide_button_2.set_tooltip_text(  HIDE_LIBRARY);
-//            }
-//            else {
-//                hide_button_image.set_from_stock(  Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
-//                hide_button_2.set_tooltip_text(  SHOW_LIBRARY);
-//            }
-//        });
     }
 }
 

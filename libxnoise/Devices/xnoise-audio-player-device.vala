@@ -31,10 +31,11 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.ExtDev;
 
 
 
-private class Xnoise.AudioPlayerDevice : Xnoise.Device {
+private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     
     private string uri;
     private AudioPlayerMainView view;
@@ -83,14 +84,15 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
 
 
 
-private class Xnoise.AudioPlayerMainView : Gtk.Box, IMainView {
+private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
     
     private uint32 id;
     private unowned AudioPlayerDevice audio_player_device;
-    
+    private TreeView tree;
+    private TreeStore treemodel;
     
     public AudioPlayerMainView(AudioPlayerDevice audio_player_device) {
-        GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.audio_player_device = audio_player_device;
         this.id = Random.next_int();
         setup_widgets();
@@ -105,7 +107,39 @@ private class Xnoise.AudioPlayerMainView : Gtk.Box, IMainView {
     }
     
     private void setup_widgets() {
-        this.pack_start(new Label("audioplayer"), true, true, 0);
+        var label = new Label("");
+        label.set_markup("<span size=\"xx-large\"><b>" +
+                         Markup.printf_escaped(_("External Player Device")) +
+                         "</b></span>"
+        );
+        this.pack_start(label, false, false, 12);
+        treemodel = new PlayerTreeStore();
+        tree = new TreeView();
+        tree.set_headers_visible(false);
+        var cell = new CellRendererText();
+        tree.insert_column_with_attributes(-1, "", cell, "text", PlayerTreeStore.Column.VIS_TEXT);
+        var sw = new ScrolledWindow(null, null);
+        sw.set_shadow_type(ShadowType.IN);
+        sw.add(tree);
+        this.pack_start(sw, true, true, 0);
+        tree.set_model(treemodel);
+    }
+}
+
+
+private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
+    
+    private GLib.Type[] col_types = new GLib.Type[] {
+        typeof(string)     //VIS_TEXT
+    };
+
+    public enum Column {
+        VIS_TEXT,
+        N_COLUMNS
+    }
+    
+    public PlayerTreeStore() {
+        this.set_column_types(col_types);
     }
 }
 

@@ -30,8 +30,10 @@
 
 
 using Xnoise;
+using Xnoise.ExtDev;
 
-private enum Xnoise.DeviceType {
+
+private enum Xnoise.ExtDev.DeviceType {
     UNKNOWN,
     ANDROID,
     GENERIC_PLAYER,
@@ -40,14 +42,13 @@ private enum Xnoise.DeviceType {
 }
 
 
-private abstract class Xnoise.Device : GLib.Object {
+private abstract class Xnoise.ExtDev.Device : GLib.Object {
     
     private string? identifier = null;
     
     public unowned Mount mount;
     
     public DeviceType device_type { get; set; }
-    
     
     public abstract bool initialize();
     public abstract string get_uri();

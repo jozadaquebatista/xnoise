@@ -28,6 +28,8 @@
  *     Jörn Magens
  */
 
+using Xnoise;
+using Xnoise.ExtDev;
 
 
 public class Xnoise.Main : GLib.Object {

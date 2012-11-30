@@ -513,7 +513,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                                 );
                                 if(pb != null) {
                                     pb.pulse();
-                                    pb.set_text(_("%u tracks found").printf(xcnt));
+                                    pb.set_text(_("%u new tracks found").printf(xcnt));
                                 }
                                 return false;
                             });

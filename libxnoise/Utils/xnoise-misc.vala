@@ -33,6 +33,7 @@ using Xnoise.Utilities;
 using Xnoise.Resources;
 using Xnoise.Database;
 using Xnoise.PluginModule;
+using Xnoise.ExtDev;
 
 
 
@@ -43,6 +44,7 @@ namespace Xnoise {
     public static Worker db_worker = null;
     public static Worker io_worker = null;
     public static Worker cache_worker = null;
+    public static Worker device_worker = null;
     
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
@@ -111,9 +113,10 @@ namespace Xnoise {
         media_importer = new MediaImporter();
         
         // WORKERS
-        db_worker    = new Worker(MainContext.default());
-        io_worker    = new Worker(MainContext.default());
-        cache_worker = new Worker(MainContext.default());
+        db_worker     = new Worker(MainContext.default());
+        io_worker     = new Worker(MainContext.default());
+        cache_worker  = new Worker(MainContext.default());
+        device_worker = new Worker(MainContext.default());
         
         // THUMBNAILER DBUS PROXY
         thumbnailer = new DbusThumbnailer();

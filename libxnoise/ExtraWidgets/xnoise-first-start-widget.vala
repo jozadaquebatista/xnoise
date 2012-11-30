@@ -63,10 +63,6 @@ private class Xnoise.FirstStartWidget : Box {
     ~FirstStartWidget() {
     }
     
-//    public string get_view_name() {
-//        return "FirstStartWidget";
-//    }
-    
     private HashTable<string,string> ht = new HashTable<string,string>(str_hash, str_equal);
     
     private void on_add_folder_clicked() {

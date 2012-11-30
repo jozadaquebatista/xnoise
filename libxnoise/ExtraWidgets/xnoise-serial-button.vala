@@ -63,15 +63,6 @@ internal class Xnoise.SerialButton : Gtk.Box {
         get { return (int)this.get_children().length(); }
     }
 
-    //public bool has_item(string? name) {
-    //    if(name == null)
-    //        return false;
-    //    
-    //    if(sitems.lookup(name) == null)
-    //        return false;
-    //    return true;
-    //}
-
     public string? get_active_name() {
         if(active_item == null)
             return null;
@@ -107,6 +98,8 @@ internal class Xnoise.SerialButton : Gtk.Box {
     private unowned SerialItem? active_item = null;
 
     public bool has_item(string name) {
+        if(name == null || name == "")
+            return false;
         return sitems.lookup(name) != null;
     }
 

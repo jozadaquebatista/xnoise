@@ -31,19 +31,20 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.ExtDev;
 
 
 
-private class Xnoise.DeviceManager : GLib.Object {
+private class Xnoise.ExtDev.DeviceManager : GLib.Object {
     
     private GLib.VolumeMonitor volume_monitor;
     
-    private HashTable<string,Xnoise.Device> devices;
+    private HashTable<string,Device> devices;
     
     
     public DeviceManager() {
         lock(devices) {
-            devices = new HashTable<string,Xnoise.Device>(str_hash, str_equal);
+            devices = new HashTable<string,Device>(str_hash, str_equal);
         }
         
         volume_monitor = VolumeMonitor.get();
@@ -70,7 +71,7 @@ private class Xnoise.DeviceManager : GLib.Object {
     private void mount_added(Mount mount) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, mount_added_job);
         job.set_arg("mount", mount);
-        io_worker.push_job(job);
+        device_worker.push_job(job);
     }
     
     private bool mount_added_job(Worker.Job job) {

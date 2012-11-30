@@ -84,6 +84,8 @@ namespace Xnoise {
 			FAILED
 		}
 	}
+	namespace ExtDev {
+	}
 	namespace Playlist {
 		namespace Asx {
 		}
@@ -1094,6 +1096,8 @@ namespace Xnoise {
 	public static Xnoise.Worker db_worker;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Database.Writer db_writer;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.Worker device_worker;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.HashTable<string,Xnoise.DockableMedia> dockable_media_sources;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
