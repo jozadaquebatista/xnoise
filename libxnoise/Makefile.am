@@ -44,6 +44,7 @@ libxnoise_la_SOURCES = \
     Devices/xnoise-audio-player-device.vala \
     Devices/xnoise-device.vala \
     Devices/xnoise-device-manager.vala \
+    Devices/xnoise-audio-player-temp-db.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \

@@ -147,6 +147,17 @@ typedef struct _XnoiseDatabaseWriterPrivate XnoiseDatabaseWriterPrivate;
 #define XNOISE_DATABASE_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_writer_notification_data_get_type ())
 typedef struct _XnoiseDatabaseWriterNotificationData XnoiseDatabaseWriterNotificationData;
 
+#define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+
+typedef struct _XnoiseExtDevAudioPlayerTempDb XnoiseExtDevAudioPlayerTempDb;
+typedef struct _XnoiseExtDevAudioPlayerTempDbClass XnoiseExtDevAudioPlayerTempDbClass;
+typedef struct _XnoiseExtDevAudioPlayerTempDbPrivate XnoiseExtDevAudioPlayerTempDbPrivate;
+
 #define XNOISE_TYPE_MUSIC_BROWSER_MODEL (xnoise_music_browser_model_get_type ())
 #define XNOISE_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModel))
 #define XNOISE_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
@@ -953,6 +964,15 @@ struct _XnoiseDatabaseWriterNotificationData {
 };
 
 typedef void (*XnoiseDatabaseWriterWriterCallback) (sqlite3* database, void* user_data);
+struct _XnoiseExtDevAudioPlayerTempDb {
+	XnoiseDataSource parent_instance;
+	XnoiseExtDevAudioPlayerTempDbPrivate * priv;
+};
+
+struct _XnoiseExtDevAudioPlayerTempDbClass {
+	XnoiseDataSourceClass parent_class;
+};
+
 struct _XnoiseMusicBrowserModel {
 	GtkTreeStore parent_instance;
 	XnoiseMusicBrowserModelPrivate * priv;
@@ -1804,6 +1824,12 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* s
 gboolean xnoise_data_source_get_stream_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
+GType xnoise_ext_dev_audio_player_temp_db_get_type (void) G_GNUC_CONST;
+XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_new (GCancellable* cancel);
+XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GType object_type, GCancellable* cancel);
+void xnoise_ext_dev_audio_player_temp_db_begin_transaction (XnoiseExtDevAudioPlayerTempDb* self);
+void xnoise_ext_dev_audio_player_temp_db_commit_transaction (XnoiseExtDevAudioPlayerTempDb* self);
+void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerTempDb* self, XnoiseTrackData*** tda, int* tda_length1);
 GType xnoise_music_browser_model_get_type (void) G_GNUC_CONST;
 GType xnoise_music_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_music_browser_model_collection_type_get_type (void) G_GNUC_CONST;

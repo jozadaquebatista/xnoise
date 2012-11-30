@@ -85,6 +85,24 @@ namespace Xnoise {
 		}
 	}
 	namespace ExtDev {
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public class AudioPlayerTempDb : Xnoise.DataSource {
+			public AudioPlayerTempDb (GLib.Cancellable cancel);
+			public void begin_transaction ();
+			public void commit_transaction ();
+			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
+			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stamp);
+			public override Xnoise.Item[] get_artists (string searchtext = EMPTYSTRING, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
+			public override unowned string get_datasource_name ();
+			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
+			public override Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+			public override Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+			public override Xnoise.TrackData[] get_trackdata_for_item (string searchterm, Xnoise.Item? item);
+			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
+			public void insert_tracks (ref Xnoise.TrackData[] tda);
+			public signal void progress (int cnt);
+		}
 	}
 	namespace Playlist {
 		namespace Asx {
