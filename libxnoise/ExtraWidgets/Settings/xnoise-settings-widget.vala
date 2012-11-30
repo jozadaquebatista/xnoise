@@ -35,7 +35,7 @@ using Xnoise.PluginModule;
 using Xnoise.Resources;
 
 
-private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
+private class Xnoise.SettingsWidget : Gtk.Box {
     private Builder builder;
     private const string SETTINGS_UI_FILE = Config.XN_UIDIR + "settings.ui";
     private Notebook notebook;
@@ -77,9 +77,9 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         connect_signals();
     }
 
-    public string get_view_name() {
-        return "Settings";
-    }
+//    public string get_view_name() {
+//        return "Settings";
+//    }
     
     private void connect_signals() {
         assert(switch_usestop != null);
@@ -225,7 +225,7 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     private void on_back_button_clicked() {
         Params.write_all_parameters_to_file();
-        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+        main_window.show_content();//mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
         sign_finish();
     }
 
@@ -300,43 +300,30 @@ private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             
             switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
             switch_showL.can_focus = false;
-//            var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
             switch_showL.set_label(_("Grid lines in media browser"));
-//            plugin_label_sizegroup.add_widget(label_showL);
             
             switch_hoverimage = this.builder.get_object("cb_hoverimage") as CheckButton;
             switch_hoverimage.can_focus = false;
-//            var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
             switch_hoverimage.set_label(_("Show picture on hover album image"));
-//            plugin_label_sizegroup.add_widget(label_hoverimage);
             
             switch_compact = this.builder.get_object("cb_compact") as CheckButton;
             switch_compact.can_focus = false;
-//            var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
             switch_compact.set_label(_("Use Compact Menu"));
-//            plugin_label_sizegroup.add_widget(label_compact);
             
             switch_usestop = this.builder.get_object("cb_usestop") as CheckButton;
             switch_usestop.can_focus = false;
-//            var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
             switch_usestop.set_label(_("Show Stop button"));
-//            plugin_label_sizegroup.add_widget(label_usestop);
             
             switch_quitifclosed = this.builder.get_object("cb_quitifclosed") as CheckButton;
             switch_quitifclosed.can_focus = false;
-//            var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
             switch_quitifclosed.set_label(_("Quit on window close"));
-//            plugin_label_sizegroup.add_widget(label_quitifclosed);
 
             switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
             switch_use_notifications.can_focus = false;
-//            var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
             switch_use_notifications.set_label(_("Use desktop notifications"));
-//            plugin_label_sizegroup.add_widget(label_use_notifications);
             
             switch_equalizer = this.builder.get_object("cb_equalizer") as CheckButton;
             switch_equalizer.can_focus = false;
-//            var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
             switch_equalizer.set_label(_("Use Equalizer"));
 //            plugin_label_sizegroup.add_widget(label_equalizer);
             

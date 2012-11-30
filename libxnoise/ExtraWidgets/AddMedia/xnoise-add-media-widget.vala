@@ -235,7 +235,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
-        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+        main_window.show_content();
 //        main_window.dialognotebook.set_current_page(0);
         bool interrupted_populate_model = false;
         if(main_window.musicBr.mediabrowsermodel.populating_model) {
@@ -248,7 +248,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         prg_bar.set_text("0 / 0");
         
         Idle.add(() => {
-            main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+            main_window.show_content();
             return false;
         });
         

@@ -48,8 +48,6 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
     
     ~AudioPlayerDevice() {
         main_window.main_view_sbutton.del(this.get_identifier());
-//        main_window.sbuttonLY.del(this.get_identifier());
-//        main_window.sbuttonVI.del(this.get_identifier());
         main_window.mainview_box.remove_main_view(view);
         print("removed audio player %s\n", get_identifier());
     }
@@ -66,8 +64,6 @@ private class Xnoise.AudioPlayerDevice : Xnoise.Device {
             if(!main_window.main_view_sbutton.has_item(this.get_identifier())) {
                 string playername = "Player";
                 main_window.main_view_sbutton.insert(this.get_identifier(), playername);
-//                main_window.sbuttonLY.insert(this.get_identifier(), playername);
-//                main_window.sbuttonVI.insert(this.get_identifier(), playername);
             }
             return false;
         });

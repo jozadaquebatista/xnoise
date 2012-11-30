@@ -1236,12 +1236,12 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
 	XnoiseControlButton* stopButton;
+	XnoiseSerialButton* main_view_sbutton;
 	gboolean is_fullscreen;
 	XnoiseMediaSoureWidget* msw;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
 	GtkWindow* fullscreenwindow;
-	XnoiseSerialButton* main_view_sbutton;
 };
 
 struct _XnoiseMainWindowClass {

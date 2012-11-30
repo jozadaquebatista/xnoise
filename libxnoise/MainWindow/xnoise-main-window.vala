@@ -46,15 +46,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
     private unowned Main xn;
     private VolumeSliderButton volume_slider;
-    private CssProvider css_provider_search;
     private int _posX;
     private int _posY;
+    private Gtk.Box contentvbox;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
     private ToolItem eqButtonTI;
-//    internal SerialButton sbuttonTL;
-//    internal SerialButton sbuttonLY;
-//    internal SerialButton sbuttonVI;
     private Button repeatButton;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
@@ -78,6 +75,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
     private Gtk.Notebook bottom_notebook;
+    private Gtk.Notebook content_notebook;
     private AlbumImage albumimage;
     private Gtk.Entry album_search_entry;
     internal SerialButton album_view_sorting;
@@ -97,6 +95,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton previousButton;
     internal ControlButton nextButton;
     internal ControlButton stopButton;
+    internal SerialButton main_view_sbutton;
     public unowned LyricsView lyricsView { get; private set; }
     public bool is_fullscreen = false;
     public MainViewNotebook mainview_box { get; private set; }
@@ -127,14 +126,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             if(value == true) {
                 if(!main_view_sbutton.has_item(LYRICS_VIEW_NAME)) {
                     main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-//                    sbuttonLY.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-//                    sbuttonVI.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
                 }
             }
             else {
                 main_view_sbutton.del(LYRICS_VIEW_NAME);
-//                sbuttonLY.del(LYRICS_VIEW_NAME);
-//                sbuttonVI.del(LYRICS_VIEW_NAME);
             }
             Idle.add( () => {
                 foreach(Gtk.Action a in action_group.list_actions())
@@ -348,7 +343,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
         global.notify["media-import-in-progress"].connect(on_media_import_notify);
         
-//        buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
         mainview_page_buffer = TRACKLIST_VIEW_NAME;
         
         global.caught_eos_from_player.connect(on_caught_eos_from_player);
@@ -369,13 +363,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 main_view_sbutton.select(VIDEOVIEW_NAME, true);
             }
         });
-        css_provider_search = new CssProvider();
-        try {
-            css_provider_search.load_from_data(search_used_css, search_used_css.length);
-        }
-        catch(Error e) {
-            print("%s\n", e.message);
-        }
         Idle.add( () => {
             msw.set_focus_on_selector();
             return false;
@@ -474,11 +461,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal void restore_tab() {
         if(temporary_mainview_name != TRACKLIST_VIEW_NAME) {
             mainview_box.select_main_view(temporary_mainview_name);
-            if(temporary_mainview_name == VIDEOVIEW_NAME)
-                main_view_sbutton.select(temporary_mainview_name, true);
-            else if(temporary_mainview_name == LYRICS_VIEW_NAME)
-                main_view_sbutton.select(temporary_mainview_name, true);
-            
+            main_view_sbutton.select(temporary_mainview_name, true);
             temporary_mainview_name = TRACKLIST_VIEW_NAME;
         }
     }
@@ -511,8 +494,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             global.player_state_changed.connect(handle_screensaver);
         
         main_view_sbutton.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
-//        sbuttonTL.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
-//        sbuttonLY.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
     }
     
     private void handle_screensaver() {
@@ -1061,26 +1042,20 @@ print("on close 2\n");
             this.hpaned.set_position(hp_position);
         
         Idle.add( () => {
-            string x = Params.get_string_value("MainViewName");
+            string x = Params.get_string_value("MainViewName"); //TODO
             switch(x) {
                 case TRACKLIST_VIEW_NAME: {
                     main_view_sbutton.select(TRACKLIST_VIEW_NAME, false);
-//                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
-//                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
                 case VIDEOVIEW_NAME: {
                     main_view_sbutton.select(VIDEOVIEW_NAME, false);
-//                    sbuttonVI.select(VIDEOVIEW_NAME, false);
-//                    sbuttonLY.select(VIDEOVIEW_NAME, false);
                     this.mainview_box.select_main_view(VIDEOVIEW_NAME);
                     break;
                 }
                 default: {
                     main_view_sbutton.select(TRACKLIST_VIEW_NAME, false);
-//                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
-//                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
@@ -1298,8 +1273,13 @@ print("on close 2\n");
 
     private void on_menu_add() {
         album_view_toggle.set_active(false);
-        this.mainview_box.select_main_view(settings_widget.get_view_name());
+        content_notebook.set_current_page(content_notebook.page_num(settings_widget));
+//        this.mainview_box.select_main_view(settings_widget.get_view_name());
         settings_widget.select_media_tab();
+    }
+    
+    internal void show_content() {
+        content_notebook.set_current_page(content_notebook.page_num(contentvbox));
     }
 
     private void on_location_add() {
@@ -1412,7 +1392,8 @@ print("on close 2\n");
     private void on_settings_edit() {
         album_view_toggle.set_active(false);
         settings_widget.select_general_tab();
-        mainview_box.select_main_view(settings_widget.get_view_name());
+        content_notebook.set_current_page(content_notebook.page_num(settings_widget));
+//        mainview_box.select_main_view(settings_widget.get_view_name());
     }
 
     internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
@@ -1590,34 +1571,18 @@ print("on close 2\n");
     }
     
     private void on_serial_button_clicked(SerialButton sender, string name) {
-//        if(sender == this.sbuttonTL) {
-//        print("sbuttontl selected %s\n", name);
-//            sbuttonVI.select(name, false);
-//            sbuttonLY.select(name, false);
-            this.mainview_box.select_main_view(name);
-//        }
-//        if(sender == this.sbuttonVI) {
-//            sbuttonTL.select(name, false);
-//            sbuttonLY.select(name, false);
-//            this.mainview_box.select_main_view(name);
-//        }
-//        if(sender == this.sbuttonLY) {
-//            sbuttonVI.select(name, false);
-//            sbuttonTL.select(name, false);
-//            this.mainview_box.select_main_view(name);
-//        }
+        this.mainview_box.select_main_view(name);
         if(name == TRACKLIST_VIEW_NAME)
             tl.grab_focus();
     }
     
-    internal SerialButton main_view_sbutton;
-
     private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(MAIN_UI_FILE);
             
-            bottom_notebook = gb.get_object("bottom_notebook") as Gtk.Notebook;
+            bottom_notebook  = gb.get_object("bottom_notebook") as Gtk.Notebook;
+            content_notebook = gb.get_object("content_nb") as Gtk.Notebook;
             
             ///BOX FOR MAIN MENU
             menuvbox = gb.get_object("menuvbox") as Gtk.Box;
@@ -1647,7 +1612,7 @@ print("on close 2\n");
             
             this.infobox = gb.get_object("infobox") as Gtk.Box;
             
-            var contentvbox = gb.get_object("contentvbox") as Gtk.Box;
+            contentvbox = gb.get_object("contentvbox") as Gtk.Box;
             mainview_box = new MainViewNotebook();
             contentvbox.pack_start(mainview_box, true, true, 0);
             
@@ -1759,7 +1724,8 @@ print("on close 2\n");
             mainview_box.add_main_view(lyricsview_widget);
             
             settings_widget = new SettingsWidget();
-            mainview_box.add_main_view(settings_widget);
+            content_notebook.append_page(settings_widget, null);
+//            mainview_box.add_main_view(settings_widget);
             
             mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
             
@@ -1773,14 +1739,7 @@ print("on close 2\n");
             main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
             //-----------------
             
-//            sbuttonTL = tracklistview_widget.sbutton;
-//            sbuttonVI = videoview_widget.sbutton;
-//            sbuttonLY = lyricsview_widget.sbutton;
-
             main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
-//            sbuttonTL.sign_selected.connect(on_serial_button_clicked);
-//            sbuttonVI.sign_selected.connect(on_serial_button_clicked);
-//            sbuttonLY.sign_selected.connect(on_serial_button_clicked);
             //---------------------
             
             //REPEAT MODE SELECTOR
@@ -1812,8 +1771,7 @@ print("on close 2\n");
                     return false;
                 }
                 mainview_box.select_main_view(mainview_page_buffer);
-main_view_sbutton.select(mainview_page_buffer, true);
-//                sbuttonVI.select(mainview_page_buffer, true);
+                main_view_sbutton.select(mainview_page_buffer, true);
                 return false;
             });
             //--------------------
@@ -2071,7 +2029,6 @@ main_view_sbutton.select(mainview_page_buffer, true);
             if(np == null || (nme = mv.get_view_name()) == null)
                 return;
             main_view_sbutton.select(nme, false);
-//            sbuttonTL.select(nme, false);
             global.sign_main_view_changed(nme);
             Params.set_string_value("MainViewName", nme);
         });
@@ -2082,7 +2039,6 @@ main_view_sbutton.select(mainview_page_buffer, true);
     }
     
     public void reset_mainview_to_tracklist() {
-//        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
         main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
     }
     
@@ -2120,17 +2076,11 @@ main_view_sbutton.select(mainview_page_buffer, true);
         aimage_timeout = Timeout.add(300, () => {
             mainview_page_buffer = this.mainview_box.get_current_main_view_name();
             main_view_sbutton.select(VIDEOVIEW_NAME, true);
-//            sbuttonTL.select(VIDEOVIEW_NAME, true);
             this.aimage_timeout = 0;
             return false;
         });
         return false;
     }
-    
-    //@define-color text_color #FFFFFF;
-    private const string search_used_css = """
-        @define-color base_color #85B0BE;
-    """; // blue
 }
 
 
