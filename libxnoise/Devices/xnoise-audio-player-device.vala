@@ -32,6 +32,8 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
+using Xnoise.Utilities;
+using Xnoise.TagAccess;
 
 
 
@@ -113,7 +115,18 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
                          "</b></span>"
         );
         this.pack_start(label, false, false, 12);
-        treemodel = new PlayerTreeStore();
+        File b = File.new_for_uri(audio_player_device.get_uri());
+        assert(b != null);
+        b = b.get_child("Music");
+        assert(b != null);
+        assert(b.get_path() != null);
+        if(b.query_exists(null))
+            treemodel = new PlayerTreeStore(b);
+        else {
+            b = File.new_for_uri(audio_player_device.get_uri());
+            b = b.get_child("media"); // old android devices
+            treemodel = new PlayerTreeStore(b);
+        }
         tree = new TreeView();
         tree.set_headers_visible(false);
         var cell = new CellRendererText();
@@ -128,7 +141,9 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
 
 
 private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
+    private static int FILE_COUNT = 150;
     
+    private File base_folder;
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(string)     //VIS_TEXT
     };
@@ -138,8 +153,105 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         N_COLUMNS
     }
     
-    public PlayerTreeStore() {
+    public PlayerTreeStore(File base_folder) {
         this.set_column_types(col_types);
+        this.base_folder = base_folder;
+        populate();
+    }
+
+    private void populate() {
+        tda = {};
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
+        device_worker.push_job(job);
+    }
+
+    private TrackData[] tda = {}; 
+    
+    private bool read_media_folder_job(Worker.Job job) {
+        return_val_if_fail(device_worker.is_same_thread(), false);
+        read_recoursive(this.base_folder, job);
+        return false;
+    }
+    
+    // running in io thread
+    private void read_recoursive(File dir, Worker.Job job) {
+        return_if_fail(device_worker.is_same_thread());
+        
+        job.counter[0]++;
+        FileEnumerator enumerator;
+        string attr = FileAttribute.STANDARD_NAME + "," +
+                      FileAttribute.STANDARD_TYPE + "," +
+                      FileAttribute.STANDARD_CONTENT_TYPE;
+        try {
+            enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
+        } 
+        catch(Error e) {
+            print("Error importing directory %s. %s\n", dir.get_path(), e.message);
+            job.counter[0]--;
+            if(job.counter[0] == 0)
+                end_import(job);
+            return;
+        }
+        GLib.FileInfo info;
+        try {
+            while((info = enumerator.next_file()) != null) {
+                TrackData td = null;
+                string filename = info.get_name();
+                string filepath = Path.build_filename(dir.get_path(), filename);
+                File file = File.new_for_path(filepath);
+                FileType filetype = info.get_file_type();
+                if(filetype == FileType.DIRECTORY) {
+                    read_recoursive(file, job);
+                }
+                else {
+                    string uri_lc = filename.down();
+                    if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                        var tr = new TagReader();
+                        td = tr.read_tag(filepath);
+                        if(td != null) {
+                            td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+                            tda += td;
+                            job.big_counter[1]++;
+                        }
+                        if(job.big_counter[1] % 50 == 0) {
+                        }
+                        if(tda.length > FILE_COUNT) {
+                            foreach(var tdi in tda) {
+                                print("found title: %s\n", tdi.title);
+                            }
+//                            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+//                            db_job.track_dat = (owned)tda;
+//                            db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
+                            tda = {};
+//                            db_worker.push_job(db_job);
+                        }
+                    }
+                }
+            }
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        job.counter[0]--;
+        if(job.counter[0] == 0) {
+            if(tda.length > 0) {
+//                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+//                db_job.track_dat = (owned)tda;
+                tda = {};
+//                db_worker.push_job(db_job);
+            }
+            end_import(job);
+        }
+        return;
+    }
+    
+    private void end_import(Worker.Job job) {
+        print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
+//        if(job.counter[1] != job.counter[2])
+//            return;
+//        var finisher_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_import_job);
+//        finisher_job.set_arg("msg_id", job.get_arg("msg_id"));
+//        db_worker.push_job(finisher_job);
     }
 }
 

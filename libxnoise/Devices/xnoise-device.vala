@@ -44,9 +44,8 @@ private enum Xnoise.ExtDev.DeviceType {
 
 private abstract class Xnoise.ExtDev.Device : GLib.Object {
     
-    private string? identifier = null;
-    
     public unowned Mount mount;
+    private string? identifier = null;
     
     public DeviceType device_type { get; set; }
     
