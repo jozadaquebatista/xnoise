@@ -147,6 +147,55 @@ typedef struct _XnoiseDatabaseWriterPrivate XnoiseDatabaseWriterPrivate;
 #define XNOISE_DATABASE_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_writer_notification_data_get_type ())
 typedef struct _XnoiseDatabaseWriterNotificationData XnoiseDatabaseWriterNotificationData;
 
+#define XNOISE_TYPE_MUSIC_BROWSER_MODEL (xnoise_music_browser_model_get_type ())
+#define XNOISE_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModel))
+#define XNOISE_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
+#define XNOISE_IS_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
+#define XNOISE_IS_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
+#define XNOISE_MUSIC_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
+
+typedef struct _XnoiseMusicBrowserModel XnoiseMusicBrowserModel;
+typedef struct _XnoiseMusicBrowserModelClass XnoiseMusicBrowserModelClass;
+typedef struct _XnoiseMusicBrowserModelPrivate XnoiseMusicBrowserModelPrivate;
+
+#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLUMN (xnoise_music_browser_model_column_get_type ())
+
+#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_music_browser_model_collection_type_get_type ())
+
+#define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
+#define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
+#define XNOISE_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
+#define XNOISE_IS_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DOCKABLE_MEDIA))
+#define XNOISE_IS_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DOCKABLE_MEDIA))
+#define XNOISE_DOCKABLE_MEDIA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
+
+typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
+typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
+typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
+
+#define XNOISE_DOCKABLE_MEDIA_TYPE_CATEGORY (xnoise_dockable_media_category_get_type ())
+
+#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
+#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
+#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+
+typedef struct _XnoiseMainWindow XnoiseMainWindow;
+typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
+
+#define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+
+typedef struct _XnoiseExtDevAudioPlayerTempDb XnoiseExtDevAudioPlayerTempDb;
+typedef struct _XnoiseExtDevAudioPlayerTempDbClass XnoiseExtDevAudioPlayerTempDbClass;
+typedef struct _XnoiseExtDevAudioPlayerTempDbPrivate XnoiseExtDevAudioPlayerTempDbPrivate;
+
 #define XNOISE_EXT_DEV_TYPE_DEVICE_TYPE (xnoise_ext_dev_device_type_get_type ())
 
 #define XNOISE_EXT_DEV_TYPE_DEVICE (xnoise_ext_dev_device_get_type ())
@@ -189,55 +238,6 @@ typedef struct _XnoiseExtDevDeviceManagerPrivate XnoiseExtDevDeviceManagerPrivat
 typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainer XnoiseExtDevDeviceManagerDeviceIdContainer;
 typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainerClass XnoiseExtDevDeviceManagerDeviceIdContainerClass;
 typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainerPrivate XnoiseExtDevDeviceManagerDeviceIdContainerPrivate;
-
-#define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
-#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
-#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
-
-typedef struct _XnoiseExtDevAudioPlayerTempDb XnoiseExtDevAudioPlayerTempDb;
-typedef struct _XnoiseExtDevAudioPlayerTempDbClass XnoiseExtDevAudioPlayerTempDbClass;
-typedef struct _XnoiseExtDevAudioPlayerTempDbPrivate XnoiseExtDevAudioPlayerTempDbPrivate;
-
-#define XNOISE_TYPE_MUSIC_BROWSER_MODEL (xnoise_music_browser_model_get_type ())
-#define XNOISE_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModel))
-#define XNOISE_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
-#define XNOISE_IS_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
-#define XNOISE_IS_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
-#define XNOISE_MUSIC_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
-
-typedef struct _XnoiseMusicBrowserModel XnoiseMusicBrowserModel;
-typedef struct _XnoiseMusicBrowserModelClass XnoiseMusicBrowserModelClass;
-typedef struct _XnoiseMusicBrowserModelPrivate XnoiseMusicBrowserModelPrivate;
-
-#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLUMN (xnoise_music_browser_model_column_get_type ())
-
-#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_music_browser_model_collection_type_get_type ())
-
-#define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
-#define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
-#define XNOISE_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
-#define XNOISE_IS_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DOCKABLE_MEDIA))
-#define XNOISE_IS_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DOCKABLE_MEDIA))
-#define XNOISE_DOCKABLE_MEDIA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
-
-typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
-typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
-typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
-
-#define XNOISE_DOCKABLE_MEDIA_TYPE_CATEGORY (xnoise_dockable_media_category_get_type ())
-
-#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
-#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
-#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-
-typedef struct _XnoiseMainWindow XnoiseMainWindow;
-typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 
 #define XNOISE_TYPE_VIDEO_SCREEN (xnoise_video_screen_get_type ())
 #define XNOISE_VIDEO_SCREEN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_VIDEO_SCREEN, XnoiseVideoScreen))
@@ -999,6 +999,62 @@ struct _XnoiseDatabaseWriterNotificationData {
 };
 
 typedef void (*XnoiseDatabaseWriterWriterCallback) (sqlite3* database, void* user_data);
+struct _XnoiseMusicBrowserModel {
+	GtkTreeStore parent_instance;
+	XnoiseMusicBrowserModelPrivate * priv;
+};
+
+struct _XnoiseMusicBrowserModelClass {
+	GtkTreeStoreClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ICON = 0,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_VIS_TEXT,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ITEM,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_LEVEL,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_N_COLUMNS
+} XnoiseMusicBrowserModelColumn;
+
+typedef enum  {
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
+} XnoiseMusicBrowserModelCollectionType;
+
+typedef enum  {
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_MEDIA_COLLECTION,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_PLAYLIST,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_STORES,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_DEVICES
+} XnoiseDockableMediaCategory;
+
+struct _XnoiseDockableMedia {
+	GObject parent_instance;
+	XnoiseDockableMediaPrivate * priv;
+	GtkWidget* widget;
+};
+
+struct _XnoiseDockableMediaClass {
+	GObjectClass parent_class;
+	gchar* (*name) (XnoiseDockableMedia* self);
+	gchar* (*headline) (XnoiseDockableMedia* self);
+	XnoiseDockableMediaCategory (*category) (XnoiseDockableMedia* self);
+	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
+	GtkWidget* (*create_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
+	void (*remove_main_view) (XnoiseDockableMedia* self);
+};
+
+struct _XnoiseExtDevAudioPlayerTempDb {
+	XnoiseDataSource parent_instance;
+	XnoiseExtDevAudioPlayerTempDbPrivate * priv;
+};
+
+struct _XnoiseExtDevAudioPlayerTempDbClass {
+	XnoiseDataSourceClass parent_class;
+};
+
 typedef enum  {
 	XNOISE_EXT_DEV_DEVICE_TYPE_UNKNOWN,
 	XNOISE_EXT_DEV_DEVICE_TYPE_ANDROID,
@@ -1050,62 +1106,6 @@ struct _XnoiseExtDevDeviceManagerDeviceIdContainer {
 struct _XnoiseExtDevDeviceManagerDeviceIdContainerClass {
 	GTypeClass parent_class;
 	void (*finalize) (XnoiseExtDevDeviceManagerDeviceIdContainer *self);
-};
-
-struct _XnoiseExtDevAudioPlayerTempDb {
-	XnoiseDataSource parent_instance;
-	XnoiseExtDevAudioPlayerTempDbPrivate * priv;
-};
-
-struct _XnoiseExtDevAudioPlayerTempDbClass {
-	XnoiseDataSourceClass parent_class;
-};
-
-struct _XnoiseMusicBrowserModel {
-	GtkTreeStore parent_instance;
-	XnoiseMusicBrowserModelPrivate * priv;
-};
-
-struct _XnoiseMusicBrowserModelClass {
-	GtkTreeStoreClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ICON = 0,
-	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_VIS_TEXT,
-	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ITEM,
-	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_LEVEL,
-	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_N_COLUMNS
-} XnoiseMusicBrowserModelColumn;
-
-typedef enum  {
-	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
-	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
-	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
-} XnoiseMusicBrowserModelCollectionType;
-
-typedef enum  {
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_MEDIA_COLLECTION,
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_PLAYLIST,
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_STORES,
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_DEVICES
-} XnoiseDockableMediaCategory;
-
-struct _XnoiseDockableMedia {
-	GObject parent_instance;
-	XnoiseDockableMediaPrivate * priv;
-	GtkWidget* widget;
-};
-
-struct _XnoiseDockableMediaClass {
-	GObjectClass parent_class;
-	gchar* (*name) (XnoiseDockableMedia* self);
-	gchar* (*headline) (XnoiseDockableMedia* self);
-	XnoiseDockableMediaCategory (*category) (XnoiseDockableMedia* self);
-	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
-	GtkWidget* (*create_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
-	void (*remove_main_view) (XnoiseDockableMedia* self);
 };
 
 struct _XnoiseVideoScreen {
@@ -1907,6 +1907,31 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* s
 gboolean xnoise_data_source_get_stream_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
+GType xnoise_music_browser_model_get_type (void) G_GNUC_CONST;
+GType xnoise_music_browser_model_column_get_type (void) G_GNUC_CONST;
+GType xnoise_music_browser_model_collection_type_get_type (void) G_GNUC_CONST;
+GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
+XnoiseMusicBrowserModel* xnoise_music_browser_model_new (XnoiseDockableMedia* dock);
+XnoiseMusicBrowserModel* xnoise_music_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
+void xnoise_music_browser_model_filter (XnoiseMusicBrowserModel* self);
+void xnoise_music_browser_model_remove_all (XnoiseMusicBrowserModel* self);
+XnoiseDndData* xnoise_music_browser_model_get_dnd_data_for_path (XnoiseMusicBrowserModel* self, GtkTreePath** treepath, int* result_length1);
+gboolean xnoise_music_browser_model_get_populating_model (XnoiseMusicBrowserModel* self);
+GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
+GType xnoise_main_window_get_type (void) G_GNUC_CONST;
+gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
+gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
+XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia* self);
+GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
+GtkWidget* xnoise_dockable_media_create_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
+void xnoise_dockable_media_remove_main_view (XnoiseDockableMedia* self);
+XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
+GType xnoise_ext_dev_audio_player_temp_db_get_type (void) G_GNUC_CONST;
+XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_new (GCancellable* cancel);
+XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GType object_type, GCancellable* cancel);
+void xnoise_ext_dev_audio_player_temp_db_begin_transaction (XnoiseExtDevAudioPlayerTempDb* self);
+void xnoise_ext_dev_audio_player_temp_db_commit_transaction (XnoiseExtDevAudioPlayerTempDb* self);
+void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerTempDb* self, XnoiseTrackData*** tda, int* tda_length1);
 GType xnoise_ext_dev_device_type_get_type (void) G_GNUC_CONST;
 GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
 GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
@@ -1932,31 +1957,6 @@ GType xnoise_ext_dev_device_manager_device_id_container_get_type (void) G_GNUC_C
 void xnoise_ext_dev_device_manager_register_device (XnoiseExtDevDeviceManager* self, XnoiseExtDevDeviceManagerDeviceIdContainer* c);
 XnoiseExtDevDeviceManagerDeviceIdContainer* xnoise_ext_dev_device_manager_device_id_container_new (XnoiseExtDevDeviceManagerIdentificationCallback cb, void* cb_target);
 XnoiseExtDevDeviceManagerDeviceIdContainer* xnoise_ext_dev_device_manager_device_id_container_construct (GType object_type, XnoiseExtDevDeviceManagerIdentificationCallback cb, void* cb_target);
-GType xnoise_ext_dev_audio_player_temp_db_get_type (void) G_GNUC_CONST;
-XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_new (GCancellable* cancel);
-XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GType object_type, GCancellable* cancel);
-void xnoise_ext_dev_audio_player_temp_db_begin_transaction (XnoiseExtDevAudioPlayerTempDb* self);
-void xnoise_ext_dev_audio_player_temp_db_commit_transaction (XnoiseExtDevAudioPlayerTempDb* self);
-void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerTempDb* self, XnoiseTrackData*** tda, int* tda_length1);
-GType xnoise_music_browser_model_get_type (void) G_GNUC_CONST;
-GType xnoise_music_browser_model_column_get_type (void) G_GNUC_CONST;
-GType xnoise_music_browser_model_collection_type_get_type (void) G_GNUC_CONST;
-GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
-XnoiseMusicBrowserModel* xnoise_music_browser_model_new (XnoiseDockableMedia* dock);
-XnoiseMusicBrowserModel* xnoise_music_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
-void xnoise_music_browser_model_filter (XnoiseMusicBrowserModel* self);
-void xnoise_music_browser_model_remove_all (XnoiseMusicBrowserModel* self);
-XnoiseDndData* xnoise_music_browser_model_get_dnd_data_for_path (XnoiseMusicBrowserModel* self, GtkTreePath** treepath, int* result_length1);
-gboolean xnoise_music_browser_model_get_populating_model (XnoiseMusicBrowserModel* self);
-GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
-GType xnoise_main_window_get_type (void) G_GNUC_CONST;
-gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
-gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
-XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia* self);
-GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
-GtkWidget* xnoise_dockable_media_create_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
-void xnoise_dockable_media_remove_main_view (XnoiseDockableMedia* self);
-XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
 GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* player);

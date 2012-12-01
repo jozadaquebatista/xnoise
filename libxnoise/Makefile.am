@@ -41,10 +41,6 @@ libxnoise_la_SOURCES = \
     DBus/xnoise-dbus.vala \
     DBus/xnoise-dbus-thumbnailer.vala \
     DBus/xnoise-desktop-notifications.vala \
-    Devices/xnoise-audio-player-device.vala \
-    Devices/xnoise-device.vala \
-    Devices/xnoise-device-manager.vala \
-    Devices/xnoise-audio-player-temp-db.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
@@ -61,6 +57,13 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-device.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-temp-db.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala \
+    ExtDev/xnoise-device.vala \
+    ExtDev/xnoise-device-manager.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
@@ -200,7 +203,8 @@ DISTCLEANFILES = \
     Database/*.c \
     DataSource/*.c \
     DBus/*.c \
-    Devices/*.c \
+    ExtDev/*.c \
+    ExtDev/AudioPlayer/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
     DockableMedia/MusicBrowser/*.c \
