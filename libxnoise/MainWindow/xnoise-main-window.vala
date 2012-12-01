@@ -1068,9 +1068,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return false;
         });
         quit_if_closed              = Params.get_bool_value("quit_if_closed");
-        if(!quit_if_closed)
-            tray_icon = new TrayIcon();
-        tray_icon.visible           = !quit_if_closed;
+        if(!quit_if_closed) {
+            if(tray_icon == null)
+                tray_icon = new TrayIcon();
+            tray_icon.visible = true;
+        }
+        else {
+            if(tray_icon != null)
+                tray_icon.visible = false;
+        }
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
