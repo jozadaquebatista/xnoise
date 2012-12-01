@@ -35,17 +35,28 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.DeviceManager : GLib.Object {
+public class Xnoise.ExtDev.DeviceManager : GLib.Object {
     
     private GLib.VolumeMonitor volume_monitor;
-    
     private HashTable<string,Device> devices;
+    private List<DeviceIdContainer> callbacks = new List<DeviceIdContainer>();
     
+    public delegate Device? IdentificationCallback(Mount mount);
+    
+    public class DeviceIdContainer {
+        public IdentificationCallback cb;
+        public DeviceIdContainer(IdentificationCallback cb) {
+            this.cb = cb;
+        }
+    }
     
     public DeviceManager() {
         lock(devices) {
             devices = new HashTable<string,Device>(str_hash, str_equal);
         }
+        
+        //register device types
+        register_device(new DeviceIdContainer(AudioPlayerDevice.get_device));
         
         volume_monitor = VolumeMonitor.get();
         
@@ -57,6 +68,10 @@ private class Xnoise.ExtDev.DeviceManager : GLib.Object {
         });
         
         check_existing_mounts();
+    }
+    
+    public void register_device(DeviceIdContainer c) {
+        callbacks.prepend(c);
     }
     
     private void check_existing_mounts() {
@@ -83,13 +98,22 @@ private class Xnoise.ExtDev.DeviceManager : GLib.Object {
                     return false; // already here
             }
         }
-        if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ||
-           File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player").query_exists()) {
-            var ad = new AudioPlayerDevice(mount);
-            if(ad.initialize()) {
+        Device? d = null;
+        foreach(DeviceIdContainer c in callbacks) {
+            if((d = c.cb(mount)) != null) {
+                break;
+            }
+        }
+        if(d != null) {
+            if(d.initialize()) {
                 lock(devices) {
-                    devices.insert(ad.get_identifier(), ad);
+                    devices.insert(d.get_identifier(), d);
                 }
+                Idle.add(() => {
+                    main_window.mainview_box.add_main_view(d.get_main_view_widget());
+                    main_window.main_view_sbutton.insert(d.get_identifier(), d.get_presentable_name());
+                    return false;
+                });
             }
             else {
                 mount_removed(mount);
@@ -105,8 +129,12 @@ private class Xnoise.ExtDev.DeviceManager : GLib.Object {
         lock(devices) {
             foreach(Device d in devices.get_values()) {
                 if(mount.get_default_location().get_uri() == d.get_uri()) {
-                    print("remove device for %s\n", mount.get_default_location().get_uri());
+                    d.cancel();
+                    //print("remove device for %s\n", mount.get_default_location().get_uri());
                     devices.remove(d.get_identifier());
+                    main_window.main_view_sbutton.del(d.get_identifier());
+                    main_window.mainview_box.remove_main_view(d.get_main_view_widget());
+                    //print("removed audio player %s\n", d.get_identifier());
                     return;
                 }
             }

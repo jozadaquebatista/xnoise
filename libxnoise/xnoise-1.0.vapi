@@ -103,6 +103,36 @@ namespace Xnoise {
 			public void insert_tracks (ref Xnoise.TrackData[] tda);
 			public signal void progress (int cnt);
 		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public abstract class Device : GLib.Object {
+			public weak GLib.Mount mount;
+			public Device ();
+			public abstract void cancel ();
+			public virtual string get_identifier ();
+			public abstract Xnoise.IMainView? get_main_view_widget ();
+			public virtual string get_presentable_name ();
+			public abstract string get_uri ();
+			public abstract bool initialize ();
+			public Xnoise.ExtDev.DeviceType device_type { get; set; }
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public class DeviceManager : GLib.Object {
+			public class DeviceIdContainer {
+				public Xnoise.ExtDev.DeviceManager.IdentificationCallback cb;
+				public DeviceIdContainer (Xnoise.ExtDev.DeviceManager.IdentificationCallback cb);
+			}
+			public delegate Xnoise.ExtDev.Device? IdentificationCallback (GLib.Mount mount);
+			public DeviceManager ();
+			public void register_device (Xnoise.ExtDev.DeviceManager.DeviceIdContainer c);
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public enum DeviceType {
+			UNKNOWN,
+			ANDROID,
+			GENERIC_PLAYER,
+			IPOD,
+			CDROM
+		}
 	}
 	namespace Playlist {
 		namespace Asx {

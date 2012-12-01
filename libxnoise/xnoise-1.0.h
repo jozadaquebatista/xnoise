@@ -147,6 +147,49 @@ typedef struct _XnoiseDatabaseWriterPrivate XnoiseDatabaseWriterPrivate;
 #define XNOISE_DATABASE_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_writer_notification_data_get_type ())
 typedef struct _XnoiseDatabaseWriterNotificationData XnoiseDatabaseWriterNotificationData;
 
+#define XNOISE_EXT_DEV_TYPE_DEVICE_TYPE (xnoise_ext_dev_device_type_get_type ())
+
+#define XNOISE_EXT_DEV_TYPE_DEVICE (xnoise_ext_dev_device_get_type ())
+#define XNOISE_EXT_DEV_DEVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_DEVICE, XnoiseExtDevDevice))
+#define XNOISE_EXT_DEV_DEVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_DEVICE, XnoiseExtDevDeviceClass))
+#define XNOISE_EXT_DEV_IS_DEVICE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_DEVICE))
+#define XNOISE_EXT_DEV_IS_DEVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_DEVICE))
+#define XNOISE_EXT_DEV_DEVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_DEVICE, XnoiseExtDevDeviceClass))
+
+typedef struct _XnoiseExtDevDevice XnoiseExtDevDevice;
+typedef struct _XnoiseExtDevDeviceClass XnoiseExtDevDeviceClass;
+typedef struct _XnoiseExtDevDevicePrivate XnoiseExtDevDevicePrivate;
+
+#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
+#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
+#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
+#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
+
+typedef struct _XnoiseIMainView XnoiseIMainView;
+typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
+
+#define XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER (xnoise_ext_dev_device_manager_get_type ())
+#define XNOISE_EXT_DEV_DEVICE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManager))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManagerClass))
+#define XNOISE_EXT_DEV_IS_DEVICE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER))
+#define XNOISE_EXT_DEV_IS_DEVICE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManagerClass))
+
+typedef struct _XnoiseExtDevDeviceManager XnoiseExtDevDeviceManager;
+typedef struct _XnoiseExtDevDeviceManagerClass XnoiseExtDevDeviceManagerClass;
+typedef struct _XnoiseExtDevDeviceManagerPrivate XnoiseExtDevDeviceManagerPrivate;
+
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER (xnoise_ext_dev_device_manager_device_id_container_get_type ())
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_DEVICE_ID_CONTAINER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER, XnoiseExtDevDeviceManagerDeviceIdContainer))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_DEVICE_ID_CONTAINER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER, XnoiseExtDevDeviceManagerDeviceIdContainerClass))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_IS_DEVICE_ID_CONTAINER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_IS_DEVICE_ID_CONTAINER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER))
+#define XNOISE_EXT_DEV_DEVICE_MANAGER_DEVICE_ID_CONTAINER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_DEVICE_MANAGER_TYPE_DEVICE_ID_CONTAINER, XnoiseExtDevDeviceManagerDeviceIdContainerClass))
+
+typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainer XnoiseExtDevDeviceManagerDeviceIdContainer;
+typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainerClass XnoiseExtDevDeviceManagerDeviceIdContainerClass;
+typedef struct _XnoiseExtDevDeviceManagerDeviceIdContainerPrivate XnoiseExtDevDeviceManagerDeviceIdContainerPrivate;
+
 #define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
 #define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
 #define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
@@ -227,14 +270,6 @@ typedef struct _XnoiseGstPlayerClass XnoiseGstPlayerClass;
 typedef struct _XnoiseMainViewNotebook XnoiseMainViewNotebook;
 typedef struct _XnoiseMainViewNotebookClass XnoiseMainViewNotebookClass;
 typedef struct _XnoiseMainViewNotebookPrivate XnoiseMainViewNotebookPrivate;
-
-#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
-#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
-#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
-#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
-
-typedef struct _XnoiseIMainView XnoiseIMainView;
-typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
 
 #define XNOISE_TYPE_MEDIA_SOURE_WIDGET (xnoise_media_soure_widget_get_type ())
 #define XNOISE_MEDIA_SOURE_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_SOURE_WIDGET, XnoiseMediaSoureWidget))
@@ -964,6 +999,59 @@ struct _XnoiseDatabaseWriterNotificationData {
 };
 
 typedef void (*XnoiseDatabaseWriterWriterCallback) (sqlite3* database, void* user_data);
+typedef enum  {
+	XNOISE_EXT_DEV_DEVICE_TYPE_UNKNOWN,
+	XNOISE_EXT_DEV_DEVICE_TYPE_ANDROID,
+	XNOISE_EXT_DEV_DEVICE_TYPE_GENERIC_PLAYER,
+	XNOISE_EXT_DEV_DEVICE_TYPE_IPOD,
+	XNOISE_EXT_DEV_DEVICE_TYPE_CDROM
+} XnoiseExtDevDeviceType;
+
+struct _XnoiseIMainViewIface {
+	GTypeInterface parent_iface;
+	gchar* (*get_view_name) (XnoiseIMainView* self);
+};
+
+struct _XnoiseExtDevDevice {
+	GObject parent_instance;
+	XnoiseExtDevDevicePrivate * priv;
+	GMount* mount;
+};
+
+struct _XnoiseExtDevDeviceClass {
+	GObjectClass parent_class;
+	gboolean (*initialize) (XnoiseExtDevDevice* self);
+	gchar* (*get_uri) (XnoiseExtDevDevice* self);
+	XnoiseIMainView* (*get_main_view_widget) (XnoiseExtDevDevice* self);
+	void (*cancel) (XnoiseExtDevDevice* self);
+	gchar* (*get_presentable_name) (XnoiseExtDevDevice* self);
+	gchar* (*get_identifier) (XnoiseExtDevDevice* self);
+};
+
+struct _XnoiseExtDevDeviceManager {
+	GObject parent_instance;
+	XnoiseExtDevDeviceManagerPrivate * priv;
+};
+
+struct _XnoiseExtDevDeviceManagerClass {
+	GObjectClass parent_class;
+};
+
+typedef XnoiseExtDevDevice* (*XnoiseExtDevDeviceManagerIdentificationCallback) (GMount* mount, void* user_data);
+struct _XnoiseExtDevDeviceManagerDeviceIdContainer {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseExtDevDeviceManagerDeviceIdContainerPrivate * priv;
+	XnoiseExtDevDeviceManagerIdentificationCallback cb;
+	gpointer cb_target;
+	GDestroyNotify cb_target_destroy_notify;
+};
+
+struct _XnoiseExtDevDeviceManagerDeviceIdContainerClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseExtDevDeviceManagerDeviceIdContainer *self);
+};
+
 struct _XnoiseExtDevAudioPlayerTempDb {
 	XnoiseDataSource parent_instance;
 	XnoiseExtDevAudioPlayerTempDbPrivate * priv;
@@ -1036,11 +1124,6 @@ struct _XnoiseMainViewNotebook {
 
 struct _XnoiseMainViewNotebookClass {
 	GtkNotebookClass parent_class;
-};
-
-struct _XnoiseIMainViewIface {
-	GTypeInterface parent_iface;
-	gchar* (*get_view_name) (XnoiseIMainView* self);
 };
 
 struct _XnoiseMediaSoureWidget {
@@ -1824,6 +1907,31 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* s
 gboolean xnoise_data_source_get_stream_trackdata_for_item (XnoiseDataSource* self, XnoiseItem* item, XnoiseTrackData** td);
 XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
+GType xnoise_ext_dev_device_type_get_type (void) G_GNUC_CONST;
+GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
+GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
+gboolean xnoise_ext_dev_device_initialize (XnoiseExtDevDevice* self);
+gchar* xnoise_ext_dev_device_get_uri (XnoiseExtDevDevice* self);
+XnoiseIMainView* xnoise_ext_dev_device_get_main_view_widget (XnoiseExtDevDevice* self);
+void xnoise_ext_dev_device_cancel (XnoiseExtDevDevice* self);
+gchar* xnoise_ext_dev_device_get_presentable_name (XnoiseExtDevDevice* self);
+gchar* xnoise_ext_dev_device_get_identifier (XnoiseExtDevDevice* self);
+XnoiseExtDevDevice* xnoise_ext_dev_device_construct (GType object_type);
+XnoiseExtDevDeviceType xnoise_ext_dev_device_get_device_type (XnoiseExtDevDevice* self);
+void xnoise_ext_dev_device_set_device_type (XnoiseExtDevDevice* self, XnoiseExtDevDeviceType value);
+GType xnoise_ext_dev_device_manager_get_type (void) G_GNUC_CONST;
+XnoiseExtDevDeviceManager* xnoise_ext_dev_device_manager_new (void);
+XnoiseExtDevDeviceManager* xnoise_ext_dev_device_manager_construct (GType object_type);
+gpointer xnoise_ext_dev_device_manager_device_id_container_ref (gpointer instance);
+void xnoise_ext_dev_device_manager_device_id_container_unref (gpointer instance);
+GParamSpec* xnoise_ext_dev_device_manager_param_spec_device_id_container (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_ext_dev_device_manager_value_set_device_id_container (GValue* value, gpointer v_object);
+void xnoise_ext_dev_device_manager_value_take_device_id_container (GValue* value, gpointer v_object);
+gpointer xnoise_ext_dev_device_manager_value_get_device_id_container (const GValue* value);
+GType xnoise_ext_dev_device_manager_device_id_container_get_type (void) G_GNUC_CONST;
+void xnoise_ext_dev_device_manager_register_device (XnoiseExtDevDeviceManager* self, XnoiseExtDevDeviceManagerDeviceIdContainer* c);
+XnoiseExtDevDeviceManagerDeviceIdContainer* xnoise_ext_dev_device_manager_device_id_container_new (XnoiseExtDevDeviceManagerIdentificationCallback cb, void* cb_target);
+XnoiseExtDevDeviceManagerDeviceIdContainer* xnoise_ext_dev_device_manager_device_id_container_construct (GType object_type, XnoiseExtDevDeviceManagerIdentificationCallback cb, void* cb_target);
 GType xnoise_ext_dev_audio_player_temp_db_get_type (void) G_GNUC_CONST;
 XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_new (GCancellable* cancel);
 XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GType object_type, GCancellable* cancel);
@@ -1863,7 +1971,6 @@ void xnoise_video_screen_set_text (XnoiseVideoScreen* self, const gchar* value);
 GType xnoise_main_view_notebook_get_type (void) G_GNUC_CONST;
 XnoiseMainViewNotebook* xnoise_main_view_notebook_new (void);
 XnoiseMainViewNotebook* xnoise_main_view_notebook_construct (GType object_type);
-GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
 void xnoise_main_view_notebook_add_main_view (XnoiseMainViewNotebook* self, XnoiseIMainView* view);
 void xnoise_main_view_notebook_remove_main_view (XnoiseMainViewNotebook* self, XnoiseIMainView* view);
 gboolean xnoise_main_view_notebook_select_main_view (XnoiseMainViewNotebook* self, const gchar* name);

@@ -41,7 +41,7 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     
     private string uri;
     private AudioPlayerMainView view;
-    
+    private Cancellable cancellable = new Cancellable();
     
     public AudioPlayerDevice(Mount _mount) {
         mount = _mount;
@@ -50,11 +50,16 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     }
     
     ~AudioPlayerDevice() {
-        main_window.main_view_sbutton.del(this.get_identifier());
-        main_window.mainview_box.remove_main_view(view);
-        print("removed audio player %s\n", get_identifier());
     }
     
+    
+    public static Device? get_device(Mount mount) {
+        if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ||
+           File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player").query_exists()) {
+            return new AudioPlayerDevice(mount);
+        }
+        return null;
+    }
     
     public override bool initialize() {
         device_type = 
@@ -62,14 +67,6 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
                 DeviceType.ANDROID :
                 DeviceType.GENERIC_PLAYER
             );
-        Idle.add(() => {
-            main_window.mainview_box.add_main_view(this.get_main_view_widget());
-            if(!main_window.main_view_sbutton.has_item(this.get_identifier())) {
-                string playername = "Player";
-                main_window.main_view_sbutton.insert(this.get_identifier(), playername);
-            }
-            return false;
-        });
         return true;
     }
     
@@ -78,9 +75,19 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     }
     
     public override IMainView? get_main_view_widget() {
-        view = new AudioPlayerMainView(this);
+        if(view != null)
+            return view;
+        view = new AudioPlayerMainView(this, cancellable);
         view.show_all();
         return view;
+    }
+    
+    public override string get_presentable_name() {
+        return "Player";
+    }
+    
+    public override void cancel() {
+        cancellable.cancel();
     }
 }
 
@@ -91,9 +98,12 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
     private uint32 id;
     private unowned AudioPlayerDevice audio_player_device;
     private PlayerTreeView tree;
+    private unowned Cancellable cancellable;
     
-    public AudioPlayerMainView(AudioPlayerDevice audio_player_device) {
+    public AudioPlayerMainView(AudioPlayerDevice audio_player_device,
+                               Cancellable cancellable) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
+        this.cancellable = cancellable;
         this.audio_player_device = audio_player_device;
         this.id = Random.next_int();
         setup_widgets();
@@ -114,13 +124,12 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
                          "</b></span>"
         );
         this.pack_start(label, false, false, 12);
-        tree = new PlayerTreeView(audio_player_device);
+        tree = new PlayerTreeView(audio_player_device, cancellable);
 
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tree);
         this.pack_start(sw, true, true, 0);
-//        tree.set_model(treemodel);
     }
 }
 
@@ -128,26 +137,26 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
 private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
     private PlayerTreeStore treemodel;
     private unowned AudioPlayerDevice audio_player_device;
+    private unowned Cancellable cancellable;
     
     
-    public PlayerTreeView(AudioPlayerDevice audio_player_device) {
+    public PlayerTreeView(AudioPlayerDevice audio_player_device,
+                          Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
+        this.cancellable = cancellable;
         File b = File.new_for_uri(audio_player_device.get_uri());
         assert(b != null);
         b = b.get_child("Music");
         assert(b != null);
         assert(b.get_path() != null);
         if(b.query_exists(null))
-            treemodel = new PlayerTreeStore(this, b, GlobalAccess.main_cancellable);
+            treemodel = new PlayerTreeStore(this, b, cancellable);
         else {
             b = File.new_for_uri(audio_player_device.get_uri());
             b = b.get_child("media"); // old android devices
-            treemodel = new PlayerTreeStore(this, b, GlobalAccess.main_cancellable);
+            treemodel = new PlayerTreeStore(this, b, cancellable);
         }
         setup_view();
-//        tree.set_headers_visible(false);
-//        var cell = new CellRendererText();
-//        tree.insert_column_with_attributes(-1, "", cell, "text", PlayerTreeStore.Column.VIS_TEXT);
     }
     
     private void on_row_expanded(TreeIter iter, TreePath path) {
@@ -163,47 +172,7 @@ private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
         this.row_collapsed.connect(on_row_collapsed);
         this.row_expanded.connect(on_row_expanded);
         
-//        this.set_size_request(300, 500);
-        
-//        fontsize = Params.get_int_value("fontsizeMB");
-//        Gtk.StyleContext context = this.get_style_context();
-//        font_description = context.get_font(StateFlags.NORMAL).copy();
-//        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
-        
         var column = new TreeViewColumn();
-        
-//        int expander = 0;
-//        this.style_get("expander-size", out expander);
-//        int hsepar = 0;
-//        this.style_get("horizontal-separator", out hsepar);
-//        renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
-        
-//        main_window.msw.selection_changed.connect( (s,n) => {
-//            if(n == name_buffer)
-//                return;
-//            if(n == this.dock.name())
-//                last_width++;
-//            name_buffer = n;
-//        });
-        
-//        this.ow.size_allocate.connect_after( (s, a) => {
-//            unowned TreeViewColumn tvc = this.get_column(0);
-//            int current_width = this.ow.get_allocated_width();
-//            if(last_width == current_width)
-//                return;
-//            
-//            last_width = current_width;
-//            
-//            tvc.max_width = tvc.min_width = current_width - 20;
-//            TreeModel? xm = this.get_model();
-//            if(xm != null && !in_update_view)
-//                xm.foreach( (mo, pt, it) => {
-//                    if(mo == null)
-//                        return true;
-//                    mo.row_changed(pt, it);
-//                    return false;
-//                });
-//        });
         
         var pixbufRenderer = new CellRendererPixbuf();
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
@@ -211,17 +180,11 @@ private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
         column.pack_start(pixbufRenderer, false);
         column.add_attribute(pixbufRenderer, "pixbuf", PlayerTreeStore.Column.ICON);
         column.pack_start(renderer, false);
-        column.add_attribute(renderer, "text", PlayerTreeStore.Column.VIS_TEXT); // no markup!!
-        column.add_attribute(renderer, "level", PlayerTreeStore.Column.LEVEL);
-        column.add_attribute(renderer, "pix", PlayerTreeStore.Column.ICON);
+        column.add_attribute(renderer, "text", PlayerTreeStore.Column.VIS_TEXT);
         this.insert_column(column, -1);
         
         this.headers_visible = false;
         this.enable_search = false;
-        
-//        global.notify["fontsize-dockable"].connect( () => {
-//            this.fontsize = global.fontsize_dockable;
-//        });
     }
 
 
@@ -233,6 +196,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     private AudioPlayerTempDb db;
     private unowned PlayerTreeView view;
     private File base_folder;
+    private unowned Cancellable cancellable;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf),  //ICON
@@ -249,13 +213,12 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         N_COLUMNS
     }
     
-    private unowned Cancellable cancel;
     
-    public PlayerTreeStore(PlayerTreeView view, File base_folder, Cancellable cancel) {
-        db = new AudioPlayerTempDb(GlobalAccess.main_cancellable);
+    public PlayerTreeStore(PlayerTreeView view, File base_folder, Cancellable cancellable) {
+        db = new AudioPlayerTempDb(cancellable);
         this.set_column_types(col_types);
         this.base_folder = base_folder;
-        this.cancel = cancel;
+        this.cancellable = cancellable;
         this.view = view;
         load_files();
     }
@@ -277,6 +240,8 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     // running in io thread
     private void read_recoursive(File dir, Worker.Job job) {
         return_if_fail(device_worker.is_same_thread());
+        if(this.cancellable.is_cancelled())
+            return;
         
         job.counter[0]++;
         FileEnumerator enumerator;
@@ -296,6 +261,10 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         GLib.FileInfo info;
         try {
             while((info = enumerator.next_file()) != null) {
+                if(this.cancellable.is_cancelled()) {
+                    enumerator = null;
+                    return;
+                }
                 TrackData td = null;
                 string filename = info.get_name();
                 string filepath = Path.build_filename(dir.get_path(), filename);
@@ -303,6 +272,10 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                 FileType filetype = info.get_file_type();
                 if(filetype == FileType.DIRECTORY) {
                     read_recoursive(file, job);
+                    if(this.cancellable.is_cancelled()) {
+                        enumerator = null;
+                        return;
+                    }
                 }
                 else {
                     string uri_lc = filename.down();
@@ -336,7 +309,10 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         job.counter[0]--;
         if(job.counter[0] == 0) {
             if(tda.length > 0) {
-                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+                if(this.cancellable.is_cancelled()) {
+                    return;
+                }
+              var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                 db_job.track_dat = (owned)tda;
                 tda = {};
                 db_worker.push_job(db_job);
@@ -347,13 +323,9 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     }
     
     private void end_import(Worker.Job job) {
-        print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
-//        if(job.counter[1] != job.counter[2])
-//            return;
-//        var finisher_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_import_job);
-//        finisher_job.set_arg("msg_id", job.get_arg("msg_id"));
-//        db_worker.push_job(finisher_job);
         Idle.add(() => {
+            if(this.cancellable.is_cancelled())
+                return false;
             filter();
             return false;
         });
@@ -373,6 +345,8 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     
     public void filter() {
         //print("filter\n");
+        if(this.cancellable.is_cancelled())
+            return;
         view.set_model(null);
         this.clear();
         this.populate_model();
@@ -444,7 +418,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     }
 
     private bool load_album_and_tracks_job(Worker.Job job) {
-        if(this.cancel.is_cancelled())
+        if(this.cancellable.is_cancelled())
             return false;
         HashTable<ItemType,Item?>? item_ht = 
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
@@ -465,7 +439,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             string artist_name;
             this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
             foreach(Item? album in job.items) {     //ALBUMS
-                if(this.cancel.is_cancelled())
+                if(this.cancellable.is_cancelled())
                     return false;
                 File? albumimage_file = get_albumimage_for_artistalbum(artist_name,
                                                                        album.text,
@@ -526,7 +500,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     private const string LOADING = _("Loading ...");
 
     private bool populate_title_job(Worker.Job job) {
-        if(this.cancel.is_cancelled())
+        if(this.cancellable.is_cancelled())
             return false;
         
         HashTable<ItemType,Item?>? item_ht =
@@ -535,7 +509,6 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         job.track_dat = db.get_trackdata_for_album(global.searchtext,
                                                           CollectionSortMode.ARTIST_ALBUM_TITLE,
                                                           item_ht);
-//        job.track_dat = db.get_trackdata_for_album(global.searchtext, (int32)job.get_arg("albumid"), (uint32)job.get_arg("stamp"));
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
@@ -544,7 +517,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             TreeIter iter_title, iter_album;
             this.get_iter(out iter_album, p);
             foreach(TrackData td in job.track_dat) {
-                if(this.cancel.is_cancelled())
+                if(this.cancellable.is_cancelled())
                     return false;
                 this.append(out iter_title, iter_album);
                 this.set(iter_title,
@@ -560,36 +533,28 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_model() {
-        if(this.cancel.is_cancelled())
+        if(this.cancellable.is_cancelled())
             return false;
         view.model = null;
         this.clear();
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
         db_worker.push_job(a_job);
         return false;
-//        if(this.cancel.is_cancelled())
-//            return false;
-//        view.model = null;
-//        this.clear();
-//        db_worker.push_job(a_job);
-//        return false;
     }
     
     private bool populate_artists_job(Worker.Job job) {
-        if(this.cancel.is_cancelled())
+        if(this.cancellable.is_cancelled())
             return false;
         job.items = db.get_artists(global.searchtext,
                                          global.collection_sort_mode,
                                          null
                                          );
-//        job.items = db.get_artists_with_search(global.searchtext);
-        //print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
             if(this == null)
                 return false;
             TreeIter iter, iter_loader;
             foreach(Item? i in job.items) {
-                if(this.cancel.is_cancelled())
+                if(this.cancellable.is_cancelled())
                     return false;
                 this.prepend(out iter, null);
                 this.set(iter,
@@ -607,7 +572,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                               Column.LEVEL, 1
                 );
             }
-            if(this.cancel.is_cancelled())
+            if(this.cancellable.is_cancelled())
                 return false;
             view.set_model(this);
             return false;
