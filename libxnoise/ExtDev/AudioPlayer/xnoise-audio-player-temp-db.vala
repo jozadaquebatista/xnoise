@@ -60,7 +60,7 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
         uint32 number = Random.next_int();
         data_source_name = "Tempdb" + number.to_string();
         this.cancel = cancel;
-        CONVERTED_DB = GLib.Path.build_filename(data_folder(),
+        CONVERTED_DB = GLib.Path.build_filename(temp_folder(),
                                                 "player" +
                                                     number.to_string() +
                                                     ".sqlite",
@@ -73,6 +73,16 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
         assert(ret == true);
         
         prepare_target_statements();
+    }
+    
+    ~AudioPlayerTempDb() {
+        db = null;
+        File f = File.new_for_path(CONVERTED_DB);
+        try {
+            f.delete();
+        }
+        catch(Error e) {
+        }
     }
 
     private void prepare_target_statements() {

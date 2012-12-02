@@ -71,6 +71,10 @@ namespace Xnoise.Utilities {
         return (owned)_data_folder;
     }
     
+    public static string temp_folder() {
+        return "/tmp";
+    }
+    
     public static bool verify_xnoise_directories() {
         File f = File.new_for_path(settings_folder());
         if(f == null) {

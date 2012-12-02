@@ -2667,6 +2667,7 @@ XnoiseMediaExtensions* xnoise_utilities_get_media_extensions (void);
 XnoiseMediaStreamSchemes* xnoise_utilities_get_media_stream_schemes (void);
 gchar* xnoise_utilities_settings_folder (void);
 gchar* xnoise_utilities_data_folder (void);
+gchar* xnoise_utilities_temp_folder (void);
 gboolean xnoise_utilities_verify_xnoise_directories (void);
 gchar* xnoise_utilities_prepare_for_comparison (const gchar* value);
 gchar* xnoise_utilities_prepare_for_search (const gchar* val);

@@ -526,6 +526,8 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string settings_folder ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static string temp_folder ();
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static bool verify_xnoise_directories ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
