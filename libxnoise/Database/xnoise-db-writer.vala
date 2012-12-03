@@ -85,6 +85,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         ADD_ARTIST,
         ADD_ALBUM,
         ADD_TITLE,
+        ADD_GENRE,
         ADD_VIDEO,
         ADD_STREAM,
         REMOVE_ARTIST,
@@ -342,11 +343,11 @@ public class Xnoise.Database.Writer : GLib.Object {
             if(get_artist_max_id_statement.step() == Sqlite.ROW)
                 artist_id = get_artist_max_id_statement.column_int(0);
             // change notification
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            item.source_id = db_reader.get_source_id();
+            item.stamp = get_current_stamp(db_reader.get_source_id());
+            item.text = artist.strip();
             foreach(NotificationData cxd in change_callbacks) {
-                Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
-                item.source_id = db_reader.get_source_id();
-                item.stamp = get_current_stamp(db_reader.get_source_id());
-                item.text = artist.strip();
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_ARTIST, item);
             }
@@ -571,32 +572,47 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT MAX(id) FROM genres";
 
     private int handle_genre(ref string genre) {
-        if((genre == null)||(genre.strip() == EMPTYSTRING)) return -2; //NO GENRE
-
+        if((genre == null)||(genre.strip() == EMPTYSTRING)) 
+            genre = UNKNOWN_GENRE;
+        int genre_id = -1;
         get_genre_id_statement.reset();
-        if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
+        if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
             this.db_error();
             return -1;
         }
-        if(get_genre_id_statement.step() == Sqlite.ROW)
-            return get_genre_id_statement.column_int(0);
-//        if(genre_id == -1) { // genre not in table, yet
-        // Insert genre
-        insert_genre_statement.reset();
-        if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
-            this.db_error();
-            return -1;
+        if(get_genre_id_statement.step() == Sqlite.ROW) {
+            genre_id = get_genre_id_statement.column_int(0);
         }
-        if(insert_genre_statement.step() != Sqlite.DONE) {
-            this.db_error();
-            return -1;
+        if(genre_id == -1) { // genre not in table, yet 
+            // Insert genre
+            insert_genre_statement.reset();
+            if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
+                this.db_error();
+                return -1;
+            }
+            if(insert_genre_statement.step() != Sqlite.DONE) {
+                this.db_error();
+                return -1;
+            }
+            // Return id key
+            get_genre_max_id_statement.reset();
+            if(get_genre_max_id_statement.step() == Sqlite.ROW) {
+                genre_id = get_genre_max_id_statement.column_int(0);
+                Item? item = Item(ItemType.COLLECTION_CONTAINER_GENRE, null, genre_id);
+                item.source_id = db_reader.get_source_id();
+                item.stamp = get_current_stamp(db_reader.get_source_id());
+                item.text = genre.strip();
+                foreach(NotificationData cxd in change_callbacks) {
+                    if(cxd.cb != null)
+                        cxd.cb(ChangeType.ADD_GENRE, item);
+                }
+                return genre_id;
+            }
+            else {
+                return -1;
+            }
         }
-        // Return id key
-        get_genre_max_id_statement.reset();
-        if(get_genre_max_id_statement.step() == Sqlite.ROW)
-            return get_genre_max_id_statement.column_int(0);
-        else
-            return -1;
+        return genre_id;
     }
 
     public bool get_trackdata_for_stream(string uri, out TrackData val) {
@@ -1111,6 +1127,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(!exec_prepared_stmt(this.delete_artists_statement)) return false;
         if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
         if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
+        if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
         if(!exec_prepared_stmt(this.delete_uris_statement   )) return false;
         return true;
     }

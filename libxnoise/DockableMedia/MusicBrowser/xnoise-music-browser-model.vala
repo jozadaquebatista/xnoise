@@ -117,17 +117,126 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private void database_change_cb(Writer.ChangeType changetype, Item? item) {
         switch(changetype) {
             case Writer.ChangeType.ADD_ARTIST:
-                //print("got new artist\n");
-                if(item.db_id == -1){
-                    print("ADD_ARTIST:GOT -1\n");
-                    return;
+                if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                    if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+                        break;
+                        //print("got new artist\n");
+                    if(item.db_id == -1){
+                        print("ADD_ARTIST:GOT -1\n");
+                        return;
+                    }
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.add_imported_artist_job
+                    );
+                    job.item = item;
+                    db_worker.push_job(job);
                 }
-                var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_imported_artist_job);
-                job.item = item;
-                db_worker.push_job(job);
+                break;
+            case Writer.ChangeType.ADD_GENRE:
+                if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                    if(item.type != ItemType.COLLECTION_CONTAINER_GENRE)
+                        break;
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.add_imported_genre_job
+                    );
+                    job.item = item;
+                    db_worker.push_job(job);
+                }
                 break;
             default: break;
         }
+    }
+    
+    private bool add_imported_genre_job(Worker.Job job) {
+        job.item = db_reader.get_genreitem_by_genreid(global.searchtext,
+                                                      job.item.db_id,
+                                                      job.item.stamp);
+        if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
+            return false;
+        Idle.add( () => {
+            if(populating_model) // don't try to put an genre to the model in case we are filling anyway
+                return false;
+            string text = null;
+            TreeIter iter_search, genre_iter = TreeIter();
+            if(this.iter_n_children(null) == 0) {
+                this.prepend(out genre_iter, null);
+                this.set(genre_iter,
+                         Column.ICON, icon_repo.genre_icon,
+                         Column.VIS_TEXT, job.item.text,
+                         Column.ITEM, job.item,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.prepend(out iter_search, genre_iter);
+                this.set(iter_search,
+                         Column.ICON, icon_repo.loading_icon,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+                return false;
+            }
+            string itemtext_prep = job.item.text.down().strip();
+            
+            for(int i = 0; i < this.iter_n_children(null); i++) {
+                if(i == 0) {
+                    this.iter_nth_child(out genre_iter, null, i);
+                }
+                else {
+                    if(!iter_next(ref genre_iter))
+                        break;
+                }
+                Item? current_item;
+                this.get(genre_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
+                if(current_item.type != ItemType.COLLECTION_CONTAINER_GENRE)
+                    continue;
+                text = text != null ? text.down().strip() : EMPTYSTRING;
+                if(strcmp(text.collate_key(), itemtext_prep.collate_key()) == 0) {
+                    //found genre
+                    return false;
+                }
+                if(strcmp(text.collate_key(), itemtext_prep.collate_key()) > 0) {
+                    TreeIter new_genre_iter;
+                    this.insert_before(out new_genre_iter, null, genre_iter);
+                    this.set(new_genre_iter,
+                             Column.ICON, icon_repo.genre_icon,
+                             Column.VIS_TEXT, job.item.text,
+                             Column.ITEM, job.item,
+                             Column.LEVEL, 0
+                             );
+                    genre_iter = new_genre_iter;
+                    Item? loader_item = Item(ItemType.LOADER);
+                    this.prepend(out iter_search, genre_iter);
+                    this.set(iter_search,
+                             Column.ICON, icon_repo.loading_icon,
+                             Column.VIS_TEXT, LOADING,
+                             Column.ITEM, loader_item,
+                             Column.LEVEL, 1
+                             );
+                    return false;
+                }
+            }
+            TreeIter x_genre_iter;
+            this.insert_after(out x_genre_iter, null, genre_iter);
+            genre_iter = x_genre_iter;
+//            this.append(out genre_iter, null);
+            this.set(genre_iter,
+                     Column.ICON, icon_repo.artist_icon,
+                     Column.VIS_TEXT, job.item.text,
+                     Column.ITEM, job.item,
+                     Column.LEVEL, 0
+                     );
+            Item? loader_item = Item(ItemType.LOADER);
+            this.append(out iter_search, genre_iter);
+            this.set(iter_search,
+                     Column.ICON, icon_repo.loading_icon,
+                     Column.VIS_TEXT, LOADING,
+                     Column.ITEM, loader_item,
+                     Column.LEVEL, 1
+                     );
+            return false;
+        });
+        return false;
     }
     
     private bool add_imported_artist_job(Worker.Job job) {
@@ -301,7 +410,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     break;
                 this.prepend(out iter_artist, null);
                 this.set(iter_artist,
-                         Column.ICON, icon_repo.artist_icon,
+                         Column.ICON, icon_repo.genre_icon,
                          Column.VIS_TEXT, artist.text,
                          Column.ITEM, artist,
                          Column.LEVEL, 0

@@ -1079,6 +1079,45 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)i;
     }
 
+    private static const string STMT_GET_GENREITEM_BY_GENREID_WITH_SEARCH =
+        "SELECT DISTINCT g.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND g.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?)";
+    
+    private static const string STMT_GET_GENREITEM_BY_GENREID =
+        "SELECT DISTINCT g.name FROM genres g WHERE g.id = ?";
+    
+    // function used only to verify if an item matches the searchtext
+    public Item? get_genreitem_by_genreid(string searchtext, int32 id, uint32 stmp) {
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
+        Statement stmt;
+        Item? i = Item(ItemType.UNKNOWN);
+        if(searchtext != EMPTYSTRING) {
+            string st = "%%%s%%".printf(searchtext);
+            this.db.prepare_v2(STMT_GET_GENREITEM_BY_GENREID_WITH_SEARCH, -1, out stmt);
+            if((stmt.bind_int (1, id) != Sqlite.OK) ||
+               (stmt.bind_text(2, st) != Sqlite.OK) ||
+               (stmt.bind_text(3, st) != Sqlite.OK) ||
+               (stmt.bind_text(4, st) != Sqlite.OK) ||
+               (stmt.bind_text(5, st) != Sqlite.OK)) {
+                this.db_error();
+                return (owned)i;
+            }
+        }
+        else {
+            this.db.prepare_v2(STMT_GET_GENREITEM_BY_GENREID, -1, out stmt);
+            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+                this.db_error();
+                return (owned)i;
+            }
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            i = Item(ItemType.COLLECTION_CONTAINER_GENRE, null, id);
+            i.text = stmt.column_text(0);
+            i.source_id = get_source_id();
+            i.stamp = stmp;
+        }
+        return (owned)i;
+    }
+
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?)";
     

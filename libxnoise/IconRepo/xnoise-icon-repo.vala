@@ -36,6 +36,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     private unowned IconTheme theme = null;
 
     internal Gdk.Pixbuf artist_icon                 { get; private set; }
+    internal Gdk.Pixbuf genre_icon                  { get; private set; }
     internal Gdk.Pixbuf folder_symbolic_icon        { get; private set; }
     internal Gdk.Pixbuf album_icon                  { get; private set; }
     internal Gdk.Pixbuf title_icon                  { get; private set; }
@@ -90,6 +91,8 @@ internal class Xnoise.IconRepo : GLib.Object {
                 artist_icon = theme.load_icon("stock_person", iconheight, IconLookupFlags.FORCE_SIZE);
             else 
                 artist_icon = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
+            
+            genre_icon = w.render_icon_pixbuf(Gtk.Stock.COPY, IconSize.BUTTON);
             
             album_icon = w.render_icon_pixbuf(Gtk.Stock.CDROM, IconSize.BUTTON);
             

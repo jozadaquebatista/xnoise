@@ -44,7 +44,7 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
     public delegate Device? IdentificationCallback(Mount mount);
     
     public class DeviceIdContainer {
-        public IdentificationCallback cb;
+        public unowned IdentificationCallback cb;
         public DeviceIdContainer(IdentificationCallback cb) {
             this.cb = cb;
         }

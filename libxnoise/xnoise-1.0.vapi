@@ -20,6 +20,7 @@ namespace Xnoise {
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item[] get_artists (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
+			public Xnoise.Item? get_genreitem_by_genreid (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.Item[] get_genres_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);
 			public bool get_lyrics (string artist, string title, out string txt, out string cred, out string ident);
@@ -48,6 +49,7 @@ namespace Xnoise {
 				ADD_ARTIST,
 				ADD_ALBUM,
 				ADD_TITLE,
+				ADD_GENRE,
 				ADD_VIDEO,
 				ADD_STREAM,
 				REMOVE_ARTIST,
@@ -118,7 +120,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class DeviceManager : GLib.Object {
 			public class DeviceIdContainer {
-				public Xnoise.ExtDev.DeviceManager.IdentificationCallback cb;
+				public weak Xnoise.ExtDev.DeviceManager.IdentificationCallback cb;
 				public DeviceIdContainer (Xnoise.ExtDev.DeviceManager.IdentificationCallback cb);
 			}
 			public delegate Xnoise.ExtDev.Device? IdentificationCallback (GLib.Mount mount);

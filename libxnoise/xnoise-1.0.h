@@ -980,6 +980,7 @@ typedef enum  {
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_ARTIST,
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_ALBUM,
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_TITLE,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_GENRE,
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_VIDEO,
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_STREAM,
 	XNOISE_DATABASE_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
@@ -1100,7 +1101,6 @@ struct _XnoiseExtDevDeviceManagerDeviceIdContainer {
 	XnoiseExtDevDeviceManagerDeviceIdContainerPrivate * priv;
 	XnoiseExtDevDeviceManagerIdentificationCallback cb;
 	gpointer cb_target;
-	GDestroyNotify cb_target_destroy_notify;
 };
 
 struct _XnoiseExtDevDeviceManagerDeviceIdContainerClass {
@@ -1863,6 +1863,7 @@ XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabase
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_genres_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
+XnoiseItem* xnoise_database_reader_get_genreitem_by_genreid (XnoiseDatabaseReader* self, const gchar* searchtext, gint32 id, guint32 stmp);
 XnoiseItem* xnoise_database_reader_get_albums_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* artist, XnoiseItem* genre, int* result_length1);
 gpointer xnoise_album_data_ref (gpointer instance);
 void xnoise_album_data_unref (gpointer instance);
