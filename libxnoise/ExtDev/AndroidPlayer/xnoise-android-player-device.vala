@@ -59,10 +59,7 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : Device {
     }
     
     public override bool initialize() {
-        File f = File.new_for_uri(mount.get_default_location().get_uri() + "/Android");
-        if(f.query_exists(cancellable)) {
-            device_type = DeviceType.ANDROID;
-        }
+        device_type = DeviceType.ANDROID;
         return true;
     }
     

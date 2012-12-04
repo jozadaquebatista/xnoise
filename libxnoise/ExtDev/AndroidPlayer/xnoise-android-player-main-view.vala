@@ -38,15 +38,15 @@ using Xnoise.ExtDev;
 private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Box, IMainView {
     
     private uint32 id;
-    private unowned AndroidPlayerDevice audio_player_device;
+    private unowned AndroidPlayerDevice player_device;
     private AndroidPlayerTreeView tree;
     private unowned Cancellable cancellable;
     
-    public AndroidPlayerMainView(AndroidPlayerDevice audio_player_device,
-                               Cancellable cancellable) {
+    public AndroidPlayerMainView(AndroidPlayerDevice player_device,
+                                 Cancellable cancellable) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.cancellable = cancellable;
-        this.audio_player_device = audio_player_device;
+        this.player_device = player_device;
         this.id = Random.next_int();
         setup_widgets();
     }
@@ -56,17 +56,17 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Box, IMainView {
     }
     
     public string get_view_name() {
-        return audio_player_device.get_identifier();
+        return player_device.get_identifier();
     }
     
     private void setup_widgets() {
         var label = new Label("");
         label.set_markup("<span size=\"xx-large\"><b>" +
-                         Markup.printf_escaped(_("External Player Device")) +
+                         Markup.printf_escaped(_("Android Player Device")) +
                          "</b></span>"
         );
         this.pack_start(label, false, false, 12);
-        tree = new AndroidPlayerTreeView(audio_player_device, cancellable);
+        tree = new AndroidPlayerTreeView(player_device, cancellable);
 
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);

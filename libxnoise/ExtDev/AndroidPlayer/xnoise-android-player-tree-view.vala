@@ -58,8 +58,29 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             treemodel = new AndroidPlayerTreeStore(this, b, cancellable);
         }
         setup_view();
+        
+        this.row_activated.connect(this.on_row_activated);
     }
     
+    private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
+        if(treepath.get_depth() > 1) {
+            Item? item = Item(ItemType.UNKNOWN);
+            TreeIter iter;
+            treemodel.get_iter(out iter, treepath);
+            treemodel.get(iter, GenericPlayerTreeStore.Column.ITEM, out item);
+            if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
+               item.type != ItemType.LOCAL_VIDEO_TRACK &&
+               item.type != ItemType.STREAM) {
+                this.expand_row(treepath, false);
+                return;
+            }
+            global.preview_uri(item.uri);
+        }
+        else {
+            this.expand_row(treepath, false);
+        }
+    }
+
     private void on_row_expanded(TreeIter iter, TreePath path) {
         treemodel.load_children(ref iter);
     }

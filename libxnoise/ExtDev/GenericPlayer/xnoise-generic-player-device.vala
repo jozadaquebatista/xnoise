@@ -62,29 +62,28 @@ private class Xnoise.ExtDev.GenericPlayerDevice : Device {
     }
     
     public override bool initialize() {
-        File f = File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player");
-        if(f.query_exists(cancellable)) {
-            device_type = DeviceType.GENERIC_PLAYER;
-            if(f.query_exists() == true) {
-                try {
-                    var stream = new DataInputStream(f.read());
-                    string line;
-                    while((line = stream.read_line(null)) != null) {
-                        if(line.contains("audio_folders=")) {
-                            string dirs = line.substring((long)"audio_folders=".length,
-                                                            (long)(line.length - "audio_folders=".length));
-                            foreach(string dir in dirs.split(",")) {
-                                string s = mount.get_default_location().get_uri() + "/" + dir.strip();
-                                player_folders += s;
-                            }
-                            break;
-                        }
+        device_type = DeviceType.GENERIC_PLAYER;
+        File f = File.new_for_uri(mount.get_default_location().get_uri() +
+                                  "/.is_audio_player"
+        );
+        try {
+            var stream = new DataInputStream(f.read());
+            string line;
+            while((line = stream.read_line(null)) != null) {
+                if(line.contains("audio_folders=")) {
+                    string dirs = line.substring((long)"audio_folders=".length,
+                                                    (long)(line.length - "audio_folders=".length));
+                    foreach(string dir in dirs.split(",")) {
+                        string s = mount.get_default_location().get_uri() + "/" + dir.strip();
+                        player_folders += s;
                     }
-                }
-                catch(Error e) {
-                    print("%s\n", e.message);
+                    break;
                 }
             }
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+            return false;
         }
         return true;
     }
