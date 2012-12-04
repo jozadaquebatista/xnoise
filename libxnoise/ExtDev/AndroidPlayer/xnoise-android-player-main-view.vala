@@ -1,4 +1,4 @@
-/* xnoise-audio-player-main-view.vala
+/* xnoise-android-player-main-view.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -35,14 +35,14 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
+private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Box, IMainView {
     
     private uint32 id;
-    private unowned AudioPlayerDevice audio_player_device;
-    private PlayerTreeView tree;
+    private unowned AndroidPlayerDevice audio_player_device;
+    private AndroidPlayerTreeView tree;
     private unowned Cancellable cancellable;
     
-    public AudioPlayerMainView(AudioPlayerDevice audio_player_device,
+    public AndroidPlayerMainView(AndroidPlayerDevice audio_player_device,
                                Cancellable cancellable) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.cancellable = cancellable;
@@ -51,8 +51,8 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
         setup_widgets();
     }
     
-    ~AudioPlayerMainView() {
-        print("DTOR AudioPlayerMainView\n");
+    ~AndroidPlayerMainView() {
+        print("DTOR AndroidPlayerMainView\n");
     }
     
     public string get_view_name() {
@@ -66,7 +66,7 @@ private class Xnoise.ExtDev.AudioPlayerMainView : Gtk.Box, IMainView {
                          "</b></span>"
         );
         this.pack_start(label, false, false, 12);
-        tree = new PlayerTreeView(audio_player_device, cancellable);
+        tree = new AndroidPlayerTreeView(audio_player_device, cancellable);
 
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);

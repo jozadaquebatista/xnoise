@@ -45,18 +45,12 @@ private class Xnoise.ExtDev.GenericPlayerTreeView : Gtk.TreeView {
                                  Cancellable cancellable) {
         this.player_device = player_device;
         this.cancellable = cancellable;
-        File b = File.new_for_uri(player_device.get_uri());
-        assert(b != null);
-        b = b.get_child("Music");
-        assert(b != null);
-        assert(b.get_path() != null);
-        if(b.query_exists(null))
-            treemodel = new GenericPlayerTreeStore(this, b, cancellable);
-        else {
-            b = File.new_for_uri(player_device.get_uri());
-            b = b.get_child("media"); // old android devices
-            treemodel = new GenericPlayerTreeStore(this, b, cancellable);
+        File[] dirs = {};
+        foreach(string fd in player_device.player_folders) {
+            var f = File.new_for_uri(fd);
+            dirs += f;
         }
+        treemodel = new GenericPlayerTreeStore(this, dirs, cancellable);
         setup_view();
     }
     

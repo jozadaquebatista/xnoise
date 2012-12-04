@@ -1,4 +1,4 @@
-/* xnoise-audio-player-tree-view.vala
+/* xnoise-android-player-tree-view.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -35,13 +35,13 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
-    private PlayerTreeStore treemodel;
-    private unowned AudioPlayerDevice audio_player_device;
+private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
+    private AndroidPlayerTreeStore treemodel;
+    private unowned AndroidPlayerDevice audio_player_device;
     private unowned Cancellable cancellable;
     
     
-    public PlayerTreeView(AudioPlayerDevice audio_player_device,
+    public AndroidPlayerTreeView(AndroidPlayerDevice audio_player_device,
                           Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
         this.cancellable = cancellable;
@@ -51,11 +51,11 @@ private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
         assert(b != null);
         assert(b.get_path() != null);
         if(b.query_exists(null))
-            treemodel = new PlayerTreeStore(this, b, cancellable);
+            treemodel = new AndroidPlayerTreeStore(this, b, cancellable);
         else {
             b = File.new_for_uri(audio_player_device.get_uri());
             b = b.get_child("media"); // old android devices
-            treemodel = new PlayerTreeStore(this, b, cancellable);
+            treemodel = new AndroidPlayerTreeStore(this, b, cancellable);
         }
         setup_view();
     }
@@ -79,9 +79,9 @@ private class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
         var renderer = new CellRendererText();
         column.pack_start(pixbufRenderer, false);
-        column.add_attribute(pixbufRenderer, "pixbuf", PlayerTreeStore.Column.ICON);
+        column.add_attribute(pixbufRenderer, "pixbuf", AndroidPlayerTreeStore.Column.ICON);
         column.pack_start(renderer, false);
-        column.add_attribute(renderer, "text", PlayerTreeStore.Column.VIS_TEXT);
+        column.add_attribute(renderer, "text", AndroidPlayerTreeStore.Column.VIS_TEXT);
         this.insert_column(column, -1);
         
         this.headers_visible = false;

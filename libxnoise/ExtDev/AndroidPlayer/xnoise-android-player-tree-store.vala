@@ -1,4 +1,4 @@
-/* xnoise-audio-player-tree-store.vala
+/* xnoise-android-player-tree-store.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -37,10 +37,10 @@ using Xnoise.TagAccess;
 
 
 
-private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
+private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     private static int FILE_COUNT = 150;
     private AudioPlayerTempDb db;
-    private unowned PlayerTreeView view;
+    private unowned AndroidPlayerTreeView view;
     private File base_folder;
     private unowned Cancellable cancellable;
     
@@ -60,7 +60,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     }
     
     
-    public PlayerTreeStore(PlayerTreeView view, File base_folder, Cancellable cancellable) {
+    public AndroidPlayerTreeStore(AndroidPlayerTreeView view, File base_folder, Cancellable cancellable) {
         db = new AudioPlayerTempDb(cancellable);
         this.set_column_types(col_types);
         this.base_folder = base_folder;

@@ -41,8 +41,8 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
     private static int FILE_COUNT = 150;
     private AudioPlayerTempDb db;
     private unowned GenericPlayerTreeView view;
-    private File base_folder;
     private unowned Cancellable cancellable;
+    private File[] base_folders;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf),  //ICON
@@ -60,10 +60,12 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
     }
     
     
-    public GenericPlayerTreeStore(GenericPlayerTreeView view, File base_folder, Cancellable cancellable) {
+    public GenericPlayerTreeStore(GenericPlayerTreeView view,
+                                  File[] base_folders,
+                                  Cancellable cancellable) {
         db = new AudioPlayerTempDb(cancellable);
         this.set_column_types(col_types);
-        this.base_folder = base_folder;
+        this.base_folders = base_folders;
         this.cancellable = cancellable;
         this.view = view;
         load_files();
@@ -79,7 +81,11 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
     
     private bool read_media_folder_job(Worker.Job job) {
         return_val_if_fail(device_worker.is_same_thread(), false);
-        read_recoursive(this.base_folder, job);
+        foreach(File x in base_folders) {
+            if(!x.query_exists(cancellable))
+                continue;
+            read_recoursive(x, job);
+        }
         return false;
     }
     

@@ -1,4 +1,4 @@
-/* xnoise-audio-player-device.vala
+/* xnoise-android-player-device.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -35,25 +35,25 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AudioPlayerDevice : Device {
+private class Xnoise.ExtDev.AndroidPlayerDevice : Device {
     
     private string uri;
-    private AudioPlayerMainView view;
+    private AndroidPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
     
-    public AudioPlayerDevice(Mount _mount) {
+    public AndroidPlayerDevice(Mount _mount) {
         mount = _mount;
         uri = mount.get_default_location().get_uri();
         print("created new audio player device for %s\n", uri);
     }
     
-    ~AudioPlayerDevice() {
+    ~AndroidPlayerDevice() {
     }
     
     
     public static Device? get_device(Mount mount) {
         if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists()) {
-            return new AudioPlayerDevice(mount);
+            return new AndroidPlayerDevice(mount);
         }
         return null;
     }
@@ -73,13 +73,13 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     public override IMainView? get_main_view_widget() {
         if(view != null)
             return view;
-        view = new AudioPlayerMainView(this, cancellable);
+        view = new AndroidPlayerMainView(this, cancellable);
         view.show_all();
         return view;
     }
     
     public override string get_presentable_name() {
-        return "Player";
+        return "Android";
     }
     
     public override void cancel() {

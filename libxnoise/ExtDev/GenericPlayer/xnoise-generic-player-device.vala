@@ -40,7 +40,7 @@ private class Xnoise.ExtDev.GenericPlayerDevice : Device {
     private string uri;
     private GenericPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
-    private string[] player_folders;
+    public string[] player_folders;
     
     
     public GenericPlayerDevice(Mount _mount) {
