@@ -57,6 +57,7 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
         
         //register device types
         register_device(new DeviceIdContainer(AudioPlayerDevice.get_device));
+        register_device(new DeviceIdContainer(GenericPlayerDevice.get_device));
         
         volume_monitor = VolumeMonitor.get();
         

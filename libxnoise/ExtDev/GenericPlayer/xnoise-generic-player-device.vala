@@ -1,4 +1,4 @@
-/* xnoise-audio-player-device.vala
+/* xnoise-generic-player-device.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -35,36 +35,57 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AudioPlayerDevice : Device {
+private class Xnoise.ExtDev.GenericPlayerDevice : Device {
     
     private string uri;
-    private AudioPlayerMainView view;
+    private GenericPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
+    private string[] player_folders;
     
-    public AudioPlayerDevice(Mount _mount) {
+    
+    public GenericPlayerDevice(Mount _mount) {
         mount = _mount;
         uri = mount.get_default_location().get_uri();
+        player_folders = {};
         print("created new audio player device for %s\n", uri);
     }
     
-    ~AudioPlayerDevice() {
+    ~GenericPlayerDevice() {
     }
     
     
     public static Device? get_device(Mount mount) {
-        if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ||
-           File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player").query_exists()) {
-            return new AudioPlayerDevice(mount);
+        if(File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player").query_exists()) {
+            return new GenericPlayerDevice(mount);
         }
         return null;
     }
     
     public override bool initialize() {
-        device_type = 
-            (File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ?
-                DeviceType.ANDROID :
-                DeviceType.GENERIC_PLAYER
-            );
+        File f = File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player");
+        if(f.query_exists(cancellable)) {
+            device_type = DeviceType.GENERIC_PLAYER;
+            if(f.query_exists() == true) {
+                try {
+                    var stream = new DataInputStream(f.read());
+                    string line;
+                    while((line = stream.read_line(null)) != null) {
+                        if(line.contains("audio_folders=")) {
+                            string dirs = line.substring((long)"audio_folders=".length,
+                                                            (long)(line.length - "audio_folders=".length));
+                            foreach(string dir in dirs.split(",")) {
+                                string s = mount.get_default_location().get_uri() + "/" + dir.strip();
+                                player_folders += s;
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                }
+            }
+        }
         return true;
     }
     
@@ -75,7 +96,7 @@ private class Xnoise.ExtDev.AudioPlayerDevice : Device {
     public override IMainView? get_main_view_widget() {
         if(view != null)
             return view;
-        view = new AudioPlayerMainView(this, cancellable);
+        view = new GenericPlayerMainView(this, cancellable);
         view.show_all();
         return view;
     }
