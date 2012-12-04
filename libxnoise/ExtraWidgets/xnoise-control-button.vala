@@ -30,49 +30,171 @@
  */
 
 using Gtk;
+using Gdk;
+
 
 /**
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
-internal class Xnoise.ControlButton : Gtk.ToolButton {
+private class Xnoise.ControlButton : Gtk.ToolItem {
     
-    public enum Direction {
+    private unowned IconTheme theme = null;
+    private Image image;
+    private int iconwidth = 24;
+    private Function function;
+    
+    public enum Function {
         NEXT = 0,
         PREVIOUS,
         STOP
     }
     
-    public signal void sign_clicked(Direction dir);
+    public signal void sign_clicked(Function dir);
     
-    private Direction direction;
     
-    public ControlButton(Direction _direction = Direction.STOP) {
-        if(_direction != Direction.NEXT && _direction != Direction.PREVIOUS && _direction != Direction.STOP)
-            direction = Direction.STOP;
-        else
-            direction = _direction;
-            
-        switch(direction) {
-            case Direction.NEXT:
-                this.set_stock_id(Gtk.Stock.MEDIA_NEXT);
+    public ControlButton(Function _function) {
+        function = _function;
+        theme = IconTheme.get_default();
+        
+        var button = new Gtk.Button();
+        var w = new Gtk.Invisible();
+        
+        switch(function) {
+            case Function.NEXT: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_NEXT, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-skip-forward-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-skip-forward-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                image = new Gtk.Image.from_pixbuf(px);
                 break;
-            case Direction.PREVIOUS:
-                this.set_stock_id(Gtk.Stock.MEDIA_PREVIOUS);
+            }
+            case Function.PREVIOUS: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PREVIOUS, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-skip-backward-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-skip-backward-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                image = new Gtk.Image.from_pixbuf(px);
                 break;
-            case Direction.STOP:
+            }
+            case Function.STOP: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_STOP, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-playback-stop-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-playback-stop-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                assert(px != null);
+                image = new Gtk.Image.from_pixbuf(px);
+                break;
+            }
             default:
-                this.set_stock_id(Gtk.Stock.MEDIA_STOP);
+                assert_not_reached();
                 break;
         }
+        button.add(image);
+        this.add(button);
+        button.can_focus = false;
         this.can_focus = false;
-        this.clicked.connect(this.on_clicked);
+        button.clicked.connect(this.on_clicked);
+        theme.changed.connect(update_pixbufs);
     }
-
+    
+    private void update_pixbufs() {
+        print("update_pixbufs control button %s\n", function.to_string());
+        theme = IconTheme.get_default();
+        var w = new Gtk.Invisible();
+        
+        switch(function) {
+            case Function.NEXT: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_NEXT, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-skip-forward-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-skip-forward-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                image.pixbuf = px;
+                break;
+            }
+            case Function.PREVIOUS: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PREVIOUS, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-skip-backward-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-skip-backward-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                image.pixbuf = px;
+                break;
+            }
+            case Function.STOP:
+            default: {
+                Pixbuf px = null;
+                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_STOP, IconSize.LARGE_TOOLBAR);
+                iconwidth = px.width;
+                if(theme.has_icon("media-playback-stop-symbolic")) {
+                    try {
+                        px = theme.load_icon("media-playback-stop-symbolic",
+                                             iconwidth,
+                                             IconLookupFlags.FORCE_SIZE
+                        );
+                    }
+                    catch(Error e) {
+                        print("%s\n", e.message);
+                    }
+                }
+                image.pixbuf = px;
+                break;
+            }
+        }
+        this.queue_draw();
+    }
+    
     private void on_clicked() {
-        this.sign_clicked(direction);
+        this.sign_clicked(function);
     }
 }
-
-
 
 

@@ -46,12 +46,12 @@ private class Xnoise.FullscreenToolbar {
     private bool hide_lock;
     private Gdk.Cursor invisible_cursor;
     
-    private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
+    private void handle_control_button_click(ControlButton sender, ControlButton.Function dir) {
         if(xn == null) return;
         if(main_window == null) return;
-        if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
+        if(dir == ControlButton.Function.NEXT || dir == ControlButton.Function.PREVIOUS)
             main_window.change_track(dir);
-        else if(dir == ControlButton.Direction.STOP)
+        else if(dir == ControlButton.Function.STOP)
             main_window.stop();
     }
 
@@ -63,9 +63,9 @@ private class Xnoise.FullscreenToolbar {
         
         var mainbox = new Gtk.Box(Orientation.HORIZONTAL, 8);
         
-        var nextbutton      = new ControlButton(ControlButton.Direction.NEXT);
+        var nextbutton      = new ControlButton(ControlButton.Function.NEXT);
         nextbutton.sign_clicked.connect(handle_control_button_click);
-        var previousbutton  = new ControlButton(ControlButton.Direction.PREVIOUS);
+        var previousbutton  = new ControlButton(ControlButton.Function.PREVIOUS);
         previousbutton.sign_clicked.connect(handle_control_button_click);
         var plpabutton      = new PlayPauseButton();
         var leavefullscreen = new LeaveVideoFSButton();

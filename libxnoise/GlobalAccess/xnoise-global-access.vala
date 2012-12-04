@@ -347,7 +347,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public void prev() {
         if(player_state == PlayerState.STOPPED)
             return;
-        main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+        main_window.change_track(Xnoise.ControlButton.Function.PREVIOUS);
     }
 
     public void play(bool pause_if_playing) {
@@ -374,7 +374,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public void next() {
         if(global.player_state == PlayerState.STOPPED)
             return;
-        main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+        main_window.change_track(Xnoise.ControlButton.Function.NEXT);
     }
 
     public void stop() {

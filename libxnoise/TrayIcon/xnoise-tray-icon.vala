@@ -93,7 +93,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         previousHbox.pack_start(previousLabel, true, true, 0);
         previousItem.add(previousHbox);
         previousItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.previousButton, ControlButton.Direction.PREVIOUS);
+            main_window.handle_control_button_click(main_window.previousButton, ControlButton.Function.PREVIOUS);
         });
         traymenu.append(previousItem);
 
@@ -108,7 +108,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         nextHbox.pack_start(nextLabel, true, true, 0);
         nextItem.add(nextHbox);
         nextItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.nextButton, ControlButton.Direction.NEXT);
+            main_window.handle_control_button_click(main_window.nextButton, ControlButton.Function.NEXT);
         });
         traymenu.append(nextItem);
 
@@ -146,10 +146,10 @@ public class Xnoise.TrayIcon : StatusIcon {
     private bool on_scrolled(Gtk.StatusIcon sender, Gdk.EventScroll event) {
         if(global.player_state != PlayerState.STOPPED) {
             if(event.direction == Gdk.ScrollDirection.DOWN) {
-                main_window.change_track(ControlButton.Direction.PREVIOUS, true);
+                main_window.change_track(ControlButton.Function.PREVIOUS, true);
             }
             else if(event.direction == Gdk.ScrollDirection.UP) {
-                main_window.change_track(ControlButton.Direction.NEXT, true);
+                main_window.change_track(ControlButton.Function.NEXT, true);
             }
         }
         return false;

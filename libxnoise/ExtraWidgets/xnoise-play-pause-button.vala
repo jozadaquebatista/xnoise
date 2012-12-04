@@ -31,6 +31,7 @@
 
 
 using Gtk;
+using Gdk;
 
 using Xnoise;
 using Xnoise.Resources;
@@ -40,16 +41,60 @@ using Xnoise.Resources;
 /**
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
-private class Xnoise.PlayPauseButton: Gtk.ToolButton {
+private class Xnoise.PlayPauseButton: Gtk.ToolItem {
     private unowned Main xn;
-
+    private Pixbuf play  = null;
+    private Pixbuf pause = null;
+    private Gtk.Image image;
+    private int iconwidth;
+    private unowned IconTheme theme = null;
+    
+    public signal void clicked();
+    
+    
     public PlayPauseButton() {
         xn = Main.instance;
         this.can_focus = false;
         
+        theme = IconTheme.get_default();
+        var button = new Gtk.Button();
+        var w = new Gtk.Invisible();
+        play = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
+        iconwidth = play.width;
+        if(theme.has_icon("media-playback-start-symbolic")) {
+            try {
+                play = theme.load_icon("media-playback-start-symbolic",
+                                     iconwidth,
+                                     IconLookupFlags.FORCE_SIZE
+                );
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        if(theme.has_icon("media-playback-pause-symbolic")) {
+            try {
+                pause = theme.load_icon("media-playback-pause-symbolic",
+                                     iconwidth,
+                                     IconLookupFlags.FORCE_SIZE
+                );
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        else {
+            pause = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.LARGE_TOOLBAR);
+        }
+        image = new Gtk.Image.from_pixbuf(play);
+        button.add(image);
+        this.add(button);
+        button.can_focus = false;
+        this.can_focus = false;
+
         this.update_picture();
         
-        this.clicked.connect(this.on_clicked);
+        button.clicked.connect(this.on_clicked);
         gst_player.sign_paused.connect(this.update_picture);
         gst_player.sign_stopped.connect(this.update_picture);
         gst_player.sign_playing.connect(this.update_picture);
@@ -67,9 +112,8 @@ private class Xnoise.PlayPauseButton: Gtk.ToolButton {
      * This method is used to handle play/pause commands from different signal handler sources
      */
     private void handle_click() {
-        Idle.add(
-            handle_click_async
-        );
+        Idle.add(handle_click_async);
+        this.clicked();
     }
     
     private bool handle_click_async() {
@@ -104,9 +148,9 @@ private class Xnoise.PlayPauseButton: Gtk.ToolButton {
 
     public void update_picture() {
         if(gst_player.playing == true)
-            this.set_stock_id(Gtk.Stock.MEDIA_PAUSE);
+            image.pixbuf = pause;
         else
-            this.set_stock_id(Gtk.Stock.MEDIA_PLAY);
+            image.pixbuf = play;
     }
 }
 
