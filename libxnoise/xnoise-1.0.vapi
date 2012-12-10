@@ -111,11 +111,13 @@ namespace Xnoise {
 			public Device ();
 			public abstract void cancel ();
 			public virtual string get_identifier ();
+			public abstract Xnoise.ItemHandler? get_item_handler ();
 			public abstract Xnoise.IMainView? get_main_view_widget ();
 			public virtual string get_presentable_name ();
 			public abstract string get_uri ();
 			public abstract bool initialize ();
 			public Xnoise.ExtDev.DeviceType device_type { get; set; }
+			public bool in_loading { get; set; }
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class DeviceManager : GLib.Object {
@@ -730,6 +732,7 @@ namespace Xnoise {
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
 		public Xnoise.ItemHandler? get_handler_by_type (Xnoise.ItemHandlerType type);
+		public void remove_handler (Xnoise.ItemHandler handler);
 		public void test_func ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1104,7 +1107,8 @@ namespace Xnoise {
 		VIDEO_THUMBNAILER,
 		TAG_EDITOR,
 		MENU_PROVIDER,
-		PLAY_NOW
+		PLAY_NOW,
+		EXTERNAL_DEVICE
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	[Flags]

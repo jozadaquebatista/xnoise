@@ -62,7 +62,8 @@ namespace Xnoise {
         VIDEO_THUMBNAILER,
         TAG_EDITOR,
         MENU_PROVIDER,
-        PLAY_NOW
+        PLAY_NOW,
+        EXTERNAL_DEVICE
     }
 
 

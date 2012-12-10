@@ -28,22 +28,24 @@
  *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AndroidPlayerDevice : Device {
+private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     
     private string uri;
     private AndroidPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
+    private ItemHandler? handler = null;
+    
     
     public AndroidPlayerDevice(Mount _mount) {
         mount = _mount;
         uri = mount.get_default_location().get_uri();
+        assert(uri != null && uri != "");
         print("created new audio player device for %s\n", uri);
     }
     
@@ -75,6 +77,12 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : Device {
         return view;
     }
     
+    public override ItemHandler? get_item_handler() {
+        if(handler == null)
+            handler = new HandlerAndroidDevice(this, cancellable);
+        return handler;
+    }
+    
     public override string get_presentable_name() {
         return "Android";
     }
@@ -83,6 +91,5 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : Device {
         cancellable.cancel();
     }
 }
-
 
 

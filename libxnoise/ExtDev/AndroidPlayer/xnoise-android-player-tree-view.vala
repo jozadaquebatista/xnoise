@@ -51,11 +51,11 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         assert(b != null);
         assert(b.get_path() != null);
         if(b.query_exists(null))
-            treemodel = new AndroidPlayerTreeStore(this, b, cancellable);
+            treemodel = new AndroidPlayerTreeStore(this, audio_player_device, b, cancellable);
         else {
             b = File.new_for_uri(audio_player_device.get_uri());
             b = b.get_child("media"); // old android devices
-            treemodel = new AndroidPlayerTreeStore(this, b, cancellable);
+            treemodel = new AndroidPlayerTreeStore(this, audio_player_device, b, cancellable);
         }
         setup_view();
         

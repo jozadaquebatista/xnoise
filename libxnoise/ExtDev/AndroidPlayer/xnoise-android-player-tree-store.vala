@@ -38,11 +38,14 @@ using Xnoise.TagAccess;
 
 
 private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
+    
     private static int FILE_COUNT = 150;
+    
     private AudioPlayerTempDb db;
-    private unowned AndroidPlayerTreeView view;
     private File base_folder;
+    private unowned AndroidPlayerTreeView view;
     private unowned Cancellable cancellable;
+    private unowned AndroidPlayerDevice audio_player_device;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf),  //ICON
@@ -60,7 +63,11 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     }
     
     
-    public AndroidPlayerTreeStore(AndroidPlayerTreeView view, File base_folder, Cancellable cancellable) {
+    public AndroidPlayerTreeStore(AndroidPlayerTreeView view, 
+                                  AndroidPlayerDevice audio_player_device,
+                                  File base_folder,
+                                  Cancellable cancellable) {
+        this.audio_player_device = audio_player_device;
         db = new AudioPlayerTempDb(cancellable);
         this.set_column_types(col_types);
         this.base_folder = base_folder;
@@ -70,6 +77,10 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     }
 
     private void load_files() {
+        Idle.add(() => {
+            this.audio_player_device.in_loading = true;
+            return false;
+        });
         tda = {};
         var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
         device_worker.push_job(job);
@@ -170,6 +181,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     
     private void end_import(Worker.Job job) {
         Idle.add(() => {
+            this.audio_player_device.in_loading = false;
             if(this.cancellable.is_cancelled())
                 return false;
             filter();

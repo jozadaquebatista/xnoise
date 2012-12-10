@@ -28,14 +28,13 @@
  *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.GenericPlayerDevice : Device {
+private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
     
     private string uri;
     private GenericPlayerMainView view;
@@ -98,6 +97,10 @@ private class Xnoise.ExtDev.GenericPlayerDevice : Device {
         view = new GenericPlayerMainView(this, cancellable);
         view.show_all();
         return view;
+    }
+    
+    public override ItemHandler? get_item_handler() {
+        return null;
     }
     
     public override string get_presentable_name() {

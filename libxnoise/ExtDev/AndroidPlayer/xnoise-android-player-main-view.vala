@@ -35,16 +35,16 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Box, IMainView {
+private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
     
     private uint32 id;
+    private Gtk.Label info_label;
     private unowned AndroidPlayerDevice player_device;
     private AndroidPlayerTreeView tree;
     private unowned Cancellable cancellable;
     
     public AndroidPlayerMainView(AndroidPlayerDevice player_device,
                                  Cancellable cancellable) {
-        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.cancellable = cancellable;
         this.player_device = player_device;
         this.id = Random.next_int();
@@ -60,18 +60,66 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Box, IMainView {
     }
     
     private void setup_widgets() {
-        var label = new Label("");
-        label.set_markup("<span size=\"xx-large\"><b>" +
+        var box = new Gtk.Box(Orientation.VERTICAL, 0);
+        var header_label = new Label("");
+        header_label.set_markup("<span size=\"xx-large\"><b>" +
                          Markup.printf_escaped(_("Android Player Device")) +
                          "</b></span>"
         );
-        this.pack_start(label, false, false, 12);
+        box.pack_start(header_label, false, false, 12);
+        
+        info_label = new Label("");
+        box.pack_start(info_label, false, false, 4);
+        
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
+        device_worker.push_job(job);
+        
         tree = new AndroidPlayerTreeView(player_device, cancellable);
-
+        
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tree);
-        this.pack_start(sw, true, true, 0);
+        box.pack_start(sw, true, true, 0);
+        
+        var spinner = new Spinner();
+//        spinner.start();
+        spinner.set_size_request(160, 160);
+        this.add_overlay(spinner);
+        spinner.halign = Align.CENTER;
+        spinner.valign = Align.CENTER;
+        spinner.set_no_show_all(true);
+        this.show();
+        spinner.show();
+        player_device.notify["in-loading"].connect( () => {
+            if(player_device.in_loading) {
+                spinner.start();
+                spinner.set_no_show_all(false);
+                spinner.show_all();
+            }
+            else {
+                spinner.stop();
+                spinner.hide();
+                spinner.set_no_show_all(true);
+            }
+        });
+        
+        this.add(box);
+    }
+    
+    private bool fill_info_job(Worker.Job job) {
+        if(!(player_device is IAudioPlayerDevice))
+            return false;
+        string info =
+            _("Free space: ") +
+            player_device.get_free_space_size_formatted() +
+            "\n" +
+            _("Total space: ") +
+            player_device.get_filesystem_size_formatted();
+        Idle.add(() => {
+            info_label.label = info;
+            return false;
+        });
+        return false;
     }
 }
 

@@ -38,6 +38,7 @@ using Xnoise.ExtDev;
 private class Xnoise.ExtDev.GenericPlayerMainView : Gtk.Box, IMainView {
     
     private uint32 id;
+    private Gtk.Label info_label;
     private unowned GenericPlayerDevice player_device;
     private GenericPlayerTreeView tree;
     private unowned Cancellable cancellable;
@@ -68,10 +69,32 @@ private class Xnoise.ExtDev.GenericPlayerMainView : Gtk.Box, IMainView {
         this.pack_start(label, false, false, 12);
         tree = new GenericPlayerTreeView(player_device, cancellable);
 
+        info_label = new Label("");
+        this.pack_start(info_label, false, false, 4);
+        
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
+        device_worker.push_job(job);
+
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tree);
         this.pack_start(sw, true, true, 0);
+    }
+
+    private bool fill_info_job(Worker.Job job) {
+        if(!(player_device is IAudioPlayerDevice))
+            return false;
+        string info =
+            _("Free space: ") +
+            player_device.get_free_space_size_formatted() +
+            "\n" +
+            _("Total space: ") +
+            player_device.get_filesystem_size_formatted();
+        Idle.add(() => {
+            info_label.label = info;
+            return false;
+        });
+        return false;
     }
 }
 

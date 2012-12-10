@@ -1,4 +1,4 @@
-/* xnoise-device.vala
+/* xnoise-i-audio-player-device.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -33,49 +33,41 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-public enum Xnoise.ExtDev.DeviceType {
-    UNKNOWN,
-    ANDROID,
-    GENERIC_PLAYER,
-    IPOD,
-    CDROM
-}
-
-
-public abstract class Xnoise.ExtDev.Device : GLib.Object {
+private interface Xnoise.ExtDev.IAudioPlayerDevice : Device {
     
-    public unowned Mount mount;
-    private string? identifier = null;
-    
-    public DeviceType device_type { get; set; }
-    
-    public abstract bool initialize();
-    public abstract string get_uri();
-    public abstract IMainView? get_main_view_widget();
-    public abstract void cancel();
-    public abstract ItemHandler? get_item_handler();
-    
-    public bool in_loading { get; set; }
-    
-    public virtual string get_presentable_name() {
-        return "Dev";
+    public virtual uint64 get_filesystem_size() {
+        uint64 size = 0;
+        try {
+            var f = File.new_for_uri(get_uri());
+            var file_info = f.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE, null);
+            size = file_info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return size;
     }
     
-    public virtual string get_identifier() {
-        if(identifier != null)
-            return identifier;
-        assert(mount != null);
-        string uuid = mount.get_uuid();
-        File f = mount.get_default_location();
-        string ret = "";
-        if(f != null && f.get_uri() != null)
-            ret = ret + f.get_uri();
-        
-        if(uuid != null && uuid != "")
-            ret = ret + "/" + uuid;
-        //print("id = %s\n", ret);
-        identifier = ret;
-        return ret;
+    public virtual uint64 get_free_space_size() {
+        uint64 size = 0;
+        try {
+            var f = File.new_for_uri(get_uri());
+            var file_info = f.query_filesystem_info(FileAttribute.FILESYSTEM_FREE, null);
+            size = file_info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return size;
+    }
+    
+    public virtual string get_filesystem_size_formatted() {
+        return format_size(get_filesystem_size());
+    }
+    
+    public virtual string get_free_space_size_formatted() {
+        return format_size(get_free_space_size());
     }
 }
+
 

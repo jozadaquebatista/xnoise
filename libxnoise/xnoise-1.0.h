@@ -217,6 +217,16 @@ typedef struct _XnoiseExtDevDevicePrivate XnoiseExtDevDevicePrivate;
 typedef struct _XnoiseIMainView XnoiseIMainView;
 typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
 
+#define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
+#define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
+#define XNOISE_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
+#define XNOISE_IS_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER))
+#define XNOISE_IS_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER))
+#define XNOISE_ITEM_HANDLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
+
+typedef struct _XnoiseItemHandler XnoiseItemHandler;
+typedef struct _XnoiseItemHandlerClass XnoiseItemHandlerClass;
+
 #define XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER (xnoise_ext_dev_device_manager_get_type ())
 #define XNOISE_EXT_DEV_DEVICE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManager))
 #define XNOISE_EXT_DEV_DEVICE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManagerClass))
@@ -330,16 +340,6 @@ typedef struct _XnoiseItemConverterPrivate XnoiseItemConverterPrivate;
 typedef struct _XnoiseAction XnoiseAction;
 typedef struct _XnoiseActionClass XnoiseActionClass;
 typedef struct _XnoiseActionPrivate XnoiseActionPrivate;
-
-#define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
-#define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
-#define XNOISE_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
-#define XNOISE_IS_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER))
-#define XNOISE_IS_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER))
-#define XNOISE_ITEM_HANDLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
-
-typedef struct _XnoiseItemHandler XnoiseItemHandler;
-typedef struct _XnoiseItemHandlerClass XnoiseItemHandlerClass;
 typedef struct _XnoiseItemHandlerPrivate XnoiseItemHandlerPrivate;
 
 #define XNOISE_TYPE_ITEM_HANDLER_MANAGER (xnoise_item_handler_manager_get_type ())
@@ -1081,6 +1081,7 @@ struct _XnoiseExtDevDeviceClass {
 	gchar* (*get_uri) (XnoiseExtDevDevice* self);
 	XnoiseIMainView* (*get_main_view_widget) (XnoiseExtDevDevice* self);
 	void (*cancel) (XnoiseExtDevDevice* self);
+	XnoiseItemHandler* (*get_item_handler) (XnoiseExtDevDevice* self);
 	gchar* (*get_presentable_name) (XnoiseExtDevDevice* self);
 	gchar* (*get_identifier) (XnoiseExtDevDevice* self);
 };
@@ -1199,7 +1200,8 @@ typedef enum  {
 	XNOISE_ITEM_HANDLER_TYPE_VIDEO_THUMBNAILER,
 	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR,
 	XNOISE_ITEM_HANDLER_TYPE_MENU_PROVIDER,
-	XNOISE_ITEM_HANDLER_TYPE_PLAY_NOW
+	XNOISE_ITEM_HANDLER_TYPE_PLAY_NOW,
+	XNOISE_ITEM_HANDLER_TYPE_EXTERNAL_DEVICE
 } XnoiseItemHandlerType;
 
 typedef void (*XnoiseItemHandlerActionType) (XnoiseItem* item, GValue* data_1, GValue* data_2, void* user_data);
@@ -1936,15 +1938,19 @@ void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerT
 GType xnoise_ext_dev_device_type_get_type (void) G_GNUC_CONST;
 GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
 GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
+GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 gboolean xnoise_ext_dev_device_initialize (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_uri (XnoiseExtDevDevice* self);
 XnoiseIMainView* xnoise_ext_dev_device_get_main_view_widget (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_cancel (XnoiseExtDevDevice* self);
+XnoiseItemHandler* xnoise_ext_dev_device_get_item_handler (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_presentable_name (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_identifier (XnoiseExtDevDevice* self);
 XnoiseExtDevDevice* xnoise_ext_dev_device_construct (GType object_type);
 XnoiseExtDevDeviceType xnoise_ext_dev_device_get_device_type (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_set_device_type (XnoiseExtDevDevice* self, XnoiseExtDevDeviceType value);
+gboolean xnoise_ext_dev_device_get_in_loading (XnoiseExtDevDevice* self);
+void xnoise_ext_dev_device_set_in_loading (XnoiseExtDevDevice* self, gboolean value);
 GType xnoise_ext_dev_device_manager_get_type (void) G_GNUC_CONST;
 XnoiseExtDevDeviceManager* xnoise_ext_dev_device_manager_new (void);
 XnoiseExtDevDeviceManager* xnoise_ext_dev_device_manager_construct (GType object_type);
@@ -2060,7 +2066,6 @@ gpointer xnoise_value_get_action (const GValue* value);
 GType xnoise_action_get_type (void) G_GNUC_CONST;
 XnoiseAction* xnoise_action_new (void);
 XnoiseAction* xnoise_action_construct (GType object_type);
-GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHandlerManager* _uhm);
 XnoiseItemHandlerType xnoise_item_handler_handler_type (XnoiseItemHandler* self);
@@ -2069,6 +2074,7 @@ XnoiseAction* xnoise_item_handler_get_action (XnoiseItemHandler* self, XnoiseIte
 XnoiseItemHandler* xnoise_item_handler_construct (GType object_type);
 GArray* xnoise_item_handler_manager_get_actions (XnoiseItemHandlerManager* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
 void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
+void xnoise_item_handler_manager_remove_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);

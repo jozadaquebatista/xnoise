@@ -57,17 +57,19 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
+    ExtDev/AndroidPlayer/xnoise-android-item-handler.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-device.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala \
-    ExtDev/AndroidPlayer/xnoise-audio-player-temp-db.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-store.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-view.vala \
+    ExtDev/AndroidPlayer/xnoise-audio-player-temp-db.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-device.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-store.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-view.vala \
     ExtDev/xnoise-device.vala \
     ExtDev/xnoise-device-manager.vala \
+    ExtDev/xnoise-i-audio-player-device.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
