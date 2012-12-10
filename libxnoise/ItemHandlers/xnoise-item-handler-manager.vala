@@ -105,10 +105,6 @@ namespace Xnoise {
             return handler_name_map.lookup(name);
         }
         
-        private int cnt = 0;
-        public void test_func() {
-            print("testfunc %d\n", cnt++);
-        }
         
         private static string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
         

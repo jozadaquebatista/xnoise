@@ -733,7 +733,6 @@ namespace Xnoise {
 		public Xnoise.ItemHandler get_handler_by_name (string name);
 		public Xnoise.ItemHandler? get_handler_by_type (Xnoise.ItemHandlerType type);
 		public void remove_handler (Xnoise.ItemHandler handler);
-		public void test_func ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LocalSchemes {
