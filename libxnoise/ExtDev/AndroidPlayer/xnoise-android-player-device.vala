@@ -41,6 +41,8 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     private Cancellable cancellable = new Cancellable();
     private ItemHandler? handler = null;
     
+    public AudioPlayerTempDb db;
+    
     
     public AndroidPlayerDevice(Mount _mount) {
         mount = _mount;

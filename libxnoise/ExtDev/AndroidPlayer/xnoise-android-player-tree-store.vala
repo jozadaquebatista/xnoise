@@ -33,6 +33,7 @@ using Gtk;
 using Xnoise;
 using Xnoise.ExtDev;
 using Xnoise.Utilities;
+using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
@@ -41,7 +42,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     
     private static int FILE_COUNT = 150;
     
-    private AudioPlayerTempDb db;
+    private unowned AudioPlayerTempDb db;
     private File base_folder;
     private uint update_source = 0;
     private unowned AndroidPlayerTreeView view;
@@ -69,7 +70,8 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
                                   File base_folder,
                                   Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
-        db = new AudioPlayerTempDb(cancellable);
+        audio_player_device.db = new AudioPlayerTempDb(cancellable);
+        db = audio_player_device.db;
         this.set_column_types(col_types);
         this.base_folder = base_folder;
         this.cancellable = cancellable;
@@ -127,7 +129,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
         job.finished.disconnect(on_single_track_import_finished);
         if(update_source != 0)
             Source.remove(update_source);
-        update_source = Idle.add(() => {
+        update_source = Timeout.add(200, () => {
             if(this.cancellable.is_cancelled())
                 return false;
             print("update after import\n");
@@ -343,7 +345,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
         item_ht.insert(job.item.type, job.item);
         
-        job.items = db.get_albums(global.searchtext,
+        job.items = db.get_albums(EMPTYSTRING,
                                         global.collection_sort_mode,
                                         item_ht);
         //print("xx1 job.items cnt = %d\n", job.items.length);
@@ -425,7 +427,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
         HashTable<ItemType,Item?>? item_ht =
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
         item_ht.insert(job.item.type, job.item);
-        job.track_dat = db.get_trackdata_for_album(global.searchtext,
+        job.track_dat = db.get_trackdata_for_album(EMPTYSTRING,
                                                           CollectionSortMode.ARTIST_ALBUM_TITLE,
                                                           item_ht);
         Idle.add( () => {
@@ -464,7 +466,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     private bool populate_artists_job(Worker.Job job) {
         if(this.cancellable.is_cancelled())
             return false;
-        job.items = db.get_artists(global.searchtext,
+        job.items = db.get_artists(EMPTYSTRING,
                                          global.collection_sort_mode,
                                          null
                                          );
