@@ -33,8 +33,6 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-// ItemHandler Implementation 
-// provides the right Action for the given ActionContext/ItemType
 private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private Action a;
     private Action b;
@@ -89,7 +87,7 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         return null;
     }
 
-    private void add_to_device(Item item, GLib.Value? data, GLib.Value? data2 = null) { 
+    private void add_to_device(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(cancellable.is_cancelled())
             return;
         
