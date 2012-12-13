@@ -81,52 +81,50 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     }
     
     
-    private void on_add_track(IAudioPlayerDevice dev, string u) {
-        if(audio_player_device.in_loading)
-            return;
-        
-        File file = File.new_for_uri(u);
-        string attr = FileAttribute.STANDARD_NAME + "," +
-                      FileAttribute.STANDARD_TYPE + "," +
-                      FileAttribute.STANDARD_CONTENT_TYPE;
-        FileInfo info;
-        try {
-            info = file.query_info(attr, FileQueryInfoFlags.NONE, cancellable);
-        }
-        catch(Error e) {
-            print("%s\n", e.message);
-            return;
-        }
-        FileType filetype = info.get_file_type();
-        TrackData td = null;
-        string filename = info.get_name();
-        if(filetype == FileType.DIRECTORY) {
-            return;
-        }
-        else {
-            string uri_lc = filename.down();
-            TrackData[] tdal = {};
-            if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
-                var tr = new TagReader();
-                td = tr.read_tag(file.get_path());
-                if(td != null) {
-                    td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
-                    tdal += td;
+    private void on_add_track(IAudioPlayerDevice dev, string[] uris) {
+//        if(audio_player_device.in_loading)
+//            return;
+        TrackData[] tdal = {};
+        foreach(string u in uris) {
+            File file = File.new_for_uri(u);
+            string attr = FileAttribute.STANDARD_NAME + "," +
+                          FileAttribute.STANDARD_TYPE + "," +
+                          FileAttribute.STANDARD_CONTENT_TYPE;
+            FileInfo info;
+            try {
+                info = file.query_info(attr, FileQueryInfoFlags.NONE, cancellable);
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+                return;
+            }
+            FileType filetype = info.get_file_type();
+            TrackData td = null;
+            string filename = info.get_name();
+            if(filetype == FileType.DIRECTORY) {
+                continue;
+            }
+            else {
+                string uri_lc = filename.down();
+                if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                    var tr = new TagReader();
+                    td = tr.read_tag(file.get_path());
+                    if(td != null) {
+                        td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+                        tdal += td;
+                    }
                 }
-                foreach(var tdi in tdal) {
-                    print("found title: %s\n", tdi.title);
-                }
-                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-                db_job.track_dat = (owned)tdal;
-                tdal = {};
-                db_job.finished.connect(on_single_track_import_finished);
-                db_worker.push_job(db_job);
             }
         }
+        var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+        db_job.track_dat = (owned)tdal;
+        tdal = {};
+        db_job.finished.connect(on_track_import_finished);
+        db_worker.push_job(db_job);
     }
     
-    private void on_single_track_import_finished(Worker.Job job) {
-        job.finished.disconnect(on_single_track_import_finished);
+    private void on_track_import_finished(Worker.Job job) {
+        job.finished.disconnect(on_track_import_finished);
         if(update_source != 0)
             Source.remove(update_source);
         update_source = Timeout.add(200, () => {
@@ -210,9 +208,9 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
                         if(job.big_counter[1] % 50 == 0) {
                         }
                         if(tda.length > FILE_COUNT) {
-                            foreach(var tdi in tda) {
-                                print("found title: %s\n", tdi.title);
-                            }
+                            //foreach(var tdi in tda) {
+                            //    print("found title: %s\n", tdi.title);
+                            //}
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.track_dat = (owned)tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));

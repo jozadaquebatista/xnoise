@@ -117,30 +117,33 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
     
     private bool prep_copy_files_job(Worker.Job _job) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, copy_files_job);
-        job.items = prepare_track_items(_job);
+        job.track_dat = prepare_track_items(_job);
         device_worker.push_job(job);
         return false;
     }
     
-    private Item[] prepare_track_items(Worker.Job job) {
-        Item[] ia = {};
+    private TrackData[] prepare_track_items(Worker.Job job) {
+        TrackData[] ia = {};
         foreach(Item? i in job.items) {
             if(i.type == ItemType.LOCAL_AUDIO_TRACK ||
                i.type == ItemType.LOCAL_VIDEO_TRACK) {
-                ia += i;
+                TrackData[] track_dat = item_converter.to_trackdata(i, global.searchtext, null);
+                foreach(var td in track_dat) {
+                    ia += td;
+                }
                 continue;
             }
             if(i.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
                 TrackData[] track_dat = item_converter.to_trackdata(i, global.searchtext, null);
                 foreach(var td in track_dat) {
-                    ia += td.item;
+                    ia += td;
                 }
                 continue;
             }
             if(i.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
                 TrackData[] track_dat = item_converter.to_trackdata(i, global.searchtext, null);
                 foreach(var td in track_dat) {
-                    ia += td.item;
+                    ia += td;
                 }
                 continue;
             }
@@ -175,9 +178,20 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             return false;
         if(!(this.audio_player_device is IAudioPlayerDevice))
             return false;
-        foreach(Item? it in job.items) {
+        
+        string[] destinations = {};
+        
+        File dest_base = File.new_for_uri(this.audio_player_device.get_uri());
+        assert(dest_base != null);
+        File dest1 = dest_base.get_child("Music");
+        assert(dest1 != null);
+        if(!dest1.query_exists(cancellable)) {
+            dest1 = dest_base.get_child("media");
+        }
+        dest_base = dest1;
+        foreach(TrackData td in job.track_dat) {
             
-            File s = File.new_for_uri(it.uri);
+            File s = File.new_for_uri(td.item.uri);
             FileInfo info = null;
             try {
                 info = s.query_info(FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE, cancellable);
@@ -196,16 +210,10 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
                                         false,
                                         10,
                                         null);
+                break;
             }
             else {
-                File dest = File.new_for_uri(this.audio_player_device.get_uri());
-                assert(dest != null);
-                File dest1 = dest.get_child("Music");
-                assert(dest != null);
-                if(!dest1.query_exists(cancellable)) {
-                    dest1 = dest.get_child("media");
-                }
-                dest = dest1.get_child(s.get_basename());
+                File dest = dest_base.get_child(s.get_basename());
                 assert(dest != null);
                 //print("dest : %s\n", dest.get_path());
                 try {
@@ -215,16 +223,17 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
                     print("%s\n", e.message);
                     continue;
                 }
+                destinations += dest.get_uri();
                 //print("done copying file to android device.\n");
-                Timeout.add(200, () => {
-                    if(cancellable.is_cancelled())
-                        return false;
-                    audio_player_device.sign_add_track(dest.get_uri());
-                    return false;
-                });
             }
         }
         
+        Timeout.add(200, () => {
+            if(cancellable.is_cancelled())
+                return false;
+            audio_player_device.sign_add_track(destinations);
+            return false;
+        });
         return false;
     }
 }

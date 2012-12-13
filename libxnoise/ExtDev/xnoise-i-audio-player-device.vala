@@ -35,7 +35,7 @@ using Xnoise.ExtDev;
 
 private interface Xnoise.ExtDev.IAudioPlayerDevice : Device {
     
-    public signal void sign_add_track(string uri);
+    public signal void sign_add_track(string[] uris);
     
     public virtual uint64 get_filesystem_size() {
         uint64 size = 0;
