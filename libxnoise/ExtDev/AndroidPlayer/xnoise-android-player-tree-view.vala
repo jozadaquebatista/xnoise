@@ -57,6 +57,15 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                           Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
         this.cancellable = cancellable;
+        Gtk.drag_dest_set(this,
+                          Gtk.DestDefaults.ALL,
+                          dest_target_entries,
+                          Gdk.DragAction.COPY|
+                          Gdk.DragAction.DEFAULT
+                          );
+        
+        this.drag_data_received.connect(this.on_drag_data_received);
+        
         File b = File.new_for_uri(audio_player_device.get_uri());
         assert(b != null);
         b = b.get_child("Music");
@@ -71,23 +80,19 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         }
         setup_view();
         
-        Gtk.drag_dest_set(this,
-                          Gtk.DestDefaults.ALL,
-                          dest_target_entries,
-                          Gdk.DragAction.COPY|
-                          Gdk.DragAction.DEFAULT
-                          );
-        
-//        this.drag_motion.connect(this.on_drag_motion);
-        this.drag_data_received.connect(this.on_drag_data_received);
         this.row_activated.connect(this.on_row_activated);
         this.button_press_event.connect(this.on_button_press);
     }
     
+    private bool in_data_move = false;
     private Gtk.TreeViewDropPosition drop_pos;
     private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y,
                                        SelectionData selection, uint target_type, uint time) {
-        print("received\n");
+        if(this.audio_player_device.in_loading)
+            return;
+        if(in_data_move)
+            return;
+        in_data_move = true;
         Gtk.TreePath path;
         TreeRowReference drop_rowref;
         FileType filetype;
@@ -97,6 +102,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         switch(target_type) {
             // DRAGGING NOT WITHIN TRACKLIST
             case 0: // custom dnd data from media browser
+                in_data_move = true;
                 unowned DndData[] ids = (DndData[])selection.get_data();
                 ids.length = (int)(selection.get_length() / sizeof(DndData));
                 
@@ -301,6 +307,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(cancellable.is_cancelled())
                 return false;
             audio_player_device.sign_add_track(destinations);
+            in_data_move = false;
             return false;
         });
         Timeout.add_seconds(1, () => {
@@ -308,6 +315,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
+            in_data_move = false;
             return false;
         });
         return false;
@@ -427,6 +435,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(cancellable.is_cancelled())
                 return false;
             audio_player_device.sign_add_track(destinations);
+            in_data_move = false;
             return false;
         });
         Timeout.add_seconds(1, () => {
@@ -434,6 +443,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
+            in_data_move = false;
             return false;
         });
         return false;
