@@ -398,7 +398,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             return;
         
         int k = 0;
-        TreeIter iter, iter_2 = {};
+        TreeIter iter, iter_2 = {}, xiter = {};
         while(tda[k] != null) {
             if(k == 0 && immediate_play) { // First track
                 iter = tlm.insert_title(null,
@@ -412,6 +412,9 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
                 iter = tlm.insert_title(null,
                                         ref tda[k],
                                         false);
+                if(k == 0) {
+                    xiter = iter;
+                }
             }
             k++;
         }
@@ -427,6 +430,10 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             tl.set_focus_on_iter(ref iter_2);
             //print("set focus on iter\n");
         }
+        else {
+            tl.set_focus_on_iter(ref xiter);
+        }
+        main_window.reset_mainview_to_tracklist();
     }
 }
 
