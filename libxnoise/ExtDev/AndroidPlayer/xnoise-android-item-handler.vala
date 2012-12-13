@@ -31,11 +31,12 @@
 
 using Xnoise;
 using Xnoise.ExtDev;
+using Xnoise.Resources;
 
 
 private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private Action a;
-    private Action b;
+//    private Action b;
     private Action c;
     private static const string ainfo = _("Add to Android Device");
     private static const string aname = "A HandlerAndroidDevicename";
@@ -54,18 +55,18 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         name = audio_player_device.get_identifier();
         
         a = new Action();
-        a.action = add_track_to_device;
+        a.action = add_to_device;
         a.info = ainfo;
         a.name = aname;
         a.stock_item = Gtk.Stock.OPEN;
         a.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         
-        b = new Action();
-        b.action = add_to_device;
-        b.info = ainfo;
-        b.name = aname;
-        b.stock_item = Gtk.Stock.OPEN;
-        b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
+//        b = new Action();
+//        b.action = add_to_device;
+//        b.info = ainfo;
+//        b.name = aname;
+//        b.stock_item = Gtk.Stock.OPEN;
+//        b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         
         c = new Action();
         c.action = delete_from_device;
@@ -86,16 +87,16 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
     public override unowned Action? get_action(ItemType type,
                                                ActionContext context,
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY && 
-           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK)) {
-            if(audio_player_device.in_loading)
-                return null;
-            return a;
-        }
+//        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY && 
+//           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK)) {
+//            if(audio_player_device.in_loading)
+//                return null;
+//            return a;
+//        }
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
             if(audio_player_device.in_loading)
                 return null;
-            return b;
+            return a;
         }
         if(context == ActionContext.EXTERNAL_DEVICE_LIST) {
             if(audio_player_device.in_loading)
@@ -109,48 +110,111 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private void delete_from_device(Item item, GLib.Value? data, GLib.Value? data2) {
         if(cancellable.is_cancelled())
             return;
-        if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
-            return;
-        this.uri = item.uri;
-        var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
-                                        Gtk.ButtonsType.OK_CANCEL,
-                                        _("Do you want to delete the selected file from the device?"));
-        msg.response.connect( (s, response_id) => {
-            //print("response id %d\n", response_id);
-            if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
-                try {
-//                    tl.remove_uri_rows(item.uri);
-                    File f = File.new_for_uri(item.uri);
-                    f.delete(cancellable);
-                    delete_from_database();
+        if(item.type == ItemType.LOCAL_AUDIO_TRACK || item.type == ItemType.LOCAL_VIDEO_TRACK) {
+            var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+                                            Gtk.ButtonsType.OK_CANCEL,
+                                            _("Do you want to delete the selected file from the device?"));
+            msg.response.connect( (s, response_id) => {
+                //print("response id %d\n", response_id);
+                if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
+                    try {
+                        File f = File.new_for_uri(item.uri);
+                        f.delete(cancellable);
+                        delete_from_database(item);
+                        var job = new Worker.Job(Worker.ExecutionType.ONCE, on_delete_finished);
+                        db_worker.push_job(job);
+                    }
+                    catch(GLib.Error e) {
+                        print("%s\n", e.message);
+                    }
                 }
-                catch(GLib.Error e) {
-                    print("%s\n", e.message);
+                s.destroy();
+            });
+            msg.run();
+        }
+        else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+            var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+                                            Gtk.ButtonsType.OK_CANCEL,
+                                            _("Do you want to delete the selected album from the device?"));
+            msg.response.connect( (s, response_id) => {
+                //print("response id %d\n", response_id);
+                if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
+                    HashTable<ItemType,Item?>? items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                    items.insert(item.type, item);
+                    TrackData[] tda = 
+                        audio_player_device.db.get_trackdata_for_album(EMPTYSTRING,
+                                                                       CollectionSortMode.ARTIST_ALBUM_TITLE,
+                                                                       items);
+                    foreach(TrackData td in tda) {
+                        try {
+                            File f = File.new_for_uri(td.item.uri);
+                            f.delete(cancellable);
+                            delete_from_database(td.item);
+                        }
+                        catch(GLib.Error e) {
+                            print("%s\n", e.message);
+                        }
+                    }
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE, on_delete_finished);
+                    db_worker.push_job(job);
                 }
-            }
-            s.destroy();
-        });
-        msg.run();
+                s.destroy();
+            });
+            msg.run();
+        }
+        else if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+            var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+                                            Gtk.ButtonsType.OK_CANCEL,
+                                            _("Do you want to delete the selected artist from the device?"));
+            msg.response.connect( (s, response_id) => {
+                //print("response id %d\n", response_id);
+                if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
+                    HashTable<ItemType,Item?>? items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                    items.insert(item.type, item);
+                    TrackData[] tda = 
+                        audio_player_device.db.get_trackdata_for_artist(EMPTYSTRING,
+                                                                        CollectionSortMode.ARTIST_ALBUM_TITLE,
+                                                                        items);
+                    foreach(TrackData td in tda) {
+                        try {
+                            File f = File.new_for_uri(td.item.uri);
+                            f.delete(cancellable);
+                            delete_from_database(td.item);
+                        }
+                        catch(GLib.Error e) {
+                            print("%s\n", e.message);
+                        }
+                    }
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE, on_delete_finished);
+                    db_worker.push_job(job);
+                }
+                s.destroy();
+            });
+            msg.run();
+        }
     }
     
-    private string uri;
-    
-    private void delete_from_database() {
+    private void delete_from_database(Item? item) {
         if(cancellable.is_cancelled())
             return;
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
-        job.finished.connect(on_delete_finished);
+        job.item = item;
         db_worker.push_job(job);
     }
     
     private bool delete_from_database_cb(Worker.Job job) {
-        audio_player_device.db.remove_uri(this.uri);
+        if(cancellable.is_cancelled())
+            return false;
+        audio_player_device.db.remove_uri(job.item.uri);
         return false;
     }
     
-    private void on_delete_finished(Worker.Job sender) {
-        sender.finished.disconnect(on_delete_finished);
-        audio_player_device.view.tree.treemodel.filter();
+    private bool on_delete_finished(Worker.Job job) {
+        Idle.add(() => {
+            audio_player_device.view.tree.treemodel.filter();
+            return false;
+        });
+        return false;
     }
 
     private void add_to_device(Item item, GLib.Value? data, GLib.Value? data2) { 
@@ -169,21 +233,35 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         
         var mod = tq.get_queryable_model();
         Item? ix = Item(ItemType.UNKNOWN);
-        Gtk.TreeIter iter;
+        Gtk.TreeIter iter = Gtk.TreeIter();
         Item[] items = {};
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, prep_copy_files_job);
-        foreach(Gtk.TreePath path in list) {
-            mod.get_iter(out iter, path);
-            mod.get(iter, tq.get_model_item_column(), out ix);
-            items += ix;
-        }
-        job.items = items;
-        db_worker.push_job(job);
+        uint msg_id = 0;
+        Idle.add( () => {
+            msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+                                    UserInfo.ContentClass.WAIT,
+                                    _("Please wait while moving media to the device."),
+                                    false,
+                                    10,
+                                    null);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, prep_copy_files_job);
+            foreach(Gtk.TreePath path in list) {
+                mod.get_iter(out iter, path);
+                mod.get(iter, tq.get_model_item_column(), out ix);
+                items += ix;
+            }
+            job.items = items;
+            job.set_arg("msg_id", msg_id);
+            db_worker.push_job(job);
+            
+            return false;
+        });
     }
     
     private bool prep_copy_files_job(Worker.Job _job) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, copy_files_job);
+        uint msg_id = (uint)_job.get_arg("msg_id");
         job.track_dat = prepare_track_items(_job);
+        job.set_arg("msg_id", msg_id);
         device_worker.push_job(job);
         return false;
     }
@@ -215,28 +293,6 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             }
         }
         return ia;
-    }
-    
-    private void add_track_to_device(Item item, GLib.Value? data, GLib.Value? data2) { 
-        if(cancellable.is_cancelled())
-            return;
-        
-        if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
-            return;
-        if(item.uri == null || item.uri == "")
-            return;
-        
-        TreeQueryable? tq = data as TreeQueryable;
-        if(tq == null)
-            return;
-        if(!(tq is TreeQueryable))
-            return;
-        
-        print("ADD TO ANDROID\n");
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, copy_files_job);
-        job.items = new Item[1];
-        job.items[0] = item;
-        device_worker.push_job(job);
     }
     
     private bool copy_files_job(Worker.Job job) {
@@ -297,7 +353,15 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         Timeout.add(200, () => {
             if(cancellable.is_cancelled())
                 return false;
+            
             audio_player_device.sign_add_track(destinations);
+            return false;
+        });
+        Timeout.add_seconds(1, () => {
+            uint msg_id = (uint)job.get_arg("msg_id");
+            if(msg_id != 0) {
+                userinfo.popdown(msg_id);
+            }
             return false;
         });
         return false;
