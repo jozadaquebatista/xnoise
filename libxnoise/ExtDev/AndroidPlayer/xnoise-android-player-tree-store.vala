@@ -82,8 +82,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
     
     
     private void on_add_track(IAudioPlayerDevice dev, string[] uris) {
-//        if(audio_player_device.in_loading)
-//            return;
         TrackData[] tdal = {};
         foreach(string u in uris) {
             File file = File.new_for_uri(u);
@@ -199,18 +197,14 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
                     string uri_lc = filename.down();
                     if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
                         var tr = new TagReader();
+                        //print("read file %s\n", filepath);
                         td = tr.read_tag(filepath);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             tda += td;
                             job.big_counter[1]++;
                         }
-                        if(job.big_counter[1] % 50 == 0) {
-                        }
                         if(tda.length > FILE_COUNT) {
-                            //foreach(var tdi in tda) {
-                            //    print("found title: %s\n", tdi.title);
-                            //}
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.track_dat = (owned)tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
@@ -254,9 +248,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         db.begin_transaction();
-        foreach(TrackData td in job.track_dat) {
-            db.insert_tracks(ref job.track_dat);
-        }
+        db.insert_tracks(ref job.track_dat);
         db.commit_transaction();
         return false;
     }

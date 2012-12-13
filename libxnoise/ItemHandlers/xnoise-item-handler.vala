@@ -44,7 +44,8 @@ namespace Xnoise {
         QUERYABLE_PLAYLIST_ITEM_ACTIVATED,  // used by implementors of PlaylistQueryable interface
         QUERYABLE_PLAYLIST_MENU_QUERY,      // used by implementors of PlaylistQueryable interface
         QUERYABLE_EXTERNAL_ITEM_ACTIVATED,  // not editable
-        QUERYABLE_EXTERNAL_MENU_QUERY       // not editable
+        QUERYABLE_EXTERNAL_MENU_QUERY,      // not editable
+        EXTERNAL_DEVICE_LIST                // for mainviews of external players / CDROM
     }
     
     [Flags]

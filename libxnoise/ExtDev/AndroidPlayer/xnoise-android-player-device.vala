@@ -37,7 +37,7 @@ using Xnoise.ExtDev;
 private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     
     private string uri;
-    private AndroidPlayerMainView view;
+    internal AndroidPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
     private ItemHandler? handler = null;
     

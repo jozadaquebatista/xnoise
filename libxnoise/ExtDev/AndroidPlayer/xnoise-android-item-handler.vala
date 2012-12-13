@@ -36,8 +36,11 @@ using Xnoise.ExtDev;
 private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private Action a;
     private Action b;
+    private Action c;
     private static const string ainfo = _("Add to Android Device");
     private static const string aname = "A HandlerAndroidDevicename";
+    private static const string cinfo = _("Delete from device");
+    private static const string cname = "C HandlerAndroidDevicename";
     
     private unowned AndroidPlayerDevice audio_player_device;
     private unowned Cancellable cancellable;
@@ -63,6 +66,13 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         b.name = aname;
         b.stock_item = Gtk.Stock.OPEN;
         b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
+        
+        c = new Action();
+        c.action = delete_from_device;
+        c.info = cinfo;
+        c.name = cname;
+        c.stock_item = Gtk.Stock.DELETE;
+        c.context = ActionContext.EXTERNAL_DEVICE_LIST;
     }
 
     public override ItemHandlerType handler_type() {
@@ -77,14 +87,70 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
                                                ActionContext context,
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY && 
-           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
+           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK)) {
+            if(audio_player_device.in_loading)
+                return null;
             return a;
+        }
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
-            print("use b action\n");
+            if(audio_player_device.in_loading)
+                return null;
             return b;
+        }
+        if(context == ActionContext.EXTERNAL_DEVICE_LIST) {
+            if(audio_player_device.in_loading)
+                return null;
+            return c;
         }
         
         return null;
+    }
+    
+    private void delete_from_device(Item item, GLib.Value? data, GLib.Value? data2) {
+        if(cancellable.is_cancelled())
+            return;
+        if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
+            return;
+        this.uri = item.uri;
+        var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
+                                        Gtk.ButtonsType.OK_CANCEL,
+                                        _("Do you want to delete the selected file from the device?"));
+        msg.response.connect( (s, response_id) => {
+            //print("response id %d\n", response_id);
+            if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
+                try {
+//                    tl.remove_uri_rows(item.uri);
+                    File f = File.new_for_uri(item.uri);
+                    f.delete(cancellable);
+                    delete_from_database();
+                }
+                catch(GLib.Error e) {
+                    print("%s\n", e.message);
+                }
+            }
+            s.destroy();
+        });
+        msg.run();
+    }
+    
+    private string uri;
+    
+    private void delete_from_database() {
+        if(cancellable.is_cancelled())
+            return;
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
+        job.finished.connect(on_delete_finished);
+        db_worker.push_job(job);
+    }
+    
+    private bool delete_from_database_cb(Worker.Job job) {
+        audio_player_device.db.remove_uri(this.uri);
+        return false;
+    }
+    
+    private void on_delete_finished(Worker.Job sender) {
+        sender.finished.disconnect(on_delete_finished);
+        audio_player_device.view.tree.treemodel.filter();
     }
 
     private void add_to_device(Item item, GLib.Value? data, GLib.Value? data2) { 

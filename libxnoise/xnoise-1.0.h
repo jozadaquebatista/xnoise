@@ -1183,7 +1183,8 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_QUERYABLE_EXTERNAL_ITEM_ACTIVATED,
-	XNOISE_ACTION_CONTEXT_QUERYABLE_EXTERNAL_MENU_QUERY
+	XNOISE_ACTION_CONTEXT_QUERYABLE_EXTERNAL_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_EXTERNAL_DEVICE_LIST
 } XnoiseActionContext;
 
 typedef enum  {
@@ -1935,6 +1936,7 @@ XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GT
 void xnoise_ext_dev_audio_player_temp_db_begin_transaction (XnoiseExtDevAudioPlayerTempDb* self);
 void xnoise_ext_dev_audio_player_temp_db_commit_transaction (XnoiseExtDevAudioPlayerTempDb* self);
 void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerTempDb* self, XnoiseTrackData*** tda, int* tda_length1);
+void xnoise_ext_dev_audio_player_temp_db_remove_uri (XnoiseExtDevAudioPlayerTempDb* self, const gchar* uri);
 GType xnoise_ext_dev_device_type_get_type (void) G_GNUC_CONST;
 GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
 GType xnoise_imain_view_get_type (void) G_GNUC_CONST;

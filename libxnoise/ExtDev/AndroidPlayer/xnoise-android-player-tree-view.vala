@@ -36,9 +36,10 @@ using Xnoise.ExtDev;
 
 
 private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
-    private AndroidPlayerTreeStore treemodel;
     private unowned AndroidPlayerDevice audio_player_device;
     private unowned Cancellable cancellable;
+    
+    internal AndroidPlayerTreeStore treemodel;
     
     
     public AndroidPlayerTreeView(AndroidPlayerDevice audio_player_device,
@@ -60,8 +61,104 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         setup_view();
         
         this.row_activated.connect(this.on_row_activated);
+        this.button_press_event.connect(this.on_button_press);
     }
     
+    
+    private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
+        Gtk.TreePath path;
+        Gtk.TreeViewColumn column;
+        
+        Gtk.TreeSelection selection = this.get_selection();
+        int x = (int)e.x;
+        int y = (int)e.y;
+        int cell_x, cell_y;
+        if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)))
+            return true;
+        
+        switch(e.button) {
+            case 1:
+                if(selection.count_selected_rows()<=1) {
+                    return false;
+                }
+                else {
+                    if(selection.path_is_selected(path)) {
+                        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+                            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+                                selection.unselect_path(path);
+                        }
+                        return true;
+                    }
+                    else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+                            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK))) {
+                        return true;
+                    }
+                    return false;
+                }
+            case 2:
+                //print("button 2\n");
+                break;
+            case 3:
+                if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+                    ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+                        return false;
+                }
+                else {
+                    int selectioncount = selection.count_selected_rows();
+                    if(selectioncount <= 1) {
+                        selection.unselect_all();
+                        selection.select_path(path);
+                    }
+                }
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+        if(!(selection.count_selected_rows()>0)) selection.select_path(path);
+        return false;
+    }
+
+    private Gtk.Menu menu;
+    
+    private void rightclick_menu_popup(uint activateTime) {
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
+    }
+
+    private Gtk.Menu create_rightclick_menu() {
+        TreeIter iter;
+        var rightmenu = new Gtk.Menu();
+        GLib.List<TreePath> list;
+        list = this.get_selection().get_selected_rows(null);
+        if(list == null)
+            return rightmenu;
+        ItemSelectionType itsel;
+        if(list.length() > 1)
+            itsel = ItemSelectionType.MULTIPLE;
+        else
+            itsel = ItemSelectionType.SINGLE;
+        Item? item = null;
+        Array<unowned Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        treemodel.get_iter(out iter, path);
+        treemodel.get(iter, AndroidPlayerTreeStore.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.EXTERNAL_DEVICE_LIST, itsel);
+        //print("array.length:::%u\n", array.length);
+        for(int i =0; i < array.length; i++) {
+            print("%s\n", array.index(i).name);
+            var menu_item = new ImageMenuItem.from_stock(array.index(i).stock_item, null);
+            menu_item.set_label(array.index(i).info);
+            //Value? v = list;
+            unowned Action x = array.index(i);
+            menu_item.activate.connect( () => {
+                x.action(item, null, null);
+            });
+            rightmenu.append(menu_item);
+        }
+        rightmenu.show_all();
+        return rightmenu;
+    }
+
     private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
         if(treepath.get_depth() > 1) {
             Item? item = Item(ItemType.UNKNOWN);

@@ -103,6 +103,7 @@ namespace Xnoise {
 			public override Xnoise.TrackData[] get_trackdata_for_item (string searchterm, Xnoise.Item? item);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public void insert_tracks (ref Xnoise.TrackData[] tda);
+			public void remove_uri (string uri);
 			public signal void progress (int cnt);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1084,7 +1085,8 @@ namespace Xnoise {
 		QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
 		QUERYABLE_PLAYLIST_MENU_QUERY,
 		QUERYABLE_EXTERNAL_ITEM_ACTIVATED,
-		QUERYABLE_EXTERNAL_MENU_QUERY
+		QUERYABLE_EXTERNAL_MENU_QUERY,
+		EXTERNAL_DEVICE_LIST
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum CollectionSortMode {

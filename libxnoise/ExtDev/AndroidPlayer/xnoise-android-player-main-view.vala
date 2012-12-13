@@ -40,8 +40,8 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
     private uint32 id;
     private Gtk.Label info_label;
     private unowned AndroidPlayerDevice player_device;
-    private AndroidPlayerTreeView tree;
     private unowned Cancellable cancellable;
+    internal AndroidPlayerTreeView tree;
     
     public AndroidPlayerMainView(AndroidPlayerDevice player_device,
                                  Cancellable cancellable) {
