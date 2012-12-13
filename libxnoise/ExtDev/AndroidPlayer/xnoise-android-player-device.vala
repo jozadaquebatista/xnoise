@@ -37,10 +37,10 @@ using Xnoise.ExtDev;
 private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     
     private string uri;
-    internal AndroidPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
     private ItemHandler? handler = null;
     
+    internal AndroidPlayerMainView view;
     public AudioPlayerTempDb db;
     
     

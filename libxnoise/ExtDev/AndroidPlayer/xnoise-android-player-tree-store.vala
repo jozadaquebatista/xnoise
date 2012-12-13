@@ -204,6 +204,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeStore : Gtk.TreeStore {
                             tda += td;
                             job.big_counter[1]++;
                         }
+                        
                         if(tda.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.track_dat = (owned)tda;

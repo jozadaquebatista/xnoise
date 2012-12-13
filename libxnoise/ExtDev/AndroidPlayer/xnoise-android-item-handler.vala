@@ -87,12 +87,6 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
     public override unowned Action? get_action(ItemType type,
                                                ActionContext context,
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-//        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY && 
-//           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK)) {
-//            if(audio_player_device.in_loading)
-//                return null;
-//            return a;
-//        }
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
             if(audio_player_device.in_loading)
                 return null;
@@ -328,7 +322,7 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
                 uint msg_id = 0;
                 msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
                                         UserInfo.ContentClass.CRITICAL,
-                                        _("Not enough space on device!"),
+                                        _("Not enough space on device! Aborting..."),
                                         false,
                                         10,
                                         null);
@@ -353,7 +347,6 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         Timeout.add(200, () => {
             if(cancellable.is_cancelled())
                 return false;
-            
             audio_player_device.sign_add_track(destinations);
             return false;
         });
