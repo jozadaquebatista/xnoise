@@ -36,7 +36,6 @@ using Xnoise.Resources;
 
 private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private Action a;
-//    private Action b;
     private Action c;
     private static const string ainfo = _("Add to Android Device");
     private static const string aname = "A HandlerAndroidDevicename";
@@ -60,13 +59,6 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
         a.name = aname;
         a.stock_item = Gtk.Stock.OPEN;
         a.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
-        
-//        b = new Action();
-//        b.action = add_to_device;
-//        b.info = ainfo;
-//        b.name = aname;
-//        b.stock_item = Gtk.Stock.OPEN;
-//        b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         
         c = new Action();
         c.action = delete_from_device;
@@ -186,6 +178,10 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             });
             msg.run();
         }
+        Idle.add(() => {
+            audio_player_device.sign_update_filesystem();
+            return false;
+        });
     }
     
     private void delete_from_database(Item? item) {
@@ -355,6 +351,10 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
+            return false;
+        });
+        Idle.add(() => {
+            audio_player_device.sign_update_filesystem();
             return false;
         });
         return false;

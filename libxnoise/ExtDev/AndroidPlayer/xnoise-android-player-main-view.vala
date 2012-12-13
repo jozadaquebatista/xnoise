@@ -39,16 +39,21 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
     
     private uint32 id;
     private Gtk.Label info_label;
-    private unowned AndroidPlayerDevice player_device;
+    private unowned AndroidPlayerDevice audio_player_device;
     private unowned Cancellable cancellable;
     internal AndroidPlayerTreeView tree;
     
-    public AndroidPlayerMainView(AndroidPlayerDevice player_device,
+    public AndroidPlayerMainView(AndroidPlayerDevice audio_player_device,
                                  Cancellable cancellable) {
         this.cancellable = cancellable;
-        this.player_device = player_device;
+        this.audio_player_device = audio_player_device;
         this.id = Random.next_int();
         setup_widgets();
+        audio_player_device.sign_update_filesystem.connect( () => {
+            print("update filesystem info\n");
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
+            device_worker.push_job(job);
+        });
     }
     
     ~AndroidPlayerMainView() {
@@ -56,7 +61,7 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
     }
     
     public string get_view_name() {
-        return player_device.get_identifier();
+        return audio_player_device.get_identifier();
     }
     
     private void setup_widgets() {
@@ -74,7 +79,7 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
         device_worker.push_job(job);
         
-        tree = new AndroidPlayerTreeView(player_device, cancellable);
+        tree = new AndroidPlayerTreeView(audio_player_device, cancellable);
         
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
@@ -90,8 +95,8 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
         spinner.set_no_show_all(true);
         this.show();
         spinner.show();
-        player_device.notify["in-loading"].connect( () => {
-            if(player_device.in_loading) {
+        audio_player_device.notify["in-loading"].connect( () => {
+            if(audio_player_device.in_loading) {
                 spinner.start();
                 spinner.set_no_show_all(false);
                 spinner.show_all();
@@ -107,14 +112,14 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
     }
     
     private bool fill_info_job(Worker.Job job) {
-        if(!(player_device is IAudioPlayerDevice))
+        if(!(audio_player_device is IAudioPlayerDevice))
             return false;
         string info =
             _("Free space: ") +
-            player_device.get_free_space_size_formatted() +
+            audio_player_device.get_free_space_size_formatted() +
             "\n" +
             _("Total space: ") +
-            player_device.get_filesystem_size_formatted();
+            audio_player_device.get_filesystem_size_formatted();
         Idle.add(() => {
             info_label.label = info;
             return false;

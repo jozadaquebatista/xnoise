@@ -64,7 +64,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                           Gdk.DragAction.DEFAULT
                           );
         
-        this.drag_data_received.connect(this.on_drag_data_received);
+//        this.drag_data_received.connect(this.on_drag_data_received);
         
         File b = File.new_for_uri(audio_player_device.get_uri());
         assert(b != null);
@@ -86,7 +86,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
     
     private bool in_data_move = false;
     private Gtk.TreeViewDropPosition drop_pos;
-    private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y,
+    public override void drag_data_received(DragContext context, int x, int y,
                                        SelectionData selection, uint target_type, uint time) {
         if(this.audio_player_device.in_loading)
             return;
@@ -318,6 +318,10 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             in_data_move = false;
             return false;
         });
+        Idle.add(() => {
+            audio_player_device.sign_update_filesystem();
+            return false;
+        });
         return false;
     }
 
@@ -444,6 +448,10 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                 userinfo.popdown(msg_id);
             }
             in_data_move = false;
+            return false;
+        });
+        Idle.add(() => {
+            audio_player_device.sign_update_filesystem();
             return false;
         });
         return false;
