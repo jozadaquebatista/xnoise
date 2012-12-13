@@ -141,7 +141,7 @@ msgstr "Willst du den ausgewählten Künstler vom Gerät löschen?"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:236
 msgid "Please wait while moving media to the device."
-msgstr "Bitte warten während Medien auf des Gerät geschoben werden.die Datenbank entpackt wird."
+msgstr "Bitte warten während Medien auf des Gerät geschoben werden."
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:325
 msgid "Not enough space on device! Aborting..."
