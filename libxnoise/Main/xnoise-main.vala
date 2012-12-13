@@ -30,6 +30,7 @@
 
 using Xnoise;
 using Xnoise.ExtDev;
+using Xnoise.Utilities;
 
 
 public class Xnoise.Main : GLib.Object {
@@ -221,12 +222,40 @@ public class Xnoise.Main : GLib.Object {
         return false;
     }
     
+    private bool remove_temp_files_job(Worker.Job job) {
+        File dir = File.new_for_path(temp_folder());
+        FileEnumerator enumerator;
+        string attr = FileAttribute.STANDARD_NAME;
+        try {
+            enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
+        } 
+        catch(Error e) {
+            print("Error importing directory %s. %s\n", dir.get_path(), e.message);
+            return false;
+        }
+        GLib.FileInfo info;
+            try {
+                while((info = enumerator.next_file()) != null) {
+                    string filename = info.get_name();
+                    string filepath = Path.build_filename(dir.get_path(), filename);
+                    File file = File.new_for_path(filepath);
+                    file.delete(null);
+                }
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+            }
+        return false;
+    }
+    
     public void quit() {
         GlobalAccess.main_cancellable.cancel();
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;
         Source.remove(cyclic_save_source);
         preparing_quit = true;
+        var jobx = new Worker.Job(Worker.ExecutionType.ONCE, remove_temp_files_job, 0);
+        io_worker.push_job(jobx);
         var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
         io_worker.push_job(jx);
         jx.finished.connect( () => {
