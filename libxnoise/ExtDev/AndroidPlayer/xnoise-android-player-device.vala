@@ -43,6 +43,8 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     internal AndroidPlayerMainView view;
     public AudioPlayerTempDb db;
     
+    public bool in_data_transfer { get; set; default = false; }
+    
     
     public AndroidPlayerDevice(Mount _mount) {
         mount = _mount;

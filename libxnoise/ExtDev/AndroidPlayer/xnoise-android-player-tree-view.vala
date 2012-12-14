@@ -84,15 +84,12 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         this.button_press_event.connect(this.on_button_press);
     }
     
-    private bool in_data_move = false;
     private Gtk.TreeViewDropPosition drop_pos;
     public override void drag_data_received(DragContext context, int x, int y,
                                        SelectionData selection, uint target_type, uint time) {
-        if(this.audio_player_device.in_loading)
-            return;
-        if(in_data_move)
-            return;
-        in_data_move = true;
+        if(audio_player_device.in_loading || audio_player_device.in_data_transfer)
+             return;
+        audio_player_device.in_data_transfer = true;
         Gtk.TreePath path;
         TreeRowReference drop_rowref;
         FileType filetype;
@@ -102,7 +99,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         switch(target_type) {
             // DRAGGING NOT WITHIN TRACKLIST
             case 0: // custom dnd data from media browser
-                in_data_move = true;
                 unowned DndData[] ids = (DndData[])selection.get_data();
                 ids.length = (int)(selection.get_length() / sizeof(DndData));
                 
@@ -120,7 +116,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             case 1: // uri list from outside
                 uris = selection.get_uris();
                 print("receive get_uris\n");
-//                drop_rowref = null;
                 bool is_first = true;
                 string attr = FileAttribute.STANDARD_TYPE + "," +
                               FileAttribute.STANDARD_CONTENT_TYPE;
@@ -164,6 +159,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                 device_worker.push_job(job);
                 break;
             default:
+                audio_player_device.in_data_transfer = false;
                 assert_not_reached();
                 break;
         }
@@ -307,7 +303,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(cancellable.is_cancelled())
                 return false;
             audio_player_device.sign_add_track(destinations);
-            in_data_move = false;
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Timeout.add_seconds(1, () => {
@@ -315,7 +311,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
-            in_data_move = false;
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Idle.add(() => {
@@ -324,12 +320,10 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         });
         return false;
     }
-
-
+    
     private bool insert_dnd_data_job(Worker.Job job) {
         assert(db_worker.is_same_thread());
         DndData[] ids = job.dnd_data;
-        bool is_first = true;
         TrackData[] localarray = {};
         foreach(DndData ix in ids) {
             if(ix.mediatype == ItemType.STREAM)
@@ -439,7 +433,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(cancellable.is_cancelled())
                 return false;
             audio_player_device.sign_add_track(destinations);
-            in_data_move = false;
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Timeout.add_seconds(1, () => {
@@ -447,7 +441,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
-            in_data_move = false;
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Idle.add(() => {

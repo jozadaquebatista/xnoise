@@ -80,7 +80,7 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
                                                ActionContext context,
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
-            if(audio_player_device.in_loading)
+            if(audio_player_device.in_loading || audio_player_device.in_data_transfer)
                 return null;
             return a;
         }
@@ -210,7 +210,9 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
     private void add_to_device(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(cancellable.is_cancelled())
             return;
-        
+        if(audio_player_device.in_loading || audio_player_device.in_data_transfer)
+            return;
+        audio_player_device.in_data_transfer = true;
         TreeQueryable? tq = data as TreeQueryable;
         if(tq == null)
             return;
@@ -344,6 +346,7 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             if(cancellable.is_cancelled())
                 return false;
             audio_player_device.sign_add_track(destinations);
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Timeout.add_seconds(1, () => {
@@ -351,6 +354,7 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             if(msg_id != 0) {
                 userinfo.popdown(msg_id);
             }
+            audio_player_device.in_data_transfer = false;
             return false;
         });
         Idle.add(() => {
