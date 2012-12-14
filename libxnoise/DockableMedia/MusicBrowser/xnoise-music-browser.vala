@@ -337,7 +337,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         });
         rightmenu.append(collapse_item);
         var sort_item = new Gtk.MenuItem.with_label(_("Sort Mode"));
-//        sort_item.set_label(_("Sort Mode"));
         sort_item.set_submenu(get_sort_submenu());
         rightmenu.append(sort_item);
         rightmenu.show_all();

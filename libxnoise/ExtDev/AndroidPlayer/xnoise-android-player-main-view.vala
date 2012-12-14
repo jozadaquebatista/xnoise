@@ -87,7 +87,7 @@ private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
         box.pack_start(sw, true, true, 0);
         
         var spinner = new Spinner();
-//        spinner.start();
+        //spinner.start();
         spinner.set_size_request(160, 160);
         this.add_overlay(spinner);
         spinner.halign = Align.CENTER;
