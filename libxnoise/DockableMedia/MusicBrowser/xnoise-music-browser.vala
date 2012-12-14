@@ -326,8 +326,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             });
             rightmenu.append(menu_item);
         }
-        var sptr_item = new SeparatorMenuItem();
-        rightmenu.append(sptr_item);
+        if(array.length > 0) {
+            var sptr_item = new SeparatorMenuItem();
+            rightmenu.append(sptr_item);
+        }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));
         collapse_item.activate.connect( () => {

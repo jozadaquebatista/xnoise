@@ -85,11 +85,10 @@ private class Xnoise.HandlerAndroidDevice : ItemHandler {
             return a;
         }
         if(context == ActionContext.EXTERNAL_DEVICE_LIST) {
-            if(audio_player_device.in_loading)
+            if(audio_player_device.in_loading || audio_player_device.in_data_transfer)
                 return null;
             return c;
         }
-        
         return null;
     }
     

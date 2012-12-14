@@ -642,6 +642,17 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
             });
             rightmenu.append(menu_item);
         }
+        if(array.length > 0) {
+            var sptr_item = new SeparatorMenuItem();
+            rightmenu.append(sptr_item);
+        }
+        var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        collapse_item.set_label(_("Collapse all"));
+        collapse_item.activate.connect( () => {
+            this.collapse_all();
+        });
+        rightmenu.append(collapse_item);
+        
         rightmenu.show_all();
         return rightmenu;
     }
