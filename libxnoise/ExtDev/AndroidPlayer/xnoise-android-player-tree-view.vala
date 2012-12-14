@@ -40,15 +40,12 @@ using Xnoise.Utilities;
 private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
     private unowned AndroidPlayerDevice audio_player_device;
     private unowned Cancellable cancellable;
-    private const int autoscroll_distance = 50;
-    private uint autoscroll_source = 0;
     
     // targets used with this as a destination
     private const TargetEntry[] dest_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
         {"text/uri-list", 0, 1}
     };
-
     
     internal AndroidPlayerTreeStore treemodel;
     
@@ -57,14 +54,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                           Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
         this.cancellable = cancellable;
-        Gtk.drag_dest_set(this,
-                          Gtk.DestDefaults.ALL,
-                          dest_target_entries,
-                          Gdk.DragAction.COPY|
-                          Gdk.DragAction.DEFAULT
-                          );
-        
-//        this.drag_data_received.connect(this.on_drag_data_received);
         
         File b = File.new_for_uri(audio_player_device.get_uri());
         assert(b != null);
@@ -80,6 +69,12 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         }
         setup_view();
         
+        Gtk.drag_dest_set(this,
+                          Gtk.DestDefaults.ALL,
+                          dest_target_entries,
+                          Gdk.DragAction.COPY|
+                          Gdk.DragAction.DEFAULT
+                          );
         this.row_activated.connect(this.on_row_activated);
         this.button_press_event.connect(this.on_button_press);
     }
@@ -110,7 +105,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
                                          this.insert_dnd_data_job
                 );
                 job.dnd_data = ids;
-//              print("dnd data get %d  %s\n", ids[0].db_id, ids[0].items[0].type.to_string());
+                //print("dnd data get %d  %s\n", ids[0].db_id, ids[0].items[0].type.to_string());
                 db_worker.push_job(job);
                 break;
             case 1: // uri list from outside
@@ -165,8 +160,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         }
     }
 
-    private void handle_dropped_file(ref string fileuri, ref Array<Item?> items) {//, ref TreePath? path, ref bool is_first) {
-        //print ("1. xnoise-tracklist.vala => Ingresando a handle_dropped_file\n");
+    private void handle_dropped_file(ref string fileuri, ref Array<Item?> items) {
         //Function to import music FILES in drag'n'drop
         File file;
         FileType filetype;
@@ -451,107 +445,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         return false;
     }
 
-//    private bool on_drag_motion(Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp) {
-//        Gtk.TreePath path;
-//        Gtk.TreeViewDropPosition pos;
-//        if(!(this.get_dest_row_at_pos(x, y, out path, out pos))) return false;
-//        this.set_drag_dest_row(path, pos);
-//        
-//        // Autoscroll
-//        start_autoscroll();
-//        return true;
-//    }
-//    
-//    private bool do_scroll(int delta) { 
-//        int buffer;
-//        Gtk.Adjustment adjustment = this.get_vadjustment();
-//        
-//        if(adjustment == null)
-//            return false;
-//        
-//        buffer = (int)adjustment.get_value();
-//        adjustment.set_value(adjustment.get_value() + delta);
-//        return (adjustment.get_value() != buffer);
-//    }
-//    
-//    private bool autoscroll_timeout() {
-//        double delta = 0.0;
-//        Gdk.Rectangle expose_area = Gdk.Rectangle();
-//        
-//        get_autoscroll_delta(ref delta);
-//        if(delta == 0) 
-//            return true;
-//        
-//        if(!do_scroll((int)delta))
-//            return true;
-//        
-//        Allocation alloc;
-//        this.get_allocation(out alloc);
-//        expose_area.x      = alloc.x;
-//        expose_area.y      = alloc.y;
-//        expose_area.width  = alloc.width;
-//        expose_area.height = alloc.height;
-//        
-//        if(delta > 0) {
-//            expose_area.y = expose_area.height - (int)delta;
-//        } 
-//        else {
-//            if(delta < 0)
-//                expose_area.height = (int)(-1.0 * delta);
-//        }
-
-//        expose_area.x -= alloc.x;
-//        expose_area.y -= alloc.y;
-
-//        this.queue_draw_area(expose_area.x,
-//                             expose_area.y,
-//                             expose_area.width,
-//                             expose_area.height);
-//        return true;
-//    }
-//    
-//    private void start_autoscroll() { 
-//        double delta = 0.0;
-//        get_autoscroll_delta(ref delta);
-//        if(delta != 0) {
-//            if(autoscroll_source == 0) 
-//                autoscroll_source = Timeout.add(100, autoscroll_timeout);
-//        } 
-//        else {
-//            stop_autoscroll();
-//        }
-//    }
-
-//    private void stop_autoscroll() {
-//        if(autoscroll_source != 0) {
-//            Source.remove(autoscroll_source);
-//            autoscroll_source = 0;
-//        }
-//    }
-
-//    private void get_autoscroll_delta(ref double delta) {
-//        int y_pos;
-//        this.get_pointer(null, out y_pos);
-//        delta = 0.0;
-//        if(y_pos < autoscroll_distance) 
-//            delta = (double)(y_pos - autoscroll_distance);
-//        Allocation alloc;
-//        this.get_allocation(out alloc);
-//        if(y_pos > (alloc.height - autoscroll_distance)) {
-//            if(delta != 0) { //window too narrow, don't autoscroll.
-//                return;
-//            }
-//            delta = (double)(y_pos - (alloc.height - autoscroll_distance));
-//        }
-//        if(delta == 0) {
-//            return;
-//        }
-//        if(delta != 0) {
-//            delta /= autoscroll_distance;
-//            delta *= 60;
-//        }
-//    }
-
     private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
         Gtk.TreePath path;
         Gtk.TreeViewColumn column;
@@ -703,6 +596,6 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         this.headers_visible = false;
         this.enable_search = false;
     }
-
-
 }
+
+
