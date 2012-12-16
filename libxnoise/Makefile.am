@@ -63,6 +63,7 @@ libxnoise_la_SOURCES = \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-store.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-view.vala \
     ExtDev/AndroidPlayer/xnoise-audio-player-temp-db.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-device.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-store.vala \

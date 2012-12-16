@@ -36,10 +36,14 @@ using Xnoise.ExtDev;
 
 private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
     
+    private ItemHandler? handler = null;
     private string uri;
-    private GenericPlayerMainView view;
     private Cancellable cancellable = new Cancellable();
     public string[] player_folders;
+    public AudioPlayerTempDb db;
+    
+    public bool in_data_transfer { get; set; default = false; }
+    internal GenericPlayerMainView view;
     
     
     public GenericPlayerDevice(Mount _mount) {
@@ -100,7 +104,9 @@ private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
     }
     
     public override ItemHandler? get_item_handler() {
-        return null;
+        if(handler == null)
+            handler = new HandlerGenericPlayerDevice(this, cancellable);
+        return handler;
     }
     
     public override string get_presentable_name() {

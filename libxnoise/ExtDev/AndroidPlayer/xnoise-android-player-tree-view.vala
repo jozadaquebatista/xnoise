@@ -51,7 +51,7 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
     
     
     public AndroidPlayerTreeView(AndroidPlayerDevice audio_player_device,
-                          Cancellable cancellable) {
+                                 Cancellable cancellable) {
         this.audio_player_device = audio_player_device;
         this.cancellable = cancellable;
         
@@ -79,12 +79,12 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : Gtk.TreeView {
         this.button_press_event.connect(this.on_button_press);
     }
     
-    private Gtk.TreeViewDropPosition drop_pos;
     public override void drag_data_received(DragContext context, int x, int y,
                                        SelectionData selection, uint target_type, uint time) {
         if(audio_player_device.in_loading || audio_player_device.in_data_transfer)
              return;
         audio_player_device.in_data_transfer = true;
+        Gtk.TreeViewDropPosition drop_pos;
         Gtk.TreePath path;
         TreeRowReference drop_rowref;
         FileType filetype;

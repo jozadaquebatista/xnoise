@@ -39,9 +39,11 @@ using Xnoise.TagAccess;
 
 private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
     private static int FILE_COUNT = 150;
-    private AudioPlayerTempDb db;
+    private uint update_source = 0;
+    private unowned AudioPlayerTempDb db;
     private unowned GenericPlayerTreeView view;
     private unowned Cancellable cancellable;
+    private unowned GenericPlayerDevice audio_player_device;
     private File[] base_folders;
     
     private GLib.Type[] col_types = new GLib.Type[] {
@@ -61,17 +63,80 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
     
     
     public GenericPlayerTreeStore(GenericPlayerTreeView view,
+                                  GenericPlayerDevice audio_player_device,
                                   File[] base_folders,
                                   Cancellable cancellable) {
-        db = new AudioPlayerTempDb(cancellable);
+        this.audio_player_device = audio_player_device;
+        audio_player_device.db = new AudioPlayerTempDb(cancellable);
+        db = audio_player_device.db;
         this.set_column_types(col_types);
         this.base_folders = base_folders;
         this.cancellable = cancellable;
         this.view = view;
         load_files();
+        this.audio_player_device.sign_add_track.connect(on_add_track);
     }
-
+    
+    
+    private void on_add_track(IAudioPlayerDevice dev, string[] uris) {
+        TrackData[] tdal = {};
+        foreach(string u in uris) {
+            File file = File.new_for_uri(u);
+            string attr = FileAttribute.STANDARD_NAME + "," +
+                          FileAttribute.STANDARD_TYPE + "," +
+                          FileAttribute.STANDARD_CONTENT_TYPE;
+            FileInfo info;
+            try {
+                info = file.query_info(attr, FileQueryInfoFlags.NONE, cancellable);
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+                return;
+            }
+            FileType filetype = info.get_file_type();
+            TrackData td = null;
+            string filename = info.get_name();
+            if(filetype == FileType.DIRECTORY) {
+                continue;
+            }
+            else {
+                string uri_lc = filename.down();
+                if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                    var tr = new TagReader();
+                    td = tr.read_tag(file.get_path());
+                    if(td != null) {
+                        td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+                        tdal += td;
+                    }
+                }
+            }
+        }
+        var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+        db_job.track_dat = (owned)tdal;
+        tdal = {};
+        db_job.finished.connect(on_track_import_finished);
+        db_worker.push_job(db_job);
+    }
+    
+    private void on_track_import_finished(Worker.Job job) {
+        job.finished.disconnect(on_track_import_finished);
+        if(update_source != 0)
+            Source.remove(update_source);
+        update_source = Timeout.add(200, () => {
+            if(this.cancellable.is_cancelled())
+                return false;
+            print("update after import\n");
+            filter();
+            update_source = 0;
+            return false;
+        });
+    }
+    
     private void load_files() {
+        Idle.add(() => {
+            this.audio_player_device.in_loading = true;
+            return false;
+        });
         tda = {};
         var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
         device_worker.push_job(job);
@@ -86,6 +151,11 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
                 continue;
             read_recoursive(x, job);
         }
+        Timeout.add(500, () => {
+            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, end_import_job);
+            db_worker.push_job(db_job);
+            return false;
+        });
         return false;
     }
     
@@ -106,8 +176,8 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
         catch(Error e) {
             print("Error importing directory %s. %s\n", dir.get_path(), e.message);
             job.counter[0]--;
-            if(job.counter[0] == 0)
-                end_import(job);
+//            if(job.counter[0] == 0)
+//                end_import(job);
             return;
         }
         GLib.FileInfo info;
@@ -164,39 +234,39 @@ private class Xnoise.ExtDev.GenericPlayerTreeStore : Gtk.TreeStore {
                 if(this.cancellable.is_cancelled()) {
                     return;
                 }
-              var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                 db_job.track_dat = (owned)tda;
                 tda = {};
                 db_worker.push_job(db_job);
             }
-            end_import(job);
+//            end_import(job);
         }
         return;
     }
     
-    private void end_import(Worker.Job job) {
+    private bool end_import_job(Worker.Job job) {
         Idle.add(() => {
             if(this.cancellable.is_cancelled())
                 return false;
+            this.audio_player_device.in_loading = false;
             filter();
             return false;
         });
+        return false;
     }
     
     private bool insert_trackdata_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         db.begin_transaction();
-        foreach(TrackData td in job.track_dat) {
-            db.insert_tracks(ref job.track_dat);
-        }
+        db.insert_tracks(ref job.track_dat);
         db.commit_transaction();
         return false;
     }
     
     
     public void filter() {
-        //print("filter\n");
+        print("filter\n");
         if(this.cancellable.is_cancelled())
             return;
         view.set_model(null);
