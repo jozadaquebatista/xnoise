@@ -36,9 +36,9 @@ using Xnoise.Resources;
 
 private class Xnoise.HandlerGenericPlayerDevice : HandlerPlayerDevice {
     private static const string ainfo = _("Add to Player Device");
-    private static const string aname = "A HandlerPlayerDevicename";
+    private static const string aname = "A HandlerGenPlayerDevicename";
     private static const string cinfo = _("Delete from device");
-    private static const string cname = "C HandlerPlayerDevicename";
+    private static const string cname = "C HandlerGenPlayerDevicename";
     
     
     public HandlerGenericPlayerDevice(PlayerDevice _audio_player_device,
