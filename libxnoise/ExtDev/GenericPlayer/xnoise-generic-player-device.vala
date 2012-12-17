@@ -34,26 +34,12 @@ using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
+private class Xnoise.ExtDev.GenericPlayerDevice : PlayerDevice {
     
-    private ItemHandler? handler = null;
-    private string uri;
-    private Cancellable cancellable = new Cancellable();
     public string[] player_folders;
-    public AudioPlayerTempDb db;
-    
-    public bool in_data_transfer { get; set; default = false; }
-    internal GenericPlayerMainView view;
-    
     
     public GenericPlayerDevice(Mount _mount) {
-        mount = _mount;
-        uri = mount.get_default_location().get_uri();
-        player_folders = {};
-        print("created new audio player device for %s\n", uri);
-    }
-    
-    ~GenericPlayerDevice() {
+        base(_mount);
     }
     
     
@@ -65,6 +51,7 @@ private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
     }
     
     public override bool initialize() {
+        player_folders = {};
         device_type = DeviceType.GENERIC_PLAYER;
         File f = File.new_for_uri(mount.get_default_location().get_uri() +
                                   "/.is_audio_player"
@@ -91,14 +78,11 @@ private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
         return true;
     }
     
-    public override string get_uri() {
-        return uri;
-    }
-    
-    public override IMainView? get_main_view_widget() {
+    public override PlayerMainView? get_main_view_widget() {
         if(view != null)
             return view;
         view = new GenericPlayerMainView(this, cancellable);
+        assert(view != null);
         view.show_all();
         return view;
     }
@@ -110,11 +94,7 @@ private class Xnoise.ExtDev.GenericPlayerDevice : IAudioPlayerDevice, Device {
     }
     
     public override string get_presentable_name() {
-        return "Player";
-    }
-    
-    public override void cancel() {
-        cancellable.cancel();
+        return _("Player"); 
     }
 }
 

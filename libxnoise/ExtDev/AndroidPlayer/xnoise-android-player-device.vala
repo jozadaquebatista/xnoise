@@ -33,29 +33,18 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-
-private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
-    
-    private string uri;
-    private Cancellable cancellable = new Cancellable();
-    private ItemHandler? handler = null;
-    
-    internal AndroidPlayerMainView view;
-    public AudioPlayerTempDb db;
-    
-    public bool in_data_transfer { get; set; default = false; }
+private class Xnoise.ExtDev.AndroidPlayerDevice : PlayerDevice {
     
     
     public AndroidPlayerDevice(Mount _mount) {
-        mount = _mount;
-        uri = mount.get_default_location().get_uri();
-        assert(uri != null && uri != "");
-        print("created new audio player device for %s\n", uri);
+        base(_mount);
     }
     
-    ~AndroidPlayerDevice() {
-    }
     
+    public override bool initialize() {
+        device_type = DeviceType.ANDROID;
+        return true;
+    }
     
     public static Device? get_device(Mount mount) {
         if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists()) {
@@ -64,16 +53,7 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
         return null;
     }
     
-    public override bool initialize() {
-        device_type = DeviceType.ANDROID;
-        return true;
-    }
-    
-    public override string get_uri() {
-        return uri;
-    }
-    
-    public override IMainView? get_main_view_widget() {
+    public override PlayerMainView? get_main_view_widget() {
         if(view != null)
             return view;
         view = new AndroidPlayerMainView(this, cancellable);
@@ -90,10 +70,5 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : IAudioPlayerDevice, Device {
     public override string get_presentable_name() {
         return "Android";
     }
-    
-    public override void cancel() {
-        cancellable.cancel();
-    }
 }
-
 

@@ -108,16 +108,18 @@ namespace Xnoise {
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public abstract class Device : GLib.Object {
+			protected Xnoise.ItemHandler? handler;
 			public weak GLib.Mount mount;
 			public Device ();
 			public abstract void cancel ();
 			public virtual string get_identifier ();
 			public abstract Xnoise.ItemHandler? get_item_handler ();
-			public abstract Xnoise.IMainView? get_main_view_widget ();
+			public abstract Xnoise.ExtDev.PlayerMainView? get_main_view_widget ();
 			public virtual string get_presentable_name ();
 			public abstract string get_uri ();
 			public abstract bool initialize ();
 			public Xnoise.ExtDev.DeviceType device_type { get; set; }
+			public bool in_data_transfer { get; set; }
 			public bool in_loading { get; set; }
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -129,6 +131,56 @@ namespace Xnoise {
 			public delegate Xnoise.ExtDev.Device? IdentificationCallback (GLib.Mount mount);
 			public DeviceManager ();
 			public void register_device (Xnoise.ExtDev.DeviceManager.DeviceIdContainer c);
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public class PlayerDevice : Xnoise.ExtDev.Device {
+			public Xnoise.ExtDev.AudioPlayerTempDb db;
+			protected string uri;
+			public PlayerDevice (GLib.Mount _mount);
+			public override void cancel ();
+			public virtual uint64 get_filesystem_size ();
+			public virtual string get_filesystem_size_formatted ();
+			public virtual uint64 get_free_space_size ();
+			public virtual string get_free_space_size_formatted ();
+			public override Xnoise.ItemHandler? get_item_handler ();
+			public override Xnoise.ExtDev.PlayerMainView? get_main_view_widget ();
+			public override string get_presentable_name ();
+			public override string get_uri ();
+			public override bool initialize ();
+			protected GLib.Cancellable cancellable { get; set; }
+			public signal void sign_add_track (string[] uris);
+			public signal void sign_update_filesystem ();
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public abstract class PlayerMainView : Gtk.Overlay, Xnoise.IMainView {
+			protected weak Xnoise.ExtDev.PlayerDevice audio_player_device;
+			protected weak GLib.Cancellable cancellable;
+			public PlayerMainView (Xnoise.ExtDev.PlayerDevice audio_player_device, GLib.Cancellable cancellable);
+			protected abstract string get_localized_name ();
+			protected abstract Xnoise.ExtDev.PlayerTreeView? get_tree_view ();
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public class PlayerTreeStore : Gtk.TreeStore {
+			public enum Column {
+				ICON,
+				VIS_TEXT,
+				ITEM,
+				LEVEL,
+				N_COLUMNS
+			}
+			public PlayerTreeStore (Xnoise.ExtDev.PlayerTreeView view, Xnoise.ExtDev.PlayerDevice audio_player_device, GLib.File[] base_folders, GLib.Cancellable cancellable);
+			public void filter ();
+			public void load_children (ref Gtk.TreeIter iter);
+			public void unload_children (ref Gtk.TreeIter iter);
+		}
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public abstract class PlayerTreeView : Gtk.TreeView {
+			protected weak Xnoise.ExtDev.PlayerDevice audio_player_device;
+			protected weak GLib.Cancellable cancellable;
+			public PlayerTreeView (Xnoise.ExtDev.PlayerDevice audio_player_device, GLib.Cancellable cancellable);
+			public override void drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection, uint target_type, uint time);
+			protected abstract GLib.File? get_dest_dir ();
+			protected abstract Xnoise.ExtDev.PlayerTreeStore? get_tree_store ();
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public enum DeviceType {

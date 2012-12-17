@@ -34,98 +34,19 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-
-private class Xnoise.ExtDev.AndroidPlayerMainView : Gtk.Overlay, IMainView {
+private class Xnoise.ExtDev.AndroidPlayerMainView : PlayerMainView {
     
-    private uint32 id;
-    private Gtk.Label info_label;
-    private unowned AndroidPlayerDevice audio_player_device;
-    private unowned Cancellable cancellable;
-    internal AndroidPlayerTreeView tree;
-    
-    public AndroidPlayerMainView(AndroidPlayerDevice audio_player_device,
+    public AndroidPlayerMainView(PlayerDevice audio_player_device,
                                  Cancellable cancellable) {
-        this.cancellable = cancellable;
-        this.audio_player_device = audio_player_device;
-        this.id = Random.next_int();
-        setup_widgets();
-        audio_player_device.sign_update_filesystem.connect( () => {
-            print("update filesystem info\n");
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
-            device_worker.push_job(job);
-        });
+        base(audio_player_device, cancellable);
     }
     
-    ~AndroidPlayerMainView() {
-        print("DTOR AndroidPlayerMainView\n");
+    protected override string get_localized_name() {
+        return _("Android Player Device");
     }
     
-    public string get_view_name() {
-        return audio_player_device.get_identifier();
-    }
-    
-    private void setup_widgets() {
-        var box = new Gtk.Box(Orientation.VERTICAL, 0);
-        var header_label = new Label("");
-        header_label.set_markup("<span size=\"xx-large\"><b>" +
-                         Markup.printf_escaped(_("Android Player Device")) +
-                         "</b></span>"
-        );
-        box.pack_start(header_label, false, false, 12);
-        
-        info_label = new Label("");
-        box.pack_start(info_label, false, false, 4);
-        
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
-        device_worker.push_job(job);
-        
-        tree = new AndroidPlayerTreeView(audio_player_device, cancellable);
-        
-        var sw = new ScrolledWindow(null, null);
-        sw.set_shadow_type(ShadowType.IN);
-        sw.add(tree);
-        box.pack_start(sw, true, true, 0);
-        
-        var spinner = new Spinner();
-        //spinner.start();
-        spinner.set_size_request(160, 160);
-        this.add_overlay(spinner);
-        spinner.halign = Align.CENTER;
-        spinner.valign = Align.CENTER;
-        spinner.set_no_show_all(true);
-        this.show();
-        spinner.show();
-        audio_player_device.notify["in-loading"].connect( () => {
-            if(audio_player_device.in_loading) {
-                spinner.start();
-                spinner.set_no_show_all(false);
-                spinner.show_all();
-            }
-            else {
-                spinner.stop();
-                spinner.hide();
-                spinner.set_no_show_all(true);
-            }
-        });
-        
-        this.add(box);
-    }
-    
-    private bool fill_info_job(Worker.Job job) {
-        if(!(audio_player_device is IAudioPlayerDevice))
-            return false;
-        string info =
-            _("Free space: ") +
-            audio_player_device.get_free_space_size_formatted() +
-            "\n" +
-            _("Total space: ") +
-            audio_player_device.get_filesystem_size_formatted();
-        Idle.add(() => {
-            info_label.label = info;
-            return false;
-        });
-        return false;
+    protected override PlayerTreeView? get_tree_view() {
+        return new AndroidPlayerTreeView(audio_player_device, cancellable);
     }
 }
-
 

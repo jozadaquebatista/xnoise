@@ -62,7 +62,12 @@ libxnoise_la_SOURCES = \
     ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-store.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-tree-view.vala \
-    ExtDev/AndroidPlayer/xnoise-audio-player-temp-db.vala \
+    ExtDev/AudioPlayer/xnoise-audio-item-handler.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-device.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-temp-db.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-device.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala \
@@ -70,7 +75,6 @@ libxnoise_la_SOURCES = \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-view.vala \
     ExtDev/xnoise-device.vala \
     ExtDev/xnoise-device-manager.vala \
-    ExtDev/xnoise-i-audio-player-device.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
@@ -212,6 +216,8 @@ DISTCLEANFILES = \
     DBus/*.c \
     ExtDev/*.c \
     ExtDev/AndroidPlayer/*.c \
+    ExtDev/AudioPlayer/*.c \
+    ExtDev/GenericPlayer/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
     DockableMedia/MusicBrowser/*.c \

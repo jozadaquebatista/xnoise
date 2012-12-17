@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-13 14:08+0100\n"
+"POT-Creation-Date: 2012-12-17 22:34+0100\n"
 "PO-Revision-Date: 2012-09-01 13:00+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -85,26 +85,26 @@ msgstr "Ostatnio odtwarzane"
 msgid "Music"
 msgstr "Muzyka"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:332
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:334
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
 #: ../plugins/magnatune/magnatune-treeview.vala:217
 msgid "Collapse all"
 msgstr "Zwiń wszystko"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:337
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:339
 msgid "Sort Mode"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:348
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:349
 msgid "ARTIST-ALBUM-TITLE"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:355
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:356
 msgid "GENRE-ARTIST-ALBUM"
 msgstr ""
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:476
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-tree-store.vala:412
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-tree-store.vala:352
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
 msgstr "Wczytywanie ..."
@@ -121,53 +121,65 @@ msgstr "Strumienie"
 msgid "Videos"
 msgstr "Wideo"
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:41
+#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
 msgid "Add to Android Device"
 msgstr ""
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:43
+#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
+#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
 msgid "Delete from device"
 msgstr ""
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:110
+#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:45
+msgid "Android Player Device"
+msgstr ""
+
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:103
 #, fuzzy
 msgid "Do you want to delete the selected file from the device?"
 msgstr "Czy chcesz przenieść zaznaczone pliki do kosza?"
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:132
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:125
 #, fuzzy
 msgid "Do you want to delete the selected album from the device?"
 msgstr "Czy chcesz przenieść zaznaczone pliki do kosza?"
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:162
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:155
 #, fuzzy
 msgid "Do you want to delete the selected artist from the device?"
 msgstr "Czy chcesz przenieść zaznaczone pliki do kosza?"
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:236
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:235
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:112
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:341
 #, fuzzy
 msgid "Please wait while moving media to the device."
 msgstr "Czekaj na zaimportowanie mediów lub anuluj, gdy nie chcesz czekać."
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:325
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:319
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:260
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:383
 msgid "Not enough space on device! Aborting..."
 msgstr ""
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:66
-msgid "Android Player Device"
-msgstr ""
-
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:113
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:88
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:116
 msgid "Free space: "
 msgstr ""
 
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:116
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:91
+#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:119
 msgid "Total space: "
 msgstr ""
 
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:66
+#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-device.vala:97
+#, fuzzy
+msgid "Player"
+msgstr "Odtwórz"
+
+#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
+msgid "Add to Player Device"
+msgstr ""
+
+#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
 msgid "External Player Device"
 msgstr ""
 

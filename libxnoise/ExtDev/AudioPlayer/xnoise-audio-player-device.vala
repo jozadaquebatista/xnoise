@@ -1,4 +1,4 @@
-/* xnoise-i-audio-player-device.vala
+/* xnoise-audio-player-device.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -33,7 +33,49 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-private interface Xnoise.ExtDev.IAudioPlayerDevice : Device {
+
+public class Xnoise.ExtDev.PlayerDevice : Device {
+    
+    protected string uri;
+    protected Cancellable cancellable { get; set; }
+    
+    internal PlayerMainView? view = null;
+    public AudioPlayerTempDb db;
+    
+    
+    public PlayerDevice(Mount _mount) {
+        cancellable = new Cancellable();
+        mount = _mount;
+        uri = mount.get_default_location().get_uri();
+        assert(uri != null && uri != "");
+        print("created new audio player device for %s\n", uri);
+    }
+    
+    
+    public override bool initialize() {
+        device_type = DeviceType.UNKNOWN;
+        return false;
+    }
+    
+    public override PlayerMainView? get_main_view_widget() {
+        return null;
+    }
+    
+    public override ItemHandler? get_item_handler() {
+        return null;
+    }
+    
+    public override string get_presentable_name() {
+        return "unknown";
+    }
+
+    public override string get_uri() {
+        return uri;
+    }
+    
+    public override void cancel() {
+        cancellable.cancel();
+    }
     
     public signal void sign_add_track(string[] uris);
     public signal void sign_update_filesystem();

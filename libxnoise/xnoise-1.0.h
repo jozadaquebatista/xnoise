@@ -185,19 +185,6 @@ typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 typedef struct _XnoiseMainWindow XnoiseMainWindow;
 typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 
-#define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
-#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
-#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
-#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
-
-typedef struct _XnoiseExtDevAudioPlayerTempDb XnoiseExtDevAudioPlayerTempDb;
-typedef struct _XnoiseExtDevAudioPlayerTempDbClass XnoiseExtDevAudioPlayerTempDbClass;
-typedef struct _XnoiseExtDevAudioPlayerTempDbPrivate XnoiseExtDevAudioPlayerTempDbPrivate;
-
-#define XNOISE_EXT_DEV_TYPE_DEVICE_TYPE (xnoise_ext_dev_device_type_get_type ())
-
 #define XNOISE_EXT_DEV_TYPE_DEVICE (xnoise_ext_dev_device_get_type ())
 #define XNOISE_EXT_DEV_DEVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_DEVICE, XnoiseExtDevDevice))
 #define XNOISE_EXT_DEV_DEVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_DEVICE, XnoiseExtDevDeviceClass))
@@ -209,13 +196,15 @@ typedef struct _XnoiseExtDevDevice XnoiseExtDevDevice;
 typedef struct _XnoiseExtDevDeviceClass XnoiseExtDevDeviceClass;
 typedef struct _XnoiseExtDevDevicePrivate XnoiseExtDevDevicePrivate;
 
-#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
-#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
-#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
-#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
+#define XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW (xnoise_ext_dev_player_main_view_get_type ())
+#define XNOISE_EXT_DEV_PLAYER_MAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW, XnoiseExtDevPlayerMainView))
+#define XNOISE_EXT_DEV_PLAYER_MAIN_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW, XnoiseExtDevPlayerMainViewClass))
+#define XNOISE_EXT_DEV_IS_PLAYER_MAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW))
+#define XNOISE_EXT_DEV_IS_PLAYER_MAIN_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW))
+#define XNOISE_EXT_DEV_PLAYER_MAIN_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_MAIN_VIEW, XnoiseExtDevPlayerMainViewClass))
 
-typedef struct _XnoiseIMainView XnoiseIMainView;
-typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
+typedef struct _XnoiseExtDevPlayerMainView XnoiseExtDevPlayerMainView;
+typedef struct _XnoiseExtDevPlayerMainViewClass XnoiseExtDevPlayerMainViewClass;
 
 #define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
 #define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
@@ -226,6 +215,63 @@ typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
 
 typedef struct _XnoiseItemHandler XnoiseItemHandler;
 typedef struct _XnoiseItemHandlerClass XnoiseItemHandlerClass;
+
+#define XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE (xnoise_ext_dev_player_device_get_type ())
+#define XNOISE_EXT_DEV_PLAYER_DEVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE, XnoiseExtDevPlayerDevice))
+#define XNOISE_EXT_DEV_PLAYER_DEVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE, XnoiseExtDevPlayerDeviceClass))
+#define XNOISE_EXT_DEV_IS_PLAYER_DEVICE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE))
+#define XNOISE_EXT_DEV_IS_PLAYER_DEVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE))
+#define XNOISE_EXT_DEV_PLAYER_DEVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_DEVICE, XnoiseExtDevPlayerDeviceClass))
+
+typedef struct _XnoiseExtDevPlayerDevice XnoiseExtDevPlayerDevice;
+typedef struct _XnoiseExtDevPlayerDeviceClass XnoiseExtDevPlayerDeviceClass;
+typedef struct _XnoiseExtDevPlayerDevicePrivate XnoiseExtDevPlayerDevicePrivate;
+
+#define XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB (xnoise_ext_dev_audio_player_temp_db_get_type ())
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDb))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_IS_AUDIO_PLAYER_TEMP_DB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB))
+#define XNOISE_EXT_DEV_AUDIO_PLAYER_TEMP_DB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_AUDIO_PLAYER_TEMP_DB, XnoiseExtDevAudioPlayerTempDbClass))
+
+typedef struct _XnoiseExtDevAudioPlayerTempDb XnoiseExtDevAudioPlayerTempDb;
+typedef struct _XnoiseExtDevAudioPlayerTempDbClass XnoiseExtDevAudioPlayerTempDbClass;
+
+#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
+#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
+#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
+#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
+
+typedef struct _XnoiseIMainView XnoiseIMainView;
+typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
+typedef struct _XnoiseExtDevPlayerMainViewPrivate XnoiseExtDevPlayerMainViewPrivate;
+
+#define XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW (xnoise_ext_dev_player_tree_view_get_type ())
+#define XNOISE_EXT_DEV_PLAYER_TREE_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW, XnoiseExtDevPlayerTreeView))
+#define XNOISE_EXT_DEV_PLAYER_TREE_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW, XnoiseExtDevPlayerTreeViewClass))
+#define XNOISE_EXT_DEV_IS_PLAYER_TREE_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW))
+#define XNOISE_EXT_DEV_IS_PLAYER_TREE_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW))
+#define XNOISE_EXT_DEV_PLAYER_TREE_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_VIEW, XnoiseExtDevPlayerTreeViewClass))
+
+typedef struct _XnoiseExtDevPlayerTreeView XnoiseExtDevPlayerTreeView;
+typedef struct _XnoiseExtDevPlayerTreeViewClass XnoiseExtDevPlayerTreeViewClass;
+
+#define XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE (xnoise_ext_dev_player_tree_store_get_type ())
+#define XNOISE_EXT_DEV_PLAYER_TREE_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE, XnoiseExtDevPlayerTreeStore))
+#define XNOISE_EXT_DEV_PLAYER_TREE_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE, XnoiseExtDevPlayerTreeStoreClass))
+#define XNOISE_EXT_DEV_IS_PLAYER_TREE_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE))
+#define XNOISE_EXT_DEV_IS_PLAYER_TREE_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE))
+#define XNOISE_EXT_DEV_PLAYER_TREE_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_EXT_DEV_TYPE_PLAYER_TREE_STORE, XnoiseExtDevPlayerTreeStoreClass))
+
+typedef struct _XnoiseExtDevPlayerTreeStore XnoiseExtDevPlayerTreeStore;
+typedef struct _XnoiseExtDevPlayerTreeStoreClass XnoiseExtDevPlayerTreeStoreClass;
+typedef struct _XnoiseExtDevPlayerTreeStorePrivate XnoiseExtDevPlayerTreeStorePrivate;
+
+#define XNOISE_EXT_DEV_PLAYER_TREE_STORE_TYPE_COLUMN (xnoise_ext_dev_player_tree_store_column_get_type ())
+typedef struct _XnoiseExtDevPlayerTreeViewPrivate XnoiseExtDevPlayerTreeViewPrivate;
+typedef struct _XnoiseExtDevAudioPlayerTempDbPrivate XnoiseExtDevAudioPlayerTempDbPrivate;
+
+#define XNOISE_EXT_DEV_TYPE_DEVICE_TYPE (xnoise_ext_dev_device_type_get_type ())
 
 #define XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER (xnoise_ext_dev_device_manager_get_type ())
 #define XNOISE_EXT_DEV_DEVICE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_EXT_DEV_TYPE_DEVICE_MANAGER, XnoiseExtDevDeviceManager))
@@ -1047,6 +1093,90 @@ struct _XnoiseDockableMediaClass {
 	void (*remove_main_view) (XnoiseDockableMedia* self);
 };
 
+struct _XnoiseExtDevDevice {
+	GObject parent_instance;
+	XnoiseExtDevDevicePrivate * priv;
+	GMount* mount;
+	XnoiseItemHandler* handler;
+};
+
+struct _XnoiseExtDevDeviceClass {
+	GObjectClass parent_class;
+	gboolean (*initialize) (XnoiseExtDevDevice* self);
+	gchar* (*get_uri) (XnoiseExtDevDevice* self);
+	XnoiseExtDevPlayerMainView* (*get_main_view_widget) (XnoiseExtDevDevice* self);
+	void (*cancel) (XnoiseExtDevDevice* self);
+	XnoiseItemHandler* (*get_item_handler) (XnoiseExtDevDevice* self);
+	gchar* (*get_presentable_name) (XnoiseExtDevDevice* self);
+	gchar* (*get_identifier) (XnoiseExtDevDevice* self);
+};
+
+struct _XnoiseExtDevPlayerDevice {
+	XnoiseExtDevDevice parent_instance;
+	XnoiseExtDevPlayerDevicePrivate * priv;
+	gchar* uri;
+	XnoiseExtDevPlayerMainView* view;
+	XnoiseExtDevAudioPlayerTempDb* db;
+};
+
+struct _XnoiseExtDevPlayerDeviceClass {
+	XnoiseExtDevDeviceClass parent_class;
+	guint64 (*get_filesystem_size) (XnoiseExtDevPlayerDevice* self);
+	guint64 (*get_free_space_size) (XnoiseExtDevPlayerDevice* self);
+	gchar* (*get_filesystem_size_formatted) (XnoiseExtDevPlayerDevice* self);
+	gchar* (*get_free_space_size_formatted) (XnoiseExtDevPlayerDevice* self);
+};
+
+struct _XnoiseIMainViewIface {
+	GTypeInterface parent_iface;
+	gchar* (*get_view_name) (XnoiseIMainView* self);
+};
+
+struct _XnoiseExtDevPlayerMainView {
+	GtkOverlay parent_instance;
+	XnoiseExtDevPlayerMainViewPrivate * priv;
+	XnoiseExtDevPlayerDevice* audio_player_device;
+	GCancellable* cancellable;
+	XnoiseExtDevPlayerTreeView* tree;
+};
+
+struct _XnoiseExtDevPlayerMainViewClass {
+	GtkOverlayClass parent_class;
+	gchar* (*get_localized_name) (XnoiseExtDevPlayerMainView* self);
+	XnoiseExtDevPlayerTreeView* (*get_tree_view) (XnoiseExtDevPlayerMainView* self);
+};
+
+struct _XnoiseExtDevPlayerTreeStore {
+	GtkTreeStore parent_instance;
+	XnoiseExtDevPlayerTreeStorePrivate * priv;
+};
+
+struct _XnoiseExtDevPlayerTreeStoreClass {
+	GtkTreeStoreClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_EXT_DEV_PLAYER_TREE_STORE_COLUMN_ICON,
+	XNOISE_EXT_DEV_PLAYER_TREE_STORE_COLUMN_VIS_TEXT,
+	XNOISE_EXT_DEV_PLAYER_TREE_STORE_COLUMN_ITEM,
+	XNOISE_EXT_DEV_PLAYER_TREE_STORE_COLUMN_LEVEL,
+	XNOISE_EXT_DEV_PLAYER_TREE_STORE_COLUMN_N_COLUMNS
+} XnoiseExtDevPlayerTreeStoreColumn;
+
+struct _XnoiseExtDevPlayerTreeView {
+	GtkTreeView parent_instance;
+	XnoiseExtDevPlayerTreeViewPrivate * priv;
+	XnoiseExtDevPlayerDevice* audio_player_device;
+	GCancellable* cancellable;
+	XnoiseExtDevPlayerTreeStore* treemodel;
+};
+
+struct _XnoiseExtDevPlayerTreeViewClass {
+	GtkTreeViewClass parent_class;
+	XnoiseExtDevPlayerTreeStore* (*get_tree_store) (XnoiseExtDevPlayerTreeView* self);
+	GFile* (*get_dest_dir) (XnoiseExtDevPlayerTreeView* self);
+};
+
 struct _XnoiseExtDevAudioPlayerTempDb {
 	XnoiseDataSource parent_instance;
 	XnoiseExtDevAudioPlayerTempDbPrivate * priv;
@@ -1063,28 +1193,6 @@ typedef enum  {
 	XNOISE_EXT_DEV_DEVICE_TYPE_IPOD,
 	XNOISE_EXT_DEV_DEVICE_TYPE_CDROM
 } XnoiseExtDevDeviceType;
-
-struct _XnoiseIMainViewIface {
-	GTypeInterface parent_iface;
-	gchar* (*get_view_name) (XnoiseIMainView* self);
-};
-
-struct _XnoiseExtDevDevice {
-	GObject parent_instance;
-	XnoiseExtDevDevicePrivate * priv;
-	GMount* mount;
-};
-
-struct _XnoiseExtDevDeviceClass {
-	GObjectClass parent_class;
-	gboolean (*initialize) (XnoiseExtDevDevice* self);
-	gchar* (*get_uri) (XnoiseExtDevDevice* self);
-	XnoiseIMainView* (*get_main_view_widget) (XnoiseExtDevDevice* self);
-	void (*cancel) (XnoiseExtDevDevice* self);
-	XnoiseItemHandler* (*get_item_handler) (XnoiseExtDevDevice* self);
-	gchar* (*get_presentable_name) (XnoiseExtDevDevice* self);
-	gchar* (*get_identifier) (XnoiseExtDevDevice* self);
-};
 
 struct _XnoiseExtDevDeviceManager {
 	GObject parent_instance;
@@ -1930,7 +2038,34 @@ GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_create_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 void xnoise_dockable_media_remove_main_view (XnoiseDockableMedia* self);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
+GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
+GType xnoise_ext_dev_player_main_view_get_type (void) G_GNUC_CONST;
+GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
+GType xnoise_ext_dev_player_device_get_type (void) G_GNUC_CONST;
 GType xnoise_ext_dev_audio_player_temp_db_get_type (void) G_GNUC_CONST;
+XnoiseExtDevPlayerDevice* xnoise_ext_dev_player_device_new (GMount* _mount);
+XnoiseExtDevPlayerDevice* xnoise_ext_dev_player_device_construct (GType object_type, GMount* _mount);
+guint64 xnoise_ext_dev_player_device_get_filesystem_size (XnoiseExtDevPlayerDevice* self);
+guint64 xnoise_ext_dev_player_device_get_free_space_size (XnoiseExtDevPlayerDevice* self);
+gchar* xnoise_ext_dev_player_device_get_filesystem_size_formatted (XnoiseExtDevPlayerDevice* self);
+gchar* xnoise_ext_dev_player_device_get_free_space_size_formatted (XnoiseExtDevPlayerDevice* self);
+GCancellable* xnoise_ext_dev_player_device_get_cancellable (XnoiseExtDevPlayerDevice* self);
+void xnoise_ext_dev_player_device_set_cancellable (XnoiseExtDevPlayerDevice* self, GCancellable* value);
+GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
+GType xnoise_ext_dev_player_tree_view_get_type (void) G_GNUC_CONST;
+XnoiseExtDevPlayerMainView* xnoise_ext_dev_player_main_view_construct (GType object_type, XnoiseExtDevPlayerDevice* audio_player_device, GCancellable* cancellable);
+gchar* xnoise_ext_dev_player_main_view_get_localized_name (XnoiseExtDevPlayerMainView* self);
+XnoiseExtDevPlayerTreeView* xnoise_ext_dev_player_main_view_get_tree_view (XnoiseExtDevPlayerMainView* self);
+GType xnoise_ext_dev_player_tree_store_get_type (void) G_GNUC_CONST;
+GType xnoise_ext_dev_player_tree_store_column_get_type (void) G_GNUC_CONST;
+XnoiseExtDevPlayerTreeStore* xnoise_ext_dev_player_tree_store_new (XnoiseExtDevPlayerTreeView* view, XnoiseExtDevPlayerDevice* audio_player_device, GFile** base_folders, int base_folders_length1, GCancellable* cancellable);
+XnoiseExtDevPlayerTreeStore* xnoise_ext_dev_player_tree_store_construct (GType object_type, XnoiseExtDevPlayerTreeView* view, XnoiseExtDevPlayerDevice* audio_player_device, GFile** base_folders, int base_folders_length1, GCancellable* cancellable);
+void xnoise_ext_dev_player_tree_store_filter (XnoiseExtDevPlayerTreeStore* self);
+void xnoise_ext_dev_player_tree_store_unload_children (XnoiseExtDevPlayerTreeStore* self, GtkTreeIter* iter);
+void xnoise_ext_dev_player_tree_store_load_children (XnoiseExtDevPlayerTreeStore* self, GtkTreeIter* iter);
+XnoiseExtDevPlayerTreeView* xnoise_ext_dev_player_tree_view_construct (GType object_type, XnoiseExtDevPlayerDevice* audio_player_device, GCancellable* cancellable);
+XnoiseExtDevPlayerTreeStore* xnoise_ext_dev_player_tree_view_get_tree_store (XnoiseExtDevPlayerTreeView* self);
+GFile* xnoise_ext_dev_player_tree_view_get_dest_dir (XnoiseExtDevPlayerTreeView* self);
 XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_new (GCancellable* cancel);
 XnoiseExtDevAudioPlayerTempDb* xnoise_ext_dev_audio_player_temp_db_construct (GType object_type, GCancellable* cancel);
 void xnoise_ext_dev_audio_player_temp_db_begin_transaction (XnoiseExtDevAudioPlayerTempDb* self);
@@ -1938,12 +2073,9 @@ void xnoise_ext_dev_audio_player_temp_db_commit_transaction (XnoiseExtDevAudioPl
 void xnoise_ext_dev_audio_player_temp_db_insert_tracks (XnoiseExtDevAudioPlayerTempDb* self, XnoiseTrackData*** tda, int* tda_length1);
 void xnoise_ext_dev_audio_player_temp_db_remove_uri (XnoiseExtDevAudioPlayerTempDb* self, const gchar* uri);
 GType xnoise_ext_dev_device_type_get_type (void) G_GNUC_CONST;
-GType xnoise_ext_dev_device_get_type (void) G_GNUC_CONST;
-GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
-GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 gboolean xnoise_ext_dev_device_initialize (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_uri (XnoiseExtDevDevice* self);
-XnoiseIMainView* xnoise_ext_dev_device_get_main_view_widget (XnoiseExtDevDevice* self);
+XnoiseExtDevPlayerMainView* xnoise_ext_dev_device_get_main_view_widget (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_cancel (XnoiseExtDevDevice* self);
 XnoiseItemHandler* xnoise_ext_dev_device_get_item_handler (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_presentable_name (XnoiseExtDevDevice* self);
@@ -1951,6 +2083,8 @@ gchar* xnoise_ext_dev_device_get_identifier (XnoiseExtDevDevice* self);
 XnoiseExtDevDevice* xnoise_ext_dev_device_construct (GType object_type);
 XnoiseExtDevDeviceType xnoise_ext_dev_device_get_device_type (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_set_device_type (XnoiseExtDevDevice* self, XnoiseExtDevDeviceType value);
+gboolean xnoise_ext_dev_device_get_in_data_transfer (XnoiseExtDevDevice* self);
+void xnoise_ext_dev_device_set_in_data_transfer (XnoiseExtDevDevice* self, gboolean value);
 gboolean xnoise_ext_dev_device_get_in_loading (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_set_in_loading (XnoiseExtDevDevice* self, gboolean value);
 GType xnoise_ext_dev_device_manager_get_type (void) G_GNUC_CONST;
