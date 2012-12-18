@@ -101,7 +101,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
     ItemHandlers/EditTags/xnoise-tag-album-editor.vala \
-    ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala \
+    ItemHandlers/EditTags/xnoise-tag-artist-editor.vala \
     ItemHandlers/EditTags/xnoise-tag-genre-editor.vala \
     ItemHandlers/EditTags/xnoise-tag-title-editor.vala \
     ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala \

@@ -41,9 +41,14 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
-    private string new_content_name = null;
+    private string? new_content_name = null;
     private uint new_year = 0;
+    private string? new_genre = null;
     private unowned MusicBrowserModel mbm = null;
+    private Label infolabel;
+    private Entry year_entry;
+    private Entry genre_entry;
+    private Image albumimage;
     
     private Entry entry;
     private HashTable<ItemType,Item?>? restrictions;
@@ -95,12 +100,19 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     File? f = get_albumimage_for_artistalbum(td.artist, td.album, "extralarge");
                     if(f != null)
                         art = AlbumArtView.icon_cache.get_image(f.get_path());
-                    
+                    Gdk.Pixbuf? xicon = null;
+                    unowned Gtk.IconTheme theme = IconTheme.get_default();
                     if(art != null) {
                         albumimage.pixbuf = art;
                     }
+                    else {
+                        if(theme.has_icon("xnoise")) 
+                            xicon = theme.load_icon("xnoise", 48, IconLookupFlags.USE_BUILTIN);
+                        albumimage.pixbuf = xicon;
+                    }
                     entry.text  = td.album;
                     year_entry.text = (td.year > 0 ? td.year.to_string() : "");
+                    genre_entry.text = (td.genre != null ? td.genre : "");
                     albumimage = new Image.from_stock(Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
                     return false;
                 });
@@ -115,9 +127,6 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         return false;
     }
 
-    private Label infolabel;
-    private Entry year_entry;
-    private Image albumimage;
     private void setup_widgets() {
         try {
             dialog = new Dialog();
@@ -132,10 +141,12 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             var cancelbutton       = builder.get_object("cancelbutton")    as Gtk.Button;
             entry                  = builder.get_object("entry1")          as Gtk.Entry;
             year_entry             = builder.get_object("year_entry")      as Gtk.Entry;
+            genre_entry            = builder.get_object("genre_entry")     as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
             var explainer_label    = builder.get_object("explainer_label") as Gtk.Label;
             var content_label      = builder.get_object("content_label")   as Gtk.Label;
             var year_label         = builder.get_object("year_label")      as Gtk.Label;
+            var genre_label        = builder.get_object("genre_label")     as Gtk.Label;
             albumimage             = builder.get_object("albumimage")      as Gtk.Image;
             ((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
             okbutton.clicked.connect(on_ok_button_clicked);
@@ -175,7 +186,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         infolabel.label = EMPTYSTRING;
         if(entry.text != null && entry.text.strip() != EMPTYSTRING) {
             new_content_name = entry.text.strip();
-            new_year = (uint)int.parse(year_entry.text.strip());
+            new_year  = (uint)int.parse(year_entry.text.strip());
+            new_genre = genre_entry.text.strip();
             //print("new_year val : %u\n", new_year);
         }
         // TODO: UTF-8 validation
@@ -196,6 +208,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
         job.set_arg("new_content_name", new_content_name);
         job.set_arg("new_year", new_year);
+        job.set_arg("new_genre", new_genre);
         job.item = this.item;
         db_worker.push_job(job);
     }
@@ -211,6 +224,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             foreach(TrackData td in job.track_dat) {
                 td.album = new_content_name;
                 td.year  = new_year;
+                td.genre = new_genre;
             }
             io_worker.push_job(job);
         }
@@ -231,7 +245,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             bool ret = false;
             if(job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
                 ret =  tw.write_album(f, job.track_dat[i].album);
-                ret |= tw.write_year(f, job.track_dat[i].year);
+                ret |= tw.write_year (f, job.track_dat[i].year );
+                ret |= tw.write_genre(f, job.track_dat[i].genre);
             }
             if(ret) {
                 var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);

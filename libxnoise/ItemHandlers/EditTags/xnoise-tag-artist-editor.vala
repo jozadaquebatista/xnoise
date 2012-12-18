@@ -1,4 +1,4 @@
-/* xnoise-tag-artistalbum-editor.vala
+/* xnoise-tag-artist-editor.vala
  *
  * Copyright (C) 2011 - 2012  Jörn Magens
  *
@@ -35,7 +35,7 @@ using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
-private class Xnoise.TagArtistAlbumEditor : GLib.Object {
+private class Xnoise.TagArtistEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
@@ -49,7 +49,7 @@ private class Xnoise.TagArtistAlbumEditor : GLib.Object {
     private HashTable<ItemType,Item?>? restrictions;
     public signal void sign_finish();
 
-    public TagArtistAlbumEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
+    public TagArtistEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
         this.item = _item;
         this.restrictions = restrictions;
         xn = Main.instance;

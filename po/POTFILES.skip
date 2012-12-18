@@ -29,7 +29,7 @@ libxnoise/ExtraWidgets/xnoise-equalizer-widget.c
 libxnoise/ExtraWidgets/xnoise-first-start-widget.c
 libxnoise/ExtraWidgets/xnoise-media-source-widget.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.c
-libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.c
+libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.c
 libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.c
 libxnoise/Lyrics/xnoise-lyrics-loader.c
@@ -49,4 +49,6 @@ plugins/magnatune/magnatune-dockable.c
 plugins/magnatune/magnatune-treeview.c
 plugins/magnatune/magnatune-widget.c
 package_result
+data/ui/metadat_genre.ui
+libxnoise/ItemHandlers/EditTags/xnoise-tag-genre-editor.c
 

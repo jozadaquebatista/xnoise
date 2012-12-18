@@ -226,7 +226,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     private TagGenreEditor tge;
-    private TagArtistAlbumEditor tae;
+    private TagArtistEditor tae;
     private TagAlbumEditor taled;
     
     private void open_tag_genre_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
@@ -236,7 +236,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         });
     }
     private void open_tagartist_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
-        tae = new TagArtistAlbumEditor(item, restrictions);
+        tae = new TagArtistEditor(item, restrictions);
         tae.sign_finish.connect( () => {
             tae = null;
         });
