@@ -28,67 +28,91 @@
  *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
 
 
 
-private class Xnoise.ExtDev.AudioPlayerDevice : Device {
+public class Xnoise.ExtDev.PlayerDevice : Device {
     
-    private string uri;
-    private AudioPlayerMainView view;
-    private Cancellable cancellable = new Cancellable();
+    protected string uri;
+    protected Cancellable cancellable { get; set; }
     
-    public AudioPlayerDevice(Mount _mount) {
+    internal PlayerMainView? view = null;
+    public AudioPlayerTempDb db;
+    
+    
+    public PlayerDevice(Mount _mount) {
+        cancellable = new Cancellable();
         mount = _mount;
         uri = mount.get_default_location().get_uri();
+        assert(uri != null && uri != "");
         print("created new audio player device for %s\n", uri);
     }
     
-    ~AudioPlayerDevice() {
+    
+    public override bool initialize() {
+        device_type = DeviceType.UNKNOWN;
+        return false;
     }
     
-    
-    public static Device? get_device(Mount mount) {
-        if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ||
-           File.new_for_uri(mount.get_default_location().get_uri() + "/.is_audio_player").query_exists()) {
-            return new AudioPlayerDevice(mount);
-        }
+    public override PlayerMainView? get_main_view_widget() {
         return null;
     }
     
-    public override bool initialize() {
-        device_type = 
-            (File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists() ?
-                DeviceType.ANDROID :
-                DeviceType.GENERIC_PLAYER
-            );
-        return true;
-    }
-    
-    public override string get_uri() {
-        return uri;
-    }
-    
-    public override IMainView? get_main_view_widget() {
-        if(view != null)
-            return view;
-        view = new AudioPlayerMainView(this, cancellable);
-        view.show_all();
-        return view;
+    public override ItemHandler? get_item_handler() {
+        return null;
     }
     
     public override string get_presentable_name() {
-        return "Player";
+        return "unknown";
+    }
+
+    public override string get_uri() {
+        return uri;
     }
     
     public override void cancel() {
         cancellable.cancel();
     }
+    
+    public signal void sign_add_track(string[] uris);
+    public signal void sign_update_filesystem();
+    
+    public virtual uint64 get_filesystem_size() {
+        uint64 size = 0;
+        try {
+            var f = File.new_for_uri(get_uri());
+            var file_info = f.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE, null);
+            size = file_info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return size;
+    }
+    
+    public virtual uint64 get_free_space_size() {
+        uint64 size = 0;
+        try {
+            var f = File.new_for_uri(get_uri());
+            var file_info = f.query_filesystem_info(FileAttribute.FILESYSTEM_FREE, null);
+            size = file_info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return size;
+    }
+    
+    public virtual string get_filesystem_size_formatted() {
+        return format_size(get_filesystem_size());
+    }
+    
+    public virtual string get_free_space_size_formatted() {
+        return format_size(get_free_space_size());
+    }
 }
-
-
 
 

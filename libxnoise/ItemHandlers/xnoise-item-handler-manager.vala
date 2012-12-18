@@ -72,6 +72,18 @@ namespace Xnoise {
             handler_name_map.insert(handler.handler_name(), handler);
         }
         
+        public void remove_handler(ItemHandler handler) {
+            for(int i = 0; i< _handlers.length; i++) {
+                if(handler == _handlers.index(i)) {
+                    print("removing item handler: %s\n", _handlers.index(i).handler_name());
+                    handler_type_map.remove(_handlers.index(i).handler_type());
+                    handler_name_map.remove(_handlers.index(i).handler_name());
+                    _handlers.remove_index_fast(i);
+                    break;
+                }
+            }
+        }
+
         public ItemHandler? get_handler_by_type(ItemHandlerType type) {
             ItemHandler? hndl = null;
             hndl = handler_type_map.lookup(type);
@@ -93,10 +105,6 @@ namespace Xnoise {
             return handler_name_map.lookup(name);
         }
         
-        private int cnt = 0;
-        public void test_func() {
-            print("testfunc %d\n", cnt++);
-        }
         
         private static string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
         

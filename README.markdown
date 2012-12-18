@@ -15,14 +15,14 @@ The 'Now playing' information will show a graphical representation of the curren
 To extend the features even more there are quite some plugins. For example one that shows notifications, mpris v1/v2 dbus interfaces, ayatana soundmenu plugin for ubuntu, lastfm scrobbling, album image fetching, lyrics fetching... 
 
 
-**[READ MORE ON THE ABOUT PAGE IN THE WIKI](https://github.com/shuerhaaken/xnoise/wiki/About)**
+**[READ MORE ON THE ABOUT PAGE IN THE WIKI](https://bitbucket.org/shuerhaaken/xnoise/wiki/About)**
 
 ***
 
 
 **[home page](http://www.xnoise-media-player.com/)**
 
-**[wiki home](https://github.com/shuerhaaken/xnoise/wiki/Home)**
+**[wiki home](https://bitbucket.org/shuerhaaken/xnoise/wiki/Home)**
 
 **[mailing list](http://groups.google.com/group/xnoise)**
 

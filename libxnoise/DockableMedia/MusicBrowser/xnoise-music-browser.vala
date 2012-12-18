@@ -326,8 +326,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             });
             rightmenu.append(menu_item);
         }
-        var sptr_item = new SeparatorMenuItem();
-        rightmenu.append(sptr_item);
+        if(array.length > 0) {
+            var sptr_item = new SeparatorMenuItem();
+            rightmenu.append(sptr_item);
+        }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));
         collapse_item.activate.connect( () => {
@@ -335,7 +337,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         });
         rightmenu.append(collapse_item);
         var sort_item = new Gtk.MenuItem.with_label(_("Sort Mode"));
-//        sort_item.set_label(_("Sort Mode"));
         sort_item.set_submenu(get_sort_submenu());
         rightmenu.append(sort_item);
         rightmenu.show_all();

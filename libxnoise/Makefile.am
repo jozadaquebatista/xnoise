@@ -57,11 +57,22 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
+    ExtDev/AndroidPlayer/xnoise-android-item-handler.vala \
+    ExtDev/AndroidPlayer/xnoise-android-player-device.vala \
+    ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala \
+    ExtDev/AndroidPlayer/xnoise-android-player-tree-store.vala \
+    ExtDev/AndroidPlayer/xnoise-android-player-tree-view.vala \
+    ExtDev/AudioPlayer/xnoise-audio-item-handler.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-device.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala \
-    ExtDev/AudioPlayer/xnoise-audio-player-temp-db.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala \
+    ExtDev/AudioPlayer/xnoise-audio-player-temp-db.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-device.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-tree-store.vala \
+    ExtDev/GenericPlayer/xnoise-generic-player-tree-view.vala \
     ExtDev/xnoise-device.vala \
     ExtDev/xnoise-device-manager.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
@@ -204,7 +215,9 @@ DISTCLEANFILES = \
     DataSource/*.c \
     DBus/*.c \
     ExtDev/*.c \
+    ExtDev/AndroidPlayer/*.c \
     ExtDev/AudioPlayer/*.c \
+    ExtDev/GenericPlayer/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
     DockableMedia/MusicBrowser/*.c \

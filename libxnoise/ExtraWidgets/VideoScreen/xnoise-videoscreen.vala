@@ -42,7 +42,6 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     private unowned MainWindow win;
     internal Gtk.Box videovbox;
     internal unowned VideoScreen videoscreen;
-    internal SerialButton sbutton;
     
     public VideoViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);

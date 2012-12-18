@@ -76,12 +76,14 @@ namespace Xnoise.Utilities {
         if(!temp_inited) {
             temp_inited = true;
             File f = File.new_for_path("/tmp/xnoise");
-            try {
-                f.make_directory(null);
-            }
-            catch(Error e) {
-                print("%s\n", e.message);
-                return "/tmp";
+            if(!f.query_exists(null)) {
+                try {
+                    f.make_directory(null);
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return "/tmp";
+                }
             }
         }
         return "/tmp/xnoise";

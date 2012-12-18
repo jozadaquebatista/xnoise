@@ -56,7 +56,8 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
         }
         
         //register device types
-        register_device(new DeviceIdContainer(AudioPlayerDevice.get_device));
+        register_device(new DeviceIdContainer(AndroidPlayerDevice.get_device));
+        register_device(new DeviceIdContainer(GenericPlayerDevice.get_device));
         
         volume_monitor = VolumeMonitor.get();
         
@@ -112,6 +113,10 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
                 Idle.add(() => {
                     main_window.mainview_box.add_main_view(d.get_main_view_widget());
                     main_window.main_view_sbutton.insert(d.get_identifier(), d.get_presentable_name());
+                    ItemHandler? handler = null;
+                    if((handler = d.get_item_handler()) != null) {
+                        itemhandler_manager.add_handler(handler);
+                    }
                     return false;
                 });
             }
@@ -130,6 +135,7 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
             foreach(Device d in devices.get_values()) {
                 if(mount.get_default_location().get_uri() == d.get_uri()) {
                     d.cancel();
+                    itemhandler_manager.remove_handler(d.get_item_handler());
                     //print("remove device for %s\n", mount.get_default_location().get_uri());
                     devices.remove(d.get_identifier());
                     main_window.main_view_sbutton.del(d.get_identifier());

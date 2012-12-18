@@ -31,7 +31,7 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
     private static const string STMT_INSERT_ALBUM =
         "INSERT INTO albums (artist, name) VALUES (?, ?)";
     private static const string STMT_GET_URI_ID =
-        "SELECT id FROM uris WHERE name = ?";
+        "SELECT id FROM uris WHERE utf8_lower(name) = ?";
     private static const string STMT_INSERT_URI =
         "INSERT INTO uris (name) VALUES (?)";
     private static const string STMT_GET_GENRE_ID =
@@ -145,30 +145,11 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
     private int count = 0;
     
     public void insert_tracks(ref TrackData[] tda) {
-//        Statement stmt;
-//        this.source.prepare_v2(STMT_GET_TRACKS, -1, out stmt);
         count = 0;
         
         foreach(TrackData td in tda) {
-//        while(stmt.step() == Sqlite.ROW) {
             if(cancel.is_cancelled())
                 return;
-//            Item? i = Item(ItemType.STREAM);
-//            i.uri  = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(1), null, true);
-//            i.text = stmt.column_text(0);
-//            string artist = stmt.column_text(3);
-//            string album = stmt.column_text(4);
-//            string genre = stmt.column_text(5);
-//            string sku   = stmt.column_text(8);
-//            int year = 0;
-//            if(stmt.column_int(6) != 0) {
-//                DateTime dt = new DateTime.from_unix_utc(stmt.column_int(6));
-//                year = dt.get_year();
-//            }
-//            int length = 0;
-//            if(stmt.column_int(7) > 0) {
-//                length = stmt.column_int(7);
-//            }
             // INSERT
             int32 artist_id = handle_artist(ref td.artist);
             if(artist_id == -1) {
@@ -285,6 +266,91 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
 //        return UNZIPPED_DB;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
 //    }
 
+    private static const string STMT_GET_ITEM_DAT = 
+       "SELECT id,artist,album FROM items WHERE uri=?";
+    
+    private static const string STMT_GET_TRACK_CNT_FOR_ARTIST = 
+       "SELECT COUNT(id) FROM items WHERE artist=(SELECT artist FROM items WHERE items.id=?)";
+
+    private static const string STMT_GET_TRACK_CNT_FOR_ALBUM = 
+       "SELECT COUNT(id) FROM items WHERE album=(SELECT album FROM items WHERE items.id=?)";
+    
+    public void remove_uri(string uri) {
+        Statement stmt;
+        string errormsg;
+        
+        this.get_uri_id_statement.reset();
+        if(this.get_uri_id_statement.bind_text(1, uri.strip().down())!= Sqlite.OK ) {
+            return;
+        }
+        int32 uri_id = -1;
+        if(this.get_uri_id_statement.step() == Sqlite.ROW) {
+            uri_id = this.get_uri_id_statement.column_int(0);
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_ITEM_DAT, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        
+        int32 item_id   = -1;
+        int32 artist_id = -1;
+        int32 album_id  = -1;
+        
+        if(stmt.step() == Sqlite.ROW) {
+            item_id     = stmt.column_int(0);
+            artist_id   = stmt.column_int(1);
+            album_id    = stmt.column_int(2);
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_TRACK_CNT_FOR_ARTIST, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        bool more_tracks_from_same_artist = true;
+        if(stmt.step() == Sqlite.ROW) {
+            more_tracks_from_same_artist = stmt.column_int(0) > 1;
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_TRACK_CNT_FOR_ALBUM, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        bool more_tracks_from_same_album = true;
+        if(stmt.step() == Sqlite.ROW) {
+            more_tracks_from_same_album = stmt.column_int(0) > 1;
+        }
+        else {
+            return;
+        }
+        
+        if(!more_tracks_from_same_artist) {
+            if(db.exec("DELETE FROM artists WHERE id=%d;".printf(artist_id), null, out errormsg)!= Sqlite.OK) {
+                stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+            }
+        }
+        if(!more_tracks_from_same_album) {
+            if(db.exec("DELETE FROM albums WHERE id=%d;".printf(album_id), null, out errormsg)!= Sqlite.OK) {
+                stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+            }
+        }
+        if(db.exec("DELETE FROM items WHERE id=%d;".printf(item_id), null, out errormsg)!= Sqlite.OK) {
+            stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+        }
+        if(db.exec("DELETE FROM uris WHERE id=%d;".printf(uri_id), null, out errormsg)!= Sqlite.OK) {
+            stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+        }
+    }
+
     private static const string STMT_GET_GET_ITEM_ID = 
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
@@ -369,8 +435,15 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
     
     private int handle_uri(string uri) {
         // Insert uri
+//        get_uri_id_statement.reset();
+//        if(get_uri_id_statement.bind_text(1, uri != null ? uri.down().strip() : EMPTYSTRING) != Sqlite.OK) {
+//            this.db_error();
+//            return -1;
+//        }
+//        if(get_uri_id_statement.step() == Sqlite.ROW)
+//            return get_uri_id_statement.column_int(0);
         insert_uri_statement.reset();
-        if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+        if(insert_uri_statement.bind_text(1, uri.strip()) != Sqlite.OK) {
             this.db_error();
             return -1;
         }

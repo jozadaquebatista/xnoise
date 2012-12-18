@@ -46,13 +46,18 @@ public abstract class Xnoise.ExtDev.Device : GLib.Object {
     
     public unowned Mount mount;
     private string? identifier = null;
+    protected ItemHandler? handler = null;
     
     public DeviceType device_type { get; set; }
+    public bool in_data_transfer { get; set; default = false; }
     
     public abstract bool initialize();
     public abstract string get_uri();
-    public abstract IMainView? get_main_view_widget();
+    public abstract PlayerMainView? get_main_view_widget();
     public abstract void cancel();
+    public abstract ItemHandler? get_item_handler();
+    
+    public bool in_loading { get; set; }
     
     public virtual string get_presentable_name() {
         return "Dev";

@@ -33,16 +33,20 @@ using Gtk;
 using Xnoise;
 using Xnoise.ExtDev;
 using Xnoise.Utilities;
+using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
-
-private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
+public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
+    
     private static int FILE_COUNT = 150;
-    private AudioPlayerTempDb db;
-    private unowned PlayerTreeView view;
+    
+    private unowned AudioPlayerTempDb db;
     private File base_folder;
+    private uint update_source = 0;
+    private unowned PlayerTreeView view;
     private unowned Cancellable cancellable;
+    private unowned PlayerDevice audio_player_device;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf),  //ICON
@@ -60,16 +64,82 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     }
     
     
-    public PlayerTreeStore(PlayerTreeView view, File base_folder, Cancellable cancellable) {
-        db = new AudioPlayerTempDb(cancellable);
+    public PlayerTreeStore(PlayerTreeView view, 
+                           PlayerDevice audio_player_device,
+                           File[] base_folders,
+                           Cancellable cancellable) {
+        this.audio_player_device = audio_player_device;
+        audio_player_device.db = new AudioPlayerTempDb(cancellable);
+        db = audio_player_device.db;
         this.set_column_types(col_types);
-        this.base_folder = base_folder;
+        assert(base_folders.length > 0);
+        this.base_folder = base_folders[0];
         this.cancellable = cancellable;
         this.view = view;
         load_files();
+        this.audio_player_device.sign_add_track.connect(on_add_track);
     }
-
+    
+    
+    private void on_add_track(PlayerDevice dev, string[] uris) {
+        TrackData[] tdal = {};
+        foreach(string u in uris) {
+            File file = File.new_for_uri(u);
+            string attr = FileAttribute.STANDARD_NAME + "," +
+                          FileAttribute.STANDARD_TYPE + "," +
+                          FileAttribute.STANDARD_CONTENT_TYPE;
+            FileInfo info;
+            try {
+                info = file.query_info(attr, FileQueryInfoFlags.NONE, cancellable);
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+                return;
+            }
+            FileType filetype = info.get_file_type();
+            TrackData td = null;
+            string filename = info.get_name();
+            if(filetype == FileType.DIRECTORY) {
+                continue;
+            }
+            else {
+                string uri_lc = filename.down();
+                if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                    var tr = new TagReader();
+                    td = tr.read_tag(file.get_path());
+                    if(td != null) {
+                        td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+                        tdal += td;
+                    }
+                }
+            }
+        }
+        var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+        db_job.track_dat = (owned)tdal;
+        tdal = {};
+        db_job.finished.connect(on_track_import_finished);
+        db_worker.push_job(db_job);
+    }
+    
+    private void on_track_import_finished(Worker.Job job) {
+        job.finished.disconnect(on_track_import_finished);
+        if(update_source != 0)
+            Source.remove(update_source);
+        update_source = Timeout.add(200, () => {
+            if(this.cancellable.is_cancelled())
+                return false;
+            print("update after import\n");
+            filter();
+            update_source = 0;
+            return false;
+        });
+    }
+    
     private void load_files() {
+        Idle.add(() => {
+            this.audio_player_device.in_loading = true;
+            return false;
+        });
         tda = {};
         var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
         device_worker.push_job(job);
@@ -127,18 +197,15 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                     string uri_lc = filename.down();
                     if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
                         var tr = new TagReader();
+                        //print("read file %s\n", filepath);
                         td = tr.read_tag(filepath);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             tda += td;
                             job.big_counter[1]++;
                         }
-                        if(job.big_counter[1] % 50 == 0) {
-                        }
+                        
                         if(tda.length > FILE_COUNT) {
-                            foreach(var tdi in tda) {
-                                print("found title: %s\n", tdi.title);
-                            }
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.track_dat = (owned)tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
@@ -170,6 +237,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     
     private void end_import(Worker.Job job) {
         Idle.add(() => {
+            this.audio_player_device.in_loading = false;
             if(this.cancellable.is_cancelled())
                 return false;
             filter();
@@ -181,9 +249,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         db.begin_transaction();
-        foreach(TrackData td in job.track_dat) {
-            db.insert_tracks(ref job.track_dat);
-        }
+        db.insert_tracks(ref job.track_dat);
         db.commit_transaction();
         return false;
     }
@@ -270,7 +336,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
         item_ht.insert(job.item.type, job.item);
         
-        job.items = db.get_albums(global.searchtext,
+        job.items = db.get_albums(EMPTYSTRING,
                                         global.collection_sort_mode,
                                         item_ht);
         //print("xx1 job.items cnt = %d\n", job.items.length);
@@ -352,7 +418,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
         HashTable<ItemType,Item?>? item_ht =
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
         item_ht.insert(job.item.type, job.item);
-        job.track_dat = db.get_trackdata_for_album(global.searchtext,
+        job.track_dat = db.get_trackdata_for_album(EMPTYSTRING,
                                                           CollectionSortMode.ARTIST_ALBUM_TITLE,
                                                           item_ht);
         Idle.add( () => {
@@ -391,7 +457,7 @@ private class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
     private bool populate_artists_job(Worker.Job job) {
         if(this.cancellable.is_cancelled())
             return false;
-        job.items = db.get_artists(global.searchtext,
+        job.items = db.get_artists(EMPTYSTRING,
                                          global.collection_sort_mode,
                                          null
                                          );

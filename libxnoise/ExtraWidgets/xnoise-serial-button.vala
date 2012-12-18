@@ -32,9 +32,11 @@ using Gtk;
 
 internal class Xnoise.SerialButton : Gtk.Box {
     
+    private unowned SerialItem? active_item = null;
     private HashTable<string,SerialItem> sitems = new HashTable<string,SerialItem>(str_hash, str_equal);
     
     public signal void sign_selected(string name);
+    
     
     private class SerialItem : Gtk.ToggleButton {
         private unowned SerialButton sb;
@@ -51,6 +53,7 @@ internal class Xnoise.SerialButton : Gtk.Box {
         }
     }
     
+    
     public SerialButton() {
         GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
         this.set_homogeneous(true);
@@ -58,18 +61,19 @@ internal class Xnoise.SerialButton : Gtk.Box {
         this.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
 #endif
     }
-
+    
+    
     public int item_count {
         get { return (int)this.get_children().length(); }
     }
-
+    
     public string? get_active_name() {
         if(active_item == null)
             return null;
         else
             return active_item.item_name;
     }
-
+    
     public bool insert(string? name, string? txt) {
         if(txt == null || name == null)
             return false;
@@ -94,10 +98,8 @@ internal class Xnoise.SerialButton : Gtk.Box {
         }
         return true;
     }
-
-    private unowned SerialItem? active_item = null;
-
-    public bool has_item(string name) {
+    
+    public bool has_item(string? name) {
         if(name == null || name == "")
             return false;
         return sitems.lookup(name) != null;
@@ -115,7 +117,7 @@ internal class Xnoise.SerialButton : Gtk.Box {
         select(((SerialItem)w).item_name, true);
     }
     
-    public void select(string name, bool emit_signal = true) {
+    public void select(string? name, bool emit_signal = true) {
         if(name == null)
             return;
         
@@ -136,7 +138,7 @@ internal class Xnoise.SerialButton : Gtk.Box {
             this.sign_selected(name);
     }
 
-    public new void set_sensitive(string name, bool sensitive_status) {
+    public new void set_sensitive(string? name, bool sensitive_status) {
         if(name == null)
             return;
         
@@ -150,7 +152,7 @@ internal class Xnoise.SerialButton : Gtk.Box {
         si.set_sensitive(sensitive_status);
     }
 
-    public void del(string name) {
+    public void del(string? name) {
         if(name == null)
             return;
         
