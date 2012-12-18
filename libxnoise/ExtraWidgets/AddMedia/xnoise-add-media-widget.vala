@@ -279,18 +279,24 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             Gtk.Stock.OPEN,
             Gtk.ResponseType.ACCEPT,
             null);
+        fcdialog.select_multiple = true;
         fcdialog.set_current_folder(Environment.get_home_dir());
-        if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
-            File f = File.new_for_path(fcdialog.get_filename());
+        string music = Environment.get_user_special_dir(UserDirectory.MUSIC);
+        if(music != null && music != "")
+            fcdialog.select_filename(music);
+        if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
             Gtk.Invisible w = new Gtk.Invisible();
             Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
-            TreeIter iter;
-            listmodel.append(out iter);
-            listmodel.set(iter,
-                          Column.ICON,      folder_icon,
-                          Column.LOCATION,  f.get_path(),
-                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
-                          );
+            foreach(string fn in fcdialog.get_filenames()) {
+                File f = File.new_for_path(fn);
+                TreeIter iter;
+                listmodel.append(out iter);
+                listmodel.set(iter,
+                              Column.ICON,      folder_icon,
+                              Column.LOCATION,  f.get_path(),
+                              Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
+                );
+            }
         }
         fcdialog.destroy();
         fcdialog = null;
