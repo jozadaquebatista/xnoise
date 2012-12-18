@@ -74,19 +74,25 @@ private class Xnoise.FirstStartWidget : Box {
             Gtk.ResponseType.CANCEL,
             Gtk.Stock.OPEN,
             Gtk.ResponseType.ACCEPT);
+        fcdialog.select_multiple = true;
         fcdialog.set_current_folder(Environment.get_home_dir());
+        string music = Environment.get_user_special_dir(UserDirectory.MUSIC);
+        if(music != null && music != "")
+            fcdialog.select_filename(music);
         if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
-            File f = File.new_for_path(fcdialog.get_filename());
-            TreeIter iter;
-            if(ht.lookup(f.get_path()) == null) {
-                ht.insert(f.get_path(),f.get_path());
-                listmodel.append(out iter);
-                listmodel.set(iter,
-                              Column.ICON, icon_repo.folder_symbolic_icon,
-                              Column.LOCATION,  f.get_path()
-                              );
-                media_importer.import_media_folder(f.get_path(), true, true);
-                nb.set_current_page(1);
+            foreach(string fn in fcdialog.get_filenames()) {
+                File f = File.new_for_path(fn);
+                TreeIter iter;
+                if(ht.lookup(f.get_path()) == null) {
+                    ht.insert(f.get_path(), f.get_path());
+                    listmodel.append(out iter);
+                    listmodel.set(iter,
+                                  Column.ICON, icon_repo.folder_symbolic_icon,
+                                  Column.LOCATION,  f.get_path()
+                                  );
+                    media_importer.import_media_folder(f.get_path(), true, true);
+                    nb.set_current_page(1);
+                }
             }
         }
         fcdialog.destroy();
