@@ -91,6 +91,14 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 Idle.add( () => {
                     // put data to entry
+                    Gdk.Pixbuf? art = null;
+                    File? f = get_albumimage_for_artistalbum(td.artist, td.album, "extralarge");
+                    if(f != null)
+                        art = AlbumArtView.icon_cache.get_image(f.get_path());
+                    
+                    if(art != null) {
+                        albumimage.pixbuf = art;
+                    }
                     entry.text  = td.album;
                     year_entry.text = (td.year > 0 ? td.year.to_string() : "");
                     albumimage = new Image.from_stock(Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
