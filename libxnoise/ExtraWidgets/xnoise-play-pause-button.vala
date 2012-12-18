@@ -43,12 +43,10 @@ using Xnoise.Resources;
 */
 private class Xnoise.PlayPauseButton: Gtk.ToolItem {
     private unowned Main xn;
-    private Pixbuf play  = null;
-    private Pixbuf pause = null;
-    private Gtk.Image image;
+    private Gtk.Image? play  = null;
+    private Gtk.Image? pause = null;
     private int iconwidth;
-    private unowned IconTheme theme = null;
-    
+    private Gtk.Button button;
     public signal void clicked();
     
     
@@ -56,43 +54,18 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         xn = Main.instance;
         this.can_focus = false;
         
-        theme = IconTheme.get_default();
-        var button = new Gtk.Button();
-        var w = new Gtk.Invisible();
-        play = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
-        iconwidth = play.width;
-        if(theme.has_icon("media-playback-start-symbolic")) {
-            try {
-                play = theme.load_icon("media-playback-start-symbolic",
-                                     iconwidth,
-                                     IconLookupFlags.FORCE_SIZE
-                );
-            }
-            catch(Error e) {
-                print("%s\n", e.message);
-            }
-        }
-        if(theme.has_icon("media-playback-pause-symbolic")) {
-            try {
-                pause = theme.load_icon("media-playback-pause-symbolic",
-                                     iconwidth,
-                                     IconLookupFlags.FORCE_SIZE
-                );
-            }
-            catch(Error e) {
-                print("%s\n", e.message);
-            }
-        }
-        else {
-            pause = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.LARGE_TOOLBAR);
-        }
-        image = new Gtk.Image.from_pixbuf(play);
-        button.add(image);
+        button = new Gtk.Button();
+        
+        play = get_themed_image_icon("media-playback-start-symbolic", IconSize.LARGE_TOOLBAR);
+        play.show();
+        
+        pause = get_themed_image_icon("media-playback-pause-symbolic", IconSize.LARGE_TOOLBAR);
+        pause.show();
+        
+        button.add(play);
         this.add(button);
         button.can_focus = false;
         this.can_focus = false;
-
-        this.update_picture();
         
         button.clicked.connect(this.on_clicked);
         gst_player.sign_paused.connect(this.update_picture);
@@ -147,10 +120,20 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
     }
 
     public void update_picture() {
-        if(gst_player.playing == true)
-            image.pixbuf = pause;
-        else
-            image.pixbuf = play;
+        if(gst_player.playing == true) {
+            if(play.get_parent() != null)
+                button.remove(play);
+            if(pause.get_parent() != null)
+                button.remove(pause);
+            button.add(pause);
+        }
+        else {
+            if(pause.get_parent() != null)
+                button.remove(pause);
+            if(play.get_parent() != null)
+                button.remove(play);
+            button.add(play);
+        }
     }
 }
 

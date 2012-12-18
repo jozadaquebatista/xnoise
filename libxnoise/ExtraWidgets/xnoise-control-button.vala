@@ -61,58 +61,15 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         
         switch(function) {
             case Function.NEXT: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_NEXT, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-skip-forward-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-skip-forward-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                image = new Gtk.Image.from_pixbuf(px);
+                image = get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.PREVIOUS: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PREVIOUS, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-skip-backward-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-skip-backward-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                image = new Gtk.Image.from_pixbuf(px);
+                image = get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.STOP: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_STOP, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-playback-stop-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-playback-stop-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                assert(px != null);
-                image = new Gtk.Image.from_pixbuf(px);
+                image = get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             default:
@@ -134,58 +91,16 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         
         switch(function) {
             case Function.NEXT: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_NEXT, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-skip-forward-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-skip-forward-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                image.pixbuf = px;
+                image = get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.PREVIOUS: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PREVIOUS, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-skip-backward-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-skip-backward-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                image.pixbuf = px;
+                image = get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.STOP:
             default: {
-                Pixbuf px = null;
-                px = w.render_icon_pixbuf(Gtk.Stock.MEDIA_STOP, IconSize.LARGE_TOOLBAR);
-                iconwidth = px.width;
-                if(theme.has_icon("media-playback-stop-symbolic")) {
-                    try {
-                        px = theme.load_icon("media-playback-stop-symbolic",
-                                             iconwidth,
-                                             IconLookupFlags.FORCE_SIZE
-                        );
-                    }
-                    catch(Error e) {
-                        print("%s\n", e.message);
-                    }
-                }
-                image.pixbuf = px;
+                image = get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
         }
@@ -195,6 +110,26 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     private void on_clicked() {
         this.sign_clicked(function);
     }
+}
+
+private static Gtk.Image? get_themed_image_icon(string _name, IconSize size) {
+        GLib.Icon gicon;
+        Gtk.Image? image = null;
+        string? name = null;
+        string? file_name = null;
+        if(Path.is_absolute(_name)) {
+            file_name = _name;
+            gicon = new FileIcon(File.new_for_path(file_name));
+        }
+        else {
+            name = _name;
+            gicon = new ThemedIcon(name);
+        }
+        if(name != null)
+            image = new Gtk.Image.from_icon_name (name, size);
+        else
+            image = new Gtk.Image.from_gicon (gicon, size);
+        return image;
 }
 
 
