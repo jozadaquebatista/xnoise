@@ -38,7 +38,6 @@ using Gdk;
  */
 private class Xnoise.ControlButton : Gtk.ToolItem {
     
-    private unowned IconTheme theme = null;
     private Image image;
     private int iconwidth = 24;
     private Function function;
@@ -54,22 +53,20 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     
     public ControlButton(Function _function) {
         function = _function;
-        theme = IconTheme.get_default();
         
         var button = new Gtk.Button();
-        var w = new Gtk.Invisible();
         
         switch(function) {
             case Function.NEXT: {
-                image = get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
+                image = IconRepo.get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.PREVIOUS: {
-                image = get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
+                image = IconRepo.get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.STOP: {
-                image = get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
+                image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
                 break;
             }
             default:
@@ -81,55 +78,10 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         button.can_focus = false;
         this.can_focus = false;
         button.clicked.connect(this.on_clicked);
-        theme.changed.connect(update_pixbufs);
-    }
-    
-    private void update_pixbufs() {
-        print("update_pixbufs control button %s\n", function.to_string());
-        theme = IconTheme.get_default();
-        var w = new Gtk.Invisible();
-        
-        switch(function) {
-            case Function.NEXT: {
-                image = get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
-                break;
-            }
-            case Function.PREVIOUS: {
-                image = get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
-                break;
-            }
-            case Function.STOP:
-            default: {
-                image = get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
-                break;
-            }
-        }
-        this.queue_draw();
     }
     
     private void on_clicked() {
         this.sign_clicked(function);
     }
 }
-
-private static Gtk.Image? get_themed_image_icon(string _name, IconSize size) {
-        GLib.Icon gicon;
-        Gtk.Image? image = null;
-        string? name = null;
-        string? file_name = null;
-        if(Path.is_absolute(_name)) {
-            file_name = _name;
-            gicon = new FileIcon(File.new_for_path(file_name));
-        }
-        else {
-            name = _name;
-            gicon = new ThemedIcon(name);
-        }
-        if(name != null)
-            image = new Gtk.Image.from_icon_name (name, size);
-        else
-            image = new Gtk.Image.from_gicon (gicon, size);
-        return image;
-}
-
 
