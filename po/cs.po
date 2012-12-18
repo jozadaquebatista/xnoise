@@ -3,15 +3,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-18 22:16+0100\n"
-"PO-Revision-Date: 2012-10-29 05:19+0100\n"
-"Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
+"POT-Creation-Date: 2012-10-28 21:37+0100\n"
+"PO-Revision-Date: 2012-12-18 23:18+0100\n"
+"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Language: cs_CZ\n"
 
@@ -27,16 +27,19 @@ msgstr "Přehrávač"
 msgid "Organize and play your music and video collections"
 msgstr "Spravovat a přehrávat hudební a filmové sbírky"
 
-#: ../libxnoise/Application/xnoise-application.vala:209 ../src/xnoise.vala:140
+#: ../libxnoise/Application/xnoise-application.vala:209
+#: ../src/xnoise.vala:140
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise je přehrávač multimédií pro Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:210 ../src/xnoise.vala:141
+#: ../libxnoise/Application/xnoise-application.vala:210
+#: ../src/xnoise.vala:141
 msgid "It uses the gstreamer framework."
 msgstr "Používá soustavu GStreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:211 ../src/xnoise.vala:142
+#: ../libxnoise/Application/xnoise-application.vala:211
+#: ../src/xnoise.vala:142
 msgid "More information on the project website:"
 msgstr "Více informací na stránkách projektu:"
 
@@ -45,15 +48,15 @@ msgstr "Více informací na stránkách projektu:"
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:177
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
-msgstr "Nenalezen žádný text ..."
+msgstr "Nenalezen žádný text..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:428
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1485
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1527
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1557
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1442
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1470
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1512
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1542
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
@@ -61,12 +64,12 @@ msgid "by"
 msgstr "Od"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:430
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1459
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1487
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1529
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1559
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1444
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1472
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1514
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1544
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
 #, c-format
@@ -81,26 +84,12 @@ msgstr "Naposledy přehráno"
 msgid "Music"
 msgstr "Hudba"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:334
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:317
 #: ../plugins/magnatune/magnatune-treeview.vala:217
 msgid "Collapse all"
 msgstr "Sbalit vše"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:339
-msgid "Sort Mode"
-msgstr ""
-
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:349
-msgid "ARTIST-ALBUM-TITLE"
-msgstr ""
-
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:356
-msgid "GENRE-ARTIST-ALBUM"
-msgstr ""
-
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:476
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:312
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
 msgstr "Nahrává se..."
@@ -111,75 +100,11 @@ msgstr "Nejhranější"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr "Streamy"
+msgstr "Proudy"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
 msgstr "Videa"
-
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
-msgid "Add to Android Device"
-msgstr ""
-
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
-msgid "Delete from device"
-msgstr ""
-
-#: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:45
-msgid "Android Player Device"
-msgstr ""
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:103
-#, fuzzy
-msgid "Do you want to delete the selected file from the device?"
-msgstr "Chcete vyhodit vybraný soubor do koše?"
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:125
-#, fuzzy
-msgid "Do you want to delete the selected album from the device?"
-msgstr "Chcete vyhodit vybraný soubor do koše?"
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:155
-#, fuzzy
-msgid "Do you want to delete the selected artist from the device?"
-msgstr "Chcete vyhodit vybraný soubor do koše?"
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:235
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:112
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:341
-#, fuzzy
-msgid "Please wait while moving media to the device."
-msgstr ""
-"Počkejte, prosím, zatímco\n"
-"se převádí databáze."
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:319
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:260
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:383
-msgid "Not enough space on device! Aborting..."
-msgstr ""
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:116
-msgid "Free space: "
-msgstr ""
-
-#: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:119
-msgid "Total space: "
-msgstr ""
-
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-device.vala:97
-#, fuzzy
-msgid "Player"
-msgstr "Přehrát"
-
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
-msgid "Add to Player Device"
-msgstr ""
-
-#: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
-msgid "External Player Device"
-msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 msgid "Add or Remove media"
@@ -195,7 +120,7 @@ msgstr "Přidat místní složku"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
-msgstr "Přidat stream"
+msgstr "Přidat proud"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
@@ -214,7 +139,6 @@ msgstr ""
 "Vše bude dostupné v knihovně Xnoise."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:189
 msgid "Location"
 msgstr "Umístění"
 
@@ -222,14 +146,13 @@ msgstr "Umístění"
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
 #: ../libxnoise/Utils/xnoise-media-importer.vala:184
 msgid "Importing media data. This may take some time..."
-msgstr "Import dat. Může to chvíli trvat..."
+msgstr "nahrávají se data médií. Může to chvíli trvat..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
 msgstr "Vybrat složku se skladbami"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:344
 msgid "Add internet radio link"
 msgstr "Přidat odkaz na internetové rádio"
 
@@ -237,84 +160,79 @@ msgstr "Přidat odkaz na internetové rádio"
 msgid "Leave fullscreen"
 msgstr "Opustit režim celé obrazovky"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:295
 msgid "Settings"
 msgstr "Nastavení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:297
 msgid "Media"
 msgstr "Media"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 msgid "Grid lines in media browser"
 msgstr "Mřížka v prohlížeči médií"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:313
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Show picture on hover album image"
 msgstr "Zobrazit obrázek při přejetí přebalu alba myší"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
-#, fuzzy
-msgid "Use Compact Menu"
-msgstr "Použít menu aplikací"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
+msgid "Use Application Menu"
+msgstr "Použít programovou nabídku"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Show Stop button"
 msgstr "Zobrazit tlačítko pro zastavení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:325
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Quit on window close"
 msgstr "Ukončit při zavření okna"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:329
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 msgid "Use desktop notifications"
-msgstr "Použít systémová oznámení."
+msgstr "Použít systémová oznámení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use Equalizer"
 msgstr "Použít ekvalizér"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:353
 msgid "Go Back"
 msgstr "Vrátit se"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:355
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Media browser fontsize"
 msgstr "Velikost písma v prohlížeči skladeb"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:372
-#, fuzzy
-msgid "User Interface:"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:379
+msgid "User Interface"
 msgstr "Uživatelské rozhraní"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:376
-#, fuzzy
-msgid "Lyrics:"
-msgstr "Texty"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:383
+msgid "Lyric Providers"
+msgstr "Poskytovatelé textů skladeb "
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:380
-#, fuzzy
-msgid "Additional:"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
+msgid "Additional"
 msgstr "Další"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
-#, fuzzy
-msgid "Music Stores:"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
+msgid "Music Stores"
 msgstr "Hudební obchody"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:65
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:100
 msgid "Select external subtitle file"
 msgstr "Vybrat soubor s titulky"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:130
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:165
 msgid "No Subtitle"
 msgstr "Bez titulků"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:223
 msgid "Leave Fullscreen"
 msgstr "Opustit režim celé obrazovky"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:223
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
@@ -335,7 +253,7 @@ msgid "Devices"
 msgstr "Zařízení"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:415
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1989
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
 msgid "Search..."
 msgstr "Hledat..."
 
@@ -347,82 +265,33 @@ msgstr "Přednastavení:"
 msgid "Volume"
 msgstr "Hlasitost"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
-#, fuzzy
-msgid "Add Media"
-msgstr "Přidat media"
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
-msgid "Skip"
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:123
-msgid "Done"
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:131
-msgid "Please wait while media is added to your library!"
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
-#, c-format
-msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
-#, fuzzy
-msgid "Add more media folders"
-msgstr "Přidat místní složku"
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:161
-#, fuzzy
-msgid "Media Folders:"
-msgstr "Přehrávač"
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
-msgid "Welcome to Xnoise!\n"
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
-msgid "This is the first time you start xnoise."
-msgstr ""
-
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:203
-#, fuzzy
-msgid "Do you want to import media into your library?"
-msgstr ""
-"Xnoise byl poprvé spuštěn. Chcete do knihovny se skladbami vložit hudbu nebo "
-"film? "
-
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
 msgstr "Přidat všechny stopy do seznamu skladeb"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:135
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:175
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:135
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Upravit údaje"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:138
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:138
 msgid "Type new artist name."
 msgstr "Zadejte nové jméno umělce."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
 msgid "Artist:"
 msgstr "Umělec:"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
 msgid "Type new album name."
 msgstr "Zadejte nový název alba."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:143
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:148
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
 msgid "Album:"
 msgstr "Album:"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:168
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -430,55 +299,37 @@ msgstr ""
 "Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
 "pokud nechcete čekat."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:172
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:194
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
-"Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud nechcete "
-"čekat."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:144
-#, fuzzy
-msgid "Album data"
-msgstr "Změnit údaje o albu"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:147
-#, fuzzy
-msgid "Please enter new album data."
-msgstr "Změnit údaje o albu"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:149
-#, fuzzy
-msgid "Year:"
-msgstr "Rok"
+"Počkejte, prosím, na dokončení nahrávání dat. Nebo nahrávání zrušte, pokud "
+"nechcete čekat."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2000
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1239
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1369
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1301
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1431
 msgid "Artist"
 msgstr "Umělec"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2001
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1378
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1277
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1440
 msgid "Album"
 msgstr "Album"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1191
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Title"
 msgstr "Název"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1387
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1347
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1449
 msgid "Genre"
 msgstr "Žánr"
 
@@ -488,21 +339,21 @@ msgstr "Adresa (URI)"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1309
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1396
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1371
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1458
 msgid "Year"
 msgstr "Rok"
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1360
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1422
 msgid "Tracknumber"
 msgstr "Číslo skladby"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
 msgid "Edit data for track"
-msgstr "Upravit údaje o stopě"
+msgstr "Upravit údaje o skladbě"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
 msgid "Change album data"
@@ -511,10 +362,6 @@ msgstr "Změnit údaje o albu"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
 msgid "Change artist data"
 msgstr "Změnit údaje o umělci"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:51
-msgid "Change genre name"
-msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:54
@@ -542,13 +389,13 @@ msgstr "Odstranit vybranou skladbu"
 msgid "Show in parent folder"
 msgstr "Zobrazit v nadřazené složce"
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:128
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:183
 msgid "Insufficient track information. Not searching for lyrics."
 msgstr "Nedostatek informací o skladbě. Text písně nelze nalézt."
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:127
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:143
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:156
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:172
 msgid "Player stopped. Not searching for lyrics."
 msgstr "Přehrávání zastaveno. Text písně nelze nalézt."
 
@@ -558,7 +405,7 @@ msgstr "Přehrávání zastaveno. Text písně nelze nalézt."
 #. textbuffer.get_start_iter (out end_iter);
 #. string txt = textbuffer.get_text(start_iter, end_iter, true);
 #. TODO: Howto append text ?
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:179
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:208
 #, c-format
 msgid ""
 "\n"
@@ -572,156 +419,156 @@ msgstr ""
 "\n"
 "Používá se %s ..."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:221
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "open file"
 msgstr "Otevřít soubor"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "Open _Stream"
-msgstr "Otevřít _stream"
+msgstr "Otevřít _proud"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "open remote location"
 msgstr "Otevřít vzdálené umístění"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
 msgid "_Add or Remove media"
 msgstr "Přidat nebo odebrat média"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
 msgid "manage the content of the xnoise media library"
 msgstr "Spravovat obsah knihovny skladeb"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 msgid "_Edit"
-msgstr "_Úpravy"
+msgstr "Ú_pravy"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "C_lear tracklist"
 msgstr "V_yprázdnit seznam skladeb"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "Clear the tracklist"
 msgstr "Vyprázdnit seznam skladeb"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "_Rescan collection"
 msgstr "_Prohledat sbírku znovu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "Rescan collection"
 msgstr "Prohledat sbírku znovu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "_Increase volume"
 msgstr "_Zvýšit hlasitost"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "Increase playback volume"
 msgstr "Zvýšit hlasitost přehrávání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "_Decrease volume"
 msgstr "_Snížit hlasitost"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "Decrease playback volume"
 msgstr "Snížit hlasitost přehrávání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "_Previous track"
 msgstr "_Předchozí skladba"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "Go to previous track"
 msgstr "Jít na předchozí skladbu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "_Toggle play"
 msgstr "_Přepnout přehrávání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "Toggle playback status"
 msgstr "Přepnout stav přehrávání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
 msgid "_Next track"
 msgstr "_Další skladba"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
 msgid "Go to next track"
 msgstr "Jít na další skladbu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 #: ../plugins/ubuntuone/ubuntuone.vala:223
 msgid "_View"
 msgstr "_Pohled"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "_Tracklist"
 msgstr "_Seznam skladeb"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "Go to the tracklist."
 msgstr "Přejít na seznam skladeb"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "_Lyrics"
 msgstr "_Text skladby"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "Go to the lyrics view."
 msgstr "Jít na pohled Text písně."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:240
 msgid "_Now Playing"
 msgstr "_Nyní hraje"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
 msgid "Go to the 'Now Playing' screen in the main window."
 msgstr "Přejít na 'Nyní hraje' v hlavním okně."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Frequently Asked Questions"
 msgstr "_Časté dotazy"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Open Frequently Asked Questions in web browser"
 msgstr "_Otevřít často kladené dotazy v internetovém prohlížeči"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Keyboard Shortcuts"
 msgstr "_Klávesové zkratky"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Open Keyboard Shortcuts in web browser"
 msgstr "_Otevřít klávesové zkratky v internetovém prohlížeči"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:243
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:246
 msgid "_Config"
 msgstr "_Nastavení"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:313
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:312
 msgid "_Show Media Browser"
 msgstr "_Zobrazit prohlížeč médií"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:322
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:321
 msgid "Show _Video Fullscreen"
-msgstr "Zobrazit _Video přes celou obrazovku"
+msgstr "Zobrazit _video přes celou obrazovku"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:331
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:330
 msgid "Show _Album Art view"
 msgstr "Zobrazit _obal alba"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:530
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:543
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
@@ -730,90 +577,38 @@ msgstr ""
 "Obnovuje se %u položek v seznamu skladeb. To je poměrně velký počet, který "
 "může zpomalit spuštění Xnoise."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:731
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:740
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:749
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:758
-msgid "Playback mode: "
-msgstr ""
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+msgid "no repeat"
+msgstr "Neopakovat"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:731
-msgid "No repeat, one after another"
-msgstr ""
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:738
+msgid "repeat single"
+msgstr "Opakovat jednotlivé"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:740
-#, fuzzy
-msgid "Repeat single track"
-msgstr "Opakovat jednu"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:749
-#, fuzzy
-msgid "Repeat all"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
+msgid "repeat all"
 msgstr "Opakovat vše"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:758
-msgid "Random playlist track playing"
-msgstr ""
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:750
+msgid "random play"
+msgstr "Náhodné přehrávání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1362
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
 msgid "Enter the URL for playing"
 msgstr "Zadejte adresu (URL) k přehrání"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1378
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1364
 msgid "Select media file"
 msgstr "Vyberte multimediální soubor"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1663
-msgid "Remove selected titles"
-msgstr "Odstranit vybrané skladby"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1677
-msgid "Remove all"
-msgstr "Odstranit vše"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1693
-msgid "Jump to current position"
-msgstr "Skočit na aktuální polohu"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1813
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1985
-msgid "Select search with <Ctrl-F>"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1815
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1987
-msgid "Remove search filter with <Ctrl-D>"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1824
-#, fuzzy
-msgid "Open equalizer"
-msgstr "Použít ekvalizér"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1839
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1737
 msgid "Equalizer"
 msgstr "Ekvalizér"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1867
-msgid "Toggle visibility of album art view"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1869
-msgid "<Ctrl+B>"
-msgstr ""
-
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1909
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1802
 msgid "Show application main menu"
 msgstr "Ukázat hlavní nabídku programu"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2004
-msgid "Ascending"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2005
-msgid "Descending"
-msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:148
 msgid "Dance"
@@ -863,8 +658,7 @@ msgstr "Výchozí"
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
-"Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se "
-"nepoužívá."
+"Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se nepoužívá."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:697
 #, c-format
@@ -886,8 +680,7 @@ msgstr "Přídavný modul pro Gstreamer se v repozitářích nepodařilo najít"
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr ""
-"Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu "
-"GStreameru"
+"Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu GStreameru"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:756
 #: ../libxnoise/Player/xnoise-gst-player.vala:767
@@ -918,7 +711,7 @@ msgstr "Titulek #"
 msgid "Audio Track #"
 msgstr "Zvuková stopa #"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
 msgid "(Plugin)"
 msgstr "(Přídavný modul)"
 
@@ -954,42 +747,54 @@ msgstr "Skrýt knihovnu"
 msgid "Show Library"
 msgstr "Zobrazit knihovnu"
 
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:84
+msgid "Remove selected titles"
+msgstr "Odstranit vybrané skladby"
+
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:98
+msgid "Remove all"
+msgstr "Odstranit vše"
+
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:114
+msgid "Jump to current position"
+msgstr "Skočit na aktuální polohu"
+
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1405
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1323
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1467
 msgid "Length"
 msgstr "Délka"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:72
 msgid "Play/Pause"
 msgstr "Přehrát/Pozastavit"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:86
 msgid "Previous"
 msgstr "Předchozí"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:101
 msgid "Next"
 msgstr "Další"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:119
 msgid "Exit"
 msgstr "Ukončit"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:181
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:168
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:180
 msgid "stopped"
 msgstr "Zastaveno"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:172
 msgid "playing"
 msgstr "Přehrává se"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:176
 msgid "paused"
 msgstr "Pozastaveno"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:189
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:188
 #, c-format
 msgid "ready to rock"
 msgstr "Připraven"
@@ -1000,8 +805,8 @@ msgid "Found %u tracks. Updating library ..."
 msgstr "Nalezeno %u skladeb. Obnovuje se knihovna..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:516
-#, fuzzy, c-format
-msgid "%u new tracks found"
+#, c-format
+msgid "%u tracks found"
 msgstr "Nalezeno %u skladeb"
 
 #: ../src/xnoise.vala:151
@@ -1060,7 +865,7 @@ msgstr ""
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
-msgstr "Základní demo přídavný modul pro vývojáře"
+msgstr "Základní ukázkový přídavný modul pro vývojáře"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
@@ -1123,31 +928,31 @@ msgstr "Magnatune"
 msgid "Download whole album to disk"
 msgstr "Stáhnout celé album do počítače"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:276
+#: ../plugins/magnatune/magnatune-treeview.vala:268
 msgid "Downloading album "
 msgstr "Stahuje se album"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:278
+#: ../plugins/magnatune/magnatune-treeview.vala:270
 msgid "This may take some time..."
 msgstr "Může to chvíli trvat..."
 
-#: ../plugins/magnatune/magnatune-treeview.vala:392
+#: ../plugins/magnatune/magnatune-treeview.vala:384
 msgid "Download finished for \""
 msgstr "Stahování skončilo pro \""
 
-#: ../plugins/magnatune/magnatune-widget.vala:234
+#: ../plugins/magnatune/magnatune-widget.vala:229
 msgid "download finished..."
 msgstr "Stahování dokončeno..."
 
-#: ../plugins/magnatune/magnatune-widget.vala:238
+#: ../plugins/magnatune/magnatune-widget.vala:233
 msgid "decompressing..."
 msgstr "Rozbaluje se..."
 
-#: ../plugins/magnatune/magnatune-widget.vala:292
+#: ../plugins/magnatune/magnatune-widget.vala:287
 msgid "decompressing finished..."
 msgstr "Rozbalení dokončeno..."
 
-#: ../plugins/magnatune/magnatune-widget.vala:313
+#: ../plugins/magnatune/magnatune-widget.vala:308
 msgid ""
 "Please wait while\n"
 "converting database."
@@ -1155,7 +960,7 @@ msgstr ""
 "Počkejte, prosím, zatímco\n"
 "se převádí databáze."
 
-#: ../plugins/magnatune/magnatune-widget.vala:360
+#: ../plugins/magnatune/magnatune-widget.vala:355
 #, c-format
 msgid ""
 "Please wait while\n"
@@ -1166,7 +971,7 @@ msgstr ""
 "se převádí databáze.\n"
 "Hotovo %d skladeb."
 
-#: ../plugins/magnatune/magnatune-widget.vala:380
+#: ../plugins/magnatune/magnatune-widget.vala:375
 msgid "loading..."
 msgstr "Nahrává se..."
 
@@ -1239,15 +1044,6 @@ msgstr "Zobrazit _hudební obchod Ubuntu"
 msgid "Show UbuntuOne Store"
 msgstr "Zobrazit hudební obchod Ubuntu"
 
-#~ msgid "Lyric Providers"
-#~ msgstr "Poskytovatelé textů skladeb "
-
-#~ msgid "no repeat"
-#~ msgstr "Neopakovat"
-
-#~ msgid "random play"
-#~ msgstr "Náhodné přehrávání"
-
 #~ msgid "Open _Location"
 #~ msgstr "Otevřít _umístění"
 
@@ -1265,6 +1061,16 @@ msgstr "Zobrazit hudební obchod Ubuntu"
 
 #~ msgid "Quit application if window is closed"
 #~ msgstr "Ukončit program při zavření okna"
+
+#~ msgid "Add media"
+#~ msgstr "Přidat media"
+
+#~ msgid ""
+#~ "You started xnoise for the first time. Do you want to import media into "
+#~ "the library?"
+#~ msgstr ""
+#~ "Xnoise byl poprvé spuštěn. Chcete do knihovny se skladbami vložit hudbu "
+#~ "nebo film? "
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "Změnit zobrazení prohlížeče multimédií."
