@@ -76,19 +76,19 @@ internal class Xnoise.IconRepo : GLib.Object {
             int iconheight = video_icon.height;
             radios_icon_menu = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.MENU);
             if(theme.has_icon("xn-stream")) {
-                radios_icon = theme.load_icon("xn-stream", iconheight, IconLookupFlags.FORCE_SIZE);
+                radios_icon = theme.load_icon("xn-stream", iconheight, IconLookupFlags.USE_BUILTIN);
                 radios_icon_menu = theme.load_icon("xn-stream",
                                                    radios_icon_menu.height,
-                                                   IconLookupFlags.FORCE_SIZE);
+                                                   IconLookupFlags.USE_BUILTIN);
             }
             else {
                 radios_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
             }
             
             if(theme.has_icon("system-users")) 
-                artist_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.FORCE_SIZE);
+                artist_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.USE_BUILTIN);
             else if(theme.has_icon("stock_person")) 
-                artist_icon = theme.load_icon("stock_person", iconheight, IconLookupFlags.FORCE_SIZE);
+                artist_icon = theme.load_icon("stock_person", iconheight, IconLookupFlags.USE_BUILTIN);
             else 
                 artist_icon = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
             
@@ -97,19 +97,19 @@ internal class Xnoise.IconRepo : GLib.Object {
             album_icon = w.render_icon_pixbuf(Gtk.Stock.CDROM, IconSize.BUTTON);
             
             if(theme.has_icon("media-audio")) 
-                title_icon = theme.load_icon("media-audio", iconheight, IconLookupFlags.FORCE_SIZE);
+                title_icon = theme.load_icon("media-audio", iconheight, IconLookupFlags.USE_BUILTIN);
             else if(theme.has_icon("audio-x-generic")) 
-                title_icon = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
+                title_icon = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.USE_BUILTIN);
             else 
                 title_icon = w.render_icon_pixbuf(Gtk.Stock.OPEN, IconSize.BUTTON);
             
             if(theme.has_icon("video-x-generic")) 
-                videos_icon = theme.load_icon("video-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
+                videos_icon = theme.load_icon("video-x-generic", iconheight, IconLookupFlags.USE_BUILTIN);
             else 
                 videos_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON);
             
             if(theme.has_icon("xn-playlist"))
-                playlist_icon = theme.load_icon("xn-playlist", iconheight, IconLookupFlags.FORCE_SIZE);
+                playlist_icon = theme.load_icon("xn-playlist", iconheight, IconLookupFlags.USE_BUILTIN);
             else
                 playlist_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
             
@@ -118,71 +118,100 @@ internal class Xnoise.IconRepo : GLib.Object {
             if(theme.has_icon("xn-local-collection"))
                 local_collection_icon = theme.load_icon("xn-local-collection",
                                                         iconheight,
-                                                        IconLookupFlags.FORCE_SIZE);
+                                                        IconLookupFlags.USE_BUILTIN);
             else
                 local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             
             if(theme.has_icon("xn-current-position"))
                 selected_collection_icon = theme.load_icon("xn-current-position",
                                                            iconheight,
-                                                           IconLookupFlags.FORCE_SIZE);
+                                                           IconLookupFlags.USE_BUILTIN);
             else
                 selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
             
             if(theme.has_icon("media-playback-start-symbolic"))
                 symbolic_play_icon = theme.load_icon("media-playback-start-symbolic",
                                                      iconheight,
-                                                     IconLookupFlags.FORCE_SIZE);
+                                                     IconLookupFlags.USE_BUILTIN);
             else
                 symbolic_play_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON);
             
             if(theme.has_icon("media-playback-pause-symbolic"))
                 symbolic_pause_icon = theme.load_icon("media-playback-pause-symbolic",
                                                       iconheight,
-                                                      IconLookupFlags.FORCE_SIZE);
+                                                      IconLookupFlags.USE_BUILTIN);
             else
                 symbolic_pause_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON);
             if(theme.has_icon("folder-symbolic"))
                 folder_symbolic_icon = theme.load_icon("folder-symbolic",
                                                        iconheight,
-                                                       IconLookupFlags.FORCE_SIZE);
+                                                       IconLookupFlags.USE_BUILTIN);
             else
                 folder_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.BUTTON);
             if(theme.has_icon("network-transmit-symbolic"))
                 network_symbolic_icon = theme.load_icon("network-transmit-symbolic",
                                                         iconheight,
-                                                        IconLookupFlags.FORCE_SIZE);
+                                                        IconLookupFlags.USE_BUILTIN);
             else
                 network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
             
             if(theme.has_icon("xnoise-grey"))
                 album_art_default_icon = theme.load_icon("xnoise-grey",
                                                         AlbumImage.SIZE,
-                                                        IconLookupFlags.FORCE_SIZE);
+                                                        IconLookupFlags.USE_BUILTIN);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
         }
     }
 
-    internal static Gtk.Image? get_themed_image_icon(string _name, IconSize size) {
-            GLib.Icon gicon;
-            Gtk.Image? image = null;
-            string? name = null;
-            string? file_name = null;
-            if(Path.is_absolute(_name)) {
-                file_name = _name;
-                gicon = new FileIcon(File.new_for_path(file_name));
+    internal static Gtk.Image? get_themed_image_icon(string name, IconSize size) {
+        Gtk.Image? image = null;
+        GLib.Icon gicon = new ThemedIcon(name);
+        if(name != null)
+            image = new Gtk.Image.from_icon_name (name, size);
+        else
+            image = new Gtk.Image.from_gicon (gicon, size);
+        return image;
+    }
+    
+    internal static Gdk.Pixbuf? get_themed_pixbuf_icon(string name,
+                                                       int pixel_size,
+                                                       Gtk.StyleContext? style_context = null) {
+        Gtk.Image? image = null;
+        GLib.Icon gicon = new ThemedIcon(name);
+        assert(gicon != null);
+        int width, height;
+        Gdk.Pixbuf? pix = null;
+        unowned IconTheme theme = IconTheme.get_default();
+        try {
+            var icon_info = theme.lookup_by_gicon(gicon, pixel_size, Gtk.IconLookupFlags.USE_BUILTIN);
+            
+            if(icon_info != null) {
+                if (style_context != null) {
+                    pix = icon_info.load_symbolic_for_context(style_context);
+                }
+                else {
+                    pix = icon_info.load_icon();
+                }
             }
-            else {
-                name = _name;
-                gicon = new ThemedIcon(name);
+            if(pix == null) {
+                pix = theme.load_icon(Gtk.Stock.MISSING_IMAGE,
+                                      pixel_size,
+                                      Gtk.IconLookupFlags.GENERIC_FALLBACK
+                );
             }
-            if(name != null)
-                image = new Gtk.Image.from_icon_name (name, size);
-            else
-                image = new Gtk.Image.from_gicon (gicon, size);
-            return image;
+        }
+        catch (Error e) {
+            print("%s", e.message);
+            if(pix == null) {
+                pix = theme.load_icon(Gtk.Stock.MISSING_IMAGE,
+                                      pixel_size,
+                                      Gtk.IconLookupFlags.GENERIC_FALLBACK
+                );
+            }
+        }
+        return pix;
     }
 }
 

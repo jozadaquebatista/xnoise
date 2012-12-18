@@ -44,6 +44,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     private static uint timeout = 0;
     private string default_size = "medium";
     private string? current_path = null;
+    private unowned IconTheme theme;
     
     private Gdk.Pixbuf? pixbuf = null;
 
@@ -65,8 +66,29 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         });
         gst_player.sign_found_embedded_image.connect(load_embedded);
         this.set_visible_window(false);
+        theme = IconTheme.get_default();
+        setup_symbolic_icon();
+        theme.changed.connect( () => {
+            Idle.add(() => {
+                setup_symbolic_icon();
+                queue_draw();
+                return false;
+            });
+        });
     }
 
+    private void setup_symbolic_icon() {
+        StyleContext context = this.get_style_context();
+        context.set_state(StateFlags.ACTIVE);
+        album_art_default_icon = IconRepo.get_themed_pixbuf_icon("xnoise-symbolic",
+                                                                 SIZE,
+                                                                 context
+        );
+        if(album_art_default_icon.width != SIZE) {
+            album_art_default_icon = album_art_default_icon.scale_simple(SIZE, SIZE, Gdk.InterpType.HYPER);
+        }
+    }
+    
     private void load_embedded(Object sender, string uri, string _artist, string _album) {
         if(uri != global.current_uri)
             return;
@@ -132,9 +154,12 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         return false;
     }
     
+    private Gdk.Pixbuf? album_art_default_icon = null;
+    
     public override bool draw(Cairo.Context cr) {
+        assert(album_art_default_icon != null);
         if(this.pixbuf == null) {
-            Gdk.cairo_set_source_pixbuf(cr, icon_repo.album_art_default_icon, 0, 0);
+            Gdk.cairo_set_source_pixbuf(cr, album_art_default_icon, 0, 0);
         }
         else {
             cr.set_source_rgb(0.8, 0.8, 0.8);
