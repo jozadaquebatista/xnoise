@@ -724,25 +724,36 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_repeatState_changed(GLib.ParamSpec pspec) {
         switch(this.repeatState) {
             case PlayerRepeatMode.NOT_AT_ALL : {
-                //TODO: create some other images
-                repeatimage.set_from_icon_name("xn-no-repeat", IconSize.LARGE_TOOLBAR);
+                repeatimage.destroy();
+                repeatimage = IconRepo.get_themed_image_icon("xn-no-repeat-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage.show();
+                repeatButton.add(repeatimage);
                 repeatButton.set_tooltip_text(_("Playback mode: ") + _("No repeat, one after another"));
                 break;
             }
             case PlayerRepeatMode.SINGLE : {
-                repeatimage.set_from_icon_name("xn-repeat-single", IconSize.LARGE_TOOLBAR);
+                repeatimage.destroy();
+                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-single-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage.show();
+                repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
                 repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat single track"));
                 break;
             }
             case PlayerRepeatMode.ALL : {
-                repeatimage.set_from_icon_name("xn-repeat-all", IconSize.LARGE_TOOLBAR);
+                repeatimage.destroy();
+                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage.show();
+                repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
                 repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat all"));
                 break;
             }
             case PlayerRepeatMode.RANDOM : {
-                repeatimage.set_from_icon_name("xn-shuffle", IconSize.LARGE_TOOLBAR);
+                repeatimage.destroy();
+                repeatimage = IconRepo.get_themed_image_icon("xn-shuffle-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage.show();
+                repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
                 repeatButton.set_tooltip_text(_("Playback mode: ") + _("Random playlist track playing"));
                 break;
@@ -1762,7 +1773,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             repeatButton.set_relief(Gtk.ReliefStyle.NONE);
             repeatButton.can_focus = false;
             repeatButton.clicked.connect(this.on_repeat_button_clicked);
-            repeatimage = new Gtk.Image();
+//            repeatimage = new Gtk.Image();
+            repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
             repeatButton.add(repeatimage);
             var repeatButtonTI = new ToolItem();
             repeatButtonTI.add(repeatButton);
@@ -1810,7 +1822,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             eqButtonTI = new ToolItem();
             var eqButton = new Button();
             eqButton.set_tooltip_text(_("Open equalizer"));
-            var eqi = new Image.from_icon_name("xn-equalizer", IconSize.LARGE_TOOLBAR);
+            Image eqi = IconRepo.get_themed_image_icon("xn-equalizer-symbolic", IconSize.LARGE_TOOLBAR);
             eqi.show();
             eqButton.add(eqi);
             eqButton.set_relief(Gtk.ReliefStyle.NONE);
@@ -1849,7 +1861,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             eqButtonTI.add(eqButton);
             
             var albumart_toggleb = new ToolItem();
-            var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
+            var aart_im = IconRepo.get_themed_image_icon("xn-grid-symbolic", IconSize.LARGE_TOOLBAR);
             album_view_toggle = new ToggleButton();
             album_view_toggle.set_relief(ReliefStyle.NONE);
             album_view_toggle.set_tooltip_text(_("Toggle visibility of album art view") +

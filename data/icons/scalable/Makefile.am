@@ -5,12 +5,12 @@ icon_DATA = xnoise.svg
 
 statusdir = $(datadir)/icons/hicolor/scalable/status
 status_DATA = \
-    xn-no-repeat.svg \
-    xn-repeat-all.svg \
-    xn-repeat-single.svg \
-    xn-shuffle.svg \
-    xn-equalizer.svg \
-    xn-grid.svg \
+    xn-no-repeat-symbolic.svg \
+    xn-repeat-all-symbolic.svg \
+    xn-repeat-single-symbolic.svg \
+    xn-shuffle-symbolic.svg \
+    xn-equalizer-symbolic.svg \
+    xn-grid-symbolic.svg \
     xn-albumart.svg \
     xn-shadow.svg \
     $(NULL)
@@ -22,7 +22,7 @@ greydir = $(datadir)/icons/hicolor/scalable/apps
 grey_DATA = xnoise-grey.svg
 
 appdir = $(datadir)/icons/hicolor/scalable/apps
-app_DATA = xn-app-menu.svg xn-stream.svg xn-playlist.svg xn-local-collection.svg xn-current-position.svg
+app_DATA = xn-app-menu-symbolic.svg xn-stream.svg xn-playlist.svg xn-local-collection.svg xn-current-position.svg
 
 EXTRA_DIST = \
     $(icon_DATA) \
