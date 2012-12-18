@@ -106,6 +106,36 @@ public class Xnoise.TagAccess.TagWriter {
         return retval;
     }
 
+    public bool write_genre(File? file, string? genre) {
+        // does writes for values that are different from default values
+        if(file == null)
+            return false;
+        if(genre == null)
+            return false;
+        bool retval = false;
+        
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
+        
+        TagLib.File taglib_file = null;
+        taglib_file = new TagLib.File(path);
+        if(taglib_file!=null) {
+            unowned TagLib.Tag tag = taglib_file.tag;
+            if(tag != null) {
+                if(genre != EMPTYSTRING)
+                    tag.genre = genre;
+                else
+                    return false;
+                                
+                retval = taglib_file.save();
+            }
+        }
+        taglib_file = null;
+        return retval;
+    }
+
     public bool write_album(File? file, string? album) {
         // does writes for values that are different from default values
         if(file == null)

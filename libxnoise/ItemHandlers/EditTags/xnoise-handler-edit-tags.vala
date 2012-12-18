@@ -47,6 +47,10 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     private static const string artistinfo = _("Change artist data");
     private static const string artistname = "HandlerEditTagsActionArtist";
     
+    private Action edit_genre_mediabrowser;
+    private static const string genreinfo = _("Change genre name");
+    private static const string genrename = "HandlerEditTagsActionGenre";
+
     private static const string name = "HandlerEditTags";
     
     
@@ -65,6 +69,13 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         edit_album_mediabrowser.name = albumname;
         edit_album_mediabrowser.stock_item = Gtk.Stock.EDIT;
         edit_album_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
+
+        edit_genre_mediabrowser = new Action(); 
+        edit_genre_mediabrowser.action = on_edit_genre_mediabrowser;
+        edit_genre_mediabrowser.info = genreinfo;
+        edit_genre_mediabrowser.name = genrename;
+        edit_genre_mediabrowser.stock_item = Gtk.Stock.EDIT;
+        edit_genre_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_artist_mediabrowser = new Action(); 
         edit_artist_mediabrowser.action = on_edit_artist_mediabrowser;
@@ -99,6 +110,8 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY ||
            context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
             switch(type) {
+                case ItemType.COLLECTION_CONTAINER_GENRE:
+                    return edit_genre_mediabrowser;
                 case ItemType.COLLECTION_CONTAINER_ARTIST:
                     return edit_artist_mediabrowser;
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
@@ -145,6 +158,22 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             this.open_tagalbum_changer(item, item_ht);
     }
 
+    private void on_edit_genre_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
+        Item? i = null;
+//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+//            if(data2 != null) {
+//                i = (Item)data2;
+//            }
+//        }
+        HashTable<ItemType,Item?>? item_ht = null;
+        if(i != null) {
+            item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+            item_ht.insert(i.type, i);
+        }
+        if(item.type == ItemType.COLLECTION_CONTAINER_GENRE)
+            this.open_tag_genre_changer(item, item_ht);
+    }
+    
     private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         Item? i = null;
         if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
@@ -196,9 +225,16 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         });
     }
 
+    private TagGenreEditor tge;
     private TagArtistAlbumEditor tae;
     private TagAlbumEditor taled;
     
+    private void open_tag_genre_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
+        tge = new TagGenreEditor(item, restrictions);
+        tge.sign_finish.connect( () => {
+            tge = null;
+        });
+    }
     private void open_tagartist_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
         tae = new TagArtistAlbumEditor(item, restrictions);
         tae.sign_finish.connect( () => {

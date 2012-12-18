@@ -7,6 +7,7 @@ ui_DATA = \
     settings.ui \
     metadat_title.ui \
     metadata_album.ui \
+    metadat_genre.ui \
     metadat_artist_album.ui \
     main_ui.xml \
     xnoise_bruit.svg \

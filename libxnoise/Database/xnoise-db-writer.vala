@@ -64,11 +64,11 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement count_artist_in_items_statement;
     private Statement delete_artist_statement;
 
+    private Statement count_genres_in_items_statement;
+    private Statement delete_genre_statement;
+
     private Statement count_album_in_items_statement;
     private Statement delete_album_statement;
-
-    private Statement count_genre_in_items_statement;
-    private Statement delete_genre_statement;
 
     private Statement get_statistics_id_statement;
     private Statement add_statistic_statement;
@@ -156,22 +156,20 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT artist FROM items WHERE uri = ?";
     private static const string STMT_COUNT_ARTIST_IN_ITEMS =
         "SELECT COUNT(id) FROM items WHERE artist = ?";
+    private static const string STMT_COUNT_GENRE_IN_ITEMS =
+        "SELECT COUNT(id) FROM items WHERE genre = ?";
+    private static const string STMT_DEL_GENRE = 
+        "DELETE FROM genres WHERE id = ?";
     private static const string STMT_DEL_ARTIST = 
-        "DELETE FROM ARTISTS WHERE id = ?";
+        "DELETE FROM artists WHERE id = ?";
     private static const string STMT_GET_ALBUM_FOR_URI_ID =
         "SELECT album FROM items WHERE uri = ?";
     private static const string STMT_COUNT_ALBUM_IN_ITEMS =
         "SELECT COUNT(id) FROM items WHERE album = ?";
     private static const string STMT_DEL_ALBUM = 
         "DELETE FROM albums WHERE id = ?";
-        
     private static const string STMT_GET_GENRE_FOR_URI_ID =
         "SELECT genre FROM items WHERE uri = ?";
-    private static const string STMT_COUNT_GENRE_IN_ITEMS =
-        "SELECT COUNT(id) FROM genre WHERE album = ?";
-    private static const string STMT_DEL_GENRE = 
-        "DELETE FROM genre WHERE id = ?";
-
     private static const string STMT_GET_STATISTICS_ID =
         "SELECT id FROM statistics WHERE uri = ?";
     private static const string STMT_ADD_STATISTIC =
@@ -260,11 +258,11 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_DEL_URIS, -1, out delete_uris_statement);
         db.prepare_v2(STMT_DEL_GENRES, -1, out delete_genres_statement);
         db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out count_artist_in_items_statement);
+        db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out count_genres_in_items_statement);
         db.prepare_v2(STMT_DEL_ARTIST , -1, out delete_artist_statement);
+        db.prepare_v2(STMT_DEL_GENRE , -1, out delete_genre_statement);
         db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out count_album_in_items_statement);
         db.prepare_v2(STMT_DEL_ALBUM , -1, out delete_album_statement);
-        db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out count_genre_in_items_statement);
-        db.prepare_v2(STMT_DEL_GENRE , -1, out delete_genre_statement);
         db.prepare_v2(STMT_GET_STATISTICS_ID , -1, out get_statistics_id_statement);
         db.prepare_v2(STMT_ADD_STATISTIC , -1, out add_statistic_statement);
         db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out update_playtime_statement);
@@ -570,13 +568,15 @@ public class Xnoise.Database.Writer : GLib.Object {
 
     private static const string STMT_GET_GENRE_MAX_ID =
         "SELECT MAX(id) FROM genres";
+    private static const string STMT_UPDATE_GENRE_NAME = 
+        "UPDATE genres SET name=? WHERE id=?";
 
-    private int handle_genre(ref string genre) {
-        if((genre == null)||(genre.strip() == EMPTYSTRING)) 
-            genre = UNKNOWN_GENRE;
+    private int handle_genre(ref TrackData td, bool update_genre = false) {
+        if((td.genre == null)||(td.genre.strip() == EMPTYSTRING)) 
+            td.genre = UNKNOWN_GENRE;
         int genre_id = -1;
         get_genre_id_statement.reset();
-        if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
+        if(get_genre_id_statement.bind_text(1, td.genre.down().strip()) != Sqlite.OK) {
             this.db_error();
             return -1;
         }
@@ -586,7 +586,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(genre_id == -1) { // genre not in table, yet 
             // Insert genre
             insert_genre_statement.reset();
-            if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
+            if(insert_genre_statement.bind_text(1, td.genre.strip()) != Sqlite.OK) {
                 this.db_error();
                 return -1;
             }
@@ -601,14 +601,27 @@ public class Xnoise.Database.Writer : GLib.Object {
                 Item? item = Item(ItemType.COLLECTION_CONTAINER_GENRE, null, genre_id);
                 item.source_id = db_reader.get_source_id();
                 item.stamp = get_current_stamp(db_reader.get_source_id());
-                item.text = genre.strip();
+                item.text = td.genre.strip();
                 foreach(NotificationData cxd in change_callbacks) {
                     if(cxd.cb != null)
                         cxd.cb(ChangeType.ADD_GENRE, item);
                 }
-                return genre_id;
             }
             else {
+                return -1;
+            }
+        }
+        if(update_genre) {
+            Statement stmt;
+            db.prepare_v2(STMT_UPDATE_GENRE_NAME, -1, out stmt);
+            stmt.reset();
+            if(stmt.bind_text(1, td.genre)    != Sqlite.OK ||
+               stmt.bind_int (2, genre_id) != Sqlite.OK ) {
+                this.db_error();
+                return -1;
+            }
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
                 return -1;
             }
         }
@@ -636,7 +649,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_UPDATE_TITLE =
         "UPDATE items SET artist=?, album=?, title=?, genre=?, year=?, tracknumber=? WHERE id=?";
     private static const string STMT_UPDATE_ARTISTALBUM =
-        "UPDATE items SET artist=?, album=? WHERE id=?";
+        "UPDATE items SET artist=?, album=?, genre=? WHERE id=?";
     
     public bool update_title(ref Item? item, ref TrackData td) {
         if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
@@ -653,12 +666,18 @@ public class Xnoise.Database.Writer : GLib.Object {
                 print("Error updating album for '%s' ! \n", td.album);
                 return false;
             }
+            int genre_id = handle_genre(ref td, true);
+            if(genre_id == -1) {
+                print("Error updating genre for '%s' ! \n", td.genre);
+                return false;
+            }
             Statement stmt;
             db.prepare_v2(STMT_UPDATE_ARTISTALBUM, -1, out stmt);
         
             if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
                stmt.bind_int (2, album_id)      != Sqlite.OK ||
-               stmt.bind_int (3, td.item.db_id) != Sqlite.OK) {
+               stmt.bind_int (3, genre_id)      != Sqlite.OK ||
+               stmt.bind_int (4, td.item.db_id) != Sqlite.OK) {
                 this.db_error();
                 return false;
             }
@@ -704,6 +723,25 @@ public class Xnoise.Database.Writer : GLib.Object {
                     delete_artist_statement.step();
                 }
             }
+            else if(item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
+                count_genres_in_items_statement.reset();
+                if(count_genres_in_items_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+                    this.db_error();
+                    return false;
+                }
+                int cnt = 0;
+                if(count_genres_in_items_statement.step() == Sqlite.ROW) {
+                    cnt = count_genres_in_items_statement.column_int(0);
+                }
+                if(cnt == 0) {
+                    delete_genre_statement.reset();
+                    if(delete_genre_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+                        this.db_error();
+                        return false;
+                    }
+                    delete_genre_statement.step();
+                }
+            }
         }
         else {
             // Buffer old ids
@@ -721,7 +759,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 print("Error updating album for '%s' ! \n", td.album);
                 return false;
             }
-            int genre_id = handle_genre(ref td.genre);
+            int genre_id = handle_genre(ref td, false);
             if(genre_id == -1) {
                 print("Error updating genre for '%s' ! \n", td.genre);
                 return false;
@@ -910,7 +948,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             //print("Error importing uri for %s : '%s' ! \n", uri, uri);
             return false;
         }
-        int genre_id = handle_genre(ref td.genre);
+        int genre_id = handle_genre(ref td);
         if(genre_id == -1) {
             print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
             return false;

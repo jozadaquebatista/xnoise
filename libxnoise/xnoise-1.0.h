@@ -2662,6 +2662,7 @@ gpointer xnoise_tag_access_value_get_tag_writer (const GValue* value);
 GType xnoise_tag_access_tag_writer_get_type (void) G_GNUC_CONST;
 gboolean xnoise_tag_access_tag_writer_write_tag (XnoiseTagAccessTagWriter* self, GFile* file, XnoiseTrackData* td);
 gboolean xnoise_tag_access_tag_writer_write_artist (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* artist);
+gboolean xnoise_tag_access_tag_writer_write_genre (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* genre);
 gboolean xnoise_tag_access_tag_writer_write_album (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* album);
 gboolean xnoise_tag_access_tag_writer_write_year (XnoiseTagAccessTagWriter* self, GFile* file, guint year);
 XnoiseTagAccessTagWriter* xnoise_tag_access_tag_writer_new (void);
