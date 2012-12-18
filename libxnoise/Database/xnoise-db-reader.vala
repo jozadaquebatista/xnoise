@@ -602,10 +602,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_ARTISTS_WITH_GENRE_AND_SEARCH =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) AND g.id = ? AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) AND g.id = ? AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC";
 
     private static const string STMT_GET_ARTISTS_WITH_GENRE =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, genres g WHERE t.artist = ar.id AND t.genre = g.id AND g.id = ? AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, genres g WHERE t.artist = ar.id AND t.genre = g.id AND g.id = ? AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_ARTISTS_WITH_SEARCH =
         "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";

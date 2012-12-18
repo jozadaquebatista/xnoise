@@ -158,6 +158,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     explainer_label.label =  _("Please enter new album data.");
                     content_label.label   =  _("Album:");
                     year_label.label      =  _("Year:");
+                    genre_label.label     =  _("Genre:");
                     break;
                 default:
                     break;
