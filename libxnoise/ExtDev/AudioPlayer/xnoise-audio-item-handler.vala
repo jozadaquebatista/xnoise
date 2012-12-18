@@ -284,6 +284,13 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
                 }
                 continue;
             }
+            if(i.type == ItemType.COLLECTION_CONTAINER_GENRE) {
+                TrackData[] track_dat = item_converter.to_trackdata(i, global.searchtext, null);
+                foreach(var td in track_dat) {
+                    ia += td;
+                }
+                continue;
+            }
         }
         return ia;
     }
