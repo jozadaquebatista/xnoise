@@ -46,7 +46,7 @@
      inkscape:window-x="53"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3223"
+     inkscape:current-layer="g3067"
      showguides="true"
      inkscape:guide-bbox="true" />
   <defs
@@ -296,60 +296,17 @@
        r="7.228416" />
   </defs>
   <g
-     id="g3067"
-     transform="matrix(1.0140663,0,0,1,-0.01584672,0)">
+     id="g3026"
+     transform="matrix(1,0,0,1.1016798,-0.14381833,-0.78190064)">
     <g
-       transform="matrix(1,0,0,0.99897481,0,0.01416691)"
-       id="g3062">
-      <rect
+       transform="matrix(1.0140663,0,0,1,-0.01584672,0)"
+       id="g3067">
+      <path
          style="fill-opacity:1"
+         d="m 1.1435791,2.0712925 0,1.8154095 0,3.1769667 0,1.8154095 0,3.2053328 0,1.787043 13.7434779,0 0.06233,0 0,-11.8001615 -0.06233,0 z m 1.0284236,1.8154095 11.7489593,0 0,3.1769667 -11.7489593,0 z m 1.1219165,1.1518769 0,0.74863 9.5051268,0 0,-0.74863 z m -1.1219165,3.8404993 11.7489593,0 0,3.2053328 -11.7489593,0 z m 1.1219165,1.3279718 0,0.776995 9.5051268,0 0,-0.776995 z"
          id="rect3022"
-         width="13.566862"
-         height="1.8"
-         x="1.126577"
-         y="2.0067284" />
-      <rect
-         style="fill-opacity:1"
-         id="rect3022-4"
-         width="13.566862"
-         height="1.8"
-         x="1.126577"
-         y="7.012743" />
-      <rect
-         style="fill-opacity:1"
-         id="rect3022-8"
-         width="13.566862"
-         height="1.8"
-         x="1.126577"
-         y="12.018755" />
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccc" />
     </g>
-    <rect
-       y="2.0189998"
-       x="1.127"
-       height="11.8"
-       width="1"
-       id="rect3022-4-7"
-       style="fill-opacity:1" />
-    <rect
-       y="2.0189998"
-       x="13.759041"
-       height="11.8"
-       width="1"
-       id="rect3022-4-7-0"
-       style="fill-opacity:1" />
   </g>
-  <rect
-     style="fill-opacity:1"
-     id="rect3075"
-     width="9.5399494"
-     height="0.57527333"
-     x="3.2598822"
-     y="5.1656861" />
-  <rect
-     style="fill-opacity:1"
-     id="rect3075-9"
-     width="9.5399494"
-     height="0.57527333"
-     x="3.2598822"
-     y="10.247267" />
 </svg>
