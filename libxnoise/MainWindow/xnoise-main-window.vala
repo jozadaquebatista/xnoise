@@ -1682,7 +1682,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             removeAllButton.set_tooltip_text(_("Remove all"));
             var posjumper = new Gtk.Button();
-            var posjumper_image = IconRepo.get_themed_image_icon("view-list-symbolic",
+            var posjumper_image = IconRepo.get_themed_image_icon("format-justify-fill-symbolic",
                                                                      IconSize.MENU
             );
             posjumper.add(posjumper_image);
