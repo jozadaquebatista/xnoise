@@ -47,7 +47,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private CheckButton switch_hoverimage;
     private CheckButton switch_quitifclosed;
     private CheckButton switch_use_notifications;
-    private CheckButton switch_equalizer;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
     
@@ -97,9 +96,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         assert(switch_quitifclosed != null);
         switch_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
         
-        assert(switch_equalizer != null);
-        switch_equalizer.clicked.connect(this.on_switch_use_equalizer_clicked);
-        
         assert(switch_use_notifications != null);
         switch_use_notifications.clicked.connect(this.on_switch_use_notifications_clicked);
         
@@ -117,8 +113,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         
         //use stop button
         switch_quitifclosed.active = Params.get_bool_value("quit_if_closed");
-        
-        switch_equalizer.active = !Params.get_bool_value("not_use_eq");
         
         switch_usestop.active = Params.get_bool_value("usestop");
         
@@ -174,19 +168,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         else {
             Params.set_bool_value("not_use_notifications", true);
             Main.instance.use_notifications = false;
-        }
-    }
-    
-    private void on_switch_use_equalizer_clicked() {
-        if(!this.switch_equalizer.active) {
-            Params.set_bool_value("not_use_eq", true);
-            main_window.use_eq = false;
-            gst_player.deactivate_equalizer();
-        }
-        else {
-            Params.set_bool_value("not_use_eq", false);
-            main_window.use_eq = true;
-            gst_player.activate_equalizer();
         }
     }
     
@@ -327,11 +308,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
             switch_use_notifications.can_focus = false;
             switch_use_notifications.set_label(_("Use desktop notifications"));
-            
-            switch_equalizer = this.builder.get_object("cb_equalizer") as CheckButton;
-            switch_equalizer.can_focus = false;
-            switch_equalizer.set_label(_("Use Equalizer"));
-//            plugin_label_sizegroup.add_widget(label_equalizer);
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             

@@ -57,11 +57,15 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     public class TenBandPreset {
         
         public string name { get; set; default = ""; }
+        public double pre_gain { get; set; }
+        
         public double[] freq_band_gains;
         
         public TenBandPreset(string   name = "", 
-                             double[] band_gains) {
+                             double[] band_gains,
+                             double pre_gain) {
             this.name = name;
+            this.pre_gain = pre_gain;
             this.freq_band_gains = new double[10];
             for(int i = 0; i < 10; ++i)
                 this.freq_band_gains[i] = band_gains[i];
@@ -146,49 +150,60 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
 
         presets.prepend(
             new TenBandPreset(_("Dance"), 
-                              { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, 0.0, 10.0, 10.0 }
+                              { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, 0.0, 10.0, 10.0 },
+                              1.0
         ));
         presets.prepend(
             new TenBandPreset(_("Pop"), 
-                              { -10.0, 10.0, 15.0, 28.0, 20.0, -5.0, -10.0, -10.0, 0.0, 0.0 }
+                              { -10.0, 10.0, 15.0, 28.0, 20.0, -5.0, -10.0, -10.0, 0.0, 0.0 },
+                              1.0
         ));
         presets.prepend(
             new TenBandPreset(_("Techno"), 
-                              { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 }
+                              { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 },
+                              1.0
         ));
         presets.prepend(
             new TenBandPreset(_("Club"), 
-                              { 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0 }
+                              { 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0 },
+                              1.0
         ));
         presets.prepend(
             new TenBandPreset(_("Jazz"), 
-                              { -5.0, 0.0, 0.0, 10.0, 30.0, 30.0, 15.0, 5.0, 5.0, 0.0 }
+                              { -5.0, 0.0, 0.0, 10.0, 30.0, 30.0, 15.0, 5.0, 5.0, 0.0 },
+                              1.0
         ));
         presets.prepend(
             new TenBandPreset(_("Rock"), 
-                              { 20.0, 5.0, -10.0, -20.0, -5.0, 5.0, 20.0, 35.0, 35.0, 40.0 }
+                              { 20.0, 5.0, -10.0, -20.0, -5.0, 5.0, 20.0, 35.0, 35.0, 40.0 },
+                              1.1
         ));
         presets.prepend(
             new TenBandPreset(_("Maximum Treble"), 
-                              { -30.0, -30.0, -20.0, -15.0, 0.0, 15.0, 50.0, 70.0, 70.0, 70.0 }
+                              { -30.0, -30.0, -20.0, -15.0, 0.0, 15.0, 50.0, 70.0, 70.0, 70.0 },
+                              0.8
         ));
         presets.prepend(
             new TenBandPreset(_("Maximum Bass"), 
-                              { 60.0, 60.0, 60.0, 10.0, 0.0, -25.0, -30.0, -30.0, -30.0, -30.0 }
+                              { 60.0, 60.0, 60.0, 10.0, 0.0, -25.0, -30.0, -30.0, -30.0, -30.0 },
+                              0.9
         ));
         presets.prepend(
             new TenBandPreset(_("Classic"), 
-                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -30.0, -30.0, -30.0, -35.0 }
+                              { -5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -10.0, -10.0, -15.0 },
+                              0.8
         ));
         // "Custom" always has to be in this position
         presets.prepend(
             new TenBandPreset(_("Custom"), 
-                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
+                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                              1.0
         ));
         // "Default" always has to be in this position
         presets.prepend(
             new TenBandPreset(_("Default"), 
-                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
+                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                              1.0
         ));
     }
     

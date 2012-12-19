@@ -712,8 +712,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GstPlayer : GLib.Object {
 		public GstPlayer ();
-		public void activate_equalizer ();
-		public void deactivate_equalizer ();
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
@@ -730,6 +728,7 @@ namespace Xnoise {
 		public bool current_has_video_track { get; }
 		public int current_text { get; set; }
 		public int current_video { get; set; }
+		public bool eq_active { get; set; }
 		public bool is_stream { get; private set; }
 		public int64 length_nsecs { get; set; }
 		public int n_audio { get; }
@@ -846,7 +845,6 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public Gtk.UIManager ui_manager { get; set; }
-		public bool use_eq { get; set; }
 		public bool usestop { get; set; }
 		public bool window_in_foreground { get; private set; }
 	}

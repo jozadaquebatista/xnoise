@@ -291,17 +291,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
 
-    private bool _use_eq;
-    public bool use_eq {
-        get {
-            return _use_eq;
-        }
-        set {
-            _use_eq = value;
-            set_use_equalizer(value);
-        }
-    }
-
     public MainWindow() {
         this.xn = Main.instance;
         Params.iparams_register(this);
@@ -986,18 +975,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
 
-    private void set_use_equalizer(bool use) {
-        //print("set_use_equalizer %s\n", use.to_string());
-        if(use) {
-            eqButtonTI.set_no_show_all(false);
-            eqButtonTI.show_all();
-        }
-        else {
-            eqButtonTI.set_no_show_all(true);
-            eqButtonTI.hide();
-        }
-    }
-    
     public void toggle_window_visbility() {
         if(this.has_toplevel_focus && this.visible) {
             this.get_position(out _posX, out _posY);
@@ -1077,9 +1054,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     break;
                 }
             }
-//            bool tmp_media_browser_visible = !Params.get_bool_value("media_browser_hidden");
-//            if(tmp_media_browser_visible != media_browser_visible)
-//                toggle_media_browser_visibility();
             return false;
         });
         quit_if_closed              = Params.get_bool_value("quit_if_closed");
@@ -1095,7 +1069,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
-        use_eq                      = !Params.get_bool_value("not_use_eq");
     }
 
     public void write_params_data() {
@@ -1113,7 +1086,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         Params.set_int_value("repeatstate", repeatState);
         Params.set_bool_value("usestop", this.usestop);
         Params.set_bool_value("compact_layout", this.compact_layout);
-        Params.set_bool_value("not_use_eq", !use_eq);
         Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
     }
 
@@ -1850,6 +1822,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     return;
                 var eq_widget = new EqualizerWidget(gst_player.equalizer);
                 eqdialog = new Gtk.Window();
+                eqdialog.set_resizable(false);
+                eqdialog.set_has_resize_grip(false);
                 eqdialog.add(eq_widget);
                 eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
                 eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
@@ -1875,7 +1849,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     return false;
                 });
             });
-            eqButtonTI.set_no_show_all(true);
             eqButtonTI.add(eqButton);
             
             var albumart_toggleb = new ToolItem();

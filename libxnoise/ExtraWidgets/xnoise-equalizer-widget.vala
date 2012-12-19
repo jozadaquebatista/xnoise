@@ -90,6 +90,11 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             l.set_alignment(0.8f, 0.6f);
             this.pack_start(l, false, false, 0);
             this.show_all();
+            
+            this.scale.sensitive = gst_player.eq_active;
+            gst_player.notify["eq-active"].connect( () => {
+                this.scale.sensitive = gst_player.eq_active;
+            });
         }
     }
     
@@ -120,6 +125,7 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             sc.set_gain(pres.freq_band_gains[j]);
             equalizer[j] = pres.freq_band_gains[j];
         }
+        preamp.set_value(pres.pre_gain);
         Idle.add(() => {
             in_load_preset = false;
             return false;
@@ -138,6 +144,7 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
     }
     
     private ComboBoxText c;
+    private Gtk.Switch on_off_switch;
     
     private void setup_widgets() {
         var combox = new Gtk.Box(Orientation.HORIZONTAL, 0);
@@ -152,6 +159,23 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             c.set_active_id("0");
         
         c.changed.connect(on_preset_changed);
+        
+        var vbox_switch = new Gtk.Box(Orientation.VERTICAL, 0);
+        on_off_switch = new Gtk.Switch();
+        vbox_switch.pack_start(on_off_switch, false, false, 0);
+        vbox_switch.pack_start(new DrawingArea(), false, false, 0);
+        combox.pack_start(vbox_switch, false, false, 0);
+        on_off_switch.set_active(gst_player.eq_active);
+        on_off_switch.notify["active"].connect( () => {
+            if(!on_off_switch.active) {
+                Params.set_bool_value("not_use_eq", true);
+                gst_player.eq_active = false;
+            }
+            else {
+                Params.set_bool_value("not_use_eq", false);
+                gst_player.eq_active = true;
+            }
+        });
         var l = new Label("");
         combox.pack_start(l, true, true, 0);
         l = new Label(_("Preset:"));
@@ -175,8 +199,19 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         var l_pre = new Label(_("Volume"));
         preampbox.pack_start(l_pre, false, false, 0);
         freq_gains_box.pack_start(preampbox, true, true, 10);
+        
+        preamp.sensitive = gst_player.eq_active;
+        c.sensitive      = gst_player.eq_active;
+        
+        gst_player.notify["eq-active"].connect( () => {
+            preamp.sensitive = gst_player.eq_active;
+            c.sensitive      = gst_player.eq_active;
+        });
+        
         Idle.add(() => {
-            preamp.set_value(Params.get_double_value("preamp") < 0.2 ? 1.0 : Params.get_double_value("preamp"));
+            preamp.set_value(
+                Params.get_double_value("preamp") < 0.2 ? 1.0 : Params.get_double_value("preamp")
+            );
             return false;
         });
         for(int i = 0; i < 10; i++) {
