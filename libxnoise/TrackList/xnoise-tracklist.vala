@@ -1127,6 +1127,7 @@ public class Xnoise.TrackList : TreeView, IParams {
             print("cannot setup treerowref\n");
             return;
         }
+        global.in_preview = false;
         if(item.type != ItemType.UNKNOWN) {
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
             if(tmp == null)
