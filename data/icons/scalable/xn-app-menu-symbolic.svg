@@ -41,12 +41,14 @@
      id="namedview37"
      showgrid="false"
      inkscape:zoom="20.85965"
-     inkscape:cx="10.83728"
+     inkscape:cx="4.7969102"
      inkscape:cy="8.1109765"
      inkscape:window-x="53"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3223" />
+     inkscape:current-layer="svg3223"
+     showguides="true"
+     inkscape:guide-bbox="true" />
   <defs
      id="defs3225">
     <linearGradient
@@ -294,35 +296,60 @@
        r="7.228416" />
   </defs>
   <g
-     id="g3056"
-     transform="matrix(1,0,0,1.0207039,0,-0.04144271)">
+     id="g3067"
+     transform="matrix(1.0140663,0,0,1,-0.01584672,0)">
+    <g
+       transform="matrix(1,0,0,0.99897481,0,0.01416691)"
+       id="g3062">
+      <rect
+         style="fill-opacity:1"
+         id="rect3022"
+         width="13.566862"
+         height="1.8"
+         x="1.126577"
+         y="2.0067284" />
+      <rect
+         style="fill-opacity:1"
+         id="rect3022-4"
+         width="13.566862"
+         height="1.8"
+         x="1.126577"
+         y="7.012743" />
+      <rect
+         style="fill-opacity:1"
+         id="rect3022-8"
+         width="13.566862"
+         height="1.8"
+         x="1.126577"
+         y="12.018755" />
+    </g>
     <rect
-       y="2.0016828"
-       x="1.2224559"
-       height="1.4861227"
-       width="13.566862"
-       id="rect3022"
+       y="2.0189998"
+       x="1.127"
+       height="11.8"
+       width="1"
+       id="rect3022-4-7"
        style="fill-opacity:1" />
     <rect
-       y="5.3654342"
-       x="1.2224559"
-       height="1.4861227"
-       width="13.566862"
-       id="rect3022-7"
-       style="fill-opacity:1" />
-    <rect
-       y="8.7291851"
-       x="1.2224559"
-       height="1.4861227"
-       width="13.566862"
-       id="rect3022-4"
-       style="fill-opacity:1" />
-    <rect
-       y="12.092936"
-       x="1.2224559"
-       height="1.4861227"
-       width="13.566862"
-       id="rect3022-8"
+       y="2.0189998"
+       x="13.759041"
+       height="11.8"
+       width="1"
+       id="rect3022-4-7-0"
        style="fill-opacity:1" />
   </g>
+  <rect
+     style="fill-opacity:1"
+     id="rect3075"
+     width="9.5399494"
+     height="0.57527333"
+     x="3.2598822"
+     y="5.1656861" />
+  <rect
+     style="fill-opacity:1"
+     id="rect3075-9"
+     width="9.5399494"
+     height="0.57527333"
+     x="3.2598822"
+     y="10.247267" />
 </svg>
