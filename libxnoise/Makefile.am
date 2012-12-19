@@ -77,13 +77,13 @@ libxnoise_la_SOURCES = \
     ExtDev/xnoise-device-manager.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \
+    ExtraWidgets/AlbumArtView/xnoise-albumart-cellarea.vala \
+    ExtraWidgets/AlbumArtView/xnoise-albumart-view.vala \
+    ExtraWidgets/AlbumArtView/xnoise-icons-model.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala \
     ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
-    ExtraWidgets/AlbumArtView/xnoise-albumart-cellarea.vala \
-    ExtraWidgets/AlbumArtView/xnoise-albumart-view.vala \
-    ExtraWidgets/AlbumArtView/xnoise-icons-model.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-equalizer-widget.vala \
@@ -228,6 +228,7 @@ DISTCLEANFILES = \
     ExtraWidgets/*.c \
     ExtraWidgets/AboutDialog/*.c \
     ExtraWidgets/AddMedia/*.c \
+    ExtraWidgets/AlbumArtView/*.c \
     ExtraWidgets/Fullscreen/*.c \
     ExtraWidgets/Settings/*.c \
     ExtraWidgets/VideoScreen/*.c \
@@ -257,6 +258,7 @@ DISTCLEANFILES = \
     ScreensaverManager/*.c \
     Services/*.c \
     SimpleMarkup/*.c \
+    Statistics/*.c \
     TagAccess/*.c \
     TrackList/*.c \
     TrayIcon/*.c \

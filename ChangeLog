@@ -1,3 +1,730 @@
+commit 78b0bf328083cf9fa82b4623aefc784beb7f2265
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 17:27:01 2012 +0100
+
+    equalizer is now activatable from the equalizer window, only
+
+commit f0710dbd1b34fd2eee2f37c2c3284dfd7b032d7a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 15:56:58 2012 +0100
+
+    end preview mode if activating track in tracklist
+
+commit ffb8b0caca99187f460859315be48142d0395e58
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 15:28:57 2012 +0100
+
+    change icon size
+
+commit 027859fceb00c34590dd9652b80b37a986fffbe7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 12:16:05 2012 +0100
+
+    change some icon sizes
+
+commit 9f5d9fc77cf9ad2361d03e403d80c77cb8ff1ee7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 11:47:17 2012 +0100
+
+    change some icons
+
+commit aefc739ef100e02b3a473d0f7f50dfcdc9223c82
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 09:50:10 2012 +0100
+
+    change icon
+
+commit 4e1c074359995c1a9366d13fa9baaf9cd25179e1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 09:28:53 2012 +0100
+
+    update tracklist action buttons
+
+commit b805118a3f54e5180045b0615ea70e3818f6774d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 09:04:02 2012 +0100
+
+    update shuffle icon
+
+commit aa60590d35de19f8122fb488779dcc0cd5ec6bd5
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Wed Dec 19 00:07:19 2012 +0100
+
+    update po/cs.po
+
+commit 3860ee7021453b04cff0073c1109cde2136ea10e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 23:25:56 2012 +0100
+
+    fix artist sort direction in genre
+
+commit 75598dbd7bd0686cd98b1bc2a745fe6cb11794e8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 23:18:16 2012 +0100
+
+    improve genre editing
+
+commit 1b155443b6dfde073b9cd8a5f155c5680bb54f0c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 23:05:54 2012 +0100
+
+    fix max length for genre
+
+commit 35f0cdd917f0f37428840152ff266e44741068c2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 22:53:27 2012 +0100
+
+    more genre editing
+
+commit 6c7bd21c98958d536aadbec9b24ca1473b46807d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 22:11:57 2012 +0100
+
+    allow editing of genres
+
+commit 4799ae6fc47fb0dfff4273bbc8a0afd7a9acf18c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 21:24:00 2012 +0100
+
+    show album art in album tag editor
+
+commit 8e7ad430f071733e3a973c069fe7f7dd2cbc25fe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 21:04:17 2012 +0100
+
+    update README
+
+commit da2bc20b1c32fee8c83c4ef203dede2e380a45fe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 21:03:04 2012 +0100
+
+    fix sorting when inserting Collection_container_genre
+
+commit 055cd351ce4bd0c4a2fba6872cfecbf9e3bb187b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 19:08:49 2012 +0100
+
+    use symbolic application icon
+
+commit 4dbe24cf7645b7662fdcef454eeb1e3e826d91f9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 15:19:43 2012 +0100
+
+    use more symbolic icons
+
+commit 38502b80f018e407e587b1bd995cf9fc290d1ea7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 13:23:22 2012 +0100
+
+    reorder code
+
+commit 5c4e53d24947ffb8d35b1f3fcf481686fb0c93cb
+Merge: 27e3987 0c96cf5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 13:13:23 2012 +0100
+
+    Merge commit '0c96cf53324939631a89b2cedd546b75f67c4e12' into symbolic
+
+commit 27e39870f8e0f13a33159545c74767430981b4b5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 13:12:02 2012 +0100
+
+    use themed symbolic icons
+
+commit 0c96cf53324939631a89b2cedd546b75f67c4e12
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 10:14:29 2012 +0100
+
+    allow multiple selection of folders for first start widget; fix warnings
+
+commit cba2da4b32e32ce633fab33dc5d33276e660bace
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 18 09:51:11 2012 +0100
+
+    allow multiple selection of folders; default to 'Music'
+
+commit 7083f22e44c225a06efd43de80b2dbcfc3babcbd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 17 22:45:19 2012 +0100
+
+    remove commented, old code
+
+commit 1c5a4adb7a72c0c8fb2fe4f2eb9eabd880c80d36
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 17 22:38:15 2012 +0100
+
+    adapt handler name
+
+commit c920c2e6a662f2538cfffa332923d1759604fd11
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 17 22:36:21 2012 +0100
+
+    avoid code duplication through inheritance
+
+commit a9de3279660543848ba468caeb4bc87f20a26e21
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 16 15:59:31 2012 +0100
+
+    copy code for generic audio player device
+
+commit aa3aa0fafbd5ace125a20b714a88e139e1b26ad6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 14 13:47:48 2012 +0100
+
+    remove unnecessary code
+
+commit af13f3477efb99dd0e08209a583ad41d42b74696
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 14 10:19:39 2012 +0100
+
+    remove some comments
+
+commit 924fd4d8d14e4d0c0329d9046d626a9ed086cef0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 14 10:15:53 2012 +0100
+
+    add collapse menu option for adroid device
+
+commit d3598354a8112012fe8c1c1043140c5f65f8084a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 14 10:06:27 2012 +0100
+
+    more locks for android device loading
+
+commit ba0bef146ad0fc09be2c3c9fd5350835ec8a17e4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 19:03:33 2012 +0100
+
+    properly remove temp files
+
+commit 1ba6e1f50e23ee5c45ce52fc49e335807791e7c5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 18:15:29 2012 +0100
+
+    update file system info after device operations
+
+commit 128c1c5bb7a09d4627b82413aa678666888598ad
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 17:52:10 2012 +0100
+
+    add lock while copying in drag'n'drop
+
+commit 64add41f79de8f4dd646caea00fd1b1a7f6de0fd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 17:32:41 2012 +0100
+
+    fix typo in translation
+
+commit 26eca6ed1378e5e351a0d07aa4cf5c20ea4a222b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 16:40:04 2012 +0100
+
+    add drag'n'drop support for android device
+
+commit 684d0884f429eeed270a3454ee96172e015ba3aa
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 14:25:37 2012 +0100
+
+    show tracklist to user if tracks are added
+
+commit 65c144886e655148efbe2af76b7791bc8ed7af52
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 14:14:04 2012 +0100
+
+    update some strings
+
+commit a031d4fc81c79885f56533c5de9e62ff41942bfa
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 14:02:38 2012 +0100
+
+    fix user feedback while copying media to external device
+
+commit 57017a78b4d5a17364ee1a47c7e231f08b390ec0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 12:26:56 2012 +0100
+
+    fix database issue for externa devices; allow deletion from external device
+
+commit e807090b2a7edde8dcc5f3c2f97df68f9e0bfd5a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 13 10:59:30 2012 +0100
+
+    improve file move to android device
+
+commit d81bca30d27e86d806f00f313195c6182d835abb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 12 14:27:42 2012 +0100
+
+    adapt about.markdown for bitbucket
+
+commit ad430c8ee512e9c0c2c7e859d1485f3f4d7ab025
+Author: Jörn Magens <shuerhaaken@gmail.com>
+Date:   Wed Dec 12 12:30:49 2012 +0100
+
+    remove comment
+
+commit ae1ca6b7a055974a857c2a9d326dff296a930e32
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 11 15:42:42 2012 +0100
+
+    allow copying albums and artists to android device
+
+commit d0811406dd46103834834d08909fc914dd476ee8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 10 15:14:04 2012 +0100
+
+    allow adding tracks to android device
+
+commit d599bfc9f5054559c71265976941a6e3a19d870a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 10 12:30:29 2012 +0100
+
+    create some infrastructure for adding media to external player devices
+
+commit 46edc2373d01cd35f4133429398b17fe9465a461
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 4 16:22:15 2012 +0100
+
+    allow preview listening from generic player device
+
+commit 0b5d8bafcd2fa840653f589bfde52517387cda5d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 4 16:19:56 2012 +0100
+
+    allow preview listening from android device
+
+commit 70deb3ba3b9282814645d904492ae63c3fcc649e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 4 15:51:54 2012 +0100
+
+    clean up
+
+commit 3e8e33b41192c568cff4f9133c481dabe38b31f4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 4 15:33:25 2012 +0100
+
+    add external generic audio player device
+
+commit 3d3524ef0f8804d2ff381b3f7ef902ea84f15c9e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 4 13:28:57 2012 +0100
+
+    use symbolic icons
+
+commit a473ad12af045ce0f910a64721ced34859eeb632
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 3 15:41:09 2012 +0100
+
+    fix import issues for GENRE-ARTIST-ALBUM sorting
+
+commit 7821c73f0d07bacffac9b671d760dcea95c3f1a0
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Sun Dec 2 15:35:54 2012 +0100
+
+    Fixed the grid icon's color and shrpness and made the equalizer more consistent
+
+commit 1969738024e2ffbd5752c33c9c8c65fbba88b72e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 2 01:13:41 2012 +0100
+
+    use tmp folder for temporary database
+
+commit d1d92fdd56a34f077568414c57cbf01e77b903dd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 2 00:56:35 2012 +0100
+
+    reorganize files
+
+commit e4a4d00ee13c6c84aed63cba5057573fe7cabae2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 2 00:37:43 2012 +0100
+
+    use new device type registration
+
+commit cc56815eeed158055768293098e941862f1d8a74
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 1 22:16:58 2012 +0100
+
+    fix initialization issue
+
+commit 000c5e5666950dfc794dd9462652f499cf388f20
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 23:09:34 2012 +0100
+
+    add forgotten file; hide status icon, if 'quit on close' option is active
+
+commit d7aa2f8773d14fbe3f69754ff4d5dd3b8d4b0804
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 17:50:04 2012 +0100
+
+    list external player's tracks in xnoise
+
+commit e2220d770ad9ec5c64a0e984e3308fe2492aee47
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 15:09:43 2012 +0100
+
+    read android device content
+
+commit 45bec8089ad45e787058bc44d15368b42804413c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 14:27:25 2012 +0100
+
+    cleanup code
+
+commit 41373b89e1ddbbec3b825ea434e2631146932001
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 13:43:38 2012 +0100
+
+    adapt changes for first start widget
+
+commit 2823ea11fcc2a2799f6072c266204eca09f7a668
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 13:27:36 2012 +0100
+
+    reorder dialogs
+
+commit 03eb2e650811c65c57e81993ccd2c71d8b6a7263
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 12:18:59 2012 +0100
+
+    start removal of redundant serial buttons
+
+commit a795b6280158ec4c723fec2d02d7e0403ee85382
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 30 11:01:38 2012 +0100
+
+    more changes for android player integration
+
+commit bc19096ac99480dd4d8b134359548b879b86d1a6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 29 23:24:39 2012 +0100
+
+    take care of existing mounted devices
+
+commit 9bb098b6e52799db78aa39f8558988b21b8a4b97
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 29 18:14:44 2012 +0100
+
+    add device manager and basic android device implementation
+
+commit 9cbe8426b8f4fc3beb93d975d3602163437985c4
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Thu Nov 29 12:04:26 2012 +0000
+
+    Portuguese update
+
+commit 4baa30cbccaee71e4be532b3a777e54be030cf1e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 16:11:10 2012 +0100
+
+    remove focus from font size selector
+
+commit 4973a190e3d10ab961b0e19c59538c83d19409e1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 15:59:39 2012 +0100
+
+    adjust some distances in settings dialog
+
+commit cb457747f32d5dff33e50856497b378d7689f62a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 15:48:23 2012 +0100
+
+    rework settings dialog
+
+commit 9c6426e42e596070b0be9b098e5586ab162b8c3d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 14:34:50 2012 +0100
+
+    require vala-0.18
+
+commit 12bce242916855ce5de706fb5629a4c1a0620a84
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 13:32:28 2012 +0100
+
+    add sort modes for album art view; fix some warnings
+
+commit 8632af4a82f28313f3c4d947c716ba02a80fa459
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 28 11:31:28 2012 +0100
+
+    decrease album view image sizes
+
+commit 271126bdd313f1817bbfe94c1f05c18b6359fc7d
+Merge: 961d27b 5be495f
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Sat Nov 24 02:02:33 2012 -0800
+
+    Merge pull request #47 from tuhaihe/patch-6
+    
+    Update po/zh_CN.po
+
+commit 5be495fd01086c83ceb099d11821867af0dd17aa
+Author: tuhaihe <1132321739qq@gmail.com>
+Date:   Sat Nov 24 17:55:27 2012 +0800
+
+    Update po/zh_CN.po
+
+commit 961d27b8ea16b0c63efb9dc20ade781fd6dce43d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 23 12:32:46 2012 +0100
+
+    update equalizer icon
+
+commit 60b7802fb7a06c65acd0e1e43c07106580500d3a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 22 19:47:38 2012 +0100
+
+    revert caching change
+
+commit e4b681eb41daed79a9136b3fe7d05d461f5c7fb8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 14 10:44:35 2012 +0100
+
+    change caching algorithm, decrease pixbuf size to save some memory
+
+commit ae2a83114a3684766defc0a10f54e95b1ddc59e8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 12 12:26:12 2012 +0100
+
+    try a more general way of restriction using in db query
+
+commit cc4642f09869530a39e321714423836f6800465b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 12 11:33:20 2012 +0100
+
+    fix tag loading for tag editing dialogs for different sort modes
+
+commit 8717bb16969ce04c3c63a942a2a1581dc2c1603e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 9 14:02:24 2012 +0100
+
+    update strings
+
+commit 7301bb00e5d3db9cad3e93c57b2ca2adb29a249f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 9 13:59:59 2012 +0100
+
+    fix issues with data conversions / db queries in new sort modes
+
+commit a8841c5ab1025ebc4e84caaa15e843f714b3fe2c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 8 18:16:14 2012 +0100
+
+    restore sortmode on restart
+
+commit a8907c42d03fc26b6a81373ba64669dd418af6a4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 8 18:12:00 2012 +0100
+
+    add context menu for sort switching
+
+commit 5a2138b99acfea4feab3e7df914b66cdb099e1ac
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 8 17:45:13 2012 +0100
+
+    honor genre filtering in artist and album trackdata conversion
+
+commit 9720395832545da2382daa38f737b78d1f043e98
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 8 17:01:05 2012 +0100
+
+    more support for different sortings
+
+commit 138dd38f3fe5a18db12b7b7c8a1d2811857ef199
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 17:55:32 2012 +0100
+
+    add initial support for different sortings
+
+commit a9d672cdea9a558e154f3a0b602fcf4c342e03d3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 15:31:36 2012 +0100
+
+    add tooltips to search entries; increase search delay after last key entry
+
+commit 4499c281cea7e5dde947f89b06608858015757c2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 13:00:41 2012 +0100
+
+    do not allow reimport of media folders while first start import is running
+
+commit 7a23c37f5f2cc14ae11c1fd4a773aab3ecb11ef8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 12:18:47 2012 +0100
+
+    for safety increment db version after all recent experiments
+
+commit ca44d7e93df396b4147b0dac187d703ef0c7f381
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 12:15:52 2012 +0100
+
+    remove some obsolete code
+
+commit 4872f2b36129abb7154a2bf25c99dca8527382b8
+Merge: 25cfaa0 11b78d2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 11:52:56 2012 +0100
+
+    try fixing conflict
+
+commit 25cfaa0f4869747e35e2a5e4c24a2fc15b7fde93
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 11:47:38 2012 +0100
+
+    add some changes from singlet branch
+
+commit 11b78d2f5570e1b14bb269fe72747d1548ed5c98
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 11:31:02 2012 +0100
+
+    different way of video audio seperation
+
+commit d2f6f88ceb76f36a3d049dc042b18651b0b08cd0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 09:56:10 2012 +0100
+
+    branch from old rev
+
+commit 9f876476ffc2d3b20320eef39d4e04cbeec73441
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 7 09:49:01 2012 +0100
+
+    some changes for statistics
+
+commit 85a717eb24e16aef425ed28fb70c7ee8e85d7d84
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 15:36:37 2012 +0100
+
+    remove obsolete function
+
+commit 274bbe0ca2bda0a405ea86a56d1a612eb5eb34cf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 15:19:39 2012 +0100
+
+    more changes for database separation for music and video
+
+commit 4cdeaf7f2f38c6a3f6e7a3137afc5a83c4cf65e9
+Merge: d0a4dc5 544790b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 14:35:07 2012 +0100
+
+    Merge branch 'master' of github.com:shuerhaaken/xnoise
+
+commit d0a4dc5aebd3f6a97009fb5cee9ed3224f753723
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 14:34:56 2012 +0100
+
+    start database separation for music and video
+
+commit 544790b2f57e55174cb6ae44c4919aede2a037e2
+Merge: 0e73036 f2eec8e
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 01:59:44 2012 -0800
+
+    Merge pull request #45 from smarquespt/master
+    
+    Portuguese update
+
+commit f2eec8e3b30471607af2bb0a87fc2297c4f14417
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Tue Nov 6 09:27:04 2012 +0000
+
+    Portuguese update
+
+commit 0e730364c351709027cf7a06adb99f0868a7de7c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 10:02:57 2012 +0100
+
+    grab focus on tracklist after swiwtching main view to tracklistview
+
+commit 913c978284277dcd6d94da427cbd6491ec03f35d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 6 09:50:40 2012 +0100
+
+    update some tooltip texts; add new translatable strings
+
+commit c863387a923d8fff60f50f1998294e46373f840a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 5 13:17:27 2012 +0100
+
+    chnange some translatable strings
+
+commit 7cc70426d8dcd4aea19d589928aed8532bcc99a1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 5 10:40:53 2012 +0100
+
+    add missing translatable strings
+
+commit 8a679f01c74f5eb6c17e8333e07b5990f1ebb25c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 5 10:21:12 2012 +0100
+
+    set relief style of album art toggle button to NONE
+
+commit 81c4220bde13ed2d8dfc0268573dd98dc7dd7b19
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Mon Nov 5 09:59:48 2012 +0100
+
+    update po/eu.po
+
+commit fef039b602a071f98d0125020a79f510cad83de8
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sun Nov 4 14:52:30 2012 +0100
+
+    update po/he.po
+
+commit 2644715a5671d987d261dcbcd297421d0d2e8505
+Merge: b90138a 276e55b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Nov 3 16:09:10 2012 +0100
+
+    Merge branch 'master' of github.com:shuerhaaken/xnoise
+
+commit b90138a6e6d4a73e3788a8bebe716a89a1a34d49
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Nov 3 15:08:15 2012 +0100
+
+    require gtk+-3.4 in packages
+
+commit 276e55b4cf7c5017fea7611eb8ecb5e8da102871
+Merge: b152490 41dbd7d
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Wed Oct 31 03:41:29 2012 -0700
+
+    Merge pull request #44 from smarquespt/master
+    
+    Portuguese update
+
+commit 41dbd7d9d2cddd0e5b1101d061063c5289e23b62
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Wed Oct 31 10:23:10 2012 +0000
+
+    Portuguese update
+
+commit b1524902869508dc282ccf16facda0b3fabed8c0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 30 22:52:42 2012 +0100
+
+    remove extra pakages from recommends
+
+commit 80de2703283877fdcceef34cc73d28b5c21bbed5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 30 19:31:56 2012 +0100
+
+    update translatable strings
+
+commit ed1abb868631645e84d498f2fb482065442fbc2a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 30 19:28:15 2012 +0100
+
+    post release version update
+
+commit 94bbdba4920d09aab6a610c7b79998fca9f65322
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 29 18:17:50 2012 +0100
+
+    add autoupdated changelog
+
 commit f97ae644e1b62867df48529eed829d42ba7e658d
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Mon Oct 29 14:11:05 2012 +0100
