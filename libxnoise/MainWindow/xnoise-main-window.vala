@@ -1644,7 +1644,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             var hide_button = new Gtk.Button();
-            var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+            var hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+                                                                   IconSize.MENU
+            );
             hide_button.add(hide_button_image);
             hide_button.can_focus = false;
             hide_button.clicked.connect(this.toggle_media_browser_visibility);
@@ -1652,7 +1654,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             var tbx = new Box(Orientation.HORIZONTAL, 0);
             tbx.pack_start(hide_button, false, false, 0);
             var removeSelectedButton = new Gtk.Button();
-            var remsel_button_image = new Gtk.Image.from_stock(Stock.DELETE, IconSize.MENU);
+            var remsel_button_image = IconRepo.get_themed_image_icon("list-remove-symbolic",
+                                                                     IconSize.MENU
+            );
             removeSelectedButton.add(remsel_button_image);
             removeSelectedButton.can_focus = false;
             removeSelectedButton.set_relief(ReliefStyle.NONE);
@@ -1664,7 +1668,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             //REMOVE TITLE OR ALL TITLES BUTTONS
             var removeAllButton = new Gtk.Button();
-            var remove_button_image = new Gtk.Image.from_stock(Stock.CLEAR, IconSize.MENU);
+            var remove_button_image = IconRepo.get_themed_image_icon("user-trash-symbolic",
+                                                                     IconSize.MENU
+            );
             removeAllButton.add(remove_button_image);
             removeAllButton.can_focus      = false;
             removeAllButton.set_relief(ReliefStyle.NONE);
@@ -1676,7 +1682,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             removeAllButton.set_tooltip_text(_("Remove all"));
             var posjumper = new Gtk.Button();
-            var posjumper_image = new Gtk.Image.from_stock(Stock.JUSTIFY_FILL, IconSize.MENU);
+            var posjumper_image = IconRepo.get_themed_image_icon("view-list-symbolic",
+                                                                     IconSize.MENU
+            );
             posjumper.add(posjumper_image);
             posjumper.can_focus      = false;
             posjumper.set_relief(ReliefStyle.NONE);
@@ -1703,11 +1711,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             contentvbox.pack_start(bottom_box, false, false, 0);
             this.notify["media-browser-visible"].connect( (s, val) => {
                 if(this.media_browser_visible == true) {
-                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+                    hide_button.remove(hide_button_image);
+                    hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+                                                                       IconSize.MENU
+                    );
+                    hide_button_image.show();
+                    hide_button.add(hide_button_image);
                     hide_button.set_tooltip_text(HIDE_LIBRARY);
                 }
                 else {
-                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+                    hide_button.remove(hide_button_image);
+                    hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
+                                                                       IconSize.MENU
+                    );
+                    hide_button_image.show();
+                    hide_button.add(hide_button_image);
                     hide_button.set_tooltip_text(SHOW_LIBRARY);
                 }
             });
