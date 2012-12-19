@@ -14,7 +14,7 @@
    height="16"
    id="svg7384"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="xn-repeat-all-symbolic.svg">
+   sodipodi:docname="xn-repeat-single-symbolic.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -59,18 +59,18 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="g2991">
-    <path
-       sodipodi:nodetypes="ccccccccccscc"
-       inkscape:connector-curvature="0"
-       id="rect3815"
-       d="m 13.719587,10.994715 -2.286395,0.0021 c 0.002,1.661998 -1.5259783,3.001408 -3.4259727,3.003163 -1.8999944,0.0018 -3.4312072,-1.334832 -3.4332128,-2.996831 l -0.00122,-0.999999 2.2863951,-0.0021 L 3.4247658,6.0042185 0,10.007382 l 2.2863951,-0.0021 0.00122,0.999999 C 2.2909551,13.775279 4.8429792,16.002923 8.0096365,16 11.176294,15.9971 13.722933,13.764723 13.719591,10.994727 z"
-       style="color:#bebebe;fill-opacity:1;fill-rule:nonzero;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+     id="g3889">
     <path
        sodipodi:nodetypes="ssssscccccccccccc"
        inkscape:connector-curvature="0"
        id="path2984"
        d="M 9.8137448,0.4210553 C 7.1601331,0.4210553 5,2.4689427 5,5 5,7.5310571 7.1601331,9.5789446 9.8137448,9.5789446 12.467356,9.5789446 14.573403,7.5310571 14.573403,5 c 0,-2.5310573 -2.106047,-4.5789447 -4.7596582,-4.5789447 z m -0.2163478,1.7157884 0.875777,0 0,4.7052604 0.735583,0 0,0.6943154 -2.5200221,0 0,-0.6943154 0.9086621,0 0,-3.9052608 -1.1899145,0.3789471 0,-0.7477891 z"
        style="fill-opacity:1" />
+    <path
+       sodipodi:nodetypes="cccscccccscc"
+       inkscape:connector-curvature="0"
+       id="rect3815"
+       d="m 13.719568,10.652375 -2.286395,0.0019 c 0.002,1.454249 -1.5259789,2.626233 -3.4259733,2.627768 C 6.1072053,13.283643 4.575993,12.114065 4.573987,10.659815 L 4.572787,9.7847838 6.859182,9.7829138 3.424766,6.2856884 0,9.7884569 l 2.286396,-0.00187 0.0012,0.8749991 c 0.0033,2.42378 2.5553636,4.372968 5.7220209,4.370411 3.1666581,-0.0025 5.7132971,-1.955867 5.7099511,-4.379622 z"
+       style="color:#bebebe;fill-opacity:1;fill-rule:nonzero;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   </g>
 </svg>
