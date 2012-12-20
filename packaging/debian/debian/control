@@ -11,18 +11,19 @@ Package: xnoise
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Recommends: xnoise-plugins, tumbler
-Description: Media player for Gtk+
- Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
- The tracklist is a list of video or music tracks that are played one by one 
- without being removed. This gives you the possibility to enqueue any track 
- in any order, regardless if they are on the same album or not. The tracks 
- can be reordered at any time via drag and drop.
+Description: Pretty and fast media player for Gtk+
+ Xnoise allows listening to music and playing video in an intuitive way: You 
+ can easily search the library and drag each artist, album or title to the 
+ tracklist (to any position in any order). In the tracklist all queued tracks 
+ (music or video) are played one by one without being removed. There, you can 
+ reorder, insert or remove any track as it comes to your mind.
  .
- The media browser contains all available media in a hierarchical tree 
- structure of the available metadata. It is easy to find a single track, 
- artist or album by  going through this tree or by just entering a search term.
- From the media browser, music or videos can be dragged into the tracklist to 
- every position.
+ The media library contains all available media as a hierarchical tree 
+ structure of media tag metadata. It is easy to find any single track, artist, 
+ album or genre by using this tree structure or by entering a search term.
+ Here you find all you music, streams or videos in a nicely presented, 
+ searchable way. 
+ .
  Xnoise can play every kind of audio/video data that GStreamer can handle.
  There are plugins available.
  .
@@ -33,18 +34,19 @@ Description: Media player for Gtk+
 Package: xnoise-dev
 Architecture: any
 Depends: ${misc:Depends}, xnoise (= ${binary:Version})
-Description: Media player for Gtk+ (development files)
- Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
- The tracklist is a list of video or music tracks that are played one by one 
- without being removed. This gives you the possibility to enqueue any track 
- in any order, regardless if they are on the same album or not. The tracks 
- can be reordered at any time via drag and drop.
+Description: Pretty and fast media player for Gtk+
+ Xnoise allows listening to music and playing video in an intuitive way: You 
+ can easily search the library and drag each artist, album or title to the 
+ tracklist (to any position in any order). In the tracklist all queued tracks 
+ (music or video) are played one by one without being removed. There, you can 
+ reorder, insert or remove any track as it comes to your mind.
  .
- The media browser contains all available media in a hierarchical tree 
- structure of the available metadata. It is easy to find a single track, 
- artist or album by  going through this tree or by just entering a search term.
- From the media browser, music or videos can be dragged into the tracklist to 
- every position.
+ The media library contains all available media as a hierarchical tree 
+ structure of media tag metadata. It is easy to find any single track, artist, 
+ album or genre by using this tree structure or by entering a search term.
+ Here you find all you music, streams or videos in a nicely presented, 
+ searchable way. 
+ .
  Xnoise can play every kind of audio/video data that GStreamer can handle.
  There are plugins available.
  .
@@ -55,18 +57,19 @@ Description: Media player for Gtk+ (development files)
 Package: xnoise-plugins
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, xnoise (= ${binary:Version})
-Description: Media player for Gtk+ (factory plugins collection)
- Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
- The tracklist is a list of video or music tracks that are played one by one 
- without being removed. This gives you the possibility to enqueue any track 
- in any order, regardless if they are on the same album or not. The tracks 
- can be reordered at any time via drag and drop.
+Description: Pretty and fast media player for Gtk+
+ Xnoise allows listening to music and playing video in an intuitive way: You 
+ can easily search the library and drag each artist, album or title to the 
+ tracklist (to any position in any order). In the tracklist all queued tracks 
+ (music or video) are played one by one without being removed. There, you can 
+ reorder, insert or remove any track as it comes to your mind.
  .
- The media browser contains all available media in a hierarchical tree 
- structure of the available metadata. It is easy to find a single track, 
- artist or album by  going through this tree or by just entering a search term.
- From the media browser, music or videos can be dragged into the tracklist to 
- every position.
+ The media library contains all available media as a hierarchical tree 
+ structure of media tag metadata. It is easy to find any single track, artist, 
+ album or genre by using this tree structure or by entering a search term.
+ Here you find all you music, streams or videos in a nicely presented, 
+ searchable way. 
+ .
  Xnoise can play every kind of audio/video data that GStreamer can handle.
  There are plugins available.
  .
