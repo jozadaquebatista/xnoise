@@ -1,3 +1,21 @@
+xnoise (0.2.14)
+
+Changes
+======================
+  * Add support for Android and some other player devices
+  * Use themed symbolic icons
+  * Add optional GENRE-ARTIST-ALBUM sort mode in music browser
+  * Add some sort modes for album-art-view
+  * Allow editing of genres
+  * Equalizer is now activatable from the equalizer window, only
+  * Show album art in album tag editor
+  * Rework settings dialog, again
+  * Localization updates
+  * Code cleanups
+  * Many bug fixes
+
+
+
 xnoise (0.2.13)
 
 New Features and Fixes
