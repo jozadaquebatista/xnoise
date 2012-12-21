@@ -1,3 +1,45 @@
+commit 574e3963c392cb5f2a6a17506f631d9ba54af693
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 21 22:06:19 2012 +0100
+
+    update packaging data
+
+commit c694d511069ca982307c5847241128943868edbd
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Fri Dec 21 11:13:30 2012 +0100
+
+    update po/eu.po
+
+commit 512cb7bb7e984877bf3ea94ec1b3f150a387365c
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Thu Dec 20 16:52:07 2012 +0100
+
+    update po/cs.po
+
+commit fd660eeb9aefea8786fe55437c2fe22d13dd3c20
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 20 12:55:05 2012 +0100
+
+    update packaging data
+
+commit 7e8c35ab04ed5c2b22330328069e72f7132f6056
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 20 11:43:34 2012 +0100
+
+    update NEWS
+
+commit 1caea31266a781a2f9ce626f6bec28d8487822b6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 20 10:28:04 2012 +0100
+
+    update some autotool stuff 2
+
+commit fca2d5438d0366ac201e39f525f5ec65a3da2a85
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 19 17:41:02 2012 +0100
+
+    update some autotool stuff
+
 commit 78b0bf328083cf9fa82b4623aefc784beb7f2265
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Dec 19 17:27:01 2012 +0100
