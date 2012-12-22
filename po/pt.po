@@ -28,16 +28,19 @@ msgstr "Reprodutor multimédia"
 msgid "Organize and play your music and video collections"
 msgstr "Organização e reprodução das suas músicas e vídeos"
 
-#: ../libxnoise/Application/xnoise-application.vala:209 ../src/xnoise.vala:140
+#: ../libxnoise/Application/xnoise-application.vala:209
+#: ../src/xnoise.vala:140
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise é um reprodutor multimédia para GTK+"
 
-#: ../libxnoise/Application/xnoise-application.vala:210 ../src/xnoise.vala:141
+#: ../libxnoise/Application/xnoise-application.vala:210
+#: ../src/xnoise.vala:141
 msgid "It uses the gstreamer framework."
 msgstr "Utiliza a infraestrutura gstreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:211 ../src/xnoise.vala:142
+#: ../libxnoise/Application/xnoise-application.vala:211
+#: ../src/xnoise.vala:142
 msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
@@ -120,67 +123,60 @@ msgstr "Vídeos"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
 msgid "Add to Android Device"
-msgstr ""
+msgstr "Adicionar a dispositivo Android"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
 msgid "Delete from device"
-msgstr ""
+msgstr "Eliminar do dispositivo"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:45
 msgid "Android Player Device"
-msgstr ""
+msgstr "Dispositivo Android"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:103
-#, fuzzy
 msgid "Do you want to delete the selected file from the device?"
-msgstr "Pretende mover o ficheiro selecionado para o lixo?"
+msgstr "Pretende eliminar o ficheiro selecionado do dispositivo?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:125
-#, fuzzy
 msgid "Do you want to delete the selected album from the device?"
-msgstr "Pretende mover o ficheiro selecionado para o lixo?"
+msgstr "Pretende eliminar o álbum selecionado do dispositivo?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:155
-#, fuzzy
 msgid "Do you want to delete the selected artist from the device?"
-msgstr "Pretende mover o ficheiro selecionado para o lixo?"
+msgstr "Pretende eliminar o artista selecionado do dispositivo?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:235
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:112
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:341
-#, fuzzy
 msgid "Please wait while moving media to the device."
-msgstr ""
-"Aguarde pela conversão\n"
-"da base de dados."
+msgstr "Por favor aguarde pela movimentação dos itens."
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:319
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:260
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:383
 msgid "Not enough space on device! Aborting..."
-msgstr ""
+msgstr "Não possui espaço suficiente! A cancelar..."
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:116
 msgid "Free space: "
-msgstr ""
+msgstr "Espaço livre:"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:119
 msgid "Total space: "
-msgstr ""
+msgstr "Espaço total:"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-device.vala:97
-#, fuzzy
 msgid "Player"
-msgstr "Reproduzir"
+msgstr "Reprodutor"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
 msgid "Add to Player Device"
-msgstr ""
+msgstr "Adicionar ao dispositivo"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
 msgid "External Player Device"
-msgstr ""
+msgstr "Dispositivo externo"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 msgid "Add or Remove media"
@@ -413,19 +409,14 @@ msgstr "Álbum:"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:168
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:172
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:194
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:144
 msgid "Album data"
@@ -499,7 +490,7 @@ msgstr "Alterar dados do artista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:51
 msgid "Change genre name"
-msgstr ""
+msgstr "Alterar nome do género"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:54
@@ -707,12 +698,8 @@ msgstr "Mostr_ar vista de álbuns"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:530
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
-"o arranque do xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:731
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:740
@@ -760,12 +747,12 @@ msgstr "Ir para a posição atual"
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1813
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1985
 msgid "Select search with <Ctrl-F>"
-msgstr ""
+msgstr "Escolha a procura com <Ctrl-F>"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1815
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1987
 msgid "Remove search filter with <Ctrl-D>"
-msgstr ""
+msgstr "Remover filtro de procurar com <Ctrl-d>"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1824
 msgid "Open equalizer"
@@ -841,49 +828,47 @@ msgid "Default"
 msgstr "Pré-definido"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:227
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:697
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
-msgstr "Instalação do \"plugin\" gstreamer efetuada com sucesso"
+msgstr "Instalação do plugin gstreamer efetuada com sucesso"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:701
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "O utilizador cancelou a instalação do \"plugin\""
+msgstr "O utilizador cancelou a instalação do plugin"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:705
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
-msgstr "\"Plugin\" gstreamer não encontrado nos repositórios"
+msgstr "Plugin gstreamer não encontrado nos repositórios"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:711
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr "Erro crítico ao tentar instalar o \"plugin\" em falta"
+msgstr "Erro crítico ao tentar instalar o plugin em falta"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:756
 #: ../libxnoise/Player/xnoise-gst-player.vala:767
 #: ../libxnoise/Player/xnoise-gst-player.vala:780
 #, c-format
 msgid "Missing gstreamer plugin"
-msgstr "\"Plugin\" gstreamer em falta"
+msgstr "Plugin gstreamer em falta"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:758
 msgid "Automatic missing codec installation not supported"
-msgstr "Não existe suporte à instalação automática de \"plugins\""
+msgstr "Não existe suporte à instalação automática de plugins"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:769
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "Falha ao tentar instalar o \"plugin\" gstreamer"
+msgstr "Falha ao tentar instalar o plugin gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:782
 msgid "Trying to install missing gstreamer plugin"
-msgstr "A tentar instalar o \"plugin\" gstreamer..."
+msgstr "A tentar instalar o plugin gstreamer..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:881
 msgid "Subtitle #"
@@ -972,18 +957,16 @@ msgstr "pronto"
 #: ../libxnoise/Utils/xnoise-media-importer.vala:301
 #, c-format
 msgid "Found %u tracks. Updating library ..."
-msgstr "Encontrada(s) %u faixa(s). A atualizar coleção..."
+msgstr "Encontradas %u faixas. Atualizar coleção..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:516
-#, fuzzy, c-format
+#, c-format
 msgid "%u new tracks found"
-msgstr "%u faixas encontradas"
+msgstr "Encontradas %u novas faixas"
 
 #: ../src/xnoise.vala:151
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
@@ -1034,7 +1017,7 @@ msgstr "Enviar faixas para a last.fm (enviar dados para criar estatísticas)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
-msgstr "\"Plugin\" de exemplo para programadores"
+msgstr "Plugin de exemplo para programadores"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
