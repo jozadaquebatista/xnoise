@@ -36,36 +36,36 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
     private Gtk.Button? content;
     private Gtk.Menu menu;
     private Image img;
-
+    
     public AppMenuButton(Gtk.Menu menu, string? tooltip_text = null) {
-        img = IconRepo.get_themed_image_icon("application-menu-symbolic", IconSize.LARGE_TOOLBAR); //new Image.from_icon_name("xn-app-menu", Gtk.IconSize.LARGE_TOOLBAR);
+        img = IconRepo.get_themed_image_icon("xn-app-menu-symbolic", IconSize.LARGE_TOOLBAR); //new Image.from_icon_name("xn-app-menu", Gtk.IconSize.LARGE_TOOLBAR);
         this.set_icon_widget(img);
         img.show();
-
+        
         this.menu = menu;
-
+        
         if(tooltip_text != null)
             this.set_tooltip_text(tooltip_text);
-
+        
         if(this.menu.get_attach_widget() != null)
             this.menu.detach();
-
+        
         this.menu.attach_to_widget(this, null);
-
+        
         this.content = this.get_child() as Gtk.Button;
         assert(content != null);
-
+        
         this.content.set_relief(Gtk.ReliefStyle.HALF);
         this.content.events |=
            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK;
-
+        
         this.content.button_press_event.connect(on_button_pressed);
         this.content.button_release_event.connect(on_button_released);
-
+        
         this.menu.deactivate.connect( () => {
             if(deactivtion_src != 0)
                 Source.remove(deactivtion_src);
-
+            
             deactivtion_src = Idle.add( () => {
                 this.active = false;
                 menu.popdown();
@@ -78,10 +78,10 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
     private bool on_button_pressed(Gdk.EventButton e) {
         if(e.button != 1)
             return true;
-
+        
         if(button_press_src != 0)
             Source.remove(button_press_src);
-
+        
         button_press_src = Idle.add( () => {
             button_press_src = 0;
             this.active = true;
@@ -94,7 +94,7 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
     private bool on_button_released(Gdk.EventButton e) {
         if(e.button != 1)
             return true;
-
+        
         if(button_press_src != 0) {
             Source.remove(button_press_src);
             button_press_src = 0;
@@ -111,7 +111,7 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
         int h;
         Allocation widget_allocation;
         Allocation menu_allocation;
-
+        
         menu.get_allocation(out menu_allocation);
         push = true;
         if(menu.attach_widget == null || menu.attach_widget.get_window() == null) {
@@ -120,12 +120,12 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
         }
         menu.attach_widget.get_window().get_origin(out x, out y);
         menu.attach_widget.get_allocation(out widget_allocation);
-
+        
         //TODO: test for RTL
         x += widget_allocation.x;
         x += widget_allocation.width;
         x -= menu_allocation.width;
-
+        
         menu.get_size_request(out w, out h);
         y += widget_allocation.y;
         if(y + h >= menu.attach_widget.get_screen().get_height())

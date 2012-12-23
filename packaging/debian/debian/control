@@ -9,7 +9,7 @@ Homepage: http://www.xnoise-media-player.com/
 
 Package: xnoise
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, gnome-icon-theme-symbolic
 Recommends: xnoise-plugins, tumbler
 Description: Pretty and fast media player for Gtk+
  Xnoise allows listening to music and playing video in an intuitive way: You 
