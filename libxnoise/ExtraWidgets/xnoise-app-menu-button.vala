@@ -38,7 +38,7 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
     private Image img;
     
     public AppMenuButton(Gtk.Menu menu, string? tooltip_text = null) {
-        img = IconRepo.get_themed_image_icon("xn-app-menu-symbolic", IconSize.LARGE_TOOLBAR); //new Image.from_icon_name("xn-app-menu", Gtk.IconSize.LARGE_TOOLBAR);
+        img = IconRepo.get_themed_image_icon("emblem-system-symbolic", IconSize.LARGE_TOOLBAR); //new Image.from_icon_name("xn-app-menu", Gtk.IconSize.LARGE_TOOLBAR);
         this.set_icon_widget(img);
         img.show();
         
