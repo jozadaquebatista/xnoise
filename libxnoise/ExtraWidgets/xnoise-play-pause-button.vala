@@ -55,11 +55,25 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         this.can_focus = false;
         
         button = new Gtk.Button();
+        button.set_relief(ReliefStyle.NONE);
         
-        play = IconRepo.get_themed_image_icon("media-playback-start-symbolic", IconSize.LARGE_TOOLBAR);
+        unowned IconTheme theme = IconTheme.get_default();
+        
+        // use standard icon theme or local fallback
+        if(theme.has_icon("media-playback-start-symbolic"))
+            play = IconRepo.get_themed_image_icon("media-playback-start-symbolic",
+                                                  IconSize.LARGE_TOOLBAR);
+        else
+            play = IconRepo.get_themed_image_icon("xn-media-playback-start-symbolic",
+                                                  IconSize.LARGE_TOOLBAR);
         play.show();
         
-        pause = IconRepo.get_themed_image_icon("media-playback-pause-symbolic", IconSize.LARGE_TOOLBAR);
+        if(theme.has_icon("media-playback-pause-symbolic"))
+            pause = IconRepo.get_themed_image_icon("media-playback-pause-symbolic",
+                                                  IconSize.LARGE_TOOLBAR);
+        else
+            pause = IconRepo.get_themed_image_icon("xn-media-playback-pause-symbolic",
+                                                  IconSize.LARGE_TOOLBAR);
         pause.show();
         
         button.add(play);

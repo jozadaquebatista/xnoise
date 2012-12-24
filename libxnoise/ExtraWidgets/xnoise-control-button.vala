@@ -39,7 +39,6 @@ using Gdk;
 private class Xnoise.ControlButton : Gtk.ToolItem {
     
     private Image image;
-    private int iconwidth = 24;
     private Function function;
     
     public enum Function {
@@ -52,21 +51,39 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     
     
     public ControlButton(Function _function) {
-        function = _function;
+        this.function = _function;
         
         var button = new Gtk.Button();
+        button.set_relief(ReliefStyle.NONE);
+        unowned IconTheme theme = IconTheme.get_default();
         
+        // use standard icon theme or local fallback
         switch(function) {
             case Function.NEXT: {
-                image = IconRepo.get_themed_image_icon("media-skip-forward-symbolic", IconSize.LARGE_TOOLBAR);
+                if(theme.has_icon("media-skip-forward-symbolic"))
+                    image = IconRepo.get_themed_image_icon("media-skip-forward-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
+                else
+                    image = IconRepo.get_themed_image_icon("xn-media-skip-forward-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.PREVIOUS: {
-                image = IconRepo.get_themed_image_icon("media-skip-backward-symbolic", IconSize.LARGE_TOOLBAR);
+                if(theme.has_icon("media-skip-backward-symbolic"))
+                    image = IconRepo.get_themed_image_icon("media-skip-backward-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
+                else
+                    image = IconRepo.get_themed_image_icon("xn-media-skip-backward-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
                 break;
             }
             case Function.STOP: {
-                image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic", IconSize.LARGE_TOOLBAR);
+                if(theme.has_icon("media-playback-stop-symbolic"))
+                    image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
+                else
+                    image = IconRepo.get_themed_image_icon("xn-media-playback-stop-symbolic",
+                                                           IconSize.LARGE_TOOLBAR);
                 break;
             }
             default:

@@ -1579,6 +1579,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(MAIN_UI_FILE);
             
+            unowned IconTheme theme = IconTheme.get_default();
+            
             bottom_notebook  = gb.get_object("bottom_notebook") as Gtk.Notebook;
             content_notebook = gb.get_object("content_nb") as Gtk.Notebook;
             
@@ -1616,9 +1618,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             var hide_button = new Gtk.Button();
-            var hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+            
+            // use standard icon theme or local fallback
+            Gtk.Image hide_button_image;
+            if(theme.has_icon("go-first-symbolic"))
+                hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
                                                                    IconSize.MENU
-            );
+                );
+            else
+                hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
+                                                                   IconSize.MENU
+                );
+            
             hide_button.add(hide_button_image);
             hide_button.can_focus = false;
             hide_button.clicked.connect(this.toggle_media_browser_visibility);
@@ -1626,9 +1637,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             var tbx = new Box(Orientation.HORIZONTAL, 0);
             tbx.pack_start(hide_button, false, false, 0);
             var removeSelectedButton = new Gtk.Button();
-            var remsel_button_image = IconRepo.get_themed_image_icon("list-remove-symbolic",
+            Gtk.Image remsel_button_image;
+            if(theme.has_icon("list-remove-symbolic"))
+                remsel_button_image = IconRepo.get_themed_image_icon("list-remove-symbolic",
                                                                      IconSize.MENU
-            );
+                );
+            else
+                remsel_button_image = IconRepo.get_themed_image_icon("xn-list-remove-symbolic",
+                                                                     IconSize.MENU
+                );
+            
             removeSelectedButton.add(remsel_button_image);
             removeSelectedButton.can_focus = false;
             removeSelectedButton.set_relief(ReliefStyle.NONE);
@@ -1640,9 +1658,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             //REMOVE TITLE OR ALL TITLES BUTTONS
             var removeAllButton = new Gtk.Button();
-            var remove_button_image = IconRepo.get_themed_image_icon("user-trash-symbolic",
+            Gtk.Image remove_button_image;
+            if(theme.has_icon("user-trash-symbolic"))
+                remove_button_image = IconRepo.get_themed_image_icon("user-trash-symbolic",
                                                                      IconSize.MENU
-            );
+                );
+            else
+                remove_button_image = IconRepo.get_themed_image_icon("xn-user-trash-symbolic",
+                                                                     IconSize.MENU
+                );
+            
             removeAllButton.add(remove_button_image);
             removeAllButton.can_focus      = false;
             removeAllButton.set_relief(ReliefStyle.NONE);
@@ -1654,9 +1679,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             removeAllButton.set_tooltip_text(_("Remove all"));
             var posjumper = new Gtk.Button();
-            var posjumper_image = IconRepo.get_themed_image_icon("format-justify-fill-symbolic",
+            Gtk.Image posjumper_image;
+            if(theme.has_icon("format-justify-fill-symbolic"))
+                posjumper_image = IconRepo.get_themed_image_icon("format-justify-fill-symbolic",
                                                                      IconSize.MENU
-            );
+                );
+            else
+                posjumper_image = IconRepo.get_themed_image_icon("xn-format-justify-fill-symbolic",
+                                                                     IconSize.MENU
+                );
             posjumper.add(posjumper_image);
             posjumper.can_focus      = false;
             posjumper.set_relief(ReliefStyle.NONE);
@@ -1684,18 +1715,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.notify["media-browser-visible"].connect( (s, val) => {
                 if(this.media_browser_visible == true) {
                     hide_button.remove(hide_button_image);
-                    hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-                                                                       IconSize.MENU
-                    );
+                    if(theme.has_icon("go-first-symbolic"))
+                        hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+                                                                           IconSize.MENU
+                        );
+                    else
+                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
+                                                                           IconSize.MENU
+                        );
                     hide_button_image.show();
                     hide_button.add(hide_button_image);
                     hide_button.set_tooltip_text(HIDE_LIBRARY);
                 }
                 else {
                     hide_button.remove(hide_button_image);
-                    hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
-                                                                       IconSize.MENU
-                    );
+                    if(theme.has_icon("go-last-symbolic"))
+                        hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
+                                                                           IconSize.MENU
+                        );
+                    else
+                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-last-symbolic",
+                                                                           IconSize.MENU
+                        );
                     hide_button_image.show();
                     hide_button.add(hide_button_image);
                     hide_button.set_tooltip_text(SHOW_LIBRARY);

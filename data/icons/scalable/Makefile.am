@@ -13,6 +13,16 @@ status_DATA = \
     xn-grid-symbolic.svg \
     xn-albumart.svg \
     xn-shadow.svg \
+    xn-media-playback-pause-symbolic.svg \
+    xn-media-playback-start-symbolic.svg \
+    xn-media-playback-stop-symbolic.svg \
+    xn-media-skip-backward-symbolic.svg \
+    xn-media-skip-forward-symbolic.svg \
+    xn-emblem-system-symbolic.svg \
+    xn-go-first-symbolic.svg \
+    xn-go-last-symbolic.svg \
+    xn-list-remove-symbolic.svg \
+    xn-format-justify-fill-symbolic.svg \
     $(NULL)
 
 paneldir = $(datadir)/icons/hicolor/scalable/apps
@@ -23,7 +33,6 @@ grey_DATA = xnoise-grey.svg
 
 appdir = $(datadir)/icons/hicolor/scalable/apps
 app_DATA = \
-    xn-app-menu-symbolic.svg \
     xn-stream.svg \
     xn-playlist.svg \
     xn-local-collection.svg \
