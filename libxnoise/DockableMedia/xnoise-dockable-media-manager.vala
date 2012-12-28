@@ -10,27 +10,6 @@ public class Xnoise.DockableMediaManager {
     public DockableMediaManager() {
         table = new HashTable<string,Xnoise.DockableMedia>(str_hash, str_equal);
     }
-    
-    /*
-    Returns a string corresponding to the DockableMedia.Category.
-    */
-    public static string? get_category_name(DockableMedia.Category category) {
-        switch(category) {
-            case DockableMedia.Category.MEDIA_COLLECTION:
-                return _("Media Collections");
-            case DockableMedia.Category.PLAYLIST:
-                return _("Playlists");
-            case DockableMedia.Category.STORES:
-                return _("Stores");
-            case DockableMedia.Category.DEVICES:
-                return _("Devices");
-            case DockableMedia.Category.UNKNOWN:
-            default:
-                return null;
-        }
-    }
-    
-    
 
     /*
     Removes a media source by its name.    
