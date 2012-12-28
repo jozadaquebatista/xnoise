@@ -57,6 +57,7 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
+    DockableMedia/xnoise-dockable-media-manager.vala \
     ExtDev/AndroidPlayer/xnoise-android-item-handler.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-device.vala \
     ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala \
