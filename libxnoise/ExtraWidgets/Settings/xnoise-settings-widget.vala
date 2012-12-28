@@ -47,6 +47,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private CheckButton switch_hoverimage;
     private CheckButton switch_quitifclosed;
     private CheckButton switch_use_notifications;
+    private CheckButton switch_compact_media_selector;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
     
@@ -99,6 +100,9 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         assert(switch_use_notifications != null);
         switch_use_notifications.clicked.connect(this.on_switch_use_notifications_clicked);
         
+        assert(switch_compact_media_selector != null);
+        switch_compact_media_selector.clicked.connect(this.on_switch_compact_media_selector_clicked);
+        
         sb.changed.connect(this.on_mb_font_changed);
     }
 
@@ -120,6 +124,11 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         switch_hoverimage.active = !Params.get_bool_value("not_show_art_on_hover_image");
         
         switch_use_notifications.active = !Params.get_bool_value("not_use_notifications");
+        
+        if(Params.get_string_value("media_source_selector_type") == "combobox")
+            switch_compact_media_selector.active = true;
+        else
+            switch_compact_media_selector.active = false;
         
         // SpinButton
         if((Params.get_int_value("fontsizeMB") >= 7)&&
@@ -207,6 +216,17 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         else {
             Params.set_bool_value("not_show_art_on_hover_image", false);
             main_window.not_show_art_on_hover_image = false;
+        }
+    }
+    
+    private void on_switch_compact_media_selector_clicked() {
+        if(!this.switch_compact_media_selector.active) {
+            Params.set_string_value("media_source_selector_type", "tree");
+            main_window.msw.media_source_selector_type = "tree";
+        }
+        else {
+            Params.set_string_value("media_source_selector_type", "combobox");
+            main_window.msw.media_source_selector_type = "combobox";
         }
     }
     
@@ -308,6 +328,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
             switch_use_notifications.can_focus = false;
             switch_use_notifications.set_label(_("Use desktop notifications"));
+            
+            switch_compact_media_selector = this.builder.get_object("cb_compact_media_selector") as CheckButton;
+            switch_compact_media_selector.can_focus = true;
+            switch_compact_media_selector.set_label(_("Use a compact selector for media sources"));
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             

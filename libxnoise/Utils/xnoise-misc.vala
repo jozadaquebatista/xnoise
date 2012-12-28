@@ -49,7 +49,7 @@ namespace Xnoise {
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
-    public static HashTable<string,Xnoise.DockableMedia>  dockable_media_sources;
+    public static Xnoise.DockableMediaManager dockable_media_sources;
     public static HashTable<int, Xnoise.DataSource>       data_source_registry;
 
     public static PatternSpec pattern_audio;
@@ -98,7 +98,7 @@ namespace Xnoise {
         
         setup_pattern_specs();
         
-        dockable_media_sources = new HashTable<string, DockableMedia> (str_hash, str_equal);
+        dockable_media_sources = new DockableMediaManager();
         data_source_registry   = new HashTable<int, Xnoise.DataSource>(direct_hash, direct_equal);
         
         _current_stamps   = new HashTable<int, uint32>(direct_hash, direct_equal);
