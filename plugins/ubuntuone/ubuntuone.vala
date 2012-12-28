@@ -1,4 +1,4 @@
-f/* ubuntuone.vala
+/* ubuntuone.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -146,7 +146,7 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
     
     private void on_selection_changed() {
-        if(dname == UBUNTUONE_MUSIC_STORE_NAME) {
+        if(global.active_dockable_media_name == UBUNTUONE_MUSIC_STORE_NAME) {
             if(ms == null) {
                 ms = new UStore();
                 //Signals
