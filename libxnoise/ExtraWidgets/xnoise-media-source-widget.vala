@@ -31,7 +31,16 @@
 
 using Gtk;
 
-public class Xnoise.MediaSoureWidget : Gtk.Box {
+
+// Vala does not seem to allow nested interfaces
+private interface MediaSelector : Gtk.Widget {
+    public abstract string selected_dockable_media {get; set;} 
+    public abstract void select_without_signal_emmission(string name);
+    public abstract void expand_all();
+}
+    
+
+public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     
     private Gtk.Notebook notebook;
     private unowned Xnoise.MainWindow mwindow;
@@ -39,18 +48,265 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
     public signal void selection_changed(string dockable_name); //int selection_number
     
     public Gtk.Entry search_entry              { get; private set; }
-    private MediaSelector media_source_selector;// { get; private set; }
+    private MediaSelector media_source_selector = null;// { get; private set; }
+    private ScrolledWindow media_source_selector_window = null;
+    private Box media_source_selector_box = null;
     
     public MediaSoureWidget(Xnoise.MainWindow mwindow) {
         Object(orientation:Orientation.VERTICAL, spacing:0);
+        Params.iparams_register(this);
         this.mwindow = mwindow;
         
         setup_widgets();
     }
-
-    private class MediaSelector : TreeView {
+    
+    /* This is a compact media selector, which uses a ComboBox */
+    private class ComboMediaSelector : ComboBox, MediaSelector {
         
         private unowned MediaSoureWidget owner;
+        TreeStore store;
+        
+        public enum Column {
+            ICON = 0,
+            VIS_TEXT,
+            WEIGHT,
+            CATEGORY,
+            IS_SEPARATOR,
+            NAME,
+            N_COLUMNS
+        }
+        
+        public string selected_dockable_media { get; set; }
+        
+        public ComboMediaSelector(MediaSoureWidget owner) {
+            this.owner = owner;
+            selected_dockable_media = "";
+            store = new TreeStore(Column.N_COLUMNS, 
+                                  typeof(Gdk.Pixbuf),           //icon
+                                  typeof(string),               //vis_text
+                                  typeof(int),                  //weight
+                                  typeof(DockableMedia.Category),
+                                  typeof(bool),                 //is_separator
+                                  typeof(string)                //name
+                                  );
+            var renderer = new CellRendererText();
+            var rendererPb = new CellRendererPixbuf();
+            
+            this.pack_start(rendererPb, false);
+            this.pack_start(renderer, true);
+            
+            this.add_attribute(rendererPb, "pixbuf", Column.ICON);
+            this.add_attribute(renderer, "text", Column.VIS_TEXT);
+            this.add_attribute(renderer, "weight", Column.WEIGHT);
+            this.set_row_separator_func(separator_func);
+            this.model = store;
+            
+            this.notify["selected-dockable-media"].connect( () => {
+                select_without_signal_emmission(selected_dockable_media);
+                global.active_dockable_media_name = selected_dockable_media;
+            });
+            
+            this.changed.connect((a) => {
+                assert(this.get_model() != null);
+                
+                TreeIter iter;
+                this.get_active_iter(out iter);
+                
+                string name = "";
+                this.get_model().get(iter, Column.NAME, out name);
+                selected_dockable_media = name;
+                owner.selection_changed(name);
+            });
+            
+            this.show_all();
+            build_model();
+            dockable_media_sources.media_inserted.connect(on_media_inserted);
+            dockable_media_sources.media_removed.connect(on_media_removed);
+            dockable_media_sources.category_removed.connect(on_category_removed);
+            dockable_media_sources.category_inserted.connect(on_category_inserted);
+        }
+        
+        public void expand_all() {
+        }
+             
+        public void select_without_signal_emmission(string dockable_name) {  
+            TreeIter iter_search;
+            Value v;
+            if(!this.store.get_iter_first(out iter_search))
+                return;
+                
+            while(true) {
+                this.store.get_value(iter_search, ComboMediaSelector.Column.NAME, out v);
+                string row_name = v.get_string();
+                if(row_name == dockable_name)
+                {
+                    this.set_active_iter(iter_search);
+                    return;
+                }
+                if(!this.store.iter_next(ref iter_search))
+                    break;
+            }
+        }
+        
+        /* set the data of a row that is not a separator between categories */
+        private void set_row_data(TreeIter iter, DockableMedia media) {
+            assert(media != null);
+            
+            this.store.set(iter,
+                  ComboMediaSelector.Column.ICON, media.get_icon(),
+                  ComboMediaSelector.Column.VIS_TEXT, media.headline(),
+                  ComboMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+                  ComboMediaSelector.Column.CATEGORY, media.category,
+                  ComboMediaSelector.Column.IS_SEPARATOR, false,
+                  ComboMediaSelector.Column.NAME, media.name()
+            );
+        }
+        
+        /* make a row a separator for a category */
+        private void set_row_separator(TreeIter iter, DockableMedia.Category category) {
+            this.store.set(iter,
+                  ComboMediaSelector.Column.ICON, null,
+                  ComboMediaSelector.Column.VIS_TEXT, "",
+                  ComboMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+                  ComboMediaSelector.Column.CATEGORY, category,
+                  ComboMediaSelector.Column.IS_SEPARATOR, true,
+                  ComboMediaSelector.Column.NAME, ""
+              );
+          }              
+        
+        private void on_media_inserted(string name) {
+            DockableMedia d = dockable_media_sources.lookup(name);
+            assert(d != null);
+            insert_media_into_category(d, d.category());
+        }
+        
+        /* we can always rely on the fact that the category media is inserted into has already been added
+        to the model - DockableMediaManager takes care of this*/
+        private void insert_media_into_category(DockableMedia media, DockableMedia.Category category) {
+            TreeIter iter;
+            Value v;
+            assert(this.store.get_iter_first(out iter));
+            
+            while(true) 
+            {
+                store.get_value(iter, ComboMediaSelector.Column.IS_SEPARATOR, out v);
+                if(v.get_boolean())
+                {
+                    Value v_category;
+                    store.get_value(iter, ComboMediaSelector.Column.CATEGORY, out v_category);
+                    if(v_category.get_enum() == category) //found the appropriate section
+                    {
+                        TreeIter iter_section = iter;
+                        while(this.store.iter_next(ref iter_section)) //cycle to last entry in section
+                        {
+                            this.store.get_value(iter, ComboMediaSelector.Column.IS_SEPARATOR, out v);
+                            if(v.get_boolean())
+                            {
+                                this.store.iter_previous(ref iter_section);
+                                break;
+                            }
+                        }
+                        TreeIter iter_new;
+                        // if iter is still valid (end was no reached) insert new entry after it, else append
+                        if(this.store.iter_is_valid(iter_section))
+                            this.store.insert_after(out iter_new, null, iter_section);
+                        else
+                            this.store.append(out iter_new, null);
+                        set_row_data(iter_new, media);
+                        return;
+                    }
+                }
+                if(!store.iter_next(ref iter))
+                    break;
+            }
+        }
+        
+        private void on_category_inserted(DockableMedia.Category category) {
+            TreeIter iter;
+            this.store.append(out iter, null);
+            set_row_separator(iter, category);
+        }
+        
+        private void on_media_removed(string name) {
+            TreeIter iter;
+            Value v;
+            if(!this.store.get_iter_first(out iter))
+                return;
+                
+            while(true) {
+                this.store.get_value(iter, ComboMediaSelector.Column.NAME, out v);
+                string row_name = v.get_string();
+                if(row_name == name)
+                {
+                    this.store.remove(ref iter);
+                    return;
+                }
+                
+                if(!this.store.iter_next(ref iter))
+                    break;
+            }
+        }
+        
+        /* this code will only be called when the last element in a category has been removed, because only then
+        DockableMediaManager fires the signal */
+        private void on_category_removed(DockableMedia.Category category) {
+            TreeIter iter;
+            Value v;
+            if(!this.store.get_iter_first(out iter))
+                return;
+                
+            while(true) {
+                this.store.get_value(iter, ComboMediaSelector.Column.CATEGORY, out v);
+                if(v.get_enum() == category)
+                {
+                    this.store.remove(ref iter);
+                    return;
+                }
+                
+                if(!this.store.iter_next(ref iter))
+                    break;
+            }
+        }
+        
+        /* the model is first built here. Further updates to the model when new sources are added are handled
+        by the functions that respond to DockableMediaManager's signals (instead of building everything anew.
+        Adds code but saves startup time when several plugins register at the beginning. */
+        private void build_model() {
+            this.store.clear();
+            TreeIter iter;
+            if(!this.store.get_iter_first(out iter))
+                this.store.append(out iter, null);
+            int count = 0;
+            foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories())
+            {
+                // don't add a redundant row at the beginning
+                if(count != 0)
+                    this.store.append(out iter, null);
+                set_row_separator(iter, c);
+                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c))
+                {
+                    this.store.append(out iter, null);
+                    set_row_data(iter, d);
+                }
+                ++count;
+            }
+        }
+        
+        /* determines whether a row is to be drawn as a separator */
+        bool separator_func (TreeModel model, TreeIter iter) {
+            Value v;
+            
+            model.get_value(iter, ComboMediaSelector.Column.IS_SEPARATOR, out v);
+            return v.get_boolean();
+        }   
+    }
+        
+        
+    /* This is the traditional MediaSelector, which uses a TreeView */
+    private class TreeMediaSelector : TreeView, MediaSelector {
+        
+        private unowned MediaSoureWidget owner;
+        private TreeStore store;
         
         public enum Column {
             ICON = 0,
@@ -65,14 +321,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         
         public string selected_dockable_media { get; set; }
         
-        public MediaSelector(MediaSoureWidget owner) {
+        public TreeMediaSelector(MediaSoureWidget owner) {
             this.owner = owner;
             selected_dockable_media = "";
             //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
             this.headers_visible = false;
             this.set_enable_search(false);
             this.get_selection().set_mode(SelectionMode.SINGLE);
-            TreeStore media_source_selector_model = new TreeStore(Column.N_COLUMNS, 
+            this.store = new TreeStore(Column.N_COLUMNS, 
                                                                   typeof(Gdk.Pixbuf),           //icon
                                                                   typeof(string),               //vis_text
                                                                   typeof(int),                  //weight
@@ -99,7 +355,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             this.insert_column(column, -1);
             column.add_attribute(rendererPb, "pixbuf", Column.SELECTION_ICON);
             
-            this.model = media_source_selector_model;
+            this.model = this.store;
             
             this.key_release_event.connect(this.on_key_released);
             
@@ -107,7 +363,86 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             
             this.notify["selected-dockable-media"].connect( () => {
                 global.active_dockable_media_name = selected_dockable_media;
+                select_without_signal_emmission(selected_dockable_media);
             });
+            
+            this.show_all();
+            build_model();
+            dockable_media_sources.media_inserted.connect(on_media_inserted);
+            dockable_media_sources.media_removed.connect(on_media_removed);
+            dockable_media_sources.category_removed.connect(on_category_removed);
+            dockable_media_sources.category_inserted.connect(on_category_inserted);
+        }
+        
+        private void setup_model() {
+            foreach(string n in dockable_media_sources.get_keys()) {
+                if(n == "MusicBrowserDockable")
+                    continue;
+                
+                DockableMedia? d = null;
+                d = dockable_media_sources.lookup(n);
+                if(d == null)
+                    continue;
+                TreeIter? ix = null;
+                _insert_dockable(d, false, ref ix, false);
+            }
+        }
+        
+        
+        private void _insert_dockable(DockableMedia d,
+                                  bool bold = false,
+                                  ref TreeIter? xiter,
+                                  bool initial_selection = false) {
+        
+            var category = d.category();
+            TreeStore m = (TreeStore)this.get_model();
+            TreeIter iter = TreeIter(), child;
+            
+            // Add Category, if necessary
+            bool found_category = false;
+            m.foreach( (m,p,i) => {
+                if(p.get_depth() == 1) {
+                    DockableMedia.Category cat;
+                    m.get(i, TreeMediaSelector.Column.CATEGORY , out cat);
+                    if(cat == category) {
+                        found_category = true;
+                        iter = i;
+                        return true;
+                    }
+                }
+                return false;
+            });
+            if(!found_category) {
+                print("add new category %s\n", DockableMediaManager.get_category_name(category));
+                m.append(out iter, null);
+                m.set(iter,
+                      TreeMediaSelector.Column.ICON, null,
+                      TreeMediaSelector.Column.VIS_TEXT, DockableMediaManager.get_category_name(category),
+                      TreeMediaSelector.Column.WEIGHT, Pango.Weight.BOLD,
+                      TreeMediaSelector.Column.CATEGORY, category,
+                      TreeMediaSelector.Column.SELECTION_STATE, false,
+                      TreeMediaSelector.Column.SELECTION_ICON, null,
+                      TreeMediaSelector.Column.NAME, ""
+                );
+            }
+            
+            //insert dockable info
+            
+            if(found_category)
+                m.insert_after(out child, null, iter);
+            else
+                m.append(out child, null);
+            m.set(child,
+                  TreeMediaSelector.Column.ICON, d.get_icon(),
+                  TreeMediaSelector.Column.VIS_TEXT, d.headline(),
+                  TreeMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+                  TreeMediaSelector.Column.CATEGORY, category,
+                  TreeMediaSelector.Column.SELECTION_STATE, initial_selection,
+                  TreeMediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null),
+                  TreeMediaSelector.Column.NAME, d.name()
+            );
+            xiter = child;
+            d = null;
         }
         
         
@@ -144,11 +479,10 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
                     sel.select_path(path);
                     return false;
                 });
-                selected_dockable_media = dockable_name;
                 //print("sel treepth %s\n", dockable_name);
             }
             else {
-                print("couldn't find treepth\n");
+                print("couldn't find treepath\n");
             }
         }
         
@@ -248,26 +582,127 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             }
             return false;
         }
-    }
+        
+        private void set_row_data(TreeIter iter, DockableMedia media) {
+            assert(media != null);
+            
+            this.store.set(iter,
+                  TreeMediaSelector.Column.ICON, media.get_icon(),
+                  TreeMediaSelector.Column.VIS_TEXT, media.headline(),
+                  TreeMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+                  TreeMediaSelector.Column.CATEGORY, media.category,
+                  TreeMediaSelector.Column.SELECTION_STATE, false,
+                  TreeMediaSelector.Column.SELECTION_ICON, null,
+                  TreeMediaSelector.Column.NAME, media.name()
+            );
+        }
+        
+        private void set_row_category(TreeIter iter, DockableMedia.Category category) {
+            this.store.set(iter,
+                  TreeMediaSelector.Column.ICON, null,
+                  TreeMediaSelector.Column.VIS_TEXT, DockableMediaManager.get_category_name(category),
+                  TreeMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+                  TreeMediaSelector.Column.CATEGORY, category,
+                  TreeMediaSelector.Column.SELECTION_STATE, false,
+                  TreeMediaSelector.Column.SELECTION_ICON, null,
+                  TreeMediaSelector.Column.NAME, ""
+              );
+          }    
+        
+        private void build_model() {
+            this.store.clear();
+            TreeIter iter;
+            foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories())
+            {
+                int child_count = 0; 
+                this.store.append(out iter, null);
+                set_row_category(iter, c);
+                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c))
+                {
+                    TreeIter iter_child; 
+                    this.store.append(out iter_child, iter);
+                    set_row_data(iter_child, d);
+                    child_count++;
+                }
+                // if there were children being added, move up to toplevel again
+                if(child_count > 0)
+                    this.store.iter_parent(out iter, iter);
+            }
+        }
+        
+        private void on_media_inserted(string name) {
+            DockableMedia d = dockable_media_sources.lookup(name);
+            assert(d != null);
+            
+            TreeIter iter_category;
+            this.store.get_iter_first(out iter_category);
+            bool found_category = false;
+            
+            this.store.foreach((model, path, iter) => {
+                Value v;
+                this.store.get_value(iter, Column.CATEGORY, out v);
+                if(v.get_enum() == d.category())
+                {
+                    iter_category = iter;
+                    found_category = true;
+                    return true;
+                }
+                return false;
+            });
+            
+            if(found_category)
+            {
+                TreeIter iter;
+                this.store.append(out iter, iter_category);
+                set_row_data(iter, d);
+            }            
+        }
+        
+        private void on_media_removed(string name) {
+             this.store.foreach((model, path, iter) => {
+                Value v;
+                this.store.get_value(iter, Column.NAME, out v);
+                if(v.get_string() == name)
+                {
+                    this.store.remove(ref iter);
+                    return true;
+                }
+                return false;
+            });
+        }
+        
+        private void on_category_inserted(DockableMedia.Category category) {
+            TreeIter iter;
+            this.store.append(out iter, null);
+            this.set_row_category(iter, category);    
+        }
+        
+        private void on_category_removed(DockableMedia.Category category) {
+            this.store.foreach((model, path, iter) => {
+                Value v;
+                this.store.get_value(iter, Column.CATEGORY, out v);
+                if(v.get_enum() == category)
+                {
+                    this.store.remove(ref iter);
+                    return true;
+                }
+                return false;
+            });
+        }
+        
+    } // end class TreeMediaSelector
     
     public void set_focus_on_selector() {
         this.media_source_selector.grab_focus();
     }
     
-    private string? get_category_name(DockableMedia.Category category) {
-        switch(category) {
-            case DockableMedia.Category.MEDIA_COLLECTION:
-                return _("Media Collections");
-            case DockableMedia.Category.PLAYLIST:
-                return _("Playlists");
-            case DockableMedia.Category.STORES:
-                return _("Stores");
-            case DockableMedia.Category.DEVICES:
-                return _("Devices");
-            case DockableMedia.Category.UNKNOWN:
-            default:
-                return null;
-        }
+    
+        
+    private void _insert_dockable(DockableMedia d,
+                              bool bold = false,
+                              ref TreeIter? xiter,
+                              bool initial_selection = false) {
+        add_page(d);
     }
     
     public void select_dockable_by_name(string name, bool emmit_signal = false) {
@@ -306,103 +741,46 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
     public void remove_dockable_in_idle(string name) {
         string s = name;
         Idle.add(() => {
-            remove_dockable(s);
+            remove_page(s);
             return false;
         });
     }
+ 
+    private void add_page(DockableMedia d) {
+        Gtk.Widget? widg = d.create_widget(mwindow);
+            if(widg == null)
+                return;
+            
+            widg.show_all();
+            notebook.show_all();
+            assert(notebook != null && notebook is Gtk.Container);
+            notebook.append_page(widg, new Label("x"));        
+            d = null;   
+    }
     
-    public void remove_dockable(string name) {
-        //print("remove_dockable %s\n", name);
-        TreeStore m = (TreeStore)media_source_selector.get_model();
-        string? iname = null;
-        m.foreach( (m,p,i) => {
-            if(p.get_depth() == 2) {
-                m.get(i, MediaSelector.Column.NAME, out iname);
-                if(name == iname) {
-                    TreePath pc = m.get_path(i);
-                    pc.up();
-                    TreeIter parent_iter;
-                    m.get_iter(out parent_iter, pc);
-                    if(m.iter_n_children(parent_iter) == 1)
-                        ((TreeStore)m).remove(ref parent_iter);
-                    else
-                        ((TreeStore)m).remove(ref i);
-                    DockableMedia? d = dockable_media_sources.lookup(name);
-                    if(d != null) {
-                        d.remove_main_view();
-                        assert(notebook != null && notebook is Gtk.Container);
-                        notebook.remove_page(notebook.page_num(d.widget));
-                        dockable_media_sources.remove(name);
-                    }
-                    return true;
-                }
-            }
-            return false;
-        });
+    private void remove_page(string name) {
+        DockableMedia? d = dockable_media_sources.lookup(name);
+        if(d != null) {
+            d.remove_main_view();
+            assert(notebook != null && notebook is Gtk.Container);
+            notebook.remove_page(notebook.page_num(d.widget));
+            dockable_media_sources.remove(name);
+        }
+        
         Idle.add( () => {
             set_focus_on_selector();
             return false;
         });
     }
-
-    private void _insert_dockable(DockableMedia d,
-                                  bool bold = false,
-                                  ref TreeIter? xiter,
-                                  bool initial_selection = false) {
-        Gtk.Widget? widg = d.create_widget(mwindow);
-        if(widg == null) {
-            xiter = null;
-            return;
-        }
-        widg.show_all();
-        notebook.show_all();
-        assert(notebook != null && notebook is Gtk.Container);
-        notebook.append_page(widg, new Label("x"));
-        var category = d.category();
-        TreeStore m = (TreeStore)media_source_selector.get_model();
-        TreeIter iter = TreeIter(), child;
-        
-        // Add Category, if necessary
-        bool found_category = false;
-        m.foreach( (m,p,i) => {
-            if(p.get_depth() == 1) {
-                DockableMedia.Category cat;
-                m.get(i, MediaSelector.Column.CATEGORY , out cat);
-                if(cat == category) {
-                    found_category = true;
-                    iter = i;
-                    return true;
-                }
-            }
-            return false;
-        });
-        if(!found_category) {
-            print("add new category %s\n", get_category_name(category));
-            m.append(out iter, null);
-            m.set(iter,
-                  MediaSelector.Column.ICON, null,
-                  MediaSelector.Column.VIS_TEXT, get_category_name(category),
-                  MediaSelector.Column.WEIGHT, Pango.Weight.BOLD,
-                  MediaSelector.Column.CATEGORY, category,
-                  MediaSelector.Column.SELECTION_STATE, false,
-                  MediaSelector.Column.SELECTION_ICON, null,
-                  MediaSelector.Column.NAME, ""
-            );
-        }
-        
-        //insert dockable info
-        m.append(out child, iter);
-        m.set(child,
-              MediaSelector.Column.ICON, d.get_icon(),
-              MediaSelector.Column.VIS_TEXT, d.headline(),
-              MediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
-              MediaSelector.Column.CATEGORY, category,
-              MediaSelector.Column.SELECTION_STATE, initial_selection,
-              MediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null),
-              MediaSelector.Column.NAME, d.name()
-        );
-        xiter = child;
-        d = null;
+    
+    private void on_dockable_added(string name) {
+        DockableMedia dockable = dockable_media_sources.lookup(name);
+        if(dockable != null)
+            add_page(dockable);
+    }    
+    
+    private void on_dockable_removed(string name) {
+        remove_page(name);
     }
 
     private void setup_widgets() {
@@ -428,37 +806,26 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         notebook.set_border_width(1);
         notebook.show_border = true;
             
-        media_source_selector = new MediaSelector(this);
+        
+        this.media_source_selector_box = new Box(Orientation.VERTICAL, 0);
+        this.pack_start(media_source_selector_box, false, false, 0);
+        
+        // initialize the proper type of media source selector
+        read_params_data();
+        build_media_selector();
+                
         selection_changed.connect( (s,t) => {
             select_dockable_by_name(t, false);
             //notebook.set_current_page(t);
         });
-        var mss_sw = new ScrolledWindow(null, null);
-        mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
-        mss_sw.set_border_width(1);
-        mss_sw.add(media_source_selector);
-        mss_sw.set_shadow_type(ShadowType.IN);
-        this.pack_start(mss_sw, false, false, 0);
         
         //Separator
         da = new Gtk.DrawingArea();
         da.height_request = 4;
         this.pack_start(da, false, false, 0);
-        
-        DockableMedia? dm_mb = null;
-        assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
         this.pack_start(notebook, true, true, 0);
-        //Insert Media Browser first
-        TreeIter? media_browser_iter = null;
-        _insert_dockable(dm_mb, true, ref media_browser_iter, true);
-        string dname = dm_mb.name();
-        global.active_dockable_media_name = dname;
-        media_source_selector.selected_dockable_media = dname;
         
         foreach(string n in dockable_media_sources.get_keys()) {
-            if(n == "MusicBrowserDockable")
-                continue;
-            
             DockableMedia? d = null;
             d = dockable_media_sources.lookup(n);
             if(d == null)
@@ -467,7 +834,65 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             _insert_dockable(d, false, ref ix, false);
         }
         media_source_selector.expand_all();
-        media_source_selector.get_selection().select_iter(media_browser_iter);
+       
+        DockableMedia? dm_mb = null;
+        assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
+        string dname = dm_mb.name();
+        media_source_selector.selected_dockable_media = dname;
+    }
+    
+    private string _media_source_selector_type = "tree";
+    public string media_source_selector_type {
+        get {
+            return _media_source_selector_type;
+        }
+        set {
+            if(value == _media_source_selector_type)
+                return;
+            _media_source_selector_type = value;
+            build_media_selector();
+        }
+    }
+    
+    private void build_media_selector() {
+        // clear the box and remove all references
+        if(media_source_selector_box != null)
+        {
+            foreach(Widget w in media_source_selector_box.get_children()) {
+                media_source_selector_box.remove(w);
+            }
+            media_source_selector = null;
+            media_source_selector_window = null;
+        }
+        switch(media_source_selector_type)
+        {
+            case "combobox":
+                media_source_selector = new ComboMediaSelector(this);
+                media_source_selector_box.add(media_source_selector);
+                break;
+            default:
+                media_source_selector = new TreeMediaSelector(this);
+                var mss_sw = new ScrolledWindow(null, null);
+                mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
+                mss_sw.set_border_width(1);
+                mss_sw.add(media_source_selector);
+                mss_sw.set_shadow_type(ShadowType.IN);
+                media_source_selector_box.add(mss_sw);
+                media_source_selector_window = mss_sw;
+                break;
+        }
+        media_source_selector.selected_dockable_media = global.active_dockable_media_name;
+        media_source_selector.expand_all();
+        this.show_all();
+    }
+    
+    
+    public void read_params_data() {
+        _media_source_selector_type = Params.get_string_value("media_source_selector_type");
+    }
+
+    public void write_params_data() {
+        Params.set_string_value("media_source_selector_type", media_source_selector_type);
     }
 }
 
