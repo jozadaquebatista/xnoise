@@ -70,7 +70,6 @@ public class Xnoise.DockableMediaManager {
     Insert a new media source.
     */
     public void insert (owned string key, Xnoise.DockableMedia value) {
-        message("inserting " + key); 
         table.insert(key, value);
         if (size_of_category(value.category()) == 1) 
             // the just added media source is the first of its category
