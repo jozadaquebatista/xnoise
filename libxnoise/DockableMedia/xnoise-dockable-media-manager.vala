@@ -74,8 +74,7 @@ public class Xnoise.DockableMediaManager {
    public List<DockableMedia.Category> get_existing_categories() {
         List<DockableMedia.Category> l = new List<DockableMedia.Category>();
         
-        foreach(DockableMedia d in table.get_values())
-        {
+        foreach(DockableMedia d in table.get_values()) {
             bool already_counted = false;
             foreach(DockableMedia.Category c in l)
                 if(d.category() == c)
@@ -89,8 +88,7 @@ public class Xnoise.DockableMediaManager {
    public List<DockableMedia> get_media_for_category(DockableMedia.Category category) {
         List<DockableMedia> l = new List<DockableMedia>();
         
-        foreach(DockableMedia d in table.get_values())
-        {
+        foreach(DockableMedia d in table.get_values()) {
             if(d.category() == category)
                 l.append(d);
         }

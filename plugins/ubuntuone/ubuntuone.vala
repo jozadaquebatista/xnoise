@@ -1,4 +1,4 @@
-/* ubuntuone.vala
+f/* ubuntuone.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -139,13 +139,13 @@ private class DockableUbuntuOneMS : DockableMedia {
         assert(this.win != null);
         var wu = new Label("UbuntuOne Music");
         
-        win.msw.selection_changed.connect(on_selection_changed);
+        global.notify["active-dockable-media-name"].connect(on_selection_changed);
         widget = wu;
         wu.show_all();
         return wu;
     }
     
-    private void on_selection_changed(string dname) {
+    private void on_selection_changed() {
         if(dname == UBUNTUONE_MUSIC_STORE_NAME) {
             if(ms == null) {
                 ms = new UStore();
@@ -186,7 +186,7 @@ private class DockableUbuntuOneMS : DockableMedia {
         assert(win != null);
         if(ms == null)
             return;
-        win.msw.selection_changed.disconnect(this.on_selection_changed);
+        global.notify["active-dockable-media-name"].disconnect(this.on_selection_changed);
         win.mainview_box.remove_main_view(ms);
         ms = null;
     }

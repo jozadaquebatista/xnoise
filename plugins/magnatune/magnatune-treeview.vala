@@ -682,7 +682,8 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         this.style_get("horizontal-separator", out hsepar);
         renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
         
-        main_window.msw.selection_changed.connect( (s,n) => {
+        global.notify["active-dockable-media-name"].connect( () => {
+            string n = global.active_dockable_media_name;
             if(n == name_buffer)
                 return;
             if(n == this.dock.name())

@@ -45,8 +45,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     private Gtk.Notebook notebook;
     private unowned Xnoise.MainWindow mwindow;
     
-    public signal void selection_changed(string dockable_name); //int selection_number
-    
     public Gtk.Entry search_entry              { get; private set; }
     private MediaSelector media_source_selector = null;// { get; private set; }
     private ScrolledWindow media_source_selector_window = null;
@@ -115,7 +113,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 string name = "";
                 this.get_model().get(iter, Column.NAME, out name);
                 selected_dockable_media = name;
-                owner.selection_changed(name);
             });
             
             this.show_all();
@@ -149,8 +146,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             while(true) {
                 this.store.get_value(iter_search, ComboMediaSelector.Column.NAME, out v);
                 string row_name = v.get_string();
-                if(row_name == dockable_name)
-                {
+                if(row_name == dockable_name) {
                     disconnect_signal_handlers();
                     this.set_active_iter(iter_search);
                     connect_signal_handlers();
@@ -200,21 +196,16 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             Value v;
             assert(this.store.get_iter_first(out iter));
             
-            while(true) 
-            {
+            while(true) {
                 store.get_value(iter, ComboMediaSelector.Column.IS_SEPARATOR, out v);
-                if(v.get_boolean())
-                {
+                if(v.get_boolean()) {
                     Value v_category;
                     store.get_value(iter, ComboMediaSelector.Column.CATEGORY, out v_category);
-                    if(v_category.get_enum() == category) //found the appropriate section
-                    {
+                    if(v_category.get_enum() == category) { //found the appropriate section
                         TreeIter iter_section = iter;
-                        while(this.store.iter_next(ref iter_section)) //cycle to last entry in section
-                        {
+                        while(this.store.iter_next(ref iter_section)) { //cycle to last entry in section
                             this.store.get_value(iter, ComboMediaSelector.Column.IS_SEPARATOR, out v);
-                            if(v.get_boolean())
-                            {
+                            if(v.get_boolean()) {
                                 this.store.iter_previous(ref iter_section);
                                 break;
                             }
@@ -249,8 +240,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             while(true) {
                 this.store.get_value(iter, ComboMediaSelector.Column.NAME, out v);
                 string row_name = v.get_string();
-                if(row_name == name)
-                {
+                if(row_name == name) {
                     this.store.remove(ref iter);
                     return;
                 }
@@ -270,8 +260,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 
             while(true) {
                 this.store.get_value(iter, ComboMediaSelector.Column.CATEGORY, out v);
-                if(v.get_enum() == category)
-                {
+                if(v.get_enum() == category) {
                     this.store.remove(ref iter);
                     return;
                 }
@@ -296,8 +285,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 if(count != 0)
                     this.store.append(out iter, null);
                 set_row_separator(iter, c);
-                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c))
-                {
+                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c)) {
                     this.store.append(out iter, null);
                     set_row_data(iter, d);
                 }
@@ -473,7 +461,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 if(name == null)
                     name = "";
                 selected_dockable_media = name;
-                owner.selection_changed(name);
             }
             return false;
         }
@@ -514,7 +501,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                             if(name == null)
                                 name = "";
                             selected_dockable_media = name;
-                            owner.selection_changed(name);
                         }
                     }
                     break;
@@ -558,8 +544,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 int child_count = 0; 
                 this.store.append(out iter, null);
                 set_row_category(iter, c);
-                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c))
-                {
+                foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c)) {
                     TreeIter iter_child; 
                     this.store.append(out iter_child, iter);
                     set_row_data(iter_child, d);
@@ -582,8 +567,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             this.store.foreach((model, path, iter) => {
                 Value v;
                 this.store.get_value(iter, Column.CATEGORY, out v);
-                if(v.get_enum() == d.category())
-                {
+                if(v.get_enum() == d.category()) {
                     iter_category = iter;
                     found_category = true;
                     return true;
@@ -591,8 +575,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 return false;
             });
             
-            if(found_category)
-            {
+            if(found_category) {
                 TreeIter iter;
                 this.store.append(out iter, iter_category);
                 set_row_data(iter, d);
@@ -603,8 +586,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
              this.store.foreach((model, path, iter) => {
                 Value v;
                 this.store.get_value(iter, Column.NAME, out v);
-                if(v.get_string() == name)
-                {
+                if(v.get_string() == name) {
                     this.store.remove(ref iter);
                     return true;
                 }
@@ -622,8 +604,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             this.store.foreach((model, path, iter) => {
                 Value v;
                 this.store.get_value(iter, Column.CATEGORY, out v);
-                if(v.get_enum() == category)
-                {
+                if(v.get_enum() == category) {
                     this.store.remove(ref iter);
                     return true;
                 }
@@ -748,9 +729,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         // initialize the proper type of media source selector
         read_params_data();
         build_media_selector();
-                
-        selection_changed.connect( (s,t) => {
-            select_dockable_by_name(t, false);
+        
+        global.notify["active-dockable-media-name"].connect(() => {
+            select_dockable_by_name(global.active_dockable_media_name, false);
         });
         
         //Separator
@@ -790,16 +771,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     
     private void build_media_selector() {
         // clear the box and remove all references
-        if(media_source_selector_box != null)
-        {
+        if(media_source_selector_box != null) {
             foreach(Widget w in media_source_selector_box.get_children()) {
                 media_source_selector_box.remove(w);
             }
             media_source_selector = null;
             media_source_selector_window = null;
         }
-        switch(media_source_selector_type)
-        {
+        switch(media_source_selector_type) {
             case "combobox":
                 media_source_selector = new ComboMediaSelector(this);
                 media_source_selector_box.add(media_source_selector);
