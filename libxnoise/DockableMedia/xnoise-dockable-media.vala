@@ -35,7 +35,23 @@ public abstract class Xnoise.DockableMedia : GLib.Object {
         MEDIA_COLLECTION,
         PLAYLIST,
         STORES,
-        DEVICES
+        DEVICES;
+        
+        public string? to_string() {
+            switch(this) {
+                case DockableMedia.Category.MEDIA_COLLECTION:
+                    return _("Media Collections");
+                case DockableMedia.Category.PLAYLIST:
+                    return _("Playlists");
+                case DockableMedia.Category.STORES:
+                    return _("Stores");
+                case DockableMedia.Category.DEVICES:
+                    return _("Devices");
+                case DockableMedia.Category.UNKNOWN:
+                default:
+                    return null;
+            }
+        }
     }
     
     public unowned Gtk.Widget? widget = null;

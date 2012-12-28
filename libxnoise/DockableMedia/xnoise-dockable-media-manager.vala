@@ -10,27 +10,6 @@ public class Xnoise.DockableMediaManager {
     public DockableMediaManager() {
         table = new HashTable<string,Xnoise.DockableMedia>(str_hash, str_equal);
     }
-    
-    /*
-    Returns a string corresponding to the DockableMedia.Category.
-    */
-    public static string? get_category_name(DockableMedia.Category category) {
-        switch(category) {
-            case DockableMedia.Category.MEDIA_COLLECTION:
-                return _("Media Collections");
-            case DockableMedia.Category.PLAYLIST:
-                return _("Playlists");
-            case DockableMedia.Category.STORES:
-                return _("Stores");
-            case DockableMedia.Category.DEVICES:
-                return _("Devices");
-            case DockableMedia.Category.UNKNOWN:
-            default:
-                return null;
-        }
-    }
-    
-    
 
     /*
     Removes a media source by its name.    
@@ -95,8 +74,7 @@ public class Xnoise.DockableMediaManager {
    public List<DockableMedia.Category> get_existing_categories() {
         List<DockableMedia.Category> l = new List<DockableMedia.Category>();
         
-        foreach(DockableMedia d in table.get_values())
-        {
+        foreach(DockableMedia d in table.get_values()) {
             bool already_counted = false;
             foreach(DockableMedia.Category c in l)
                 if(d.category() == c)
@@ -110,8 +88,7 @@ public class Xnoise.DockableMediaManager {
    public List<DockableMedia> get_media_for_category(DockableMedia.Category category) {
         List<DockableMedia> l = new List<DockableMedia>();
         
-        foreach(DockableMedia d in table.get_values())
-        {
+        foreach(DockableMedia d in table.get_values()) {
             if(d.category() == category)
                 l.append(d);
         }
