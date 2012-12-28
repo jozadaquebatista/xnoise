@@ -20,15 +20,19 @@ public class Xnoise.DockableMediaManager {
          
         if(d != null)
             c = d.category();
-            
-        if(table.remove(key)) {
-            media_removed(key);
-            if(this.size_of_category(c) == 0)
-                category_removed(c);
-            return true;
-        }
-        
-        else return false;
+        else
+            return false;
+        print("category : %s :: size: %d\n", c.to_string(), this.size_of_category(c));
+        media_removed(key);
+        if(this.size_of_category(c) == 1)
+            category_removed(c);
+        table.remove(key);
+//        if(table.remove(key)) {
+//            media_removed(key);
+        return true;
+//        }
+//        else
+//            return false;
     }
 
     /*
@@ -48,12 +52,14 @@ public class Xnoise.DockableMediaManager {
     /*
     Insert a new media source.
     */
-    public void insert (owned string key, Xnoise.DockableMedia value) {
-        table.insert(key, value);
-        if (size_of_category(value.category()) == 1) 
-            // the just added media source is the first of its category
-            category_inserted(value.category());
-        media_inserted(key);
+    public void insert(Xnoise.DockableMedia val) {
+        string name = val.name();
+        table.insert(name, val);
+        
+        // the just added media source is the first of its category
+        if(size_of_category(val.category()) == 1) 
+            category_inserted(val.category());
+        media_inserted(name);
     }
     
     /*

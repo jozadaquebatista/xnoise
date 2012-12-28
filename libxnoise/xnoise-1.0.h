@@ -357,6 +357,17 @@ typedef struct _XnoiseMediaSoureWidget XnoiseMediaSoureWidget;
 typedef struct _XnoiseMediaSoureWidgetClass XnoiseMediaSoureWidgetClass;
 typedef struct _XnoiseMediaSoureWidgetPrivate XnoiseMediaSoureWidgetPrivate;
 
+#define XNOISE_TYPE_SERIAL_BUTTON (xnoise_serial_button_get_type ())
+#define XNOISE_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButton))
+#define XNOISE_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+#define XNOISE_IS_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_IS_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_SERIAL_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+
+typedef struct _XnoiseSerialButton XnoiseSerialButton;
+typedef struct _XnoiseSerialButtonClass XnoiseSerialButtonClass;
+typedef struct _XnoiseSerialButtonPrivate XnoiseSerialButtonPrivate;
+
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
 #define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
@@ -485,16 +496,6 @@ typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
-
-#define XNOISE_TYPE_SERIAL_BUTTON (xnoise_serial_button_get_type ())
-#define XNOISE_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButton))
-#define XNOISE_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
-#define XNOISE_IS_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SERIAL_BUTTON))
-#define XNOISE_IS_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SERIAL_BUTTON))
-#define XNOISE_SERIAL_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
-
-typedef struct _XnoiseSerialButton XnoiseSerialButton;
-typedef struct _XnoiseSerialButtonClass XnoiseSerialButtonClass;
 
 #define XNOISE_TYPE_ALBUM_ART_VIEW (xnoise_album_art_view_get_type ())
 #define XNOISE_ALBUM_ART_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_ART_VIEW, XnoiseAlbumArtView))
@@ -1273,6 +1274,15 @@ struct _XnoiseMediaSoureWidgetClass {
 	GtkBoxClass parent_class;
 };
 
+struct _XnoiseSerialButton {
+	GtkBox parent_instance;
+	XnoiseSerialButtonPrivate * priv;
+};
+
+struct _XnoiseSerialButtonClass {
+	GtkBoxClass parent_class;
+};
+
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
@@ -1473,12 +1483,12 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
 	XnoiseControlButton* stopButton;
-	XnoiseSerialButton* main_view_sbutton;
-	gboolean is_fullscreen;
-	XnoiseMediaSoureWidget* msw;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
 	GtkWindow* fullscreenwindow;
+	XnoiseSerialButton* main_view_sbutton;
+	gboolean is_fullscreen;
+	XnoiseMediaSoureWidget* msw;
 };
 
 struct _XnoiseMainWindowClass {
@@ -2074,7 +2084,7 @@ XnoiseDockableMediaManager* xnoise_dockable_media_manager_construct (GType objec
 gboolean xnoise_dockable_media_manager_remove (XnoiseDockableMediaManager* self, const gchar* key);
 XnoiseDockableMedia* xnoise_dockable_media_manager_lookup (XnoiseDockableMediaManager* self, const gchar* key);
 GList* xnoise_dockable_media_manager_get_keys (XnoiseDockableMediaManager* self);
-void xnoise_dockable_media_manager_insert (XnoiseDockableMediaManager* self, gchar* key, XnoiseDockableMedia* value);
+void xnoise_dockable_media_manager_insert (XnoiseDockableMediaManager* self, XnoiseDockableMedia* val);
 gint xnoise_dockable_media_manager_size_of_category (XnoiseDockableMediaManager* self, XnoiseDockableMediaCategory category);
 GList* xnoise_dockable_media_manager_get_existing_categories (XnoiseDockableMediaManager* self);
 GList* xnoise_dockable_media_manager_get_media_for_category (XnoiseDockableMediaManager* self, XnoiseDockableMediaCategory category);
@@ -2166,11 +2176,20 @@ XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow);
 void xnoise_media_soure_widget_set_focus_on_selector (XnoiseMediaSoureWidget* self);
 void xnoise_media_soure_widget_select_dockable_by_name (XnoiseMediaSoureWidget* self, const gchar* name, gboolean emmit_signal);
-void xnoise_media_soure_widget_insert_dockable (XnoiseMediaSoureWidget* self, XnoiseDockableMedia* d);
-void xnoise_media_soure_widget_remove_dockable_in_idle (XnoiseMediaSoureWidget* self, const gchar* name);
 GtkEntry* xnoise_media_soure_widget_get_search_entry (XnoiseMediaSoureWidget* self);
 const gchar* xnoise_media_soure_widget_get_media_source_selector_type (XnoiseMediaSoureWidget* self);
 void xnoise_media_soure_widget_set_media_source_selector_type (XnoiseMediaSoureWidget* self, const gchar* value);
+GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
+XnoiseSerialButton* xnoise_serial_button_new (void);
+XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
+gchar* xnoise_serial_button_get_active_name (XnoiseSerialButton* self);
+gboolean xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* name, const gchar* txt);
+gboolean xnoise_serial_button_has_item (XnoiseSerialButton* self, const gchar* name);
+void xnoise_serial_button_select_first (XnoiseSerialButton* self);
+void xnoise_serial_button_select (XnoiseSerialButton* self, const gchar* name, gboolean emit_signal);
+void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, const gchar* name, gboolean sensitive_status);
+void xnoise_serial_button_del (XnoiseSerialButton* self, const gchar* name);
+gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 extern GCancellable* xnoise_global_access_main_cancellable;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
@@ -2293,7 +2312,6 @@ void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
 gboolean xnoise_main_is_same_thread (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
-GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
 GType xnoise_album_art_view_get_type (void) G_GNUC_CONST;
 gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
 void xnoise_fullscreen_toolbar_unref (gpointer instance);

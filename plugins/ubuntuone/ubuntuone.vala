@@ -120,7 +120,7 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
     
     ~DockableUbuntuOneMS() {
-        //print("dtor UBUNTUONE_MUSIC_STORE dockable\n");
+        print("dtor UBUNTUONE_MUSIC_STORE dockable\n");
         widget = null;
     }
     
@@ -156,9 +156,12 @@ private class DockableUbuntuOneMS : DockableMedia {
                 ms.url_loaded.connect(on_url_loaded); // working
                 assert(win != null);
                 assert(win.mainview_box != null);
-                if(ms.parent == null)
-                    win.mainview_box.add_main_view(ms);
                 ms.show();
+                if(ms.parent == null) {
+//                    win.mainview_box.add_main_view(ms);
+                    main_window.mainview_box.add_main_view(ms);
+                    main_window.main_view_sbutton.insert(UBUNTUONE_MUSIC_STORE_NAME, _("UbuntuOne"));
+                }
                 ui_merge_id = add_main_window_menu_entry();
                 
                 Xnoise.media_importer.import_media_folder(ms.get_library_location());
@@ -167,7 +170,8 @@ private class DockableUbuntuOneMS : DockableMedia {
             Idle.add( () => {
                 assert(win != null);
                 assert(win.mainview_box != null);
-                win.mainview_box.select_main_view(ms.get_view_name());
+//                win.mainview_box.select_main_view(ms.get_view_name());
+                main_window.main_view_sbutton.select(UBUNTUONE_MUSIC_STORE_NAME, true);
                 return false;
             });
         }
@@ -177,17 +181,20 @@ private class DockableUbuntuOneMS : DockableMedia {
             assert(win != null);
             assert(win.mainview_box != null);
             if(win.mainview_box.get_current_main_view_name() == UBUNTUONE_MUSIC_STORE_NAME)
-                win.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+                main_window.main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
+//                win.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
         }
     }
     
     public override void remove_main_view() {
         disconnect_signals();
+        global.notify["active-dockable-media-name"].disconnect(this.on_selection_changed);
+        main_window.main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
         assert(win != null);
         if(ms == null)
             return;
-        global.notify["active-dockable-media-name"].disconnect(this.on_selection_changed);
-        win.mainview_box.remove_main_view(ms);
+        main_window.main_view_sbutton.del(UBUNTUONE_MUSIC_STORE_NAME);
+        main_window.mainview_box.remove_main_view(ms);
         ms = null;
     }
     
@@ -272,11 +279,12 @@ private class DockableUbuntuOneMS : DockableMedia {
 private class UbuMusicStore : GLib.Object {
     
     public UbuMusicStore()  {
-        main_window.msw.insert_dockable(new DockableUbuntuOneMS());
+        dockable_media_sources.insert(new DockableUbuntuOneMS());
     }
     
     ~UbuMusicStore() {
-        main_window.msw.select_dockable_by_name("MusicBrowserDockable");
+        print("dtor UBU MU ST\n");
+//        main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         unowned DockableUbuntuOneMS msd = 
             (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);
         if(msd == null)
@@ -287,7 +295,7 @@ private class UbuMusicStore : GLib.Object {
         }
         if(msd.ui_merge_id != 0)
             main_window.ui_manager.remove_ui(msd.ui_merge_id);
-        main_window.msw.remove_dockable_in_idle(UBUNTUONE_MUSIC_STORE_NAME);
+        dockable_media_sources.remove(UBUNTUONE_MUSIC_STORE_NAME);
     }
 }
 
