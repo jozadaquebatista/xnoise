@@ -60,8 +60,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     
     /* This is a compact media selector, which uses a ComboBox */
     private class ComboMediaSelector : ComboBox, MediaSelector {
-        
-        private unowned MediaSoureWidget owner;
         private TreeStore store;
         
         public enum Column {
@@ -76,8 +74,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
         public string selected_dockable_media { get; set; }
         
-        public ComboMediaSelector(MediaSoureWidget owner) {
-            this.owner = owner;
+        public ComboMediaSelector() {
             selected_dockable_media = "";
             store = new TreeStore(Column.N_COLUMNS, 
                                   typeof(Gdk.Pixbuf),           //icon
@@ -197,7 +194,6 @@ print("select_without_signal_emmission 8 %s\n", row_name);
             DockableMedia? d = dockable_media_sources.lookup(name);
             assert(d != null);
             insert_media_into_category(d, d.category());
-            owner.add_page(d);
         }
         
         /* we can always rely on the fact that the category media is inserted into has already been added
@@ -316,8 +312,7 @@ print("on_media_removed ComboMediaSelector\n");
         
     /* This is the traditional MediaSelector, which uses a TreeView */
     private class TreeMediaSelector : TreeView, MediaSelector {
-        
-        private unowned MediaSoureWidget owner;
+
         private TreeStore store;
         
         public enum Column {
@@ -333,8 +328,7 @@ print("on_media_removed ComboMediaSelector\n");
         
         public string selected_dockable_media { get; set; }
         
-        public TreeMediaSelector(MediaSoureWidget owner) {
-            this.owner = owner;
+        public TreeMediaSelector() {
             selected_dockable_media = "";
             //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
             this.headers_visible = false;
@@ -588,7 +582,6 @@ print("on_media_removed ComboMediaSelector\n");
                 this.store.append(out iter, iter_category);
                 set_row_data(iter, d);
             }
-            owner.add_page(d);
         }
         
         private void on_media_removed(string name) {
@@ -662,13 +655,19 @@ print("on_media_removed ComboMediaSelector\n");
             d.remove_main_view();
             assert(notebook != null && notebook is Gtk.Container);
             notebook.remove_page(notebook.page_num(d.widget));
-            dockable_media_sources.remove(name);
         }
         
         Idle.add( () => {
             set_focus_on_selector();
             return false;
         });
+    }
+    
+    private void on_media_inserted(string name) {
+        DockableMedia? d = dockable_media_sources.lookup(name);
+        if(d == null)
+            return;
+        add_page(d);
     }
     
     private void setup_widgets() {
@@ -722,7 +721,10 @@ print("on_media_removed ComboMediaSelector\n");
             add_page(d);
         }
         media_source_selector.expand_all();
-       
+        
+        dockable_media_sources.media_removed.connect(on_media_removed);
+        dockable_media_sources.media_inserted.connect(on_media_inserted);
+        
         DockableMedia? dm_mb = null;
         assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
         string dname = dm_mb.name();
@@ -753,11 +755,11 @@ print("on_media_removed ComboMediaSelector\n");
         }
         switch(media_source_selector_type) {
             case "combobox":
-                media_source_selector = new ComboMediaSelector(this);
+                media_source_selector = new ComboMediaSelector();
                 media_source_selector_box.add(media_source_selector);
                 break;
             default:
-                media_source_selector = new TreeMediaSelector(this);
+                media_source_selector = new TreeMediaSelector();
                 var mss_sw = new ScrolledWindow(null, null);
                 mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
                 mss_sw.set_border_width(1);
@@ -772,6 +774,9 @@ print("on_media_removed ComboMediaSelector\n");
         this.show_all();
     }
     
+    private void on_media_removed(string name) {
+        remove_page(name);
+    }
     
     public void read_params_data() {
         _media_source_selector_type = Params.get_string_value("media_source_selector_type");

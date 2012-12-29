@@ -91,6 +91,10 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         });
     }
     
+    ~MagnatuneTreeView() {        
+        global.notify["active-dockable-media-name"].disconnect(on_active_dockable_media_changed);
+    }
+    
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //        print("%d\n",(int)e.keyval);
         Gtk.TreeModel m;
@@ -682,14 +686,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         this.style_get("horizontal-separator", out hsepar);
         renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
         
-        global.notify["active-dockable-media-name"].connect( () => {
-            string n = global.active_dockable_media_name;
-            if(n == name_buffer)
-                return;
-            if(n == this.dock.name())
-                last_width++;
-            name_buffer = n;
-        });
+        global.notify["active-dockable-media-name"].connect(on_active_dockable_media_changed);
         
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
@@ -727,6 +724,15 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         global.notify["fontsize-dockable"].connect( () => {
             this.fontsize = global.fontsize_dockable;
         });
+    }
+    
+    private void on_active_dockable_media_changed() {
+        string n = global.active_dockable_media_name;
+        if(n == name_buffer)
+            return;
+        if(n == this.dock.name())
+            last_width++;
+        name_buffer = n;
     }
 
     private string name_buffer;
