@@ -541,7 +541,15 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 int child_count = 0; 
                 this.store.append(out iter, null);
                 set_row_category(iter, c);
+                
+                List<unowned DockableMedia> list = new List<unowned DockableMedia>();
                 foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c)) {
+                    if(d.name() == "MusicBrowserDockable")
+                        list.prepend(d);
+                    else
+                        list.append(d);
+                }
+                foreach(DockableMedia d in list) {
                     TreeIter iter_child; 
                     this.store.append(out iter_child, iter);
                     set_row_data(iter_child, d);
