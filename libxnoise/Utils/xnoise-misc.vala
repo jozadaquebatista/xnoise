@@ -49,8 +49,8 @@ namespace Xnoise {
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
-    public static Xnoise.DockableMediaManager dockable_media_sources;
-    public static HashTable<int, Xnoise.DataSource>       data_source_registry;
+    public static DockableMediaManager dockable_media_sources;
+    public static HashTable<int, Xnoise.DataSource> data_source_registry;
 
     public static PatternSpec pattern_audio;
     public static PatternSpec pattern_video;
@@ -174,15 +174,15 @@ namespace Xnoise {
         // DOCKABLE MEDIA
         DockableMedia d;
         d = new MusicBrowserDockable();         // LOCAL COLLECTION
-        dockable_media_sources.insert(d.name(), d);
+        dockable_media_sources.insert(d);
         d = new DockablePlaylistMostplayed();   // Dynamic Playlist Most played
-        dockable_media_sources.insert(d.name(), d);
+        dockable_media_sources.insert(d);
         d = new DockablePlaylistLastplayed();   // Dynamic Playlist Last played
-        dockable_media_sources.insert(d.name(), d);
+        dockable_media_sources.insert(d);
         d = new DockableVideos();               // VIDEOS
-        dockable_media_sources.insert(d.name(), d);
+        dockable_media_sources.insert(d);
         d = new DockableStreams();              // STREAMS
-        dockable_media_sources.insert(d.name(), d);
+        dockable_media_sources.insert(d);
         
         // STATIC WIDGETS
         tlm = new TrackListModel();

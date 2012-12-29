@@ -78,6 +78,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Gtk.Notebook content_notebook;
     private AlbumImage albumimage;
     private Gtk.Entry album_search_entry;
+    private unowned TrackList trackList;
     internal SerialButton album_view_sorting;
     internal SerialButton album_view_direction;
     internal AlbumArtView album_art_view;
@@ -95,15 +96,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton previousButton;
     internal ControlButton nextButton;
     internal ControlButton stopButton;
-    internal SerialButton main_view_sbutton;
+    internal TrackInfobar track_infobar;
+    internal MusicBrowser musicBr = null;
+    internal Gtk.Window fullscreenwindow;
+    public SerialButton main_view_sbutton;
     public unowned LyricsView lyricsView { get; private set; }
     public bool is_fullscreen = false;
     public MainViewNotebook mainview_box { get; private set; }
     public MediaSoureWidget msw;
-    internal TrackInfobar track_infobar;
-    internal MusicBrowser musicBr = null;
-    private unowned TrackList trackList;
-    internal Gtk.Window fullscreenwindow;
     
     private Gtk.UIManager _ui_manager = new Gtk.UIManager();
     public Gtk.UIManager ui_manager {

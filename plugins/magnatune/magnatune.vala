@@ -320,7 +320,8 @@ private class MagMusicStore : GLib.Object {
         dock_source = Idle.add(() => {
             assert(main_window.msw != null);
             assert(msd != null);
-            main_window.msw.insert_dockable(msd);
+            dockable_media_sources.insert(msd);
+//            main_window.msw.insert_dockable(msd);
             dock_source = 0;
             return false;
         });
@@ -332,7 +333,8 @@ private class MagMusicStore : GLib.Object {
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         if(msd == null)
             return;
-        main_window.msw.remove_dockable_in_idle(MAGNATUNE_MUSIC_STORE_NAME);
+        dockable_media_sources.remove(MAGNATUNE_MUSIC_STORE_NAME);
+//        main_window.msw.remove_dockable_in_idle(MAGNATUNE_MUSIC_STORE_NAME);
     }
 }
 

@@ -62,7 +62,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     private class ComboMediaSelector : ComboBox, MediaSelector {
         
         private unowned MediaSoureWidget owner;
-        TreeStore store;
+        private TreeStore store;
         
         public enum Column {
             ICON = 0,
@@ -107,12 +107,18 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             this.changed.connect((a) => {
                 assert(this.get_model() != null);
                 
+print("###1\n");
                 TreeIter iter;
+print("###2\n");
                 this.get_active_iter(out iter);
+print("###3\n");
                 
-                string name = "";
-                this.get_model().get(iter, Column.NAME, out name);
+                string name;
+print("###4\n");
+                store.get(iter, Column.NAME, out name);
+print("###5 %s\n", name);
                 selected_dockable_media = name;
+print("###6\n");
             });
             
             this.show_all();
@@ -147,9 +153,13 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 this.store.get_value(iter_search, ComboMediaSelector.Column.NAME, out v);
                 string row_name = v.get_string();
                 if(row_name == dockable_name) {
+print("select_without_signal_emmission 5 %s\n", row_name);
                     disconnect_signal_handlers();
+print("select_without_signal_emmission 6 %s\n", row_name);
                     this.set_active_iter(iter_search);
+print("select_without_signal_emmission 7 %s\n", row_name);
                     connect_signal_handlers();
+print("select_without_signal_emmission 8 %s\n", row_name);
                     return;
                 }
                 if(!this.store.iter_next(ref iter_search))
@@ -181,12 +191,13 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                   ComboMediaSelector.Column.IS_SEPARATOR, true,
                   ComboMediaSelector.Column.NAME, ""
               );
-          }              
+          }
         
         private void on_media_inserted(string name) {
-            DockableMedia d = dockable_media_sources.lookup(name);
+            DockableMedia? d = dockable_media_sources.lookup(name);
             assert(d != null);
             insert_media_into_category(d, d.category());
+            owner.add_page(d);
         }
         
         /* we can always rely on the fact that the category media is inserted into has already been added
@@ -232,19 +243,19 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         }
         
         private void on_media_removed(string name) {
+print("on_media_removed ComboMediaSelector\n");
             TreeIter iter;
             Value v;
             if(!this.store.get_iter_first(out iter))
                 return;
-                
             while(true) {
                 this.store.get_value(iter, ComboMediaSelector.Column.NAME, out v);
                 string row_name = v.get_string();
                 if(row_name == name) {
+                    this.set_active(1);
                     this.store.remove(ref iter);
                     return;
                 }
-                
                 if(!this.store.iter_next(ref iter))
                     break;
             }
@@ -415,9 +426,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             }
         }
         
-//        private const int KEY_CURSOR_DOWN  = 0xFF54;
-//        private const int KEY_CURSOR_UP    = 0xFF52;
-        
         private bool on_button_pressed(Gdk.EventButton e) {
             int x = (int)e.x;
             int y = (int)e.y;
@@ -579,7 +587,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 TreeIter iter;
                 this.store.append(out iter, iter_category);
                 set_row_data(iter, d);
-            }            
+            }
+            owner.add_page(d);
         }
         
         private void on_media_removed(string name) {
@@ -618,15 +627,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.media_source_selector.grab_focus();
     }
     
-    
-        
-    private void _insert_dockable(DockableMedia d,
-                              bool bold = false,
-                              ref TreeIter? xiter,
-                              bool initial_selection = false) {
-        add_page(d);
-    }
-    
     public void select_dockable_by_name(string name, bool emmit_signal = false) {
         //print("dockable %s selected\n", name);
         DockableMedia? d = dockable_media_sources.lookup(name);
@@ -644,34 +644,16 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             notebook.set_current_page(i);
     }
     
-    public void insert_dockable(DockableMedia d) {
-        TreeIter? ix = null;
-        DockableMedia dl = d;
-        if(dockable_media_sources.lookup(dl.name()) != null)
-            return; // already inside
-        dockable_media_sources.insert(dl.name(), dl);
-        _insert_dockable(dl, false, ref ix, false);
-        media_source_selector.expand_all();
-    }
-    
-    public void remove_dockable_in_idle(string name) {
-        string s = name;
-        Idle.add(() => {
-            remove_page(s);
-            return false;
-        });
-    }
- 
     private void add_page(DockableMedia d) {
         Gtk.Widget? widg = d.create_widget(mwindow);
-            if(widg == null)
-                return;
-            
-            widg.show_all();
-            notebook.show_all();
-            assert(notebook != null && notebook is Gtk.Container);
-            notebook.append_page(widg, new Label("x"));        
-            d = null;   
+        if(widg == null)
+            return;
+        
+        widg.show_all();
+        notebook.show_all();
+        assert(notebook != null && notebook is Gtk.Container);
+        notebook.append_page(widg, new Label("x"));
+        d = null;
     }
     
     private void remove_page(string name) {
@@ -689,16 +671,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         });
     }
     
-    private void on_dockable_added(string name) {
-        DockableMedia dockable = dockable_media_sources.lookup(name);
-        if(dockable != null)
-            add_page(dockable);
-    }    
-    
-    private void on_dockable_removed(string name) {
-        remove_page(name);
-    }
-
     private void setup_widgets() {
         var buff = new Gtk.EntryBuffer(null);
         this.search_entry = new Gtk.Entry.with_buffer(buff); // media_source_widget.search_entry;
@@ -740,13 +712,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.pack_start(da, false, false, 0);
         this.pack_start(notebook, true, true, 0);
         
+        //load pre-existing
         foreach(string n in dockable_media_sources.get_keys()) {
             DockableMedia? d = null;
             d = dockable_media_sources.lookup(n);
             if(d == null)
                 continue;
             TreeIter? ix = null;
-            _insert_dockable(d, false, ref ix, false);
+            add_page(d);
         }
         media_source_selector.expand_all();
        

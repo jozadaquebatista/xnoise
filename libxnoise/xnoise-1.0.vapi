@@ -642,7 +642,8 @@ namespace Xnoise {
 			MEDIA_COLLECTION,
 			PLAYLIST,
 			STORES,
-			DEVICES
+			DEVICES;
+			public string? to_string ();
 		}
 		public weak Gtk.Widget? widget;
 		public DockableMedia ();
@@ -652,6 +653,22 @@ namespace Xnoise {
 		public abstract string headline ();
 		public abstract string name ();
 		public abstract void remove_main_view ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class DockableMediaManager {
+		public GLib.HashTable<string,Xnoise.DockableMedia> table;
+		public DockableMediaManager ();
+		public GLib.List<Xnoise.DockableMedia.Category> get_existing_categories ();
+		public GLib.List<weak string> get_keys ();
+		public GLib.List<Xnoise.DockableMedia> get_media_for_category (Xnoise.DockableMedia.Category category);
+		public void insert (Xnoise.DockableMedia val);
+		public unowned Xnoise.DockableMedia lookup (string key);
+		public bool remove (string key);
+		public int size_of_category (Xnoise.DockableMedia.Category category);
+		public signal void category_inserted (Xnoise.DockableMedia.Category category);
+		public signal void category_removed (Xnoise.DockableMedia.Category category);
+		public signal void media_inserted (string key);
+		public signal void media_removed (string key);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
@@ -830,6 +847,7 @@ namespace Xnoise {
 			RANDOM
 		}
 		public bool is_fullscreen;
+		public Xnoise.SerialButton main_view_sbutton;
 		public Xnoise.MediaSoureWidget msw;
 		public MainWindow ();
 		public void reset_mainview_to_tracklist ();
@@ -866,15 +884,12 @@ namespace Xnoise {
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaSoureWidget : Gtk.Box {
+	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
 		public MediaSoureWidget (Xnoise.MainWindow mwindow);
-		public void insert_dockable (Xnoise.DockableMedia d);
-		public void remove_dockable (string name);
-		public void remove_dockable_in_idle (string name);
 		public void select_dockable_by_name (string name, bool emmit_signal = false);
 		public void set_focus_on_selector ();
+		public string media_source_selector_type { get; set; }
 		public Gtk.Entry search_entry { get; private set; }
-		public signal void selection_changed (string dockable_name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {
@@ -926,6 +941,19 @@ namespace Xnoise {
 		public RemoteSchemes ();
 		public bool contains (string? location);
 		public string[] list { get; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class SerialButton : Gtk.Box {
+		public SerialButton ();
+		public void del (string? name);
+		public string? get_active_name ();
+		public bool has_item (string? name);
+		public bool insert (string? name, string? txt);
+		public void select (string? name, bool emit_signal = true);
+		public void select_first ();
+		public new void set_sensitive (string? name, bool sensitive_status);
+		public int item_count { get; }
+		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackData {
@@ -1207,7 +1235,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Worker device_worker;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static GLib.HashTable<string,Xnoise.DockableMedia> dockable_media_sources;
+	public static Xnoise.DockableMediaManager dockable_media_sources;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
