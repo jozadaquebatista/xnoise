@@ -104,18 +104,12 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             this.changed.connect((a) => {
                 assert(this.get_model() != null);
                 
-print("###1\n");
                 TreeIter iter;
-print("###2\n");
                 this.get_active_iter(out iter);
-print("###3\n");
                 
                 string name;
-print("###4\n");
                 store.get(iter, Column.NAME, out name);
-print("###5 %s\n", name);
                 selected_dockable_media = name;
-print("###6\n");
             });
             
             this.show_all();
@@ -150,13 +144,9 @@ print("###6\n");
                 this.store.get_value(iter_search, ComboMediaSelector.Column.NAME, out v);
                 string row_name = v.get_string();
                 if(row_name == dockable_name) {
-print("select_without_signal_emmission 5 %s\n", row_name);
                     disconnect_signal_handlers();
-print("select_without_signal_emmission 6 %s\n", row_name);
                     this.set_active_iter(iter_search);
-print("select_without_signal_emmission 7 %s\n", row_name);
                     connect_signal_handlers();
-print("select_without_signal_emmission 8 %s\n", row_name);
                     return;
                 }
                 if(!this.store.iter_next(ref iter_search))
@@ -239,7 +229,6 @@ print("select_without_signal_emmission 8 %s\n", row_name);
         }
         
         private void on_media_removed(string name) {
-print("on_media_removed ComboMediaSelector\n");
             TreeIter iter;
             Value v;
             if(!this.store.get_iter_first(out iter))
@@ -286,13 +275,19 @@ print("on_media_removed ComboMediaSelector\n");
             if(!this.store.get_iter_first(out iter))
                 this.store.append(out iter, null);
             int count = 0;
-            foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories())
-            {
+            foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories()) {
                 // don't add a redundant row at the beginning
                 if(count != 0)
                     this.store.append(out iter, null);
                 set_row_separator(iter, c);
+                List<unowned DockableMedia> list = new List<unowned DockableMedia>();
                 foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c)) {
+                    if(d.name() == "MusicBrowserDockable")
+                        list.prepend(d);
+                    else
+                        list.append(d);
+                }
+                foreach(DockableMedia d in list) {
                     this.store.append(out iter, null);
                     set_row_data(iter, d);
                 }
@@ -717,7 +712,6 @@ print("on_media_removed ComboMediaSelector\n");
             d = dockable_media_sources.lookup(n);
             if(d == null)
                 continue;
-            TreeIter? ix = null;
             add_page(d);
         }
         media_source_selector.expand_all();
