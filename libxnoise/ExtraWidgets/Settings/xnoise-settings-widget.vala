@@ -422,7 +422,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
                            );
             plugin_switch.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
         }
-        if(box.get_children().length() > 1) {
+        if(box.get_children().length() > 0) {
             box.set_no_show_all(false);
             box.show_all();
         }
