@@ -662,7 +662,6 @@ print("on_media_removed ComboMediaSelector\n");
             d.remove_main_view();
             assert(notebook != null && notebook is Gtk.Container);
             notebook.remove_page(notebook.page_num(d.widget));
-            dockable_media_sources.remove(name);
         }
         
         Idle.add( () => {
@@ -722,7 +721,9 @@ print("on_media_removed ComboMediaSelector\n");
             add_page(d);
         }
         media_source_selector.expand_all();
-       
+        
+        dockable_media_sources.media_removed.connect(on_media_removed);
+        
         DockableMedia? dm_mb = null;
         assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
         string dname = dm_mb.name();
@@ -772,6 +773,9 @@ print("on_media_removed ComboMediaSelector\n");
         this.show_all();
     }
     
+    private void on_media_removed(string name) {
+        remove_page(name);
+    }
     
     public void read_params_data() {
         _media_source_selector_type = Params.get_string_value("media_source_selector_type");
