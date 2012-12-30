@@ -91,8 +91,23 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         cover_image_available = false;
         global.notify["image-path-large"].connect(on_image_path_changed);
         global.notify["image-path-embedded"].connect(on_image_path_changed);
+        int ev = this.get_events();
+        this.set_events(ev|Gdk.EventMask.SCROLL_MASK);
         this.button_release_event.connect(on_button_released);
+        this.scroll_event.connect(this.on_scrolled);
         global.tag_changed.connect(on_tag_changed);
+    }
+    
+    private bool on_scrolled(Gdk.EventScroll event) {
+        if(event.direction == Gdk.ScrollDirection.DOWN) {
+            double tmp = player.volume - 0.02;
+            player.volume = double.max(0.0, tmp);
+        }
+        else if(event.direction == Gdk.ScrollDirection.UP) {
+            double tmp = player.volume + 0.02;
+            player.volume = double.min(1.0, tmp);
+        }
+        return false;
     }
     
     private void on_tag_changed() {
