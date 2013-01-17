@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-29 20:03+0100\n"
+"POT-Creation-Date: 2013-01-17 23:57+0100\n"
 "PO-Revision-Date: 2008-02-04 04:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: Macedonian\n"
@@ -46,7 +46,7 @@ msgid "no lyrics found..."
 msgstr ""
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:428
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:443
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
@@ -59,7 +59,7 @@ msgid "by"
 msgstr ""
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:430
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1459
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1501
@@ -291,15 +291,15 @@ msgstr ""
 msgid "Select external subtitle file"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:130
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:145
 msgid "No Subtitle"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:203
 msgid "Leave Fullscreen"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:203
 msgid "Fullscreen"
 msgstr ""
 

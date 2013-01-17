@@ -36,6 +36,8 @@ liblastfm_la_VALAFLAGS = \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/lastfm \
     --vapidir $(top_srcdir)/libxnoise \
+    --vapidir $(top_srcdir)/bindings/vala \
+    --pkg taginfo_c \
     --pkg libsoup-2.4 \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \

@@ -38,6 +38,7 @@ namespace Xnoise {
     
     public class TrackData {
         public string? artist = null;
+        public string? albumartist = null;
         public string? album = null;
         public string? title = null;
         public string? genre = null;
@@ -47,7 +48,9 @@ namespace Xnoise {
         public uint tracknumber = 0;
         public int32 length = 0;
         public int bitrate = 0;
+        public bool is_compilation = false;
         public Item? item = Item(ItemType.UNKNOWN);
+        public Gdk.Pixbuf? pixbuf = null;
         public int32 dat1 = -1;
         public int32 dat2 = -1;
     }
@@ -57,6 +60,7 @@ namespace Xnoise {
             return new TrackData();
         TrackData td_new = new TrackData();
         td_new.artist      = td.artist;
+        td_new.albumartist = td.albumartist;
         td_new.album       = td.album;
         td_new.title       = td.title;
         td_new.genre       = td.genre;
@@ -65,6 +69,8 @@ namespace Xnoise {
         td_new.length      = td.length;
         td_new.bitrate     = td.bitrate;
         td_new.item        = td.item;
+        td_new.dat1        = td.dat1;
+        td_new.dat2        = td.dat2;
         return td_new;
     }
 }

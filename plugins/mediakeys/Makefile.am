@@ -31,6 +31,8 @@ libmediakeys_la_VALAFLAGS = \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/mediakeys \
     --vapidir $(top_srcdir)/libxnoise \
+    --vapidir $(top_srcdir)/bindings/vala \
+    --pkg taginfo_c \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \
     $(NULL)

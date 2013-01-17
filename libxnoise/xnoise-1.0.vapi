@@ -540,7 +540,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagReader {
 			public TagReader ();
-			public Xnoise.TrackData? read_tag (string? filename);
+			public Xnoise.TrackData? read_tag (string? filename, bool try_read_image_data = false);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {
@@ -958,15 +958,18 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackData {
 		public string? album;
+		public string? albumartist;
 		public string? artist;
 		public int bitrate;
 		public int32 dat1;
 		public int32 dat2;
 		public string? genre;
+		public bool is_compilation;
 		public Xnoise.Item? item;
 		public int32 length;
 		public string? mimetype;
 		public string? name;
+		public Gdk.Pixbuf? pixbuf;
 		public string? title;
 		public uint tracknumber;
 		public uint year;

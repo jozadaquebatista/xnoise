@@ -25,6 +25,9 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE([enable])
 
+AC_PROG_CXX
+AM_PROG_CC_C_O
+
 # Disable generation of static libraries
 AC_DISABLE_STATIC
 
@@ -38,7 +41,6 @@ LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=TARGET_GLIB_VERSION
 GTK_REQUIRED=3.2.0
 SQLITE_REQUIRED=3.6
-TAGLIB_C_REQUIRED=1.6.0
 
 dnl required versions for plugins
 LIBXML_REQUIRED=2.6.32
@@ -48,7 +50,7 @@ UBUNTUONEUI_REQUIRED=3.0
 VALA_REQUIRED=0.18.0
 
 
-AC_PROG_CC
+#AC_PROG_CC
 AC_HEADER_STDC
 AC_FUNC_MMAP
 
@@ -67,9 +69,28 @@ AC_PATH_PROG([VALAC], [valac], [])
           VALAC=""])])])
 AM_CONDITIONAL(USE_VALA, [test -n "$VALAC"])
 AC_SUBST(USE_VALA)
-dnl =========================================
+dnl ================================================================
+dnl ================================================================
 
 LT_INIT
+
+dnl ================================================================
+TAGLIB_C_REQUIRED=1.6
+LIBFLAC_REQUIRED=1.2.1
+
+TAGINFO_VERSION="0.0.8"
+TAGINFO_NAME="taginfo"
+AC_SUBST(TAGINFO_VERSION)
+AC_SUBST(TAGINFO_NAME)
+
+PKG_CHECK_MODULES(TAGINFO, \
+    taglib >= $TAGLIB_C_REQUIRED \
+    flac >= $LIBFLAC_REQUIRED)
+
+AC_SUBST(TAGINFO_CFLAGS)
+AC_SUBST(TAGINFO_LIBS)
+
+dnl ================================================================
 
 PKG_CHECK_MODULES(XNOISE, \
     gdk-3.0 \
@@ -83,7 +104,6 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-plugins-base-0.10 \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
-    taglib_c >= $TAGLIB_C_REQUIRED \
     cairo)
 
 
@@ -431,7 +451,7 @@ XNOISE_PACKAGES="\
     --pkg gtk+-3.0 \
     --pkg posix \
     --pkg sqlite3 \
-    --pkg taglib_c \
+    --pkg taginfo_c \
     --target-glib=`echo $TARGET_GLIB_VERSION` \
 "
 
@@ -460,6 +480,12 @@ AM_SILENT_RULES([yes])
 
 AC_CONFIG_FILES([
     Makefile
+    taginfo/taginfo.pc:taginfo/taginfo.pc.in
+    taginfo/Makefile
+    bindings/Makefile
+    bindings/c/Makefile
+    bindings/c/taginfo_c.pc:bindings/c/taginfo_c.pc.in
+    bindings/vala/Makefile
     data/Makefile
     data/misc/xnoise.desktop.in
     data/misc/Makefile
@@ -540,3 +566,4 @@ echo "
         manually by user option or automatically,
         in case the dependencies are not available.
 "
+

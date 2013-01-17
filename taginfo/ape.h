@@ -1,0 +1,161 @@
+//    Copyright (C) 2008-2012 J.Rios
+//    anonbeat@gmail.com
+//
+//    This Program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 3, or (at your option)
+//    any later version.
+//
+//    This Program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program; see the file LICENSE.  If not, write to
+//    the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+//    http://www.gnu.org/copyleft/gpl.html
+//
+
+#ifndef APE_H
+#define APE_H
+
+#include <algorithm>
+#include <fstream>
+#include <string.h>
+#include <vector>
+#include <fcntl.h>
+
+
+using namespace std;
+
+
+namespace TagInfo {
+    
+    namespace Ape {
+        
+        class Item
+        {
+            public:
+                string key;
+                string value;
+                uint flags;
+                
+                Item() {};
+                
+                Item(const string &key, const string &value, uint flags)
+                {
+                    this->key = key;
+                    this->value = value;
+                    this->flags = flags;
+                }
+                
+                const string & get_key(void) const
+                {
+                    return key;
+                }
+                
+                const string & get_value(void) const
+                {
+                    return value;
+                }
+                
+                const uint get_flags(void) const
+                {
+                    return flags;
+                }
+                
+                bool operator==(const Item &other);
+        };
+        
+        
+        class ApeTag
+        {
+            protected:
+                uint file_length;
+                uint offset;
+                uint item_count;
+                vector<Item*> items;
+                
+            
+            public:
+                ApeTag(uint length, uint offset, uint items);
+                ~ApeTag();
+                
+                void remove_items(void);
+                void remove_item(Item * item);
+                void add_item(Item * item);
+                
+                Item * get_item(const int position) const;
+                Item * get_item(const string &key) const;
+                
+                string get_item_value(const string &key) const;
+                
+                void set_item(const string &key, const string &value, uint flags = 0/*CONTENT_TEXT*/);
+                void set_item(const string &key, char * data, uint len);
+                
+                uint get_file_length(void) const;
+                uint get_offset(void) const;
+                uint get_item_length(void) const;
+                uint get_item_count(void) const;
+                
+                string get_title(void) const;
+                void set_title(const string &title);
+                
+                string get_album(void) const;
+                void set_album(const string &album);
+                
+                string get_artist(void) const;
+                void set_artist(const string &artist);
+                
+                string get_genre(void) const;
+                void set_genre(const string &genre);
+                
+                uint get_tracknumber(void) const;
+                void set_tracknumber(const uint track);
+                
+                uint get_year(void) const;
+                void set_year(const uint year);
+            
+            friend class   ApeFile;
+        };
+        
+        
+        class ApeFile
+        {
+            private:
+                string file_name;
+                uint length;
+                uint bitrate;
+                fstream stream;
+                ApeTag * apetag;
+
+                void read_header(void);
+                void write_header_footer(const uint flags);
+                void write_items(void);
+                void inline write_number(const int value);
+
+            public:
+                ApeFile(const string &filename);
+                ~ApeFile();
+
+                bool write_tag(void);
+
+                ApeTag * get_tag()
+                {
+                    return apetag;
+                };
+
+                uint get_bitrate(void)
+                {
+                    return bitrate;
+                }
+
+                uint get_length(void)
+                {
+                    return length;
+                }
+        };
+    }
+}
+#endif

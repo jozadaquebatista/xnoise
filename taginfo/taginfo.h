@@ -1,0 +1,307 @@
+#ifndef TAGINFO_H
+#define TAGINFO_H
+
+#include <string>
+#include <iostream>
+#include "ape.h"
+
+#include <tag.h>
+#include <fileref.h>
+#include <asffile.h>
+#include <mp4file.h>
+#include <oggfile.h>
+#include <xiphcomment.h>
+
+#include <apetag.h>
+#include <id3v2tag.h>
+
+#define NOT_FOUND -1
+
+using namespace TagLib;
+using namespace std;
+
+
+
+namespace TagInfo {
+    
+    enum ChangedData {
+        CHANGED_DATA_NONE   = 0,
+        CHANGED_DATA_TAGS   = (1 << 0),
+        CHANGED_DATA_IMAGES = (1 << 1),
+        CHANGED_DATA_LYRICS = (1 << 2),
+        CHANGED_DATA_LABELS = (1 << 3),
+        CHANGED_DATA_RATING = (1 << 2)
+    };
+    
+    
+    class Info
+    {
+        protected :
+            FileRef *       taglib_file;
+            Tag *           taglib_tag;
+            
+            void set_file_name(const string &filename);
+        
+        
+        public:
+            string file_name;
+            string track_name;
+            string genre;
+            string artist;
+            string album_artist;
+            string album;
+            string composer;
+            string comments;
+            int tracknumber;
+            int year;
+            
+            int length_seconds;
+            int bitrate;
+            
+            int playcount;
+            int rating;
+            string disk_str;
+            std::vector<string> track_labels;
+            string track_labels_str;
+            std::vector<string> artist_labels;
+            string artist_labels_str;
+            std::vector<string> album_labels;
+            string album_labels_str;
+            bool is_compilation;
+            
+            Info(const string &filename = "");
+            ~Info();
+            
+            virtual bool read(void);
+            virtual bool write(const int changedflag);
+            
+            virtual bool can_handle_images(void);
+            virtual bool get_image(char*& data, int &data_length) const;
+            virtual bool set_image(char* data, int data_length);
+            
+            virtual bool can_handle_lyrics(void);
+            virtual string get_lyrics(void);
+            virtual bool set_lyrics(const string &lyrics);
+            
+            static Info * create_tag_info(const string &file);
+    };
+
+
+    
+    class Mp3Info : public Info
+    {
+      protected :
+        ID3v2::Tag * taglib_tagId3v2;
+
+      public :
+        Mp3Info(const string &filename = "");
+        ~Mp3Info();
+
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+        
+        virtual bool can_handle_images(void);
+        virtual bool get_image(char*& data, int &data_length) const;
+        virtual bool set_image(char* data, int data_length);
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image(void);
+    //    virtual bool        set_image(const wxImage * image);
+
+        virtual bool        can_handle_lyrics(void);
+        virtual string    get_lyrics(void);
+        virtual bool        set_lyrics(const string &lyrics);
+
+    };
+
+    
+    class FlacInfo : public Info
+    {
+      protected :
+        Ogg::XiphComment * m_XiphComment;
+
+      public :
+        FlacInfo(const string &filename = "");
+        ~FlacInfo();
+
+        virtual bool        read(void);
+        virtual bool        write(const int changedflag);
+
+        virtual bool        can_handle_images(void);
+        virtual bool        get_image(char*& data, int &data_length) const;
+        virtual bool        set_image(char* data, int data_length);
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image();
+    //    virtual bool        set_image(const wxImage * image);
+
+        virtual bool        can_handle_lyrics(void);
+        virtual string    get_lyrics(void);
+        virtual bool        set_lyrics(const string &lyrics);
+    };
+
+    
+    class OggInfo : public Info
+    {
+      protected :
+        Ogg::XiphComment * m_XiphComment;
+
+      public :
+        OggInfo(const string &filename = "");
+        ~OggInfo();
+
+        virtual bool        read(void);
+        virtual bool        write(const int changedflag);
+
+        virtual bool        can_handle_images(void);
+        virtual bool        get_image(char*& data, int &data_length) const;
+        virtual bool        set_image(char* data, int data_length);
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image(void);
+    //    virtual bool        set_image(const wxImage * image);
+
+        virtual bool        can_handle_lyrics(void);
+        virtual string    get_lyrics(void);
+        virtual bool        set_lyrics(const string &lyrics);
+    };
+
+    
+    class Mp4Info : public Info
+    {
+      protected :
+        TagLib::MP4::Tag *  m_Mp4Tag;
+
+      public :
+        Mp4Info(const string &filename = "");
+        ~Mp4Info();
+
+        virtual bool        read(void);
+        virtual bool        write(const int changedflag);
+
+        virtual bool        can_handle_images(void);
+        virtual bool        get_image(char*& data, int &data_length) const;
+        virtual bool        set_image(char* data, int data_length);
+    //#ifdef TAGLIB_WITH_MP4_COVERS
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image(void);
+    //    virtual bool        set_image(const wxImage * image);
+    //#endif
+
+        virtual bool can_handle_lyrics(void);
+        virtual string get_lyrics(void);
+        virtual bool set_lyrics(const string &lyrics);
+    };
+
+    
+    class ApeInfo : public Info
+    {
+      protected:
+        Ape::ApeFile       m_ApeFile;
+
+      public:
+        ApeInfo(const string &filename = "");
+        ~ApeInfo();
+
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+        
+        virtual bool can_handle_lyrics(void);
+        virtual string get_lyrics(void);
+        virtual bool set_lyrics(const string &lyrics);
+    };
+
+    
+    class MpcInfo : public Info
+    {
+      protected :
+        TagLib::APE::Tag * taglib_apetag;
+        
+      public :
+        MpcInfo(const string &filename = "");
+        ~MpcInfo();
+        
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+
+        virtual bool can_handle_images(void);
+        virtual bool get_image(char*& data, int &data_length) const;
+        virtual bool set_image(char* data, int data_length);
+    //    virtual bool can_handle_images(void);
+    //    virtual wxImage * get_image(void);
+    //    virtual bool set_image(const string * image);
+    };
+
+    
+    class WavPackInfo : public Info
+    {
+      protected :
+        TagLib::APE::Tag * taglib_apetag;
+
+      public :
+        WavPackInfo(const string &filename = "");
+        ~WavPackInfo();
+
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+
+        virtual bool can_handle_images(void);
+        virtual bool get_image(char*& data, int &data_length) const;
+        virtual bool set_image(char* data, int data_length);
+    //    virtual bool can_handle_images(void);
+    //    virtual wxImage * get_image(void);
+    //    virtual bool set_image(const wxImage * image);
+        
+        virtual bool can_handle_lyrics(void);
+        virtual string get_lyrics(void);
+        virtual bool set_lyrics(const string &lyrics);
+    };
+
+    
+    class TrueAudioInfo : public Info
+    {
+      protected :
+        ID3v2::Tag * taglib_tagId3v2;
+
+      public :
+        TrueAudioInfo(const string &filename = "");
+        ~TrueAudioInfo();
+
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+
+        virtual bool can_handle_images(void);
+        virtual bool get_image(char*& data, int &data_length) const;
+        virtual bool set_image(char* data, int data_length);
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image(void);
+    //    virtual bool        set_image(const wxImage * image);
+        
+        virtual bool can_handle_lyrics(void);
+        virtual string get_lyrics(void);
+        virtual bool set_lyrics(const string &lyrics);
+    };
+
+    
+    class ASFTagInfo : public Info
+    {
+      protected :
+        ASF::Tag *        m_ASFTag;
+
+      public :
+        ASFTagInfo(const string &filename = "");
+        ~ASFTagInfo();
+
+        virtual bool read(void);
+        virtual bool write(const int changedflag);
+
+        virtual bool can_handle_images(void);
+        virtual bool get_image(char*& data, int &data_length) const;
+        virtual bool set_image(char* data, int data_length);
+    //    virtual bool        can_handle_images(void);
+    //    virtual wxImage *   get_image(void);
+    //    virtual bool        set_image(const wxImage * image);
+        
+        virtual bool can_handle_lyrics(void);
+        virtual string get_lyrics(void);
+        virtual bool set_lyrics(const string &lyrics);
+    };
+}
+#endif

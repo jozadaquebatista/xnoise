@@ -2,6 +2,8 @@ NULL =
 
 SUBDIRS = \
     data \
+    taginfo \
+    bindings \
     libxnoise \
     src \
     packaging \
@@ -13,6 +15,8 @@ SUBDIRS = \
 
 DIST_SUBDIRS = \
     data \
+    taginfo \
+    bindings \
     libxnoise \
     src \
     packaging \

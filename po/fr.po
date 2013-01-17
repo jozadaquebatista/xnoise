@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-29 20:03+0100\n"
+"POT-Creation-Date: 2013-01-17 23:57+0100\n"
 "PO-Revision-Date: 2012-07-05 14:17+0100\n"
 "Last-Translator: Aurélien Rivière <aurelien.riv@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -47,7 +47,7 @@ msgid "no lyrics found..."
 msgstr "Pas de paroles trouvées..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:428
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:443
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
@@ -60,7 +60,7 @@ msgid "by"
 msgstr "de"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:430
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1459
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1501
@@ -312,15 +312,15 @@ msgstr ""
 msgid "Select external subtitle file"
 msgstr "Sélectionner un fichier de sous-titres externe"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:130
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:145
 msgid "No Subtitle"
 msgstr "Pas de sous-titres"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:203
 msgid "Leave Fullscreen"
 msgstr "Quitter le mode plein écran"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:188
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:203
 msgid "Fullscreen"
 msgstr "Plein écran"
 

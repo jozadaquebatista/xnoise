@@ -1,3 +1,220 @@
+commit 5c4d299d41a4851a801d5cbe0d5e927f3c3dab06
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Jan 17 23:06:13 2013 +0100
+
+    basic integration
+
+commit 123fe764bdc0af64c3fec29e15a2cea4a52deef6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 30 16:30:23 2012 +0100
+
+    adjust volume on scroll on video screen/'now playing' pane
+
+commit 8a563deb863e5dee92685409d91e26dfe9c9824d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 20:05:53 2012 +0100
+
+    update strings
+
+commit 60923488c6996a4fb472586c8397c0fe02b05b56
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 20:01:09 2012 +0100
+
+    put music browser into fist row 2
+
+commit ca468cf86d423704b0adb8b477cff8d6f1d187e5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 19:56:39 2012 +0100
+
+    put music browser into fist row
+
+commit b5083937f4afb20ffede5ff4f84c051c53bc741b
+Merge: 2c5770d d6d5306
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 19:13:12 2012 +0100
+
+    Merge branch 'master' of ssh://bitbucket.org/tradiaz/xnoise_dev_andi
+
+commit d6d53069270079216a4cd62a888d895bca15985e
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Sat Dec 29 19:06:32 2012 +0100
+
+    Reduce inter-class dependency in MediaSourceWidget
+
+commit 009094e53b2a89c19e527f8b09aea03598f9d34b
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Sat Dec 29 18:48:07 2012 +0100
+
+    Fix unloading of DockableMedia plugins
+
+commit 2c5770d4b579b42a25a3c116bfa5a655cc6ae7fd
+Merge: 733125e 37060a3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 10:59:32 2012 +0100
+
+    Merge bitbucket.org:tradiaz/xnoise_dev_andi
+
+commit 733125eadebccfd1a267ca851c209307ba2edcec
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 29 10:53:12 2012 +0100
+
+    use original image
+
+commit 37060a3f812f871578bc38cc3f58938aba7f63a9
+Merge: 4ed9ba0 8421a8e
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Sat Dec 29 09:39:18 2012 +0100
+
+    Merge branch 'master' of https://bitbucket.org/shuerhaaken/xnoise
+
+commit 4ed9ba0ec601d2ad8eabed470b293bb34bed4a02
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Sat Dec 29 09:34:20 2012 +0100
+
+    Fix a bug where categories with only one config option did not show up in settings dialog
+
+commit 8421a8e4b388aed54cd4d0508b8e4fc08575da05
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 28 21:19:05 2012 +0100
+
+    use DockableMediaManager exclusively for inserting/removing dockables; fix crash with dockables from plugins
+
+commit be762d49e1551e5a6344de91e8c6d9b2823f6b71
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 28 16:08:58 2012 +0100
+
+    fix issue with ubuntuone plugin and compact media source selector
+
+commit 4fe815e48537d876cec14b985ce21cfbde644f74
+Merge: 9bec13e 953cc50
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Dec 28 13:06:45 2012 +0100
+
+    Merged in tradiaz/xnoise_dev_andi (pull request #5: Code fixes in the DockableMedia area)
+
+commit 953cc5040e5363863b843ffa54604c0db76a8ee1
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 12:20:02 2012 +0100
+
+    Follow coding style; Disentanle signal handling in DockableMedia
+
+commit f90c57b663afdcddd59aef5323e3eaea2fa7297c
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 11:09:28 2012 +0100
+
+    Code cleanup in DockableMediaManager.
+
+commit 9bec13e2ea885773ef26df755dbcbcc41dddbd67
+Merge: 85fce66 ac76788
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Dec 28 10:41:34 2012 +0100
+
+    Merged in tradiaz/xnoise_dev_andi (pull request #4: combo)
+
+commit ac7678821a48f6a480235bf395c83a5629f26c9b
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 02:31:02 2012 +0100
+
+    Remove debug message.
+
+commit 2a966d288b0e200cd2b78d1b209b9230dbaa8587
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 02:24:16 2012 +0100
+
+    Include new file in build system
+
+commit c6abe7c9b388801fd5f4df579f894df5bc4b9c65
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 02:22:29 2012 +0100
+
+    Extend alternative media source control
+
+commit 3e8e333480f62cdba9d33fb4afbc59e13443aeac
+Author: Andreas Obergrusberger <softshaker@googlemail.com>
+Date:   Fri Dec 28 02:15:22 2012 +0100
+
+    Added a new optional control to browse media sources.
+
+commit 85fce664841c8f865ceb460c7f2bb6e0bbb55f5c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 24 13:00:19 2012 +0100
+
+    use gnome-icon-theme-symbolic as 'Recommends:' in pakaging data
+
+commit 0995eb53df3336e4fe21344d5535518e11ff222e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 24 12:57:01 2012 +0100
+
+    prepare local fallback icons for xnoise
+
+commit a63bbbf3285d26683a8532779cdb2098673d40c5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 24 00:00:15 2012 +0100
+
+    remove old icon code
+
+commit 500bbf74509ff7632dc248a439398be26e768607
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 23 23:47:19 2012 +0100
+
+    use gnome's 'emblem-system-symbolic' for the application button
+
+commit 3ec5c2d5a69331bf9840b24f512ed3e170f29a3d
+Merge: a39bfc7 44af186
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 23 23:14:27 2012 +0100
+
+    Merged in 0rAX0/xnoise (pull request #2: Will this be okay?)
+
+commit 44af186ac144b070c67db76a70c3bcac2c7ed35d
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Sun Dec 23 22:53:35 2012 +0100
+
+    Test grid
+
+commit 14296af0c6d211f36ac049661adb3ca6e6672798
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Sun Dec 23 21:36:54 2012 +0100
+
+    More icon work
+
+commit a39bfc727dd2e8c60c4acbf57e4d7d1ecbc77859
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 23 18:53:55 2012 +0100
+
+    revert icon changes; add package dependency for gnome symbolic iconc
+
+commit 28d9b4740b5e4bb14078cbc6d76e5b468b1e73bb
+Merge: a2e8cc5 8b9c659
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Sun Dec 23 15:59:21 2012 +0100
+
+    Merged in 0rAX0/xnoise (pull request #1: More icon love. )
+
+commit 8b9c659b9c06e01aeaf90ee447e172ba5ce41365
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Sun Dec 23 15:13:57 2012 +0100
+
+    Use a Gear icon.
+
+commit 5f354f5e4bdb1e5f0f928c401ea9c743fb3cd85b
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Sun Dec 23 15:13:13 2012 +0100
+
+    Better icons
+
+commit a2e8cc5dd615b05ad3627125432bb93dcf0da90b
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Sat Dec 22 10:28:29 2012 +0100
+
+    update po/pt.po
+
+commit a4d0e097c67660b5c98c36ee063f86de973baab7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 21 22:25:23 2012 +0100
+
+    update packaging data
+
 commit 574e3963c392cb5f2a6a17506f631d9ba54af693
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Dec 21 22:06:19 2012 +0100

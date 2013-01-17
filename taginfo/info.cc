@@ -1,0 +1,491 @@
+#include "taginfo.h"
+#include "taginfo_internal.h"
+
+
+
+using namespace TagInfo;
+
+
+
+Info * Info::create_tag_info(const string & filename) {
+    map<string,int> ext_map;
+    
+    ext_map["mp3"]  = MEDIA_FILE_TYPE_MP3;
+    ext_map["flac"] = MEDIA_FILE_TYPE_FLAC;
+    ext_map["ogg"]  = MEDIA_FILE_TYPE_OGG;
+    ext_map["oga"]  = MEDIA_FILE_TYPE_OGA;
+    ext_map["mp4"]  = MEDIA_FILE_TYPE_MP4;
+    ext_map["m4a"]  = MEDIA_FILE_TYPE_M4A;
+    ext_map["m4b"]  = MEDIA_FILE_TYPE_M4B;
+    ext_map["m4p"]  = MEDIA_FILE_TYPE_M4P;
+    ext_map["aac"]  = MEDIA_FILE_TYPE_AAC;
+    ext_map["wma"]  = MEDIA_FILE_TYPE_WMA;
+    ext_map["asf"]  = MEDIA_FILE_TYPE_ASF;
+    ext_map["ape"]  = MEDIA_FILE_TYPE_APE;
+    ext_map["wav"]  = MEDIA_FILE_TYPE_WAV;
+    ext_map["aif"]  = MEDIA_FILE_TYPE_AIF;
+    ext_map["wv"]   = MEDIA_FILE_TYPE_WV;
+    ext_map["tta"]  = MEDIA_FILE_TYPE_TTA;
+    ext_map["mpc"]  = MEDIA_FILE_TYPE_MPC;
+    
+    string fnex = filename.substr(filename.find_last_of(".") + 1);
+//    cout << "lala : " << fnex << " " << ext_map[fnex] << endl;
+    if(ext_map[fnex] == 0)
+        return NULL;
+
+//    if(!guIsValidAudioFile(&ext_map, filename))
+//        return NULL;
+    
+//    string fnex = filename.substr(filename.find_last_of(".") + 1);
+//    guSupportedFormatsMutex.Lock();
+//    int FormatIndex = guSupportedFormats.Index(filename.Lower().AfterLast(wxT('.')));
+//    guSupportedFormatsMutex.Unlock();
+    
+//    wxString fn = wxT("/home/qnull/Musik/The Life Aquatic with Steve Zissou/DEVO - Gut Feeling.ogg");
+    int format = ext_map[fnex];
+    switch(format) {
+            case  MEDIA_FILE_TYPE_MP3 :
+            return new Mp3Info(filename);
+        case  MEDIA_FILE_TYPE_FLAC :
+            return new FlacInfo(filename);
+        case  MEDIA_FILE_TYPE_OGG :
+        case  MEDIA_FILE_TYPE_OGA :
+            return new OggInfo(filename);
+        case  MEDIA_FILE_TYPE_MP4 :
+        case  MEDIA_FILE_TYPE_M4A :
+        case  MEDIA_FILE_TYPE_M4B :
+        case  MEDIA_FILE_TYPE_M4P :
+        case  MEDIA_FILE_TYPE_AAC : 
+            return new Mp4Info(filename);
+        case  MEDIA_FILE_TYPE_WMA :
+        case  MEDIA_FILE_TYPE_ASF :
+            return new ASFTagInfo(filename);
+        case MEDIA_FILE_TYPE_APE :
+            return new ApeInfo(filename);
+        case MEDIA_FILE_TYPE_WAV :
+        case MEDIA_FILE_TYPE_AIF :
+            return new Info(filename);
+        case MEDIA_FILE_TYPE_WV : 
+            return new WavPackInfo(filename);
+        case MEDIA_FILE_TYPE_TTA :
+            return new TrueAudioInfo(filename);
+        case MEDIA_FILE_TYPE_MPC :
+            return new MpcInfo(filename);
+        default :
+            break;
+    }
+    return NULL;
+}
+
+
+
+//wxImage * get_typed_id3v2_image(TagLib::ID3v2::FrameList &framelist,
+//            TagLib::ID3v2::AttachedPictureFrame::Type frametype  = TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+
+
+//
+//wxImage * get_id3v2_image(ID3v2::Tag * tagv2)
+//{
+//    TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
+
+//    wxImage * CoverImage = get_typed_id3v2_image(FrameList, TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+
+//    if(!CoverImage)
+//    {
+//        CoverImage = get_typed_id3v2_image(FrameList, TagLib::ID3v2::AttachedPictureFrame::Other);
+//    }
+
+//    return CoverImage;
+//}
+
+//
+//void SetID3v2Image(ID3v2::Tag * tagv2, const wxImage * image)
+//{
+//    TagLib::ID3v2::AttachedPictureFrame * PicFrame;
+
+//    TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
+//    for(list<TagLib::ID3v2::Frame*>::iterator iter = FrameList.begin(); iter != FrameList.end(); iter++)
+//    {
+//        PicFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(*iter);
+//        // TODO : Ppl should be able to select which image types want guayadeque to remove from the audio files
+//        if((PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::FrontCover) ||
+//            (PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::Other))
+//            tagv2->removeFrame(PicFrame, TRUE);
+//    }
+
+//    if(image)
+//    {
+//        PicFrame = new TagLib::ID3v2::AttachedPictureFrame;
+//        PicFrame->setMimeType("image/jpeg");
+//        PicFrame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+//        wxMemoryOutputStream ImgOutputStream;
+//        if(image->SaveFile(ImgOutputStream, wxBITMAP_TYPE_JPEG))
+//        {
+//            ByteVector ImgData((TagLib::uint) ImgOutputStream.GetSize());
+//            ImgOutputStream.CopyTo(ImgData.data(), ImgOutputStream.GetSize());
+//            PicFrame->setPicture(ImgData);
+//            tagv2->addFrame(PicFrame);
+//        }
+//    }
+//}
+
+
+
+
+// Info
+
+Info::Info(const string &filename) {
+    taglib_file = NULL;
+    taglib_tag = NULL;
+    
+    set_file_name(filename);
+    
+    tracknumber = 0;
+    year = 0;
+    length_seconds = 0;
+    bitrate = 0;
+    rating = -1;
+    playcount = 0;
+    is_compilation = false;
+};
+
+
+Info::~Info() {
+    if(taglib_file)
+        delete taglib_file;
+}
+
+
+void Info::set_file_name(const string &filename) {
+    file_name = filename;
+    if(!filename.empty()) {
+    //        taglib_file = new TagLib::FileRef(filename.mb_str(wxConvFile), true, TagLib::AudioProperties::Fast);
+        taglib_file = new TagLib::FileRef(filename.data(), true, TagLib::AudioProperties::Fast);
+    }
+
+    if(taglib_file && !taglib_file->isNull()) {
+            taglib_tag = taglib_file->tag();
+        if(!taglib_tag) {
+            printf("Cant get tag object from '%s'\n", filename.data());
+        }
+    }
+}
+
+
+bool Info::read(void) {
+    AudioProperties * apro;
+    //cout << "Info::read #1" << endl;
+    if(taglib_tag) {
+            //cout << "Info::read #2" << endl;
+        
+        track_name  = (char*) taglib_tag->title().toCString(true);
+        artist = (char*) taglib_tag->artist().toCString(true);
+        album  = (char*) taglib_tag->album().toCString(true);
+        genre  = (char*) taglib_tag->genre().toCString(true);
+        comments   = (char*) taglib_tag->comment().toCString(true);
+        tracknumber = taglib_tag->track();
+        year = taglib_tag->year();
+        //cout << "Info::read #3" << endl;
+    }
+    if(taglib_file && taglib_tag && (apro = taglib_file->audioProperties())) {
+            length_seconds = apro->length();
+        bitrate = apro->bitrate();
+        //m_Samplerate = apro->sampleRate();
+        return true;
+    }
+    return false;
+}
+
+
+bool Info::write(const int changedflag) {
+    if(taglib_tag && (changedflag & CHANGED_DATA_TAGS)) {
+        taglib_tag->setTitle(track_name.c_str());
+        taglib_tag->setArtist(artist.c_str());
+        taglib_tag->setAlbum(album.c_str());
+        taglib_tag->setGenre(genre.c_str());
+        taglib_tag->setComment(comments.c_str());
+        taglib_tag->setTrack(tracknumber); // set the id3v1 track
+        taglib_tag->setYear(year);
+    }
+    
+    if(!taglib_file->save()) {
+          printf("Tags Save failed for file '%s'\n", file_name.data());
+      return false;
+    }
+    return true;
+}
+
+
+bool Info::can_handle_images(void) {
+    return false;
+}
+
+bool Info::get_image(char*& data, int &data_length) const {
+    data = NULL;
+    data_length = 0;
+    return false;
+}
+
+bool Info::set_image(char* data, int data_length) {
+    return false;
+}
+
+
+//bool Info::can_handle_images(void)
+//{
+//    return false;
+//}
+
+//
+//wxImage * Info::get_image(void)
+//{
+//    return NULL;
+//}
+
+//
+//bool Info::set_image(const wxImage * image)
+//{
+//    return false;
+//}
+
+
+bool Info::can_handle_lyrics(void) {
+    return false;
+}
+
+
+string Info::get_lyrics(void) {
+    return "";
+}
+
+
+bool Info::set_lyrics(const string &lyrics) {
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+// Other functions
+
+//wxImage * guTagGetPicture(const string &filename)
+//{
+//    wxImage * RetVal = NULL;
+//    Info * TagInfo = create_tag_info(filename);
+//    if(TagInfo)
+//    {
+//        if(TagInfo->can_handle_images())
+//        {
+//            RetVal = TagInfo->get_image();
+//        }
+//        delete TagInfo;
+//    }
+//    return RetVal;
+//}
+
+
+//bool guTagSetPicture(const string &filename, wxImage * picture)
+//{
+//    guMainFrame * MainFrame = (guMainFrame *) wxTheApp->GetTopWindow();
+
+//    const guCurrentTrack * CurrentTrack = MainFrame->GetCurrentTrack();
+//    if(CurrentTrack && CurrentTrack->m_Loaded)
+//    {
+//        if(CurrentTrack->file_name == filename)
+//        {
+//            // Add the pending track change to MainFrame
+//            MainFrame->AddPendingUpdateTrack(filename, picture, "", guTRACK_CHANGED_DATA_IMAGES);
+//            return true;
+//        }
+//    }
+
+//    bool RetVal = false;
+//    Info * TagInfo = create_tag_info(filename);
+//    if(TagInfo)
+//    {
+//        if(TagInfo->can_handle_images())
+//        {
+//            RetVal = TagInfo->set_image(picture) && TagInfo->write(guTRACK_CHANGED_DATA_IMAGES);
+//        }
+//        delete TagInfo;
+//    }
+//    return RetVal;
+//    return false;
+//}
+
+
+//bool guTagSetPicture(const string &filename, const string &imagefile)
+//{
+//    wxImage Image(imagefile);
+//    if(Image.IsOk())
+//    {
+//        return guTagSetPicture(filename, &Image);
+//    }
+//    return false;
+//}
+
+
+//string guTagget_lyrics(const string &filename)
+//{
+//    string RetVal = "";
+////    Info * TagInfo = create_tag_info(filename);
+////    if(TagInfo)
+////    {
+////        if(TagInfo->can_handle_lyrics())
+////        {
+////            RetVal = TagInfo->get_lyrics();
+////        }
+////        delete TagInfo;
+////    }
+//    return RetVal;
+//}
+
+//
+//bool guTagset_lyrics(const string &filename, string &lyrics)
+//{
+////    guMainFrame * MainFrame = (guMainFrame *) wxTheApp->GetTopWindow();
+
+////    const guCurrentTrack * CurrentTrack = MainFrame->GetCurrentTrack();
+////    if(CurrentTrack && CurrentTrack->m_Loaded)
+////    {
+////        if(CurrentTrack->file_name == filename)
+////        {
+////            // Add the pending track change to MainFrame
+////            MainFrame->AddPendingUpdateTrack(filename, NULL, lyrics, guTRACK_CHANGED_DATA_LYRICS);
+////            return true;
+////        }
+////    }
+
+////    bool RetVal = false;
+////    Info * TagInfo = create_tag_info(filename);
+////    if(TagInfo)
+////    {
+////        if(TagInfo->can_handle_lyrics())
+////        {
+////            RetVal = TagInfo->set_lyrics(lyrics) && TagInfo->write(guTRACK_CHANGED_DATA_LYRICS);
+////        }
+////        delete TagInfo;
+////    }
+////    return RetVal;
+//    return false;
+//}
+
+
+//void guUpdateTracks(const guTrackArray &tracks, const guImagePtrArray &images,
+//                    const wxArrayString &lyrics, const wxArrayInt &changedflags)
+//{
+//    int Index;
+//    int Count = tracks.size();
+
+//    guMainFrame * MainFrame = guMainFrame::GetMainFrame();
+
+//    // Process each Track
+//    for(Index = 0; Index < Count; Index++)
+//    {
+//        // If there is nothign to change continue with next one
+//        int ChangedFlag = changedflags[ Index ];
+//        if(!ChangedFlag)
+//            continue;
+
+//        const guTrack &Track = tracks[ Index ];
+
+//        // Dont allow to edit tags from Cue files tracks
+//        if(Track.m_Offset)
+//            continue;
+
+//        if(wxFileExists(Track.file_name))
+//        {
+//            // Prevent write to the current playing file in order to avoid segfaults specially with flac and wma files
+//            const guCurrentTrack * CurrentTrack = MainFrame->GetCurrentTrack();
+//            if(CurrentTrack && CurrentTrack->m_Loaded)
+//            {
+//                if(CurrentTrack->file_name == Track.file_name)
+//                {
+//                    // Add the pending track change to MainFrame
+//                    MainFrame->AddPendingUpdateTrack(Track,
+//                                                       Index < (int) images.size() ? images[ Index ] : NULL,
+//                                                       Index < (int) lyrics.size() ? lyrics[ Index ] : wxT(""),
+//                                                       changedflags[ Index ]);
+//                    continue;
+//                }
+//            }
+
+//            Info * TagInfo = create_tag_info(Track.file_name);
+
+//            if(!TagInfo)
+//            {
+//                guLogError(wxT("There is no handler for the file '%s'"), Track.file_name.c_str());
+//                return;
+//            }
+
+//            if(ChangedFlag & CHANGED_DATA_TAGS)
+//            {
+//                TagInfo->track_name = Track.m_SongName;
+//                TagInfo->album_artist = Track.album_artist;
+//                TagInfo->artist = Track.artist;
+//                TagInfo->album = Track.album;
+//                TagInfo->genre = Track.genre;
+//                TagInfo->tracknumber = Track.m_Number;
+//                TagInfo->year = Track.year;
+//                TagInfo->composer = Track.composer;
+//                TagInfo->comments = Track.comments;
+//                TagInfo->disk_str = Track.disk_str;
+//            }
+
+//            if(ChangedFlag & guTRACK_CHANGED_DATA_RATING)
+//            {
+//                TagInfo->rating = Track.rating;
+//                TagInfo->playcount = Track.playcount;
+//            }
+
+//            if((ChangedFlag & guTRACK_CHANGED_DATA_LYRICS) && TagInfo->can_handle_lyrics())
+//            {
+//                TagInfo->set_lyrics(lyrics[ Index ]);
+//            }
+
+//            if((ChangedFlag & guTRACK_CHANGED_DATA_IMAGES) && TagInfo->can_handle_images())
+//            {
+//                TagInfo->set_image(images[ Index ]);
+//            }
+
+//            TagInfo->write(ChangedFlag);
+
+//            delete TagInfo;
+//        }
+//        else
+//        {
+//            guLogMessage(wxT("File not found for edition: '%s'"), Track.file_name.c_str());
+//        }
+//    }
+//}
+
+
+//void guUpdateImages(const guTrackArray &songs, const guImagePtrArray &images, const wxArrayInt &changedflags)
+//{
+//    int Index;
+//    int Count = images.size();
+//    for(Index = 0; Index < Count; Index++)
+//    {
+//        if(!songs[ Index ].m_Offset && (changedflags[ Index ] & guTRACK_CHANGED_DATA_IMAGES))
+//            guTagSetPicture(songs[ Index ].file_name, images[ Index ]);
+//    }
+//}
+
+
+//void guUpdateLyrics(const guTrackArray &songs, const wxArrayString &lyrics, const wxArrayInt &changedflags)
+//{
+//    int Index;
+//    int Count = lyrics.size();
+//    for(Index = 0; Index < Count; Index++)
+//    {
+//        if(!songs[ Index ].m_Offset && (changedflags[ Index ] & guTRACK_CHANGED_DATA_LYRICS))
+//            guTagset_lyrics(songs[ Index ].file_name, lyrics[ Index ]);
+//    }
+//}
+

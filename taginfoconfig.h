@@ -1,0 +1,1 @@
+/* taginfoconfig.h.  Generated from taginfoconfig.h.in by configure.  */

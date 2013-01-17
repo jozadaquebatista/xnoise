@@ -1910,6 +1910,7 @@ struct _XnoiseTrackData {
 	volatile int ref_count;
 	XnoiseTrackDataPrivate * priv;
 	gchar* artist;
+	gchar* albumartist;
 	gchar* album;
 	gchar* title;
 	gchar* genre;
@@ -1919,7 +1920,9 @@ struct _XnoiseTrackData {
 	guint tracknumber;
 	gint32 length;
 	gint bitrate;
+	gboolean is_compilation;
 	XnoiseItem* item;
+	GdkPixbuf* pixbuf;
 	gint32 dat1;
 	gint32 dat2;
 };
@@ -2707,7 +2710,7 @@ void xnoise_tag_access_value_set_tag_reader (GValue* value, gpointer v_object);
 void xnoise_tag_access_value_take_tag_reader (GValue* value, gpointer v_object);
 gpointer xnoise_tag_access_value_get_tag_reader (const GValue* value);
 GType xnoise_tag_access_tag_reader_get_type (void) G_GNUC_CONST;
-XnoiseTrackData* xnoise_tag_access_tag_reader_read_tag (XnoiseTagAccessTagReader* self, const gchar* filename);
+XnoiseTrackData* xnoise_tag_access_tag_reader_read_tag (XnoiseTagAccessTagReader* self, const gchar* filename, gboolean try_read_image_data);
 XnoiseTagAccessTagReader* xnoise_tag_access_tag_reader_new (void);
 XnoiseTagAccessTagReader* xnoise_tag_access_tag_reader_construct (GType object_type);
 gpointer xnoise_tag_access_tag_writer_ref (gpointer instance);

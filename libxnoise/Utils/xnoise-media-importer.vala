@@ -136,7 +136,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         return_val_if_fail(io_worker.is_same_thread(), false);
         var tr = new TagReader();
         File f = File.new_for_path((string)job.get_arg("path"));
-        TrackData? td = tr.read_tag(f.get_path());
+        TrackData? td = tr.read_tag(f.get_path(), false);
         if(td != null) {
             FileInfo info = f.query_info(FileAttribute.STANDARD_TYPE + "," + 
                                          FileAttribute.STANDARD_CONTENT_TYPE,
@@ -424,7 +424,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             //    File file = File.new_for_commandline_arg(folder);
             //    count_media_files(file, job);
             //}
-    
+            
             if(new_mfolders_ht.get_keys().length() == 0) {
                 db_writer.commit_transaction();
                 end_import(job);
@@ -492,7 +492,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                     string uri_lc = filename.down();
                     if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
                         var tr = new TagReader();
-                        td = tr.read_tag(filepath);
+                        td = tr.read_tag(filepath, false);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             tda += td;
@@ -526,82 +526,6 @@ public class Xnoise.MediaImporter : GLib.Object {
                             db_worker.push_job(db_job);
                         }
                     }
-//                    else {
-//                        print("found playlist file\n");
-//                        Item item = ItemHandlerManager.create_item(file.get_uri());
-//                        TrackData[]? playlist_content = null;
-//                        var pr = new Playlist.Reader();
-//                        Playlist.Result rslt;
-//                        try {
-//                            rslt = pr.read(item.uri , null);
-//                        }
-//                        catch(Playlist.ReaderError e) {
-//                            print("%s\n", e.message);
-//                            continue;
-//                        }
-//                        if(rslt != Playlist.Result.SUCCESS)
-//                            continue;
-//                        Playlist.EntryCollection ec = pr.data_collection;
-//                        if(ec != null) {
-//                            playlist_content = {};
-//                            foreach(Playlist.Entry e in ec) {
-//                                var tmp = new TrackData();
-//                                tmp.title  = (e.get_title()  != null ? e.get_title()  : UNKNOWN_TITLE);
-//                                tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
-//                                tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
-//                                tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
-//                                tmp.item   = ItemHandlerManager.create_item(e.get_uri());
-//                                File fe = File.new_for_uri(e.get_uri());
-//                                FileInfo einfo = null;
-//                                try {
-//                                    einfo = fe.query_info(FileAttribute.STANDARD_TYPE + "," + 
-//                                                          FileAttribute.STANDARD_CONTENT_TYPE,
-//                                                          FileQueryInfoFlags.NONE , null);
-//                                }
-//                                catch(Error err) {
-//                                    print("mimeinfo error for playlist content: %s\n", err.message);
-//                                    continue;
-//                                }
-//                                tmp.mimetype = 
-//                                    GLib.ContentType.get_mime_type(einfo.get_content_type());
-//                                playlist_content += (owned)tmp;
-//                            }
-//                        }
-//                        else {
-//                            continue;
-//                        }
-//                        if(playlist_content != null) {
-//                            foreach(TrackData tdat in playlist_content) {
-//                                //print("fnd playlist_content : %s - %s\n", tdat.item.uri, tdat.title);
-//                                tda += (owned)tdat;
-//                                job.big_counter[1]++;
-//                                lock(current_import_track_count) {
-//                                    current_import_track_count++;
-//                                }
-//                            }
-//                            if(job.big_counter[1] % 50 == 0) {
-//                                Idle.add( () => {  // Update progress bar
-//                                    uint xcnt = 0;
-//                                    lock(current_import_track_count) {
-//                                        xcnt = current_import_track_count;
-//                                    }
-//                                    unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
-//                                    if(pb != null) {
-//                                        pb.pulse();
-//                                        pb.set_text(_("%u tracks found").printf(xcnt));
-//                                    }
-//                                    return false;
-//                                });
-//                            }
-//                            if(tda.length > FILE_COUNT) {
-//                                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-//                                db_job.track_dat = (owned)tda;
-//                                db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
-//                                tda = {};
-//                                db_worker.push_job(db_job);
-//                            }
-//                        }
-//                    }
                 }
             }
         }

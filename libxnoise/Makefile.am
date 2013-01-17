@@ -13,6 +13,8 @@ INCLUDES = \
     -DXN_PLUGINSDIR=\"$(libdir)/xnoise\" \
     -DXN_LICENSEDIR=\"$(datadir)/xnoise/license/\" \
     -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
+    -I$(top_builddir) \
+    -I$(top_srcdir)/bindings/c \
     $(NULL)
 
 libxnoise_hdir = $(includedir)/xnoise
@@ -25,7 +27,7 @@ BUILT_SOURCES = \
     
 libxnoisedir = $(libdir)/xnoise
 
-libxnoise_LTLIBRARIES = libxnoise.la
+lib_LTLIBRARIES = libxnoise.la
 
 libxnoise_la_SOURCES = \
     AlbumImages/xnoise-album-image.vala \
@@ -174,6 +176,8 @@ libxnoise_la_VALAFLAGS = \
     --thread \
     --pkg gio-2.0 \
     --vapidir $(top_srcdir)/vapi \
+    --vapidir $(top_srcdir)/bindings/vala \
+    --pkg taginfo_c \
     --basedir $(top_srcdir)/libxnoise \
     @XNOISE_PACKAGES@ \
     $(NULL)
@@ -189,6 +193,7 @@ libxnoise_la_LDFLAGS = \
 
 libxnoise_la_LIBADD = \
     $(XNOISE_LIBS) \
+    $(top_builddir)/bindings/c/libtaginfo_c.la \
     -lgstpbutils-0.10 \
     $(NULL)
 
@@ -266,4 +271,5 @@ DISTCLEANFILES = \
     UserInfoSystem/*.c \
     Utils/*.c \
     $(NULL)
+
 

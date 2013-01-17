@@ -31,6 +31,8 @@
 using Xnoise;
 using Xnoise.Resources;
 
+using TagInfo;
+
 
 public class Xnoise.TagAccess.TagWriter {
     public bool write_tag(File? file, TrackData? td) {
@@ -39,40 +41,31 @@ public class Xnoise.TagAccess.TagWriter {
             return false;
         if(td == null)
             return false;
+        
         bool retval = false;
-
+        
         string path = null;
         path = file.get_path();
         if(path == null)
             return false;
-
-        TagLib.File taglib_file = null;
-        taglib_file = new TagLib.File(path);
-        if(taglib_file != null && taglib_file.is_valid()) {
-            unowned TagLib.Tag tag = taglib_file.tag;
-            if(tag != null) {
-                if(td.artist != null && td.artist != EMPTYSTRING)
-                    tag.artist = td.artist;
-                    
-                if(td.title != null && td.title != EMPTYSTRING)
-                    tag.title = td.title;
-                
-                if(td.album != null && td.album != EMPTYSTRING)
-                    tag.album = td.album;
-                
-                if(td.genre != null && td.genre != EMPTYSTRING)
-                    tag.genre = td.genre;
-                
-                if(td.year != 0)
-                    tag.year = td.year;
-                
-                if(td.tracknumber != 0)
-                    tag.track = td.tracknumber;
-                
-                retval = taglib_file.save();
-            }
+        
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.artist       = td.artist      != null ? td.artist      : EMPTYSTRING;
+            info.title        = td.title       != null ? td.title       : EMPTYSTRING;
+            info.album        = td.album       != null ? td.album       : EMPTYSTRING;
+            info.albumartist  = td.albumartist != null ? td.albumartist : EMPTYSTRING;
+            info.genre        = td.genre       != null ? td.genre       : EMPTYSTRING;
+            if(td.year >= 0)
+                info.year = (int)td.year;
+            
+            if(td.tracknumber >= 0)
+                info.tracknumber = (int)td.tracknumber;
+            
+            retval = info.write();
         }
-        taglib_file = null;
         return retval;
     }
 
@@ -83,26 +76,21 @@ public class Xnoise.TagAccess.TagWriter {
         if(artist == null)
             return false;
         bool retval = false;
-
+        
         string path = null;
         path = file.get_path();
         if(path == null)
             return false;
         
-        TagLib.File taglib_file = null;
-        taglib_file = new TagLib.File(path);
-        if(taglib_file!=null) {
-            unowned TagLib.Tag tag = taglib_file.tag;
-            if(tag != null) {
-                if(artist != EMPTYSTRING)
-                    tag.artist = artist;
-                else
-                    return false;
-                                
-                retval = taglib_file.save();
-            }
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.read();
+            info.artist = artist != null ? artist : EMPTYSTRING;
+            
+            retval = info.write();
         }
-        taglib_file = null;
         return retval;
     }
 
@@ -119,20 +107,15 @@ public class Xnoise.TagAccess.TagWriter {
         if(path == null)
             return false;
         
-        TagLib.File taglib_file = null;
-        taglib_file = new TagLib.File(path);
-        if(taglib_file!=null) {
-            unowned TagLib.Tag tag = taglib_file.tag;
-            if(tag != null) {
-                if(genre != EMPTYSTRING)
-                    tag.genre = genre;
-                else
-                    return false;
-                                
-                retval = taglib_file.save();
-            }
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.read();
+            info.genre = genre != null ? genre : EMPTYSTRING;
+            
+            retval = info.write();
         }
-        taglib_file = null;
         return retval;
     }
 
@@ -149,20 +132,15 @@ public class Xnoise.TagAccess.TagWriter {
         if(path == null)
             return false;
         
-        TagLib.File taglib_file = null;
-        taglib_file = new TagLib.File(path);
-        if(taglib_file!=null) {
-            unowned TagLib.Tag tag = taglib_file.tag;
-            if(tag != null) {
-                if(album != EMPTYSTRING)
-                    tag.album = album;
-                else
-                    return false;
-                                
-                retval = taglib_file.save();
-            }
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.read();
+            info.album = album != null ? album : EMPTYSTRING;
+            
+            retval = info.write();
         }
-        taglib_file = null;
         return retval;
     }
 
@@ -179,16 +157,15 @@ public class Xnoise.TagAccess.TagWriter {
         if(path == null)
             return false;
         
-        TagLib.File taglib_file = null;
-        taglib_file = new TagLib.File(path);
-        if(taglib_file!=null) {
-            unowned TagLib.Tag tag = taglib_file.tag;
-            if(tag != null) {
-                tag.year = year;
-                retval = taglib_file.save();
-            }
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.read();
+            info.year = (int)year;
+            
+            retval = info.write();
         }
-        taglib_file = null;
         return retval;
     }
 }

@@ -46,6 +46,7 @@ data/misc/xnoise.desktop.in
 .deps
 src/xnoise
 stamp-h1
+stamp-h2
 *.bz2
 *.gz
 .anjuta/

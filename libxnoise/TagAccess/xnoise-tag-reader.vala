@@ -32,10 +32,11 @@ using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Utilities;
 
+using TagInfo;
 
 
 public class Xnoise.TagAccess.TagReader {
-    public TrackData? read_tag(string? filename) {
+    public TrackData? read_tag(string? filename, bool try_read_image_data = false) {
         if(filename == null || filename.strip() == EMPTYSTRING)
             return null;
         File f = null;
@@ -44,64 +45,59 @@ public class Xnoise.TagAccess.TagReader {
             return null;
         TrackData td = new TrackData();
         td.item = ItemHandlerManager.create_item(f.get_uri());
-        TagLib.File taglib_file = null;
+        Info info = null;
         if(td.item.type != ItemType.LOCAL_AUDIO_TRACK && td.item.type != ItemType.LOCAL_VIDEO_TRACK)
             return null;
         if(f.get_path() == null)
             return null;
-        taglib_file = new TagLib.File(f.get_path());
-        if(taglib_file != null && taglib_file.is_valid()) {
-            unowned TagLib.Tag tag = null;
-            tag = taglib_file.tag;
-            unowned TagLib.AudioProperties ap = null;
-            ap = taglib_file.audioproperties;
-            if(tag != null && ap != null) {
-                try {
-                    // from class Tag
-                    if(tag != null) {
-                        if(tag.artist.validate())
-                        td.artist      = tag.artist;
-                        td.title       = tag.title;
-                        td.album       = tag.album;
-                        td.genre       = tag.genre;
-                        td.year        = tag.year;
-                        td.tracknumber = tag.track;
-                    } 
-                    else {
-                        td.artist      = UNKNOWN_ARTIST;
-                        td.title       = UNKNOWN_TITLE;
-                        td.album       = UNKNOWN_ALBUM;
-                        td.genre       = UNKNOWN_GENRE;
-                        td.year        = 0;
-                        td.tracknumber = (uint)0;
-                    }    
-                    // from class AudioProperties
-                    if(ap != null) {
-                        td.length      = (int32)ap.length;
-                        td.bitrate     = ap.bitrate;
-                    } else {
-                        td.length = (int32)0;
-                        td.bitrate = 0;
-                    }        
+        info = Info.factory_make(f.get_path());
+        if(info != null) {
+            if(info.read()) {
+                td.artist         = info.artist != null && info.artist != "" ?
+                                        info.artist : UNKNOWN_ARTIST;
+                td.albumartist    = info.albumartist != null && info.albumartist != "" ?
+                                        info.albumartist : UNKNOWN_ARTIST;
+                td.title          = info.title != null && info.title != "" ?
+                                        info.title : UNKNOWN_TITLE;
+                td.album          = info.album != null && info.album != "" ?
+                                        info.album : UNKNOWN_ALBUM;
+                td.genre          = info.genre != null && info.genre != "" ?
+                                        info.genre : UNKNOWN_GENRE;
+                td.year           = info.year;
+                td.tracknumber    = info.tracknumber;
+                td.length         = info.length;
+                td.is_compilation = info.is_compilation;
+                if(try_read_image_data) {
+                    uint8[] data = null;
+                    if(info.get_image(out data)) {
+                        if(data != null && data.length > 0) {
+                            var pbloader = new Gdk.PixbufLoader();
+                            try {
+                                pbloader.write(data);
+                            }
+                            catch(Error e) {
+                                print("Error 1: %s\n", e.message);
+                                try { pbloader.close(); } catch(Error e) { print("Error 2\n");}
+                            }
+                            try { 
+                                pbloader.close(); 
+                                td.pixbuf = pbloader.get_pixbuf();
+                            } 
+                            catch(Error e) { 
+                                print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
+                            }
+                        }
+                    }
                 }
-                finally {
-                    if((td.artist == null)||(td.artist == EMPTYSTRING)) td.artist = UNKNOWN_ARTIST;
-                    if((td.title  == null)||(td.title  == EMPTYSTRING)) td.title  = UNKNOWN_TITLE;
-                    if((td.album  == null)||(td.album  == EMPTYSTRING)) td.album  = UNKNOWN_ALBUM;
-                    if((td.genre  == null)||(td.genre  == EMPTYSTRING)) td.genre  = UNKNOWN_GENRE;
-                    tag = null;
-                    taglib_file = null;
-                }
-            }
+            } 
             else {
                 td.artist      = UNKNOWN_ARTIST;
                 td.title       = UNKNOWN_TITLE;
                 td.album       = UNKNOWN_ALBUM;
                 td.genre       = UNKNOWN_GENRE;
-                td.year        = 0;
-                td.tracknumber = (uint)0;
-                td.length      = (int32)0;
-                td.bitrate     = 0;
+//                td.year        = 0;
+//                td.tracknumber = (uint)0;
+//                td.length      = 0;//(int32)ap.length;
             }
         }
         else {
@@ -109,10 +105,10 @@ public class Xnoise.TagAccess.TagReader {
             td.title       = UNKNOWN_TITLE;
             td.album       = UNKNOWN_ALBUM;
             td.genre       = UNKNOWN_GENRE;
-            td.year        = 0;
-            td.tracknumber = (uint)0;
-            td.length      = (int32)0;
-            td.bitrate     = 0;
+//            td.year        = 0;
+//            td.tracknumber = (uint)0;
+//            td.length      = (int32)0;
+//            td.bitrate     = 0;
         }
         if(td.title  == UNKNOWN_TITLE)
             td.title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
