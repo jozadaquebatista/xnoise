@@ -120,39 +120,37 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             return false;
         });
         
-        this.enter_notify_event.connect( () => { 
-            mouse_over = true;
-            Timeout.add(500, () => {
-                queue_resize();
-                return false;
-            }); 
-            return false;
-        });
-        this.leave_notify_event.connect( () => { 
-            mouse_over = false;
-            Timeout.add(500, () => {
-                queue_resize();
-                return false;
-            }); 
-            return false;
-        });
+        this.enter_notify_event.connect(on_enter);
+        this.leave_notify_event.connect(on_leave);
         
-        msw.search_entry.enter_notify_event.connect( () => { 
-            mouse_over = true;
-            Timeout.add(500, () => {
-                queue_resize();
-                return false;
-            }); 
+        msw.search_entry.enter_notify_event.connect(on_enter);
+        msw.search_entry.leave_notify_event.connect(on_leave);
+    }
+    
+    ~TreeMediaSelector() {
+        this.enter_notify_event.disconnect(on_enter);
+        this.leave_notify_event.disconnect(on_leave);
+        
+        this.msw.search_entry.enter_notify_event.disconnect(on_enter);
+        this.msw.search_entry.leave_notify_event.disconnect(on_leave);
+    }
+    
+    private bool on_enter() {
+        mouse_over = true;
+        Timeout.add(500, () => {
+            queue_resize();
             return false;
-        });
-        msw.search_entry.leave_notify_event.connect( () => { 
-            mouse_over = false;
-            Timeout.add(500, () => {
-                queue_resize();
-                return false;
-            }); 
+        }); 
+        return false;
+    }
+    
+    private bool on_leave() { 
+        mouse_over = false;
+        Timeout.add(500, () => {
+            queue_resize();
             return false;
-        });
+        }); 
+        return false;
     }
     
     uint scroll_source = 0;
@@ -166,7 +164,6 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                 GLib.List<TreePath> list;
                 list = this.get_selection().get_selected_rows(null);
                 if(list.length() != 0) {
-//                    current_path = list.data;
                     this.scroll_to_cell(list.data, null, false, 0.0f, 0.0f);
                 }
                 scroll_source = 0;
