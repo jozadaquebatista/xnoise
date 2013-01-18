@@ -1,3 +1,19 @@
+xnoise (0.2.15-1ppa1~precise) precise; urgency=low
+  * Add support for Android and some other player devices
+  * Use themed symbolic icons
+  * Add optional GENRE-ARTIST-ALBUM sort mode in music browser
+  * Add some sort modes for album-art-view
+  * Allow editing of genres
+  * Equalizer is now activatable from the equalizer window, only
+  * Show album art in album tag editor
+  * Rework settings dialog, again
+  * Localization updates
+  * Code cleanups
+  * Many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 22 Dec 2012 22:04:51 +0100
+
+
 xnoise (0.2.14-1ppa1~quantal) quantal; urgency=low
   * Add support for Android and some other player devices
   * Use themed symbolic icons

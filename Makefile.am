@@ -43,6 +43,7 @@ noinst_DATA =  \
 
 EXTRA_DIST = \
     $(noinst_DATA) \
+    taginfoconfig.h \
     intltool-extract.in \
     intltool-merge.in \
     intltool-update.in\

@@ -23,9 +23,9 @@ usr/lib/xnoise/libxnoisetest.so
 usr/lib/xnoise/xnoisetest.xnplugin
 usr/lib/xnoise/libsoundmenu2.so
 usr/lib/xnoise/soundmenu2.xnplugin
-usr/lib/xnoise/libxnoise.so
-usr/lib/xnoise/libxnoise.so.0
-usr/lib/xnoise/libxnoise.so.0.0.0
+usr/lib/libtaginfo.s*
+usr/lib/libtaginfo_c.s*
+usr/lib/libxnoise.s*
 usr/share/applications
 usr/share/icons
 usr/share/locale

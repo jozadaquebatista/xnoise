@@ -1,8 +1,20 @@
-commit 5c4d299d41a4851a801d5cbe0d5e927f3c3dab06
+commit 1fe4f33846971804d5d3a30ffd59accd98b5da43
 Author: Jörn Magens <shuerhaaken@googlemail.com>
-Date:   Thu Jan 17 23:06:13 2013 +0100
+Date:   Fri Jan 18 09:09:02 2013 +0100
 
-    basic integration
+    add missing header ref
+
+commit bf2769c70a6894904b2f208655581efcb91ad522
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 00:25:43 2013 +0100
+
+    version increment
+
+commit 210b7be29ea22399277aa9ee18dfe6a846af38f9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 00:19:35 2013 +0100
+
+    land taginfo wrapper
 
 commit 123fe764bdc0af64c3fec29e15a2cea4a52deef6
 Author: Jörn Magens <shuerhaaken@googlemail.com>
