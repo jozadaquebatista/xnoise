@@ -158,7 +158,7 @@ internal class Xnoise.IconRepo : GLib.Object {
             if(theme.has_icon("xnoise-grey"))
                 album_art_default_icon = theme.load_icon("xnoise-grey",
                                                         AlbumImage.SIZE,
-                                                        IconLookupFlags.USE_BUILTIN);
+                                                        IconLookupFlags.FORCE_SIZE);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);

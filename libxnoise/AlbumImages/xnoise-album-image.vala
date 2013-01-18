@@ -80,10 +80,11 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     private void setup_symbolic_icon() {
         StyleContext context = this.get_style_context();
         context.set_state(StateFlags.ACTIVE);
-        album_art_default_icon = IconRepo.get_themed_pixbuf_icon("xnoise-symbolic",
-                                                                 SIZE,
-                                                                 context
-        );
+        album_art_default_icon = icon_repo.album_art_default_icon;
+//        IconRepo.get_themed_pixbuf_icon("xnoise-symbolic",
+//                                                                 SIZE,
+//                                                                 context
+//        );
         if(album_art_default_icon.width != SIZE) {
             album_art_default_icon = album_art_default_icon.scale_simple(SIZE, SIZE, Gdk.InterpType.HYPER);
         }
