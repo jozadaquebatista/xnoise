@@ -26,7 +26,7 @@
 #include <string.h>
 #include <vector>
 #include <fcntl.h>
-
+#include <unistd.h>
 
 #define APE_TAG_TITLE               "Title" 
 #define APE_TAG_SUBTITLE            "Subtitle" 
