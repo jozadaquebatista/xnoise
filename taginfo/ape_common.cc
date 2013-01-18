@@ -1,11 +1,30 @@
+/* Original Author 2008-2012: J.Rios
+ * 
+ * Edited by: Jörn Magens <shuerhaaken@googlemail.com>
+ * 
+ * 
+ * This Program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ * 
+ * This Program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; see the file LICENSE.  If not, write to
+ * the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+
 #include <string>
 #include "taginfo.h"
 #include "taginfo_internal.h"
-//#include <apetag.h>
 
 
 void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const string &value) {
-    //guLogMessage(wxT("USERTEXT[ %s ] = '%s'"), wxString(description, wxConvISO8859_1).c_str(), value.c_str());
     if(apetag->itemListMap().contains(description))
         apetag->removeItem(description);
     if(!value.empty()) {
@@ -29,8 +48,6 @@ string get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_
 }
 
 
-
-//
 string get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length) {
     data = NULL;
     data_length = 0;
