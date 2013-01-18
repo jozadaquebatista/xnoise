@@ -298,9 +298,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             print("%s\n", e.message);
             return;
         }
-        default_image = default_image.scale_simple((int)(default_image.get_width()  * 0.8),
-                                                   (int)(default_image.get_height() * 0.8),
-                                                   Gdk.InterpType.HYPER);
     }
     
     private Gdk.Rectangle rect;

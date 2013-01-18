@@ -34,8 +34,11 @@ using Gtk;
 
 /* This is the traditional MediaSelector, which uses a TreeView */
 private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
-
+    
+    private unowned MediaSoureWidget msw;
     private TreeStore store;
+    private bool mouse_over = false;
+    private int row_height = 23;
     
     public enum Column {
         ICON = 0,
@@ -50,7 +53,11 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     public string selected_dockable_media { get; set; }
     
-    public TreeMediaSelector() {
+    public TreeMediaSelector(MediaSoureWidget msw) {
+        this.events = this.events |
+                      Gdk.EventMask.ENTER_NOTIFY_MASK |
+                      Gdk.EventMask.LEAVE_NOTIFY_MASK;
+        this.msw = msw;
         selected_dockable_media = "";
         //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
@@ -66,6 +73,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                                                               typeof(string)                //name
                                                               );
         var column = new TreeViewColumn();
+        TreeViewColumn first_col = column;
         var renderer = new CellRendererText();
         var rendererPb = new CellRendererPixbuf();
         column.pack_start(rendererPb, false);
@@ -100,8 +108,73 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         dockable_media_sources.media_removed.connect(on_media_removed);
         dockable_media_sources.category_removed.connect(on_category_removed);
         dockable_media_sources.category_inserted.connect(on_category_inserted);
+        
+        Timeout.add_seconds(1, () => {
+            if(this.get_window() == null)
+                return true;
+            var path = new Gtk.TreePath.first();
+            Gdk.Rectangle rect = Gdk.Rectangle();
+            this.get_cell_area(path, first_col, out rect);
+            row_height = rect.height;
+            queue_resize();
+            return false;
+        });
+        
+        this.enter_notify_event.connect( () => { 
+            mouse_over = true;
+            Timeout.add(500, () => {
+                queue_resize();
+                return false;
+            }); 
+            return false;
+        });
+        this.leave_notify_event.connect( () => { 
+            mouse_over = false;
+            Timeout.add(500, () => {
+                queue_resize();
+                return false;
+            }); 
+            return false;
+        });
+        
+        msw.search_entry.enter_notify_event.connect( () => { 
+            mouse_over = true;
+            Timeout.add(500, () => {
+                queue_resize();
+                return false;
+            }); 
+            return false;
+        });
+        msw.search_entry.leave_notify_event.connect( () => { 
+            mouse_over = false;
+            Timeout.add(500, () => {
+                queue_resize();
+                return false;
+            }); 
+            return false;
+        });
     }
-            
+    
+    uint scroll_source = 0;
+    public override void get_preferred_height(out int minimum_height, out int natural_height) {
+        base.get_preferred_height(out minimum_height, out natural_height);
+        if(!mouse_over) {
+            natural_height = minimum_height = row_height;
+            if(scroll_source != 0)
+                Source.remove(scroll_source);
+            Idle.add(() => {
+                GLib.List<TreePath> list;
+                list = this.get_selection().get_selected_rows(null);
+                if(list.length() != 0) {
+//                    current_path = list.data;
+                    this.scroll_to_cell(list.data, null, false, 0.0f, 0.0f);
+                }
+                scroll_source = 0;
+                return false;
+            });
+        }
+    }
+    
     public void select_without_signal_emmission(string dockable_name) {
         Gtk.TreePath? path = null;
         Gtk.TreeSelection sel = this.get_selection();

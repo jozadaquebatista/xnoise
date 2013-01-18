@@ -38,7 +38,7 @@ private interface Xnoise.MediaSelector : Gtk.Widget {
     public abstract void select_without_signal_emmission(string name);
     public abstract void expand_all();
 }
-    
+
 
 public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     
@@ -46,6 +46,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     private unowned Xnoise.MainWindow mwindow;
     
     public Gtk.Entry search_entry              { get; private set; }
+    
     private MediaSelector media_source_selector = null;// { get; private set; }
     private ScrolledWindow media_source_selector_window = null;
     private Box media_source_selector_box = null;
@@ -115,6 +116,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     private void setup_widgets() {
         var buff = new Gtk.EntryBuffer(null);
         this.search_entry = new Gtk.Entry.with_buffer(buff); // media_source_widget.search_entry;
+        this.search_entry.events = this.search_entry.events |
+                                   Gdk.EventMask.ENTER_NOTIFY_MASK |
+                                   Gdk.EventMask.LEAVE_NOTIFY_MASK;
         this.search_entry.secondary_icon_stock = Gtk.Stock.CLEAR;
         this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
         this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
@@ -200,7 +204,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 media_source_selector_box.add(media_source_selector);
                 break;
             default:
-                media_source_selector = new TreeMediaSelector();
+                media_source_selector = new TreeMediaSelector(this);
                 var mss_sw = new ScrolledWindow(null, null);
                 mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
                 mss_sw.set_border_width(1);
