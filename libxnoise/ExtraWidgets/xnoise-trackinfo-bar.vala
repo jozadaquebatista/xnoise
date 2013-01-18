@@ -52,7 +52,7 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         public CustomLabel(string txt) {
             GLib.Object(label:txt);
             this.set_single_line_mode(true);
-            this.set_alignment(0.35f, 1.0f);
+            this.set_alignment(0.3f, 1.0f);
             this.set_ellipsize(Pango.EllipsizeMode.END);
             this.xpad = 10;
         }
