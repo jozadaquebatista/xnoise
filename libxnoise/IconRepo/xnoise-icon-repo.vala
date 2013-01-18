@@ -165,13 +165,17 @@ internal class Xnoise.IconRepo : GLib.Object {
         }
     }
 
-    internal static Gtk.Image? get_themed_image_icon(string name, IconSize size) {
+    internal static Gtk.Image? get_themed_image_icon(string name, IconSize size, int pixelsize = -1) {
         Gtk.Image? image = null;
         GLib.Icon gicon = new ThemedIcon(name);
         if(name != null)
             image = new Gtk.Image.from_icon_name (name, size);
         else
             image = new Gtk.Image.from_gicon (gicon, size);
+        
+        if(pixelsize != -1)
+            image.set_pixel_size(pixelsize);
+        
         return image;
     }
     

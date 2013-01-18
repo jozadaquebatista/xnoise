@@ -88,6 +88,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
+    ExtraWidgets/xnoise-combo-media-selector.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-equalizer-widget.vala \
     ExtraWidgets/xnoise-first-start-widget.vala \
@@ -96,6 +97,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-play-pause-button.vala \
     ExtraWidgets/xnoise-serial-button.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
+    ExtraWidgets/xnoise-tree-media-selector.vala \
     ExtraWidgets/xnoise-volume-slider-button.vala \
     GlobalAccess/xnoise-global-access.vala \
     IconRepo/xnoise-icon-cache.vala \

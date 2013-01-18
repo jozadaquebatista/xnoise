@@ -1944,13 +1944,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             var si = new SeparatorToolItem();
             si.set_draw(false);
             
+            var si2 = new SeparatorToolItem();
+            si2.set_draw(false);
+            
             //---------------------
+            main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(si, -1);
             main_toolbar.insert(previousButton, -1);
             main_toolbar.insert(playPauseButton, -1);
             main_toolbar.insert(stopButton, -1);
             main_toolbar.insert(nextButton, -1);
-            main_toolbar.insert(si, -1);
-            main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(si2, -1);
             main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(repeatButtonTI, -1);
             main_toolbar.insert(eqButtonTI, -1);
