@@ -90,6 +90,23 @@ enum TagInfo::MediaFileType {
 };
 
 
+inline StringList split(const String str, const String &separator) {
+    StringList list;
+    for(int index = 0;;) {
+        int sep = str.find(separator, index);
+        if(sep < 0) {
+            list.append(str.substr(index, str.size() - index));
+        break;
+        }
+        else {
+            list.append(str.substr(index, sep - index));
+            index = sep + separator.size();
+        }
+    }
+    return list;
+}
+
+
 //inline void split(const string& str, const string& delimiters , vector<string>& tokens) {
 //    // Skip delimiters at beginning.
 //    string::size_type lastPos = str.find_first_not_of(delimiters, 0);

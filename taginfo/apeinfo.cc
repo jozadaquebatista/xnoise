@@ -29,7 +29,7 @@ using namespace TagInfo;
 using namespace TagInfo::Ape;
 
 
-ApeInfo::ApeInfo(const string &filename) : Info(), m_ApeFile(filename) {
+ApeInfo::ApeInfo(const string &filename) : Info(), ape_file(filename) {
 }
 
 
@@ -40,7 +40,7 @@ ApeInfo::~ApeInfo() {
 bool ApeInfo::read(void) {
 
 
-    ApeTag * Tag = m_ApeFile.get_tag();
+    ApeTag * Tag = ape_file.get_tag();
     if(Tag) {
             //cout << "title:  " << Tag->get_title()   << endl <<
         //"artist: " << Tag->get_artist()  << endl;
@@ -50,8 +50,8 @@ bool ApeInfo::read(void) {
         genre = Tag->get_genre();
         tracknumber = Tag->get_tracknumber();
         year = Tag->get_year();
-        length_seconds = m_ApeFile.get_length();
-        bitrate = m_ApeFile.get_bitrate();
+        length_seconds = ape_file.get_length();
+        bitrate = ape_file.get_bitrate();
         
         comments = Tag->get_item_value(APE_TAG_COMMENT);
         composer = Tag->get_item_value(APE_TAG_COMPOSER);
@@ -71,9 +71,9 @@ bool ApeInfo::read(void) {
 
 
 bool ApeInfo::write(const int changedflag) {
-    ApeTag * Tag = m_ApeFile.get_tag();
+    ApeTag * Tag = ape_file.get_tag();
     if(Tag && (changedflag & CHANGED_DATA_TAGS)) {
-            Tag->set_title(track_name);
+        Tag->set_title(track_name);
         Tag->set_artist(artist);
         Tag->set_album(album);
         Tag->set_genre(genre);
@@ -83,7 +83,7 @@ bool ApeInfo::write(const int changedflag) {
         Tag->set_item(APE_TAG_COMPOSER, composer);
         Tag->set_item(APE_TAG_MEDIA, disk_str);
         Tag->set_item(APE_TAG_ALBUMARTIST, album_artist);
-        m_ApeFile.write_tag();
+        ape_file.write_tag();
         return true;
     }
     return false;
@@ -96,7 +96,7 @@ bool ApeInfo::can_handle_lyrics(void) {
 
 
 String ApeInfo::get_lyrics(void) {
-    ApeTag * Tag = m_ApeFile.get_tag();
+    ApeTag * Tag = ape_file.get_tag();
     if(Tag)
         return Tag->get_item_value(APE_TAG_LYRICS);
     return "";
@@ -104,10 +104,10 @@ String ApeInfo::get_lyrics(void) {
 
 
 bool ApeInfo::set_lyrics(const String &lyrics) {
-    ApeTag * Tag = m_ApeFile.get_tag();
+    ApeTag * Tag = ape_file.get_tag();
     if(Tag) {
             Tag->set_item(APE_TAG_LYRICS, lyrics);
-        return m_ApeFile.write_tag();
+        return ape_file.write_tag();
     }
     return false;
 }

@@ -53,7 +53,7 @@ bool OggInfo::read(void) {
                 disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("COMPILATION")) {
-                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front() == (char*)"1";
+                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front() == String("1");
             }
             if(m_XiphComment->fieldListMap().contains("ALBUMARTIST")) {
                 album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front();
@@ -91,7 +91,7 @@ bool OggInfo::read(void) {
                 {
                     track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
-//                    split(track_labels_str, "|" , track_labels); TODO
+                    track_labels = split(track_labels_str, "|");
                 }
             }
             if(artist_labels.size() == 0) {
@@ -99,7 +99,7 @@ bool OggInfo::read(void) {
                 {
                     artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front();
                     //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
-//                    split(artist_labels_str, "|" , artist_labels); TODO
+                    artist_labels = split(artist_labels_str, "|");
                 }
             }
             if(album_labels.size() == 0) {
@@ -107,7 +107,7 @@ bool OggInfo::read(void) {
                 {
                     album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front();
                     //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
-//                    split(album_labels_str, "|" , album_labels); TODO
+                    album_labels = split(album_labels_str, "|");
                 }
             }
             return true;
@@ -124,9 +124,11 @@ bool OggInfo::write(const int changedflag) {
             m_XiphComment->addField("COMPOSER", composer);
             
             char* str;
-            if(asprintf (&str, "%u" , is_compilation) >= 0) {
-                m_XiphComment->addField("COMPILATION", str);
-                free(str);
+            if(is_compilation) {
+                m_XiphComment->addField("COMPILATION", "1");
+            }
+            else {
+                m_XiphComment->addField("COMPILATION", "0");
             }
             
             m_XiphComment->addField("ALBUMARTIST", album_artist);

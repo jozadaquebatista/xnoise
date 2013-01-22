@@ -100,22 +100,18 @@ String ApeTag::get_item_value(const String &key) const
 {
     String RetVal = "";
     Item * item = get_item(key);
-    if(item)
-    {
+    if(item) {
         RetVal = item->value;
     }
     return RetVal;
 }
 
-void ApeTag::set_item(const String &key, const String &value, uint flags)
-{
+void ApeTag::set_item(const String &key, const String &value, uint flags) {
     Item * item = get_item(key);
-    if(item)
-    {
+    if(item) {
         item->value = value;
     }
-    else
-    {
+    else {
         item = new Item(key, value, flags);
         items.push_back(item);
     }
@@ -124,14 +120,12 @@ void ApeTag::set_item(const String &key, const String &value, uint flags)
 void ApeTag::set_item(const String &key, char * data, uint len)
 {
     Item * item = get_item(key);
-    if(item)
-    {
+    if(item) {
         String ustr = data;
         ustr = ustr.substr(0, len);
         item->value = ustr;//wxString::From8BitData(data, len);
     }
-    else
-    {
+    else {
         String ustr = data;
         ustr = ustr.substr(0, len);
         item = new Item(key, ustr, APE_FLAG_CONTENT_BINARY);

@@ -81,12 +81,12 @@ static uint read_little_endian_uint32(const char * cp)
 // ApeFile
 
 ApeFile::ApeFile(const string &filename) {
-    this->file_name = filename.c_str();
+    this->file_name = filename;
     this->apetag = NULL;
     this->length = 0;
     bitrate = 0;
 //    m_File = new wxFile(filename, wxFile::read_write);
-    stream.open(file_name.toCString(false), ios::in|ios::out);
+    stream.open(file_name.toCString(true), ios::in|ios::out);
     //cout << "opend stream for ape file reading" << file_name << endl;
 //    if(m_File->IsOpened())
     if(stream.is_open()) {
@@ -292,8 +292,8 @@ void ApeFile::read_header(void) {
     }
     
     apetag = new ApeTag(FileLength,
-                          FileLength - footer.length - have_header * sizeof(ApeHeaderFooter),
-                          footer.item_count);
+                        FileLength - footer.length - have_header * sizeof(ApeHeaderFooter),
+                        footer.item_count);
     
     // read and process tag data
     stream.seekg(- (int) footer.length, ios::end);

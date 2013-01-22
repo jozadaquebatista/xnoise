@@ -56,7 +56,7 @@ bool TrueAudioInfo::read(void) {
                 album_artist = taglib_tagId3v2->frameListMap()[ "TPE2" ].front()->toString();
             }
             if(taglib_tagId3v2->frameListMap().contains("TCMP")) {
-                is_compilation = taglib_tagId3v2->frameListMap()[ "TCMP" ].front()->toString().toCString(false) == (char*)"1";
+                is_compilation = taglib_tagId3v2->frameListMap()[ "TCMP" ].front()->toString() == String("1");
             }
             TagLib::ID3v2::PopularimeterFrame * PopMFrame = NULL;
 
@@ -79,7 +79,7 @@ bool TrueAudioInfo::read(void) {
                     //guLogMessage(wxT("*Track Label: '%s'"), TStringTowxString(Frame->fieldList()[ 1 ]).c_str());
                     // [guTRLABELS] guTRLABELS labels
                     track_labels_str = Frame->fieldList()[ 1 ];
-//                    split(track_labels_str, "|" , track_labels); TODO
+                    track_labels = split(track_labels_str, "|");
 //                    track_labels = Regex::split_simple("|", track_labels_str);//(track_labels_str, wxT("|"));
                 }
             }
@@ -91,7 +91,7 @@ bool TrueAudioInfo::read(void) {
                 {
                     //guLogMessage(wxT("*Artist Label: '%s'"), TStringTowxString(Frame->fieldList()[ 1 ]).c_str());
                     artist_labels_str = Frame->fieldList()[ 1 ];
-//                    split(artist_labels_str, "|" , artist_labels); TODO
+                    artist_labels = split(artist_labels_str, "|");
 //                    artist_labels = Regex::split_simple("|", artist_labels_str);//(artist_labels_str, wxT("|"));
                 }
             }
@@ -103,7 +103,7 @@ bool TrueAudioInfo::read(void) {
                 {
                     //guLogMessage(wxT("*Album Label: '%s'"), TStringTowxString(Frame->fieldList()[ 1 ]).c_str());
                     album_labels_str = Frame->fieldList()[ 1 ];
-//                    split(album_labels_str, "|" , album_labels); TODO
+                    album_labels = split(album_labels_str, "|");
 //                    album_labels = Regex::split_simple("|", album_labels_str);//(album_labels_str, wxT("|"));
                 }
             }
@@ -136,10 +136,15 @@ bool TrueAudioInfo::write(const int changedflag) {
             frame->setText(album_artist);
             taglib_tagId3v2->addFrame(frame);
 
-            //taglib_tagId3v2->removeFrames("TCMP");
-            //frame = new TagLib::ID3v2::TextIdentificationFrame("TCMP");
-            //frame->setText(wxString::Format(wxT("%u"), is_compilation).c_str());
-            //taglib_tagId3v2->addFrame(frame);
+            taglib_tagId3v2->removeFrames("TCMP");
+            frame = new TagLib::ID3v2::TextIdentificationFrame("TCMP");
+            if(is_compilation) {
+                frame->setText("1");
+            }
+            else {
+                frame->setText("0");
+            }
+            taglib_tagId3v2->addFrame(frame);
 
             // I have found several TRCK fields in the mp3s
             taglib_tagId3v2->removeFrames("TRCK");

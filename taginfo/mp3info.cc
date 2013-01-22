@@ -62,7 +62,7 @@ bool Mp3Info::read(void) {
                 album_artist = taglib_tagId3v2->frameListMap()[ "TPE2" ].front()->toString();
             }
             if(taglib_tagId3v2->frameListMap().contains("TCMP")) {
-                is_compilation = (char*)(taglib_tagId3v2->frameListMap()["TCMP"].front()->toString().toCString(true)) == (char*)"1";
+                is_compilation = (taglib_tagId3v2->frameListMap()["TCMP"].front()->toString()) == String("1");
             }
             TagLib::ID3v2::PopularimeterFrame * PopMFrame = NULL;
 
@@ -86,7 +86,7 @@ bool Mp3Info::read(void) {
                     if(TrLabelsList.size())
                     {
                         track_labels_str = TrLabelsList[ 1 ];
-//                        split(track_labels_str, "|" , track_labels); TODO
+                        track_labels = split(track_labels_str, "|");
                     }
                 }
             }
@@ -101,7 +101,7 @@ bool Mp3Info::read(void) {
                     if(ArLabelsList.size())
                     {
                         artist_labels_str = ArLabelsList[ 1 ];//.toCString(true);
-//                        split(artist_labels_str, "|" , artist_labels); TODO
+                        artist_labels = split(artist_labels_str, "|");
                     }
                 }
             }
@@ -116,7 +116,7 @@ bool Mp3Info::read(void) {
                     if(AlLabelsList.size())
                     {
                         album_labels_str = AlLabelsList[1];//.toCString(true);
-//                        split(album_labels_str, "|" , album_labels);
+                        album_labels = split(album_labels_str, "|");
                     }
                 }
             }

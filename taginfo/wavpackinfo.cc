@@ -50,7 +50,7 @@ bool WavPackInfo::read(void) {
                 disk_str = taglib_apetag->itemListMap()["DISCNUMBER"].toStringList().front();
             }
             if(taglib_apetag->itemListMap().contains("COMPILATION")) {
-                is_compilation = taglib_apetag->itemListMap()["COMPILATION"].toStringList().front().toCString(true) == (char*)"1";
+                is_compilation = taglib_apetag->itemListMap()["COMPILATION"].toStringList().front() == String("1");
             }
             if(taglib_apetag->itemListMap().contains("ALBUM ARTIST")) {
                 album_artist = taglib_apetag->itemListMap()["ALBUM ARTIST"].toStringList().front();
@@ -85,7 +85,7 @@ bool WavPackInfo::read(void) {
                 {
                     track_labels_str = taglib_apetag->itemListMap()["TRACK_LABELS"].toStringList().front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
-//                    split(track_labels_str, "|" , track_labels); TODO
+                    track_labels = split(track_labels_str, "|");
 //                    track_labels = Regex::split_simple("|", track_labels_str);//(track_labels_str, wxT("|"));
                 }
             }
@@ -94,7 +94,7 @@ bool WavPackInfo::read(void) {
                 {
                     artist_labels_str = taglib_apetag->itemListMap()["ARTIST_LABELS"].toStringList().front();
                     //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
-//                    split(artist_labels_str, "|" , artist_labels); TODO
+                    artist_labels = split(artist_labels_str, "|");
 //                    artist_labels = Regex::split_simple("|", artist_labels_str);//(artist_labels_str, wxT("|"));
                 }
             }
@@ -103,7 +103,7 @@ bool WavPackInfo::read(void) {
                 {
                     album_labels_str = taglib_apetag->itemListMap()["ALBUM_LABELS"].toStringList().front();
                     //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
-//                    split(album_labels_str, "|" , album_labels); TODO
+                    album_labels = split(album_labels_str, "|");
 //                    album_labels = Regex::split_simple("|", album_labels_str);//(album_labels_str, wxT("|"));
                 }
             }
@@ -122,9 +122,11 @@ bool WavPackInfo::write(const int changedflag) {
             taglib_apetag->addValue("DISCNUMBER", disk_str);
             
             char* str;
-            if(asprintf (&str, "%u", is_compilation) >= 0) {
-                taglib_apetag->addValue("COMPILATION", str);
-                free(str);
+            if(is_compilation) {
+                taglib_apetag->addValue("COMPILATION", "1");
+            }
+            else {
+                taglib_apetag->addValue("COMPILATION", "0");
             }
             
             taglib_apetag->addValue("ALBUM ARTIST", album_artist);

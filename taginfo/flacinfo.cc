@@ -31,7 +31,7 @@ using namespace TagInfo;
 
 FlacInfo::FlacInfo(const string &filename) : Info(filename) {
     if(taglib_file && !taglib_file->isNull()) {
-            m_XiphComment = ((TagLib::FLAC::File *) taglib_file->file())->xiphComment();
+        m_XiphComment = ((TagLib::FLAC::File *) taglib_file->file() )->xiphComment();
     }
     else
         m_XiphComment = NULL;
@@ -44,7 +44,7 @@ FlacInfo::~FlacInfo() {
 
 bool FlacInfo::read(void) {
     if(Info::read()) {
-            if(m_XiphComment) {
+        if(m_XiphComment) {
             if(m_XiphComment->fieldListMap().contains("COMPOSER")) {
                 composer = m_XiphComment->fieldListMap()["COMPOSER"].front();
             }
@@ -52,7 +52,7 @@ bool FlacInfo::read(void) {
                 disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("COMPILATION")) {
-                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front().toCString(true) == (char*)"1";
+                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front() == String("1");
             }
             if(m_XiphComment->fieldListMap().contains("ALBUMARTIST")) {
                 album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front();
@@ -63,10 +63,8 @@ bool FlacInfo::read(void) {
             // Rating
             if(m_XiphComment->fieldListMap().contains("RATING")) {
                 long Rating = 0;
-//                if(m_XiphComment->fieldListMap()["RATING"].front().toCString(true).ToLong(&Rating))
                 Rating = atol(m_XiphComment->fieldListMap()["RATING"].front().toCString(true));
-                if(Rating)
-                {
+                if(Rating) {
                     if(Rating > 5)
                     {
                         rating = popularity_to_rating(Rating);
@@ -91,7 +89,7 @@ bool FlacInfo::read(void) {
                 {
                     track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
-//                    track_labels = track_labels_str.split("|");
+                    track_labels = split(track_labels_str, "|");
                 }
             }
             if(artist_labels.size() == 0) {
@@ -99,7 +97,7 @@ bool FlacInfo::read(void) {
                 {
                     artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front();
                     //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
-//                    split(artist_labels_str, "|" , artist_labels);
+                    artist_labels = split(artist_labels_str, "|");
                 }
             }
             if(album_labels.size() == 0) {
@@ -107,7 +105,7 @@ bool FlacInfo::read(void) {
                 {
                     album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front();
                     //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
-//                    split(album_labels_str, "|" , album_labels);
+                    album_labels = split(album_labels_str, "|");
                 }
             }
             return true;
@@ -124,20 +122,12 @@ bool FlacInfo::write(const int changedflag) {
             m_XiphComment->addField("DISCNUMBER", disk_str);
             m_XiphComment->addField("COMPOSER", composer);
             
-//            m_XiphComment->addField("COMPILATION", format("%d", (int)is_compilation).c_str());
             if(is_compilation) {
-                m_XiphComment->addField("COMPILATION", "1");
+                m_XiphComment->addField("COMPILATION", String("1"));
             }
             else {
-                m_XiphComment->addField("COMPILATION", "0");
+                m_XiphComment->addField("COMPILATION", String("0"));
             }
-//            char* str;
-//            if(asprintf (&str, "%d", (int)is_compilation) >= 0) {
-//                m_XiphComment->addField("COMPILATION", str);
-//                free(str);
-//            }
-            
-            
             m_XiphComment->addField("ALBUMARTIST", album_artist);
         }
 

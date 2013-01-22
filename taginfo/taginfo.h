@@ -219,7 +219,7 @@ namespace TagInfo {
     class ApeInfo : public Info
     {
       protected:
-        Ape::ApeFile       m_ApeFile;
+        Ape::ApeFile       ape_file;
 
       public:
         ApeInfo(const string &filename = "");

@@ -91,21 +91,21 @@ bool Mp4Info::read(void) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:TRACK_LABELS"))
                 {
                     track_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:TRACK_LABELS"].toStringList().front();
-//                    split(track_labels_str, "|" , track_labels); TODO
+                    track_labels = split(track_labels_str, "|");
                 }
             }
             if(artist_labels.size() == 0) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:ARTIST_LABELS"))
                 {
                     artist_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ARTIST_LABELS"].toStringList().front();
-//                    split(artist_labels_str, "|" , artist_labels); TODO
+                    artist_labels = split(artist_labels_str, "|");
                 }
             }
             if(album_labels.size() == 0) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:ALBUM_LABELS"))
                 {
                     album_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ALBUM_LABELS"].toStringList().front();
-//                    split(album_labels_str, "|" , album_labels); TODO
+                    album_labels = split(album_labels_str, "|");
                 }
             }
             return true; //JM
@@ -136,7 +136,7 @@ void mp4_check_label_frame(TagLib::MP4::Tag * mp4tag, const char * description, 
 
 bool Mp4Info::write(const int changedflag) {
     if(m_Mp4Tag) {
-            if(changedflag & CHANGED_DATA_TAGS) {
+        if(changedflag & CHANGED_DATA_TAGS) {
             m_Mp4Tag->itemListMap()["aART"] = TagLib::StringList(album_artist);
             m_Mp4Tag->itemListMap()["\xA9wrt"] = TagLib::StringList(composer);
             int first;
@@ -145,7 +145,7 @@ bool Mp4Info::write(const int changedflag) {
             m_Mp4Tag->itemListMap()["disk"] = TagLib::MP4::Item(first, second);
             m_Mp4Tag->itemListMap()["cpil"] = TagLib::MP4::Item(is_compilation);
         }
-
+        
         if(changedflag & CHANGED_DATA_RATING) {
             char* c_rating;
             if(asprintf (&c_rating, "%u", rating_to_popularity(rating)) >= 0) {
