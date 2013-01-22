@@ -78,20 +78,20 @@ inline string base64_decode(const char* encoded_string) {
 }
 
 
-string get_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment) {
+String get_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment) {
     if(xiphcomment && xiphcomment->contains("LYRICS")) {
-        return xiphcomment->fieldListMap()[ "LYRICS" ].front().toCString(true);
+        return xiphcomment->fieldListMap()[ "LYRICS" ].front();
     }
     return "";
 }
 
-bool set_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment, const string &lyrics) {
+bool set_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment, const String &lyrics) {
     if(xiphcomment) {
         while(xiphcomment->contains("LYRICS")) {
             xiphcomment->removeField("LYRICS");
         }
-        if(!lyrics.empty()) {
-            xiphcomment->addField("LYRICS", lyrics.c_str());
+        if(!lyrics.isEmpty()) {
+            xiphcomment->addField("LYRICS", lyrics);
         }
         return true;
     }
@@ -102,25 +102,25 @@ bool set_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment, const string &lyric
 
 void check_xiph_label_frame(Ogg::XiphComment * xiphcomment, 
                                  const char * description, 
-                                 const string &value) {
+                                 const String &value) {
     if(xiphcomment->fieldListMap().contains(description)) {
-            if(!value.empty()) {
-            xiphcomment->addField(description, value.c_str());
+            if(!value.isEmpty()) {
+            xiphcomment->addField(description, value);
         }
         else {
             xiphcomment->removeField(description);
         }
     }
     else {
-            if(!value.empty()) {
-            xiphcomment->addField(description, value.c_str());
+            if(!value.isEmpty()) {
+            xiphcomment->addField(description, value);
         }
     }
 }
 
 
-string get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length) {
-    string CoverMime = "";
+String get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length) {
+    String CoverMime = "";
     if(xiphcomment && xiphcomment->contains("COVERART")) {
         CoverMime = xiphcomment->fieldListMap()[ "COVERARTMIME" ].front().to8Bit(false);
         

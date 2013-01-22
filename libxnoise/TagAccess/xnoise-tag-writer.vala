@@ -35,7 +35,7 @@ using TagInfo;
 
 
 public class Xnoise.TagAccess.TagWriter {
-    public bool write_tag(File? file, TrackData? td) {
+    public bool write_tag(File? file, TrackData? td, bool read_before_write = false) {
         // does writes for values that are different from default values
         if(file == null)
             return false;
@@ -53,6 +53,9 @@ public class Xnoise.TagAccess.TagWriter {
         info = Info.factory_make(path);
         
         if(info != null) {
+            if(read_before_write)
+                info.read();
+            
             info.artist       = td.artist      != null ? td.artist      : EMPTYSTRING;
             info.title        = td.title       != null ? td.title       : EMPTYSTRING;
             info.album        = td.album       != null ? td.album       : EMPTYSTRING;
@@ -63,6 +66,8 @@ public class Xnoise.TagAccess.TagWriter {
             
             if(td.tracknumber >= 0)
                 info.tracknumber = (int)td.tracknumber;
+            
+            info.is_compilation  = td.is_compilation;
             
             retval = info.write();
         }

@@ -182,13 +182,13 @@ void Info::set_file_name(const string &filename) {
     file_name = filename;
     if(!filename.empty()) {
     //        taglib_file = new TagLib::FileRef(filename.mb_str(wxConvFile), true, TagLib::AudioProperties::Fast);
-        taglib_file = new TagLib::FileRef(filename.data(), true, TagLib::AudioProperties::Fast);
+        taglib_file = new TagLib::FileRef(filename.c_str(), true, TagLib::AudioProperties::Fast);
     }
 
     if(taglib_file && !taglib_file->isNull()) {
             taglib_tag = taglib_file->tag();
         if(!taglib_tag) {
-            printf("Cant get tag object from '%s'\n", filename.data());
+            printf("Cant get tag object from '%s'\n", filename.c_str());
         }
     }
 }
@@ -200,11 +200,11 @@ bool Info::read(void) {
     if(taglib_tag) {
             //cout << "Info::read #2" << endl;
         
-        track_name  = (char*) taglib_tag->title().toCString(true);
-        artist = (char*) taglib_tag->artist().toCString(true);
-        album  = (char*) taglib_tag->album().toCString(true);
-        genre  = (char*) taglib_tag->genre().toCString(true);
-        comments   = (char*) taglib_tag->comment().toCString(true);
+        track_name  = taglib_tag->title();
+        artist = taglib_tag->artist();
+        album  = taglib_tag->album();
+        genre  = taglib_tag->genre();
+        comments   = taglib_tag->comment();
         tracknumber = taglib_tag->track();
         year = taglib_tag->year();
         //cout << "Info::read #3" << endl;
@@ -221,17 +221,17 @@ bool Info::read(void) {
 
 bool Info::write(const int changedflag) {
     if(taglib_tag && (changedflag & CHANGED_DATA_TAGS)) {
-        taglib_tag->setTitle(track_name.c_str());
-        taglib_tag->setArtist(artist.c_str());
-        taglib_tag->setAlbum(album.c_str());
-        taglib_tag->setGenre(genre.c_str());
-        taglib_tag->setComment(comments.c_str());
+        taglib_tag->setTitle(track_name);
+        taglib_tag->setArtist(artist);
+        taglib_tag->setAlbum(album);
+        taglib_tag->setGenre(genre);
+        taglib_tag->setComment(comments);
         taglib_tag->setTrack(tracknumber); // set the id3v1 track
         taglib_tag->setYear(year);
     }
     
     if(!taglib_file->save()) {
-          printf("Tags Save failed for file '%s'\n", file_name.data());
+          printf("Tags Save failed for file '%s'\n", file_name.toCString(true));
       return false;
     }
     return true;
@@ -276,12 +276,12 @@ bool Info::can_handle_lyrics(void) {
 }
 
 
-string Info::get_lyrics(void) {
+String Info::get_lyrics(void) {
     return "";
 }
 
 
-bool Info::set_lyrics(const string &lyrics) {
+bool Info::set_lyrics(const String &lyrics) {
     return false;
 }
 
@@ -296,7 +296,7 @@ bool Info::set_lyrics(const string &lyrics) {
 
 // Other functions
 
-//wxImage * guTagGetPicture(const string &filename)
+//wxImage * guTagGetPicture(const String &filename)
 //{
 //    wxImage * RetVal = NULL;
 //    Info * TagInfo = create_tag_info(filename);
@@ -312,7 +312,7 @@ bool Info::set_lyrics(const string &lyrics) {
 //}
 
 
-//bool guTagSetPicture(const string &filename, wxImage * picture)
+//bool guTagSetPicture(const String &filename, wxImage * picture)
 //{
 //    guMainFrame * MainFrame = (guMainFrame *) wxTheApp->GetTopWindow();
 
@@ -342,7 +342,7 @@ bool Info::set_lyrics(const string &lyrics) {
 //}
 
 
-//bool guTagSetPicture(const string &filename, const string &imagefile)
+//bool guTagSetPicture(const String &filename, const String &imagefile)
 //{
 //    wxImage Image(imagefile);
 //    if(Image.IsOk())
@@ -353,9 +353,9 @@ bool Info::set_lyrics(const string &lyrics) {
 //}
 
 
-//string guTagget_lyrics(const string &filename)
+//String guTagget_lyrics(const String &filename)
 //{
-//    string RetVal = "";
+//    String RetVal = "";
 ////    Info * TagInfo = create_tag_info(filename);
 ////    if(TagInfo)
 ////    {
@@ -369,7 +369,7 @@ bool Info::set_lyrics(const string &lyrics) {
 //}
 
 //
-//bool guTagset_lyrics(const string &filename, string &lyrics)
+//bool guTagset_lyrics(const String &filename, String &lyrics)
 //{
 ////    guMainFrame * MainFrame = (guMainFrame *) wxTheApp->GetTopWindow();
 

@@ -119,13 +119,62 @@ public class Xnoise.MediaImporter : GLib.Object {
         });
         return false;
     }
-    
-    public void import_media_file(string file_path) {
-        var f = File.new_for_path(file_path);
-        if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
-            return;
+
+    public void reimport_media_files(string[] file_paths) {
         if(global.media_import_in_progress == true)
             return;
+        
+        Worker.Job job;
+        //remove from db
+        job = new Worker.Job(Worker.ExecutionType.ONCE, remove_file_job);
+        job.set_arg("paths", file_paths);
+        job.set_arg("path_count", file_paths.length);
+        db_worker.push_job(job);
+        
+        //import files
+        job = new Worker.Job(Worker.ExecutionType.ONCE, reimport_media_files_job);
+        job.set_arg("paths", file_paths);
+        job.set_arg("path_count", file_paths.length);
+        db_worker.push_job(job);
+    }
+    
+    private bool reimport_media_files_job(Worker.Job xjob) {
+        if(global.media_import_in_progress == true)
+            return false;
+    
+        string[] file_paths = (string[])xjob.get_arg("paths");
+        int path_count      = (int)xjob.get_arg("path_count");
+        file_paths.length = path_count;
+        
+        foreach(string p in file_paths) {
+            File x = File.new_for_path(p);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_file_job);
+            job.set_arg("path", x.get_path());
+            io_worker.push_job(job);
+        }
+        return false;
+    }
+    
+    private bool remove_file_job(Worker.Job xjob) {
+        if(global.media_import_in_progress == true)
+            return false;
+        string[] file_paths = (string[])xjob.get_arg("paths");
+        int path_count      = (int)xjob.get_arg("path_count");
+        file_paths.length = path_count;
+        
+        foreach(string p in file_paths) {
+            File x = File.new_for_path(p);
+            string? uri = x.get_uri();
+            if(uri != null)
+                db_writer.remove_uri(uri);
+        }
+        return false;
+    }
+    
+    public void import_media_file(string file_path) {
+        if(global.media_import_in_progress == true)
+            return;
+        var f = File.new_for_path(file_path);
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_file_job);
         job.set_arg("path", f.get_path());
@@ -136,6 +185,8 @@ public class Xnoise.MediaImporter : GLib.Object {
         return_val_if_fail(io_worker.is_same_thread(), false);
         var tr = new TagReader();
         File f = File.new_for_path((string)job.get_arg("path"));
+        if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
+            return false;
         TrackData? td = tr.read_tag(f.get_path(), false);
         if(td != null) {
             FileInfo info = f.query_info(FileAttribute.STANDARD_TYPE + "," + 

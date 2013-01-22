@@ -78,7 +78,7 @@ Item * ApeTag::get_item(const int pos) const
     return items.at(pos);
 }
 
-Item * ApeTag::get_item(const string &key) const
+Item * ApeTag::get_item(const String &key) const
 {
     Item * item;
     int index;
@@ -86,8 +86,8 @@ Item * ApeTag::get_item(const string &key) const
     for(index = 0; index < count; index++)
     {
         item = items.at(index);
-        std::string str1Cpy(key);
-        std::string str2Cpy(item->key);
+        String str1Cpy(key);
+        String str2Cpy(item->key);
         std::transform(str1Cpy.begin(), str1Cpy.end(), str1Cpy.begin(), ::tolower);
         std::transform(str2Cpy.begin(), str2Cpy.end(), str2Cpy.begin(), ::tolower);
         if(str1Cpy == str2Cpy)
@@ -96,9 +96,9 @@ Item * ApeTag::get_item(const string &key) const
     return NULL;
 }
 
-string ApeTag::get_item_value(const string &key) const
+String ApeTag::get_item_value(const String &key) const
 {
-    string RetVal = "";
+    String RetVal = "";
     Item * item = get_item(key);
     if(item)
     {
@@ -107,7 +107,7 @@ string ApeTag::get_item_value(const string &key) const
     return RetVal;
 }
 
-void ApeTag::set_item(const string &key, const string &value, uint flags)
+void ApeTag::set_item(const String &key, const String &value, uint flags)
 {
     Item * item = get_item(key);
     if(item)
@@ -121,18 +121,18 @@ void ApeTag::set_item(const string &key, const string &value, uint flags)
     }
 }
 
-void ApeTag::set_item(const string &key, char * data, uint len)
+void ApeTag::set_item(const String &key, char * data, uint len)
 {
     Item * item = get_item(key);
     if(item)
     {
-        string ustr = data;
+        String ustr = data;
         ustr = ustr.substr(0, len);
         item->value = ustr;//wxString::From8BitData(data, len);
     }
     else
     {
-        string ustr = data;
+        String ustr = data;
         ustr = ustr.substr(0, len);
         item = new Item(key, ustr, APE_FLAG_CONTENT_BINARY);
         items.push_back(item);
@@ -154,16 +154,15 @@ uint ApeTag::get_item_length(void) const
     uint RetVal = 0;
     int index;
     int count = items.size();
-    for(index = 0; index < count; index++)
-    {
+    for(index = 0; index < count; index++) {
         Item * item = items.at(index);
-
-        if(!item->get_value().empty())
+        
+        if(!item->get_value().isEmpty())
         {
             RetVal += 8;
             RetVal += 1;
             RetVal += item->get_key().length();
-            RetVal += strlen(item->get_value().c_str());
+            RetVal += item->get_value().length();
         }
     }
     return RetVal;
@@ -174,61 +173,57 @@ uint ApeTag::get_item_count(void) const
     uint RetVal = 0;
     int Index;
     int Count = items.size();
-    for(Index = 0; Index < Count; Index++)
-    {
+    for(Index = 0; Index < Count; Index++) {
         Item * item = items.at(Index);
-
+        
         //printf(wxT("'%s' => '%s'"), item->key.c_str(), item->value.c_str());
-        if(!item->value.empty())
-        {
-//            const wxWX2MBbuf 
-            const void* ValueBuf = item->value.c_str();//mb_str(wxConvUTF8);
-            if(ValueBuf)
-            {
+        if(!item->value.isEmpty()) {
+//            const void* ValueBuf = item->value;//mb_str(wxConvUTF8); //JM*******
+//            if(ValueBuf) {
                 RetVal++;
-            }
+//            }
         }
     }
     //printf("get_item_count() -> %u \n" , RetVal);
     return RetVal;
 }
 
-string ApeTag::get_title(void) const
+String ApeTag::get_title(void) const
 {
     return get_item_value(APE_TAG_TITLE);
 }
 
-void ApeTag::set_title(const string &title)
+void ApeTag::set_title(const String &title)
 {
     set_item(APE_TAG_TITLE, title, 0);
 }
 
-string ApeTag::get_artist(void) const
+String ApeTag::get_artist(void) const
 {
     return get_item_value(APE_TAG_ARTIST);
 }
 
-void ApeTag::set_artist(const string &artist)
+void ApeTag::set_artist(const String &artist)
 {
     set_item(APE_TAG_ARTIST, artist, 0);
 }
 
-string ApeTag::get_album(void) const
+String ApeTag::get_album(void) const
 {
     return get_item_value(APE_TAG_ALBUM);
 }
 
-void ApeTag::set_album(const string &album)
+void ApeTag::set_album(const String &album)
 {
     set_item(APE_TAG_ALBUM, album, 0);
 }
 
-string ApeTag::get_genre(void) const
+String ApeTag::get_genre(void) const
 {
     return get_item_value(APE_TAG_GENRE);
 }
 
-void ApeTag::set_genre(const string &genre)
+void ApeTag::set_genre(const String &genre)
 {
     set_item(APE_TAG_GENRE, genre, 0);
 }
@@ -236,7 +231,9 @@ void ApeTag::set_genre(const string &genre)
 uint ApeTag::get_tracknumber(void) const
 {
     unsigned long Track;
-    Track = strtoul(get_item_value(APE_TAG_TRACK).c_str(), NULL, 0);
+    
+    Track = strtoul(get_item_value(APE_TAG_TRACK).toCString(true), NULL, 0); //JM ****
+//    Track = strtoul(get_item_value(APE_TAG_TRACK).c_str(), NULL, 0);
     return (uint)Track;
 }
 
@@ -252,7 +249,7 @@ void ApeTag::set_tracknumber(const uint track)
 uint ApeTag::get_year(void) const
 {
     unsigned long Year;
-    Year = strtoul(get_item_value(APE_TAG_YEAR).c_str(), NULL, 0);
+    Year = strtoul(get_item_value(APE_TAG_YEAR).toCString(true), NULL, 0); //JM ******
     return (uint)Year;
 }
 

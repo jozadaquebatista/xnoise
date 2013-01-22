@@ -90,21 +90,21 @@ enum TagInfo::MediaFileType {
 };
 
 
-inline void split(const string& str, const string& delimiters , vector<string>& tokens) {
-    // Skip delimiters at beginning.
-    string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-    // Find first "non-delimiter".
-    string::size_type pos     = str.find_first_of(delimiters, lastPos);
-    
-    while (string::npos != pos || string::npos != lastPos) {
-        // Found a token, add it to the vector.
-        tokens.push_back(str.substr(lastPos, pos - lastPos));
-        // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of(delimiters, pos);
-        // Find next "non-delimiter"
-        pos = str.find_first_of(delimiters, lastPos);
-    }
-}
+//inline void split(const string& str, const string& delimiters , vector<string>& tokens) {
+//    // Skip delimiters at beginning.
+//    string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+//    // Find first "non-delimiter".
+//    string::size_type pos     = str.find_first_of(delimiters, lastPos);
+//    
+//    while (string::npos != pos || string::npos != lastPos) {
+//        // Found a token, add it to the vector.
+//        tokens.push_back(str.substr(lastPos, pos - lastPos));
+//        // Skip delimiters.  Note the "not_of"
+//        lastPos = str.find_first_not_of(delimiters, pos);
+//        // Find next "non-delimiter"
+//        pos = str.find_first_of(delimiters, lastPos);
+//    }
+//}
 
 
 inline string format(const char* fmt, ...) {
@@ -215,15 +215,15 @@ int inline rating_to_popularity(const int rating) {
 
 //////////ID3
 
-void id3v2_check_label_frame(ID3v2::Tag * tagv2, const string& description, const string &value);
+void id3v2_check_label_frame(ID3v2::Tag * tagv2, const String& description, const String &value);
 
-string get_typed_id3v2_image(char*& idata, int &idata_length,TagLib::ID3v2::FrameList &framelist,
+String get_typed_id3v2_image(char*& idata, int &idata_length,TagLib::ID3v2::FrameList &framelist,
                              TagLib::ID3v2::AttachedPictureFrame::Type frametype);
 
 bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length);
 
-string get_id3v2_lyrics(ID3v2::Tag * tagv2);
-void set_id3v2_lyrics(ID3v2::Tag * tagv2, const string &lyrics);
+String get_id3v2_lyrics(ID3v2::Tag * tagv2);
+void set_id3v2_lyrics(ID3v2::Tag * tagv2, const String &lyrics);
 
 TagLib::ID3v2::PopularimeterFrame * get_popularity_frame(TagLib::ID3v2::Tag * tag, 
                                                          const TagLib::String &email);
@@ -236,14 +236,14 @@ TagLib::ID3v2::PopularimeterFrame * get_popularity_frame(TagLib::ID3v2::Tag * ta
 
 ////////// XIPH
 
-string get_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment);
-bool set_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment, const string &lyrics);
+String get_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment);
+bool set_xiph_comment_lyrics(Ogg::XiphComment * xiphcomment, const String &lyrics);
 
 void check_xiph_label_frame(Ogg::XiphComment * xiphcomment, 
                                  const char * description, 
-                                 const string &value);
+                                 const String &value);
 
-string get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length);
+String get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length);
 //bool set_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, const wxImage * image);
 
 ////////// end XIPH
@@ -252,11 +252,11 @@ string get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, i
 
 ////////// MP4
 
-string get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length);
+String get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length);
 //bool set_mp4_cover_art(TagLib::MP4::Tag * mp4tag, const wxImage * image);
 
-string get_mp4_lyrics(TagLib::MP4::Tag * mp4tag);
-bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const string &lyrics);
+String get_mp4_lyrics(TagLib::MP4::Tag * mp4tag);
+bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const String &lyrics);
 
 ////////// end MP4
 
@@ -264,13 +264,13 @@ bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const string &lyrics);
 
 ////////// APE
 
-void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const string &value);
+void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const String &value);
 
-string get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length);
-string get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length);
+String get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length);
+String get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length);
 
-string get_ape_lyrics(APE::Tag * apetag);
-bool set_ape_lyrics(APE::Tag * apetag, const string &lyrics);
+String get_ape_lyrics(APE::Tag * apetag);
+bool set_ape_lyrics(APE::Tag * apetag, const String &lyrics);
 
 ////////// end APE
 

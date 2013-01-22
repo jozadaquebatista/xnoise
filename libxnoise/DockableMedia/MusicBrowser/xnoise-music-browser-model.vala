@@ -831,12 +831,25 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.get_iter(out iter_album, p);
             foreach(unowned TrackData td in job.track_dat) {
                 this.append(out iter_title, iter_album);
-                this.set(iter_title,
-                         Column.ICON, icon_repo.title_icon,
-                         Column.VIS_TEXT, td.title,
-                         Column.ITEM, td.item,
-                         Column.LEVEL, 2
-                         );
+                if(!td.is_compilation) {
+                    this.set(iter_title,
+                             Column.ICON, icon_repo.title_icon,
+                             Column.VIS_TEXT, td.title,
+                             Column.ITEM, td.item,
+                             Column.LEVEL, 2
+                             );
+                }
+                else {
+                    string append = (td.albumartist == "*" ?
+                                        "\n (" + "%s".printf(UNKNOWN_ARTIST_LOCALIZED) + ")" : 
+                                        "\n (" + td.albumartist + ")");
+                    this.set(iter_title,
+                             Column.ICON, icon_repo.title_icon,
+                             Column.VIS_TEXT, td.title + append,
+                             Column.ITEM, td.item,
+                             Column.LEVEL, 2
+                             );
+                }
             }
             return false;
         });

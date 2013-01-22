@@ -43,6 +43,7 @@ namespace Xnoise {
         public string? comment = null;
         public uint year = 0;
         public uint trackcount = 0;
+        public bool is_compilation = false;
         public Item? item = Item(ItemType.UNKNOWN);
         public int32 dat1 = -1;
         public int32 dat2 = -1;

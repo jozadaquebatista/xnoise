@@ -34,6 +34,7 @@
 namespace Xnoise.Resources {
     
     public const string UNKNOWN_ARTIST           = "unknown artist";
+    public const string VARIOUS_ARTISTS          = "Various artists";
     public const string UNKNOWN_TITLE            = "unknown title";
     public const string UNKNOWN_ALBUM            = "unknown album";
     public const string UNKNOWN_GENRE            = "unknown genre";
@@ -49,7 +50,7 @@ namespace Xnoise.Resources {
     public const string LYRICS_VIEW_NAME         = "LyricsView";  
 
     public static const int VIDEOTHUMBNAILSIZE   = 40; //TODO
-    internal static const int DB_VERSION_MAJOR   = 12;
+    internal static const int DB_VERSION_MAJOR   = 13;
     internal static const int DB_VERSION_MINOR   = 0;
 
     public const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");

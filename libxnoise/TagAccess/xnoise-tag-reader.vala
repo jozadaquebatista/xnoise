@@ -53,20 +53,21 @@ public class Xnoise.TagAccess.TagReader {
         info = Info.factory_make(f.get_path());
         if(info != null) {
             if(info.read()) {
-                td.artist         = info.artist != null && info.artist != "" ?
+                td.artist         = info.artist != null && info.artist != EMPTYSTRING ?
                                         info.artist : UNKNOWN_ARTIST;
-                td.albumartist    = info.albumartist != null && info.albumartist != "" ?
-                                        info.albumartist : UNKNOWN_ARTIST;
-                td.title          = info.title != null && info.title != "" ?
+                td.albumartist    = info.albumartist != null ?
+                                        info.albumartist : EMPTYSTRING;
+                td.title          = info.title != null && info.title != EMPTYSTRING ?
                                         info.title : UNKNOWN_TITLE;
-                td.album          = info.album != null && info.album != "" ?
+                td.album          = info.album != null && info.album != EMPTYSTRING ?
                                         info.album : UNKNOWN_ALBUM;
-                td.genre          = info.genre != null && info.genre != "" ?
+                td.genre          = info.genre != null && info.genre != EMPTYSTRING ?
                                         info.genre : UNKNOWN_GENRE;
                 td.year           = info.year;
                 td.tracknumber    = info.tracknumber;
                 td.length         = info.length;
                 td.is_compilation = info.is_compilation;
+                td.cd_number_str  = EMPTYSTRING;
                 if(try_read_image_data) {
                     uint8[] data = null;
                     if(info.get_image(out data)) {
@@ -95,6 +96,8 @@ public class Xnoise.TagAccess.TagReader {
                 td.title       = UNKNOWN_TITLE;
                 td.album       = UNKNOWN_ALBUM;
                 td.genre       = UNKNOWN_GENRE;
+                td.albumartist = EMPTYSTRING;
+                td.cd_number_str  = EMPTYSTRING;
 //                td.year        = 0;
 //                td.tracknumber = (uint)0;
 //                td.length      = 0;//(int32)ap.length;
@@ -105,6 +108,8 @@ public class Xnoise.TagAccess.TagReader {
             td.title       = UNKNOWN_TITLE;
             td.album       = UNKNOWN_ALBUM;
             td.genre       = UNKNOWN_GENRE;
+            td.albumartist = EMPTYSTRING;
+            td.cd_number_str  = EMPTYSTRING;
 //            td.year        = 0;
 //            td.tracknumber = (uint)0;
 //            td.length      = (int32)0;

@@ -1,6 +1,6 @@
 /* xnoise-tag-title-editor.vala
  *
- * Copyright (C) 2011 - 2012  Jörn Magens
+ * Copyright (C) 2011 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,8 +43,10 @@ private class Xnoise.TagTitleEditor : GLib.Object {
     private unowned MusicBrowserModel mbm = null;
     
     private Entry entry_artist;
+    private Entry entry_albumartist;
     private Entry entry_album;
     private Entry entry_title;
+    private CheckButton check_compilation;
     private SpinButton spinbutton_tracknumber;
     private SpinButton spinbutton_year;
     private Entry entry_genre;
@@ -100,9 +102,11 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         Idle.add( () => {
             // put data to entry
             entry_artist.text      = td.artist;
+            entry_albumartist.text = (td.albumartist == "*" ? EMPTYSTRING : td.albumartist);
             entry_album.text       = td.album;
             entry_title.text       = td.title;
             entry_genre.text       = td.genre;
+            check_compilation.active = td.is_compilation;
             spinbutton_tracknumber.set_value(td.tracknumber);
             spinbutton_year.set_value(td.year);
             
@@ -127,8 +131,10 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             var okbutton           = builder.get_object("okbutton")          as Gtk.Button;
             var cancelbutton       = builder.get_object("cancelbutton")      as Gtk.Button;
             entry_artist           = builder.get_object("entry_artist")      as Gtk.Entry;
+            entry_albumartist      = builder.get_object("entry_albumartist") as Gtk.Entry;
             entry_album            = builder.get_object("entry_album")       as Gtk.Entry;
             entry_title            = builder.get_object("entry_title")       as Gtk.Entry;
+            check_compilation      = builder.get_object("check_compilation") as Gtk.CheckButton;
             spinbutton_tracknumber = builder.get_object("spinbutton_tracknumber") as Gtk.SpinButton;
             spinbutton_year        = builder.get_object("spinbutton_year")        as Gtk.SpinButton;
             entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
@@ -137,6 +143,9 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             
             var artist_label       = builder.get_object("label1")            as Gtk.Label;
             artist_label.set_text(_("Artist") + ":");
+            
+            var aart_label         = builder.get_object("label_aa")          as Gtk.Label;
+            aart_label.set_text(_("Album Artist") + ":");
             
             var album_label        = builder.get_object("label2")            as Gtk.Label;
             album_label.set_text(_("Album") + ":");
@@ -202,12 +211,15 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         TrackData td_new = copy_trackdata(td_old);
         if(entry_artist.text != null)
             td_new.artist = entry_artist.text.strip();
+        if(entry_albumartist.text != null)
+            td_new.albumartist = entry_albumartist.text.strip();
         if(entry_album.text != null)
             td_new.album  = entry_album.text.strip();
         if(entry_title.text != null)
             td_new.title  = entry_title.text.strip();
         if(entry_genre.text != null)
             td_new.genre  = entry_genre.text.strip();
+        td_new.is_compilation = check_compilation.active;
         td_new.year         = spinbutton_year.get_value_as_int();
         td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int(); //TODO: add check
         
@@ -236,7 +248,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         tda[0] = td_old;
         tda[1] = td_new;
         job.track_dat = tda;
-        db_worker.push_job(job);
+        io_worker.push_job(job);
     }
     
     // job to update tag in files
@@ -248,45 +260,19 @@ private class Xnoise.TagTitleEditor : GLib.Object {
                 return false;
             var tw = new TagWriter();
             bool ret = false;
-            //print("%s\n", tag_job.item.type.to_string());
-            ret = tw.write_tag(f, tag_job.track_dat[1]);
-            if(ret) {
-                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-                dbjob.track_dat = tag_job.track_dat;
-                dbjob.item = tag_job.track_dat[0].item;
-                db_worker.push_job(dbjob);
-            }
-            var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+            string[] paths = {};
             
+            ret = tw.write_tag(f, tag_job.track_dat[1]);
+            
+            if(ret) {
+                paths += f.get_path();
+            }
+            
+            media_importer.reimport_media_files(paths);
+            
+            var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
             db_worker.push_job(fin_job);
-            return false;
-//            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-//            job.track_dat = tag_job.track_dat;
-//            io_worker.push_job(job);
         }
-        return false;
-    }
-    
-//    private bool update_filetags_job(Worker.Job job) {
-//        File f = File.new_for_uri(job.track_dat[1].item.uri);
-//        var tw = new TagWriter();
-//        bool ret = false;
-//        //print("%s\n", job.item.type.to_string());
-//        ret = tw.write_tag(f, job.track_dat[1]);
-//        if(ret) {
-//            var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-//            dbjob.track_dat = job.track_dat;
-//            dbjob.item = job.track_dat[0].item;
-//            db_worker.push_job(dbjob);
-//        }
-//        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-//        
-//        db_worker.push_job(fin_job);
-//        return false;
-//    }
-    
-    private bool update_db_job(Worker.Job job) {
-        media_importer.update_item_tag(ref job.item, ref job.track_dat[1]);
         return false;
     }
 

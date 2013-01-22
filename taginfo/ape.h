@@ -27,9 +27,11 @@
 #include <string.h>
 #include <vector>
 #include <fcntl.h>
+#include <tag.h>
 
 
 using namespace std;
+using namespace TagLib;
 
 
 namespace TagInfo {
@@ -39,25 +41,25 @@ namespace TagInfo {
         class Item
         {
             public:
-                string key;
-                string value;
+                String key;
+                String value;
                 uint flags;
                 
                 Item() {};
                 
-                Item(const string &key, const string &value, uint flags)
+                Item(const String &key, const String &value, uint flags)
                 {
                     this->key = key;
                     this->value = value;
                     this->flags = flags;
                 }
                 
-                const string & get_key(void) const
+                const String & get_key(void) const
                 {
                     return key;
                 }
                 
-                const string & get_value(void) const
+                const String & get_value(void) const
                 {
                     return value;
                 }
@@ -89,29 +91,29 @@ namespace TagInfo {
                 void add_item(Item * item);
                 
                 Item * get_item(const int position) const;
-                Item * get_item(const string &key) const;
+                Item * get_item(const String &key) const;
                 
-                string get_item_value(const string &key) const;
+                String get_item_value(const String &key) const;
                 
-                void set_item(const string &key, const string &value, uint flags = 0/*CONTENT_TEXT*/);
-                void set_item(const string &key, char * data, uint len);
+                void set_item(const String &key, const String &value, uint flags = 0/*CONTENT_TEXT*/);
+                void set_item(const String &key, char * data, uint len);
                 
                 uint get_file_length(void) const;
                 uint get_offset(void) const;
                 uint get_item_length(void) const;
                 uint get_item_count(void) const;
                 
-                string get_title(void) const;
-                void set_title(const string &title);
+                String get_title(void) const;
+                void set_title(const String &title);
                 
-                string get_album(void) const;
-                void set_album(const string &album);
+                String get_album(void) const;
+                void set_album(const String &album);
                 
-                string get_artist(void) const;
-                void set_artist(const string &artist);
+                String get_artist(void) const;
+                void set_artist(const String &artist);
                 
-                string get_genre(void) const;
-                void set_genre(const string &genre);
+                String get_genre(void) const;
+                void set_genre(const String &genre);
                 
                 uint get_tracknumber(void) const;
                 void set_tracknumber(const uint track);
@@ -126,7 +128,7 @@ namespace TagInfo {
         class ApeFile
         {
             private:
-                string file_name;
+                String file_name;
                 uint length;
                 uint bitrate;
                 fstream stream;

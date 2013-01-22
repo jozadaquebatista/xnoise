@@ -44,6 +44,7 @@ namespace Xnoise {
         public string? genre = null;
         public string? name = null;
         public string? mimetype = null;
+        public string? cd_number_str = null;
         public uint year = 0;
         public uint tracknumber = 0;
         public int32 length = 0;
@@ -53,6 +54,7 @@ namespace Xnoise {
         public Gdk.Pixbuf? pixbuf = null;
         public int32 dat1 = -1;
         public int32 dat2 = -1;
+        public int32 dat3 = -1;
     }
     
     public static TrackData copy_trackdata(TrackData? td) {
@@ -69,6 +71,7 @@ namespace Xnoise {
         td_new.length      = td.length;
         td_new.bitrate     = td.bitrate;
         td_new.item        = td.item;
+        td_new.is_compilation = td.is_compilation;
         td_new.dat1        = td.dat1;
         td_new.dat2        = td.dat2;
         return td_new;

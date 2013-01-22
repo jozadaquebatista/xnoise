@@ -91,6 +91,49 @@
       </packing>
     </child>
     <child>
+      <object class="GtkBox" id="box7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label_aa">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Album Artist:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">3</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry_albumartist">
+            <property name="width_request">500</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">•</property>
+            <property name="invisible_char_set">True</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="padding">2</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="padding">5</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -129,7 +172,7 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="padding">5</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
@@ -171,7 +214,48 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="padding">5</property>
-        <property name="position">3</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box11">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="check_compilation">
+            <property name="label" translatable="yes">This track is part of a compilation / various artists album.</property>
+            <property name="use_action_appearance">False</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">8</property>
+            <property name="margin_right">8</property>
+            <property name="use_action_appearance">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <child>
@@ -215,7 +299,7 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="padding">5</property>
-        <property name="position">4</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child>
@@ -273,7 +357,7 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="padding">5</property>
-        <property name="position">5</property>
+        <property name="position">7</property>
       </packing>
     </child>
     <child>
@@ -331,7 +415,7 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="padding">5</property>
-        <property name="position">6</property>
+        <property name="position">8</property>
       </packing>
     </child>
     <child>
@@ -342,7 +426,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="position">9</property>
       </packing>
     </child>
     <child>
@@ -409,7 +493,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">8</property>
+        <property name="position">10</property>
       </packing>
     </child>
   </object>
@@ -420,6 +504,8 @@
       <widget name="entry_title"/>
       <widget name="entry_genre"/>
       <widget name="entry_uri"/>
+      <widget name="entry_albumartist"/>
+      <widget name="check_compilation"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="label_sizegroup">
@@ -431,6 +517,8 @@
       <widget name="label3"/>
       <widget name="label2"/>
       <widget name="label1"/>
+      <widget name="label_aa"/>
+      <widget name="label6"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sb_sizegroup">

@@ -450,6 +450,8 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_TITLE_LOCALIZED;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string VARIOUS_ARTISTS;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const int VIDEOTHUMBNAILSIZE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string VIDEOVIEW_NAME;
@@ -548,7 +550,7 @@ namespace Xnoise {
 			public bool write_album (GLib.File? file, string? album);
 			public bool write_artist (GLib.File? file, string? artist);
 			public bool write_genre (GLib.File? file, string? genre);
-			public bool write_tag (GLib.File? file, Xnoise.TrackData? td);
+			public bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
 			public bool write_year (GLib.File? file, uint year);
 		}
 	}
@@ -605,6 +607,7 @@ namespace Xnoise {
 		public string? comment;
 		public int32 dat1;
 		public int32 dat2;
+		public bool is_compilation;
 		public Xnoise.Item? item;
 		public uint trackcount;
 		public uint year;
@@ -882,6 +885,7 @@ namespace Xnoise {
 		public void import_media_file (string file_path);
 		public void import_media_folder (string folder_path, bool create_user_info = false, bool add_folder_to_media_folders = false);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
+		public void reimport_media_files (string[] file_paths);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
@@ -961,8 +965,10 @@ namespace Xnoise {
 		public string? albumartist;
 		public string? artist;
 		public int bitrate;
+		public string? cd_number_str;
 		public int32 dat1;
 		public int32 dat2;
+		public int32 dat3;
 		public string? genre;
 		public bool is_compilation;
 		public Xnoise.Item? item;

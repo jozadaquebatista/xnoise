@@ -27,10 +27,10 @@
 
 //#ifdef TAGLIB_WITH_MP4_COVERS
 //
-string get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length) {
+String get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length) {
     data = NULL;
     data_length = 0;
-    string mimetype = "";
+    String mimetype = "";
     
     if(mp4tag && mp4tag->itemListMap().contains("covr")) {
         TagLib::MP4::CoverArtList Covers = mp4tag->itemListMap()[ "covr" ].toCoverArtList();
@@ -87,23 +87,23 @@ string get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_lengt
 //#endif
 
 
-string get_mp4_lyrics(TagLib::MP4::Tag * mp4tag) {
+String get_mp4_lyrics(TagLib::MP4::Tag * mp4tag) {
     if(mp4tag) {
             if(mp4tag->itemListMap().contains("\xa9lyr"))
-            return mp4tag->itemListMap()[ "\xa9lyr" ].toStringList().front().toCString(true);
+            return mp4tag->itemListMap()[ "\xa9lyr" ].toStringList().front();//.toCString(true);
     }
     return "";
 }
 
 
-bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const string &lyrics) {
+bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const String &lyrics) {
     if(mp4tag) {
             if(mp4tag->itemListMap().contains("\xa9lyr")) {
             mp4tag->itemListMap().erase("\xa9lyr");
         }
-        if(!lyrics.empty()) {
-            const TagLib::String Lyrics = lyrics.c_str();
-            mp4tag->itemListMap()[ "\xa9lyr" ] = TagLib::StringList(Lyrics);
+        if(!lyrics.isEmpty()) {
+//            const TagLib::String Lyrics = lyrics.c_str();
+            mp4tag->itemListMap()[ "\xa9lyr" ] = TagLib::StringList(lyrics);
         }
         return true;
     }

@@ -47,19 +47,19 @@ bool OggInfo::read(void) {
     if(Info::read()) {
             if(m_XiphComment) {
             if(m_XiphComment->fieldListMap().contains("COMPOSER")) {
-                composer = m_XiphComment->fieldListMap()["COMPOSER"].front().toCString(true);
+                composer = m_XiphComment->fieldListMap()["COMPOSER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("DISCNUMBER")) {
-                disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front().toCString(true);
+                disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("COMPILATION")) {
-                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front().toCString(true) == (char*)"1";
+                is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front() == (char*)"1";
             }
             if(m_XiphComment->fieldListMap().contains("ALBUMARTIST")) {
-                album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front().toCString(true);
+                album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front();
             }
             else if(m_XiphComment->fieldListMap().contains("ALBUM ARTIST")) {
-                album_artist = m_XiphComment->fieldListMap()["ALBUM ARTIST"].front().toCString(true);
+                album_artist = m_XiphComment->fieldListMap()["ALBUM ARTIST"].front();
             }
             // Rating
             if(m_XiphComment->fieldListMap().contains("RATING")) {
@@ -89,25 +89,25 @@ bool OggInfo::read(void) {
             if(track_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("TRACK_LABELS"))
                 {
-                    track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front().toCString(true);
+                    track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
-                    split(track_labels_str, "|" , track_labels);
+//                    split(track_labels_str, "|" , track_labels); TODO
                 }
             }
             if(artist_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("ARTIST_LABELS"))
                 {
-                    artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front().toCString(true);
+                    artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front();
                     //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
-                    split(artist_labels_str, "|" , artist_labels);
+//                    split(artist_labels_str, "|" , artist_labels); TODO
                 }
             }
             if(album_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("ALBUM_LABELS"))
                 {
-                    album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front().toCString(true);
+                    album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front();
                     //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
-                    split(album_labels_str, "|" , album_labels);
+//                    split(album_labels_str, "|" , album_labels); TODO
                 }
             }
             return true;
@@ -120,8 +120,8 @@ bool OggInfo::read(void) {
 bool OggInfo::write(const int changedflag) {
     if(m_XiphComment) {
             if(changedflag & CHANGED_DATA_TAGS) {
-            m_XiphComment->addField("DISCNUMBER", disk_str.c_str());
-            m_XiphComment->addField("COMPOSER", composer.c_str());
+            m_XiphComment->addField("DISCNUMBER", disk_str);
+            m_XiphComment->addField("COMPOSER", composer);
             
             char* str;
             if(asprintf (&str, "%u" , is_compilation) >= 0) {
@@ -129,7 +129,7 @@ bool OggInfo::write(const int changedflag) {
                 free(str);
             }
             
-            m_XiphComment->addField("ALBUMARTIST", album_artist.c_str());
+            m_XiphComment->addField("ALBUMARTIST", album_artist);
         }
 
         if(changedflag & CHANGED_DATA_RATING) {
@@ -198,12 +198,12 @@ bool OggInfo::can_handle_lyrics(void) {
 }
 
 
-string OggInfo::get_lyrics(void) {
+String OggInfo::get_lyrics(void) {
     return get_xiph_comment_lyrics(m_XiphComment);
 }
 
 
-bool OggInfo::set_lyrics(const string &lyrics) {
+bool OggInfo::set_lyrics(const String &lyrics) {
     return set_xiph_comment_lyrics(m_XiphComment, lyrics);
 }
 

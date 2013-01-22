@@ -1830,6 +1830,7 @@ struct _XnoiseAlbumData {
 	gchar* comment;
 	guint year;
 	guint trackcount;
+	gboolean is_compilation;
 	XnoiseItem* item;
 	gint32 dat1;
 	gint32 dat2;
@@ -1916,6 +1917,7 @@ struct _XnoiseTrackData {
 	gchar* genre;
 	gchar* name;
 	gchar* mimetype;
+	gchar* cd_number_str;
 	guint year;
 	guint tracknumber;
 	gint32 length;
@@ -1925,6 +1927,7 @@ struct _XnoiseTrackData {
 	GdkPixbuf* pixbuf;
 	gint32 dat1;
 	gint32 dat2;
+	gint32 dat3;
 };
 
 struct _XnoiseTrackDataClass {
@@ -2588,6 +2591,7 @@ gboolean xnoise_plugin_module_loader_activate_single_plugin (XnoisePluginModuleL
 void xnoise_plugin_module_loader_deactivate_single_plugin (XnoisePluginModuleLoader* self, const gchar* module);
 gboolean xnoise_plugin_module_loader_get_loaded (XnoisePluginModuleLoader* self);
 #define XNOISE_RESOURCES_UNKNOWN_ARTIST "unknown artist"
+#define XNOISE_RESOURCES_VARIOUS_ARTISTS "Various artists"
 #define XNOISE_RESOURCES_UNKNOWN_TITLE "unknown title"
 #define XNOISE_RESOURCES_UNKNOWN_ALBUM "unknown album"
 #define XNOISE_RESOURCES_UNKNOWN_GENRE "unknown genre"
@@ -2720,7 +2724,7 @@ void xnoise_tag_access_value_set_tag_writer (GValue* value, gpointer v_object);
 void xnoise_tag_access_value_take_tag_writer (GValue* value, gpointer v_object);
 gpointer xnoise_tag_access_value_get_tag_writer (const GValue* value);
 GType xnoise_tag_access_tag_writer_get_type (void) G_GNUC_CONST;
-gboolean xnoise_tag_access_tag_writer_write_tag (XnoiseTagAccessTagWriter* self, GFile* file, XnoiseTrackData* td);
+gboolean xnoise_tag_access_tag_writer_write_tag (XnoiseTagAccessTagWriter* self, GFile* file, XnoiseTrackData* td, gboolean read_before_write);
 gboolean xnoise_tag_access_tag_writer_write_artist (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* artist);
 gboolean xnoise_tag_access_tag_writer_write_genre (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* genre);
 gboolean xnoise_tag_access_tag_writer_write_album (XnoiseTagAccessTagWriter* self, GFile* file, const gchar* album);
@@ -2799,6 +2803,7 @@ XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notificati
 void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, XnoiseMediaImporterResetNotificationData* cbd);
 void xnoise_media_importer_import_media_folder (XnoiseMediaImporter* self, const gchar* folder_path, gboolean create_user_info, gboolean add_folder_to_media_folders);
+void xnoise_media_importer_reimport_media_files (XnoiseMediaImporter* self, gchar** file_paths, int file_paths_length1);
 void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, const gchar* file_path);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);

@@ -22,17 +22,20 @@
 
 #include "taginfo.h"
 #include "taginfo_internal.h"
-
+#include "tstring.h"
+#include "tag.h"
+#include "taglib.h"
+#include "tbytevector.h"
 
 
 using namespace TagInfo;
 
 
 
-string get_asf_image(ASF::Tag * asftag, char*& data, int &data_length) {
+String get_asf_image(ASF::Tag * asftag, char*& data, int &data_length) {
     data = NULL;
     data_length = 0;
-    string mime = "";
+    String mime = "";
     
     if(asftag) {
             if(asftag->attributeListMap().contains("WM/Picture")) {
@@ -47,7 +50,7 @@ string get_asf_image(ASF::Tag * asftag, char*& data, int &data_length) {
                 data = new char[data_length];
                 memcpy(data, PicFrame->picture().data(), PicFrame->picture().size());
                 mime = PicFrame->mimeType().toCString(true);
-                find_and_replace(mime, "/jpg", "/jpeg");
+//                find_and_replace(mime, "/jpg", "/jpeg"); //TODO
             }
         }
     }
@@ -78,22 +81,22 @@ ASFTagInfo::~ASFTagInfo() {
 
 bool ASFTagInfo::read(void) {
     if(Info::read()) {
-            if(m_ASFTag) {
+        if(m_ASFTag) {
             if(m_ASFTag->attributeListMap().contains("WM/PartOfSet")) {
-                disk_str = m_ASFTag->attributeListMap()[ "WM/PartOfSet" ].front().toString().toCString(true);
+                disk_str = m_ASFTag->attributeListMap()[ "WM/PartOfSet" ].front().toString();
             }
             if(m_ASFTag->attributeListMap().contains("WM/Composer")) {
-                composer = m_ASFTag->attributeListMap()[ "WM/Composer" ].front().toString().toCString(true);
+                composer = m_ASFTag->attributeListMap()[ "WM/Composer" ].front().toString();
             }
             if(m_ASFTag->attributeListMap().contains("WM/AlbumArtist")) {
-                album_artist = m_ASFTag->attributeListMap()[ "WM/AlbumArtist" ].front().toString().toCString(true);
+                album_artist = m_ASFTag->attributeListMap()[ "WM/AlbumArtist" ].front().toString();
             }
             long Rating = 0;
             if(m_ASFTag->attributeListMap().contains("WM/SharedUserRating")) {
-                Rating = atol(m_ASFTag->attributeListMap()[ "WM/SharedUserRating" ].front().toString().toCString(true));
+                Rating = atol(m_ASFTag->attributeListMap()[ "WM/SharedUserRating" ].front().toString().toCString(false));
             }
             if(!Rating && m_ASFTag->attributeListMap().contains("Rating")) {
-                Rating = atol(m_ASFTag->attributeListMap()[ "Rating" ].front().toString().toCString(true));
+                Rating = atol(m_ASFTag->attributeListMap()[ "Rating" ].front().toString().toCString(false));
             }
             if(Rating) {
                 if(Rating > 5)
@@ -108,45 +111,45 @@ bool ASFTagInfo::read(void) {
 
 
             if(track_labels.size() == 0) {
-                if(m_ASFTag->attributeListMap().contains("TRACK_LABELS"))
-                {
-                    track_labels_str = m_ASFTag->attributeListMap()[ "TRACK_LABELS" ].front().toString().toCString(true);
-                    split(track_labels_str, "|" , track_labels);
+                if(m_ASFTag->attributeListMap().contains("TRACK_LABELS")){
+//                    track_labels_str = m_ASFTag->attributeListMap()[ "TRACK_LABELS" ].front().toString();
+                    track_labels_str = m_ASFTag->attributeListMap()[ "TRACK_LABELS" ].front().toString();
+//                    track_labels = track_labels_str.split("|");
 //                    track_labels = Regex::split_simple("|", track_labels_str);//(track_labels_str, wxT("|"));
                 }
             }
             if(artist_labels.size() == 0) {
                 if(m_ASFTag->attributeListMap().contains("ARTIST_LABELS"))
                 {
-                    artist_labels_str = m_ASFTag->attributeListMap()[ "ARTIST_LABELS" ].front().toString().toCString(true);
-                    split(artist_labels_str, "|" , artist_labels);
+                    artist_labels_str = m_ASFTag->attributeListMap()[ "ARTIST_LABELS" ].front().toString();
+//                    artist_labels = artist_labels_str.split("|");
 //                    artist_labels = Regex::split_simple("|", artist_labels_str);//(artist_labels_str, wxT("|"));
                 }
             }
             if(album_labels.size() == 0) {
                 if(m_ASFTag->attributeListMap().contains("ALBUM_LABELS"))
                 {
-                    album_labels_str = m_ASFTag->attributeListMap()[ "ALBUM_LABELS" ].front().toString().toCString(true);
-                    split(album_labels_str, "|" , album_labels);
+                    album_labels_str = m_ASFTag->attributeListMap()[ "ALBUM_LABELS" ].front().toString();
+//                    album_labels = album_labels_str.split("|");
 //                    album_labels = Regex::split_simple("|", album_labels_str);//(album_labels_str, wxT("|"));
                 }
             }
         }
     }
     else {
-            printf("Error: Could not read tags from file '%s'\n", file_name.data());
+        printf("Error: Could not read tags from file '%s'\n", file_name.toCString(true));
         return false; //JM
     }
     return true;
 }
 
 
-void check_asf_label_frame(ASF::Tag * asftag, const char * description, const string &value) {
+void check_asf_label_frame(ASF::Tag * asftag, const char * description, const String &value) {
     //guLogMessage(wxT("USERTEXT[ %s ] = '%s'"), wxString(description, wxConvISO8859_1).c_str(), value.c_str());
     if(asftag->attributeListMap().contains(description))
         asftag->removeItem(description);
-    if(!value.empty()) {
-            asftag->setAttribute(description, value.data());
+    if(!value.isEmpty()) {
+            asftag->setAttribute(description, value);
     }
 }
 
@@ -155,13 +158,13 @@ bool ASFTagInfo::write(const int changedflag) {
     if(m_ASFTag) {
         if(changedflag & CHANGED_DATA_TAGS) {
             m_ASFTag->removeItem("WM/PartOfSet");
-            m_ASFTag->setAttribute("WM/PartOfSet", disk_str.data());
+            m_ASFTag->setAttribute("WM/PartOfSet", disk_str);
             
             m_ASFTag->removeItem("WM/Composer");
-            m_ASFTag->setAttribute("WM/Composer", composer.data());
+            m_ASFTag->setAttribute("WM/Composer", composer);
             
             m_ASFTag->removeItem("WM/AlbumArtist");
-            m_ASFTag->setAttribute("WM/AlbumArtist", album_artist.data());
+            m_ASFTag->setAttribute("WM/AlbumArtist", album_artist);
         }
         
         if(changedflag & CHANGED_DATA_RATING) {
@@ -192,7 +195,7 @@ bool ASFTagInfo::can_handle_images(void) {
 
 bool ASFTagInfo::get_image(char*& data, int &data_length) const {
     if(m_ASFTag) {
-            string mime;
+            String mime;
         mime = get_asf_image(m_ASFTag, data, data_length);
         
         if(! data || data_length <= 0);
@@ -241,20 +244,20 @@ bool ASFTagInfo::can_handle_lyrics(void) {
 }
 
 
-string ASFTagInfo::get_lyrics(void) {
+String ASFTagInfo::get_lyrics(void) {
     if(m_ASFTag) {
             if(m_ASFTag->attributeListMap().contains("WM/Lyrics")) {
-            return m_ASFTag->attributeListMap()[ "WM/Lyrics" ].front().toString().toCString(true);
+            return m_ASFTag->attributeListMap()[ "WM/Lyrics" ].front().toString();
         }
     }
     return "";
 }
 
 
-bool ASFTagInfo::set_lyrics(const string &lyrics) {
+bool ASFTagInfo::set_lyrics(const String &lyrics) {
     if(m_ASFTag) {
             m_ASFTag->removeItem("WM/Lyrics");
-        m_ASFTag->setAttribute("WM/Lyrics", lyrics.data());
+        m_ASFTag->setAttribute("WM/Lyrics", lyrics);
         return true;
     }
     return false;

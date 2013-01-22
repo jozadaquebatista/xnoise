@@ -7,6 +7,7 @@
 #include "taginfo_c.h"
 
 using namespace TagInfo;
+using namespace TagLib;
 
 TagInfo_Info * taginfo_info_factory_make(const char *filename) {
     return reinterpret_cast<TagInfo_Info *>(Info::create_tag_info(filename));
@@ -30,59 +31,59 @@ BOOL taginfo_info_write(TagInfo_Info *info) {
 
 char *taginfo_info_get_artist(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->artist.c_str());
+    char *s = ::strdup(i->artist.toCString(true));
     return s;
 }
 void taginfo_info_set_artist(TagInfo_Info *info, const char *artist) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->artist = string(artist);
+    i->artist = String(artist, String::UTF8);
 }
 
 
 
 char *taginfo_info_get_album(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->album.c_str());
+    char *s = ::strdup(i->album.toCString(true));
     return s;
 }
 void taginfo_info_set_album(TagInfo_Info *info, const char *album) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->album = string(album);
+    i->album = String(album, String::UTF8);
 }
 
 
 
 char *taginfo_info_get_title(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->track_name.c_str());
+    char *s = ::strdup(i->track_name.toCString(true));
     return s;
 }
 void taginfo_info_set_title(TagInfo_Info *info, const char *title) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->track_name = string(title);
+    i->track_name = String(title, String::UTF8);
 }
 
 
 char *taginfo_info_get_albumartist(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->album_artist.c_str());
+    char *s = ::strdup(i->album_artist.toCString(true));
     return s;
 }
 void taginfo_info_set_albumartist(TagInfo_Info *info, const char *albumartist) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->album_artist = string(albumartist);
+    i->album_artist = String(albumartist, String::UTF8);
 }
 
 
 
 char *taginfo_info_get_genre(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->genre.c_str());
+    char *s = ::strdup(i->genre.toCString(true));
     return s;
 }
 void taginfo_info_set_genre(TagInfo_Info *info, const char *genre) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->genre = string(genre);
+    i->genre = String(genre, String::UTF8);
 }
 
 
@@ -123,12 +124,12 @@ int taginfo_info_get_length(const TagInfo_Info *info) {
 
 char *taginfo_info_get_disk_str(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);
-    char *s = ::strdup(i->disk_str.c_str());
+    char *s = ::strdup(i->disk_str.toCString(true));
     return s;
 }
 void taginfo_info_set_disk_str(TagInfo_Info *info, const char *disk_str) {
     Info *i = reinterpret_cast<Info *>(info);
-    i->disk_str = string(disk_str);
+    i->disk_str = String(disk_str, String::UTF8);
 }
 
 

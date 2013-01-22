@@ -58,7 +58,7 @@ bool ApeInfo::read(void) {
         disk_str = Tag->get_item_value(APE_TAG_MEDIA);
         album_artist = Tag->get_item_value(APE_TAG_ALBUMARTIST);
         
-        if(album_artist.empty())
+        if(album_artist.isEmpty())
             album_artist = Tag->get_item_value("AlbumArtist");
         
         return true;
@@ -95,7 +95,7 @@ bool ApeInfo::can_handle_lyrics(void) {
 }
 
 
-string ApeInfo::get_lyrics(void) {
+String ApeInfo::get_lyrics(void) {
     ApeTag * Tag = m_ApeFile.get_tag();
     if(Tag)
         return Tag->get_item_value(APE_TAG_LYRICS);
@@ -103,7 +103,7 @@ string ApeInfo::get_lyrics(void) {
 }
 
 
-bool ApeInfo::set_lyrics(const string &lyrics) {
+bool ApeInfo::set_lyrics(const String &lyrics) {
     ApeTag * Tag = m_ApeFile.get_tag();
     if(Tag) {
             Tag->set_item(APE_TAG_LYRICS, lyrics);

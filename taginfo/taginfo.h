@@ -65,14 +65,14 @@ namespace TagInfo {
         
         
         public:
-            string file_name;
-            string track_name;
-            string genre;
-            string artist;
-            string album_artist;
-            string album;
-            string composer;
-            string comments;
+            String file_name;
+            String track_name;
+            String genre;
+            String artist;
+            String album_artist;
+            String album;
+            String composer;
+            String comments;
             int tracknumber;
             int year;
             
@@ -81,13 +81,17 @@ namespace TagInfo {
             
             int playcount;
             int rating;
-            string disk_str;
-            std::vector<string> track_labels;
-            string track_labels_str;
-            std::vector<string> artist_labels;
-            string artist_labels_str;
-            std::vector<string> album_labels;
-            string album_labels_str;
+            String disk_str;
+            
+            StringList track_labels;
+            String track_labels_str;
+            
+            StringList artist_labels;
+            String artist_labels_str;
+            
+            StringList album_labels;
+            String album_labels_str;
+            
             bool is_compilation;
             
             Info(const string &filename = "");
@@ -101,8 +105,8 @@ namespace TagInfo {
             virtual bool set_image(char* data, int data_length);
             
             virtual bool can_handle_lyrics(void);
-            virtual string get_lyrics(void);
-            virtual bool set_lyrics(const string &lyrics);
+            virtual String get_lyrics(void);
+            virtual bool set_lyrics(const String &lyrics);
             
             static Info * create_tag_info(const string &file);
     };
@@ -129,8 +133,8 @@ namespace TagInfo {
     //    virtual bool        set_image(const wxImage * image);
 
         virtual bool        can_handle_lyrics(void);
-        virtual string    get_lyrics(void);
-        virtual bool        set_lyrics(const string &lyrics);
+        virtual String    get_lyrics(void);
+        virtual bool        set_lyrics(const String &lyrics);
 
     };
 
@@ -155,8 +159,8 @@ namespace TagInfo {
     //    virtual bool        set_image(const wxImage * image);
 
         virtual bool        can_handle_lyrics(void);
-        virtual string    get_lyrics(void);
-        virtual bool        set_lyrics(const string &lyrics);
+        virtual String    get_lyrics(void);
+        virtual bool        set_lyrics(const String &lyrics);
     };
 
     
@@ -180,8 +184,8 @@ namespace TagInfo {
     //    virtual bool        set_image(const wxImage * image);
 
         virtual bool        can_handle_lyrics(void);
-        virtual string    get_lyrics(void);
-        virtual bool        set_lyrics(const string &lyrics);
+        virtual String    get_lyrics(void);
+        virtual bool        set_lyrics(const String &lyrics);
     };
 
     
@@ -207,8 +211,8 @@ namespace TagInfo {
     //#endif
 
         virtual bool can_handle_lyrics(void);
-        virtual string get_lyrics(void);
-        virtual bool set_lyrics(const string &lyrics);
+        virtual String get_lyrics(void);
+        virtual bool set_lyrics(const String &lyrics);
     };
 
     
@@ -225,8 +229,8 @@ namespace TagInfo {
         virtual bool write(const int changedflag);
         
         virtual bool can_handle_lyrics(void);
-        virtual string get_lyrics(void);
-        virtual bool set_lyrics(const string &lyrics);
+        virtual String get_lyrics(void);
+        virtual bool set_lyrics(const String &lyrics);
     };
 
     
@@ -247,7 +251,7 @@ namespace TagInfo {
         virtual bool set_image(char* data, int data_length);
     //    virtual bool can_handle_images(void);
     //    virtual wxImage * get_image(void);
-    //    virtual bool set_image(const string * image);
+    //    virtual bool set_image(const String * image);
     };
 
     
@@ -271,8 +275,8 @@ namespace TagInfo {
     //    virtual bool set_image(const wxImage * image);
         
         virtual bool can_handle_lyrics(void);
-        virtual string get_lyrics(void);
-        virtual bool set_lyrics(const string &lyrics);
+        virtual String get_lyrics(void);
+        virtual bool set_lyrics(const String &lyrics);
     };
 
     
@@ -296,8 +300,8 @@ namespace TagInfo {
     //    virtual bool        set_image(const wxImage * image);
         
         virtual bool can_handle_lyrics(void);
-        virtual string get_lyrics(void);
-        virtual bool set_lyrics(const string &lyrics);
+        virtual String get_lyrics(void);
+        virtual bool set_lyrics(const String &lyrics);
     };
 
     
@@ -321,8 +325,8 @@ namespace TagInfo {
     //    virtual bool        set_image(const wxImage * image);
         
         virtual bool can_handle_lyrics(void);
-        virtual string get_lyrics(void);
-        virtual bool set_lyrics(const string &lyrics);
+        virtual String get_lyrics(void);
+        virtual bool set_lyrics(const String &lyrics);
     };
 }
 #endif

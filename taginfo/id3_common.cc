@@ -27,38 +27,38 @@
 #include <id3v2tag.h>
 
 
-void id3v2_check_label_frame(ID3v2::Tag * tagv2, const string& description, const string &value) {
+void id3v2_check_label_frame(ID3v2::Tag * tagv2, const String& description, const String &value) {
     ID3v2::UserTextIdentificationFrame * frame;
     //guLogMessage(wxT("USERTEXT[ '%s' ] = '%s'"), wxString(description, wxConvUTF8).c_str(), value.c_str());
     frame = ID3v2::UserTextIdentificationFrame::find(tagv2, description);
     if(!frame) {
         frame = new ID3v2::UserTextIdentificationFrame(TagLib::String::UTF8);
         tagv2->addFrame(frame);
-        frame->setDescription(TagLib::String(description.c_str(), TagLib::String::UTF8));
+        frame->setDescription(TagLib::String(description.toWString(), TagLib::String::UTF8));
     }
     if(frame) {
-            frame->setText(value.data());
+            frame->setText(value);
     }
 }
 
-string get_id3v2_lyrics(ID3v2::Tag * tagv2) {
+String get_id3v2_lyrics(ID3v2::Tag * tagv2) {
     TagLib::ID3v2::FrameList frameList = tagv2->frameList("USLT");
     if(!frameList.isEmpty()) {
         TagLib::ID3v2::UnsynchronizedLyricsFrame * LyricsFrame = 
             static_cast<TagLib::ID3v2::UnsynchronizedLyricsFrame * >(frameList.front());
         if(LyricsFrame) {
             //guLogMessage(wxT("Found lyrics"));
-            return string(LyricsFrame->text().toCString(true));
+            return LyricsFrame->text();//String(LyricsFrame->text().toCString(true));
         }
     }
-    return string("");
+    return String("");
 }
 
-string get_typed_id3v2_image(char*& idata, int &idata_length,
+String get_typed_id3v2_image(char*& idata, int &idata_length,
                          TagLib::ID3v2::FrameList &framelist,
                          TagLib::ID3v2::AttachedPictureFrame::Type frametype) {
     TagLib::ID3v2::AttachedPictureFrame * PicFrame;
-    string mimetype = "";
+    String mimetype = "";
     idata = NULL;
     idata_length = 0;
     
@@ -76,8 +76,8 @@ string get_typed_id3v2_image(char*& idata, int &idata_length,
                 //fwrite(idata, idata_length, 1, fout);
                 //fclose(fout);
                 //cout<<"The picture has been written" << endl;
-                mimetype = PicFrame->mimeType().toCString(true);
-                find_and_replace(mimetype, "/jpg", "/jpeg");
+                mimetype = PicFrame->mimeType();//.toCString(true);
+//                find_and_replace(mimetype, "/jpg", "/jpeg"); TODO
             }
         }
     }
@@ -102,7 +102,7 @@ TagLib::ID3v2::PopularimeterFrame * get_popularity_frame(TagLib::ID3v2::Tag * ta
 bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length) {
     TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
     //cout << "get front cover" << endl;
-    string mime = get_typed_id3v2_image(data, data_length,
+    String mime = get_typed_id3v2_image(data, data_length,
                                      FrameList, 
                                      TagLib::ID3v2::AttachedPictureFrame::FrontCover);
     
@@ -118,7 +118,7 @@ bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length) {
 }
 
 
-void set_id3v2_lyrics(ID3v2::Tag * tagv2, const string &lyrics) {
+void set_id3v2_lyrics(ID3v2::Tag * tagv2, const String &lyrics) {
     //guLogMessage(wxT("Saving lyrics..."));
     TagLib::ID3v2::UnsynchronizedLyricsFrame * LyricsFrame;
     
@@ -127,9 +127,9 @@ void set_id3v2_lyrics(ID3v2::Tag * tagv2, const string &lyrics) {
             LyricsFrame = static_cast<TagLib::ID3v2::UnsynchronizedLyricsFrame*>(*iter);
         tagv2->removeFrame(LyricsFrame, true);
     }
-    if(!lyrics.empty()) {
+    if(!lyrics.isEmpty()) {
         LyricsFrame = new TagLib::ID3v2::UnsynchronizedLyricsFrame(TagLib::String::UTF8);
-        LyricsFrame->setText(lyrics.data());
+        LyricsFrame->setText(lyrics);
         tagv2->addFrame(LyricsFrame);
     }
 }

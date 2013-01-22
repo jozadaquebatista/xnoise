@@ -80,28 +80,24 @@ static uint read_little_endian_uint32(const char * cp)
 
 // ApeFile
 
-ApeFile::ApeFile(const string &filename)
-{
-    this->file_name = filename;
+ApeFile::ApeFile(const string &filename) {
+    this->file_name = filename.c_str();
     this->apetag = NULL;
     this->length = 0;
     bitrate = 0;
 //    m_File = new wxFile(filename, wxFile::read_write);
-    stream.open(file_name.c_str(), ios::in|ios::out);
+    stream.open(file_name.toCString(false), ios::in|ios::out);
     //cout << "opend stream for ape file reading" << file_name << endl;
 //    if(m_File->IsOpened())
-    if(stream.is_open())
-    {
+    if(stream.is_open()) {
         read_header();
     }
-    else
-    {
+    else {
         printf("Could not open the ape file %s\n", filename.c_str());
     }
 }
 
-ApeFile::~ApeFile()
-{
+ApeFile::~ApeFile() {
     if(stream)
         stream.close();
 //        delete m_File;
@@ -109,13 +105,11 @@ ApeFile::~ApeFile()
         delete apetag;
 }
 
-void inline ApeFile::write_number(const int value)
-{
+void inline ApeFile::write_number(const int value) {
     stream.write((const char*)&value, sizeof(int));
 }
 
-void ApeFile::write_header_footer(const uint flags)
-{
+void ApeFile::write_header_footer(const uint flags) {
     //printf(wxT("Writing header/footer at %08X"), m_File->Tell());
 
     write_number(APE_MAGIC_0);
@@ -134,34 +128,32 @@ void ApeFile::write_header_footer(const uint flags)
 }
 
 
-void ApeFile::write_items(void)
-{
+void ApeFile::write_items(void) {
     int index;
     int count = apetag->items.size();
     char pad = 0;
-    for(index = 0; index < count; index++)
-    {
+    for(index = 0; index < count; index++) {
         Item * item = apetag->get_item(index);
         
-        if(item->value.empty())
+        if(item->value.isEmpty())
             continue;
         
-        const char* ValueBuf = item->value.c_str();
+        const char* ValueBuf = item->value.toCString(true);
         if(!ValueBuf)
             continue;
         
         int ValueLen = strlen(ValueBuf);
         write_number(ValueLen);
         write_number(item->flags);
-        stream.write(item->key.data(), item->key.size());
+        stream.write(item->key.toCString(true), item->key.length());
+//        stream.write(item->key.data(), item->key.size());
         stream.write(&pad, sizeof(pad));
-
-        if((item->flags & APE_FLAG_CONTENT_TYPE) == APE_FLAG_CONTENT_BINARY)
-        {
-            stream.write(item->value.data(), item->value.size());
+        
+        if((item->flags & APE_FLAG_CONTENT_TYPE) == APE_FLAG_CONTENT_BINARY) {
+            stream.write(item->value.toCString(true), item->value.size());
+//            stream.write(item->value.data(), item->value.size());
         }
-        else
-        {
+        else {
             stream.write(ValueBuf, ValueLen);
         }
     }
@@ -184,12 +176,12 @@ bool ApeFile::write_tag(void) {
     stream.flush();
     stream.close();
     
-    const char* fname = file_name.c_str();
+    const char* fname = file_name.toCString(true);
     int fd = open(fname, O_RDWR, "rw+");
     if(CurPos < apetag->get_file_length()) {
         int result = ftruncate(fd, CurPos);
         if(result) {
-            printf("FAILED Truncating file %s\n", (char*)file_name.c_str());
+            printf("FAILED Truncating file %s\n", (char*)file_name.toCString(true));
         }
     }
     close(fd);
@@ -312,14 +304,13 @@ void ApeFile::read_header(void) {
     
     char * CurBufPos = items_string_buffer;
     
-    string Value;
-    string Key;
+    String Value;
+    String Key;
     int index;
     for(index = 0; index < (int) footer.item_count; index++) {
         const uint ValueLen = read_little_endian_uint32(CurBufPos);
         CurBufPos += sizeof(ValueLen);
-        if(ValueLen > (footer.length - (items_string_buffer - CurBufPos)))
-        {
+        if(ValueLen > (footer.length - (items_string_buffer - CurBufPos)))   {
             printf("Aborting reading of corrupt ape tag %u > %ld\n", ValueLen, (footer.length - (items_string_buffer - CurBufPos)));
             apetag->remove_items();
             break;

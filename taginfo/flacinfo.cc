@@ -46,19 +46,19 @@ bool FlacInfo::read(void) {
     if(Info::read()) {
             if(m_XiphComment) {
             if(m_XiphComment->fieldListMap().contains("COMPOSER")) {
-                composer = m_XiphComment->fieldListMap()["COMPOSER"].front().toCString(true);
+                composer = m_XiphComment->fieldListMap()["COMPOSER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("DISCNUMBER")) {
-                disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front().toCString(true);
+                disk_str = m_XiphComment->fieldListMap()["DISCNUMBER"].front();
             }
             if(m_XiphComment->fieldListMap().contains("COMPILATION")) {
                 is_compilation = m_XiphComment->fieldListMap()["COMPILATION"].front().toCString(true) == (char*)"1";
             }
             if(m_XiphComment->fieldListMap().contains("ALBUMARTIST")) {
-                album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front().toCString(true);
+                album_artist = m_XiphComment->fieldListMap()["ALBUMARTIST"].front();
             }
             else if(m_XiphComment->fieldListMap().contains("ALBUM ARTIST")) {
-                album_artist = m_XiphComment->fieldListMap()["ALBUM ARTIST"].front().toCString(true);
+                album_artist = m_XiphComment->fieldListMap()["ALBUM ARTIST"].front();
             }
             // Rating
             if(m_XiphComment->fieldListMap().contains("RATING")) {
@@ -79,7 +79,7 @@ bool FlacInfo::read(void) {
             }
             if(m_XiphComment->fieldListMap().contains("PLAY_COUNTER")) {
                 long PlayCount = 0;
-                PlayCount = atol(m_XiphComment->fieldListMap()["PLAY_COUNTER"].front().toCString(true));
+                PlayCount = atol(m_XiphComment->fieldListMap()["PLAY_COUNTER"].front().toCString(false));
 //                if(m_XiphComment->fieldListMap()["PLAY_COUNTER"].front().toCString(true).ToLong(&PlayCount))
 //                {
                 playcount = PlayCount;
@@ -89,25 +89,25 @@ bool FlacInfo::read(void) {
             if(track_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("TRACK_LABELS"))
                 {
-                    track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front().toCString(true);
+                    track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
-                    split(track_labels_str, "|" , track_labels);
+//                    track_labels = track_labels_str.split("|");
                 }
             }
             if(artist_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("ARTIST_LABELS"))
                 {
-                    artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front().toCString(true);
+                    artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front();
                     //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
-                    split(artist_labels_str, "|" , artist_labels);
+//                    split(artist_labels_str, "|" , artist_labels);
                 }
             }
             if(album_labels.size() == 0) {
                 if(m_XiphComment->fieldListMap().contains("ALBUM_LABELS"))
                 {
-                    album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front().toCString(true);
+                    album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front();
                     //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
-                    split(album_labels_str, "|" , album_labels);
+//                    split(album_labels_str, "|" , album_labels);
                 }
             }
             return true;
@@ -121,10 +121,16 @@ bool FlacInfo::read(void) {
 bool FlacInfo::write(const int changedflag) {
     if(m_XiphComment) {
             if(changedflag & CHANGED_DATA_TAGS) {
-            m_XiphComment->addField("DISCNUMBER", disk_str.c_str());
-            m_XiphComment->addField("COMPOSER", composer.c_str());
+            m_XiphComment->addField("DISCNUMBER", disk_str);
+            m_XiphComment->addField("COMPOSER", composer);
             
-            m_XiphComment->addField("COMPILATION", format("%d", (int)is_compilation).c_str());
+//            m_XiphComment->addField("COMPILATION", format("%d", (int)is_compilation).c_str());
+            if(is_compilation) {
+                m_XiphComment->addField("COMPILATION", "1");
+            }
+            else {
+                m_XiphComment->addField("COMPILATION", "0");
+            }
 //            char* str;
 //            if(asprintf (&str, "%d", (int)is_compilation) >= 0) {
 //                m_XiphComment->addField("COMPILATION", str);
@@ -132,7 +138,7 @@ bool FlacInfo::write(const int changedflag) {
 //            }
             
             
-            m_XiphComment->addField("ALBUMARTIST", album_artist.c_str());
+            m_XiphComment->addField("ALBUMARTIST", album_artist);
         }
 
         if(changedflag & CHANGED_DATA_RATING) {
@@ -168,10 +174,10 @@ bool FlacInfo::can_handle_images(void) {
 bool FlacInfo::get_image(char*& data, int &data_length) const {
     data = NULL;
     data_length = 0;
-    string mime = "";
+    String mime = "";
     FLAC__Metadata_SimpleIterator * iter = FLAC__metadata_simple_iterator_new();
     if(iter) {
-            if(FLAC__metadata_simple_iterator_init(iter, file_name.data(), true, false)) {
+            if(FLAC__metadata_simple_iterator_init(iter, file_name.toCString(true), true, false)) {
             while(!data && FLAC__metadata_simple_iterator_next(iter)) {
                 if(FLAC__metadata_simple_iterator_get_block_type(iter) == FLAC__METADATA_TYPE_PICTURE)
                 {
@@ -352,12 +358,12 @@ bool FlacInfo::can_handle_lyrics(void) {
 }
 
 
-string FlacInfo::get_lyrics(void) {
+String FlacInfo::get_lyrics(void) {
     return get_xiph_comment_lyrics(m_XiphComment);
 }
 
 
-bool FlacInfo::set_lyrics(const string &lyrics) {
+bool FlacInfo::set_lyrics(const String &lyrics) {
     return set_xiph_comment_lyrics(m_XiphComment, lyrics);
 }
 

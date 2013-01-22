@@ -45,10 +45,10 @@ bool Mp4Info::read(void) {
     if(Info::read()) {
             if(m_Mp4Tag) {
             if(m_Mp4Tag->itemListMap().contains("aART")) {
-                album_artist = m_Mp4Tag->itemListMap()["aART"].toStringList().front().toCString(true);
+                album_artist = m_Mp4Tag->itemListMap()["aART"].toStringList().front();
             }
             if(m_Mp4Tag->itemListMap().contains("\xA9wrt")) {
-                composer = m_Mp4Tag->itemListMap()["\xa9wrt"].toStringList().front().toCString(true);
+                composer = m_Mp4Tag->itemListMap()["\xa9wrt"].toStringList().front();
             }
             if(m_Mp4Tag->itemListMap().contains("disk")) {
                 char* c_disk_str;
@@ -90,22 +90,22 @@ bool Mp4Info::read(void) {
             if(track_labels.size() == 0) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:TRACK_LABELS"))
                 {
-                    track_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:TRACK_LABELS"].toStringList().front().toCString(true);
-                    split(track_labels_str, "|" , track_labels);
+                    track_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:TRACK_LABELS"].toStringList().front();
+//                    split(track_labels_str, "|" , track_labels); TODO
                 }
             }
             if(artist_labels.size() == 0) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:ARTIST_LABELS"))
                 {
-                    artist_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ARTIST_LABELS"].toStringList().front().toCString(true);
-                    split(artist_labels_str, "|" , artist_labels);
+                    artist_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ARTIST_LABELS"].toStringList().front();
+//                    split(artist_labels_str, "|" , artist_labels); TODO
                 }
             }
             if(album_labels.size() == 0) {
                 if(m_Mp4Tag->itemListMap().contains("----:com.apple.iTunes:ALBUM_LABELS"))
                 {
-                    album_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ALBUM_LABELS"].toStringList().front().toCString(true);
-                    split(album_labels_str, "|" , album_labels);
+                    album_labels_str = m_Mp4Tag->itemListMap()["----:com.apple.iTunes:ALBUM_LABELS"].toStringList().front();
+//                    split(album_labels_str, "|" , album_labels); TODO
                 }
             }
             return true; //JM
@@ -116,19 +116,19 @@ bool Mp4Info::read(void) {
 }
 
 
-void mp4_check_label_frame(TagLib::MP4::Tag * mp4tag, const char * description, const string &value) {
+void mp4_check_label_frame(TagLib::MP4::Tag * mp4tag, const char * description, const String &value) {
     //guLogMessage(wxT("USERTEXT[ %s ] = '%s'"), wxString(description, wxConvISO8859_1).c_str(), value.c_str());
     if(mp4tag->itemListMap().contains(description)) {
-            if(!value.empty()) {
-            mp4tag->itemListMap()[ description ] = TagLib::MP4::Item(TagLib::StringList(value.data()));
+            if(!value.isEmpty()) {
+            mp4tag->itemListMap()[ description ] = TagLib::MP4::Item(TagLib::StringList(value));
         }
         else {
             mp4tag->itemListMap().erase(description);
         }
     }
     else {
-            if(!value.empty()) {
-            mp4tag->itemListMap().insert(description, TagLib::MP4::Item(TagLib::StringList(value.data())));
+            if(!value.isEmpty()) {
+            mp4tag->itemListMap().insert(description, TagLib::MP4::Item(TagLib::StringList(value)));
         }
     }
 }
@@ -137,11 +137,11 @@ void mp4_check_label_frame(TagLib::MP4::Tag * mp4tag, const char * description, 
 bool Mp4Info::write(const int changedflag) {
     if(m_Mp4Tag) {
             if(changedflag & CHANGED_DATA_TAGS) {
-            m_Mp4Tag->itemListMap()["aART"] = TagLib::StringList(album_artist.c_str());
-            m_Mp4Tag->itemListMap()["\xA9wrt"] = TagLib::StringList(composer.c_str());
+            m_Mp4Tag->itemListMap()["aART"] = TagLib::StringList(album_artist);
+            m_Mp4Tag->itemListMap()["\xA9wrt"] = TagLib::StringList(composer);
             int first;
             int second;
-            string_disk_to_disk_num(disk_str, first, second);
+            string_disk_to_disk_num(disk_str.toCString(true), first, second);
             m_Mp4Tag->itemListMap()["disk"] = TagLib::MP4::Item(first, second);
             m_Mp4Tag->itemListMap()["cpil"] = TagLib::MP4::Item(is_compilation);
         }
@@ -177,7 +177,7 @@ bool Mp4Info::can_handle_images(void) {
 
 bool Mp4Info::get_image(char*& data, int &data_length) const {
     if(m_Mp4Tag) {
-        string mime = get_mp4_cover_art(m_Mp4Tag, data, data_length);
+        String mime = get_mp4_cover_art(m_Mp4Tag, data, data_length);
         if(! data || data_length <= 0)
             return false;
         return true;
@@ -214,13 +214,13 @@ bool Mp4Info::can_handle_lyrics(void) {
 }
 
 
-string Mp4Info::get_lyrics(void) {
+String Mp4Info::get_lyrics(void) {
     //TagLib::MP4::File tagfile(file_name.mb_str(wxConvFile));
     return get_mp4_lyrics(((TagLib::MP4::File *) taglib_file->file())->tag());
 }
 
 
-bool Mp4Info::set_lyrics(const string &lyrics) {
+bool Mp4Info::set_lyrics(const String &lyrics) {
     return set_mp4_lyrics(((TagLib::MP4::File *) taglib_file->file())->tag(), lyrics);
 }
 

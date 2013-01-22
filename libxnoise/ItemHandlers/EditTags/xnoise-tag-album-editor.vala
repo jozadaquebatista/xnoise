@@ -1,6 +1,6 @@
 /* xnoise-tag-album-editor.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,14 +41,16 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
-    private string? new_content_name = null;
+    private string new_content_name = "";
     private uint new_year = 0;
-    private string? new_genre = null;
+    private string new_genre = "";
+    private bool new_is_compilation = false;
     private unowned MusicBrowserModel mbm = null;
     private Label infolabel;
     private Entry year_entry;
     private Entry genre_entry;
     private Image albumimage;
+    private CheckButton checkb_comp;
     
     private Entry entry;
     private HashTable<ItemType,Item?>? restrictions;
@@ -113,6 +115,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     entry.text  = td.album;
                     year_entry.text = (td.year > 0 ? td.year.to_string() : "");
                     genre_entry.text = (td.genre != null ? td.genre : "");
+                    checkb_comp.active = td.is_compilation;
                     albumimage = new Image.from_stock(Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
                     return false;
                 });
@@ -140,6 +143,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             var okbutton           = builder.get_object("okbutton")        as Gtk.Button;
             var cancelbutton       = builder.get_object("cancelbutton")    as Gtk.Button;
             entry                  = builder.get_object("entry1")          as Gtk.Entry;
+            checkb_comp            = builder.get_object("checkbutton1")    as Gtk.CheckButton;
             year_entry             = builder.get_object("year_entry")      as Gtk.Entry;
             genre_entry            = builder.get_object("genre_entry")     as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
@@ -185,19 +189,12 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             return;
         }
         infolabel.label = EMPTYSTRING;
-        if(entry.text != null && entry.text.strip() != EMPTYSTRING) {
-            new_content_name = entry.text.strip();
-            new_year  = (uint)int.parse(year_entry.text.strip());
-            new_genre = genre_entry.text.strip();
-            //print("new_year val : %u\n", new_year);
-        }
-        // TODO: UTF-8 validation
         switch(item.type) {
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 do_album_rename();
                 break;
             default:
-                break;    
+                break;
         }
         Idle.add( () => {
             this.dialog.destroy();
@@ -207,13 +204,23 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     
     private void do_album_rename() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-        job.set_arg("new_content_name", new_content_name);
-        job.set_arg("new_year", new_year);
-        job.set_arg("new_genre", new_genre);
+        if(entry.text == null || entry.text.strip() == EMPTYSTRING) {
+            print("Warning: new album name is empty!\n");
+            Idle.add( () => {
+                this.dialog.destroy();
+                return false;
+            });
+            return;
+        }
+        //print(" entry.text.strip() : %s\n",  entry.text.strip());
+        new_content_name = entry.text.strip();
+        if(year_entry.text.strip() != EMPTYSTRING)
+            new_year = (uint)int.parse(year_entry.text.strip());
+        new_genre = genre_entry.text.strip();
+        new_is_compilation = checkb_comp.active;
         job.item = this.item;
         db_worker.push_job(job);
     }
-
 
     private bool update_tags_job(Worker.Job tag_job) {
         if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
@@ -222,54 +229,42 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;
-            foreach(TrackData td in job.track_dat) {
-                td.album = new_content_name;
-                td.year  = new_year;
-                td.genre = new_genre;
+            foreach(unowned TrackData td in job.track_dat) {
+                td.album          = new_content_name;//(string)tag_job.get_arg("new_content_name");//
+                td.year           = new_year;//(uint)  tag_job.get_arg("new_year");//
+                td.genre          = new_genre; //(string)tag_job.get_arg("new_genre");//
+                td.is_compilation = new_is_compilation;// (bool)  tag_job.get_arg("new_is_compilation");
             }
             io_worker.push_job(job);
         }
         return false;
     }
 
-    private bool update_filetags_job(Worker.Job job) {
-        //print("job.track_dat len : %d\n", job.track_dat.length);
-        if(job.track_dat.length > 0) {
-            var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
-            db_worker.push_job(bjob);
-        }
-        for(int i = 0; i<job.track_dat.length; i++) {
-            File f = File.new_for_uri(job.track_dat[i].item.uri);
+    private bool update_filetags_job(Worker.Job tag_job) {
+        string[] paths = {};
+        for(int i = 0; i < tag_job.track_dat.length; i++) {
+            File f = File.new_for_uri(tag_job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
-            var tw = new TagWriter();
             bool ret = false;
-            if(job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-                ret =  tw.write_album(f, job.track_dat[i].album);
-                ret |= tw.write_year (f, job.track_dat[i].year );
-                ret |= tw.write_genre(f, job.track_dat[i].genre);
-            }
+            var tw = new TagWriter();
+            ret = tw.write_tag(f, tag_job.track_dat[i], false);
+            
             if(ret) {
-                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-                TrackData td = job.track_dat[i];
-                dbjob.set_arg("td", td);
-                dbjob.item = job.item;
-                db_worker.push_job(dbjob);
+                paths += f.get_path();
+            }
+            else {
+                print("No success for path : %s !!!\n", f.get_path());
             }
         }
-        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+        media_importer.reimport_media_files(paths);
         
+        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
         db_worker.push_job(fin_job);
         return false;
     }
     
-    private bool begin_job(Worker.Job job) {
-        db_writer.begin_transaction();
-        return false;
-    }
-    
     private bool finish_job(Worker.Job job) {
-        db_writer.commit_transaction();
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
             return false;
@@ -278,12 +273,6 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             this.sign_finish();
             return false;
         });
-        return false;
-    }
-
-    private bool update_db_job(Worker.Job job) {
-        TrackData td = (TrackData)job.get_arg("td");
-        media_importer.update_item_tag(ref job.item, ref td);
         return false;
     }
 

@@ -24,17 +24,17 @@
 #include "taginfo_internal.h"
 
 
-void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const string &value) {
+void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const String &value) {
     if(apetag->itemListMap().contains(description))
         apetag->removeItem(description);
-    if(!value.empty()) {
-            apetag->addValue(description, value.c_str());
+    if(!value.isEmpty()) {
+            apetag->addValue(description, value);//.c_str());
     }
 }
 
 
-string get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length) {
-    string mime = "";
+String get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length) {
+    String mime = "";
     if(item.type() == TagLib::APE::Item::Binary) {
         TagLib::ByteVector CoverData = item.value();
         if(CoverData.size()) {
@@ -48,10 +48,10 @@ string get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_
 }
 
 
-string get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length) {
+String get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length) {
     data = NULL;
     data_length = 0;
-    string mime = "";
+    String mime = "";
     
     if(apetag) {
         if(apetag->itemListMap().contains("Cover Art (front)")) {
@@ -74,20 +74,20 @@ string get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length) {
 
 
 
-string get_ape_lyrics(APE::Tag * apetag) {
+String get_ape_lyrics(APE::Tag * apetag) {
     if(apetag) {
             if(apetag->itemListMap().contains("LYRICS")) {
-            return apetag->itemListMap()[ "LYRICS" ].toStringList().front().toCString(true);
+            return apetag->itemListMap()[ "LYRICS" ].toStringList().front();
         }
         else if(apetag->itemListMap().contains("UNSYNCED LYRICS")) {
-            return apetag->itemListMap()[ "UNSYNCED LYRICS" ].toStringList().front().toCString(true);
+            return apetag->itemListMap()[ "UNSYNCED LYRICS" ].toStringList().front();
         }
     }
     return "";
 }
 
 
-bool set_ape_lyrics(APE::Tag * apetag, const string &lyrics) {
+bool set_ape_lyrics(APE::Tag * apetag, const String &lyrics) {
     if(apetag) {
             if(apetag->itemListMap().contains("LYRICS")) {
             apetag->removeItem("LYRICS");
@@ -95,9 +95,9 @@ bool set_ape_lyrics(APE::Tag * apetag, const string &lyrics) {
         if(apetag->itemListMap().contains("UNSYNCED LYRICS")) {
             apetag->removeItem("UNSYNCED LYRICS");
         }
-        if(!lyrics.empty()) {
-            const TagLib::String Lyrics = lyrics.data();
-            apetag->addValue("Lyrics", Lyrics);
+        if(!lyrics.isEmpty()) {
+//            const TagLib::String Lyrics = lyrics.data();
+            apetag->addValue("Lyrics", lyrics);
         }
         return true;
     }
