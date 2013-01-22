@@ -137,7 +137,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private bool on_enter() {
         mouse_over = true;
-        Timeout.add(500, () => {
+        Timeout.add(200, () => {
             queue_resize();
             return false;
         }); 
@@ -146,21 +146,50 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private bool on_leave() { 
         mouse_over = false;
-        Timeout.add(500, () => {
+        Idle.add( () => {
             queue_resize();
             return false;
         }); 
         return false;
     }
     
-    uint scroll_source = 0;
+    private uint scroll_source = 0;
+    private int height_last = 0;
+    private int l_minimum_height = 0;
+    private int l_natural_height = 0;
+    private int STEPSIZE = 10;
     public override void get_preferred_height(out int minimum_height, out int natural_height) {
-        base.get_preferred_height(out minimum_height, out natural_height);
-        if(!mouse_over) {
-            natural_height = minimum_height = row_height;
+        base.get_preferred_height(out l_minimum_height, out l_natural_height);
+        if(mouse_over) { // SHOWING
+            if(height_last < l_natural_height) {
+                if(height_last < row_height)
+                    height_last = row_height;
+                natural_height = minimum_height = (height_last = height_last + STEPSIZE);
+                Timeout.add(40, () => {
+                    queue_resize();
+                    return false;
+                });
+                return;
+            }
+            else {
+                natural_height = minimum_height = l_natural_height;
+            }
+        }
+        else { //HIDING
+            if(height_last > row_height) {
+                natural_height = minimum_height = (height_last = height_last - STEPSIZE);
+                Timeout.add(40, () => {
+                    queue_resize();
+                    return false;
+                });
+                return;
+            }
+            else {
+                natural_height = minimum_height = row_height;
+            }
             if(scroll_source != 0)
                 Source.remove(scroll_source);
-            Idle.add(() => {
+            scroll_source = Idle.add(() => {
                 GLib.List<TreePath> list;
                 list = this.get_selection().get_selected_rows(null);
                 if(list.length() != 0) {
