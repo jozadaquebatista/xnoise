@@ -74,104 +74,104 @@ public class Xnoise.TagAccess.TagWriter {
         return retval;
     }
 
-    public bool write_artist(File? file, string? artist) {
-        // does writes for values that are different from default values
-        if(file == null)
-            return false;
-        if(artist == null)
-            return false;
-        bool retval = false;
-        
-        string path = null;
-        path = file.get_path();
-        if(path == null)
-            return false;
-        
-        Info info = null;
-        info = Info.factory_make(path);
-        
-        if(info != null) {
-            info.read();
-            info.artist = artist != null ? artist : EMPTYSTRING;
-            
-            retval = info.write();
-        }
-        return retval;
-    }
+//    public bool write_artist(File? file, string? artist) {
+//        // does writes for values that are different from default values
+//        if(file == null)
+//            return false;
+//        if(artist == null)
+//            return false;
+//        bool retval = false;
+//        
+//        string path = null;
+//        path = file.get_path();
+//        if(path == null)
+//            return false;
+//        
+//        Info info = null;
+//        info = Info.factory_make(path);
+//        
+//        if(info != null) {
+//            info.read();
+//            info.artist = artist != null ? artist : EMPTYSTRING;
+//            
+//            retval = info.write();
+//        }
+//        return retval;
+//    }
 
-    public bool write_genre(File? file, string? genre) {
-        // does writes for values that are different from default values
-        if(file == null)
-            return false;
-        if(genre == null)
-            return false;
-        bool retval = false;
-        
-        string path = null;
-        path = file.get_path();
-        if(path == null)
-            return false;
-        
-        Info info = null;
-        info = Info.factory_make(path);
-        
-        if(info != null) {
-            info.read();
-            info.genre = genre != null ? genre : EMPTYSTRING;
-            
-            retval = info.write();
-        }
-        return retval;
-    }
+//    public bool write_genre(File? file, string? genre) {
+//        // does writes for values that are different from default values
+//        if(file == null)
+//            return false;
+//        if(genre == null)
+//            return false;
+//        bool retval = false;
+//        
+//        string path = null;
+//        path = file.get_path();
+//        if(path == null)
+//            return false;
+//        
+//        Info info = null;
+//        info = Info.factory_make(path);
+//        
+//        if(info != null) {
+//            info.read();
+//            info.genre = genre != null ? genre : EMPTYSTRING;
+//            
+//            retval = info.write();
+//        }
+//        return retval;
+//    }
 
-    public bool write_album(File? file, string? album) {
-        // does writes for values that are different from default values
-        if(file == null)
-            return false;
-        if(album == null)
-            return false;
-        bool retval = false;
-
-        string path = null;
-        path = file.get_path();
-        if(path == null)
-            return false;
-        
-        Info info = null;
-        info = Info.factory_make(path);
-        
-        if(info != null) {
-            info.read();
-            info.album = album != null ? album : EMPTYSTRING;
-            
-            retval = info.write();
-        }
-        return retval;
-    }
-
-    public bool write_year(File? file, uint year) {
-        // does writes for values that are different from default values
-        if(file == null)
-            return false;
+//    public bool write_album(File? file, string? album) {
+//        // does writes for values that are different from default values
+//        if(file == null)
+//            return false;
 //        if(album == null)
 //            return false;
-        bool retval = false;
+//        bool retval = false;
 
-        string path = null;
-        path = file.get_path();
-        if(path == null)
-            return false;
-        
-        Info info = null;
-        info = Info.factory_make(path);
-        
-        if(info != null) {
-            info.read();
-            info.year = (int)year;
-            
-            retval = info.write();
-        }
-        return retval;
-    }
+//        string path = null;
+//        path = file.get_path();
+//        if(path == null)
+//            return false;
+//        
+//        Info info = null;
+//        info = Info.factory_make(path);
+//        
+//        if(info != null) {
+//            info.read();
+//            info.album = album != null ? album : EMPTYSTRING;
+//            
+//            retval = info.write();
+//        }
+//        return retval;
+//    }
+
+//    public bool write_year(File? file, uint year) {
+//        // does writes for values that are different from default values
+//        if(file == null)
+//            return false;
+////        if(album == null)
+////            return false;
+//        bool retval = false;
+
+//        string path = null;
+//        path = file.get_path();
+//        if(path == null)
+//            return false;
+//        
+//        Info info = null;
+//        info = Info.factory_make(path);
+//        
+//        if(info != null) {
+//            info.read();
+//            info.year = (int)year;
+//            
+//            retval = info.write();
+//        }
+//        return retval;
+//    }
 }
 

@@ -196,41 +196,52 @@ private class Xnoise.TagGenreEditor : GLib.Object {
     }
 
     private bool update_filetags_job(Worker.Job job) {
+        string[] paths = {};
         //print("job.track_dat len : %d\n", job.track_dat.length);
-        if(job.track_dat.length > 0) {
-            var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
-            db_worker.push_job(bjob);
-        }
+//        if(job.track_dat.length > 0) {
+//            var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
+//            db_worker.push_job(bjob);
+//        }
         for(int i = 0; i<job.track_dat.length; i++) {
             File f = File.new_for_uri(job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
-            var tw = new TagWriter();
+//            var tw = new TagWriter();
             bool ret = false;
-            //print("%s\n", job.item.type.to_string());
-            if(job.item.type == ItemType.COLLECTION_CONTAINER_GENRE)
-                ret = tw.write_genre(f, job.track_dat[i].genre);
+            var tw = new TagWriter();
+            ret = tw.write_tag(f, job.track_dat[i], false);
+            
             if(ret) {
-                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-                TrackData td = job.track_dat[i];
-                dbjob.set_arg("td", td);
-                dbjob.item = job.item;
-                db_worker.push_job(dbjob);
+                paths += f.get_path();
             }
+            else {
+                print("No success for path : %s !!!\n", f.get_path());
+            }
+//            //print("%s\n", job.item.type.to_string());
+//            if(job.item.type == ItemType.COLLECTION_CONTAINER_GENRE)
+//                ret = tw.write_genre(f, job.track_dat[i].genre);
+//            if(ret) {
+//                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
+//                TrackData td = job.track_dat[i];
+//                dbjob.set_arg("td", td);
+//                dbjob.item = job.item;
+//                db_worker.push_job(dbjob);
+//            }
         }
+        media_importer.reimport_media_files(paths);
         var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
         
         db_worker.push_job(fin_job);
         return false;
     }
     
-    private bool begin_job(Worker.Job job) {
-        db_writer.begin_transaction();
-        return false;
-    }
+//    private bool begin_job(Worker.Job job) {
+//        db_writer.begin_transaction();
+//        return false;
+//    }
     
     private bool finish_job(Worker.Job job) {
-        db_writer.commit_transaction();
+//        db_writer.commit_transaction();
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
             return false;
@@ -242,11 +253,11 @@ private class Xnoise.TagGenreEditor : GLib.Object {
         return false;
     }
 
-    private bool update_db_job(Worker.Job job) {
-        TrackData td = (TrackData)job.get_arg("td");
-        media_importer.update_item_tag(ref job.item, ref td);
-        return false;
-    }
+//    private bool update_db_job(Worker.Job job) {
+//        TrackData td = (TrackData)job.get_arg("td");
+//        media_importer.update_item_tag(ref job.item, ref td);
+//        return false;
+//    }
 
     private void on_cancel_button_clicked(Gtk.Button sender) {
         Idle.add( () => {

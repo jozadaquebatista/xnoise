@@ -547,11 +547,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {
 			public TagWriter ();
-			public bool write_album (GLib.File? file, string? album);
-			public bool write_artist (GLib.File? file, string? artist);
-			public bool write_genre (GLib.File? file, string? genre);
 			public bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
-			public bool write_year (GLib.File? file, uint year);
 		}
 	}
 	namespace Utilities {
