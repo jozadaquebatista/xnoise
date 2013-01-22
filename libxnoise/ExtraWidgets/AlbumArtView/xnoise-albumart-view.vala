@@ -239,6 +239,11 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     }
 
     private bool on_button_press(Gdk.EventButton e) {
+        if(e.button==1 && e.type == Gdk.EventType.@2BUTTON_PRESS) {
+            TreePath tp = this.get_path_at_pos((int)e.x, (int)e.y).copy();
+            on_row_activated(this, tp);
+            return true;
+        }
         Gtk.TreePath treepath = null;
         GLib.List<TreePath> selection = this.get_selected_items();
         int x = (int)e.x;
