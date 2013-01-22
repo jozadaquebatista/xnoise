@@ -773,7 +773,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void menutoggle_playpause() {
-        playPauseButton.clicked();
+        playPauseButton.on_clicked(playPauseButton);
     }
 
     private void menu_next() {
@@ -801,7 +801,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
-        //print("%u : %u\n", e.keyval, e.state);
+        //print("%u : %u  . space: %u\n", e.keyval, e.state, (uint)Gdk.Key.space);
         switch(e.keyval) {
             case Gdk.Key.b: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
@@ -830,7 +830,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case Gdk.Key.space: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                     return false;
-                playPauseButton.clicked();
+                playPauseButton.on_clicked(playPauseButton);
                 return true;
             }
             case Gdk.Key.plus: {
