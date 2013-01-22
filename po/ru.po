@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-17 23:57+0100\n"
+"POT-Creation-Date: 2013-01-22 11:18+0100\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -53,7 +53,7 @@ msgid "no lyrics found..."
 msgstr "текст не найден..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:443
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
@@ -66,7 +66,7 @@ msgid "by"
 msgstr "от"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1459
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1501
@@ -228,7 +228,7 @@ msgstr "Открыть _местоположение"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:258
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
-#: ../libxnoise/Utils/xnoise-media-importer.vala:184
+#: ../libxnoise/Utils/xnoise-media-importer.vala:235
 msgid "Importing media data. This may take some time..."
 msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
 
@@ -330,8 +330,8 @@ msgstr "Выйти из полноэкранного режима"
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
-#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:683
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:126
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2025
 msgid "Search..."
 msgstr ""
 
@@ -395,7 +395,7 @@ msgid "Add all tracks to tracklist"
 msgstr "Добавить все видимые треки в список"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:135
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:175
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:184
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Правка метаданных"
 
@@ -412,13 +412,13 @@ msgid "Type new album name."
 msgstr "Введите новое название альбома"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:143
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:159
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:163
 msgid "Album:"
 msgstr "Альбом:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:199
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -427,75 +427,80 @@ msgstr ""
 "хотите ждать."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:194
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:188
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:203
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 "Пожалуйста, подождите пока импортируются файлы. Или отмените, если не хотите "
 "ждать."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:155
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:159
 #, fuzzy
 msgid "Album data"
 msgstr "Изменить название альбома"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:158
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:162
 #, fuzzy
 msgid "Please enter new album data."
 msgstr "Изменить название альбома"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:160
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
 #, fuzzy
 msgid "Year:"
 msgstr "Год"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:161
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:165
 #, fuzzy
 msgid "Genre:"
 msgstr "Жанр"
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2032
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2036
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1370
 msgid "Artist"
 msgstr "Исполнитель"
 
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
+#, fuzzy
+msgid "Album Artist"
+msgstr "Исполнитель"
+
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2033
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:151
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2037
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1216
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1379
 msgid "Album"
 msgstr "Альбом"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1192
 msgid "Title"
 msgstr "Название"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1286
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1388
 msgid "Genre"
 msgstr "Жанр"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:151
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:160
 msgid "Uri"
 msgstr "Адрес"
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:163
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1310
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1397
 msgid "Year"
 msgstr "Год"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:166
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1361
 msgid "Tracknumber"
 msgstr "Номер трека"
@@ -787,12 +792,12 @@ msgid "Jump to current position"
 msgstr "Перейти к текущей позиции"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1844
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2017
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
 msgid "Select search with <Ctrl-F>"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1846
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2019
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2023
 msgid "Remove search filter with <Ctrl-D>"
 msgstr ""
 
@@ -817,11 +822,11 @@ msgstr ""
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2036
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2040
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2037
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2041
 msgid "Descending"
 msgstr ""
 
@@ -928,36 +933,36 @@ msgstr "Аудио трек #"
 msgid "(Plugin)"
 msgstr "Дополнения"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:55
+#: ../libxnoise/Resources/xnoise-resources.vala:56
 msgid "unknown artist"
 msgstr "неизвестный исполнитель"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:56
+#: ../libxnoise/Resources/xnoise-resources.vala:57
 msgid "unknown title"
 msgstr "неизвестный заголовок"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:57
+#: ../libxnoise/Resources/xnoise-resources.vala:58
 msgid "unknown album"
 msgstr "неизвестный альбом"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:59
+#: ../libxnoise/Resources/xnoise-resources.vala:60
 msgid "Now Playing"
 msgstr "Проигрывается"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:60
+#: ../libxnoise/Resources/xnoise-resources.vala:61
 msgid "Tracklist"
 msgstr "Список дорожек"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:61
+#: ../libxnoise/Resources/xnoise-resources.vala:62
 #, fuzzy
 msgid "Lyrics"
 msgstr "_Текст песни"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:62
+#: ../libxnoise/Resources/xnoise-resources.vala:63
 msgid "Hide Library"
 msgstr "Скрыть библиотеку"
 
-#: ../libxnoise/Resources/xnoise-resources.vala:63
+#: ../libxnoise/Resources/xnoise-resources.vala:64
 msgid "Show Library"
 msgstr "Показать библиотеку"
 
@@ -1001,12 +1006,12 @@ msgstr "приостановлен"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:301
+#: ../libxnoise/Utils/xnoise-media-importer.vala:352
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Найдено %u дорожек. Обновление библиотеки ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:516
+#: ../libxnoise/Utils/xnoise-media-importer.vala:567
 #, fuzzy, c-format
 msgid "%u new tracks found"
 msgstr "Найдено %u дорожек"
