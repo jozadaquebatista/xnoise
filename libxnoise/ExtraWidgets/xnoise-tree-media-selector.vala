@@ -123,16 +123,16 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         this.enter_notify_event.connect(on_enter);
         this.leave_notify_event.connect(on_leave);
         
-        msw.search_entry.enter_notify_event.connect(on_enter);
-        msw.search_entry.leave_notify_event.connect(on_leave);
+        //msw.search_entry.enter_notify_event.connect(on_enter);
+        //msw.search_entry.leave_notify_event.connect(on_leave);
     }
     
     ~TreeMediaSelector() {
         this.enter_notify_event.disconnect(on_enter);
         this.leave_notify_event.disconnect(on_leave);
         
-        this.msw.search_entry.enter_notify_event.disconnect(on_enter);
-        this.msw.search_entry.leave_notify_event.disconnect(on_leave);
+        //this.msw.search_entry.enter_notify_event.disconnect(on_enter);
+        //this.msw.search_entry.leave_notify_event.disconnect(on_leave);
     }
     
     private bool on_enter() {
