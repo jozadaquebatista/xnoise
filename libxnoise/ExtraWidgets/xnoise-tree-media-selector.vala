@@ -158,6 +158,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     private int l_minimum_height = 0;
     private int l_natural_height = 0;
     private int STEPSIZE = 10;
+    private int ANIMATION_SPEED = 30;
     public override void get_preferred_height(out int minimum_height, out int natural_height) {
         base.get_preferred_height(out l_minimum_height, out l_natural_height);
         if(mouse_over) { // SHOWING
@@ -165,7 +166,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                 if(height_last < row_height)
                     height_last = row_height;
                 natural_height = minimum_height = (height_last = height_last + STEPSIZE);
-                Timeout.add(40, () => {
+                Timeout.add(ANIMATION_SPEED, () => {
                     queue_resize();
                     return false;
                 });
@@ -178,7 +179,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         else { //HIDING
             if(height_last > row_height) {
                 natural_height = minimum_height = (height_last = height_last - STEPSIZE);
-                Timeout.add(40, () => {
+                Timeout.add(ANIMATION_SPEED, () => {
                     queue_resize();
                     return false;
                 });
