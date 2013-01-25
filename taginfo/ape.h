@@ -41,17 +41,16 @@ namespace TagInfo {
         class Item
         {
             public:
-                String key;
                 String value;
+                String key;
                 uint flags;
                 
                 Item() {};
                 
-                Item(const String &key, const String &value, uint flags)
-                {
-                    this->key = key;
-                    this->value = value;
-                    this->flags = flags;
+                Item(const String &_key, const String &_val, uint _flags) {
+                    this->key   = _key;
+                    this->value = _val;
+                    this->flags = _flags;
                 }
                 
                 const String & get_key(void) const
@@ -69,7 +68,7 @@ namespace TagInfo {
                     return flags;
                 }
                 
-                bool operator==(const Item &other);
+//                bool operator==(const Item &other);
         };
         
         
@@ -79,16 +78,15 @@ namespace TagInfo {
                 uint file_length;
                 uint offset;
                 uint item_count;
-                vector<Item*> items;
-                
+                vector<TagInfo::Ape::Item*> items;
             
             public:
-                ApeTag(uint length, uint offset, uint items);
+                ApeTag(uint _length, uint _offset, uint _items);
                 ~ApeTag();
                 
                 void remove_items(void);
                 void remove_item(Item * item);
-                void add_item(Item * item);
+                void add_item(TagInfo::Ape::Item * item);
                 
                 Item * get_item(const int position) const;
                 Item * get_item(const String &key) const;

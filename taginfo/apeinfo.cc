@@ -29,7 +29,13 @@ using namespace TagInfo;
 using namespace TagInfo::Ape;
 
 
+int read_cnt;
+int write_cnt;
+
 ApeInfo::ApeInfo(const string &filename) : Info(), ape_file(filename) {
+    read_cnt = 0;
+    write_cnt = 1;
+    read();
 }
 
 
@@ -38,12 +44,11 @@ ApeInfo::~ApeInfo() {
 
 
 bool ApeInfo::read(void) {
-
-
+    if(read_cnt >= write_cnt)
+        return true;
     ApeTag * Tag = ape_file.get_tag();
     if(Tag) {
-            //cout << "title:  " << Tag->get_title()   << endl <<
-        //"artist: " << Tag->get_artist()  << endl;
+        //cout << "READ:  " << Tag->get_title()   << endl;
         track_name = Tag->get_title();
         artist = Tag->get_artist();
         album = Tag->get_album();
@@ -61,16 +66,19 @@ bool ApeInfo::read(void) {
         if(album_artist.isEmpty())
             album_artist = Tag->get_item_value("AlbumArtist");
         
+        read_cnt++;
         return true;
     }
     else {
-            printf("Error: Ape file with no tags found\n");
+        printf("Error: Ape file with no tags found\n");
     }
     return false;
 }
 
 
 bool ApeInfo::write(const int changedflag) {
+    if(read_cnt < write_cnt)
+        return false;
     ApeTag * Tag = ape_file.get_tag();
     if(Tag && (changedflag & CHANGED_DATA_TAGS)) {
         Tag->set_title(track_name);
@@ -84,6 +92,7 @@ bool ApeInfo::write(const int changedflag) {
         Tag->set_item(APE_TAG_MEDIA, disk_str);
         Tag->set_item(APE_TAG_ALBUMARTIST, album_artist);
         ape_file.write_tag();
+        write_cnt++;
         return true;
     }
     return false;

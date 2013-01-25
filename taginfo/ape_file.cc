@@ -85,10 +85,7 @@ ApeFile::ApeFile(const string &filename) {
     this->apetag = NULL;
     this->length = 0;
     bitrate = 0;
-//    m_File = new wxFile(filename, wxFile::read_write);
     stream.open(file_name.toCString(true), ios::in|ios::out);
-    //cout << "opend stream for ape file reading" << file_name << endl;
-//    if(m_File->IsOpened())
     if(stream.is_open()) {
         read_header();
     }
@@ -100,29 +97,22 @@ ApeFile::ApeFile(const string &filename) {
 ApeFile::~ApeFile() {
     if(stream)
         stream.close();
-//        delete m_File;
     if(apetag)
         delete apetag;
 }
 
-void inline ApeFile::write_number(const int value) {
-    stream.write((const char*)&value, sizeof(int));
+void inline ApeFile::write_number(const int32_t value) {
+    stream.write((const char*)&value, sizeof(value));
 }
 
 void ApeFile::write_header_footer(const uint flags) {
     //printf(wxT("Writing header/footer at %08X"), m_File->Tell());
-
     write_number(APE_MAGIC_0);
     write_number(APE_MAGIC_1);
-
     write_number(APE_VERSION_2);
-
     write_number(apetag->get_item_length() + sizeof(ApeHeaderFooter));
-
     write_number(apetag->get_item_count());
-
     write_number(flags);
-
     write_number(0);
     write_number(0);
 }
@@ -130,7 +120,8 @@ void ApeFile::write_header_footer(const uint flags) {
 
 void ApeFile::write_items(void) {
     int index;
-    int count = apetag->items.size();
+    int count = apetag->get_item_count();//items.size();
+
     char pad = 0;
     for(index = 0; index < count; index++) {
         Item * item = apetag->get_item(index);
@@ -138,36 +129,42 @@ void ApeFile::write_items(void) {
         if(item->value.isEmpty())
             continue;
         
-        const char* ValueBuf = item->value.toCString(true);
+        const char* ValueBuf = item->value.toCString(false);
+        
         if(!ValueBuf)
             continue;
         
-        int ValueLen = strlen(ValueBuf);
+        int ValueLen = item->value.size();;
         write_number(ValueLen);
         write_number(item->flags);
         stream.write(item->key.toCString(true), item->key.length());
-//        stream.write(item->key.data(), item->key.size());
         stream.write(&pad, sizeof(pad));
         
         if((item->flags & APE_FLAG_CONTENT_TYPE) == APE_FLAG_CONTENT_BINARY) {
-            stream.write(item->value.toCString(true), item->value.size());
-//            stream.write(item->value.data(), item->value.size());
+            stream.write(item->value.to8Bit().data(), ValueLen);
         }
         else {
-            stream.write(ValueBuf, ValueLen);
+            stream.write(ValueBuf, item->value.size());
         }
     }
 }
 
 bool ApeFile::write_tag(void) {
+    long begin,end;
+    stream.seekg(0, ios::beg);
+    begin = stream.tellg();
+    stream.seekg(0, ios::end);
+    end = stream.tellg();
     const uint TagOffset = !apetag->get_offset() ?  apetag->get_file_length() : apetag->get_offset();
-    stream.seekp(TagOffset);
+
+    stream.seekp(TagOffset, ios::beg);
     // write header
-    if(stream.tellp() != TagOffset)
-    {
+    if(stream.tellp() != TagOffset) {
         printf("Seek for header failed %ld target pos %u\n", (long)stream.tellp(), TagOffset);
     }
-    write_header_footer(APE_FLAG_IS_HEADER | APE_FLAG_HAVE_HEADER);
+    write_header_footer(APE_FLAG_IS_HEADER |
+                        APE_FLAG_HAVE_HEADER
+    );
     write_items();
     write_header_footer(APE_FLAG_HAVE_HEADER);
     
@@ -181,7 +178,7 @@ bool ApeFile::write_tag(void) {
     if(CurPos < apetag->get_file_length()) {
         int result = ftruncate(fd, CurPos);
         if(result) {
-            printf("FAILED Truncating file %s\n", (char*)file_name.toCString(true));
+            printf("FAILED Truncating file %s\n", file_name.toCString(true));
         }
     }
     close(fd);
@@ -195,31 +192,47 @@ void ApeFile::read_header(void) {
     stream.seekg(0, ios::end);
     end = stream.tellg();
     const long FileLength = end - begin;
+    //printf("FileLength:  %lu\n", FileLength);
+    //printf("sizeof(ApeCommonHeader):  %u\n", sizeof(ApeCommonHeader));
+    //printf("sizeof(ApeDescriptor):  %u\n", sizeof(ApeDescriptor));
+    //printf("sizeof(ApeHeader):  %u\n", sizeof(ApeHeader));
+    //printf("sizeof(ApeOldHeader):  %u\n", sizeof(ApeOldHeader));
+    //printf("sizeof(ApeHeaderFooter):  %u\n", sizeof(ApeHeaderFooter));
     
     ApeCommonHeader common_header;
     stream.seekg (0, ios::beg);
     stream.read((char*)&common_header, sizeof(ApeCommonHeader));
-    if(common_header.id != APE_HEADER_MAGIC)
-    {
+    if(common_header.id != APE_HEADER_MAGIC) {
         printf("This is not a valid ape file %08x . APE_HEADER_MAGIC:  %08x\n", common_header.id, APE_HEADER_MAGIC);
         return;
     }
     // New header format
     if(common_header.version >= 3980) {
+        //std::cout << "NEW HEADER FORMAT: " << common_header.version << std::endl;
         ApeDescriptor  Descriptor;
         ApeHeader      header;
-        stream.seekg (0, ios::beg);
+        stream.seekg(0, ios::beg);
         
         stream.read((char*) &Descriptor, sizeof(ApeDescriptor));
-        stream.seekg (Descriptor.descriptor_bytes - sizeof(ApeDescriptor), ios::cur);
+        int ReadCnt = stream.gcount();
+        if((ReadCnt - Descriptor.descriptor_bytes) > 0)
+            stream.seekg(Descriptor.descriptor_bytes - ReadCnt, ios::cur);
         
         stream.read((char*) &header, sizeof(ApeHeader));
-        stream.seekg(Descriptor.header_bytes - sizeof(ApeDescriptor), ios::cur);
-        length = int(double(((header.total_frames - 1) * header.blocks_per_frame) + header.final_frame_blocks)
-                             / double(header.sample_rate)) * 1000;
+        ReadCnt = stream.gcount();
+        if((ReadCnt - Descriptor.header_bytes) > 0)
+            stream.seekg(Descriptor.header_bytes - ReadCnt, ios::cur);
+        
+        length = int(double(((header.total_frames - 1) * header.blocks_per_frame) + 
+            double(header.final_frame_blocks)) / double(header.sample_rate)) * 1000;
+        //printf("TotalFrames      : %u\n", header.total_frames);
+        //printf("blocks_per_frame   : %u\n", header.blocks_per_frame);
+        //printf("FinalFrameBlocks : %u\n", header.final_frame_blocks);
+        //printf("SampleRate       : %u\n", header.sample_rate);
     }
     else {
         // Old header format
+        //std::cout << "OLD HEADER FORMAT" << std::endl;
         ApeOldHeader header;
         stream.seekg(0, ios::beg);
         
@@ -238,7 +251,7 @@ void ApeFile::read_header(void) {
                              / double(header.sample_rate)) * 1000;
         
     }
-
+    
     bitrate = length ? int((double(FileLength) * double(8)) / double(length)) : 0;
 
     if(FileLength < sizeof(ApeHeaderFooter)) {
@@ -266,6 +279,9 @@ void ApeFile::read_header(void) {
         return;
     }
     
+    //printf("\nFound ApeFooter tag footer version: %i  length: %i  items: %i  flags: %08x \n",
+     //         footer.version, footer.length, footer.item_count, footer.flags );
+
     if(FileLength < footer.length) {
         printf("ApeTag bigger than file\n");
         return;
@@ -276,40 +292,45 @@ void ApeFile::read_header(void) {
     
     if(FileLength >= footer.length + sizeof(ApeHeaderFooter)) {
         stream.seekg(FileLength - (footer.length + sizeof(ApeHeaderFooter)), ios::beg);
-        ApeHeaderFooter footer;
+        ApeHeaderFooter header;
         
-        stream.read((char*) &footer, sizeof(ApeHeaderFooter));
+        stream.read((char*) &header, sizeof(ApeHeaderFooter));
         
-        if(footer.magic[0] == APE_MAGIC_0 && footer.magic[1] == APE_MAGIC_1) {
+        if(header.magic[0] == APE_MAGIC_0 && header.magic[1] == APE_MAGIC_1) {
             have_header = true;
             
-            if(footer.version != footer.version || 
-               footer.length != footer.length || 
-               footer.item_count != footer.item_count) {
-                printf("footer header/footer data mismatch\n");
+            if(header.version != footer.version || 
+               header.length != footer.length || 
+               header.item_count != footer.item_count) {
+                printf("footer header/footer data mismatch %d -> %d   ; %d -> %d\n", header.version, footer.version, header.length, footer.length);
             }
+            //printf("\nFound ApeFooter tag header version: %i  length: %i  items: %i  flags: %08x\n",
+            //      header.version, header.length, header.item_count, header.flags );
+
         }
     }
     
+    //printf("\nXXX filelength: %u, %u, %u , %u\n", FileLength,
+    //                      footer.length, have_header * sizeof(ApeHeaderFooter),
+    //                      footer.item_count);
     apetag = new ApeTag(FileLength,
-                        FileLength - footer.length - have_header * sizeof(ApeHeaderFooter),
+                        FileLength - footer.length - ((int)have_header * sizeof(ApeHeaderFooter)),
                         footer.item_count);
     
     // read and process tag data
     stream.seekg(- (int) footer.length, ios::end);
     
     char * const items_string_buffer = new char[footer.length];
-    
     stream.read((char*) items_string_buffer, footer.length);
-    
     char * CurBufPos = items_string_buffer;
-    
-    String Value;
-    String Key;
+    //printf("\nFound a valid ape footer with %i items and %i bytes length\n", footer.item_count, footer.length );
     int index;
     for(index = 0; index < (int) footer.item_count; index++) {
+        String Value;
+        String Key;
         const uint ValueLen = read_little_endian_uint32(CurBufPos);
         CurBufPos += sizeof(ValueLen);
+
         if(ValueLen > (footer.length - (items_string_buffer - CurBufPos)))   {
             printf("Aborting reading of corrupt ape tag %u > %ld\n", ValueLen, (footer.length - (items_string_buffer - CurBufPos)));
             apetag->remove_items();
@@ -320,19 +341,23 @@ void ApeFile::read_header(void) {
         CurBufPos += sizeof(ItemFlags);
         
         Key = CurBufPos;
-        
-        CurBufPos += 1 + Key.length();
+        CurBufPos += 1 + strlen(Key.toCString(false));// Key.length();
         
         if((ItemFlags & APE_FLAG_CONTENT_TYPE) == APE_FLAG_CONTENT_BINARY) {
-            Value = string(CurBufPos, ValueLen);
+            char subbuff[ValueLen + 1];
+            memcpy( subbuff, CurBufPos, ValueLen );
+            subbuff[ValueLen] = '\0';
+            Value = (char*)&subbuff;//::strdup(Value.toCString(true));
         }
         else {
-            Value = string(CurBufPos, ValueLen);
+            Value = String(::strndup(CurBufPos, ValueLen));
         }
         
         CurBufPos += ValueLen;
         
-        apetag->add_item(new Item(Key, Value, ItemFlags));
+        Item * itn = new Item(Key, Value, ItemFlags);
+        
+        apetag->add_item(itn);
     }
     delete items_string_buffer;
 }

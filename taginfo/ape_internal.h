@@ -29,6 +29,7 @@
 #include <vector>
 #include <fcntl.h>
 #include <unistd.h>
+#include <iostream>
 
 
 #define APE_TAG_TITLE               "Title" 

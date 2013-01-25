@@ -28,11 +28,11 @@ using namespace TagInfo;
 using namespace TagInfo::Ape;
 
 
-ApeTag::ApeTag(uint length, uint offset, uint nitems)
+ApeTag::ApeTag(uint _length, uint _offset, uint _nitems)
 {
-    file_length = length;
-    offset = offset;
-    item_count = nitems;
+    this->file_length = _length;
+    this->offset = _offset;
+    this->item_count = _nitems;
     this->items.clear();
 //    items = new ItemArray(compare_items);
 }
@@ -68,7 +68,7 @@ void ApeTag::remove_item(Item * item)
     delete item;
 }
 
-void ApeTag::add_item(Item * item)
+void ApeTag::add_item(TagInfo::Ape::Item * item)
 {
     items.push_back(item);
 }
@@ -83,14 +83,13 @@ Item * ApeTag::get_item(const String &key) const
     Item * item;
     int index;
     int count = items.size();
-    for(index = 0; index < count; index++)
-    {
+    for(index = 0; index < count; index++) {
         item = items.at(index);
-        String str1Cpy(key);
-        String str2Cpy(item->key);
-        std::transform(str1Cpy.begin(), str1Cpy.end(), str1Cpy.begin(), ::tolower);
-        std::transform(str2Cpy.begin(), str2Cpy.end(), str2Cpy.begin(), ::tolower);
-        if(str1Cpy == str2Cpy)
+//        String str1Cpy(key);
+//        String str2Cpy(item->key);
+//        std::transform(str1Cpy.begin(), str1Cpy.end(), str1Cpy.begin(), ::tolower);
+//        std::transform(str2Cpy.begin(), str2Cpy.end(), str2Cpy.begin(), ::tolower);
+        if(key == item->key)
             return item;
     }
     return NULL;
@@ -101,7 +100,7 @@ String ApeTag::get_item_value(const String &key) const
     String RetVal = "";
     Item * item = get_item(key);
     if(item) {
-        RetVal = item->value;
+        RetVal = item->get_value();
     }
     return RetVal;
 }
@@ -170,15 +169,10 @@ uint ApeTag::get_item_count(void) const
     for(Index = 0; Index < Count; Index++) {
         Item * item = items.at(Index);
         
-        //printf(wxT("'%s' => '%s'"), item->key.c_str(), item->value.c_str());
-        if(!item->value.isEmpty()) {
-//            const void* ValueBuf = item->value;//mb_str(wxConvUTF8); //JM*******
-//            if(ValueBuf) {
-                RetVal++;
-//            }
+        if(!item->get_value().isEmpty()) {
+            RetVal++;
         }
     }
-    //printf("get_item_count() -> %u \n" , RetVal);
     return RetVal;
 }
 
@@ -224,18 +218,26 @@ void ApeTag::set_genre(const String &genre)
 
 uint ApeTag::get_tracknumber(void) const
 {
+    String ret = get_item_value(APE_TAG_TRACK);
+    int i = 0;
     unsigned long Track;
-    
-    Track = strtoul(get_item_value(APE_TAG_TRACK).toCString(true), NULL, 0); //JM ****
-//    Track = strtoul(get_item_value(APE_TAG_TRACK).c_str(), NULL, 0);
-    return (uint)Track;
+    if((i = ret.find("/")) < 0) {
+        Track = strtoul(ret.toCString(false), NULL, 0);
+        return (uint)Track;
+    }
+    else {
+        String first = ret.substr(0, i);
+        Track = strtoul(first.toCString(false), NULL, 0);
+        return (uint)Track;
+    }
 }
 
-void ApeTag::set_tracknumber(const uint track)
+void ApeTag::set_tracknumber(uint track)//(const uint track)
 {
     char* trck;
     if(asprintf (&trck, "%u", track) >= 0) {
-        set_item(APE_TAG_TRACK, trck, 0);
+        String tstr = trck;
+        set_item(APE_TAG_TRACK, tstr, 0);
         free(trck);
     }
 }
@@ -251,7 +253,8 @@ void ApeTag::set_year(const uint year)
 {
     char* yr;
     if(asprintf (&yr, "%u", year) >= 0) {
-        set_item(APE_TAG_YEAR, yr, 0);
+        String ystr = yr;
+        set_item(APE_TAG_YEAR, ystr, 0);
         free(yr);
     }
 }

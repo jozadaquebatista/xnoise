@@ -267,7 +267,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             if(ret) {
                 paths += f.get_path();
             }
-            
+            // TODO handle is_compilation for containing album
             media_importer.reimport_media_files(paths);
             
             var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
