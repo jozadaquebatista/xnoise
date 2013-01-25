@@ -887,8 +887,12 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
                     i.source_id = get_source_id();
                     i.stamp = album.stamp;
-                    
-                    td.artist      = stmt.column_text(5);
+                    //print("td.albumartist: %s    art: %s\n", td.albumartist, td.artist);
+                    td.albumartist = stmt.column_text(11);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -897,7 +901,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
                     td.is_compilation = (stmt.column_int(10) != 0 ? true : false);
-                    td.albumartist = stmt.column_text(11);
                     val += td;
                 }
                 return (owned)val;
@@ -931,7 +934,11 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.source_id = get_source_id();
                     i.stamp = album.stamp;
                     
-                    td.artist      = stmt.column_text(5);
+                    td.albumartist = stmt.column_text(11);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -940,7 +947,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
                     td.is_compilation = (stmt.column_int(10) != 0 ? true : false);
-                    td.albumartist = stmt.column_text(11);
                     val += td;
                 }
                 return (owned)val;
@@ -950,16 +956,16 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE_AND_SEARCH =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND t.mediatype = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_for_artist(string searchtext,
                                                          CollectionSortMode sort_mode,
@@ -1006,7 +1012,13 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.source_id = get_source_id();
                     i.stamp = genre.stamp;
                     
-                    td.artist      = stmt.column_text(5);
+                    td.albumartist = stmt.column_text(11);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
+//                    td.artist      = stmt.column_text(5);
+                    td.is_compilation = (stmt.column_int(10) == 1 ? true : false);
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -1047,7 +1059,12 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.source_id = get_source_id();
                     i.stamp = artist.stamp;
                     
-                    td.artist      = stmt.column_text(5);
+                    td.albumartist = stmt.column_text(11);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
+                    td.is_compilation = (stmt.column_int(10) == 1 ? true : false);
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -1191,7 +1208,11 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.source_id = get_source_id();
                     i.stamp = item.stamp;
                     
-                    td.artist      = stmt.column_text(5);
+                    td.albumartist = stmt.column_text(10);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -1199,7 +1220,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
-                    td.albumartist = stmt.column_text(10);
                     td.is_compilation = (stmt.column_int(11) != 0 ? true : false);
                     val += td;
                 }
@@ -1232,7 +1252,14 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.source_id = get_source_id();
                     i.stamp = item.stamp;
                     
-                    td.artist      = stmt.column_text(5);
+//                    td.albumartist = stmt.column_text(10);
+//                    td.artist      = stmt.column_text(5);
+                    td.albumartist = stmt.column_text(10);
+                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
+                                                                     td.albumartist != "*" ? 
+                                                                        td.albumartist :
+                                                                        stmt.column_text(5));
+
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -1240,7 +1267,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
-                    td.albumartist = stmt.column_text(10);
                     td.is_compilation = (stmt.column_int(11) != 0 ? true : false);
                     val += td;
                 }
