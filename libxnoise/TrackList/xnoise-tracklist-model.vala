@@ -101,13 +101,17 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             if(upd_tl_data_src != 0)
                 Source.remove(upd_tl_data_src);
             upd_tl_data_src = Timeout.add_seconds(2, () => {
-                HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
+                HashTable<TrackListModel.Column,string?> ntags = 
+                    new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
                 if(global.current_uri != null)
                     ntags.insert(Column.ITEM,   global.current_uri); // cheating - the uri is not an item
                 else
                     return false;
                 if(global.current_artist != null)
-                    ntags.insert(Column.ARTIST, global.current_artist);
+                    ntags.insert(Column.ARTIST, (global.current_artist.down() == "various artists" &&
+                                                 global.current_albumartist != null && 
+                                                 global.current_albumartist != EMPTYSTRING ? 
+                                                    global.current_albumartist : global.current_artist));
                 if(global.current_album != null)
                     ntags.insert(Column.ALBUM,  global.current_album);
                 if(global.current_title != null)

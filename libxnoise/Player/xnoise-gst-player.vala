@@ -941,6 +941,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(list.get_string(tag, out val))
                     if(val != global.current_artist) global.current_artist = remove_linebreaks(val);
                 break;
+            case Gst.TAG_ALBUM_ARTIST:
+                if(list.get_string(tag, out val))
+                    if(val != global.current_albumartist) global.current_albumartist = remove_linebreaks(val);
+                break;
             case Gst.TAG_ALBUM:
                 if(list.get_string(tag, out val))
                     if(val != global.current_album) global.current_album = remove_linebreaks(val);

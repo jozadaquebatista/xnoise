@@ -688,6 +688,7 @@ namespace Xnoise {
 		public string active_dockable_media_name { get; set; }
 		public Xnoise.CollectionSortMode collection_sort_mode { get; set; }
 		public string current_album { get; set; }
+		public string current_albumartist { get; set; }
 		public string current_artist { get; set; }
 		public string current_genre { get; set; }
 		public string current_location { get; set; }

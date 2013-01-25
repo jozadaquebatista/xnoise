@@ -46,6 +46,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
         uri_changed.connect( (s,v) => {
         //print("uri_changed\n");
             current_artist = null;
+            current_albumartist = null;
             current_album = null;
             current_title = null;
             current_location = null;
@@ -58,6 +59,9 @@ public class Xnoise.GlobalAccess : GLib.Object {
             switch(p.name) {
                 case "current-artist":
                     this.tag_changed(this._current_uri, "artist", this._current_artist);
+                    break;
+                case "current-albumartist":
+                    this.tag_changed(this._current_uri, "albumartist", this._current_albumartist);
                     break;
                 case "current-album":
                     this.tag_changed(this._current_uri, "album", this._current_album);
@@ -227,6 +231,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 
     // Current track's meta data
     public string current_artist { get; set; default = null; }
+    public string current_albumartist { get; set; default = null; }
     public string current_album { get; set; default = null; }
     public string current_title { get; set; default = null; }
     public string current_location { get; set; default = null; }

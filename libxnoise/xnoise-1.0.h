@@ -2231,6 +2231,8 @@ gboolean xnoise_global_access_get_media_import_in_progress (XnoiseGlobalAccess* 
 void xnoise_global_access_set_media_import_in_progress (XnoiseGlobalAccess* self, gboolean value);
 const gchar* xnoise_global_access_get_current_artist (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_artist (XnoiseGlobalAccess* self, const gchar* value);
+const gchar* xnoise_global_access_get_current_albumartist (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_albumartist (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_current_album (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_album (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_current_title (XnoiseGlobalAccess* self);
