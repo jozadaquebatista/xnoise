@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-22 11:18+0100\n"
+"POT-Creation-Date: 2013-01-25 13:34+0100\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -808,7 +808,7 @@ msgstr "顯示應用的主選單"
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2041
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2042
 msgid "Descending"
 msgstr ""
 

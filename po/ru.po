@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-22 11:18+0100\n"
+"POT-Creation-Date: 2013-01-25 13:34+0100\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -826,7 +826,7 @@ msgstr "Показывать главное меню"
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2041
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2042
 msgid "Descending"
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: glib.glib-2-10.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-22 11:18+0100\n"
+"POT-Creation-Date: 2013-01-25 13:34+0100\n"
 "PO-Revision-Date: 2006-04-27 00:00+0545\n"
 "Last-Translator: \n"
 "Language-Team: Nepali\n"
@@ -765,7 +765,7 @@ msgstr ""
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2041
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2042
 msgid "Descending"
 msgstr ""
 
