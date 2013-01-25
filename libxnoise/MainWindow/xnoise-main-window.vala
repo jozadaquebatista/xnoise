@@ -2036,9 +2036,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             album_view_sorting.insert("ARTIST", _("Artist"));
             album_view_sorting.insert("ALBUM" , _("Album") );
             aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
-            album_view_direction = new SerialButton();
-            album_view_direction.insert("ASC", _("Ascending"));
-            album_view_direction.insert("DESC" , _("Descending") );
+            album_view_direction = new SerialButton(SerialButton.Presentation.IMAGE);
+            album_view_direction.insert("ASC" , _("Ascending"), 
+                new Image.from_icon_name("go-up-symbolic", IconSize.MENU));
+            album_view_direction.insert("DESC", _("Descending"), 
+                new Image.from_icon_name("go-down-symbolic", IconSize.MENU));
             aa_contr_bx.pack_start(album_view_direction, false, false, 1);
             var sg01 = new SizeGroup(SizeGroupMode.HORIZONTAL);
             sg01.add_widget(album_view_sorting);

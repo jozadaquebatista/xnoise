@@ -368,6 +368,8 @@ typedef struct _XnoiseSerialButton XnoiseSerialButton;
 typedef struct _XnoiseSerialButtonClass XnoiseSerialButtonClass;
 typedef struct _XnoiseSerialButtonPrivate XnoiseSerialButtonPrivate;
 
+#define XNOISE_SERIAL_BUTTON_TYPE_PRESENTATION (xnoise_serial_button_presentation_get_type ())
+
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
 #define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
@@ -1283,6 +1285,11 @@ struct _XnoiseSerialButtonClass {
 	GtkBoxClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_SERIAL_BUTTON_PRESENTATION_TEXT,
+	XNOISE_SERIAL_BUTTON_PRESENTATION_IMAGE
+} XnoiseSerialButtonPresentation;
+
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
@@ -2186,10 +2193,11 @@ GtkEntry* xnoise_media_soure_widget_get_search_entry (XnoiseMediaSoureWidget* se
 const gchar* xnoise_media_soure_widget_get_media_source_selector_type (XnoiseMediaSoureWidget* self);
 void xnoise_media_soure_widget_set_media_source_selector_type (XnoiseMediaSoureWidget* self, const gchar* value);
 GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
-XnoiseSerialButton* xnoise_serial_button_new (void);
-XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
+GType xnoise_serial_button_presentation_get_type (void) G_GNUC_CONST;
+XnoiseSerialButton* xnoise_serial_button_new (XnoiseSerialButtonPresentation presentation);
+XnoiseSerialButton* xnoise_serial_button_construct (GType object_type, XnoiseSerialButtonPresentation presentation);
 gchar* xnoise_serial_button_get_active_name (XnoiseSerialButton* self);
-gboolean xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* name, const gchar* txt);
+gboolean xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* name, const gchar* txt, GtkImage* image);
 gboolean xnoise_serial_button_has_item (XnoiseSerialButton* self, const gchar* name);
 void xnoise_serial_button_select_first (XnoiseSerialButton* self);
 void xnoise_serial_button_select (XnoiseSerialButton* self, const gchar* name, gboolean emit_signal);

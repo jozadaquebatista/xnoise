@@ -37,25 +37,43 @@ public class Xnoise.SerialButton : Gtk.Box {
     
     public signal void sign_selected(string name);
     
+    public enum Presentation {
+        TEXT,
+        IMAGE
+    }
+    
+    private Presentation presentation;
     
     private class SerialItem : Gtk.ToggleButton {
         private unowned SerialButton sb;
+        private Presentation presentation;
         public string item_name;
         
-        public SerialItem(SerialButton sb, string item_name, string txt) {
-
+        public SerialItem(SerialButton sb, Presentation presentation, 
+                          string item_name, string? txt = null, Image? image = null) {
+            this.presentation = presentation;
             this.sb = sb;
             this.item_name = item_name;
             
-            this.add(new Gtk.Label(txt));
+            assert((txt != null   && presentation == Presentation.TEXT) || 
+                   (image != null && presentation == Presentation.IMAGE));
+            
+            if(presentation == Presentation.IMAGE) {
+                this.add(image);
+                if(txt != null)
+                    this.set_tooltip_text(txt);
+            }
+            else {
+                this.add(new Gtk.Label(txt));
+            }
             
             this.set_can_focus(false);
         }
     }
     
-    
-    public SerialButton() {
+    public SerialButton(Presentation presentation = Presentation.TEXT) {
         GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
+        this.presentation = presentation;
         this.set_homogeneous(true);
 #if HAVE_MIN_GTK_34
         this.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
@@ -74,21 +92,27 @@ public class Xnoise.SerialButton : Gtk.Box {
             return active_item.item_name;
     }
     
-    public bool insert(string? name, string? txt) {
-        if(txt == null || name == null)
+    public bool insert(string? name, string? txt, Image? image = null) {
+        if(name == null)
+            return false;
+        
+        if(txt == null && presentation == Presentation.TEXT)
+            return false;
+        
+        if(image == null && presentation == Presentation.IMAGE)
             return false;
         
         if(sitems.lookup(name) != null)
             return false;
         
-        var si = new SerialItem(this, name, txt);
+        var si = new SerialItem(this, this.presentation, name, txt, image);
         
         this.add(si);
         
         sitems.insert(name, si);
         
         si.button_press_event.connect( (s,e) => {
-            this.select(((SerialItem)s).item_name, true);
+            this.select(((SerialItem)s).item_name, !si.get_active());
             return true;
         });
         

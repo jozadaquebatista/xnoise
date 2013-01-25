@@ -945,11 +945,15 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class SerialButton : Gtk.Box {
-		public SerialButton ();
+		public enum Presentation {
+			TEXT,
+			IMAGE
+		}
+		public SerialButton (Xnoise.SerialButton.Presentation presentation = Presentation.TEXT);
 		public void del (string? name);
 		public string? get_active_name ();
 		public bool has_item (string? name);
-		public bool insert (string? name, string? txt);
+		public bool insert (string? name, string? txt, Gtk.Image? image = null);
 		public void select (string? name, bool emit_signal = true);
 		public void select_first ();
 		public new void set_sensitive (string? name, bool sensitive_status);
