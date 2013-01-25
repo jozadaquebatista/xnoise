@@ -52,11 +52,13 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_RADIO =
         "CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
     private static const string STMT_CREATE_ARTISTS =
-        "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
+        "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT UNIQUE);";
     private static const string STMT_CREATE_ALBUMS =
         "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, year INTEGER, is_compilation INTEGER);";
     private static const string STMT_CREATE_URIS =
-        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
+        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT UNIQUE, type INTEGER);";
+    private static const string STMT_CREATE_PATHS =
+        "CREATE TABLE paths (id INTEGER PRIMARY KEY, name TEXT UNIQUE);";
     private static const string STMT_CREATE_STATISTICS =
         "CREATE TABLE statistics (id INTEGER PRIMARY KEY, uri TEXT UNIQUE, uris_id INTEGER, playcount INTEGER, rating INTEGER, lastplayTime INTEGER, addTime INTEGER);";
     private static const string STMT_CREATE_USER_LISTS =
@@ -64,9 +66,9 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_USER_LIST_ITEMS =
         "CREATE TABLE user_list_items (id INTEGER PRIMARY KEY, position INTEGER, uri TEXT, uris_id INTEGER, list INTEGER);";
     private static const string STMT_CREATE_GENRES =
-        "CREATE TABLE genres (id integer primary key, name TEXT);";
+        "CREATE TABLE genres (id integer primary key, name TEXT UNIQUE);";
     private static const string STMT_CREATE_ITEMS =
-        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album_artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, cd_number TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
+        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album_artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, path INTEGER, cd_number TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
     private static const string STMT_ADD_INT_ADDTIME_TO_ITEMS =
         "ALTER TABLE items ADD addTimeUnix INTEGER;";
     private static const string STMT_CREATE_VERSION =
@@ -157,13 +159,14 @@ private class Xnoise.Database.DbCreator {
             }
             else {
             //create Tables if not existant
-                if(!exec_stmnt_string(STMT_CREATE_LASTUSED_2)       ) { reset(); return; }
+                if(!exec_stmnt_string(STMT_CREATE_LASTUSED_2)     ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS)   ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)     ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_RADIO)          ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ARTISTS)        ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ALBUMS)         ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_URIS)           ) { reset(); return; }
+                if(!exec_stmnt_string(STMT_CREATE_PATHS)          ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ITEMS)          ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_GENRES)         ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_VERSION)        ) { reset(); return; }

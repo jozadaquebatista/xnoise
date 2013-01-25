@@ -49,7 +49,9 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement get_album_id_statement;
     private Statement insert_album_statement;
     private Statement get_uri_id_statement;
+    private Statement get_path_id_statement;
     private Statement insert_uri_statement;
+    private Statement insert_path_statement;
     private Statement get_genre_id_statement;
     private Statement insert_genre_statement;
     private Statement insert_title_statement;
@@ -58,6 +60,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement delete_albums_statement;
     private Statement delete_items_statement;
     private Statement delete_uris_statement;
+    private Statement delete_paths_statement;
     private Statement delete_genres_statement;
     private Statement update_album_statement;
 
@@ -77,6 +80,7 @@ public class Xnoise.Database.Writer : GLib.Object {
 
     private Statement get_artist_max_id_statement;
     private Statement get_uri_max_id_statement;
+    private Statement get_paths_max_id_statement;
     private Statement get_genre_max_id_statement;
     private Statement get_albums_max_id_statement;
     
@@ -129,6 +133,10 @@ public class Xnoise.Database.Writer : GLib.Object {
         "INSERT INTO artists (name) VALUES (?)";
     private static const string STMT_GET_URI_ID =
         "SELECT id FROM uris WHERE name = ?";
+    private static const string STMT_GET_PATH_ID =
+        "SELECT id FROM paths WHERE name = ?";
+    private static const string STMT_INSERT_PATH =
+        "INSERT INTO paths (name) VALUES (?)";
     private static const string STMT_INSERT_URI =
         "INSERT INTO uris (name) VALUES (?)";
     private static const string STMT_GET_GENRE_ID =
@@ -145,6 +153,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         "DELETE FROM items";
     private static const string STMT_DEL_URIS =
         "DELETE FROM uris";
+    private static const string STMT_DEL_PATHS =
+        "DELETE FROM paths";
     private static const string STMT_DEL_GENRES =
         "DELETE FROM genres";
     private static const string STMT_DEL_URI = 
@@ -250,7 +260,9 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_INSERT_ALBUM, -1, out insert_album_statement);
         db.prepare_v2(STMT_UPDATE_ALBUM, -1, out update_album_statement);
         db.prepare_v2(STMT_GET_URI_ID, -1, out get_uri_id_statement);
+        db.prepare_v2(STMT_GET_PATH_ID, -1, out get_path_id_statement);
         db.prepare_v2(STMT_INSERT_URI, -1, out insert_uri_statement);
+        db.prepare_v2(STMT_INSERT_PATH, -1, out insert_path_statement);
         db.prepare_v2(STMT_GET_GENRE_ID, -1, out get_genre_id_statement);
         db.prepare_v2(STMT_INSERT_GENRE, -1, out insert_genre_statement);
         db.prepare_v2(STMT_INSERT_TITLE, -1, out insert_title_statement);
@@ -259,6 +271,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_DEL_ALBUMS, -1, out delete_albums_statement);
         db.prepare_v2(STMT_DEL_ITEMS, -1, out delete_items_statement);
         db.prepare_v2(STMT_DEL_URIS, -1, out delete_uris_statement);
+        db.prepare_v2(STMT_DEL_PATHS, -1, out delete_paths_statement);
         db.prepare_v2(STMT_DEL_GENRES, -1, out delete_genres_statement);
         db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out count_artist_in_items_statement);
         db.prepare_v2(STMT_COUNT_ALBUMARTIST_IN_ITEMS , -1, out count_albumartist_in_items_statement);
@@ -272,6 +285,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out update_playtime_statement);
         db.prepare_v2(STMT_GET_ARTIST_MAX_ID, -1, out get_artist_max_id_statement);
         db.prepare_v2(STMT_GET_URI_MAX_ID, -1, out get_uri_max_id_statement);
+        db.prepare_v2(STMT_GET_PATHS_MAX_ID, -1, out get_paths_max_id_statement);
         db.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out get_genre_max_id_statement);
         db.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out get_albums_max_id_statement);
     }
@@ -599,6 +613,40 @@ public class Xnoise.Database.Writer : GLib.Object {
                 return alb_id;
             }
         }
+    }
+
+    private static const string STMT_GET_PATHS_MAX_ID =
+        "SELECT MAX(id) FROM paths";
+
+    private int handle_path(string path) {
+        int path_id = -1;
+        get_path_id_statement.reset();
+        if(get_path_id_statement.bind_text(1, path) != Sqlite.OK) {
+            this.db_error();
+            return -1;
+        }
+        if(get_path_id_statement.step() == Sqlite.ROW) {
+            path_id = get_path_id_statement.column_int(0);
+        }
+        if(path_id == -1) { // genre not in table, yet 
+            insert_path_statement.reset();
+            if(insert_path_statement.bind_text(1, path) != Sqlite.OK) {
+                this.db_error();
+                return -1;
+            }
+            if(insert_path_statement.step() != Sqlite.DONE) {
+                this.db_error();
+                return -1;
+            }
+        }
+        else {
+            return path_id;
+        }
+        get_paths_max_id_statement.reset();
+        if(get_paths_max_id_statement.step() == Sqlite.ROW)
+            return get_paths_max_id_statement.column_int(0);
+        else
+            return -1;
     }
 
     private static const string STMT_GET_URI_MAX_ID =
@@ -1048,7 +1096,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
     private static const string STMT_INSERT_TITLE =
-        "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO items (tracknumber, artist, album, title, genre, year, path, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
@@ -1085,7 +1133,12 @@ public class Xnoise.Database.Writer : GLib.Object {
             print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
             return false;
         }
-        int uri_id = handle_uri(td.item.uri);
+        File f = File.new_for_uri(td.item.uri);
+        int path_id = handle_path(f.get_parent().get_path());
+        if(path_id == -1) {
+            return false;
+        }
+        int uri_id = handle_uri(f.get_uri());
         if(uri_id == -1) {
             //print("Error importing uri for %s : '%s' ! \n", uri, uri);
             return false;
@@ -1104,13 +1157,14 @@ public class Xnoise.Database.Writer : GLib.Object {
            insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
            insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
            insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
-           insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-           insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
-           insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
-           insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK ||
-           insert_title_statement.bind_text(11, td.mimetype)         != Sqlite.OK ||
-           insert_title_statement.bind_int (12, td.dat3)             != Sqlite.OK ||
-           insert_title_statement.bind_text(13, cd_number)           != Sqlite.OK) {
+           insert_title_statement.bind_int (7,  path_id)             != Sqlite.OK ||
+           insert_title_statement.bind_int (8,  uri_id)              != Sqlite.OK ||
+           insert_title_statement.bind_int (9,  td.item.type)        != Sqlite.OK ||
+           insert_title_statement.bind_int (10,  td.length)           != Sqlite.OK ||
+           insert_title_statement.bind_int (11, td.bitrate)          != Sqlite.OK ||
+           insert_title_statement.bind_text(12, td.mimetype)         != Sqlite.OK ||
+           insert_title_statement.bind_int (13, td.dat3)             != Sqlite.OK ||
+           insert_title_statement.bind_text(14, cd_number)           != Sqlite.OK) {
             this.db_error();
             return false;
         }
@@ -1311,6 +1365,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
         if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
         if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
+        if(!exec_prepared_stmt(this.delete_paths_statement  )) return false;
         if(!exec_prepared_stmt(this.delete_uris_statement   )) return false;
         return true;
     }

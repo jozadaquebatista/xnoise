@@ -1056,16 +1056,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        quit_if_closed              = Params.get_bool_value("quit_if_closed");
-        if(!quit_if_closed) {
+        
+        Timeout.add_seconds(2, () => {
             if(tray_icon == null)
                 tray_icon = new TrayIcon();
-            tray_icon.visible = true;
-        }
-        else {
-            if(tray_icon != null)
+            if(Params.get_string_value("activated_plugins").contains("soundmenu") &&
+               !Params.get_bool_value("quit_if_closed")) { // using soundmenu, close to tray
                 tray_icon.visible = false;
-        }
+            }
+            else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
+               !Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close to tray
+                print("not using soundmenu, close to tray\n");
+                tray_icon.visible = true;
+            }
+            else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
+               Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close quits
+                tray_icon.visible = false;
+            }
+            else if(Params.get_string_value("activated_plugins").contains("soundmenu") &&
+               Params.get_bool_value("quit_if_closed")) { // using soundmenu, close quits
+                tray_icon.visible = false;
+            }
+            return false;
+        });
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
