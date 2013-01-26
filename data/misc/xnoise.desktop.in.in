@@ -31,3 +31,9 @@ OnlyShowIn=Unity;
 Name=Previous
 Exec=xnoise --previous
 OnlyShowIn=Unity;
+
+[Desktop Action Quit]
+Name=Quit
+Exec=xnoise --quit
+OnlyShowIn=Unity;
+

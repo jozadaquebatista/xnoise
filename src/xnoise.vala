@@ -1,6 +1,6 @@
 /* xnoise.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ namespace Xnoise {
     private static bool _stop;
     private static bool _prev;
     private static bool _next;
+    private static bool _quit_running;
 
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
@@ -117,6 +118,14 @@ namespace Xnoise {
           "Goto previous track.",
           null
         },
+        { "quit",
+          'q',
+          0,
+          OptionArg.NONE,
+          ref _quit_running,
+          "Quit a running instance of xnoise.",
+          null
+        },
         { "",
           0,
           0,
@@ -155,10 +164,11 @@ namespace Xnoise {
             print("xnoise %s\n", Config.PACKAGE_VERSION);
             return 0;
         }
-        if(_play_pause) sa_args += "-t";
-        if(_stop)       sa_args += "-s";
-        if(_next)       sa_args += "-n";
-        if(_prev)       sa_args += "-e";
+        if(_play_pause)   sa_args += "-t";
+        if(_stop)         sa_args += "-s";
+        if(_next)         sa_args += "-n";
+        if(_prev)         sa_args += "-e";
+        if(_quit_running) sa_args += "-q";
         string mime;
         var psVideo = new PatternSpec("video*");
         var psAudio = new PatternSpec("audio*");

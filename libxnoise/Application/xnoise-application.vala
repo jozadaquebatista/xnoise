@@ -1,6 +1,6 @@
 /* xnoise-application.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ public class Xnoise.Application : GLib.Application {
     private static bool _stop;
     private static bool _prev;
     private static bool _next;
+    private static bool _quit_running;
 
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
@@ -118,6 +119,14 @@ public class Xnoise.Application : GLib.Application {
           "Goto previous track.",
           null
         },
+        { "quit",
+          'q',
+          0,
+          OptionArg.NONE,
+          ref _quit_running,
+          "Quit a running instance of xnoise.",
+          null
+        },
         { "",
           0,
           0,
@@ -141,6 +150,14 @@ public class Xnoise.Application : GLib.Application {
     }
 
     public void on_activated() {
+        if(_quit_running) {
+            Idle.add( () => {
+                Main.instance.quit();
+                return false;
+            });
+            reset_control_options();
+            return;
+        }
         if(_stop) {
             Idle.add( () => {
                 global.stop();
