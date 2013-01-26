@@ -1959,6 +1959,7 @@ XnoiseApplication* xnoise_application_construct (GType object_type);
 void xnoise_application_on_activated (XnoiseApplication* self);
 void xnoise_application_on_startup (XnoiseApplication* self);
 gint xnoise_application_on_command_line (XnoiseApplication* self, GApplicationCommandLine* command_line);
+gboolean xnoise_application_get_hidden_window (void);
 GType xnoise_worker_get_type (void) G_GNUC_CONST;
 GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);

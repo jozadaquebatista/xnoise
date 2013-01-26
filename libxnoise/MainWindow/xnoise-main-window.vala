@@ -991,11 +991,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
         else if(this.get_window().is_visible() == true) {
             this.move(_posX, _posY);
+            this.show_all();
             this.present();
             active_notifier = this.notify["is-active"].connect(buffer_position);
         }
         else {
             this.move(_posX, _posY);
+            this.show_all();
             this.present();
             active_notifier = this.notify["is-active"].connect(buffer_position);
         }
@@ -1006,6 +1008,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.present();
         }
         else {
+            this.set_no_show_all(false);
+            this.show_all();
             this.move(_posX, _posY);
             this.present();
         }
@@ -1067,7 +1071,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
                !Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close to tray
                 print("not using soundmenu, close to tray\n");
-                tray_icon.visible = true;
+                tray_icon.visible = !Application.hidden_window;
             }
             else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
                Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close quits

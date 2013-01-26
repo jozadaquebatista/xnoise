@@ -188,7 +188,7 @@ namespace Xnoise {
         tlm = new TrackListModel();
         tl = new TrackList();
         main_window = new MainWindow();
-        if(!Params.get_bool_value("quit_if_closed"))
+        if(!Params.get_bool_value("quit_if_closed") && !Application.hidden_window)
             tray_icon = new TrayIcon();
     }
     

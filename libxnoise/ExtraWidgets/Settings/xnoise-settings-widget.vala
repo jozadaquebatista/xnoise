@@ -192,7 +192,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             if(tray_icon == null) {
                 tray_icon = new TrayIcon();
             }
-            tray_icon.visible = true;
+            tray_icon.visible = !Application.hidden_window;
             main_window.quit_if_closed = false;
         }
     }

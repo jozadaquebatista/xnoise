@@ -41,6 +41,7 @@ namespace Xnoise {
     private static bool _prev;
     private static bool _next;
     private static bool _quit_running;
+    private static bool _hidden_window;
 
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
@@ -53,6 +54,14 @@ namespace Xnoise {
           ref _version,
           "Show the application's version.",
           null 
+        },
+        { "hidden-window",
+          'h',
+          0,
+          OptionArg.NONE,
+          ref _hidden_window,
+          "Start the application with hidden window.",
+          null
         },
         { "plugin-info",
           'p',
@@ -164,11 +173,12 @@ namespace Xnoise {
             print("xnoise %s\n", Config.PACKAGE_VERSION);
             return 0;
         }
-        if(_play_pause)   sa_args += "-t";
-        if(_stop)         sa_args += "-s";
-        if(_next)         sa_args += "-n";
-        if(_prev)         sa_args += "-e";
-        if(_quit_running) sa_args += "-q";
+        if(_play_pause)    sa_args += "-t";
+        if(_stop)          sa_args += "-s";
+        if(_next)          sa_args += "-n";
+        if(_prev)          sa_args += "-e";
+        if(_quit_running)  sa_args += "-q";
+        if(_hidden_window) sa_args += "-h";
         string mime;
         var psVideo = new PatternSpec("video*");
         var psAudio = new PatternSpec("audio*");

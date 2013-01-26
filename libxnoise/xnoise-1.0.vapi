@@ -616,6 +616,7 @@ namespace Xnoise {
 		public void on_activated ();
 		public int on_command_line (GLib.ApplicationCommandLine command_line);
 		public void on_startup ();
+		public static bool hidden_window { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {

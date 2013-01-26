@@ -92,7 +92,8 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
         if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
             tray_icon = new TrayIcon();
         }
-        tray_icon.visible = !Params.get_bool_value("quit_if_closed");
+        tray_icon.visible = !Params.get_bool_value("quit_if_closed") &&
+                            !Application.hidden_window;
     }
 
     private uint watch;
@@ -124,7 +125,8 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
         if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
             tray_icon = new TrayIcon();
         }
-        tray_icon.visible = !Params.get_bool_value("quit_if_closed");;
+        tray_icon.visible = !Params.get_bool_value("quit_if_closed") &&
+                            !Application.hidden_window;
         if(watch != 0) {
             Bus.unwatch_name(watch);
             watch = 0;
@@ -148,14 +150,15 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
                 nw = true;
                 break;
             }
-        }
+        } 
         if(old == false && nw == false) {
             if(this.owner != null)
                 Idle.add( () => {
                     if(tray_icon == null && !Params.get_bool_value("quit_if_closed")) {
                         tray_icon = new TrayIcon();
                     }
-                    tray_icon.visible = !Params.get_bool_value("quit_if_closed");;
+                    tray_icon.visible = !Params.get_bool_value("quit_if_closed") &&
+                                        !Application.hidden_window;
                     owner.deactivate();
                     return false;
                 }); 

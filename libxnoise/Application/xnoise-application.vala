@@ -42,7 +42,14 @@ public class Xnoise.Application : GLib.Application {
     private static bool _prev;
     private static bool _next;
     private static bool _quit_running;
-
+    private static bool _hidden_window;
+    
+    public static bool hidden_window {
+        get {
+            return _hidden_window;
+        }
+    }
+    
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
 
@@ -54,6 +61,14 @@ public class Xnoise.Application : GLib.Application {
           ref _version,
           "Show the application's version.",
           null 
+        },
+        { "hidden-window",
+          'h',
+          0,
+          OptionArg.NONE,
+          ref _hidden_window,
+          "Start the application with hidden window.",
+          null
         },
         { "plugin-info",
           'p',
@@ -190,7 +205,10 @@ public class Xnoise.Application : GLib.Application {
             reset_control_options();
             return;
         }
-        main_window.present();
+        if(!_hidden_window) {
+            main_window.show_all();
+            main_window.present();
+        }
     }
     
     public void on_startup() {
@@ -200,7 +218,7 @@ public class Xnoise.Application : GLib.Application {
             Gst.init(ref args);
             Xnoise.Application.xn = Xnoise.Main.instance;
             Xnoise.Main.app = this;
-            main_window.show_all();
+            main_window.hide();
         }
         else {
             this.activate();
