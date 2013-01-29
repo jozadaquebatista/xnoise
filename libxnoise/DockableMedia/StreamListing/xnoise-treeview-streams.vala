@@ -217,7 +217,8 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
                                                             int width,
                                                             out int minimum_height,
                                                             out int natural_height) {
-            int column_width = col.get_width();
+            int column_width = widget.get_allocated_width();//col.get_width();
+            //print("cw: %d   cwo: %d\n", column_width, col.get_width());
             int sum = 0;
             int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
