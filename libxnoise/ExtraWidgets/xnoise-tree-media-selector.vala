@@ -342,9 +342,14 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private void set_row_data(TreeIter iter, DockableMedia media) {
         assert(media != null);
+        Gdk.Pixbuf? pix;
+        pix = media.get_icon();
+        
+        if(pix != null && pix.get_height() != 22)
+            pix = pix.scale_simple(22, 22, Gdk.InterpType.BILINEAR);
         
         this.store.set(iter,
-              TreeMediaSelector.Column.ICON, media.get_icon(),
+              TreeMediaSelector.Column.ICON, pix,
               TreeMediaSelector.Column.VIS_TEXT, media.headline(),
               TreeMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
               TreeMediaSelector.Column.CATEGORY, media.category,
