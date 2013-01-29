@@ -38,7 +38,7 @@ using Xnoise;
 private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     private bool dragging;
     private bool _use_treelines = false;
-    private CellRendererText renderer = null;
+    private FlowingTextRenderer renderer = null;
     private Gtk.Menu menu;
     
     public MusicBrowserModel mediabrowsermodel;
@@ -499,7 +499,11 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         public int level    { get; set; }
         public unowned Gdk.Pixbuf pix { get; set; }
         
-        public FlowingTextRenderer(Widget ow, Pango.FontDescription font_description, TreeViewColumn col, int expander, int hsepar) {
+        public FlowingTextRenderer(Widget ow, 
+                                   Pango.FontDescription font_description,
+                                   TreeViewColumn col,
+                                   int expander,
+                                   int hsepar) {
             GLib.Object();
             this.ow = ow;
             this.col = col;
@@ -522,7 +526,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 natural_height = minimum_height = 30;
                 return;
             }
-            int column_width = col.get_width();
+            int column_width = ow.get_allocated_width() - 2; //col.get_width();
+            int cw = col.get_width();
+            if(cw > column_width)
+                print("discrepancy in size calc: %d\n", cw - column_width);
             int sum = 0;
             int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
@@ -559,7 +566,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)((calculated_widh[level] > cell_area.width ? calculated_widh[level] : cell_area.width) * Pango.SCALE));
+            pango_layout.set_width( (int) ((calculated_widh[level] > cell_area.width ?
+                                              calculated_widh[level] :
+                                              cell_area.width) * Pango.SCALE)
+            );
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             context = widget.get_style_context();
             int wi = 0, he = 0;
