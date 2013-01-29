@@ -529,7 +529,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             int column_width = ow.get_allocated_width() - 2; //col.get_width();
             int cw = col.get_width();
             if(cw > column_width)
-                print("discrepancy in size calc: %d\n", cw - column_width);
+                print("discrepancy in size calc: %d\n ... or in resize. \n\n", cw - column_width);
             int sum = 0;
             int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
@@ -574,6 +574,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             context = widget.get_style_context();
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
+            
             if(cell_area.height > he)
                 context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
             else
