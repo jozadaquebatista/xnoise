@@ -1130,7 +1130,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
     private static const string STMT_INSERT_TITLE =
-        "INSERT INTO items (tracknumber, artist, album, title, genre, year, path, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO items (tracknumber, artist, album, title, genre, year, path, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number, caseless_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
@@ -1238,6 +1238,8 @@ public class Xnoise.Database.Writer : GLib.Object {
 //        t.start();
         string cd_number = td.cd_number_str != null ? td.cd_number_str.strip() : EMPTYSTRING;
         //print("insert_title td.item.type %s\n", td.item.type.to_string());
+        string stripped_title = td.title.strip();
+        string caseless_title = stripped_title.casefold();
         insert_title_statement.reset();
         if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
            insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
@@ -1252,7 +1254,8 @@ public class Xnoise.Database.Writer : GLib.Object {
            insert_title_statement.bind_int (11, td.bitrate)          != Sqlite.OK ||
            insert_title_statement.bind_text(12, td.mimetype)         != Sqlite.OK ||
            insert_title_statement.bind_int (13, td.dat3)             != Sqlite.OK ||
-           insert_title_statement.bind_text(14, cd_number)           != Sqlite.OK) {
+           insert_title_statement.bind_text(14, cd_number)           != Sqlite.OK ||
+           insert_title_statement.bind_text(15, caseless_title)      != Sqlite.OK) {
             this.db_error();
             return false;
         }

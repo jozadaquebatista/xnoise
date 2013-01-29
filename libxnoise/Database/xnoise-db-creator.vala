@@ -68,7 +68,7 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_GENRES =
         "CREATE TABLE genres (id INTEGER primary key, name TEXT, caseless_name TEXT UNIQUE);";
     private static const string STMT_CREATE_ITEMS =
-        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album_artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, path INTEGER, cd_number TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
+        "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album_artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, mimetype TEXT, path INTEGER, cd_number TEXT, caseless_name TEXT, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
     private static const string STMT_ADD_INT_ADDTIME_TO_ITEMS =
         "ALTER TABLE items ADD addTimeUnix INTEGER;";
     private static const string STMT_CREATE_VERSION =
