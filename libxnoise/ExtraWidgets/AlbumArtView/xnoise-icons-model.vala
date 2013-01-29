@@ -166,31 +166,41 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         return;
     }
     
+    //Timer t = new Timer();
+    private const int FIRST_RUN_CNT = 30;
     private bool populate_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
+        //t.reset();
+        //t.start();
         AlbumData[] ad_list = db_reader.get_all_albums_with_search(
                 global.searchtext,
                 main_window.album_view_sorting.get_active_name(),
                 main_window.album_view_direction.get_active_name()
         );
-        foreach(AlbumData ad in ad_list) {
-            IconState st = IconState.UNRESOLVED;
-            string albumname = Markup.printf_escaped("<b>%s</b>\n", ad.album) + 
-                               Markup.printf_escaped("<i>%s</i>", ad.artist);
-            Gdk.Pixbuf? art = null;
-            File? f = get_albumimage_for_artistalbum(ad.artist, ad.album, "extralarge");
-            if(f != null)
-                art = AlbumArtView.icon_cache.get_image(f.get_path());
-            
-            if(art == null)
-                art = logo;
-            else
-                st = IconState.RESOLVED;
-            
-            string ar = ad.artist;
-            string al = ad.album;
-            Item? it  = ad.item;
-            Idle.add(() => {
+        //t.stop();
+        //ulong usec;
+        //t.elapsed(out usec);
+        //print("album query done in %lu\n", usec);
+        Idle.add(() => {
+            for(int i = 0; i < FIRST_RUN_CNT && i < ad_list.length; i++) { 
+                //AT FIRST PUT SOME RESULTS INTO THE ALBUM ART VIEW, SO
+                // THE USER WILL SEE SOMETHING FOR LARGE RESULT SETS.
+                IconState st = IconState.UNRESOLVED;
+                string albumname = Markup.printf_escaped("<b>%s</b>\n", ad_list[i].album) + 
+                                   Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
+                Gdk.Pixbuf? art = null;
+                File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
+                if(f != null)
+                    art = AlbumArtView.icon_cache.get_image(f.get_path());
+                
+                if(art == null)
+                    art = logo;
+                else
+                    st = IconState.RESOLVED;
+                
+                string ar = ad_list[i].artist;
+                string al = ad_list[i].album;
+                Item? it  = ad_list[i].item;
                 TreeIter iter;
                 this.append(out iter);
                 this.set(iter,
@@ -202,9 +212,46 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                          Column.ITEM,  it,
                          Column.IMAGE_PATH, (f != null ? f.get_path() : null)
                 );
+            }
+            Idle.add(() => {
+                if(FIRST_RUN_CNT < ad_list.length) {
+                    for(int i = FIRST_RUN_CNT; i < ad_list.length; i++) { //foreach(AlbumData ad in ad_list) 
+                        IconState st = IconState.UNRESOLVED;
+                        string albumname = Markup.printf_escaped("<b>%s</b>\n", ad_list[i].album) + 
+                                           Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
+                        Gdk.Pixbuf? art = null;
+                        File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
+                        if(f != null)
+                            art = AlbumArtView.icon_cache.get_image(f.get_path());
+                        
+                        if(art == null)
+                            art = logo;
+                        else
+                            st = IconState.RESOLVED;
+                        
+                        string ar = ad_list[i].artist;
+                        string al = ad_list[i].album;
+                        Item? it  = ad_list[i].item;
+                        Idle.add(() => {
+                            TreeIter iter;
+                            this.append(out iter);
+                            this.set(iter,
+                                     Column.ICON, art,
+                                     Column.TEXT, albumname,
+                                     Column.STATE, st,
+                                     Column.ARTIST, ar,
+                                     Column.ALBUM,  al,
+                                     Column.ITEM,  it,
+                                     Column.IMAGE_PATH, (f != null ? f.get_path() : null)
+                            );
+                            return false;
+                        });
+                    }
+                }
                 return false;
             });
-        }
+            return false;
+        });
         return false;
     }
     
