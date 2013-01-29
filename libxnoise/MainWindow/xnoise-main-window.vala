@@ -1,6 +1,6 @@
 /* xnoise-main-window.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -432,24 +432,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         videoscreen.drag_motion.connect( (sender,context,x,y,t) => {
             print("videoscreen d m\n");
             temporary_mainview_name = VIDEOVIEW_NAME;
-//            temporary_tab = TrackListNoteBookTab.VIDEO;
             sign_drag_over_content_area();
             return true;
         });
         
         lyricsView.drag_motion.connect((sender,context,x,y,t) => {
-//            temporary_tab = TrackListNoteBookTab.LYRICS;
             temporary_mainview_name = LYRICS_VIEW_NAME;
             sign_drag_over_content_area();
             return true;
         });
         
     }
-
-    //internal void restore_last_view() {
-    //    mainview_box.select_main_view(mainview_page_buffer);
-    //    sbuttonTL.select(mainview_page_buffer, false);
-    //}
     
     internal void restore_tab() {
         if(temporary_mainview_name != TRACKLIST_VIEW_NAME) {
@@ -1233,22 +1226,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal void toggle_media_browser_visibility() {
         if(in_update_toggle_action)
             return;
-        if(media_browser_visible) {
-//            hpaned_position_buffer = hpaned.get_position(); // buffer last position
-//            mbbox01.hide();
-//            hpaned.set_position(0);
+        if(media_browser_visible)
             media_browser_visible = false;
-        }
-        else {
-//            mbbox01.show();
-//            if(hpaned_position_buffer > 20) { // min value
-//                hpaned.set_position(hpaned_position_buffer);
-//            }
-//            else {
-//                hpaned.set_position(200); //use this if nothing else is available
-//            }
+        else
             media_browser_visible = true;
-        }
+        
         update_toggle_action_state("ShowMediaBrowserAction", _media_browser_visible);
     }
 
@@ -1289,7 +1271,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_menu_add() {
         album_view_toggle.set_active(false);
         content_notebook.set_current_page(content_notebook.page_num(settings_widget));
-//        this.mainview_box.select_main_view(settings_widget.get_view_name());
         settings_widget.select_media_tab();
     }
     
