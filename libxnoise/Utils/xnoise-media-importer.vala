@@ -342,6 +342,9 @@ public class Xnoise.MediaImporter : GLib.Object {
         if(job.counter[1] != job.counter[2])
             return;
         
+        //Look for potentiol various artists albums
+        db_postprocessor.find_compilations();
+        
         Idle.add( () => {
             // update user info in idle in main thread
             uint xcnt = 0;

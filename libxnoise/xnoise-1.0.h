@@ -2031,6 +2031,7 @@ void xnoise_value_take_album_data (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_album_data (const GValue* value);
 GType xnoise_album_data_get_type (void) G_GNUC_CONST;
 XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, const gchar* sorting, const gchar* direction, int* result_length1);
+gchar** xnoise_database_reader_get_all_album_names (XnoiseDatabaseReader* self, int* result_length1);
 GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);

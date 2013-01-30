@@ -1309,7 +1309,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         Item[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
-            string st = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             this.db.prepare_v2(STMT_GET_ALBUMS_WITH_GENRE_AND_SEARCH, -1, out stmt);
             if(stmt.bind_int (1, artist.db_id) != Sqlite.OK ||
@@ -1449,7 +1448,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(dir == null || dir == EMPTYSTRING)
             dir = "ASC";
         if(searchtext != EMPTYSTRING) {
-            string st = "%%%s%%".printf(searchtext);
+//            string st = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             string sql = STMT_GET_ALL_ALBUMS_WITH_SEARCH +
                          (sorting == "ALBUM" ?
@@ -1488,6 +1487,37 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             list += ad;
         }
         return (owned)list;
+    }
+
+    private static const string STMT_GET_ALL_ALBUM_NAMES =
+        "SELECT al.name FROM albums al GROUP BY utf8_lower(al.name)";
+
+    public string[] get_all_album_names() {
+        string[] val = {};
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_ALL_ALBUM_NAMES, -1, out stmt);
+        while(stmt.step() == Sqlite.ROW) {
+            val += stmt.column_text(0);
+        }
+        return (owned)val;
+    }
+    
+    private static const string STMT_ARTIST_CNT_WITH_ALBUM_NAME = 
+        "SELECT COUNT(DISTINCT ar.id) FROM items t, albums al, artists ar where t.album = al.id AND t.artist = ar.id AND utf8_lower(al.name) = ?";
+        
+    internal int32 get_artist_count_with_album_name(ref string? album_name) {
+        if(album_name == null)
+            return -1;
+        Statement stmt;
+        this.db.prepare_v2(STMT_ARTIST_CNT_WITH_ALBUM_NAME, -1, out stmt);
+        if(stmt.bind_text(1, album_name.strip().down()) != Sqlite.OK) {
+            this.db_error();
+            return -1;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            return stmt.column_int(0);
+        }
+        return 0;
     }
 }
 

@@ -1433,6 +1433,82 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
         }
     }
+    
+    private static const string STMT_GET_ALBUM_IDS_BY_NAME =
+        "SELECT al.id FROM albums al, artists ar WHERE al.artist = ar.id AND ar.caseless_name != ? AND utf8_lower(al.name) = ?";
+    
+    private static const string STMT_REPLACE_ALBUM =
+        "UPDATE items SET artist=?, album=? WHERE album=?";
+    private static const string STMT_REMOVE_ALBUM_ENTRY =
+        "DELETE FROM albums WHERE id=?";
+    
+    internal void set_albumname_is_va_album(string album_name) {
+        string stripped_album;
+        string va = VARIOUS_ARTISTS;
+        stripped_album = album_name != null ? album_name.strip() : EMPTYSTRING;
+        Statement stmt;
+        
+        int32[] ids = {};
+        this.db.prepare_v2(STMT_GET_ALBUM_IDS_BY_NAME, -1, out stmt);
+        if(stmt.bind_text(1, va.casefold()) != Sqlite.OK ||
+           stmt.bind_text(2, stripped_album.down()) != Sqlite.OK) {
+            this.db_error();
+            return;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            ids += stmt.column_int(0);
+        }
+        
+        int artist_id = handle_artist(ref va, false);
+        
+        if(artist_id == -1) {
+            print("Error retrieving artist id !\n");
+            return;
+        }
+        TrackData td = new TrackData();
+        td.artist = VARIOUS_ARTISTS;
+        td.album = stripped_album;
+        td.is_compilation = true;
+        //td.year TODO
+        
+        int album_id = handle_album(ref artist_id, ref td, false);
+        if(album_id == -1) {
+            print("Error retrieving album !\n");
+            return;
+        }
+        
+        begin_transaction(); //BEGIN
+        this.db.prepare_v2(STMT_REPLACE_ALBUM, -1, out stmt);
+        
+        foreach(int32 id in ids) {
+            stmt.reset();
+            if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
+               stmt.bind_int (2, album_id)  != Sqlite.OK ||
+               stmt.bind_int (3, id)        != Sqlite.OK) {
+                this.db_error();
+                continue;
+            }
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
+                continue;
+            }
+        }
+        
+        this.db.prepare_v2(STMT_REMOVE_ALBUM_ENTRY, -1, out stmt);
+        
+        foreach(int32 id in ids) {
+            stmt.reset();
+            if(stmt.bind_int (1, id) != Sqlite.OK) {
+                this.db_error();
+                continue;
+            }
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
+                continue;
+            }
+        }
+        commit_transaction(); //COMMIT
+    }
 
     // Execution of prepared statements of that the return values are not
     // used (delete, drop, ...) and that do not need to bind data.

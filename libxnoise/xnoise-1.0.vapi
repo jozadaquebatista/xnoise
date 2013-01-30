@@ -15,6 +15,7 @@ namespace Xnoise {
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public Xnoise.Item[] get_albums_with_genre_and_search (string searchtext, Xnoise.Item? artist, Xnoise.Item? genre);
+			public string[] get_all_album_names ();
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext, string? sorting = "ARTIST", string? direction = "ASC");
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
