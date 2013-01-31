@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: @TAGINFO_NAME@
+Name: @PACKAGE_NAME@
 Description: Media metatag library.
-Requires: taglib flac
-Version: @TAGINFO_VERSION@
-URL: http://www.xnoise-media-player.com
+Requires: taglib
+Version: @PACKAGE_VERSION@
+URL: @PACKAGE_URL@
 Libs: -L${libdir} -ltaginfo
 Cflags: -I${includedir}/taginfo -I${libdir}/taginfo/include

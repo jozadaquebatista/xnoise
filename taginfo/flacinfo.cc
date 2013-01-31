@@ -23,8 +23,6 @@
 #include "taginfo_internal.h"
 
 
-#include <FLAC/metadata.h>
-#include <FLAC/format.h>
 
 using namespace TagInfo;
 
@@ -164,32 +162,45 @@ bool FlacInfo::can_handle_images(void) {
 bool FlacInfo::get_image(char*& data, int &data_length) const {
     data = NULL;
     data_length = 0;
-    String mime = "";
-    FLAC__Metadata_SimpleIterator * iter = FLAC__metadata_simple_iterator_new();
-    if(iter) {
-            if(FLAC__metadata_simple_iterator_init(iter, file_name.toCString(true), true, false)) {
-            while(!data && FLAC__metadata_simple_iterator_next(iter)) {
-                if(FLAC__metadata_simple_iterator_get_block_type(iter) == FLAC__METADATA_TYPE_PICTURE)
-                {
-                    FLAC__StreamMetadata * block = FLAC__metadata_simple_iterator_get_block(iter);
-                    
-                    if(block->data.picture.type == FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER)
-                    {
-                        FLAC__StreamMetadata_Picture * PicInfo = &block->data.picture;
-                        data = strdup((const char*)PicInfo->data);
-                        data_length = PicInfo->data_length;
-                        mime = PicInfo->mime_type;
-                    }
-                    FLAC__metadata_object_delete(block);
+    
+    get_xiph_comment_cover_art(m_XiphComment, data, data_length);
+    if(!(data) || (data_length <= 0)) {
+        TagLib::FLAC::File * fi = reinterpret_cast<TagLib::FLAC::File *>(taglib_file->file());
+        List<TagLib::FLAC::Picture *> plist = fi->pictureList();
+        TagLib::FLAC::Picture * result_pic = NULL;
+        for(List<TagLib::FLAC::Picture *>::Iterator it = plist.begin(); it != plist.end(); ++it) {
+            TagLib::FLAC::Picture::Type ty = (*it)->type();
+            switch((*it)->type()) {
+                case TagLib::FLAC::Picture::FrontCover:
+                    result_pic = *it;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(!result_pic) {
+            for(List<TagLib::FLAC::Picture *>::Iterator it = plist.begin(); it != plist.end(); ++it) {
+                TagLib::FLAC::Picture::Type ty = (*it)->type();
+                switch((*it)->type()) {
+                    case TagLib::FLAC::Picture::Other:
+                        result_pic = *it;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        FLAC__metadata_simple_iterator_delete(iter);
+        if(result_pic) {
+            data_length = result_pic->data().size();
+            data = new char[data_length];
+            memcpy(data, result_pic->data().data(), data_length);
+        }
     }
-    if(data == NULL || data_length <= 0 || mime == "")
+    
+    if(!(data) || (data_length <= 0)) {
         return false;
-    else
-        return true;
+    }
+    return true;
 }
 
 bool FlacInfo::set_image(char* data, int data_length) {
@@ -202,52 +213,6 @@ bool FlacInfo::set_image(char* data, int data_length) {
 //    return true;
 //}
 
-//
-//wxImage * FlacInfo::get_image(void)
-//{
-//    wxImage * CoverImage = NULL;
-
-//    FLAC__Metadata_SimpleIterator * iter = FLAC__metadata_simple_iterator_new();
-//    if(iter)
-//    {
-//        if(FLAC__metadata_simple_iterator_init(iter, file_name.data(), true, false))
-//        {
-//            while(!CoverImage && FLAC__metadata_simple_iterator_next(iter))
-//            {
-//                if(FLAC__metadata_simple_iterator_get_block_type(iter) == FLAC__METADATA_TYPE_PICTURE)
-//                {
-//                    FLAC__StreamMetadata * block = FLAC__metadata_simple_iterator_get_block(iter);
-
-//                    if(block->data.picture.type == FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER)
-//                    {
-//                        wxMemoryOutputStream ImgOutStream;
-
-//                        FLAC__StreamMetadata_Picture * PicInfo = &block->data.picture;
-
-//                        ImgOutStream.write(PicInfo->data, PicInfo->data_length);
-//                        wxMemoryInputStream ImgInputStream(ImgOutStream);
-//                        CoverImage = new wxImage(ImgInputStream, wxString(PicInfo->mime_type, wxConvUTF8));
-
-//                        if(CoverImage)
-//                        {
-//                            if(!CoverImage->IsOk())
-//                            {
-//                                delete CoverImage;
-//                                CoverImage = NULL;
-//                            }
-//                        }
-//                    }
-
-//                    FLAC__metadata_object_delete(block);
-//                }
-//            }
-//        }
-
-//        FLAC__metadata_simple_iterator_delete(iter);
-//    }
-
-//    return CoverImage;
-//}
 
 //
 //bool FlacInfo::set_image(const wxImage * image)

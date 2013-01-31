@@ -24,7 +24,6 @@
 #include <stdarg.h>
 #include <string>
 #include <iostream>
-//#include "ape.h"
 
 #include <tag.h>
 #include <textidentificationframe.h>
@@ -33,7 +32,6 @@
 #include <asffile.h>
 #include <flacfile.h>
 #include <id3v2tag.h>
-//#include <mp4file.h>
 #include <mpcfile.h>
 #include <mpegfile.h>
 #include <oggfile.h>
@@ -42,25 +40,8 @@
 #include <wavpackfile.h>
 #include <popularimeterframe.h>
 
-//#include <apetag.h>
 #include <id3v2tag.h>
 
-
-//#include <tag.h>
-//#include <attachedpictureframe.h>
-//#include <fileref.h>
-////#include <id3v2framefactory.h>
-//#include <asffile.h>
-//#include <mp4file.h>
-//#include <oggfile.h>
-
-//#include <xiphcomment.h>
-
-//#include <mp4tag.h>
-//#include <apetag.h>
-//#include <asftag.h>
-
-//#include <asfattribute.h>
 
 #define BUFFERSIZE 512
 

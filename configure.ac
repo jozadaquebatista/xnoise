@@ -76,7 +76,6 @@ LT_INIT
 
 dnl ================================================================
 TAGLIB_C_REQUIRED=1.6
-LIBFLAC_REQUIRED=1.2.1
 
 TAGINFO_VERSION="0.0.8"
 TAGINFO_NAME="taginfo"
@@ -84,8 +83,7 @@ AC_SUBST(TAGINFO_VERSION)
 AC_SUBST(TAGINFO_NAME)
 
 PKG_CHECK_MODULES(TAGINFO, \
-    taglib >= $TAGLIB_C_REQUIRED \
-    flac >= $LIBFLAC_REQUIRED)
+    taglib >= $TAGLIB_C_REQUIRED)
 
 AC_SUBST(TAGINFO_CFLAGS)
 AC_SUBST(TAGINFO_LIBS)
