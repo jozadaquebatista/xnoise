@@ -100,14 +100,11 @@ bool MpcInfo::read(void) {
             if(taglib_apetag->itemListMap().contains("RATING")) {
                 long Rating = 0;
                 Rating = atol(taglib_apetag->itemListMap()["RATING"].toStringList().front().toCString(true));
-                if(Rating)
-                {
-                    if(Rating > 5)
-                    {
+                if(Rating) {
+                    if(Rating > 5) {
                         rating = popularity_to_rating(Rating);
                     }
-                    else
-                    {
+                    else {
                         rating = Rating;
                     }
                 }
@@ -119,8 +116,7 @@ bool MpcInfo::read(void) {
             }
             // Labels
             if(track_labels.size() == 0) {
-                if(taglib_apetag->itemListMap().contains("TRACK_LABELS"))
-                {
+                if(taglib_apetag->itemListMap().contains("TRACK_LABELS")) {
                     track_labels_str = taglib_apetag->itemListMap()["TRACK_LABELS"].toStringList().front();
                     //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
                     track_labels = split(track_labels_str, "|");
@@ -128,26 +124,25 @@ bool MpcInfo::read(void) {
                 }
             }
             if(artist_labels.size() == 0) {
-                if(taglib_apetag->itemListMap().contains("ARTIST_LABELS"))
-                {
+                if(taglib_apetag->itemListMap().contains("ARTIST_LABELS")) {
                     artist_labels_str = taglib_apetag->itemListMap()["ARTIST_LABELS"].toStringList().front();
-                    //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
                     artist_labels = split(artist_labels_str, "|");
-//                    artist_labels = Regex::split_simple("|", artist_labels_str);//(artist_labels_str, wxT("|"));
                 }
             }
             if(album_labels.size() == 0) {
-                if(taglib_apetag->itemListMap().contains("ALBUM_LABELS"))
-                {
+                if(taglib_apetag->itemListMap().contains("ALBUM_LABELS")) {
                     album_labels_str = taglib_apetag->itemListMap()["ALBUM_LABELS"].toStringList().front();
-                    //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
                     album_labels = split(album_labels_str, "|");
-//                    album_labels = Regex::split_simple("|", album_labels_str);//(album_labels_str, wxT("|"));
                 }
             }
-            return true; //JM
+            if(taglib_apetag->itemListMap().contains("Cover Art (front)")) {
+                has_image = true;
+            }
+            else if(taglib_apetag->itemListMap().contains("Cover Art (other)")) {
+                has_image = true;
+            }
+            return true;
         }
-//        return true; //JM
     }
     return false;
 }
@@ -159,7 +154,6 @@ bool MpcInfo::write(const int changedflag) {
             taglib_apetag->addValue("COMPOSER", composer);
             taglib_apetag->addValue("DISCNUMBER", disk_str);
             
-            char* str;
             if(is_compilation) {
                 taglib_apetag->addValue("COMPILATION", "1");
             }
@@ -171,7 +165,7 @@ bool MpcInfo::write(const int changedflag) {
         if(changedflag & CHANGED_DATA_RATING) {
             char* str;
             
-            if(asprintf (&str, "%u", rating_to_popularity(rating)) >= 0) {
+            if(asprintf (&str, "%u", rating_to_popularity(rating)) >= 0) { //TODO
                 taglib_apetag->addValue("RATING", str);
                 free (str);
                 str = NULL;

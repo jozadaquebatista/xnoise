@@ -93,6 +93,7 @@ namespace TagInfo {
             String album_labels_str;
             
             bool is_compilation;
+            bool has_image;
             
             Info(const string &filename = "");
             ~Info();

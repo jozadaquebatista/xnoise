@@ -107,11 +107,13 @@ bool TrueAudioInfo::read(void) {
 //                    album_labels = Regex::split_simple("|", album_labels_str);//(album_labels_str, wxT("|"));
                 }
             }
+            TagLib::ID3v2::FrameList frameList = taglib_tagId3v2->frameListMap()["APIC"];
+            has_image = (frameList.size() > 0);
         }
     }
     else {
-          printf("Error: Could not read tags from file '%s'\n", file_name.toCString(true));
-      return false; //JM
+        printf("Error: Could not read tags from file '%s'\n", file_name.toCString(true));
+        return false; //JM
     }
     return true;
 }
@@ -180,7 +182,7 @@ bool TrueAudioInfo::can_handle_images(void) {
 
 bool TrueAudioInfo::get_image(char*& data, int &data_length) const {
     if(taglib_tagId3v2) {
-            return get_id3v2_image(taglib_tagId3v2, data, data_length);
+        return get_id3v2_image(taglib_tagId3v2, data, data_length);
     }
     return false;
 }

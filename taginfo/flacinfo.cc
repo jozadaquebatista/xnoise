@@ -63,12 +63,10 @@ bool FlacInfo::read(void) {
                 long Rating = 0;
                 Rating = atol(m_XiphComment->fieldListMap()["RATING"].front().toCString(true));
                 if(Rating) {
-                    if(Rating > 5)
-                    {
+                    if(Rating > 5) {
                         rating = popularity_to_rating(Rating);
                     }
-                    else
-                    {
+                    else {
                         rating = Rating;
                     }
                 }
@@ -77,34 +75,36 @@ bool FlacInfo::read(void) {
                 long PlayCount = 0;
                 PlayCount = atol(m_XiphComment->fieldListMap()["PLAY_COUNTER"].front().toCString(false));
 //                if(m_XiphComment->fieldListMap()["PLAY_COUNTER"].front().toCString(true).ToLong(&PlayCount))
-//                {
+// {
                 playcount = PlayCount;
 //                }
             }
             // Labels
             if(track_labels.size() == 0) {
-                if(m_XiphComment->fieldListMap().contains("TRACK_LABELS"))
-                {
+                if(m_XiphComment->fieldListMap().contains("TRACK_LABELS")) {
                     track_labels_str = m_XiphComment->fieldListMap()["TRACK_LABELS"].front();
-                    //guLogMessage(wxT("*Track Label: '%s'\n"), track_labels_str.c_str());
                     track_labels = split(track_labels_str, "|");
                 }
             }
             if(artist_labels.size() == 0) {
-                if(m_XiphComment->fieldListMap().contains("ARTIST_LABELS"))
-                {
+                if(m_XiphComment->fieldListMap().contains("ARTIST_LABELS")) {
                     artist_labels_str = m_XiphComment->fieldListMap()["ARTIST_LABELS"].front();
-                    //guLogMessage(wxT("*Artist Label: '%s'\n"), artist_labels_str.c_str());
                     artist_labels = split(artist_labels_str, "|");
                 }
             }
             if(album_labels.size() == 0) {
-                if(m_XiphComment->fieldListMap().contains("ALBUM_LABELS"))
-                {
+                if(m_XiphComment->fieldListMap().contains("ALBUM_LABELS")) {
                     album_labels_str = m_XiphComment->fieldListMap()["ALBUM_LABELS"].front();
-                    //guLogMessage(wxT("*Album Label: '%s'\n"), album_labels_str.c_str());
                     album_labels = split(album_labels_str, "|");
                 }
+            }
+            if(m_XiphComment->contains("COVERART")) {// TODO
+                has_image = true;
+            }
+            else {
+                TagLib::FLAC::File * fi = ((TagLib::FLAC::File *) taglib_file->file());
+                List<TagLib::FLAC::Picture *> plist = fi->pictureList();
+                has_image = (plist.size() > 0);
             }
             return true;
         }
@@ -165,7 +165,7 @@ bool FlacInfo::get_image(char*& data, int &data_length) const {
     
     get_xiph_comment_cover_art(m_XiphComment, data, data_length);
     if(!(data) || (data_length <= 0)) {
-        TagLib::FLAC::File * fi = reinterpret_cast<TagLib::FLAC::File *>(taglib_file->file());
+        TagLib::FLAC::File * fi = ((TagLib::FLAC::File *) taglib_file->file());
         List<TagLib::FLAC::Picture *> plist = fi->pictureList();
         TagLib::FLAC::Picture * result_pic = NULL;
         for(List<TagLib::FLAC::Picture *>::Iterator it = plist.begin(); it != plist.end(); ++it) {
@@ -207,13 +207,6 @@ bool FlacInfo::set_image(char* data, int data_length) {
     return false;
 }
 
-
-//bool FlacInfo::can_handle_images(void)
-//{
-//    return true;
-//}
-
-
 //
 //bool FlacInfo::set_image(const wxImage * image)
 //{
@@ -232,12 +225,12 @@ bool FlacInfo::set_image(char* data, int data_length) {
 //                FLAC__metadata_iterator_init(Iter, Chain);
 
 //                while(FLAC__metadata_iterator_next(Iter))
-//                {
+// {
 //                    if(FLAC__metadata_iterator_get_block_type(Iter) == FLAC__METADATA_TYPE_PICTURE)
-//                    {
+//     {
 //                        FLAC__StreamMetadata * Picture = FLAC__metadata_iterator_get_block(Iter);
 //                        if(Picture->data.picture.type ==  FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER)
-//                        {
+//         {
 //                            //
 //                            FLAC__metadata_iterator_delete_block(Iter, true);
 //                        }
@@ -246,10 +239,10 @@ bool FlacInfo::set_image(char* data, int data_length) {
 
 //                wxMemoryOutputStream ImgOutputStream;
 //                if(image && image->SaveFile(ImgOutputStream, wxBITMAP_TYPE_JPEG))
-//                {
+// {
 //                    FLAC__byte * CoverData = (FLAC__byte *) malloc(ImgOutputStream.GetSize());
 //                    if(CoverData)
-//                    {
+//     {
 //                        const char * PicErrStr;
 
 //                        ImgOutputStream.CopyTo(CoverData, ImgOutputStream.GetSize());
@@ -268,11 +261,11 @@ bool FlacInfo::set_image(char* data, int data_length) {
 //                        FLAC__metadata_object_picture_set_data(Picture, CoverData, (FLAC__uint32) ImgOutputStream.GetSize(), FALSE);
 
 //                        if(FLAC__metadata_object_picture_is_legal(Picture, &PicErrStr))
-//                        {
+//         {
 //                            FLAC__metadata_iterator_insert_block_after(Iter, Picture);
 //                        }
 //                        else
-//                        {
+//         {
 //                            FLAC__metadata_object_delete(Picture);
 //                        }
 //                    }
@@ -280,11 +273,11 @@ bool FlacInfo::set_image(char* data, int data_length) {
 
 //                FLAC__metadata_chain_sort_padding(Chain);
 //                if(!FLAC__metadata_chain_write(Chain, TRUE, TRUE))
-//                {
+// {
 //                    guLogError(wxT("Could not save the FLAC file"));
 //                }
 //                else
-//                {
+// {
 //                    RetVal = true;
 //                }
 //            }

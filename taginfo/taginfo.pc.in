@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: @PACKAGE_NAME@
+Name: @TAGINFO_NAME@
 Description: Media metatag library.
 Requires: taglib
-Version: @PACKAGE_VERSION@
+Version: @TAGINFO_VERSION@
 URL: @PACKAGE_URL@
 Libs: -L${libdir} -ltaginfo
 Cflags: -I${includedir}/taginfo -I${libdir}/taginfo/include

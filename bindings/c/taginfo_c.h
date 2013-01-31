@@ -64,6 +64,8 @@ void taginfo_info_set_year(TagInfo_Info *info, int year);
 
 int taginfo_info_get_length(const TagInfo_Info *info);
 
+BOOL taginfo_info_get_has_image(const TagInfo_Info *info);
+
 int taginfo_info_get_bitrate(const TagInfo_Info *info);
 
 char *taginfo_info_get_disk_str(const TagInfo_Info *info);

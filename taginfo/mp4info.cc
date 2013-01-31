@@ -43,7 +43,7 @@ Mp4Info::~Mp4Info() {
 
 bool Mp4Info::read(void) {
     if(Info::read()) {
-            if(m_Mp4Tag) {
+        if(m_Mp4Tag) {
             if(m_Mp4Tag->itemListMap().contains("aART")) {
                 album_artist = m_Mp4Tag->itemListMap()["aART"].toStringList().front();
             }
@@ -108,9 +108,12 @@ bool Mp4Info::read(void) {
                     album_labels = split(album_labels_str, "|");
                 }
             }
-            return true; //JM
+            if(m_Mp4Tag->itemListMap().contains("covr")) {
+                TagLib::MP4::CoverArtList covers = m_Mp4Tag->itemListMap()[ "covr" ].toCoverArtList();
+                has_image = (covers.size() > 0);
+            }
+            return true;
         }
-//        return true; //JM
     }
     return false;
 }

@@ -120,6 +120,9 @@ bool Mp3Info::read(void) {
                     }
                 }
             }
+            // Image availability
+            TagLib::ID3v2::FrameList frame_list = taglib_tagId3v2->frameListMap()["APIC"];
+            has_image = (frame_list.size() > 0); //something is there
         }
         
     }

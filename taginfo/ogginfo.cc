@@ -45,7 +45,7 @@ OggInfo::~OggInfo() {
 
 bool OggInfo::read(void) {
     if(Info::read()) {
-            if(m_XiphComment) {
+        if(m_XiphComment) {
             if(m_XiphComment->fieldListMap().contains("COMPOSER")) {
                 composer = m_XiphComment->fieldListMap()["COMPOSER"].front();
             }
@@ -110,6 +110,8 @@ bool OggInfo::read(void) {
                     album_labels = split(album_labels_str, "|");
                 }
             }
+            if(m_XiphComment->contains("COVERART")) // TODO
+                has_image = true;
             return true;
         }
     }

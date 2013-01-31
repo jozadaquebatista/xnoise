@@ -157,6 +157,7 @@ Info * Info::create_tag_info(const string & filename) {
 // Info
 
 Info::Info(const string &filename) {
+    
     taglib_file = NULL;
     taglib_tag = NULL;
     
@@ -169,6 +170,7 @@ Info::Info(const string &filename) {
     rating = -1;
     playcount = 0;
     is_compilation = false;
+    has_image = false;
 };
 
 

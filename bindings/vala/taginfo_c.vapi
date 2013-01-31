@@ -91,6 +91,13 @@ namespace TagInfo
 			[CCode (cname = "taginfo_info_get_bitrate")]
 			get;
 		}
+		// A quick lookup sais that there is something. 
+		//   But this is not guaranteed!
+		public bool has_image {
+			[CCode (cname = "taginfo_info_get_has_image")]
+			get;
+		}
+		// Returns success
 		public bool get_image (out uint8[] data);
 	}
 }

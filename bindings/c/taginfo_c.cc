@@ -121,6 +121,12 @@ int taginfo_info_get_length(const TagInfo_Info *info) {
     return s;
 }
 
+BOOL taginfo_info_get_has_image(const TagInfo_Info *info) {
+    const Info *i = reinterpret_cast<const Info *>(info);
+    bool image_available = i->has_image;
+    return image_available;
+}
+
 
 char *taginfo_info_get_disk_str(const TagInfo_Info *info) {
     const Info *i = reinterpret_cast<const Info *>(info);

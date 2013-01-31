@@ -5,7 +5,7 @@ includedir=@includedir@
 
 Name: @TAGINFO_NAME@ C Bindings
 Description: Media metatag library (C bindings).
-Requires: taglib flac taginfo
+Requires: taglib taginfo
 Version: @TAGINFO_VERSION@
 URL: http://www.xnoise-media-player.com
 Libs: -L${libdir} -ltaginfo_c
