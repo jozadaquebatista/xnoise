@@ -1,3 +1,285 @@
+commit 2896feae2beb22b157186324324f8c4d84ee1587
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 16:13:44 2013 +0100
+
+    update strings
+
+commit b33a4a5b777e1e64c1f15e154effe2830daf1f8d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 16:07:33 2013 +0100
+
+    handle v/a seperately in genre-artist-album sorting
+
+commit 019da1b6a60a417bb17a463c6b4777abe664f576
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 16:01:30 2013 +0100
+
+    handle v/a seperately in music browser
+
+commit 86b3070b31b93c375d2f6c4f3c8d2c5a2cb9b427
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 14:03:04 2013 +0100
+
+    better import detection for VA albums
+
+commit 0c45741c12e058be574dedcfb8939a56a84bde43
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 10:46:47 2013 +0100
+
+    start working on online va detection
+
+commit 80ab6e0a6b03caf04c0009779cedb7ae58e083cf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Jan 31 13:40:52 2013 +0100
+
+    extend taginfo
+
+commit 3618b37233dcee7ad3167b9b6b8a02d52ab3c3d4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Jan 31 11:34:46 2013 +0100
+
+    remove libflac dependency
+
+commit 402c988fba2c6c5f5c615f9dcc1b56eb41e48a3d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Jan 30 15:10:40 2013 +0100
+
+    add postprocessor class for searching compilations / various artists albums
+
+commit 7dab474557bf76da7db339cf81e5b579dd4a0d35
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 18:28:16 2013 +0100
+
+    minor fixes
+
+commit de8901385a8771299e7f75b9f6b172f3c3b383c0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 17:58:43 2013 +0100
+
+    put some images into album art view at once, so the user can see something for large result sets
+
+commit 91e9c5e0249fcf3ba58ead12e7d8578d21af2e52
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 16:44:09 2013 +0100
+
+    remove some old code
+
+commit 45f938e7ef71788727d8d568fdc312fead7e6ad4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 16:21:34 2013 +0100
+
+    improve db search performance 2
+
+commit d8038bfdb97c8b75319de2f1719c6edbcf9facc4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 16:21:20 2013 +0100
+
+    fix other cellrenderers
+
+commit e6cfa79f9c5e9184c4596211e0b654df49d433bb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 12:48:27 2013 +0100
+
+    improve db search performance
+
+commit 7fbc31935a4f619dc04880d570572a57f96702ea
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 29 09:40:41 2013 +0100
+
+    add fix for issue #10
+
+commit 47484da8be52724ee41207cad3b92c89db9a88c5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Jan 26 16:15:50 2013 +0100
+
+    add commandline option for hidden window; adapt unity quicklist options
+
+commit 780662dd9b2507b89abed9b1645d44ba9ef94ec1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Jan 26 10:54:17 2013 +0100
+
+    add commandline option for quitting running instance of xnoise
+
+commit dbe1fe77e3d2d40fde75925496e9c30a664e7e45
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 16:10:23 2013 +0100
+
+    track pot file
+
+commit 867a20fcca1af29ff875a8473524072b2d802b33
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 16:09:06 2013 +0100
+
+    extend sql statements for path
+
+commit 367fd06ef13031d25c155f3b33eb2cb290d4675b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 14:51:09 2013 +0100
+
+    extend sql statements for album_artist
+
+commit dc49a3c1d70cfe28b56b37df6927f96f09527728
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 13:42:26 2013 +0100
+
+    update some strings
+
+commit 48119c463c57c46212941b4fef57d63d4290e125
+Author: =Tal Hadad <tal_hd@hotmail.com>
+Date:   Fri Jan 25 13:41:40 2013 +0100
+
+    update he.po
+
+commit 35dc6b048a713507505000ba9ab037dc5443a484
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 13:33:38 2013 +0100
+
+    enable possibility to use images in SerialButton
+
+commit 644303c2cc84c603341502cbba97349989c980df
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 12:33:39 2013 +0100
+
+    don't overwrite albumartist for various artists albums in traklist
+
+commit 9ac87b83a9151ea5494c4e3444db482e778c0908
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 12:20:19 2013 +0100
+
+    show albumartist if various artists album is dropped on tracklist
+
+commit c4af7a36b07863c927c953ed814615efc0b6ef79
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 25 11:28:07 2013 +0100
+
+    fix issue with ape tag parsing
+
+commit 6ebfbef479550d87b938b49c553bf9c6b00262dd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Jan 23 00:02:35 2013 +0100
+
+    improve compilation handling
+
+commit f670927875b30763e6bc67c64f54e766d8779db7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 15:49:21 2013 +0100
+
+    limit size of tree media selector
+
+commit 738c7eeb42d7fc89b8c538dad0bb6bd4f48e2d8b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 15:42:56 2013 +0100
+
+    again, inc anim speed
+
+commit d675569745838c1fae6fae89b75f5bdb552ebb7f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 15:09:54 2013 +0100
+
+    handle double clicks on album art view without prior selection
+
+commit 627d750c9c3f07a8abe27506453f4cede1ca7943
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 15:09:05 2013 +0100
+
+    inc anim speed
+
+commit 0416e9e16c3a495733def394154bffe88ba97e38
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 14:20:25 2013 +0100
+
+    fix Ctrl-space keybinding
+
+commit a9784537330023ce1a37a18952d4d477170bef16
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 14:14:19 2013 +0100
+
+    don't use animation on entry
+
+commit 51232b89b163c8659a76752d362d72022b02a61a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 14:01:02 2013 +0100
+
+    add animation for tree media selector
+
+commit 3482e1746f9eed3f62ea37e49ced7bf17f1d0de9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 11:50:01 2013 +0100
+
+    fix sql issue
+
+commit d8df72e9445be1b751ff915df96b7b911dddf279
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 11:30:31 2013 +0100
+
+    allow editing of genre
+
+commit 89a17a9ea08f6be20273f34e0f35e8295da8c42e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 11:19:29 2013 +0100
+
+    update strings
+
+commit 40083201afca39272b56b8fd368a50f7483e0c17
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jan 22 11:16:59 2013 +0100
+
+    start redoing tag editing
+
+commit 5ce72b0bb57563a6344c5dec6050dec82461b03b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 18:32:20 2013 +0100
+
+    use repo icon
+
+commit 32001541d6098d4c1c9df0e2c51e100628aaf77f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 18:21:11 2013 +0100
+
+    change icons
+
+commit 0db6588e45d1c67bd2512d008b7533bd9e7f3cae
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 17:15:17 2013 +0100
+
+    hange alignment
+
+commit c73cf07fa8675a0678a88bc2c58ece87d1726408
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 17:14:54 2013 +0100
+
+    use destructor for disconecting signal handlers
+
+commit 92583b22930702445300d914c90a7ec44e7f925c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 16:55:28 2013 +0100
+
+    adjust icons
+
+commit 5a8defd225e3aa71a975c1a30d80c4588fbcc665
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 13:58:51 2013 +0100
+
+    move MediaSelector implementations to separate files
+
+commit bea4e8d39f725f4a25fed2e94f7431f158e03ed0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 13:57:44 2013 +0100
+
+    add gstreamer-plugins-base ... to runtime dependencies
+
+commit 2a4cebedced03288f7ea78f8b176f3dfbcdc89b4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 11:28:48 2013 +0100
+
+    update file headers
+
+commit 40703b40b504fb98808ca3d7e6fe0a22efbb6f4d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 18 11:06:38 2013 +0100
+
+    update packaging data
+
 commit 1fe4f33846971804d5d3a30ffd59accd98b5da43
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Jan 18 09:09:02 2013 +0100
