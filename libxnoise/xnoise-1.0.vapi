@@ -973,6 +973,7 @@ namespace Xnoise {
 		public int32 dat2;
 		public int32 dat3;
 		public string? genre;
+		public bool has_embedded_image;
 		public bool is_compilation;
 		public Xnoise.Item? item;
 		public int32 length;

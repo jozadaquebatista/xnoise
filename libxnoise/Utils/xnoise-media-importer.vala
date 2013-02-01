@@ -343,7 +343,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             return;
         
         //Look for potentiol various artists albums
-        db_postprocessor.find_compilations();
+//        db_postprocessor.find_compilations();
         
         Idle.add( () => {
             // update user info in idle in main thread
@@ -399,7 +399,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         db_writer.begin_transaction();
-        if(!db_writer.delete_local_media_data())
+        if(!db_writer.reset_database())
             return false;
         db_writer.commit_transaction();
         

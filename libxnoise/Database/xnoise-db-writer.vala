@@ -37,6 +37,7 @@ using Xnoise.Utilities;
 public class Xnoise.Database.Writer : GLib.Object {
     private Sqlite.Database db = null;
     private Statement insert_lastused_entry_statement;
+    private Statement ins_va_statement;
     private Statement add_stream_statement;
     private Statement begin_statement;
     private Statement commit_statement;
@@ -58,11 +59,13 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement get_title_id_statement;
     private Statement delete_artists_statement;
     private Statement delete_albums_statement;
+    private Statement delete_album_names_statement;
     private Statement delete_items_statement;
     private Statement delete_uris_statement;
     private Statement delete_paths_statement;
     private Statement delete_genres_statement;
     private Statement update_album_statement;
+    private Statement get_album_name_count_statement;
 
     private Statement count_artist_in_items_statement;
     private Statement count_albumartist_in_items_statement;
@@ -135,6 +138,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         "DELETE FROM artists";
     private static const string STMT_DEL_ALBUMS =
         "DELETE FROM albums";
+    private static const string STMT_DEL_ALBUM_NAMES =
+        "DELETE FROM album_names";
     private static const string STMT_DEL_ITEMS =
         "DELETE FROM items";
     private static const string STMT_DEL_URIS =
@@ -255,6 +260,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_GET_TITLE_ID, -1, out get_title_id_statement);
         db.prepare_v2(STMT_DEL_ARTISTS, -1, out delete_artists_statement);
         db.prepare_v2(STMT_DEL_ALBUMS, -1, out delete_albums_statement);
+        db.prepare_v2(STMT_DEL_ALBUM_NAMES, -1, out delete_album_names_statement);
         db.prepare_v2(STMT_DEL_ITEMS, -1, out delete_items_statement);
         db.prepare_v2(STMT_DEL_URIS, -1, out delete_uris_statement);
         db.prepare_v2(STMT_DEL_PATHS, -1, out delete_paths_statement);
@@ -274,6 +280,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_GET_PATHS_MAX_ID, -1, out get_paths_max_id_statement);
         db.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out get_genre_max_id_statement);
         db.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out get_albums_max_id_statement);
+        db.prepare_v2(STMT_INS_VARIOUS_ARTISTS, -1, out ins_va_statement);
+        db.prepare_v2(STMT_GET_ALBUM_NAME_COUNT, -1, out get_album_name_count_statement);
     }
 
     public struct NotificationData {
@@ -524,6 +532,23 @@ public class Xnoise.Database.Writer : GLib.Object {
         "UPDATE albums SET name=?, year=?, is_compilation=?, caseless_name = ? WHERE id=?";
     private static const string STMT_INSERT_ALBUM =
         "INSERT INTO albums (artist, name, year, is_compilation, caseless_name) VALUES (?,?,?,?,?)";
+    private static const string STMT_GET_ALBUM_NAME_COUNT =
+        "SELECT COUNT(*) FROM album_names WHERE caseless_name = ?";
+    
+    private static const int VA_ID = 1;
+    
+    private int get_count_for_album_name(ref string casefolded_album_name) {
+        get_album_name_count_statement.reset();
+        if(get_album_name_count_statement.bind_text(1, casefolded_album_name) != Sqlite.OK) {
+            this.db_error();
+            return 0;
+        }
+        if(get_album_name_count_statement.step() == Sqlite.ROW)
+            return get_album_name_count_statement.column_int(0);
+        else
+            return 0;
+    }
+    
     
     private int handle_album(ref int artist_id, ref TrackData td, bool update_album) {
         string stripped_album;
@@ -531,39 +556,47 @@ public class Xnoise.Database.Writer : GLib.Object {
         string caseless_album;
         stripped_art = td.artist != null ? td.artist.strip() : EMPTYSTRING;
         stripped_album = td.album != null ? td.album.strip() : EMPTYSTRING;
-        caseless_album = (stripped_art + "-" + stripped_album).casefold();
+        caseless_album = stripped_album.casefold();
         
         if(update_album == false) {
+            int al_id = -1;
             get_album_id_statement.reset();
+//            if(get_count_for_album_name(ref caseless_album) > 0)
+                // what about other tracks from same album
             if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
                get_album_id_statement.bind_text(2, caseless_album) != Sqlite.OK ) {
                 this.db_error();
                 return -1;
             }
             if(get_album_id_statement.step() == Sqlite.ROW)
-                return get_album_id_statement.column_int(0);
+                al_id = get_album_id_statement.column_int(0);
             
-            // Insert album
-            insert_album_statement.reset();
-            if(insert_album_statement.bind_int (1, artist_id)                         != Sqlite.OK ||
-               insert_album_statement.bind_text(2, stripped_album)                    != Sqlite.OK ||
-               insert_album_statement.bind_int (3, (int)td.year)                      != Sqlite.OK ||
-               insert_album_statement.bind_int (4, td.is_compilation == true ? 1 : 0) != Sqlite.OK ||
-               insert_album_statement.bind_text(5, caseless_album)                    != Sqlite.OK) {
-                               this.db_error();
-                return -1;
+            if(al_id == -1) {
+                // Insert album
+                insert_album_statement.reset();
+                if(insert_album_statement.bind_int (1, artist_id)                         != Sqlite.OK ||
+                   insert_album_statement.bind_text(2, stripped_album)                    != Sqlite.OK ||
+                   insert_album_statement.bind_int (3, (int)td.year)                      != Sqlite.OK ||
+                   insert_album_statement.bind_int (4, td.is_compilation == true ? 1 : 0) != Sqlite.OK ||
+                   insert_album_statement.bind_text(5, caseless_album)                    != Sqlite.OK) {
+                    this.db_error();
+                    return -1;
+                }
+                if(insert_album_statement.step() != Sqlite.DONE) {
+                    this.db_error();
+                    return -1;
+                }
+                
+                //Return id
+                get_albums_max_id_statement.reset();
+                if(get_albums_max_id_statement.step() == Sqlite.ROW)
+                    return get_albums_max_id_statement.column_int(0);
+                else
+                    return -1;
             }
-            if(insert_album_statement.step() != Sqlite.DONE) {
-                this.db_error();
-                return -1;
+            else {
+                return al_id;
             }
-            
-            //Return id
-            get_albums_max_id_statement.reset();
-            if(get_albums_max_id_statement.step() == Sqlite.ROW)
-                return get_albums_max_id_statement.column_int(0);
-            else
-                return -1;
         }
         else {
             get_album_id_statement.reset();
@@ -1130,11 +1163,10 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
     private static const string STMT_INSERT_TITLE =
-        "INSERT INTO items (tracknumber, artist, album, title, genre, year, path, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number, caseless_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO items (tracknumber, artist, album, title, genre, year, path, uri, mediatype, length, bitrate, mimetype, album_artist, cd_number, caseless_name, has_embedded_image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
-    
 //    private Timer t = new Timer();
 
 //    ulong str1_usec = 0;
@@ -1241,6 +1273,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         string stripped_title = td.title.strip();
         string caseless_title = stripped_title.casefold();
         insert_title_statement.reset();
+        int embedded_image = (td.has_embedded_image ? 1 : 0);
         if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
            insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
            insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
@@ -1255,7 +1288,8 @@ public class Xnoise.Database.Writer : GLib.Object {
            insert_title_statement.bind_text(12, td.mimetype)         != Sqlite.OK ||
            insert_title_statement.bind_int (13, td.dat3)             != Sqlite.OK ||
            insert_title_statement.bind_text(14, cd_number)           != Sqlite.OK ||
-           insert_title_statement.bind_text(15, caseless_title)      != Sqlite.OK) {
+           insert_title_statement.bind_text(15, caseless_title)      != Sqlite.OK ||
+           insert_title_statement.bind_int (16, embedded_image)      != Sqlite.OK) {
             this.db_error();
             return false;
         }
@@ -1532,13 +1566,18 @@ public class Xnoise.Database.Writer : GLib.Object {
             print("error deleting streams from db\n");
     }
 
-    internal bool delete_local_media_data() {
-        if(!exec_prepared_stmt(this.delete_artists_statement)) return false;
-        if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
-        if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
-        if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
-        if(!exec_prepared_stmt(this.delete_paths_statement  )) return false;
-        if(!exec_prepared_stmt(this.delete_uris_statement   )) return false;
+    private static const string STMT_INS_VARIOUS_ARTISTS =
+        "INSERT INTO artists (name, caseless_name) VALUES ('Various artists','various artists');";
+
+    internal bool reset_database() {
+        if(!exec_prepared_stmt(this.delete_artists_statement     )) return false;
+        if(!exec_prepared_stmt(this.ins_va_statement             )) return false; // VA id = 1 !
+        if(!exec_prepared_stmt(this.delete_albums_statement      )) return false;
+        if(!exec_prepared_stmt(this.delete_album_names_statement )) return false;
+        if(!exec_prepared_stmt(this.delete_items_statement       )) return false;
+        if(!exec_prepared_stmt(this.delete_genres_statement      )) return false;
+        if(!exec_prepared_stmt(this.delete_paths_statement       )) return false;
+        if(!exec_prepared_stmt(this.delete_uris_statement        )) return false;
         return true;
     }
 

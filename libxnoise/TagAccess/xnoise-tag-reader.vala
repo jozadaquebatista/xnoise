@@ -67,6 +67,7 @@ public class Xnoise.TagAccess.TagReader {
                 td.tracknumber    = info.tracknumber;
                 td.length         = info.length;
                 td.is_compilation = info.is_compilation;
+                td.has_embedded_image = info.has_image;
                 td.cd_number_str  = EMPTYSTRING;
                 if(try_read_image_data) {
                     uint8[] data = null;

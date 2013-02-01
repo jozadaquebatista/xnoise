@@ -50,6 +50,7 @@ namespace Xnoise {
         public int32 length = 0;
         public int bitrate = 0;
         public bool is_compilation = false;
+        public bool has_embedded_image = false;
         public Item? item = Item(ItemType.UNKNOWN);
         public Gdk.Pixbuf? pixbuf = null;
         public int32 dat1 = -1;

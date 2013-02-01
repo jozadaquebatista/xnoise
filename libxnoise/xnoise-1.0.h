@@ -1930,6 +1930,7 @@ struct _XnoiseTrackData {
 	gint32 length;
 	gint bitrate;
 	gboolean is_compilation;
+	gboolean has_embedded_image;
 	XnoiseItem* item;
 	GdkPixbuf* pixbuf;
 	gint32 dat1;
