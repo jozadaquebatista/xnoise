@@ -161,7 +161,6 @@ libxnoise_la_SOURCES = \
     UserInfoSystem/xnoise-info-bar.vala \
     UserInfoSystem/xnoise-user-info.vala \
     Utils/xnoise-album-data.vala \
-    Utils/xnoise-db-postprcessor.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \

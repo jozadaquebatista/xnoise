@@ -55,8 +55,8 @@ private class Xnoise.Database.DbCreator {
         "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT NOT NULL, caseless_name TEXT UNIQUE NOT NULL);";
     
     //table with distinct album names. Seperate table with unique keys for faster lookup
-    private static const string STMT_CREATE_ALBUM_NAMES =
-        "CREATE TABLE album_names (id INTEGER PRIMARY KEY, name TEXT NOT NULL, caseless_name TEXT UNIQUE NOT NULL);";
+//    private static const string STMT_CREATE_ALBUM_NAMES =
+//        "CREATE TABLE album_names (id INTEGER PRIMARY KEY, name TEXT NOT NULL, caseless_name TEXT UNIQUE NOT NULL);";
     
     private static const string STMT_INS_VARIOUS_ARTISTS =
         "INSERT INTO artists (name, caseless_name) VALUES ('Various artists','various artists');";
@@ -173,7 +173,7 @@ private class Xnoise.Database.DbCreator {
                 if(!exec_stmnt_string(STMT_CREATE_ARTISTS)        ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_INS_VARIOUS_ARTISTS)   ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ALBUMS)         ) { reset(); return; }
-                if(!exec_stmnt_string(STMT_CREATE_ALBUM_NAMES)    ) { reset(); return; }
+//                if(!exec_stmnt_string(STMT_CREATE_ALBUM_NAMES)    ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_URIS)           ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_PATHS)          ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_ITEMS)          ) { reset(); return; }

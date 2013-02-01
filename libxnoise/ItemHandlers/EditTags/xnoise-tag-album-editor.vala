@@ -99,6 +99,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                 Idle.add( () => {
                     // put data to entry
                     Gdk.Pixbuf? art = null;
+                    print("AAA td.artist: %s\n", td.artist);
                     File? f = get_albumimage_for_artistalbum(td.artist, td.album, "extralarge");
                     if(f != null)
                         art = AlbumArtView.icon_cache.get_image(f.get_path());

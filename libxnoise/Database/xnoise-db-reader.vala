@@ -901,10 +901,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.stamp = album.stamp;
                     //print("td.albumartist: %s    art: %s\n", td.albumartist, td.artist);
                     td.albumartist = stmt.column_text(11);
-                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
-                                                                     td.albumartist != "*" ? 
-                                                                        td.albumartist :
-                                                                        stmt.column_text(5));
+                    td.artist      = //(stmt.column_text(5).down() == "various artists" && 
+                                       //                              td.albumartist != "*" ? 
+                                         //                               td.albumartist :
+                                                                        stmt.column_text(5);//);
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;
@@ -949,10 +949,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     i.stamp = album.stamp;
                     
                     td.albumartist = stmt.column_text(11);
-                    td.artist      = (stmt.column_text(5).down() == "various artists" && 
-                                                                     td.albumartist != "*" ? 
-                                                                        td.albumartist :
-                                                                        stmt.column_text(5));
+                    td.artist      = //(stmt.column_text(5).down() == "various artists" && 
+                                       //                              td.albumartist != "*" ? 
+                                         //                               td.albumartist :
+                                                                        stmt.column_text(5);//);
                     td.album       = stmt.column_text(6);
                     td.title       = stmt.column_text(0);
                     td.item        = i;

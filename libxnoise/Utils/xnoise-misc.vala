@@ -56,8 +56,6 @@ namespace Xnoise {
     public static PatternSpec pattern_video;
 
     private static HashTable<string,int> supported_types;
-
-    private static DbPostprocessor db_postprocessor;
     
     public static Database.Reader db_reader;
     public static Database.Writer db_writer;
@@ -163,8 +161,6 @@ namespace Xnoise {
         }
         register_data_source(db_reader);
         //print("source id: %d\n", dbid);
-        
-        db_postprocessor = new DbPostprocessor();
         
         statistics = new Statistics();
         
