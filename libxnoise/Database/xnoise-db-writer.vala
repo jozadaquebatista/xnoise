@@ -1204,7 +1204,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             return;
         }
         
-        if(!more_tracks_from_same_artist) {
+        if(!more_tracks_from_same_artist && artist_id != 1) {
             if(db.exec("DELETE FROM artists WHERE id=%d;".printf(artist_id), null, out errormsg)!= Sqlite.OK) {
                 stderr.printf("exec_stmnt_string error: %s\n", errormsg);
             }
