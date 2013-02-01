@@ -10,6 +10,7 @@ plugins/lastfm/xnoise-lastfm.c
 plugins/ubuntuone/ubuntuone.c
 libxnoise/Application/xnoise-application.c
 libxnoise/Database/xnoise-db-reader.c
+libxnoise/Database/xnoise-db-writer.c
 libxnoise/DBus/xnoise-desktop-notifications.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
 libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.c
@@ -45,7 +46,6 @@ libxnoise/Player/xnoise-gst-player.c
 libxnoise/PluginModule/xnoise-plugin-switch-widget.c
 libxnoise/TrackList/xnoise-tracklist.c
 libxnoise/TrayIcon/xnoise-tray-icon.c
-libxnoise/Utils/xnoise-db-postprcessor.c
 libxnoise/Utils/xnoise-media-importer.c
 src/xnoise.c
 plugins/magnatune/magnatune.c
