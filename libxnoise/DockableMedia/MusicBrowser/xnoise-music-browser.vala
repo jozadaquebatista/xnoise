@@ -528,8 +528,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             }
             int column_width = ow.get_allocated_width() - 2; //col.get_width();
             int cw = col.get_width();
-            if(cw > column_width)
-                print("discrepancy in size calc: %d\n ... or in resize. \n\n", cw - column_width);
+            //if(cw > column_width)
+                //print("discrepancy in size calc: %d\n ... or in resize. \n\n", cw - column_width);
             int sum = 0;
             int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
