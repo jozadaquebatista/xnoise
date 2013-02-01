@@ -594,7 +594,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //                        File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
                         this.append(out iter_artist, iter_genre);
                         this.set(iter_artist,
-                                 Column.ICON, icon_repo.artist_icon,
+                                 Column.ICON, (artist.text == VARIOUS_ARTISTS ? 
+                                                   icon_repo.various_artists_icon : icon_repo.artist_icon),
                                  Column.VIS_TEXT, artist.text,
                                  Column.ITEM, artist,
                                  Column.LEVEL, 1
