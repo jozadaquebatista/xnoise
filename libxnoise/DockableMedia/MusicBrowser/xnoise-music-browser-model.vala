@@ -1,6 +1,6 @@
 /* xnoise-music-browser-model.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -250,6 +250,39 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 return false;
             string text = null;
             TreeIter iter_search, artist_iter = TreeIter();
+//            print("job.item.db_id : %d\n", job.item.db_id);
+            bool is_va = (job.item.db_id == 1);
+            bool ins_va = false;
+            if(is_va) {
+                if(this.iter_n_children(null) > 0) {
+                    this.iter_nth_child(out artist_iter, null, 0);
+                    Item? current_item;
+                    this.get(artist_iter, Column.ITEM, out current_item);
+                    if(current_item.db_id != 1)
+                        ins_va = true;
+                }
+                else {
+                    ins_va = true;
+                }
+                if(ins_va) {
+                    this.prepend(out artist_iter, null);
+                    this.set(artist_iter,
+                             Column.ICON, icon_repo.various_artists_icon,
+                             Column.VIS_TEXT, job.item.text,
+                             Column.ITEM, job.item,
+                             Column.LEVEL, 0
+                             );
+                    Item? loader_item = Item(ItemType.LOADER);
+                    this.prepend(out iter_search, artist_iter);
+                    this.set(iter_search,
+                             Column.ICON, icon_repo.loading_icon,
+                             Column.VIS_TEXT, LOADING,
+                             Column.ITEM, loader_item,
+                             Column.LEVEL, 1
+                             );
+                }
+                return false;
+            }
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out artist_iter, null);
                 this.set(artist_iter,
@@ -282,6 +315,10 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.get(artist_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
                 if(current_item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
                     continue;
+                    
+                if(current_item.db_id == 1)
+                    continue;
+                
                 text = text != null ? text.down().strip() : EMPTYSTRING;
                 if(strcmp(text.collate_key(), itemtext_prep.collate_key()) == 0) {
                     //found artist
@@ -311,7 +348,6 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             TreeIter x_artist_iter;
             this.insert_after(out x_artist_iter, null, artist_iter);
             artist_iter = x_artist_iter;
-//            this.append(out artist_iter, null);
             this.set(artist_iter,
                      Column.ICON, icon_repo.artist_icon,
                      Column.VIS_TEXT, job.item.text,

@@ -374,6 +374,16 @@ public class Xnoise.Database.Writer : GLib.Object {
                     cxd.cb(ChangeType.ADD_ARTIST, item);
             }
         }
+        else if(artist_id == 1) {
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            item.source_id = db_reader.get_source_id();
+            item.stamp = get_current_stamp(db_reader.get_source_id());
+            item.text = stripped_art;
+            foreach(NotificationData cxd in change_callbacks) {
+                if(cxd.cb != null)
+                    cxd.cb(ChangeType.ADD_ARTIST, item);
+            }
+        }
         if(update_artist) {
             Statement stmt;
             db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);

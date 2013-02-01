@@ -1,6 +1,6 @@
 /* xnoise-music-browser.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -531,11 +531,12 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             //if(cw > column_width)
                 //print("discrepancy in size calc: %d\n ... or in resize. \n\n", cw - column_width);
             int sum = 0;
-            int iconwidth = (pix == null) ? 16 : pix.get_width();
+            int iconwidth = 30;//(pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
                 maxiconwidth = iconwidth;
             calculated_widh[level] = maxiconwidth;
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2; 
+            //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
