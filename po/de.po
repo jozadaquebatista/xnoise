@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-01 16:11+0100\n"
+"POT-Creation-Date: 2013-02-01 23:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -47,16 +47,19 @@ msgstr "Gehe zum vorherigen Titel"
 msgid "Quit application"
 msgstr "Beende das Programm"
 
-#: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
+#: ../libxnoise/Application/xnoise-application.vala:244
+#: ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise ist ein Medien-Abspieler für Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:245 ../src/xnoise.vala:159
+#: ../libxnoise/Application/xnoise-application.vala:245
+#: ../src/xnoise.vala:159
 msgid "It uses the gstreamer framework."
 msgstr "Er benutzt das GStreamer Rahmenwerk."
 
-#: ../libxnoise/Application/xnoise-application.vala:246 ../src/xnoise.vala:160
+#: ../libxnoise/Application/xnoise-application.vala:246
+#: ../src/xnoise.vala:160
 msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
@@ -67,10 +70,10 @@ msgstr "Mehr Infos auf der Website:"
 msgid "no lyrics found..."
 msgstr "keine Liedtexte gefunden..."
 
-#: ../libxnoise/Database/xnoise-db-writer.vala:591
-#, fuzzy, c-format
+#: ../libxnoise/Database/xnoise-db-writer.vala:601
+#, c-format
 msgid "unknown"
-msgstr "Unbekannter Titlel"
+msgstr "unbekannt"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
@@ -124,7 +127,7 @@ msgstr "KÜNSTLER-ALBUM-TITEL"
 msgid "GENRE-ARTIST-ALBUM"
 msgstr "GENRE-KÜNSTLER-ALBUM"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:498
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:534
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
@@ -228,8 +231,7 @@ msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
 msgstr ""
-"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek "
-"hinzuzufügen. \n"
+"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek hinzuzufügen. \n"
 "Alle Medien werden in der Bibliothek zur Verfügung gestellt."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
@@ -364,8 +366,7 @@ msgstr "Bitte warte während Medien zu deiner Bibliothek hinzugefügt werden. "
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
-"Du kannst mit dem Anhören deiner Musik beginnen, indem du '%s' auswählst"
+msgstr "Du kannst mit dem Anhören deiner Musik beginnen, indem du '%s' auswählst"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
 msgid "Add more media folders"
@@ -391,108 +392,116 @@ msgstr "Möchtest du Medien in die Bibliothek importieren? "
 msgid "Add all tracks to tracklist"
 msgstr "Alle Titel zur Titelliste hinzufügen"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:135
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:184
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:62
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:66
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:128
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:73
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:77
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
+msgid ""
+"With this dialog you can change the metatags in the according files. \n"
+"Handle with care!"
+msgstr ""
+"Mit diesem Dialog kannst du die Metadaten in den entsprechenden Dateien ändern. \n"
+"Gehe vorsichtig damit um!"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:136
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Metadaten bearbeiten"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:138
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:139
 msgid "Type new artist name."
 msgstr "Gib einen neuen Künstler/Band Namen ein"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:140
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:178
 msgid "Artist:"
 msgstr "Künstler:"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:143
 msgid "Type new album name."
 msgstr "Gib einen neuen Album-Namen ein "
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:143
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:164
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:144
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:179
 msgid "Album:"
 msgstr "Album:"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:185
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:199
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht "
-"warten willst."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:163
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:200
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:200
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht warten willst."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:189
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:203
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht "
-"warten willst."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:167
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:204
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:204
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht warten willst."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:160
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:174
 msgid "Album data"
 msgstr "Album-Daten"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:163
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
 msgid "Please enter new album data."
 msgstr "Gib die Daten des Albums ein."
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:165
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
 msgid "Year:"
 msgstr "Jahr:"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:181
 msgid "Genre:"
 msgstr "Genre:"
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2034
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1244
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1374
 msgid "Artist"
 msgstr "Künstler"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
 msgid "Album Artist"
 msgstr "Album Künstler"
 
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:151
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2035
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1220
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1383
 msgid "Album"
 msgstr "Album"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1196
 msgid "Title"
 msgstr "Titel"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1290
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1392
 msgid "Genre"
 msgstr "Genre"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:160
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
 msgid "Uri"
 msgstr "Uri"
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:163
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:164
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1314
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1401
 msgid "Year"
 msgstr "Jahr"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1365
 msgid "Tracknumber"
 msgstr "Titelnummer"
@@ -720,12 +729,8 @@ msgstr "Zeige die _Album Übersicht"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:512
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ "
-"große Zahl und kann den Start von xnoise verlangsamen."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:713
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:722
@@ -854,11 +859,8 @@ msgid "Default"
 msgstr "Werkeinstellung"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:227
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
-"Untertitel-Datei"
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere Untertitel-Datei"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:711
 #, c-format
@@ -868,8 +870,7 @@ msgstr "Fehlendes GStreamer Plugin konnte installiert werden"
 #: ../libxnoise/Player/xnoise-gst-player.vala:715
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
-"Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
+msgstr "Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:719
 #, c-format
@@ -894,8 +895,7 @@ msgstr "Automatische Suche nach fehlendem Codec wird nicht unterstützt"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:783
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
-"Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
+msgstr "Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:796
 msgid "Trying to install missing gstreamer plugin"
@@ -992,10 +992,8 @@ msgid "%u new tracks found"
 msgstr "%u neue Titel gefunden"
 
 #: ../src/xnoise.vala:169
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
@@ -1042,9 +1040,7 @@ msgstr "Passwort:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:510
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr ""
-"Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu "
-"erstellen)"
+msgstr "Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu erstellen)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
