@@ -44,7 +44,7 @@ private class Xnoise.Database.DbCreator {
     
     //CREATE TABLE STATEMENTS
     private static const string STMT_CREATE_LASTUSED_2 =
-        "CREATE TABLE lastused(tracknumber TEXT, mediatype INTEGER, title TEXT, album TEXT, artist TEXT, length TEXT, genre TEXT, year TEXT, id INTEGER, uri TEXT, source TEXT);";
+        "CREATE TABLE lastused(tracknumber TEXT, mediatype INTEGER, title TEXT, album TEXT, artist TEXT, length TEXT, genre TEXT, year TEXT, id INTEGER, uri TEXT, source TEXT, part_of_va INTEGER);";
     private static const string STMT_CREATE_MEDIAFOLDERS =
         "CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
     private static const string STMT_CREATE_MEDIAFILES =
@@ -53,11 +53,6 @@ private class Xnoise.Database.DbCreator {
         "CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
     private static const string STMT_CREATE_ARTISTS =
         "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT NOT NULL, caseless_name TEXT UNIQUE NOT NULL);";
-    
-    //table with distinct album names. Seperate table with unique keys for faster lookup
-//    private static const string STMT_CREATE_ALBUM_NAMES =
-//        "CREATE TABLE album_names (id INTEGER PRIMARY KEY, name TEXT NOT NULL, caseless_name TEXT UNIQUE NOT NULL);";
-    
     private static const string STMT_INS_VARIOUS_ARTISTS =
         "INSERT INTO artists (name, caseless_name) VALUES ('Various artists','various artists');";
     private static const string STMT_CREATE_ALBUMS =

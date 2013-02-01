@@ -449,14 +449,36 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(job.cancellable.is_cancelled())
                 return false;
             TreeIter iter_artist, iter_search;
+            Item? va_buf = null;
             foreach(Item? artist in job.items) {
                 if(job.cancellable.is_cancelled())
                     break;
+                if(artist.text == "Various artists") {
+                    va_buf = artist;
+                    continue;
+                }
                 this.prepend(out iter_artist, null);
                 this.set(iter_artist,
                          Column.ICON, icon_repo.artist_icon,
                          Column.VIS_TEXT, artist.text,
                          Column.ITEM, artist,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_search, iter_artist);
+                this.set(iter_search,
+                         Column.ICON, icon_repo.loading_icon,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+            }
+            if(va_buf != null) {
+                this.prepend(out iter_artist, null);
+                this.set(iter_artist,
+                         Column.ICON, icon_repo.various_artists_icon,
+                         Column.VIS_TEXT, va_buf.text,
+                         Column.ITEM, va_buf,
                          Column.LEVEL, 0
                          );
                 Item? loader_item = Item(ItemType.LOADER);

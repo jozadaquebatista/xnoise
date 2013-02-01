@@ -52,6 +52,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
     internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
     internal Gdk.Pixbuf album_art_default_icon      { get; private set; }
+    internal Gdk.Pixbuf various_artists_icon        { get; private set; }
     
     internal signal void icon_theme_changed();
     
@@ -85,9 +86,7 @@ internal class Xnoise.IconRepo : GLib.Object {
                 radios_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
             }
             
-            if(theme.has_icon("system-users")) 
-                artist_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.USE_BUILTIN);
-            else if(theme.has_icon("stock_person")) 
+            if(theme.has_icon("stock_person")) 
                 artist_icon = theme.load_icon("stock_person", iconheight, IconLookupFlags.USE_BUILTIN);
             else 
                 artist_icon = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
@@ -159,6 +158,10 @@ internal class Xnoise.IconRepo : GLib.Object {
                 album_art_default_icon = theme.load_icon("xnoise-grey",
                                                         AlbumImage.SIZE,
                                                         IconLookupFlags.FORCE_SIZE);
+            if(theme.has_icon("system-users")) 
+                various_artists_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.USE_BUILTIN);
+            else 
+                various_artists_icon = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);

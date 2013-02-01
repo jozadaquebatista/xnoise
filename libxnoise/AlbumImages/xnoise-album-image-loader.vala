@@ -92,9 +92,9 @@ namespace Xnoise {
         return (owned)tmp;
     }
 
-    public static string escape_album_for_local_folder_search(string _artist, string? album_name) {
+    public static string escape_album_for_local_folder_search(string artist, string? album_name) {
         // transform the name to match the naming scheme
-        string artist = _artist;
+//        string artist = _artist;
         string tmp = EMPTYSTRING;
         if(album_name == null)
             return (owned)tmp;

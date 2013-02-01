@@ -99,18 +99,18 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                 Idle.add( () => {
                     // put data to entry
                     Gdk.Pixbuf? art = null;
-                    print("AAA td.artist: %s\n", td.artist);
+                    //print("AAA td.artist: %s\n", td.artist);
                     File? f = get_albumimage_for_artistalbum(td.artist, td.album, "extralarge");
                     if(f != null)
                         art = AlbumArtView.icon_cache.get_image(f.get_path());
                     Gdk.Pixbuf? xicon = null;
-                    unowned Gtk.IconTheme theme = IconTheme.get_default();
                     if(art != null) {
                         albumimage.pixbuf = art;
                     }
                     else {
+                        unowned Gtk.IconTheme theme = IconTheme.get_default();
                         if(theme.has_icon("xnoise")) 
-                            xicon = theme.load_icon("xnoise", 48, IconLookupFlags.USE_BUILTIN);
+                            xicon = theme.load_icon("xnoise", 64, IconLookupFlags.USE_BUILTIN);
                         albumimage.pixbuf = xicon;
                     }
                     entry.text  = td.album;

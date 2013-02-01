@@ -14,8 +14,6 @@ namespace Xnoise {
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
-			public Xnoise.Item[] get_albums_with_genre_and_search (string searchtext, Xnoise.Item? artist, Xnoise.Item? genre);
-			public string[] get_all_album_names ();
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext, string? sorting = "ARTIST", string? direction = "ASC");
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
@@ -1286,7 +1284,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData? td);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static string escape_album_for_local_folder_search (string _artist, string? album_name);
+	public static string escape_album_for_local_folder_search (string artist, string? album_name);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise-1.0.h")]

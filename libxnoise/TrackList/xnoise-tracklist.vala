@@ -715,7 +715,9 @@ public class Xnoise.TrackList : TreeView, IParams {
                                        TrackListModel.Column.TRACKNUMBER, tracknumberString,
                                        TrackListModel.Column.TITLE, tdx.title,
                                        TrackListModel.Column.ALBUM, tdx.album,
-                                       TrackListModel.Column.ARTIST, tdx.artist,
+                                       TrackListModel.Column.ARTIST, (tdx.artist.down() == "various artists" &&
+                                                                      tdx.albumartist != "" ? 
+                                                                          tdx.albumartist : tdx.artist),
                                        TrackListModel.Column.LENGTH, make_time_display_from_seconds(tdx.length),
                                        TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
                                        TrackListModel.Column.ITEM, tdx.item,
@@ -784,9 +786,11 @@ public class Xnoise.TrackList : TreeView, IParams {
         
         TrackData td = new TrackData();
         TrackData[]? tmp = item_converter.to_trackdata(item, EMPTYSTRING);
+        print("BBB td.artist: %s\n", td.artist);
         if(tmp != null && tmp[0] != null) {
             td = tmp[0];
-            artist         = td.artist;
+            artist         = (td.artist.down() == "various artists" && td.albumartist != "" ? 
+                                                   td.albumartist : td.artist);
             album          = td.album;
             title          = td.title;
             tracknumb      = td.tracknumber;

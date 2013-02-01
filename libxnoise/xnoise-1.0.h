@@ -1946,7 +1946,7 @@ struct _XnoiseTrackDataClass {
 
 GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* album, const gchar* size);
 gboolean xnoise_thumbnail_available (const gchar* uri, GFile** _thumb);
-gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
+gchar* xnoise_escape_album_for_local_folder_search (const gchar* artist, const gchar* album_name);
 gchar* xnoise_check_album_name (const gchar* artistname, const gchar* albumname);
 GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
 void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
@@ -2023,7 +2023,6 @@ XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDataba
 XnoiseItem* xnoise_database_reader_get_genres_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
 XnoiseItem* xnoise_database_reader_get_genreitem_by_genreid (XnoiseDatabaseReader* self, const gchar* searchtext, gint32 id, guint32 stmp);
-XnoiseItem* xnoise_database_reader_get_albums_with_genre_and_search (XnoiseDatabaseReader* self, const gchar* searchtext, XnoiseItem* artist, XnoiseItem* genre, int* result_length1);
 gpointer xnoise_album_data_ref (gpointer instance);
 void xnoise_album_data_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_album_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2032,7 +2031,6 @@ void xnoise_value_take_album_data (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_album_data (const GValue* value);
 GType xnoise_album_data_get_type (void) G_GNUC_CONST;
 XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, const gchar* sorting, const gchar* direction, int* result_length1);
-gchar** xnoise_database_reader_get_all_album_names (XnoiseDatabaseReader* self, int* result_length1);
 GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);
