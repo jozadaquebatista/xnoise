@@ -59,11 +59,11 @@ private class Xnoise.TagGenreEditor : GLib.Object {
         mbm = main_window.musicBr.mediabrowsermodel;
         mbm.notify["populating-model"].connect( () => {
             if(!global.media_import_in_progress && !mbm.populating_model)
-                infolabel.label = EMPTYSTRING;
+                infolabel.label = _("With this dialog you can change the metatags in the according files. Handle with care!");;
         });
         global.notify["media-import-in-progress"].connect( () => {
             if(!global.media_import_in_progress && !mbm.populating_model)
-                infolabel.label = EMPTYSTRING;
+                infolabel.label = _("With this dialog you can change the metatags in the according files. Handle with care!");;
         });
         
         fill_entries();
@@ -118,6 +118,7 @@ private class Xnoise.TagGenreEditor : GLib.Object {
             var cancelbutton       = builder.get_object("cancelbutton")    as Gtk.Button;
             entry                  = builder.get_object("entry1")          as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
+            infolabel.label = _("With this dialog you can change the metatags in the according files. Handle with care!");
             var explainer_label    = builder.get_object("explainer_label") as Gtk.Label;
             var content_label      = builder.get_object("content_label")   as Gtk.Label;
             

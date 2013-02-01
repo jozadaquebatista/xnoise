@@ -140,7 +140,8 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
             entry_uri              = builder.get_object("entry_uri")         as Gtk.Entry;
             infolabel              = builder.get_object("label5")            as Gtk.Label;
-            
+            infolabel.label = _("With this dialog you can change the metatags in the according files. Handle with care!");;
+
             var artist_label       = builder.get_object("label1")            as Gtk.Label;
             artist_label.set_text(_("Artist") + ":");
             
