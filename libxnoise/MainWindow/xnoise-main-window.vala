@@ -1054,26 +1054,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return false;
         });
         
-        Timeout.add_seconds(2, () => {
+        Timeout.add_seconds(1, () => {
             if(tray_icon == null)
                 tray_icon = new TrayIcon();
-            if(Params.get_string_value("activated_plugins").contains("soundmenu") &&
-               !Params.get_bool_value("quit_if_closed")) { // using soundmenu, close to tray
+            if(Params.get_bool_value("not_use_systray")) {
                 tray_icon.visible = false;
             }
-            else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
-               !Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close to tray
-                print("not using soundmenu, close to tray\n");
+            else {
                 tray_icon.visible = !Application.hidden_window;
             }
-            else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
-               Params.get_bool_value("quit_if_closed")) { // not using soundmenu, close quits
-                tray_icon.visible = false;
-            }
-            else if(Params.get_string_value("activated_plugins").contains("soundmenu") &&
-               Params.get_bool_value("quit_if_closed")) { // using soundmenu, close quits
-                tray_icon.visible = false;
-            }
+//            else if(!Params.get_string_value("activated_plugins").contains("soundmenu") &&
+//               !Params.get_bool_value("not_use_systray")) { // not using soundmenu, close quits
+//                tray_icon.visible = false;
+//            }
+//            else if(Params.get_string_value("activated_plugins").contains("soundmenu") &&
+//               Params.get_bool_value("quit_if_closed")) { // using soundmenu, close quits
+//                tray_icon.visible = false;
+//            }
             return false;
         });
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");

@@ -42,6 +42,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private SpinButton sb;
     private int fontsizeMB;
     private CheckButton switch_showL;
+    private CheckButton switch_usetray;
     private CheckButton switch_compact;
     private CheckButton switch_usestop;
     private CheckButton switch_hoverimage;
@@ -88,6 +89,9 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         assert(switch_showL != null);
         switch_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
         
+        assert(switch_usetray != null);
+        switch_usetray.clicked.connect(this.on_checkbutton_usetray_clicked);
+        
         assert(switch_hoverimage != null);
         switch_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
         
@@ -111,6 +115,8 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         
         //Treelines
         switch_showL.active = Params.get_bool_value("use_treelines");
+        
+        switch_usetray.active = !Params.get_bool_value("not_use_systray");
         
         //compact layout / Application menu
         switch_compact.active = Params.get_bool_value("compact_layout");
@@ -147,6 +153,17 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         Params.set_int_value("fontsizeMB", fontsizeMB);
     }
 
+    private void on_checkbutton_usetray_clicked() {
+        if(this.switch_usetray.active) {
+            Params.set_bool_value("not_use_systray", false);
+            tray_icon.visible = true;
+        }
+        else {
+            Params.set_bool_value("not_use_systray", true);
+            tray_icon.visible = false;
+        }
+    }
+    
     private void on_checkbutton_show_lines_clicked() {
         if(this.switch_showL.active) {
             Params.set_bool_value("use_treelines", true);
@@ -183,16 +200,16 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private void on_checkbutton_quitifclosed_clicked() {
         if(this.switch_quitifclosed.active) {
             Params.set_bool_value("quit_if_closed", true);
-            if(tray_icon != null)
-                tray_icon.visible = false;
+//            if(tray_icon != null)
+//                tray_icon.visible = false;
             main_window.quit_if_closed = true;
         }
         else {
             Params.set_bool_value("quit_if_closed", false);
-            if(tray_icon == null) {
-                tray_icon = new TrayIcon();
-            }
-            tray_icon.visible = !Application.hidden_window;
+//            if(tray_icon == null) {
+//                tray_icon = new TrayIcon();
+//            }
+//            tray_icon.visible = !Application.hidden_window;
             main_window.quit_if_closed = false;
         }
     }
@@ -308,6 +325,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
             switch_showL.can_focus = false;
             switch_showL.set_label(_("Grid lines in media browser"));
+            
+            switch_usetray = this.builder.get_object("cb_usetray") as Gtk.CheckButton;
+            switch_usetray.can_focus = false;
+            switch_usetray.set_label(_("Use systray icon"));
             
             switch_hoverimage = this.builder.get_object("cb_hoverimage") as CheckButton;
             switch_hoverimage.can_focus = false;
