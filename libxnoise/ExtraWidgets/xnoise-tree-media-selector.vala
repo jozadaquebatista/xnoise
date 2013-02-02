@@ -38,7 +38,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     private unowned MediaSoureWidget msw;
     private TreeStore store;
     private bool mouse_over = false;
-    private int row_height = 23;
+    private int row_height = 24;
     
     public enum Column {
         ICON = 0,
@@ -115,7 +115,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             var path = new Gtk.TreePath.first();
             Gdk.Rectangle rect = Gdk.Rectangle();
             this.get_cell_area(path, first_col, out rect);
-            row_height = rect.height;
+            row_height = rect.height + 1;
             queue_resize();
             return false;
         });

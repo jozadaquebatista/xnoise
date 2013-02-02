@@ -790,7 +790,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     internal void change_volume(double delta_fraction) {
-        volume_slider.value += delta_fraction;
+        volume_slider.button.value += delta_fraction;
     }
     
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
@@ -1795,15 +1795,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             //---------------------
             
             //REPEAT MODE SELECTOR
+            var repeatButtonTI = new ToolItem();
+            var box = new Gtk.Box(Orientation.VERTICAL, 0);
             repeatButton = new Gtk.Button();
-            repeatButton.set_relief(Gtk.ReliefStyle.NONE);
             repeatButton.can_focus = false;
             repeatButton.clicked.connect(this.on_repeat_button_clicked);
-//            repeatimage = new Gtk.Image();
             repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
             repeatButton.add(repeatimage);
-            var repeatButtonTI = new ToolItem();
-            repeatButtonTI.add(repeatButton);
+            repeatButton.set_relief(ReliefStyle.NONE);
+            var eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            box.pack_start(repeatButton, false, false, 0);
+            eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            repeatButtonTI.add(box);
             //--------------------
             
             //PLAYING TITLE IMAGE
@@ -1846,13 +1853,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             //----------------
             
             eqButtonTI = new ToolItem();
+            
+            box = new Gtk.Box(Orientation.VERTICAL, 0);
             var eqButton = new Button();
             eqButton.set_tooltip_text(_("Open equalizer"));
             Image eqi = IconRepo.get_themed_image_icon("xn-equalizer-symbolic", IconSize.LARGE_TOOLBAR);
             eqi.show();
             eqButton.add(eqi);
-            eqButton.set_relief(Gtk.ReliefStyle.NONE);
             eqButton.can_focus = false;
+            eqButton.set_relief(ReliefStyle.NONE);
+            eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            box.pack_start(eqButton, false, false, 0);
+            eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            //--
             eqButton.clicked.connect( () => {
                 if(eqdialog != null)
                     return;
@@ -1885,19 +1902,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     return false;
                 });
             });
-            eqButtonTI.add(eqButton);
+            eqButtonTI.add(box);
             
             var albumart_toggleb = new ToolItem();
-            var aart_im = IconRepo.get_themed_image_icon("xn-grid-symbolic", IconSize.LARGE_TOOLBAR);
+            
+            box = new Gtk.Box(Orientation.VERTICAL, 0);
             album_view_toggle = new ToggleButton();
-            album_view_toggle.set_relief(ReliefStyle.NONE);
             album_view_toggle.set_tooltip_text(_("Toggle visibility of album art view") +
                                                "\n" +
                                                _("<Ctrl+B>")
             );
+            var aart_im = IconRepo.get_themed_image_icon("xn-grid-symbolic", IconSize.LARGE_TOOLBAR);
             album_view_toggle.add(aart_im);
             album_view_toggle.can_focus = false;
-            albumart_toggleb.add(album_view_toggle);
+            album_view_toggle.set_relief(ReliefStyle.NONE);
+            eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            box.pack_start(album_view_toggle, false, false, 0);
+            eb = new Gtk.EventBox();
+            eb.visible_window = false;
+            box.pack_start(eb, true, true, 0);
+            albumart_toggleb.add(box);
+            
             album_view_toggle.notify["active"].connect( () => {
                 if(album_view_toggle.active) {
                     bottom_notebook.set_current_page(1);
@@ -1913,9 +1940,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
             });
             //VOLUME SLIDE BUTTON
-            var volumeSliderButtonTI = new ToolItem();
             volume_slider = new VolumeSliderButton(gst_player);
-            volumeSliderButtonTI.add(volume_slider);
 
             //PLAYBACK CONTROLLS
             this.previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
@@ -1936,28 +1961,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             app_menu_button = new AppMenuButton(config_button_menu, _("Show application main menu"));
             app_menu_button.set_no_show_all(true);
             
-            var si = new SeparatorToolItem();
-            si.set_draw(false);
-            
-            var si2 = new SeparatorToolItem();
-            si2.set_draw(false);
             
             //---------------------
             main_toolbar.insert(albumimageTI, -1);
-            main_toolbar.insert(si, -1);
             main_toolbar.insert(previousButton, -1);
             main_toolbar.insert(playPauseButton, -1);
             main_toolbar.insert(stopButton, -1);
             main_toolbar.insert(nextButton, -1);
-            main_toolbar.insert(si2, -1);
             main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(repeatButtonTI, -1);
             main_toolbar.insert(eqButtonTI, -1);
             main_toolbar.insert(albumart_toggleb, -1);
-            main_toolbar.insert(volumeSliderButtonTI, -1);
+            main_toolbar.insert(volume_slider, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
-            
             
             this.search_entry.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event

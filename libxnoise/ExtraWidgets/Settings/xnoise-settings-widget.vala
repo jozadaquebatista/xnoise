@@ -325,34 +325,42 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
             switch_showL.can_focus = false;
             switch_showL.set_label(_("Grid lines in media browser"));
+            switch_showL.tooltip_text = _("Showing lines in the media browser might show hierachies more clear");
             
             switch_usetray = this.builder.get_object("cb_usetray") as Gtk.CheckButton;
             switch_usetray.can_focus = false;
             switch_usetray.set_label(_("Use systray icon"));
+            switch_usetray.tooltip_text = _("Use a status icon on your panel for showing, hiding and controlling xnoise");
             
             switch_hoverimage = this.builder.get_object("cb_hoverimage") as CheckButton;
             switch_hoverimage.can_focus = false;
             switch_hoverimage.set_label(_("Show picture on hover album image"));
+            switch_hoverimage.tooltip_text = _("Show a larger view on the album art while the mouse pointer is over the album image in the main window");
             
             switch_compact = this.builder.get_object("cb_compact") as CheckButton;
             switch_compact.can_focus = false;
-            switch_compact.set_label(_("Use Compact Menu"));
+            switch_compact.set_label(_("Use menu button"));
+            switch_compact.tooltip_text = _("Use an application menu button integrated into the main window");
             
             switch_usestop = this.builder.get_object("cb_usestop") as CheckButton;
             switch_usestop.can_focus = false;
             switch_usestop.set_label(_("Show Stop button"));
+            switch_usestop.tooltip_text = _("Show a stop button along with the other playback control buttons");
             
             switch_quitifclosed = this.builder.get_object("cb_quitifclosed") as CheckButton;
             switch_quitifclosed.can_focus = false;
             switch_quitifclosed.set_label(_("Quit on window close"));
+            switch_quitifclosed.tooltip_text = _("Quit xnoise if the main window is closed");
 
             switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
             switch_use_notifications.can_focus = false;
             switch_use_notifications.set_label(_("Use desktop notifications"));
+            switch_use_notifications.tooltip_text = _("Use desktop notifications that inform about played media while the main window of xnoise is not visible");
             
             switch_compact_media_selector = this.builder.get_object("cb_compact_media_selector") as CheckButton;
             switch_compact_media_selector.can_focus = true;
-            switch_compact_media_selector.set_label(_("Use a compact selector for media sources"));
+            switch_compact_media_selector.set_label(_("Use combo box selector for media types"));
+            switch_compact_media_selector.tooltip_text = _("Use a combo box for selecting media types like music, video or streams");
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             

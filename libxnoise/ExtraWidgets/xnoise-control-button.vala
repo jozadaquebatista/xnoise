@@ -40,7 +40,7 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     
     private Image image;
     private Function function;
-    
+
     public enum Function {
         NEXT = 0,
         PREVIOUS,
@@ -53,8 +53,18 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     public ControlButton(Function _function) {
         this.function = _function;
         
+        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         var button = new Gtk.Button();
-        button.set_relief(ReliefStyle.NONE);
+        button.set_relief(ReliefStyle.NORMAL);
+        button.set_size_request(48, -1);
+        var eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        box.pack_start(button, false, false, 0);
+        eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        
         unowned IconTheme theme = IconTheme.get_default();
         
         // use standard icon theme or local fallback
@@ -91,7 +101,7 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
                 break;
         }
         button.add(image);
-        this.add(button);
+        this.add(box);
         button.can_focus = false;
         this.can_focus = false;
         button.clicked.connect(this.on_clicked);

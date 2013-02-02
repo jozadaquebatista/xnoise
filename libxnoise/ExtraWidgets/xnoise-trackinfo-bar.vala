@@ -1,6 +1,6 @@
 /* xnoise-trackinfo-bar.vala
  *
- * Copyright (C) 2011-2012  Jörn Magens
+ * Copyright (C) 2011-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,9 +52,9 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         public CustomLabel(string txt) {
             GLib.Object(label:txt);
             this.set_single_line_mode(true);
-            this.set_alignment(0.3f, 1.0f);
+            this.set_alignment(0.0f, 1.0f);
             this.set_ellipsize(Pango.EllipsizeMode.END);
-            this.xpad = 10;
+            this.xpad = 15;
         }
         
         public override void get_preferred_height(out int minimum_height, out int natural_height) {

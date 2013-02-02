@@ -89,7 +89,6 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         notebook.show_all();
         assert(notebook != null && notebook is Gtk.Container);
         notebook.append_page(widg, new Label("x"));
-        d = null;
     }
     
     private void remove_page(string name) {
@@ -125,18 +124,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.search_entry.set_sensitive(true);
         this.search_entry.set_placeholder_text (_("Search..."));
         
-        this.pack_start(search_entry, false, false, 2);
-        
-        //Separator
-        var da = new Gtk.DrawingArea();
-        da.height_request = 1;
-        this.pack_start(da, false, false, 0);
+        search_entry.margin_top = 2;
+        search_entry.margin_bottom = 1;
+        this.pack_start(search_entry, false, false, 0);
             
         // DOCKABLE MEDIA
         
         notebook = new Gtk.Notebook();
         notebook.set_show_tabs(false);
-        notebook.set_border_width(1);
         notebook.show_border = true;
             
         
@@ -151,10 +146,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             select_dockable_by_name(global.active_dockable_media_name, false);
         });
         
-        //Separator
-        da = new Gtk.DrawingArea();
-        da.height_request = 4;
-        this.pack_start(da, false, false, 0);
+        notebook.margin_top = 2;
         this.pack_start(notebook, true, true, 0);
         
         //load pre-existing
@@ -174,6 +166,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
         string dname = dm_mb.name();
         media_source_selector.selected_dockable_media = dname;
+        this.margin_left = 1;
     }
     
     private string _media_source_selector_type = "tree";

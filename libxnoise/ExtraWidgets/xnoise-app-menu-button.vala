@@ -1,6 +1,6 @@
 /* xnoise-app-menu-button.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,14 +30,26 @@
 
 using Gtk;
 
-private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
+private class Xnoise.AppMenuButton : Gtk.ToolItem {
     private uint button_press_src = 0;
     private uint deactivtion_src = 0;
-    private Gtk.Button? content;
+    private Gtk.ToggleButton? content;
     private Gtk.Menu menu;
     private Image img;
     
     public AppMenuButton(Gtk.Menu menu, string? tooltip_text = null) {
+        var box = new Gtk.Box(Orientation.VERTICAL, 0);
+        content = new Gtk.ToggleButton();
+        content.set_relief(ReliefStyle.NORMAL);
+        var eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        box.pack_start(content, false, false, 0);
+        eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        this.add(box);
+        
         unowned IconTheme theme = IconTheme.get_default();
         
         // use standard icon theme or local fallback
@@ -48,7 +60,8 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
             img = IconRepo.get_themed_image_icon("xn-emblem-system-symbolic",
                                                  IconSize.LARGE_TOOLBAR);
         
-        this.set_icon_widget(img);
+        content.add(img);
+//        this.set_icon_widget(img);
         img.show();
         
         this.menu = menu;
@@ -59,12 +72,12 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
         if(this.menu.get_attach_widget() != null)
             this.menu.detach();
         
-        this.menu.attach_to_widget(this, null);
+        this.menu.attach_to_widget(this.content, null);
         
-        this.content = this.get_child() as Gtk.Button;
-        assert(content != null);
+//        this.content = this.get_child() as Gtk.Button;
+//        assert(content != null);
         
-        this.content.set_relief(Gtk.ReliefStyle.HALF);
+//        this.content.set_relief(Gtk.ReliefStyle.HALF);
         this.content.events |=
            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK;
         
@@ -76,12 +89,13 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
                 Source.remove(deactivtion_src);
             
             deactivtion_src = Idle.add( () => {
-                this.active = false;
+                this.content.active = false;
                 menu.popdown();
                 deactivtion_src = 0;
                 return false;
             });
         });
+        this.show_all();
     }
 
     private bool on_button_pressed(Gdk.EventButton e) {
@@ -93,7 +107,7 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
         
         button_press_src = Idle.add( () => {
             button_press_src = 0;
-            this.active = true;
+            this.content.active = true;
             menu.popup(null, null, position_menu, e.button, (e.time == 0 ? get_current_event_time() : e.time));
             return false;
         });
@@ -108,7 +122,7 @@ private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
             Source.remove(button_press_src);
             button_press_src = 0;
         }
-        this.active = true;
+        this.content.active = true;
         menu.popup(null, null, position_menu, e.button, (e.time == 0 ? get_current_event_time() : e.time));
         if(menu.attach_widget != null)
             menu.attach_widget.set_state_flags(StateFlags.SELECTED, true);

@@ -47,15 +47,24 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
     private Gtk.Image? pause = null;
     private int iconwidth;
     private Gtk.Button button;
+    
     public signal void clicked();
     
     
     public PlayPauseButton() {
         xn = Main.instance;
         this.can_focus = false;
-        
+        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         button = new Gtk.Button();
-        button.set_relief(ReliefStyle.NONE);
+        button.set_relief(ReliefStyle.NORMAL);
+        button.set_size_request(48, -1);
+        var eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        box.pack_start(button, false, false, 0);
+        eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
         
         unowned IconTheme theme = IconTheme.get_default();
         
@@ -77,7 +86,7 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         pause.show();
         
         button.add(play);
-        this.add(button);
+        this.add(box);
         button.can_focus = false;
         this.can_focus = false;
         

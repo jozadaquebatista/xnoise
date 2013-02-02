@@ -37,41 +37,55 @@ using Xnoise;
 /**
 * A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
 */
-internal class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
+internal class Xnoise.VolumeSliderButton : Gtk.ToolItem {
     
     private unowned GstPlayer player;
     private uint src = 0;
+    public Gtk.VolumeButton button = new Gtk.VolumeButton();
     
     public VolumeSliderButton(GstPlayer player) {
         this.player = player;
-        this.use_symbolic = true;
-        this.size = Gtk.IconSize.LARGE_TOOLBAR;
+        
+        var box = new Gtk.Box(Orientation.VERTICAL, 0);
+        button.set_relief(ReliefStyle.NONE);
+        button.use_symbolic = true;
+        button.size = Gtk.IconSize.LARGE_TOOLBAR;
+        button.can_focus = false;
+        button.set_value(0.1);
+        var eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        box.pack_start(button, false, false, 0);
+        eb = new Gtk.EventBox();
+        eb.visible_window = false;
+        box.pack_start(eb, true, true, 0);
+        this.add(box);
+        button.can_focus = false;
         this.can_focus = false;
-        this.relief = Gtk.ReliefStyle.NONE;
-        this.set_value(0.1);
-        this.value_changed.connect(on_change);
+        
+        button.value_changed.connect(on_change);
         Idle.add( () => {
-            this.set_value(Params.get_double_value("volume"));
+            button.set_value(Params.get_double_value("volume"));
             return false;
         });
         player.notify["volume"].connect(on_player_volume_change);
     }
     
     private void on_player_volume_change() {
-        this.freeze_notify();
-        this.set_value(player.volume);
-        this.thaw_notify();
+        button.freeze_notify();
+        button.set_value(player.volume);
+        button.thaw_notify();
     }
     
     private void on_change() {
         //print("vol on changed\n");
-        player.volume = this.get_value();
+        player.volume = button.get_value();
         
         // store
         if(src != 0)
             Source.remove(src);
         src = Idle.add( () => {
-            Params.set_double_value("volume", this.get_value());
+            Params.set_double_value("volume", button.get_value());
             src = 0;
             return false;
         });
