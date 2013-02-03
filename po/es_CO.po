@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-01 23:04+0100\n"
+"POT-Creation-Date: 2013-02-03 10:13+0100\n"
 "PO-Revision-Date: 2012-10-01 23:41-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
@@ -80,10 +80,10 @@ msgstr "título desconocido"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1427
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1455
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1497
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1527
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1424
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1452
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1494
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1524
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -93,10 +93,10 @@ msgstr "por"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1529
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1426
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1454
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1496
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1526
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -278,75 +278,116 @@ msgstr "Agregar emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:319
 msgid "Settings"
 msgstr "Configuracion"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
 msgid "Media"
 msgstr "Mostrar medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Activar las líneas de cuadrícula en el explorador de medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
+msgid "Showing lines in the media browser might show hierachies more clear"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
+msgid "Use systray icon"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+msgid ""
+"Use a status icon on your panel for showing, hiding and controlling xnoise"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr ""
 "No volver a mostrar la pantalla de vídeo mientras se cierne la imagen del "
 "álbum"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:318
-#, fuzzy
-msgid "Use Compact Menu"
-msgstr "Mostrar el menú principal de la aplicación"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:338
+msgid ""
+"Show a larger view on the album art while the mouse pointer is over the "
+"album image in the main window"
+msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
+msgid "Use menu button"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
+msgid "Use an application menu button integrated into the main window"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Mostrar el botón detener"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:326
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:348
+msgid "Show a stop button along with the other playback control buttons"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Salir de la aplicación cuando se cierre la ventana"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:330
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:353
+#, fuzzy
+msgid "Quit xnoise if the main window is closed"
+msgstr "Salir de la aplicación cuando se cierre la ventana"
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
 msgid "Use desktop notifications"
 msgstr "Usar notificaciones de escritorio"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
-msgid "Use a compact selector for media sources"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
+msgid ""
+"Use desktop notifications that inform about played media while the main "
+"window of xnoise is not visible"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
+msgid "Use combo box selector for media types"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:363
+msgid "Use a combo box for selecting media types like music, video or streams"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:375
 msgid "Go Back"
 msgstr "Volver"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:355
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
 #, fuzzy
 msgid "Media browser fontsize"
 msgstr "Tamaño de fuente en el explorador de medios:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:372
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:401
 #, fuzzy
 msgid "User Interface:"
 msgstr "Usuario:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:376
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:405
 #, fuzzy
 msgid "Lyrics:"
 msgstr "_Letra"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:380
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:409
 #, fuzzy
 msgid "Additional:"
 msgstr "Adicional"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:413
 #, fuzzy
 msgid "Music Stores:"
 msgstr "Tiendas"
@@ -370,8 +411,8 @@ msgstr "Salir de pantalla completa"
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:126
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2023
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:125
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2037
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -511,7 +552,7 @@ msgstr "Género"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2034
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2048
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1244
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1374
 msgid "Artist"
@@ -524,7 +565,7 @@ msgstr "Artista"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2035
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2049
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1220
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1383
 msgid "Album"
@@ -830,64 +871,64 @@ msgstr "repetir todo"
 msgid "Random playlist track playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1332
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1329
 #, fuzzy
 msgid "Enter the URL for playing"
 msgstr "Ingrese la dirección URL del archivo para abrir"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1345
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1655
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1652
 msgid "Remove selected titles"
 msgstr "Eliminar títulos seleccionados"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1678
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1675
 msgid "Remove all"
 msgstr "Eliminar todo"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1702
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1699
 msgid "Jump to current position"
 msgstr "Saltar a la posición  actual"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1842
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2019
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1846
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2033
 msgid "Select search with <Ctrl-F>"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1844
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1848
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2035
 msgid "Remove search filter with <Ctrl-D>"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1853
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1859
 #, fuzzy
 msgid "Open equalizer"
 msgstr "Usar Ecualizador"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1870
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
 msgid "Equalizer"
 msgstr "Ecualizador"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1897
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1911
 msgid "Toggle visibility of album art view"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1899
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1913
 msgid "<Ctrl+B>"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1939
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1961
 msgid "Show application main menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2038
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2052
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2040
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2054
 msgid "Descending"
 msgstr ""
 
@@ -1327,6 +1368,10 @@ msgstr "Mostrar tienda _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show UbuntuOne Store"
 msgstr "Mostrar tienda UbuntuOne"
+
+#, fuzzy
+#~ msgid "Use Compact Menu"
+#~ msgstr "Mostrar el menú principal de la aplicación"
 
 #~ msgid "Use Equalizer"
 #~ msgstr "Usar Ecualizador"

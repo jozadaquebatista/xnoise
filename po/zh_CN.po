@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-01 23:04+0100\n"
+"POT-Creation-Date: 2013-02-03 10:13+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -73,10 +73,10 @@ msgstr "未知标题"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1427
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1455
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1497
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1527
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1424
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1452
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1494
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1524
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -86,10 +86,10 @@ msgstr "艺术家"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1529
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1426
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1454
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1496
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1526
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -261,66 +261,108 @@ msgstr "添加网络电台链接"
 msgid "Leave fullscreen"
 msgstr "离开全屏"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:319
 msgid "Settings"
 msgstr "设置"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 msgid "Media"
 msgstr "媒体"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Grid lines in media browser"
 msgstr "在媒体浏览器中使用方格线"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
+msgid "Showing lines in the media browser might show hierachies more clear"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
+msgid "Use systray icon"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+msgid ""
+"Use a status icon on your panel for showing, hiding and controlling xnoise"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid "Show picture on hover album image"
 msgstr "当悬停在专辑封面上时显示图片"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:318
-msgid "Use Compact Menu"
-msgstr "使用紧凑菜单"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:338
+msgid ""
+"Show a larger view on the album art while the mouse pointer is over the "
+"album image in the main window"
+msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
+msgid "Use menu button"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
+msgid "Use an application menu button integrated into the main window"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show Stop button"
 msgstr "显示停止按钮"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:326
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:348
+msgid "Show a stop button along with the other playback control buttons"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 msgid "Quit on window close"
 msgstr "窗口关闭时退出"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:330
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:353
+#, fuzzy
+msgid "Quit xnoise if the main window is closed"
+msgstr "窗口关闭时退出"
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
 msgid "Use desktop notifications"
 msgstr "使用桌面通知机制"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
-msgid "Use a compact selector for media sources"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
+msgid ""
+"Use desktop notifications that inform about played media while the main "
+"window of xnoise is not visible"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
+msgid "Use combo box selector for media types"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:363
+msgid "Use a combo box for selecting media types like music, video or streams"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:375
 msgid "Go Back"
 msgstr "返回"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:355
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
 msgid "Media browser fontsize"
 msgstr "媒体浏览器字体大小"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:372
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:401
 #, fuzzy
 msgid "User Interface:"
 msgstr "用户界面"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:376
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:405
 #, fuzzy
 msgid "Lyrics:"
 msgstr "歌词"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:380
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:409
 #, fuzzy
 msgid "Additional:"
 msgstr "附加的"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:413
 #, fuzzy
 msgid "Music Stores:"
 msgstr "音乐商店"
@@ -341,8 +383,8 @@ msgstr "离开全屏"
 msgid "Fullscreen"
 msgstr "全屏"
 
-#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:126
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2023
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:125
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2037
 msgid "Search..."
 msgstr "搜索..."
 
@@ -468,7 +510,7 @@ msgstr "流派"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2034
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2048
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1244
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1374
 msgid "Artist"
@@ -481,7 +523,7 @@ msgstr "艺术家"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2035
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2049
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1220
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1383
 msgid "Album"
@@ -767,62 +809,62 @@ msgstr "重复全部"
 msgid "Random playlist track playing"
 msgstr "随机列表播放"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1332
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1329
 msgid "Enter the URL for playing"
 msgstr "输入要播放的 URL"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1345
 msgid "Select media file"
 msgstr "选择媒体文件"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1655
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1652
 msgid "Remove selected titles"
 msgstr "移除所选标题"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1678
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1675
 msgid "Remove all"
 msgstr "移除全部"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1702
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1699
 msgid "Jump to current position"
 msgstr "跳至当前位置"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1842
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2019
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1846
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2033
 msgid "Select search with <Ctrl-F>"
 msgstr "使用 <Ctrl-F> 选择搜索"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1844
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1848
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2035
 msgid "Remove search filter with <Ctrl-D>"
 msgstr "使用 <Ctrl-D> 移除搜索过滤器"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1853
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1859
 msgid "Open equalizer"
 msgstr "打开均衡器"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1870
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1884
 msgid "Equalizer"
 msgstr "均衡器"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1897
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1911
 msgid "Toggle visibility of album art view"
 msgstr "切换专辑封面视图"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1899
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1913
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1939
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1961
 msgid "Show application main menu"
 msgstr "显示应用程序主菜单"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2038
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2052
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2040
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2054
 msgid "Descending"
 msgstr ""
 
@@ -1241,6 +1283,9 @@ msgstr "显示 UbuntuOne 商店(_U)"
 #: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show UbuntuOne Store"
 msgstr "显示 UbuntuOne 商店"
+
+#~ msgid "Use Compact Menu"
+#~ msgstr "使用紧凑菜单"
 
 #~ msgid "Use Equalizer"
 #~ msgstr "使用均衡器"
