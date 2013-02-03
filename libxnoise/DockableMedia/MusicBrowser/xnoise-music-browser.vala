@@ -626,6 +626,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         var pixbufRenderer = new CellRendererPixbuf();
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
         
+        pixbufRenderer.set_fixed_size(30, -1);
         column.pack_start(pixbufRenderer, false);
         column.add_attribute(pixbufRenderer, "pixbuf", MusicBrowserModel.Column.ICON);
         column.pack_start(renderer, false);
