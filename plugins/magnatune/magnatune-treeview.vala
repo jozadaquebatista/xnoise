@@ -1,6 +1,6 @@
 /* magnatune-treeview.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -585,9 +585,11 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                 natural_height = minimum_height = 30;
                 return;
             }
-            int column_width = col.get_width();
+            int column_width = ow.get_allocated_width() - 2; //col.get_width();
+//            int column_width = col.get_width();
             int sum = 0;
-            int iconwidth = (pix == null) ? 16 : pix.get_width();
+            int iconwidth = 30;//(pix == null) ? 16 : pix.get_width();
+//            int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
                 maxiconwidth = iconwidth;
             calculated_widh[level] = maxiconwidth;
@@ -709,6 +711,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         
         var pixbufRenderer = new CellRendererPixbuf();
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
+        pixbufRenderer.set_fixed_size(30, -1);
         
         column.pack_start(pixbufRenderer, false);
         column.add_attribute(pixbufRenderer, "pixbuf", MagnatuneTreeStore.Column.ICON);
