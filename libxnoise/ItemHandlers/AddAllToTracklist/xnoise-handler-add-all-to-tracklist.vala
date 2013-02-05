@@ -226,6 +226,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.COLLECTION_CONTAINER_ARTIST:
             case ItemType.COLLECTION_CONTAINER_ALBUM:
+            case ItemType.COLLECTION_CONTAINER_GENRE:
                 job.track_dat = db_reader.get_all_tracks(global.searchtext);
                 break;
             case ItemType.LOCAL_VIDEO_TRACK:

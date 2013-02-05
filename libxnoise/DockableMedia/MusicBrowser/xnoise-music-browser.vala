@@ -314,7 +314,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             }
             mediabrowsermodel.get_iter(out iter, treepath);
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
-            print("parent_item type : %s\n", parent_item.type.to_string());
+            //print("parent_item type : %s\n", parent_item.type.to_string());
         }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
