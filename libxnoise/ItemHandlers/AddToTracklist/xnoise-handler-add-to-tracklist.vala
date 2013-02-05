@@ -51,6 +51,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     private static const string aname = "HandlerAddToTracklistAction2";
     
     private Action request_add;
+    private Action request_add_multi;
     private static const string cinfo = _("Add to tracklist");
     private static const string cname = "HandlerAddToTracklistAction3";
     
@@ -101,7 +102,12 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         request_add.info = cinfo;
         request_add.name = cname;
         request_add.context = ActionContext.REQUESTED;
-
+        
+        request_add_multi = new Action(); 
+        request_add_multi.action = on_request_multi;
+        request_add_multi.info = cinfo;
+        request_add_multi.name = cname;
+        request_add_multi.context = ActionContext.REQUESTED;
     }
 
     public override ItemHandlerType handler_type() {
@@ -127,6 +133,8 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             case ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED:
                 return activated_from_playlist;
             case ActionContext.REQUESTED:
+                if(selection == ItemSelectionType.MULTIPLE)
+                    return request_add_multi;
                 return request_add;
             default:
                 break;
@@ -336,12 +344,38 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         return false;
     }
     
+    private void on_request_multi(Item item, GLib.Value? data, GLib.Value? data2) {
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_multi_job);
+        Worker.Job j = (Worker.Job)data2;
+        job.items = j.items;
+        db_worker.push_job(job);
+    }
+
     private void on_request(Item item, GLib.Value? data, GLib.Value? data2) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_job);
         job.item = item;
         db_worker.push_job(job);
     }
     
+    private bool add_requested_multi_job(Worker.Job job) {
+        TrackData[] tda = {};
+        foreach(Item? i in job.items) {
+            TrackData[] tmp = item_converter.to_trackdata(i, EMPTYSTRING);
+            foreach(TrackData tdx in tmp) {
+                tda += tdx;
+            }
+        }
+        job.track_dat = tda;
+        
+        if(job.track_dat != null && job.track_dat.length > 0) {
+            Idle.add( () => {
+                append_tracks(ref job.track_dat, true);
+                return false;
+            });
+        }
+        return false;
+    }
+
     private bool add_requested_job(Worker.Job job) {
         Item? item = job.item;
         job.track_dat = item_converter.to_trackdata(item, EMPTYSTRING);

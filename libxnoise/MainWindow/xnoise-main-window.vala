@@ -1358,23 +1358,27 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
             GLib.SList<string> res = fcdialog.get_uris();
             if(!(res == null || res.data == EMPTYSTRING)) {
+                Item[] its = {};
                 foreach(string s in res) {
                     Item? item = ItemHandlerManager.create_item(s);
                     if(item.type == ItemType.UNKNOWN) {
                         print("itemtype unknown\n");
                         continue;
                     }
-                    ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
-                    if(tmp == null)
-                        return;
-                    unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
-                    
-                    if(action != null) {
-                        action.action(item, null, null);
-                    }
-                    else {
-                        print("action was null\n");
-                    }
+                    its += item;
+                }
+                ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+                if(tmp == null)
+                    return;
+                unowned Action? action = tmp.get_action(ItemType.LOCAL_AUDIO_TRACK, ActionContext.REQUESTED, ItemSelectionType.MULTIPLE);
+                
+                Worker.Job tj = new Worker.Job(); // transporter for items in Value
+                tj.items = its;
+                if(action != null) {
+                    action.action(Item(ItemType.LOCAL_AUDIO_TRACK), null, tj);
+                }
+                else {
+                    print("action was null\n");
                 }
             }
         }
