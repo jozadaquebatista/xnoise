@@ -21,6 +21,8 @@ libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.c
 libxnoise/DockableMedia/xnoise-dockable-media.c
 libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.c
 libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.c
+libxnoise/ExtDev/CddaDevice/xnoise-cdda-main-view.c
+libxnoise/ExtDev/CddaDevice/xnoise-cdda-tree-view.c
 libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.c
 libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.c
 libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.c
