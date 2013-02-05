@@ -1,11 +1,11 @@
-# Pavel Fric <pavelfric@seznam.cz>, 2011, 2012.
+# Pavel Fric <pavelfric@seznam.cz>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-05 17:18+0100\n"
-"PO-Revision-Date: 2012-12-20 16:03+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2013-02-05 20:40+0100\n"
+"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -34,22 +34,19 @@ msgstr "Přehrát/Pozastavit"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 msgid "Stop"
-msgstr ""
+msgstr "Zastavit"
 
 #: ../data/misc/xnoise.desktop.in.in.h:6
-#, fuzzy
 msgid "Goto next track"
 msgstr "Jít na další skladbu"
 
 #: ../data/misc/xnoise.desktop.in.in.h:7
-#, fuzzy
 msgid "Goto previous track"
 msgstr "Jít na předchozí skladbu"
 
 #: ../data/misc/xnoise.desktop.in.in.h:8
-#, fuzzy
 msgid "Quit application"
-msgstr "Ukončit program při zavření okna"
+msgstr "Ukončit program"
 
 #: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
 #, c-format
@@ -72,9 +69,9 @@ msgid "no lyrics found..."
 msgstr "Nenalezen žádný text..."
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:601
-#, fuzzy, c-format
+#, c-format
 msgid "unknown"
-msgstr "Neznámý název"
+msgstr "Neznámý"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
@@ -273,16 +270,18 @@ msgstr "Pomocné linky v prohlížeči médií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Showing lines in the media browser might show hierachies more clear"
-msgstr ""
+msgstr "Zobrazení řádků v prohlížeči médií, může ukázat hierarchii jasněji"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
 msgid "Use systray icon"
-msgstr ""
+msgstr "Použít ikonu v systémové části panelu"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
 msgid ""
 "Use a status icon on your panel for showing, hiding and controlling xnoise"
 msgstr ""
+"Zobrazit stavovou ikonu ve vašem panelu kvůli ukázání, skrytí a ovládání "
+"Xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid "Show picture on hover album image"
@@ -293,14 +292,17 @@ msgid ""
 "Show a larger view on the album art while the mouse pointer is over the "
 "album image in the main window"
 msgstr ""
+"Ukázat větší zobrazení obalu alba, když je v hlavním okně ukazovátko myši nad "
+"obrázkem "
+"alba"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use menu button"
-msgstr ""
+msgstr "Používat tlačítko pro nabídku"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
 msgid "Use an application menu button integrated into the main window"
-msgstr ""
+msgstr "Použít tlačítko pro programovou nabídku začleněné do hlavního okna"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show Stop button"
@@ -309,15 +311,15 @@ msgstr "Zobrazit tlačítko pro zastavení"
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:348
 msgid "Show a stop button along with the other playback control buttons"
 msgstr ""
+"Ukazovat tlačítko pro zastavení společně s ostatními tlačítky pro přehrávání"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 msgid "Quit on window close"
 msgstr "Ukončit při zavření okna"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:353
-#, fuzzy
 msgid "Quit xnoise if the main window is closed"
-msgstr "Ukončit při zavření okna"
+msgstr "Ukončit Xnoise při zavření hlavního okna"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
 msgid "Use desktop notifications"
@@ -328,14 +330,18 @@ msgid ""
 "Use desktop notifications that inform about played media while the main "
 "window of xnoise is not visible"
 msgstr ""
+"Použít systémová oznámení, jež informují o přehrávaném záznamu, "
+"když hlavní okno Xnoise není viditelné"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use combo box selector for media types"
-msgstr ""
+msgstr "Používat volič rozbalovacího seznamu pro typy multimédií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:363
 msgid "Use a combo box for selecting media types like music, video or streams"
 msgstr ""
+"Používat rozbalovací seznam pro výběr typů multimédií, jako jsou hudba, "
+"obrazový záznam nebo datové proudy"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:375
 msgid "Go Back"
@@ -446,6 +452,8 @@ msgid ""
 "With this dialog you can change the metatags in the according files. \n"
 "Handle with care!"
 msgstr ""
+"Pomocí tohoto dialogu můžete měnit popisná data v odpovídajících souborech.\n"
+"Používat opatrně!"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:136
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
@@ -514,9 +522,8 @@ msgid "Artist"
 msgstr "Umělec"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Album Artist"
-msgstr "Umělec"
+msgstr "Umělec alba"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
@@ -1281,9 +1288,8 @@ msgid "UbuntuOne Music"
 msgstr "UbuntuOne Music"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:163
-#, fuzzy
 msgid "UbuntuOne"
-msgstr "UbuntuOne Music"
+msgstr "UbuntuOne"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show _UbuntuOne Store"
