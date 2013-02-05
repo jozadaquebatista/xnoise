@@ -415,6 +415,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         
         if(job.track_dat != null) {
             Idle.add( () => {
+                global.in_preview = false;
                 append_tracks(ref job.track_dat, true);
                 return false;
             });
