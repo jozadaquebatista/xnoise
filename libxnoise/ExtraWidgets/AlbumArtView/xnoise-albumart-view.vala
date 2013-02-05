@@ -38,7 +38,7 @@ using Xnoise.Utilities;
 private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     
     internal static IconCache icon_cache;
-    private IconsModel icons_model;
+    internal IconsModel icons_model;
     private uint col_count_source = 0;
     private uint update_icons_source = 0;
     

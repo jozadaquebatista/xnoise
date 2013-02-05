@@ -272,7 +272,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             media_importer.reimport_media_files(paths);
             
             var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-            db_worker.push_job(fin_job);
+            io_worker.push_job(fin_job);
         }
         return false;
     }
@@ -280,6 +280,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
     private bool finish_job(Worker.Job job) {
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
+            main_window.album_art_view.icons_model.filter();
             return false;
         });
         Timeout.add(300, () => {

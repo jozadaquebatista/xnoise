@@ -198,7 +198,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
         job.set_arg("new_content_name", new_content_name);
         job.item = this.item;
-        db_worker.push_job(job);
+        io_worker.push_job(job);
     }
 
 
@@ -206,7 +206,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
         assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
         //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-        job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
+        job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);
         if(job.track_dat == null)
             return false;
         job.item = tag_job.item;
@@ -246,6 +246,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
 //        db_writer.commit_transaction();
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
+            main_window.album_art_view.icons_model.filter();
             return false;
         });
         Timeout.add(300, () => {

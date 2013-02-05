@@ -301,7 +301,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         mediabrowsermodel.get_iter(out iter, path);
         mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
-        Item? parent_item = null;
+        Item? parent_item = Item(ItemType.UNKNOWN);
         if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             TreePath treepath = path.copy();
             while(treepath.get_depth() > 1) {

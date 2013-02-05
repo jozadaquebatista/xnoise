@@ -314,7 +314,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         TrackData[] tda = {};
         foreach(Item item in job.items) {
             HashTable<ItemType,Item?>? extra_items = null;
-            if(job.item != null) {
+            if(job.item != null && job.item.type != ItemType.UNKNOWN) {
                 extra_items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                 extra_items.insert(job.item.type, job.item);
             }

@@ -94,6 +94,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
         td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
+        //foreach(var tdx in td_old)
+        //    print("tit: %s\n", tdx.title);
         assert(td_old != null && td_old[0] != null);
         TrackData td = td_old[0];
         switch(item.type) {
@@ -237,13 +239,13 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         new_genre = genre_entry.text.strip();
         new_is_compilation = checkb_comp.active;
         job.item = this.item;
-        db_worker.push_job(job);
+        io_worker.push_job(job);
     }
 
     private bool update_tags_job(Worker.Job tag_job) {
         if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
+            job.track_dat = td_old;//item_converter.to_trackdata(tag_job.item, global.searchtext);
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;
@@ -286,6 +288,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private bool finish_job(Worker.Job job) {
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
+            main_window.album_art_view.icons_model.filter();
             return false;
         });
         Timeout.add(300, () => {
