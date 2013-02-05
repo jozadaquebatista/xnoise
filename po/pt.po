@@ -35,22 +35,19 @@ msgstr "Reproduzir/Pausar"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ../data/misc/xnoise.desktop.in.in.h:6
-#, fuzzy
 msgid "Goto next track"
 msgstr "Ir para a faixa seguinte"
 
 #: ../data/misc/xnoise.desktop.in.in.h:7
-#, fuzzy
 msgid "Goto previous track"
 msgstr "Ir para a faixa anterior"
 
 #: ../data/misc/xnoise.desktop.in.in.h:8
-#, fuzzy
 msgid "Quit application"
-msgstr "Sair da aplicação ao fechar a janela"
+msgstr "Sair da aplicação"
 
 #: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
 #, c-format
@@ -73,9 +70,9 @@ msgid "no lyrics found..."
 msgstr "nenhuma letra encontrada..."
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:601
-#, fuzzy, c-format
+#, c-format
 msgid "unknown"
-msgstr "título desconhecido"
+msgstr "desconhecido"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
@@ -274,16 +271,18 @@ msgstr "Linhas de grelha no explorador"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 msgid "Showing lines in the media browser might show hierachies more clear"
-msgstr ""
+msgstr "A exibição das linhas no explorador simplifica a hierarquia"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
 msgid "Use systray icon"
-msgstr ""
+msgstr "Utilizar ícone na bandeja"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
 msgid ""
 "Use a status icon on your panel for showing, hiding and controlling xnoise"
 msgstr ""
+"Utilizar ícone de estado na bandeja para mostrar, ocultar e controlar o "
+"xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid "Show picture on hover album image"
@@ -294,14 +293,16 @@ msgid ""
 "Show a larger view on the album art while the mouse pointer is over the "
 "album image in the main window"
 msgstr ""
+"Mostrar imagem de álbum grande ao passar com o rato na imagem de álbum da "
+"janela principal"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use menu button"
-msgstr ""
+msgstr "Utilizar botão de menu"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
 msgid "Use an application menu button integrated into the main window"
-msgstr ""
+msgstr "Utilizar um botão de menu da aplicação integrado na janela principal"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show Stop button"
@@ -309,16 +310,15 @@ msgstr "Mostrar o botão \"Parar\""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:348
 msgid "Show a stop button along with the other playback control buttons"
-msgstr ""
+msgstr "Mostrar botão para parar junto aos outros controlos de reprodução"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 msgid "Quit on window close"
 msgstr "Sair ao fechar a janela"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:353
-#, fuzzy
 msgid "Quit xnoise if the main window is closed"
-msgstr "Sair ao fechar a janela"
+msgstr "Sair do xnoise ao fechar a janela principal"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
 msgid "Use desktop notifications"
@@ -329,14 +329,18 @@ msgid ""
 "Use desktop notifications that inform about played media while the main "
 "window of xnoise is not visible"
 msgstr ""
+"Utilizar notificações do ambiente de trabalho para exibir os ficheiros "
+"reproduzidos se a janela principal estiver oculta"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use combo box selector for media types"
-msgstr ""
+msgstr "Utilizar caixa de combinação para os tipos multimédia"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:363
 msgid "Use a combo box for selecting media types like music, video or streams"
 msgstr ""
+"Utilizar uma caixa de combinação para selecionar os diferentes tipos de "
+"ficheiro"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:375
 msgid "Go Back"
@@ -447,6 +451,8 @@ msgid ""
 "With this dialog you can change the metatags in the according files. \n"
 "Handle with care!"
 msgstr ""
+"Com este diálogo, pode alterar os detalhes dos ficheiros.\n"
+"Utilize com precaução!"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:136
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
@@ -501,9 +507,8 @@ msgid "Year:"
 msgstr "Ano:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
-#, fuzzy
 msgid "Genre:"
-msgstr "Género"
+msgstr "Género:"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
@@ -514,9 +519,8 @@ msgid "Artist"
 msgstr "Artista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Album Artist"
-msgstr "Artista"
+msgstr "Artista do álbum"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
@@ -1273,9 +1277,8 @@ msgid "UbuntuOne Music"
 msgstr "Música UbuntuOne"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:163
-#, fuzzy
 msgid "UbuntuOne"
-msgstr "Música UbuntuOne"
+msgstr "UbuntuOne"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show _UbuntuOne Store"
