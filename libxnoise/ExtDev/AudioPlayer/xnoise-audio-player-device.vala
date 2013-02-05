@@ -57,7 +57,7 @@ public class Xnoise.ExtDev.PlayerDevice : Device {
         return false;
     }
     
-    public override PlayerMainView? get_main_view_widget() {
+    public override DeviceMainView? get_main_view_widget() {
         return null;
     }
     

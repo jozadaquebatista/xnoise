@@ -161,7 +161,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             year_entry             = builder.get_object("year_entry")      as Gtk.Entry;
             genre_entry            = builder.get_object("genre_entry")     as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
-            infolabel.label = _("With this dialog you can change the metatags in the according files. \nHandle with care!");
+            infolabel.label = 
+            _("With this dialog you can change the metatags in the according files. \nHandle with care!");
             var explainer_label    = builder.get_object("explainer_label") as Gtk.Label;
             var content_label      = builder.get_object("content_label")   as Gtk.Label;
             var artist_label       = builder.get_object("artist_label")    as Gtk.Label;

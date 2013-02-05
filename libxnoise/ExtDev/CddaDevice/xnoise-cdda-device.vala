@@ -1,6 +1,6 @@
-/* xnoise-android-player-device.vala
+/* xnoise-cdda-device.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,22 +33,29 @@ using Xnoise;
 using Xnoise.ExtDev;
 
 
-private class Xnoise.ExtDev.AndroidPlayerDevice : PlayerDevice {
+private class Xnoise.ExtDev.CddaDevice : Device {
     
+//    private Mount mount;
+    private Cancellable cancellable;
+    private string uri;
+    internal DeviceMainView? view = null;
     
-    public AndroidPlayerDevice(Mount _mount) {
-        base(_mount);
+    public CddaDevice(Mount mount) {
+        this.mount = mount;
+        cancellable = new Cancellable();
     }
     
     
     public override bool initialize() {
-        device_type = DeviceType.ANDROID;
+        device_type = DeviceType.CDROM;
         return true;
     }
     
     public static Device? get_device(Mount mount) {
-        if(File.new_for_uri(mount.get_default_location().get_uri() + "/Android").query_exists()) {
-            return new AndroidPlayerDevice(mount);
+        if(mount.get_default_location().get_uri().has_prefix("cdda://") && mount.get_volume() != null) {
+            var dev = new CddaDevice(mount);
+            assert(dev != null);
+            return dev;
         }
         return null;
     }
@@ -56,19 +63,28 @@ private class Xnoise.ExtDev.AndroidPlayerDevice : PlayerDevice {
     public override DeviceMainView? get_main_view_widget() {
         if(view != null)
             return view;
-        view = new AndroidPlayerMainView(this, cancellable);
+        view = new CddaMainView(this, cancellable);
         view.show_all();
         return view;
     }
     
     public override ItemHandler? get_item_handler() {
-        if(handler == null)
-            handler = new HandlerAndroidDevice(this, cancellable);
-        return handler;
+//        if(handler == null)
+//            handler = new HandlerCddaDevice(this, cancellable);
+//        return handler;
+        return null;
+    }
+    
+    public override string get_uri() {
+        return uri;
+    }
+    
+    public override void cancel() {
+        cancellable.cancel();
     }
     
     public override string get_presentable_name() {
-        return "Android";
+        return "CD";
     }
 }
 

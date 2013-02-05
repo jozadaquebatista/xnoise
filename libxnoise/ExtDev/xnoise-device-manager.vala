@@ -1,6 +1,6 @@
 /* xnoise-audio-player-device.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
         //register device types
         register_device(new DeviceIdContainer(AndroidPlayerDevice.get_device));
         register_device(new DeviceIdContainer(GenericPlayerDevice.get_device));
+        register_device(new DeviceIdContainer(CddaDevice.get_device));
         
         volume_monitor = VolumeMonitor.get();
         
@@ -85,6 +86,9 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
     }
     
     private void mount_added(Mount mount) {
+        assert(mount != null);
+        if(mount.get_volume() == null)
+            return;
         var job = new Worker.Job(Worker.ExecutionType.ONCE, mount_added_job);
         job.set_arg("mount", mount);
         device_worker.push_job(job);
@@ -92,14 +96,17 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
     
     private bool mount_added_job(Worker.Job job) {
         Mount? mount = (Mount)job.get_arg("mount");
+        if(mount.get_volume() == null)
+            return false;
         assert(mount != null);
-        lock(devices) {
-            foreach(Device d in devices.get_values()) {
-                if(mount.get_default_location().get_uri() == d.get_uri())
-                    return false; // already here
-            }
-        }
         Device? d = null;
+        lock(devices) {
+            d = devices.lookup(mount.get_default_location().get_uri());
+        }
+        if(d != null)
+            return false;  // already here
+        
+        d = null;
         foreach(DeviceIdContainer c in callbacks) {
             if((d = c.cb(mount)) != null) {
                 break;
@@ -114,9 +121,13 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
                     main_window.mainview_box.add_main_view(d.get_main_view_widget());
                     main_window.main_view_sbutton.insert(d.get_identifier(), d.get_presentable_name());
                     ItemHandler? handler = null;
-                    if((handler = d.get_item_handler()) != null) {
+                    if((handler = d.get_item_handler()) != null)
                         itemhandler_manager.add_handler(handler);
-                    }
+                    
+                    Idle.add(() => {
+                        main_window.main_view_sbutton.select(d.get_identifier(), true);
+                        return false;
+                    });
                     return false;
                 });
             }
@@ -125,25 +136,26 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
             }
         }
         else {
-            print ("unknown device in %s", mount.get_default_location().get_parse_name());
+            print ("unknown device in %s\n", mount.get_default_location().get_parse_name());
         }
         return false;
     }
     
     private void mount_removed(Mount mount) {
+        Device? d = null;
         lock(devices) {
-            foreach(Device d in devices.get_values()) {
-                if(mount.get_default_location().get_uri() == d.get_uri()) {
-                    d.cancel();
-                    itemhandler_manager.remove_handler(d.get_item_handler());
-                    //print("remove device for %s\n", mount.get_default_location().get_uri());
-                    devices.remove(d.get_identifier());
-                    main_window.main_view_sbutton.del(d.get_identifier());
-                    main_window.mainview_box.remove_main_view(d.get_main_view_widget());
-                    //print("removed audio player %s\n", d.get_identifier());
-                    return;
-                }
-            }
+            d = devices.lookup(mount.get_default_location().get_uri());
+        }
+        if(d == null)
+            return;
+        
+        d.cancel();
+        itemhandler_manager.remove_handler(d.get_item_handler());
+//        devices.remove(d.get_identifier());
+        main_window.main_view_sbutton.del(d.get_identifier());
+        main_window.mainview_box.remove_main_view(d.get_main_view_widget());
+        lock(devices) {
+            devices.remove(mount.get_default_location().get_uri());
         }
     }
 }

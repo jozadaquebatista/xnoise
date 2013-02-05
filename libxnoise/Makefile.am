@@ -71,12 +71,17 @@ libxnoise_la_SOURCES = \
     ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala \
     ExtDev/AudioPlayer/xnoise-audio-player-temp-db.vala \
+    ExtDev/CddaDevice/xnoise-cdda-device.vala \
+    ExtDev/CddaDevice/xnoise-cdda-item-handler.vala \
+    ExtDev/CddaDevice/xnoise-cdda-main-view.vala \
+    ExtDev/CddaDevice/xnoise-cdda-tree-view.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-device.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-store.vala \
     ExtDev/GenericPlayer/xnoise-generic-player-tree-view.vala \
     ExtDev/xnoise-device.vala \
+    ExtDev/xnoise-device-main-view.vala \
     ExtDev/xnoise-device-manager.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \

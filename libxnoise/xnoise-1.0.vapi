@@ -113,7 +113,7 @@ namespace Xnoise {
 			public abstract void cancel ();
 			public virtual string get_identifier ();
 			public abstract Xnoise.ItemHandler? get_item_handler ();
-			public abstract Xnoise.ExtDev.PlayerMainView? get_main_view_widget ();
+			public abstract DeviceMainView? get_main_view_widget ();
 			public virtual string get_presentable_name ();
 			public abstract string get_uri ();
 			public abstract bool initialize ();
@@ -142,7 +142,7 @@ namespace Xnoise {
 			public virtual uint64 get_free_space_size ();
 			public virtual string get_free_space_size_formatted ();
 			public override Xnoise.ItemHandler? get_item_handler ();
-			public override Xnoise.ExtDev.PlayerMainView? get_main_view_widget ();
+			public override DeviceMainView? get_main_view_widget ();
 			public override string get_presentable_name ();
 			public override string get_uri ();
 			public override bool initialize ();
@@ -151,12 +151,11 @@ namespace Xnoise {
 			public signal void sign_update_filesystem ();
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public abstract class PlayerMainView : Gtk.Overlay, Xnoise.IMainView {
+		public abstract class PlayerMainView : DeviceMainView {
 			protected weak Xnoise.ExtDev.PlayerDevice audio_player_device;
-			protected weak GLib.Cancellable cancellable;
 			public PlayerMainView (Xnoise.ExtDev.PlayerDevice audio_player_device, GLib.Cancellable cancellable);
-			protected abstract string get_localized_name ();
 			protected abstract Xnoise.ExtDev.PlayerTreeView? get_tree_view ();
+			public override string get_view_name ();
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class PlayerTreeStore : Gtk.TreeStore {
@@ -802,7 +801,7 @@ namespace Xnoise {
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
 		public Xnoise.ItemHandler? get_handler_by_type (Xnoise.ItemHandlerType type);
-		public void remove_handler (Xnoise.ItemHandler handler);
+		public void remove_handler (Xnoise.ItemHandler? handler);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LocalSchemes {
@@ -1316,4 +1315,12 @@ public enum PluginCategory {
 	GUI,
 	MUSIC_STORE,
 	ADDITIONAL
+}
+[CCode (cheader_filename = "xnoise-1.0.h")]
+public abstract class DeviceMainView : Gtk.Overlay, Xnoise.IMainView {
+	protected weak GLib.Cancellable cancellable;
+	protected Xnoise.ExtDev.Device device;
+	public DeviceMainView (Xnoise.ExtDev.Device device, GLib.Cancellable cancellable);
+	protected abstract string get_localized_name ();
+	public virtual string get_view_name ();
 }

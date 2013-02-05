@@ -72,7 +72,9 @@ namespace Xnoise {
             handler_name_map.insert(handler.handler_name(), handler);
         }
         
-        public void remove_handler(ItemHandler handler) {
+        public void remove_handler(ItemHandler? handler) {
+            if(handler == null)
+                return;
             for(int i = 0; i< _handlers.length; i++) {
                 if(handler == _handlers.index(i)) {
                     print("removing item handler: %s\n", _handlers.index(i).handler_name());
@@ -133,6 +135,14 @@ namespace Xnoise {
                     }
                 }
                 return item;
+            }
+            if(scheme == "cdda") {
+                item = Item(ItemType.CDROM_TRACK);
+                item.uri = uri;
+                if(item.uri.contains("."))
+                    return Item(ItemType.UNKNOWN);
+                else
+                    return item;
             }
             if(!f.query_exists(null))
                 return Item(ItemType.UNKNOWN);

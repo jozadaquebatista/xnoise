@@ -1,6 +1,6 @@
-/* xnoise-device.vala
+/* xnoise-device-main-view.vala
  *
- * Copyright (C) 2012 - 2013  Jörn Magens
+ * Copyright (C) 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,56 +28,28 @@
  *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
 
 
-public enum Xnoise.ExtDev.DeviceType {
-    UNKNOWN,
-    ANDROID,
-    GENERIC_PLAYER,
-    IPOD,
-    CDROM
+public abstract class DeviceMainView : Gtk.Overlay, IMainView {
+    protected unowned Cancellable cancellable;
+    protected Device device;
+    
+    public DeviceMainView(Device device,
+                          Cancellable cancellable) {
+        this.cancellable = cancellable;
+        this.device = device;
+    }
+    
+    
+    public virtual string get_view_name() {
+        return device.get_identifier();
+    }
+    
+    protected abstract string get_localized_name();
 }
 
-public abstract class Xnoise.ExtDev.Device : GLib.Object {
-    
-    public unowned Mount mount;
-    private string? identifier = null;
-    protected ItemHandler? handler = null;
-    
-    public DeviceType device_type { get; set; }
-    public bool in_data_transfer { get; set; default = false; }
-    
-    public abstract bool initialize();
-    public abstract string get_uri();
-    public abstract DeviceMainView? get_main_view_widget();
-    public abstract void cancel();
-    public abstract ItemHandler? get_item_handler();
-    
-    public bool in_loading { get; set; }
-    
-    public virtual string get_presentable_name() {
-        return "Dev";
-    }
-    
-    public virtual string get_identifier() {
-        if(identifier != null)
-            return identifier;
-        assert(mount != null);
-//            return "";
-        string uuid = mount.get_uuid();
-        File f = mount.get_default_location();
-        string ret = "";
-        if(f != null && f.get_uri() != null)
-            ret = ret + f.get_uri();
-        
-        if(uuid != null && uuid != "")
-            ret = ret + "/" + uuid;
-        //print("id = %s\n", ret);
-        identifier = ret;
-        return ret;
-    }
-}
 

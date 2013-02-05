@@ -1,6 +1,6 @@
-/* xnoise-audio-player-main-view.vala
+/* xnoise-cdda-main-view.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,38 +32,30 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.ExtDev;
+using Xnoise.Resources;
 
 
-public abstract class Xnoise.ExtDev.PlayerMainView : DeviceMainView { //Gtk.Overlay, IMainView {
+private class Xnoise.ExtDev.CddaMainView : DeviceMainView {
+    private CddaTreeView treeview;
+    private Label info_label;
     
-    private Gtk.Label info_label;
-    protected unowned PlayerDevice audio_player_device;
-//    protected unowned Cancellable cancellable;
-    internal PlayerTreeView tree;
-    
-    public PlayerMainView(PlayerDevice audio_player_device,
-                          Cancellable cancellable) {
-        base(audio_player_device, cancellable);
-//        this.cancellable = cancellable;
-        this.audio_player_device = audio_player_device;
+    public CddaMainView(CddaDevice dev,
+                        Cancellable cancellable) {
+        base(dev, cancellable);
         setup_widgets();
-        audio_player_device.sign_update_filesystem.connect( () => {
-            print("update filesystem info\n");
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
-            device_worker.push_job(job);
-        });
     }
     
     
     public override string get_view_name() {
-        return audio_player_device.get_identifier();
+        return device.get_identifier();
     }
     
-//    protected abstract string get_localized_name();
-    
-    protected abstract PlayerTreeView? get_tree_view();
+    protected override string get_localized_name() {
+        return _("Audio CD");
+    }
     
     private void setup_widgets() {
+        
         var box = new Gtk.Box(Orientation.VERTICAL, 0);
         var header_label = new Label("");
         header_label.set_markup("<span size=\"xx-large\"><b>" +
@@ -75,14 +67,11 @@ public abstract class Xnoise.ExtDev.PlayerMainView : DeviceMainView { //Gtk.Over
         info_label = new Label("");
         box.pack_start(info_label, false, false, 4);
         
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, fill_info_job);
-        device_worker.push_job(job);
-        
-        tree = get_tree_view();
+        treeview = new CddaTreeView(device);
         
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
-        sw.add(tree);
+        sw.add(treeview);
         box.pack_start(sw, true, true, 0);
         
         var spinner = new Spinner();
@@ -93,9 +82,9 @@ public abstract class Xnoise.ExtDev.PlayerMainView : DeviceMainView { //Gtk.Over
         spinner.valign = Align.CENTER;
         spinner.set_no_show_all(true);
         show();
-        spinner.show();
-        audio_player_device.notify["in-loading"].connect( () => {
-            if(audio_player_device.in_loading) {
+        spinner.show(); 
+        treeview.notify["in-loading"].connect( () => {
+            if(treeview.in_loading) {
                 spinner.start();
                 spinner.set_no_show_all(false);
                 spinner.show_all();
@@ -109,22 +98,5 @@ public abstract class Xnoise.ExtDev.PlayerMainView : DeviceMainView { //Gtk.Over
         
         this.add(box);
     }
-    
-    private bool fill_info_job(Worker.Job job) {
-        if(!(audio_player_device is PlayerDevice))
-            return false;
-        string info =
-            _("Free space: ") +
-            audio_player_device.get_free_space_size_formatted() +
-            "\n" +
-            _("Total space: ") +
-            audio_player_device.get_filesystem_size_formatted();
-        Idle.add(() => {
-            info_label.label = info;
-            return false;
-        });
-        return false;
-    }
 }
-
 

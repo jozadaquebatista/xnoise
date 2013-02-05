@@ -78,7 +78,7 @@ private class Xnoise.ExtDev.GenericPlayerDevice : PlayerDevice {
         return true;
     }
     
-    public override PlayerMainView? get_main_view_widget() {
+    public override DeviceMainView? get_main_view_widget() {
         if(view != null)
             return view;
         view = new GenericPlayerMainView(this, cancellable);
