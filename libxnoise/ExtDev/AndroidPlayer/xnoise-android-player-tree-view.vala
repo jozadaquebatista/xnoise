@@ -56,6 +56,8 @@ private class Xnoise.ExtDev.AndroidPlayerTreeView : PlayerTreeView {
         else {
             b = File.new_for_uri(audio_player_device.get_uri());
             b = b.get_child("media"); // old android devices
+            ba[0] = b;
+            print("old type android device\n");
             return new AndroidPlayerTreeStore(this, audio_player_device, ba, cancellable);
         }
     }
