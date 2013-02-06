@@ -100,10 +100,8 @@ All library media will be available in the media browser.</property>
                         <property name="icon_size">1</property>
                         <child>
                           <object class="GtkToolButton" id="addfolderbutton">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">Add Folder</property>
                             <property name="use_underline">True</property>
                             <property name="icon_name">folder-symbolic</property>
@@ -115,11 +113,9 @@ All library media will be available in the media browser.</property>
                         </child>
                         <child>
                           <object class="GtkToolButton" id="streambutton">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_markup" translatable="yes">okokok</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">Add Stream</property>
                             <property name="icon_name">network-transmit-symbolic</property>
                           </object>
@@ -130,10 +126,8 @@ All library media will be available in the media browser.</property>
                         </child>
                         <child>
                           <object class="GtkSeparatorToolItem" id="toolbutton1">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -141,10 +135,8 @@ All library media will be available in the media browser.</property>
                         </child>
                         <child>
                           <object class="GtkToolButton" id="removebutton">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">Remove Item</property>
                             <property name="use_underline">True</property>
                             <property name="icon_name">list-remove-symbolic</property>
@@ -180,10 +172,8 @@ All library media will be available in the media browser.</property>
                 <property name="margin_top">10</property>
                 <child>
                   <object class="GtkSwitch" id="fullrescan_switch">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -212,7 +202,7 @@ All library media will be available in the media browser.</property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
@@ -220,11 +210,9 @@ All library media will be available in the media browser.</property>
                 <child>
                   <object class="GtkButton" id="okbutton">
                     <property name="label">gtk-apply</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -242,7 +230,7 @@ All library media will be available in the media browser.</property>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>

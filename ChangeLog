@@ -1,3 +1,141 @@
+commit 886c6fdd63d25ffb135f18ee7b9c4164eaca0719
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 6 09:56:42 2013 +0100
+
+    update packaging data
+
+commit bfc6d6551fad325e426ef7bba85d66520d72177a
+Author: Petr Simacek <psimacek@radiobeat.cz>
+Date:   Tue Feb 5 23:09:55 2013 +0100
+
+    update po/cs.po
+
+commit e3d4347eedb4255b8eb15c3975e4f4885d5ba8c2
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Tue Feb 5 23:08:50 2013 +0100
+
+    update po/eu.po
+
+commit 763eb085287b5fde095e5924eb1534586107ff08
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Tue Feb 5 20:02:00 2013 +0100
+
+    update po/pt.po
+
+commit d35fb76620f153d7ada9637a34ad7d3139962ceb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 17:50:36 2013 +0100
+
+    fix issue with preview mode
+
+commit 46b172440b0537a4698f0091bf1d5258d61a1a57
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 17:27:24 2013 +0100
+
+    fix issue with old android devices
+
+commit 1cd224bb398afb5bdcb68f46c5e7870f6f74c2d4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 17:19:59 2013 +0100
+
+    update strings
+
+commit e3e6b5b8b5cd9d0330075b7e41f287655440c082
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 17:16:11 2013 +0100
+
+    fix issue #4 : on open play first file rather than last
+
+commit 28766b8d5535b66c68809c814fe46e94bfbbce98
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 16:47:33 2013 +0100
+
+    fix issue with add all handler
+
+commit c88fd489489aa175d9e222024fe833bdd251b125
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 16:31:21 2013 +0100
+
+    fix some issues with tag editing
+
+commit a8520bb65a7ef558987b028fc252ea33bf179a20
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 5 14:32:04 2013 +0100
+
+    add CD Rom device type
+
+commit 835f80d9856f00fc5bd99d143784aaad3625fdcd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 3 10:24:57 2013 +0100
+
+    update strings
+
+commit 0f369519f1341db5858a9f165616dc0365cae0a1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 3 09:03:14 2013 +0100
+
+    fix some visual flicker in magnatune browser
+
+commit d4ff74b7e7b65aed74d892940560b287105e236e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 3 08:57:32 2013 +0100
+
+    fix some visual flicker in music browser
+
+commit dbb3450a53e0fd93101416ca798b2e691c5dab48
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 2 17:36:33 2013 +0100
+
+    change some file header dates
+
+commit 5efe3590893793c384e78d49f00622d169f9132e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 2 17:34:19 2013 +0100
+
+    change button style in toolbar; visual adjustments
+
+commit 5178a9a97c938cbde5d18abce5fae4e8d157e8ae
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 2 15:07:51 2013 +0100
+
+    only handle tray icon visibility via setting
+
+commit aedcb26ce9e9a492cd40174d43f5785fb14bfd6f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 23:06:06 2013 +0100
+
+    update strings
+
+commit e1ddcec79dd44d665d92579aef6e43ad8c92fe9c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 22:59:19 2013 +0100
+
+    add warning for tag editing
+
+commit 91cf48f67b809ec49961b040243148cf4fb83cc0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 22:43:22 2013 +0100
+
+    improve tag editing for albums
+
+commit 506a417994dedc931d3ad456f80cf1df4078fd0b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 22:11:47 2013 +0100
+
+    fix some issues
+
+commit 53df7f4471781069e6df8d1d6c5a441cc9ddf0f7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 16:52:25 2013 +0100
+
+    remove debug print
+
+commit d5abc192aff0864ac0f537c244ba9076ea77767b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 1 16:19:14 2013 +0100
+
+    update changelog
+
 commit 2896feae2beb22b157186324324f8c4d84ee1587
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Feb 1 16:13:44 2013 +0100
