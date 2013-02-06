@@ -1,17 +1,24 @@
-xnoise (0.2.15-1ppa1~precise) precise; urgency=low
-  * Add support for Android and some other player devices
-  * Use themed symbolic icons
-  * Add optional GENRE-ARTIST-ALBUM sort mode in music browser
-  * Add some sort modes for album-art-view
-  * Allow editing of genres
-  * Equalizer is now activatable from the equalizer window, only
-  * Show album art in album tag editor
-  * Rework settings dialog, again
-  * Localization updates
-  * Code cleanups
+xnoise (0.2.15-1ppa1~quantal) quantal; urgency=low
+  * Handle 'Various artists' albums and compilations
+  * Add CD Rom device type (preview listening, only)
+  * Change button style in toolbar
+  * Handle tray icon visibility via setting, only
+  * Add sequencial loading for album art view for better user experience on large search results
+  * Add commandline option for 'hidden window' mode
+  * Translate and extend unity quicklist options
+  * Add DockableMediaManager class (tradiaz)
+  * Add combobox media selector (tradiaz)
+  * Add animated showing/hiding of tree media selector
+  * Add gstreamer-plugins-base to runtime dependencies
+  * Allow editing of genre
+  * Adjust volume on scroll on video screen/'now playing' pane
+  * Add local fallback icons for xnoise
+  * Use gnome's 'emblem-system-symbolic' for the application button (0rAX0)
+  * More icon work
+  * Update some translations
   * Many bug fixes
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 22 Dec 2012 22:04:51 +0100
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 06 Feb 2013 16:54:59 +0100
 
 
 xnoise (0.2.14-1ppa1~quantal) quantal; urgency=low

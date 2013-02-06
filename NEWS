@@ -1,3 +1,29 @@
+xnoise (0.2.15)
+
+Changes
+======================
+  * Handle 'Various artists' albums and compilations
+  * Add CD Rom device type (preview listening, only)
+  * Change button style in toolbar
+  * Handle tray icon visibility via setting, only
+  * Add sequencial loading for album art view for better user experience on large search results
+  * Add commandline option for 'hidden window' mode
+  * Translate and extend unity quicklist options
+  * Add DockableMediaManager class (tradiaz)
+  * Add combobox media selector (tradiaz)
+  * Add animated showing/hiding of tree media selector
+  * Add gstreamer-plugins-base to runtime dependencies
+  * Allow editing of genre
+  * Adjust volume on scroll on video screen/'now playing' pane
+  * Add local fallback icons for xnoise
+  * Use gnome's 'emblem-system-symbolic' for the application button (0rAX0)
+  * More icon work
+  * Update some translations
+  * Many bug fixes
+
+
+
+
 xnoise (0.2.14)
 
 Changes
@@ -13,6 +39,7 @@ Changes
   * Localization updates
   * Code cleanups
   * Many bug fixes
+
 
 
 
