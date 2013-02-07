@@ -1,3 +1,9 @@
+commit 1735e39a1ea9de9ef9b7e7f3c4c776e89578ce67
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 6 10:56:30 2013 +0100
+
+    change width adaption in add media widget
+
 commit 886c6fdd63d25ffb135f18ee7b9c4164eaca0719
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Feb 6 09:56:42 2013 +0100
