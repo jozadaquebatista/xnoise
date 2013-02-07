@@ -201,7 +201,7 @@ libxnoise_la_LDFLAGS = \
 libxnoise_la_LIBADD = \
     $(XNOISE_LIBS) \
     $(top_builddir)/bindings/c/libtaginfo_c.la \
-    -lgstpbutils-0.10 \
+    -lgstpbutils-1.0 \
     $(NULL)
 
 VAPI_FILES = xnoise-1.0.vapi

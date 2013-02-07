@@ -1,6 +1,6 @@
 /* xnoise-equalizer-widget.vala
  *
- * Copyright(C) 2012 Jörn Magens
+ * Copyright(C) 2013 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,16 +42,20 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
     public Button closebutton; 
     private Gtk.Scale preamp;
     
+    internal bool eq_active {get; set;}
+    
     private class EqualizerScale : Gtk.Box {
         private Gtk.Scale scale;
         private int idx;
         private int frequency;
         private unowned GstEqualizer equalizer;
+        private EqualizerWidget eq_widget;
         
         public signal void value_changed(int index, double new_val);
         
-        public EqualizerScale(GstEqualizer equalizer, int idx, int frequency) {
+        public EqualizerScale(EqualizerWidget eq_widget, GstEqualizer equalizer, int idx, int frequency) {
             GLib.Object(orientation:Orientation.VERTICAL,spacing:5);
+            this.eq_widget = eq_widget;
             this.equalizer = equalizer;
             this.idx = idx;
             this.frequency = frequency;
@@ -62,6 +66,12 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         private void on_value_changed(Gtk.Range sender) {
             this.equalizer[idx] = (double)scale.get_value();
             this.value_changed(idx, (double)scale.get_value());
+            if(eq_widget.eq_active)
+                Params.set_double_value("eq_band%d".printf(idx), scale.get_value());
+        }
+        
+        public void restore() {
+            scale.set_value(Params.get_double_value("eq_band%d".printf(idx)));
         }
         
         public void set_gain(double gain) {
@@ -91,9 +101,9 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             this.pack_start(l, false, false, 0);
             this.show_all();
             
-            this.scale.sensitive = gst_player.eq_active;
-            gst_player.notify["eq-active"].connect( () => {
-                this.scale.sensitive = gst_player.eq_active;
+            this.scale.sensitive = eq_widget.eq_active;
+            eq_widget.notify["eq-active"].connect( () => {
+                this.scale.sensitive = eq_widget.eq_active;
             });
         }
     }
@@ -110,6 +120,23 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
 
     private bool in_load_preset = false;
     private void on_preset_changed(ComboBox sender) {
+        GstEqualizer.TenBandPreset pres;
+        EqualizerScale sc;
+        if(!eq_active) {
+            pres = equalizer.get_preset(0);
+            in_load_preset = true;
+            for(int j = 0; j < 10; j++) {
+                sc = scale_indies[j];
+                sc.set_gain(pres.freq_band_gains[j]);
+                equalizer[j] = pres.freq_band_gains[j];
+            }
+            preamp.set_value(pres.pre_gain);
+            Idle.add(() => {
+                in_load_preset = false;
+                return false;
+            });
+            return;
+        }
         string s = sender.get_active_id();
         if(s == "")
             return;
@@ -118,10 +145,10 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             return;
         int i = int.parse(s);
         //print("seleted preset %d\n", i);
-        GstEqualizer.TenBandPreset pres = equalizer.get_preset(i);
+        pres = equalizer.get_preset(i);
         in_load_preset = true;
         for(int j = 0; j < 10; j++) {
-            EqualizerScale sc = scale_indies[j];
+            sc = scale_indies[j];
             sc.set_gain(pres.freq_band_gains[j]);
             equalizer[j] = pres.freq_band_gains[j];
         }
@@ -150,7 +177,8 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         var combox = new Gtk.Box(Orientation.HORIZONTAL, 0);
         c = new ComboBoxText();
         for(int i = 0; i < equalizer.preset_count(); i++) {
-            GstEqualizer.TenBandPreset pres = equalizer.get_preset(i);
+            GstEqualizer.TenBandPreset pres = null;
+            pres = equalizer.get_preset(i);
             c.append(i.to_string(), pres.name);
         }
         if(Params.get_string_value("eq_combo") != "")
@@ -165,15 +193,16 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         vbox_switch.pack_start(on_off_switch, false, false, 0);
         vbox_switch.pack_start(new DrawingArea(), false, false, 0);
         combox.pack_start(vbox_switch, false, false, 0);
-        on_off_switch.set_active(gst_player.eq_active);
+        eq_active = !Params.get_bool_value("not_use_eq");
+        on_off_switch.set_active(eq_active);
         on_off_switch.notify["active"].connect( () => {
             if(!on_off_switch.active) {
                 Params.set_bool_value("not_use_eq", true);
-                gst_player.eq_active = false;
+                eq_active = false;
             }
             else {
                 Params.set_bool_value("not_use_eq", false);
-                gst_player.eq_active = true;
+                eq_active = true;
             }
         });
         var l = new Label("");
@@ -200,12 +229,18 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         preampbox.pack_start(l_pre, false, false, 0);
         freq_gains_box.pack_start(preampbox, true, true, 10);
         
-        preamp.sensitive = gst_player.eq_active;
-        c.sensitive      = gst_player.eq_active;
+        preamp.sensitive = eq_active;
+        c.sensitive      = eq_active;
         
-        gst_player.notify["eq-active"].connect( () => {
-            preamp.sensitive = gst_player.eq_active;
-            c.sensitive      = gst_player.eq_active;
+        this.notify["eq-active"].connect( () => {
+            preamp.sensitive = eq_active;
+            c.sensitive      = eq_active;
+            if(eq_active) {
+                for(int i = 0; i < 10; i++) {
+                    scale_indies[i].restore();
+                }
+            }
+            on_preset_changed(c);
         });
         
         Idle.add(() => {
@@ -215,7 +250,7 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
             return false;
         });
         for(int i = 0; i < 10; i++) {
-            var esc = new EqualizerScale(equalizer, i, fa[i]);
+            var esc = new EqualizerScale(this, equalizer, i, fa[i]);
             freq_gains_box.pack_start(esc, true, true, 0);
             scale_indies[i] = esc;
             esc.value_changed.connect(on_eq_scale_value_changed);

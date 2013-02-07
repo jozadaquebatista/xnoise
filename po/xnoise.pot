@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-05 17:18+0100\n"
+"POT-Creation-Date: 2013-02-07 18:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -896,55 +896,55 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:227
+#: ../libxnoise/Player/xnoise-gst-player.vala:229
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:711
+#: ../libxnoise/Player/xnoise-gst-player.vala:714
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:715
+#: ../libxnoise/Player/xnoise-gst-player.vala:718
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:719
+#: ../libxnoise/Player/xnoise-gst-player.vala:722
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:725
+#: ../libxnoise/Player/xnoise-gst-player.vala:728
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:770
-#: ../libxnoise/Player/xnoise-gst-player.vala:781
-#: ../libxnoise/Player/xnoise-gst-player.vala:794
+#: ../libxnoise/Player/xnoise-gst-player.vala:773
+#: ../libxnoise/Player/xnoise-gst-player.vala:784
+#: ../libxnoise/Player/xnoise-gst-player.vala:797
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:772
+#: ../libxnoise/Player/xnoise-gst-player.vala:775
 msgid "Automatic missing codec installation not supported"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:783
+#: ../libxnoise/Player/xnoise-gst-player.vala:786
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:796
+#: ../libxnoise/Player/xnoise-gst-player.vala:799
 msgid "Trying to install missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:895
+#: ../libxnoise/Player/xnoise-gst-player.vala:899
 msgid "Subtitle #"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:907
+#: ../libxnoise/Player/xnoise-gst-player.vala:911
 msgid "Audio Track #"
 msgstr ""
 

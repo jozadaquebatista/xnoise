@@ -2456,8 +2456,6 @@ gint xnoise_gst_player_get_n_video (XnoiseGstPlayer* self);
 gint64 xnoise_gst_player_get_abs_position_microseconds (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_position (XnoiseGstPlayer* self, gdouble value);
-gboolean xnoise_gst_player_get_eq_active (XnoiseGstPlayer* self);
-void xnoise_gst_player_set_eq_active (XnoiseGstPlayer* self, gboolean value);
 GQuark xnoise_playlist_reader_error_quark (void);
 GType xnoise_playlist_list_type_get_type (void) G_GNUC_CONST;
 GType xnoise_playlist_result_get_type (void) G_GNUC_CONST;

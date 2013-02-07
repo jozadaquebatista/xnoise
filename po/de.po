@@ -47,16 +47,19 @@ msgstr "Gehe zum vorherigen Titel"
 msgid "Quit application"
 msgstr "Beende das Programm"
 
-#: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
+#: ../libxnoise/Application/xnoise-application.vala:244
+#: ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise ist ein Medien-Abspieler für Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:245 ../src/xnoise.vala:159
+#: ../libxnoise/Application/xnoise-application.vala:245
+#: ../src/xnoise.vala:159
 msgid "It uses the gstreamer framework."
 msgstr "Er benutzt das GStreamer Rahmenwerk."
 
-#: ../libxnoise/Application/xnoise-application.vala:246 ../src/xnoise.vala:160
+#: ../libxnoise/Application/xnoise-application.vala:246
+#: ../src/xnoise.vala:160
 msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
@@ -228,8 +231,7 @@ msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
 msgstr ""
-"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek "
-"hinzuzufügen. \n"
+"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek hinzuzufügen. \n"
 "Alle Medien werden in der Bibliothek zur Verfügung gestellt."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
@@ -277,23 +279,16 @@ msgid "Use systray icon"
 msgstr "Verwende ein Tray Symbol"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid ""
-"Use a status icon on your panel for showing, hiding and controlling xnoise"
-msgstr ""
-"Verwende ein Symbol in der Statusleiste um xnoise zu zeigen/versteken oder "
-"zu steuern"
+msgid "Use a status icon on your panel for showing, hiding and controlling xnoise"
+msgstr "Verwende ein Symbol in der Statusleiste um xnoise zu zeigen/versteken oder zu steuern"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid "Show picture on hover album image"
 msgstr "Zeige Bild, wenn Mauszeiger über dem Albumbild ist"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:338
-msgid ""
-"Show a larger view on the album art while the mouse pointer is over the "
-"album image in the main window"
-msgstr ""
-"Zeige eine große Darstellung des Albumbilds während der Mauszeiger über dem "
-"Albumbild-Vorschau im Hauptfenster ist"
+msgid "Show a larger view on the album art while the mouse pointer is over the album image in the main window"
+msgstr "Zeige eine große Darstellung des Albumbilds während der Mauszeiger über dem Albumbild-Vorschau im Hauptfenster ist"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use menu button"
@@ -301,8 +296,7 @@ msgstr "Verwende einen Menüknopf"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
 msgid "Use an application menu button integrated into the main window"
-msgstr ""
-"Verwende einen Menüknopf der ins Hauptfenster von xnoise integriert wird"
+msgstr "Verwende einen Menüknopf der ins Hauptfenster von xnoise integriert wird"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show Stop button"
@@ -310,9 +304,7 @@ msgstr "Zeige Stop Knopf"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:348
 msgid "Show a stop button along with the other playback control buttons"
-msgstr ""
-"Zeige einen Stop-Knopf, der bei den anderen Wiedergabe-Kontrollknöpfen "
-"integriert wird"
+msgstr "Zeige einen Stop-Knopf, der bei den anderen Wiedergabe-Kontrollknöpfen integriert wird"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 msgid "Quit on window close"
@@ -327,12 +319,8 @@ msgid "Use desktop notifications"
 msgstr "Zeige Benachrichtigungen"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
-msgid ""
-"Use desktop notifications that inform about played media while the main "
-"window of xnoise is not visible"
-msgstr ""
-"Zeige Benachrichtigungen über die abgespielten Medien, während das "
-"Hauptfenster von xnoise nicht sichtbar ist"
+msgid "Use desktop notifications that inform about played media while the main window of xnoise is not visible"
+msgstr "Zeige Benachrichtigungen über die abgespielten Medien, während das Hauptfenster von xnoise nicht sichtbar ist"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use combo box selector for media types"
@@ -340,9 +328,7 @@ msgstr "Verwende Combobox für die Auswahl von Medienquellen"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:363
 msgid "Use a combo box for selecting media types like music, video or streams"
-msgstr ""
-"Verwende eine Combobox um Medientypen wie Musik, Video oder Streams "
-"auszuwählen"
+msgstr "Verwende eine Combobox um Medientypen wie Musik, Video oder Streams auszuwählen"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:375
 msgid "Go Back"
@@ -416,8 +402,7 @@ msgstr "Bitte warte während Medien zu deiner Bibliothek hinzugefügt werden. "
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
-"Du kannst mit dem Anhören deiner Musik beginnen, indem du '%s' auswählst"
+msgstr "Du kannst mit dem Anhören deiner Musik beginnen, indem du '%s' auswählst"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
 msgid "Add more media folders"
@@ -454,8 +439,7 @@ msgid ""
 "With this dialog you can change the metatags in the according files. \n"
 "Handle with care!"
 msgstr ""
-"Mit diesem Dialog kannst du die Metadaten in den entsprechenden Dateien "
-"ändern. \n"
+"Mit diesem Dialog kannst du die Metadaten in den entsprechenden Dateien ändern. \n"
 "Gehe vorsichtig damit um!"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:136
@@ -484,21 +468,14 @@ msgstr "Album:"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:163
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:203
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:200
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht "
-"warten willst."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Bitte warte bis der Medien Browser gefüllt ist. Oder brich ab, wenn du nicht warten willst."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:207
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:204
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht "
-"warten willst."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Bitte warte bis die Medien importiert wurden. Oder brich ab, wenn du nicht warten willst."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
 msgid "Album data"
@@ -788,12 +765,8 @@ msgstr "Zeige die _Album Übersicht"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:512
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ "
-"große Zahl und kann den Start von xnoise verlangsamen."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "%u Titel werden in der Titelliste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:713
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:722
@@ -891,7 +864,7 @@ msgstr "Techno"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:167
 msgid "Club"
-msgstr "Techno"
+msgstr "Club"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:172
 msgid "Jazz"
@@ -922,11 +895,8 @@ msgid "Default"
 msgstr "Werkeinstellung"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:227
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
-"Untertitel-Datei"
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere Untertitel-Datei"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:711
 #, c-format
@@ -936,8 +906,7 @@ msgstr "Fehlendes GStreamer Plugin konnte installiert werden"
 #: ../libxnoise/Player/xnoise-gst-player.vala:715
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
-"Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
+msgstr "Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:719
 #, c-format
@@ -962,8 +931,7 @@ msgstr "Automatische Suche nach fehlendem Codec wird nicht unterstützt"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:783
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
-"Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
+msgstr "Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:796
 msgid "Trying to install missing gstreamer plugin"
@@ -1060,10 +1028,8 @@ msgid "%u new tracks found"
 msgstr "%u neue Titel gefunden"
 
 #: ../src/xnoise.vala:169
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
@@ -1110,9 +1076,7 @@ msgstr "Passwort:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:510
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr ""
-"Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu "
-"erstellen)"
+msgstr "Scrobble Titel auf last.fm (Übermittle Titeldaten um Statistiken zu erstellen)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"

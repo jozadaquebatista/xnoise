@@ -35,7 +35,7 @@ AC_DISABLE_STATIC
 TARGET_GLIB_VERSION=2.30
 
 dnl required versions for xnoise
-GSTREAMER_REQUIRED=0.10.23
+GSTREAMER_REQUIRED=1.0.1
 GLIB_REQUIRED=TARGET_GLIB_VERSION
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=TARGET_GLIB_VERSION
@@ -97,9 +97,8 @@ PKG_CHECK_MODULES(XNOISE, \
     gmodule-2.0 \
     gobject-2.0 >= $GLIB_REQUIRED \
     gio-2.0 >= $GIO_REQUIRED \
-    gstreamer-0.10 >= $GSTREAMER_REQUIRED \
-    gstreamer-interfaces-0.10 \
-    gstreamer-plugins-base-0.10 \
+    gstreamer-1.0 >= $GSTREAMER_REQUIRED \
+    gstreamer-plugins-base-1.0 \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     cairo)
@@ -442,10 +441,11 @@ XNOISE_PACKAGES="\
     --pkg gio-2.0 \
     --pkg libxml-2.0 \
     --pkg gmodule-2.0 \
-    --pkg gstreamer-0.10 \
-    --pkg gstreamer-pbutils-0.10 \
-    --pkg gstreamer-interfaces-0.10 \
-    --pkg gstreamer-tag-0.10 \
+    --pkg gstreamer-1.0 \
+    --pkg gstreamer-video-1.0 \
+    --pkg gstreamer-pbutils-1.0 \
+    --pkg gstreamer-base-1.0 \
+    --pkg gstreamer-tag-1.0 \
     --pkg gtk+-3.0 \
     --pkg posix \
     --pkg sqlite3 \

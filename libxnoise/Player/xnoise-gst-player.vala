@@ -1,6 +1,6 @@
 /* xnoise-gst-player.vala
  *
- * Copyright(C) 2009 - 2012 Jörn Magens
+ * Copyright(C) 2009 - 2013 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,13 +29,14 @@
  */
 
 using Gst;
+using Gst.PbUtils;
 
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Utilities;
 
 
-// GstPlayFlags flags of playbin2
+// GstPlayFlags flags of playbin
 [Flags]
 private enum Gst.PlayFlag {
     VIDEO         =(1 << 0),
@@ -74,7 +75,8 @@ public class Xnoise.GstPlayer : GLib.Object {
     private class TaglistWithStreamType {
         public TaglistWithStreamType(PlaybinStreamType _pst, TagList _tags) {
             this.pst = _pst; 
-            this.tags = _tags.copy();
+            this.tags = new TagList.empty();
+            this.tags = this.tags.merge(_tags, TagMergeMode.REPLACE);
         }
         public PlaybinStreamType pst;
         public TagList tags;
@@ -285,8 +287,8 @@ public class Xnoise.GstPlayer : GLib.Object {
         get {
             int64 pos;
             Gst.Format format = Gst.Format.TIME;
-            if(!playbin.query_position(ref format, out pos))
-                if(!playbin.query_position(ref format, out pos))
+            if(!playbin.query_position(format, out pos))
+                if(!playbin.query_position(format, out pos))
                     return -1;
             return pos / Gst.USECOND;
         }
@@ -310,8 +312,8 @@ public class Xnoise.GstPlayer : GLib.Object {
             print("gst position get\n");
             int64 pos;
             Gst.Format format = Gst.Format.TIME;
-            if(!playbin.query_position(ref format, out pos))
-                if(!playbin.query_position(ref format, out pos))
+            if(!playbin.query_position(format, out pos))
+                if(!playbin.query_position(format, out pos))
                     return 0.0;
             if(_length_nsecs == 0.0)
                 return 0.0;
@@ -323,8 +325,8 @@ public class Xnoise.GstPlayer : GLib.Object {
                     value = 1.0;
                 int64 len;
                 Gst.Format fmt = Gst.Format.TIME;
-                if(!playbin.query_duration(ref fmt, out len))
-                    if(!playbin.query_duration(ref fmt, out len))
+                if(!playbin.query_duration(fmt, out len))
+                    if(!playbin.query_duration(fmt, out len))
                         return;
                 _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
                 if(_length_nsecs > 0) {
@@ -379,30 +381,29 @@ public class Xnoise.GstPlayer : GLib.Object {
                                (int64)0);
             this.playSong();
         });
-        eq_active = !Params.get_bool_value("not_use_eq");
+//        eq_active = !Params.get_bool_value("not_use_eq");
     }
 
     private Gdk.Pixbuf? extract_embedded_image(Gst.TagList taglist) {
-        Gst.Buffer gst_buffer;
+        Gst.Sample sample2 = null;
         Gdk.PixbufLoader pbloader;
-        Gdk.Pixbuf? pixbuf;
-        Gst.Value? val = null;
+        Gdk.Pixbuf? pixbuf = null;
+        Gst.Sample sample;
+        Gst.MapInfo mapinfo;
         uint i = 0;
-        
         for(;;i++) {
-            Gst.Value? gstvalue;
             string media_type;
             Gst.Structure cstruct;
             int imgtype;
-            gstvalue = taglist.get_value_index(Gst.TAG_IMAGE, i);
-            if(gstvalue == null)
+            taglist.get_sample_index(Gst.Tags.IMAGE, i, out sample);
+            if(sample == null)
                 break;
             
-            gst_buffer = gstvalue.get_buffer();
-            if(gst_buffer == null) 
+            if(sample == null)
                 continue;
             
-            cstruct = gst_buffer.caps.get_structure(0);
+            var caps = sample.get_caps();
+            cstruct = caps.get_structure(0);
             media_type = cstruct.get_name();
             
             if(media_type == "text/uri-list")
@@ -411,20 +412,23 @@ public class Xnoise.GstPlayer : GLib.Object {
             cstruct.get_int("image-type", out imgtype); // get_enum doesn't work with vala
             //cstruct.get_enum("image-type", typeof(Gst.TagImageType), out imgtype);
             if(imgtype == 0) {      // UNDEFINED
-                val = gstvalue;
+                if(sample2 == null)
+                    sample2 = sample;
             }
             else if(imgtype == 1) { //FRONT_COVER
                 print("FRONT_COVER\n");
-                val = gstvalue;
+                sample2 = sample;
             }
         }
-        if(val == null)
+        if(sample2 == null)
             return null;
         
         pbloader = new Gdk.PixbufLoader();
-        gst_buffer = val.get_buffer();
+        
+        sample2.get_buffer().map (out mapinfo, MapFlags.READ);
+        
         try {
-            if(pbloader.write(gst_buffer.data) == false);
+            if(pbloader.write(mapinfo.data) == false);
         }
         catch(Error e) {
             try { pbloader.close(); } catch(Error e) {}
@@ -432,56 +436,55 @@ public class Xnoise.GstPlayer : GLib.Object {
         }
         pixbuf = pbloader.get_pixbuf();
         try { pbloader.close(); } catch(Error e) {}
-        
+        print("extracted image\n");
         return pixbuf;
     }
 
-    private bool _eq_active;
-    
-    public bool eq_active {
-        get {
-            return _eq_active;
-        }
-        set {
-            if(value) {
-                activate_equalizer();
-            }
-            else {
-                deactivate_equalizer();
-            }
-        }
-    }
-    private void activate_equalizer() {
+//    private bool _eq_active;
+//    public bool eq_active {
+//        get {
+//            return _eq_active;
+//        }
+//        set {
+//            if(value) {
+//                activate_equalizer();
+//            }
+//            else {
+//                deactivate_equalizer();
+//            }
+//        }
+//    }
+
+//    private void activate_equalizer() {
         //print("activate_equalizer\n");
-        if(equalizer.eq != null  && equalizer.available) {
-            playbin.set_state(State.NULL);
-            queue.unlink_many(asink);
-            queue.link_many(
-                ac1,
-                preamp,
-                equalizer.eq,
-                ac2,
-                asink
-            );
-        }
-        _eq_active = true;
-    }
+//        if(equalizer.eq != null  && equalizer.available) {
+//            playbin.set_state(State.NULL);
+//            queue.unlink(asink);
+//            queue.link_many(
+//                ac1,
+//                preamp,
+//                equalizer.eq,
+//                ac2,
+//                asink
+//            );
+//        }
+//        _eq_active = true;
+//    }
     
-    private void deactivate_equalizer() {
-        //print("deactivate_equalizer\n");
-        if(equalizer.eq != null && equalizer.available) {
-            playbin.set_state(State.NULL);
-            queue.unlink_many(
-                ac1,
-                preamp,
-                equalizer.eq,
-                ac2,
-                asink
-            );
-            queue.link_many(asink);
-        }
-        _eq_active = false;
-    }
+//    private void deactivate_equalizer() {
+//        print("deactivate_equalizer 1\n");
+//        if(equalizer.eq != null && equalizer.available) {
+//        print("deactivate_equalizer 2\n");
+//            playbin.set_state(State.NULL);
+//            queue.unlink(ac1);
+//            queue.unlink(preamp);
+//            queue.unlink(equalizer.eq);
+//            queue.unlink(ac2);
+//            queue.unlink(asink);
+//            queue.link_many(asink);
+//        }
+//        _eq_active = false;
+//    }
 
     private void request_location(string? xuri) {
         bool playing_buf = playing;
@@ -513,48 +516,79 @@ public class Xnoise.GstPlayer : GLib.Object {
         taglist_buffer = null;
         pipe = new Gst.Pipeline("pipeline");
         
-        playbin   = ElementFactory.make("playbin2", null);
+        playbin   = ElementFactory.make("playbin", null);
+        assert(playbin != null);
+        
         asink     = ElementFactory.make("autoaudiosink", null);
+        assert(asink != null);
+        
         ac1       = ElementFactory.make("audioconvert", null);
+        assert(ac1 != null);
+        
         ac2       = ElementFactory.make("audioconvert", null);
+        assert(ac2 != null);
+        
         preamp    = ElementFactory.make("volume", null);
+        assert(preamp != null);
+        
         tee       = ElementFactory.make("tee", null);
+        assert(tee != null);
+        
         queue     = ElementFactory.make("queue", null);
+        assert(queue != null);
         
         abin = new Gst.Bin("audiobin");
+        assert(abin != null);
         
         this.equalizer = new GstEqualizer();
-        
-        if(equalizer.eq != null && equalizer.available)
+        if(equalizer.eq != null && equalizer.available) {
+            print("eq created ok\n");
             ((Gst.Bin)abin).add_many(
                 preamp,
                 equalizer.eq,
                 ac1,
                 ac2
             );
+        }
+        else {
+            print("eq damaged!\n");
+        }
         
         ((Gst.Bin)abin).add_many(
             tee,
             queue,
             asink
         );
-        
-        abin.add_pad(new GhostPad("sink", tee.get_pad("sink")));
+        var tsink = tee.get_static_pad("sink");
+        assert(tsink != null);
+        var gp = new GhostPad("sink", tsink);
+        abin.add_pad(gp);
         
         if(equalizer.eq == null || !equalizer.available) {
+            print("eq not available\n");
             queue.link_many(asink);
         }
         else {
             queue.link_many(ac1, preamp, equalizer.eq, ac2, asink);
         }
-        
         playbin.set("audio-sink", abin); 
         bus = playbin.get_bus();
-        
-        Gst.Pad sinkpad = queue.get_pad("sink");
-        pad = tee.get_request_pad("src%d");
+        Gst.Pad sinkpad = queue.get_static_pad("sink");
+        pad = tee.get_request_pad("src_%u");
         tee.set("alloc-pad", pad);
         pad.link(sinkpad);
+        
+        
+        queue.link_many(
+                ac1,
+                preamp,
+                equalizer.eq,
+                ac2,
+                asink
+        );
+//        _eq_active = true;
+
+        
         
         playbin.text_changed.connect(() => {
             //print("text_changed\n");
@@ -631,8 +665,10 @@ public class Xnoise.GstPlayer : GLib.Object {
         TaglistWithStreamType? tlwst;
         while((tlwst = this.new_tag_queue.try_pop()) != null) {
             // merge with taglist_buffer. taglist_buffer is set to null as soon as new uri is set
-            if(taglist_buffer == null) 
-                taglist_buffer = tlwst.tags.copy();
+            if(taglist_buffer == null) {
+                taglist_buffer = new TagList.empty();
+                taglist_buffer = taglist_buffer.merge(tlwst.tags, TagMergeMode.REPLACE);
+            }
             else
                 taglist_buffer = taglist_buffer.merge(tlwst.tags, TagMergeMode.REPLACE);
             taglist_buffer.@foreach(foreachtag);
@@ -700,27 +736,27 @@ public class Xnoise.GstPlayer : GLib.Object {
                                   null);
     }
     
-    private void install_plugins_res_func(Gst.InstallPluginsReturn result) {
+    private void install_plugins_res_func(Gst.PbUtils.InstallPluginsReturn result) {
         //print("InstallPluginsReturn: %d\n",(int)result);
         if(missing_plugins_user_message.id != 0) {
             userinfo.popdown(missing_plugins_user_message.id);
         }
         switch(result) {
-            case Gst.InstallPluginsReturn.SUCCESS:
-            case Gst.InstallPluginsReturn.PARTIAL_SUCCESS:
+            case Gst.PbUtils.InstallPluginsReturn.SUCCESS:
+            case Gst.PbUtils.InstallPluginsReturn.PARTIAL_SUCCESS:
                 send_user_info_message("%s: %s".printf(_("Success on installing missing gstreamer plugin"), 
                                                        missing_plugins_user_message.info_text));
                 break;
-            case Gst.InstallPluginsReturn.USER_ABORT:
+            case Gst.PbUtils.InstallPluginsReturn.USER_ABORT:
                 send_user_error_message("%s: %s".printf(_("User aborted installation of missing gstreamer plugin"), 
                                                         missing_plugins_user_message.info_text));
                 break;
-            case Gst.InstallPluginsReturn.NOT_FOUND:
+            case Gst.PbUtils.InstallPluginsReturn.NOT_FOUND:
                 send_user_error_message("%s: %s".printf(_("Gstreamer plugin not found in repositories"), 
                                                         missing_plugins_user_message.info_text));
                 break;
-            case Gst.InstallPluginsReturn.ERROR:
-            case Gst.InstallPluginsReturn.CRASHED:
+            case Gst.PbUtils.InstallPluginsReturn.ERROR:
+            case Gst.PbUtils.InstallPluginsReturn.CRASHED:
             default:
                 send_user_error_message("%s: %s".printf(_("Critical error while installation of missing gstreamer plugin"),
                                                         missing_plugins_user_message.info_text));
@@ -756,17 +792,17 @@ public class Xnoise.GstPlayer : GLib.Object {
                     missing_plugins.prepend(msg);
                     var install_context = new InstallPluginsContext();
                     string[] details = {};
-                    details += Gst.missing_plugin_message_get_installer_detail(msg);
+                    details += Gst.PbUtils.missing_plugin_message_get_installer_detail(msg);
                     
-                    Gst.InstallPluginsReturn retval = Gst.install_plugins_async(details, install_context, install_plugins_res_func);
+                    Gst.PbUtils.InstallPluginsReturn retval = Gst.PbUtils.install_plugins_async(details, install_context, install_plugins_res_func);
                     
-                    if(retval != Gst.InstallPluginsReturn.STARTED_OK) {
-                        if(retval == Gst.InstallPluginsReturn.HELPER_MISSING) {
+                    if(retval != Gst.PbUtils.InstallPluginsReturn.STARTED_OK) {
+                        if(retval == Gst.PbUtils.InstallPluginsReturn.HELPER_MISSING) {
                             if(missing_plugins_user_message.id != 0) {
                                 userinfo.popdown(missing_plugins_user_message.id);
                                 missing_plugins_user_message = MissingPluginsUserInfo();
                             }
-                            missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+                            missing_plugins_user_message.info_text = Gst.PbUtils.missing_plugin_message_get_description(msg);
                             missing_plugins_user_message.id = send_user_error_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
                                                                          missing_plugins_user_message.info_text,
                                                                          _("Automatic missing codec installation not supported"))
@@ -777,7 +813,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                                 userinfo.popdown(missing_plugins_user_message.id);
                                 missing_plugins_user_message = MissingPluginsUserInfo();
                             }
-                            missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+                            missing_plugins_user_message.info_text = Gst.PbUtils.missing_plugin_message_get_description(msg);
                             missing_plugins_user_message.id = send_user_error_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
                                                                          missing_plugins_user_message.info_text,
                                                                          _("Failed to start automatic gstreamer plugin installation."))
@@ -790,7 +826,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                             userinfo.popdown(missing_plugins_user_message.id);
                             missing_plugins_user_message = MissingPluginsUserInfo();
                         }
-                        missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+                        missing_plugins_user_message.info_text = Gst.PbUtils.missing_plugin_message_get_description(msg);
                         missing_plugins_user_message.id = send_user_info_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
                                                                      missing_plugins_user_message.info_text,
                                                                      _("Trying to install missing gstreamer plugin"))
@@ -834,7 +870,8 @@ public class Xnoise.GstPlayer : GLib.Object {
     private bool is_missing_plugins_error(Gst.Message msg) {
         //print("in is_missing_plugins_error?\n");
         bool retval = false;
-        Error err = null;
+        //TODO !!!
+        GLib.Error err = null;
         string debug;
         
         if(missing_plugins == null) {
@@ -845,8 +882,8 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         //print("err.code: %d\n",(int)err.code);
         
-        if(err is Gst.CoreError &&((int)(err.code) ==(int)(Gst.StreamError.CODEC_NOT_FOUND))) {
-            //print("is missing plgins error \n");
+        if(err is Gst.StreamError.CODEC_NOT_FOUND) {//.matches(Gst.StreamError.quark(), (int)Gst.StreamError.CODEC_NOT_FOUND)) { //err.domain == Gst.StreamError.quark() && err.code == Gst.StreamError.CODEC_NOT_FOUND) {
+            print("...is missing plgins error \n");
             Idle.add(() => {
                 userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
                                UserInfo.ContentClass.WARNING,
@@ -867,7 +904,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         string? result = null;
         if(tags != null) {
             string language_code = null;
-            tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
+            tags.get_string(Gst.Tags.LANGUAGE_CODE, out language_code);
             if(language_code != null) {
                 result = "%s%d: %s".printf(substitute_prefix, stream_number, language_code);
             }
@@ -924,48 +961,46 @@ public class Xnoise.GstPlayer : GLib.Object {
     private void on_sync_message(Gst.Message msg) {
         if((msg == null)||(msg.get_structure() == null)) 
             return;
-        string message_name = msg.get_structure().get_name();
-        //print("%s\n", message_name);
-        if(message_name=="prepare-xwindow-id") {
-            var imagesink =(XOverlay)(msg.src);
-            imagesink.set_property("force-aspect-ratio", true);
-            imagesink.set_window_handle((uint)(Gdk.X11Window.get_xid(videoscreen.get_window())));
-        }
+        if(!Gst.Video.is_video_overlay_prepare_window_handle_message(msg))
+            return;
+        var imagesink =(Gst.Video.Overlay)(msg.src);
+        imagesink.set_property("force-aspect-ratio", true);
+        imagesink.set_window_handle((uint*)(Gdk.X11Window.get_xid(videoscreen.get_window())));
     }
 
     private void foreachtag(TagList list, string tag) {
         string? val = null;
         //print("tag: %s\n", tag);
         switch(tag) {
-            case Gst.TAG_ARTIST:
+            case Gst.Tags.ARTIST:
                 if(list.get_string(tag, out val))
                     if(val != global.current_artist) global.current_artist = remove_linebreaks(val);
                 break;
-            case Gst.TAG_ALBUM_ARTIST:
-                if(list.get_string(tag, out val))
-                    if(val != global.current_albumartist) global.current_albumartist = remove_linebreaks(val);
-                break;
-            case Gst.TAG_ALBUM:
+            case Gst.Tags.ALBUM:
                 if(list.get_string(tag, out val))
                     if(val != global.current_album) global.current_album = remove_linebreaks(val);
                 break;
-            case Gst.TAG_TITLE:
+            case Gst.Tags.ALBUM_ARTIST:
+                if(list.get_string(tag, out val))
+                    if(val != global.current_albumartist) global.current_albumartist = remove_linebreaks(val);
+                break;
+            case Gst.Tags.TITLE:
                 if(list.get_string(tag, out val))
                     if(val != global.current_title) global.current_title = remove_linebreaks(val);
                 break;
-            case Gst.TAG_LOCATION:
+            case Gst.Tags.LOCATION:
                 if(list.get_string(tag, out val))
                     if(val != global.current_location) global.current_location = remove_linebreaks(val);
                 break;
-            case Gst.TAG_GENRE:
+            case Gst.Tags.GENRE:
                 if(list.get_string(tag, out val))
                     if(val != global.current_genre) global.current_genre = remove_linebreaks(val);
                 break;
-            case Gst.TAG_ORGANIZATION:
+            case Gst.Tags.ORGANIZATION:
                 if(list.get_string(tag, out val))
                     if(val != global.current_organization) global.current_organization = remove_linebreaks(val);
                 break;
-            case Gst.TAG_IMAGE:
+            case Gst.Tags.IMAGE:
                 if(imarge_src != 0)
                     Source.remove(imarge_src);
                 imarge_src = Timeout.add(500,() => { // TODO: move to io worker
@@ -973,8 +1008,8 @@ public class Xnoise.GstPlayer : GLib.Object {
                     string al = null;
                     if(taglist_buffer == null)
                         return false;
-                    taglist_buffer.get_string(Gst.TAG_ARTIST, out ar);
-                    taglist_buffer.get_string(Gst.TAG_ALBUM, out al);
+                    taglist_buffer.get_string(Gst.Tags.ARTIST, out ar);
+                    taglist_buffer.get_string(Gst.Tags.ALBUM, out al);
                     Gdk.Pixbuf pix = extract_embedded_image(taglist_buffer);
                     if(pix != null) {
                         File? pf2 = null;
@@ -1035,10 +1070,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                 playing = false;
             }
             if(seeking == false) {
-                playbin.query_duration(ref fmt, out len);
+                playbin.query_duration(fmt, out len);
                 length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
                 if(playing == false) return true;
-                if(!playbin.query_position(ref fmt, out pos))
+                if(!playbin.query_position(fmt, out pos))
                     return true;
                 sign_position_changed((uint)(pos/Gst.MSECOND),(uint)(len/Gst.MSECOND));
             }
@@ -1094,7 +1129,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             if(seeking == false) {
                 Gst.Format fmt = Gst.Format.TIME;
                 int64 pos, new_pos;
-                if(!playbin.query_position(ref fmt, out pos))
+                if(!playbin.query_position(fmt, out pos))
                     return;
                 new_pos = pos +(int64)((int64)micro_seconds * Gst.USECOND);
                 //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
@@ -1117,7 +1152,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             if(seeking == false) {
                 Gst.Format fmt = Gst.Format.TIME;
                 int64 pos, new_pos;
-                if(!playbin.query_position(ref fmt, out pos))
+                if(!playbin.query_position(fmt, out pos))
                     return;
                 new_pos = pos +(int64)((int64)seconds * Gst.SECOND);
                 //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
@@ -1133,3 +1168,4 @@ public class Xnoise.GstPlayer : GLib.Object {
         }
     }
 }
+

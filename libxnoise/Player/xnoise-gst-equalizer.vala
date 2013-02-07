@@ -50,8 +50,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     }
 
     public void write_params_data() {
-        for(int i = 0; i < 10; ++i)
-            Params.set_double_value("eq_band%d".printf(i), this[i]);
+//        for(int i = 0; i < 10; ++i)
+//            Params.set_double_value("eq_band%d".printf(i), this[i]);
     }
 
     public class TenBandPreset {
@@ -95,7 +95,7 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     
     public new double get(int idx) {
         double gain = 0.0;
-        Gst.Object bandgain =
+        GLib.Object bandgain =
             ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(idx));
         
         bandgain.get("gain", out gain);
@@ -110,7 +110,7 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     }
 
     public new void set(int idx, double gain) {
-        Gst.Object bandgain =
+        GLib.Object bandgain =
             ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(idx));
         
         if(gain >= 0) { // map to the allowed rnge from -24 dB to 12 dB
@@ -215,7 +215,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
         for(int i = 0; i < 10; i++) {
             double range = bw_ranges[i];
             double f = frequencies[i];
-            Gst.Object? bandgain = ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(i));
+            GLib.Object? bandgain = ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(i));
+//            Gst.Object? bandgain = ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(i));
             assert(bandgain != null);
             bandgain.set("freq", f,
                          "gain", 0.0,
