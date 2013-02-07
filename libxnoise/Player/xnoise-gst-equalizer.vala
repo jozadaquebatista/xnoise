@@ -47,6 +47,7 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     public void read_params_data() {
         for(int i = 0; i < 10; ++i)
             this[i] = Params.get_double_value("eq_band%d".printf(i));
+        gst_player.preamplification = Params.get_double_value("preamp");
     }
 
     public void write_params_data() {

@@ -167,7 +167,11 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
     
     private void on_preamp_changed(Gtk.Range sender) {
         gst_player.preamplification = (double)preamp.get_value();
-        Params.set_double_value("preamp", (double)preamp.get_value());
+        if(eq_active)
+            Params.set_double_value("preamp", (double)preamp.get_value());
+        if(in_load_preset)
+            return;
+        c.set_active_id("1"); // set to custom
     }
     
     private ComboBoxText c;
@@ -223,6 +227,7 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         preamp.inverted = true;
         preamp.draw_value = false;
         preamp.add_mark(1, PositionType.LEFT, null);
+        preamp.set_value(gst_player.preamplification);
         preamp.value_changed.connect(on_preamp_changed);
         preampbox.pack_start(preamp, true, true, 0);
         var l_pre = new Label(_("Volume"));
@@ -239,13 +244,14 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
                 for(int i = 0; i < 10; i++) {
                     scale_indies[i].restore();
                 }
+                preamp.set_value(Params.get_double_value("preamp"));
             }
             on_preset_changed(c);
         });
         
         Idle.add(() => {
             preamp.set_value(
-                Params.get_double_value("preamp") < 0.2 ? 1.0 : Params.get_double_value("preamp")
+                Params.get_double_value("preamp") < 0.05 ? 1.0 : Params.get_double_value("preamp")
             );
             return false;
         });
