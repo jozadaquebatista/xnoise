@@ -69,8 +69,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         this.set_column_types(col_types);
         this.view = view;
         logo = AlbumArtView.icon_cache.album_art;
-        if(logo.get_width() != ICONSIZE)
-            logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
+//        if(logo.get_width() != ICONSIZE)
+//            logo = logo.scale_simple(ICONSIZE, ICONSIZE, Gdk.InterpType.HYPER);
         
         global.sign_searchtext_changed.connect( (s,t) => {
             if(!cache_ready)

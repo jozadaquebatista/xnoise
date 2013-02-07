@@ -37,8 +37,6 @@ using Xnoise.Utilities;
 
 
 private class Xnoise.IconCache : GLib.Object {
-    private const int SHADOW_SIZE = 12;
-    private Gdk.Pixbuf? shadow = null;
     private static HashTable<string,Gdk.Pixbuf> cache;
     
     private File dir;
@@ -55,10 +53,8 @@ private class Xnoise.IconCache : GLib.Object {
     
     public Gdk.Pixbuf? album_art { get; private set; }
     
-//    private Gdk.Pixbuf albumart_raw;
     
-    
-    public IconCache(File dir, int icon_size = 140, Gdk.Pixbuf dummy_pixbuf) {
+    public IconCache(File dir, int icon_size = IconsModel.ICONSIZE, Gdk.Pixbuf dummy_pixbuf) {
         assert(io_worker != null);
         assert(cache_worker != null);
         assert(dir.get_path() != null);
@@ -69,18 +65,8 @@ private class Xnoise.IconCache : GLib.Object {
         }
         this.cancellable = GlobalAccess.main_cancellable;
         this.dir = dir;
-        this.icon_size = icon_size;
-        try {
-            if(IconTheme.get_default().has_icon("xn-shadow"))
-                shadow = IconTheme.get_default().load_icon("xn-shadow",
-                                                           icon_size,
-                                                           IconLookupFlags.FORCE_SIZE);
-        }
-        catch(Error e) {
-            print("Shadow icon missing. %s\n", e.message);
-        }
-        this.album_art = add_shadow(dummy_pixbuf, icon_size, SHADOW_SIZE);
-        
+        this.icon_size = IconsModel.ICONSIZE;
+        this.album_art = prepare(dummy_pixbuf);
         loading_in_progress = true;
         
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
@@ -227,7 +213,7 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = add_shadow(px, icon_size, SHADOW_SIZE);
+            px = prepare(px);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         import_job_count_dec_and_test(job);
@@ -258,38 +244,7 @@ private class Xnoise.IconCache : GLib.Object {
 
     private const int frame_width = 1;
     
-    private Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size, int shadow_size = 22) {
-        if(shadow == null) {
-            print("shadow is null\n");
-            return pixbuf;
-        }
-        if(shadow_size <= 3)
-            return pixbuf;
-        if(size <= ((2* shadow_size) + 2))
-            return pixbuf;
-        
-        Gdk.Pixbuf? pix;
-        var surface = new ImageSurface(Format.ARGB32, size, size);
-        var cr = new Cairo.Context(surface);
-        Gdk.cairo_set_source_pixbuf(cr, shadow, 0, 0);
-        cr.paint();
-        
-        int imagesize = size - (2 * shadow_size) - (2 * frame_width);
-        
-        if(pixbuf.get_width() != imagesize || pixbuf.get_height() != imagesize)
-            pix = pixbuf.scale_simple(imagesize, imagesize, Gdk.InterpType.BILINEAR);
-        else
-            pix = pixbuf;
-        
-        cr.set_source_rgb(0.8, 0.8, 0.8);
-        cr.set_line_width(0);
-        cr.rectangle(shadow_size, shadow_size, size - (2 * shadow_size), size - (2 * shadow_size));
-        cr.fill();
-        
-        Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size + frame_width, shadow_size + frame_width);
-        cr.paint();
-        
-        pix = Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size);
-        return (owned)pix;
+    private Gdk.Pixbuf? prepare(Gdk.Pixbuf pixbuf) {
+        return pixbuf.scale_simple(IconsModel.ICONSIZE - 2, IconsModel.ICONSIZE - 1, Gdk.InterpType.BILINEAR);
     }
 }

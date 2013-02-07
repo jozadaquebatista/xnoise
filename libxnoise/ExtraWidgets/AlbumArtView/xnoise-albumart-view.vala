@@ -58,15 +58,18 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     public bool in_loading { get; private set; }
     public bool in_import  { get; private set; }
     
+    private bool black = false;
+    
     public AlbumArtView(CellArea area) {
         GLib.Object(cell_area:area);
         this.area = area;
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
-        this.set_column_spacing(15);
-        this.set_margin(10);
+        this.set_column_spacing(0);
+        this.set_margin(2);
         this.set_item_padding(0);
-        this.set_row_spacing(15);
+        this.set_row_spacing(0);
+        this.set_spacing(0);
         Gdk.Pixbuf? a_art_pixb = null;
         try {
             if(IconTheme.get_default().has_icon("xn-albumart"))
@@ -106,6 +109,20 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
         cbr.cb = reset_change_cb;
         media_importer.register_reset_callback(cbr);
+        
+        this.notify.connect( (s,p) => {
+            if(p.name != "in-loading" && p.name != "in-import")
+                return;
+            if(this.in_loading || this.in_import) {
+                black = false;
+                queue_draw();
+            }
+            else {
+                black = true;
+                queue_draw();
+            }
+        });
+        
         global.notify["media-import-in-progress"].connect( () => {
             if(!global.media_import_in_progress) {
                 Idle.add(() => {
@@ -115,6 +132,13 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 });
             }
         });
+        
+        //        this.set_events(this.events | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+        //        this.leave_notify_event.connect( () => { 
+        //            print("queue draw\n");
+        //            this.queue_draw(); 
+        //            return false; 
+        //        });
     }
     
     private CellArea area = null;
@@ -176,6 +200,12 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             update_icons_source = 0;
             return false;
         });
+        
+        if(black) {
+            cr.set_source_rgb(0.0f, 0.0f, 0.0f);
+            cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
+            cr.fill();
+        }
         return base.draw(cr);
     }
     
