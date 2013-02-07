@@ -185,7 +185,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     public Item[]? get_last_played(string searchtext) {
         Statement stmt;
         Item[] retv = {};
-        string st = "%%%s%%".printf(searchtext);
         string stcl = "%%%s%%".printf(searchtext.casefold());
         this.db.prepare_v2(STMT_GET_LAST_PLAYED , -1, out stmt);
         if((stmt.bind_text(1, stcl) != Sqlite.OK) ||
@@ -217,7 +216,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     public Item[]? get_most_played(string searchtext) {
         Statement stmt;
         Item[] retv = {};
-        string st = "%%%s%%".printf(searchtext);
         string stcl = "%%%s%%".printf(searchtext.casefold());
         this.db.prepare_v2(STMT_GET_MOST_PLAYED , -1, out stmt);
         if((stmt.bind_text(1, stcl) != Sqlite.OK) ||
@@ -248,7 +246,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     public override TrackData[]? get_all_tracks(string searchtext) {
         Statement stmt;
         TrackData[] retv = {};
-        string st = "%%%s%%".printf(searchtext);
         string stcl = "%%%s%%".printf(searchtext.casefold());
         this.db.prepare_v2(STMT_ALL_TRACKDATA , -1, out stmt);
         
@@ -629,7 +626,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 assert(genre != null);
                 assert(genre.stamp == stmp);
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     get_artists_with_genre_and_search_stmt.reset();
                     if(get_artists_with_genre_and_search_stmt.bind_text(1, stcl) != Sqlite.OK ||
@@ -670,7 +666,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
             default:
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     get_artists_with_search_stmt.reset();
                     if(get_artists_with_search_stmt.bind_text(1, stcl) != Sqlite.OK ||
@@ -802,7 +797,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         Item[] val = {};
         uint32 stmp = get_current_stamp(get_source_id());
         if(searchtext != EMPTYSTRING) {
-            string st = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             get_genres_with_search_stmt.reset();
             if(get_genres_with_search_stmt.bind_text(1, stcl) != Sqlite.OK ||
@@ -870,7 +864,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 if(genre.stamp != get_current_stamp(get_source_id()))
                     return null;
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_GENRE_AND_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, album.db_id) != Sqlite.OK ||
@@ -920,7 +913,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             else {
 //           case CollectionSortMode.ARTIST_ALBUM_TITLE:
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, album.db_id) != Sqlite.OK ||
@@ -998,7 +990,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 return null;
 //            case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE_AND_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, artist.db_id) != Sqlite.OK ||
@@ -1051,7 +1042,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             else {
 //            case CollectionSortMode.ARTIST_ALBUM_TITLE:
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, artist.db_id) != Sqlite.OK ||
@@ -1133,7 +1123,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
         if(searchtext != EMPTYSTRING) {
-            string st = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             this.db.prepare_v2(STMT_GET_GENREITEM_BY_GENREID_WITH_SEARCH, -1, out stmt);
             if((stmt.bind_int (1, id) != Sqlite.OK) ||
@@ -1173,7 +1162,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
         if(searchtext != EMPTYSTRING) {
-            string st   = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
             if((stmt.bind_int (1, id) != Sqlite.OK) ||
@@ -1250,7 +1238,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 return (owned)val;
             case ItemType.COLLECTION_CONTAINER_GENRE:
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext);
                     this.db.prepare_v2(STMT_GET_TRACKDATA_BY_GENRE_WITH_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, item.db_id) != Sqlite.OK ||
@@ -1374,7 +1361,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ARTIST);
                 Item? genre  = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     this.db.prepare_v2(STMT_GET_ALBUMS_WITH_GENRE_AND_SEARCH, -1, out stmt);
                     if(stmt.bind_int (1, artist.db_id) != Sqlite.OK ||
@@ -1410,7 +1396,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             default:
                 Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ARTIST);
                 if(searchtext != EMPTYSTRING) {
-                    string st = "%%%s%%".printf(searchtext);
                     string stcl = "%%%s%%".printf(searchtext.casefold());
                     string stmt_str;
                     if(artist.db_id != 1) { 
@@ -1472,7 +1457,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         if(dir == null || dir == EMPTYSTRING)
             dir = "ASC";
         if(searchtext != EMPTYSTRING) {
-//            string st = "%%%s%%".printf(searchtext);
             string stcl = "%%%s%%".printf(searchtext.casefold());
             string sql = STMT_GET_ALL_ALBUMS_WITH_SEARCH +
                          (sorting == "ALBUM" ?
