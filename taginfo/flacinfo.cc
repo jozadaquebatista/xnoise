@@ -159,11 +159,12 @@ bool FlacInfo::can_handle_images(void) {
     return true;
 }
 
-bool FlacInfo::get_image(char*& data, int &data_length) const {
+bool FlacInfo::get_image(char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
+    image_type = IMAGE_TYPE_UNKNOWN;
     
-    get_xiph_comment_cover_art(m_XiphComment, data, data_length);
+    get_xiph_comment_cover_art(m_XiphComment, data, data_length, image_type);
     if(!(data) || (data_length <= 0)) {
         TagLib::FLAC::File * fi = ((TagLib::FLAC::File *) taglib_file->file());
         List<TagLib::FLAC::Picture *> plist = fi->pictureList();
@@ -203,7 +204,7 @@ bool FlacInfo::get_image(char*& data, int &data_length) const {
     return true;
 }
 
-bool FlacInfo::set_image(char* data, int data_length) {
+bool FlacInfo::set_image(char* data, int data_length, ImageType image_type) {
     return false;
 }
 

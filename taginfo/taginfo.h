@@ -54,6 +54,12 @@ namespace TagInfo {
         CHANGED_DATA_RATING = (1 << 2)
     };
     
+    enum ImageType {
+        IMAGE_TYPE_UNKNOWN  = 0,
+        IMAGE_TYPE_JPEG     = (1 << 0),
+        IMAGE_TYPE_PNG      = (1 << 1)
+    };
+    
     
     class Info
     {
@@ -102,8 +108,8 @@ namespace TagInfo {
             virtual bool write(const int changedflag);
             
             virtual bool can_handle_images(void);
-            virtual bool get_image(char*& data, int &data_length) const;
-            virtual bool set_image(char* data, int data_length);
+            virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+            virtual bool set_image(char* data, int data_length, ImageType image_type);
             
             virtual bool can_handle_lyrics(void);
             virtual String get_lyrics(void);
@@ -114,126 +120,104 @@ namespace TagInfo {
 
 
     
-    class Mp3Info : public Info
-    {
-      protected :
-        ID3v2::Tag * taglib_tagId3v2;
+    class Mp3Info : public Info {
+        protected :
+            ID3v2::Tag * taglib_tagId3v2;
 
-      public :
-        Mp3Info(const string &filename = "");
-        ~Mp3Info();
-
-        virtual bool read(void);
-        virtual bool write(const int changedflag);
+        public :
+            Mp3Info(const string &filename = "");
+            ~Mp3Info();
+            
+            virtual bool read(void);
+            virtual bool write(const int changedflag);
+            
+            virtual bool can_handle_images(void);
+            virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+            virtual bool set_image(char* data, int data_length, ImageType image_type);
+            
+            virtual bool        can_handle_lyrics(void);
+            virtual String    get_lyrics(void);
+            virtual bool        set_lyrics(const String &lyrics);
+    };
+    
+    class FlacInfo : public Info {
+        protected :
+            Ogg::XiphComment * m_XiphComment;
         
-        virtual bool can_handle_images(void);
-        virtual bool get_image(char*& data, int &data_length) const;
-        virtual bool set_image(char* data, int data_length);
-    //    virtual bool        can_handle_images(void);
-    //    virtual wxImage *   get_image(void);
-    //    virtual bool        set_image(const wxImage * image);
-
-        virtual bool        can_handle_lyrics(void);
-        virtual String    get_lyrics(void);
-        virtual bool        set_lyrics(const String &lyrics);
-
+        public :
+            FlacInfo(const string &filename = "");
+            ~FlacInfo();
+            
+            virtual bool        read(void);
+            virtual bool        write(const int changedflag);
+            
+            virtual bool        can_handle_images(void);
+            virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+            virtual bool set_image(char* data, int data_length, ImageType image_type);
+            
+            virtual bool        can_handle_lyrics(void);
+            virtual String    get_lyrics(void);
+            virtual bool        set_lyrics(const String &lyrics);
     };
 
     
-    class FlacInfo : public Info
-    {
-      protected :
-        Ogg::XiphComment * m_XiphComment;
-
-      public :
-        FlacInfo(const string &filename = "");
-        ~FlacInfo();
-
-        virtual bool        read(void);
-        virtual bool        write(const int changedflag);
-
-        virtual bool        can_handle_images(void);
-        virtual bool        get_image(char*& data, int &data_length) const;
-        virtual bool        set_image(char* data, int data_length);
-    //    virtual bool        can_handle_images(void);
-    //    virtual wxImage *   get_image();
-    //    virtual bool        set_image(const wxImage * image);
-
-        virtual bool        can_handle_lyrics(void);
-        virtual String    get_lyrics(void);
-        virtual bool        set_lyrics(const String &lyrics);
-    };
-
-    
-    class OggInfo : public Info
-    {
-      protected :
-        Ogg::XiphComment * m_XiphComment;
-
-      public :
-        OggInfo(const string &filename = "");
-        ~OggInfo();
-
-        virtual bool        read(void);
-        virtual bool        write(const int changedflag);
-
-        virtual bool        can_handle_images(void);
-        virtual bool        get_image(char*& data, int &data_length) const;
-        virtual bool        set_image(char* data, int data_length);
-    //    virtual bool        can_handle_images(void);
-    //    virtual wxImage *   get_image(void);
-    //    virtual bool        set_image(const wxImage * image);
-
-        virtual bool        can_handle_lyrics(void);
-        virtual String    get_lyrics(void);
-        virtual bool        set_lyrics(const String &lyrics);
-    };
-
-    
-    class Mp4Info : public Info
-    {
-      protected :
-        TagLib::MP4::Tag *  m_Mp4Tag;
-
-      public :
-        Mp4Info(const string &filename = "");
-        ~Mp4Info();
-
-        virtual bool        read(void);
-        virtual bool        write(const int changedflag);
-
-        virtual bool        can_handle_images(void);
-        virtual bool        get_image(char*& data, int &data_length) const;
-        virtual bool        set_image(char* data, int data_length);
-    //#ifdef TAGLIB_WITH_MP4_COVERS
-    //    virtual bool        can_handle_images(void);
-    //    virtual wxImage *   get_image(void);
-    //    virtual bool        set_image(const wxImage * image);
-    //#endif
-
-        virtual bool can_handle_lyrics(void);
-        virtual String get_lyrics(void);
-        virtual bool set_lyrics(const String &lyrics);
-    };
-
-    
-    class ApeInfo : public Info
-    {
-      protected:
-        Ape::ApeFile       ape_file;
-
-      public:
-        ApeInfo(const string &filename = "");
-        ~ApeInfo();
-
-        virtual bool read(void);
-        virtual bool write(const int changedflag);
+    class OggInfo : public Info {
+        protected :
+            Ogg::XiphComment * m_XiphComment;
         
-        virtual bool can_handle_lyrics(void);
-        virtual String get_lyrics(void);
-        virtual bool set_lyrics(const String &lyrics);
+        public :
+            OggInfo(const string &filename = "");
+            ~OggInfo();
+            
+            virtual bool        read(void);
+            virtual bool        write(const int changedflag);
+            
+            virtual bool        can_handle_images(void);
+            virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+            virtual bool set_image(char* data, int data_length, ImageType image_type);
+            
+            virtual bool        can_handle_lyrics(void);
+            virtual String    get_lyrics(void);
+            virtual bool        set_lyrics(const String &lyrics);
     };
 
+    
+    class Mp4Info : public Info {
+        protected :
+            TagLib::MP4::Tag *  m_Mp4Tag;
+        
+        public :
+            Mp4Info(const string &filename = "");
+            ~Mp4Info();
+            
+            virtual bool        read(void);
+            virtual bool        write(const int changedflag);
+            
+            virtual bool        can_handle_images(void);
+            virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+            virtual bool set_image(char* data, int data_length, ImageType image_type);
+            
+            virtual bool can_handle_lyrics(void);
+            virtual String get_lyrics(void);
+            virtual bool set_lyrics(const String &lyrics);
+    };
+
+    
+    class ApeInfo : public Info {
+        protected:
+            Ape::ApeFile       ape_file;
+        
+        public:
+            ApeInfo(const string &filename = "");
+            ~ApeInfo();
+            
+            virtual bool read(void);
+            virtual bool write(const int changedflag);
+            
+            virtual bool can_handle_lyrics(void);
+            virtual String get_lyrics(void);
+            virtual bool set_lyrics(const String &lyrics);
+    };
     
     class MpcInfo : public Info
     {
@@ -248,8 +232,10 @@ namespace TagInfo {
         virtual bool write(const int changedflag);
 
         virtual bool can_handle_images(void);
-        virtual bool get_image(char*& data, int &data_length) const;
-        virtual bool set_image(char* data, int data_length);
+//        virtual bool get_image(char*& data, int &data_length) const;
+//        virtual bool set_image(char* data, int data_length);
+        virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+        virtual bool set_image(char* data, int data_length, ImageType image_type);
     //    virtual bool can_handle_images(void);
     //    virtual wxImage * get_image(void);
     //    virtual bool set_image(const String * image);
@@ -269,8 +255,10 @@ namespace TagInfo {
         virtual bool write(const int changedflag);
 
         virtual bool can_handle_images(void);
-        virtual bool get_image(char*& data, int &data_length) const;
-        virtual bool set_image(char* data, int data_length);
+        virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+        virtual bool set_image(char* data, int data_length, ImageType image_type);
+//        virtual bool get_image(char*& data, int &data_length) const;
+//        virtual bool set_image(char* data, int data_length);
     //    virtual bool can_handle_images(void);
     //    virtual wxImage * get_image(void);
     //    virtual bool set_image(const wxImage * image);
@@ -285,17 +273,19 @@ namespace TagInfo {
     {
       protected :
         ID3v2::Tag * taglib_tagId3v2;
-
+        
       public :
         TrueAudioInfo(const string &filename = "");
         ~TrueAudioInfo();
-
+        
         virtual bool read(void);
         virtual bool write(const int changedflag);
-
+        
         virtual bool can_handle_images(void);
-        virtual bool get_image(char*& data, int &data_length) const;
-        virtual bool set_image(char* data, int data_length);
+        virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+        virtual bool set_image(char* data, int data_length, ImageType image_type);
+//        virtual bool get_image(char*& data, int &data_length) const;
+//        virtual bool set_image(char* data, int data_length);
     //    virtual bool        can_handle_images(void);
     //    virtual wxImage *   get_image(void);
     //    virtual bool        set_image(const wxImage * image);
@@ -319,8 +309,10 @@ namespace TagInfo {
         virtual bool write(const int changedflag);
 
         virtual bool can_handle_images(void);
-        virtual bool get_image(char*& data, int &data_length) const;
-        virtual bool set_image(char* data, int data_length);
+        virtual bool get_image(char*& data, int &data_length, ImageType &image_type);
+        virtual bool set_image(char* data, int data_length, ImageType image_type);
+//        virtual bool get_image(char*& data, int &data_length) const;
+//        virtual bool set_image(char* data, int data_length);
     //    virtual bool        can_handle_images(void);
     //    virtual wxImage *   get_image(void);
     //    virtual bool        set_image(const wxImage * image);

@@ -25,32 +25,29 @@
 #include <mp4file.h>
 
 
-//#ifdef TAGLIB_WITH_MP4_COVERS
-//
-String get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length) {
+bool get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
-    String mimetype = "";
+    image_type = IMAGE_TYPE_UNKNOWN;
     
     if(mp4tag && mp4tag->itemListMap().contains("covr")) {
         TagLib::MP4::CoverArtList Covers = mp4tag->itemListMap()[ "covr" ].toCoverArtList();
         
         for(TagLib::MP4::CoverArtList::Iterator it = Covers.begin(); it != Covers.end(); it++) {
-            mimetype = "";
             if(it->format() == TagLib::MP4::CoverArt::PNG) {
-                mimetype = "image/png";
+                image_type = IMAGE_TYPE_PNG;
             }
             else if(it->format() == TagLib::MP4::CoverArt::JPEG) {
-                mimetype = "image/jpeg";
+                image_type = IMAGE_TYPE_JPEG;
             }
             data_length = it->data().size();
             data = new char[data_length];
             memcpy(data, it->data().data(), it->data().size());
-            //data = strdup(it->data().data());
-            //data_length = it->data().size();
+            return true;
         }
+        return false;
     }
-    return mimetype;
+    return false;
 }
 
 //

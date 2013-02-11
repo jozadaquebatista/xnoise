@@ -151,9 +151,17 @@ void taginfo_info_set_is_compilation(TagInfo_Info *info, BOOL is_compilation) {
 }
 
 //            virtual bool get_image(char*& data, int &data_length);
-BOOL taginfo_info_get_image(const TagInfo_Info *info, char** data, int* data_length) {
-    const Info *i = reinterpret_cast<const Info *>(info);
-    bool v = i->get_image((*data), (*data_length));
+BOOL taginfo_info_get_image(TagInfo_Info *info,
+                            char** data, int* data_length, TagInfo_ImageType *image_type) {
+    Info *i = reinterpret_cast<Info *>(info);
+    ImageType *t  = reinterpret_cast<ImageType *>(image_type);
+    bool v = i->get_image((*data), (*data_length), (*t));
+    return v;
+}
+BOOL taginfo_info_set_image(TagInfo_Info *info,
+                            char* data, int data_length, TagInfo_ImageType image_type) {
+    Info *i = reinterpret_cast<Info *>(info);
+    bool v = i->set_image(data, data_length, (ImageType)image_type);
     return v;
 }
 

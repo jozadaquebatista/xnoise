@@ -21,6 +21,7 @@
 
 #include "ape.h"
 #include "ape_internal.h"
+#include "taginfo_internal.h"
 
 
 
@@ -234,12 +235,14 @@ uint ApeTag::get_tracknumber(void) const
 
 void ApeTag::set_tracknumber(uint track)//(const uint track)
 {
-    char* trck;
-    if(asprintf (&trck, "%u", track) >= 0) {
-        String tstr = trck;
-        set_item(APE_TAG_TRACK, tstr, 0);
-        free(trck);
-    }
+//    char* trck;
+//    if(asprintf (&trck, "%u", track) >= 0) {
+//        String tstr = trck;
+//        set_item(APE_TAG_TRACK, tstr, 0);
+//        free(trck);
+//    }
+    
+    set_item(APE_TAG_TRACK, format("%u", track).c_str(), 0);
 }
 
 uint ApeTag::get_year(void) const
@@ -251,11 +254,12 @@ uint ApeTag::get_year(void) const
 
 void ApeTag::set_year(const uint year)
 {
-    char* yr;
-    if(asprintf (&yr, "%u", year) >= 0) {
-        String ystr = yr;
-        set_item(APE_TAG_YEAR, ystr, 0);
-        free(yr);
-    }
+//    char* yr;
+//    if(asprintf (&yr, "%u", year) >= 0) {
+//        String ystr = yr;
+//        set_item(APE_TAG_YEAR, ystr, 0);
+//        free(yr);
+//    }
+    set_item(APE_TAG_YEAR, format("%u", year).c_str(), 0);
 }
 

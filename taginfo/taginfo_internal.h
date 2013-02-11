@@ -48,6 +48,7 @@
 
 using namespace TagLib;
 using namespace std;
+using namespace TagInfo;
 
 
 enum TagInfo::MediaFileType {
@@ -200,7 +201,7 @@ inline int wm_rating_to_rating(const int rating) {
     return 5;
 }
 
-int inline rating_to_popularity(const int rating) {
+inline int rating_to_popularity(const int rating) {
     int Ratings[] = { 0, 0, 1, 64, 128, 192, 255 };
     //printf("Rating: %i => %i\n", rating, Ratings[ rating + 1 ]);
     return Ratings[rating + 1];
@@ -218,7 +219,8 @@ void id3v2_check_label_frame(ID3v2::Tag * tagv2, const String& description, cons
 String get_typed_id3v2_image(char*& idata, int &idata_length,TagLib::ID3v2::FrameList &framelist,
                              TagLib::ID3v2::AttachedPictureFrame::Type frametype);
 
-bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length);
+bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length, ImageType &image_type);
+void set_id3v2_image(ID3v2::Tag * tagv2, char* data, int data_length, ImageType image_type);
 
 String get_id3v2_lyrics(ID3v2::Tag * tagv2);
 void set_id3v2_lyrics(ID3v2::Tag * tagv2, const String &lyrics);
@@ -241,8 +243,12 @@ void check_xiph_label_frame(Ogg::XiphComment * xiphcomment,
                                  const char * description, 
                                  const String &value);
 
-String get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length);
-//bool set_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, const wxImage * image);
+bool get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, 
+                                char*& data, int &data_length, 
+                                ImageType &image_type);
+bool set_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, 
+                                char* data, int data_length, 
+                                ImageType image_type);
 
 ////////// end XIPH
 
@@ -250,7 +256,7 @@ String get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, i
 
 ////////// MP4
 
-String get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length);
+bool get_mp4_cover_art(TagLib::MP4::Tag * mp4tag, char*& data, int &data_length, ImageType &image_type);
 //bool set_mp4_cover_art(TagLib::MP4::Tag * mp4tag, const wxImage * image);
 
 String get_mp4_lyrics(TagLib::MP4::Tag * mp4tag);
@@ -264,8 +270,9 @@ bool set_mp4_lyrics(TagLib::MP4::Tag * mp4tag, const String &lyrics);
 
 void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, const String &value);
 
-String get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length);
-String get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length);
+bool get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length, ImageType &image_type);
+bool get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length, ImageType &image_type);
+bool set_ape_image(TagLib::APE::Tag * apetag, char* data, int data_length, ImageType image_type);
 
 String get_ape_lyrics(APE::Tag * apetag);
 bool set_ape_lyrics(APE::Tag * apetag, const String &lyrics);

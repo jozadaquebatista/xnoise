@@ -1,6 +1,6 @@
 /* taginfo_c.vapi
  *
- * Copyright (C) 2012 Jörn Magens
+ * Copyright (C) 2012 - 2013 Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,14 @@
 [CCode (cprefix = "TagInfo_", lower_case_cprefix = "taginfo_", cheader_filename = "taginfo_c.h")]
 namespace TagInfo
 {
+	[CCode (cname = "TagInfo_ImageType", cprefix = "TagInfo_IMAGE_TYPE_")]
+	public enum ImageType
+	{
+		UNKNOWN,
+		JPEG,
+		PNG
+	}
+	
 	[CCode (free_function = "taginfo_info_free")]
 	[Compact]
 	public class Info
@@ -98,7 +106,8 @@ namespace TagInfo
 			get;
 		}
 		// Returns success
-		public bool get_image (out uint8[] data);
+		public bool get_image (out uint8[] data, out ImageType image_type);
+		public bool set_image (uint8[] data, ImageType image_type);
 	}
 }
 

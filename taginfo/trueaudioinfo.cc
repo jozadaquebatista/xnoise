@@ -180,15 +180,16 @@ bool TrueAudioInfo::can_handle_images(void) {
     return true;
 }
 
-bool TrueAudioInfo::get_image(char*& data, int &data_length) const {
-    if(taglib_tagId3v2) {
-        return get_id3v2_image(taglib_tagId3v2, data, data_length);
-    }
+bool TrueAudioInfo::get_image(char*& data, int &data_length, ImageType &image_type) {
+    if(taglib_tagId3v2)
+        return get_id3v2_image(taglib_tagId3v2, data, data_length, image_type);
     return false;
 }
 
-bool TrueAudioInfo::set_image(char* data, int data_length) {
-    return false;
+bool TrueAudioInfo::set_image(char* data, int data_length, ImageType image_type) {
+    if(taglib_tagId3v2)
+        set_id3v2_image(taglib_tagId3v2, data, data_length, image_type);
+    return true;
 }
 
 //bool TrueAudioInfo::can_handle_images(void)

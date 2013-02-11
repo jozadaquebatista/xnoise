@@ -32,29 +32,33 @@ using namespace TagInfo;
 
 
 
-String get_asf_image(ASF::Tag * asftag, char*& data, int &data_length) {
+bool get_asf_image(ASF::Tag * asftag, char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
-    String mime = "";
-    
+    image_type = IMAGE_TYPE_UNKNOWN;
     if(asftag) {
-            if(asftag->attributeListMap().contains("WM/Picture")) {
-            ByteVector PictureData = asftag->attributeListMap()[ "WM/Picture" ].front().toByteVector();
+        if(asftag->attributeListMap().contains("WM/Picture")) {
+            ByteVector PictureData = asftag->attributeListMap()["WM/Picture"].front().toByteVector();
             
-            TagLib::ID3v2::AttachedPictureFrame * PicFrame;
-            
-            PicFrame = (TagLib::ID3v2::AttachedPictureFrame *) PictureData.data();
+            TagLib::ID3v2::AttachedPictureFrame * PicFrame = 
+                (TagLib::ID3v2::AttachedPictureFrame *) PictureData.data();
             
             if(PicFrame->picture().size() > 0) {
                 data_length = PicFrame->picture().size();
                 data = new char[data_length];
                 memcpy(data, PicFrame->picture().data(), PicFrame->picture().size());
-                mime = PicFrame->mimeType().toCString(true);
-//                find_and_replace(mime, "/jpg", "/jpeg"); //TODO
+                
+                String mimetype = PicFrame->mimeType();
+                if(mimetype.find("/jpeg") != -1 || mimetype.find("/jpg") != -1)
+                    image_type = IMAGE_TYPE_JPEG;
+                else if(mimetype.find("/png") != -1)
+                    image_type = IMAGE_TYPE_PNG;
+                
+                return true;
             }
         }
     }
-    return mime;
+    return false;
 }
 
 //
@@ -171,11 +175,13 @@ bool ASFTagInfo::write(const int changedflag) {
             m_ASFTag->removeItem("WM/SharedUserRating");
             int WMRatings[] = { 0, 0, 1, 25, 50, 75, 99 };
             
-            char* str;
-            if(asprintf (&str, "%i", WMRatings[ rating + 1 ]) >= 0) {
-                m_ASFTag->setAttribute("WM/SharedUserRating", str);
-                free(str);
-            }
+//            char* str;
+//            if(asprintf (&str, "%i", WMRatings[ rating + 1 ]) >= 0) {
+//                m_ASFTag->setAttribute("WM/SharedUserRating", str);
+//                free(str);
+//            }
+            
+            m_ASFTag->setAttribute("WM/SharedUserRating", format("%i", WMRatings[ rating + 1 ]).c_str());
         }
         
         if(changedflag & CHANGED_DATA_LABELS) {
@@ -193,20 +199,15 @@ bool ASFTagInfo::can_handle_images(void) {
     return true; // TODO can save images ?
 }
 
-bool ASFTagInfo::get_image(char*& data, int &data_length) const {
+bool ASFTagInfo::get_image(char*& data, int &data_length, ImageType &image_type) {
     if(m_ASFTag) {
-            String mime;
-        mime = get_asf_image(m_ASFTag, data, data_length);
-        
-        if(! data || data_length <= 0);
-            return false;
-        
-        return true;
+        return get_asf_image(m_ASFTag, data, data_length, image_type);
     }
     return false;
 }
 
-bool ASFTagInfo::set_image(char* data, int data_length) {
+bool ASFTagInfo::set_image(char* data, int data_length, ImageType image_type) {
+    //TODO is it possible
     return false;
 }
 

@@ -33,44 +33,45 @@ void check_ape_label_frame(TagLib::APE::Tag * apetag, const char * description, 
 }
 
 
-String get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length) {
-    String mime = "";
+bool get_ape_item_image(const TagLib::APE::Item &item, char*& data, int &data_length, ImageType &image_type) {
+//    String mime = "";
+    image_type = IMAGE_TYPE_UNKNOWN;
     if(item.type() == TagLib::APE::Item::Binary) {
         TagLib::ByteVector CoverData = item.value();
-        if(CoverData.size()) {
+        if(CoverData.size() > 0) {
             data_length = CoverData.size();
             data = new char[data_length];
             memcpy(data, CoverData.data(), CoverData.size());
-            mime = "image/jpeg";
+//            mime = "image/jpeg";
+            return true;
         }
     }
-    return mime;
+    return false;
 }
 
 
-String get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length) {
+bool get_ape_image(TagLib::APE::Tag * apetag, char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
-    String mime = "";
     
     if(apetag) {
         if(apetag->itemListMap().contains("Cover Art (front)")) {
-            mime = get_ape_item_image(apetag->itemListMap()[ "Cover Art (front)" ],
-                                    data, data_length);
+            return get_ape_item_image(apetag->itemListMap()[ "Cover Art (front)" ],
+                                      data, data_length, image_type);
         }
         else if(apetag->itemListMap().contains("Cover Art (other)")) {
-            mime = get_ape_item_image(apetag->itemListMap()[ "Cover Art (other)" ],
-                                    data, data_length);
+            return get_ape_item_image(apetag->itemListMap()[ "Cover Art (other)" ],
+                                      data, data_length, image_type);
         }
+        return false;
     }
-    return mime;
+    return false;
 }
 
-//
-//bool set_ape_image(TagLib::APE::Tag * apetag, const wxImage * image)
-//{
-//    return false;
-//}
+
+bool set_ape_image(TagLib::APE::Tag * apetag, char* data, int data_length, ImageType image_type) {
+    return false;
+}
 
 
 

@@ -43,17 +43,14 @@ bool MpcInfo::can_handle_images(void) {
     return true;
 }
 
-bool MpcInfo::get_image(char*& data, int &data_length) const {
+bool MpcInfo::get_image(char*& data, int &data_length, ImageType &image_type) {
     if(taglib_apetag) {
-        String mime = get_ape_image(taglib_apetag, data, data_length);
-        if(! data || data_length <= 0)
-            return false;
-        return true;
+        return get_ape_image(taglib_apetag, data, data_length, image_type);
     }
     return false;
 }
 
-bool MpcInfo::set_image(char* data, int data_length) {
+bool MpcInfo::set_image(char* data, int data_length, ImageType image_type) {
     return false;
 }
 

@@ -51,19 +51,9 @@ Info * Info::create_tag_info(const string & filename) {
     ext_map["mpc"]  = MEDIA_FILE_TYPE_MPC;
     
     string fnex = filename.substr(filename.find_last_of(".") + 1);
-//    cout << "lala : " << fnex << " " << ext_map[fnex] << endl;
     if(ext_map[fnex] == 0)
         return NULL;
-
-//    if(!guIsValidAudioFile(&ext_map, filename))
-//        return NULL;
     
-//    string fnex = filename.substr(filename.find_last_of(".") + 1);
-//    guSupportedFormatsMutex.Lock();
-//    int FormatIndex = guSupportedFormats.Index(filename.Lower().AfterLast(wxT('.')));
-//    guSupportedFormatsMutex.Unlock();
-    
-//    wxString fn = wxT("/home/qnull/Musik/The Life Aquatic with Steve Zissou/DEVO - Gut Feeling.ogg");
     int format = ext_map[fnex];
     switch(format) {
             case  MEDIA_FILE_TYPE_MP3 :
@@ -99,57 +89,6 @@ Info * Info::create_tag_info(const string & filename) {
     return NULL;
 }
 
-
-
-//wxImage * get_typed_id3v2_image(TagLib::ID3v2::FrameList &framelist,
-//            TagLib::ID3v2::AttachedPictureFrame::Type frametype  = TagLib::ID3v2::AttachedPictureFrame::FrontCover);
-
-
-//
-//wxImage * get_id3v2_image(ID3v2::Tag * tagv2)
-//{
-//    TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
-
-//    wxImage * CoverImage = get_typed_id3v2_image(FrameList, TagLib::ID3v2::AttachedPictureFrame::FrontCover);
-
-//    if(!CoverImage)
-//    {
-//        CoverImage = get_typed_id3v2_image(FrameList, TagLib::ID3v2::AttachedPictureFrame::Other);
-//    }
-
-//    return CoverImage;
-//}
-
-//
-//void SetID3v2Image(ID3v2::Tag * tagv2, const wxImage * image)
-//{
-//    TagLib::ID3v2::AttachedPictureFrame * PicFrame;
-
-//    TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
-//    for(list<TagLib::ID3v2::Frame*>::iterator iter = FrameList.begin(); iter != FrameList.end(); iter++)
-//    {
-//        PicFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(*iter);
-//        // TODO : Ppl should be able to select which image types want guayadeque to remove from the audio files
-//        if((PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::FrontCover) ||
-//            (PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::Other))
-//            tagv2->removeFrame(PicFrame, TRUE);
-//    }
-
-//    if(image)
-//    {
-//        PicFrame = new TagLib::ID3v2::AttachedPictureFrame;
-//        PicFrame->setMimeType("image/jpeg");
-//        PicFrame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
-//        wxMemoryOutputStream ImgOutputStream;
-//        if(image->SaveFile(ImgOutputStream, wxBITMAP_TYPE_JPEG))
-//        {
-//            ByteVector ImgData((TagLib::uint) ImgOutputStream.GetSize());
-//            ImgOutputStream.CopyTo(ImgData.data(), ImgOutputStream.GetSize());
-//            PicFrame->setPicture(ImgData);
-//            tagv2->addFrame(PicFrame);
-//        }
-//    }
-//}
 
 
 
@@ -244,15 +183,18 @@ bool Info::can_handle_images(void) {
     return false;
 }
 
-bool Info::get_image(char*& data, int &data_length) const {
+bool Info::get_image(char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
+    image_type = IMAGE_TYPE_UNKNOWN;
     return false;
 }
 
-bool Info::set_image(char* data, int data_length) {
+bool Info::set_image(char* data, int data_length, ImageType image_type) {
     return false;
 }
+//            virtual bool get_image(char*& data, int &data_length, &ImageType image_type);
+//            virtual bool set_image(char* data, int data_length, ImageType image_type);
 
 
 //bool Info::can_handle_images(void)

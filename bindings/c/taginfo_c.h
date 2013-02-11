@@ -33,6 +33,13 @@ typedef struct { int dummy; } TagInfo_Info;
 TagInfo_Info *taginfo_info_factory_make(const char *filename);
 
 
+
+typedef enum {
+  TagInfo_IMAGE_TYPE_UNKNOWN,
+  TagInfo_IMAGE_TYPE_JPEG,
+  TagInfo_IMAGE_TYPE_PNG
+} TagInfo_ImageType;
+
 /*!
  * Frees and closes the file.
  */
@@ -74,7 +81,10 @@ void  taginfo_info_set_disk_str(TagInfo_Info *info, const char *disk_str);
 BOOL taginfo_info_get_is_compilation(const TagInfo_Info *info);
 void taginfo_info_set_is_compilation(TagInfo_Info *info, BOOL is_compilation);
 
-BOOL taginfo_info_get_image(const TagInfo_Info *info, char** data, int *data_length);
+BOOL taginfo_info_get_image(TagInfo_Info *info, 
+                            char** data, int *data_length, TagInfo_ImageType *image_type);
+BOOL taginfo_info_set_image(TagInfo_Info *info,
+                            char* data, int data_length, TagInfo_ImageType image_type);
 
 #ifdef __cplusplus
 }

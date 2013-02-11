@@ -71,7 +71,8 @@ public class Xnoise.TagAccess.TagReader {
                 td.cd_number_str  = EMPTYSTRING;
                 if(try_read_image_data) {
                     uint8[] data = null;
-                    if(info.get_image(out data)) {
+                    TagInfo.ImageType image_type;
+                    if(info.get_image(out data, out image_type)) {
                         if(data != null && data.length > 0) {
                             var pbloader = new Gdk.PixbufLoader();
                             try {

@@ -118,17 +118,21 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
             pango_layout.get_pixel_size(out wi, out he);
         }
         //RECTANGLE
-        if((flags & CellRendererState.PRELIT) == CellRendererState.PRELIT ||
-           (flags & CellRendererState.SELECTED) == CellRendererState.SELECTED ||
+        double alpha = 0.6;
+        
+        if((flags & CellRendererState.PRELIT) == CellRendererState.PRELIT)
+            alpha -= 0.1;
+        
+        if((flags & CellRendererState.SELECTED) == CellRendererState.SELECTED ||
            (flags & CellRendererState.FOCUSED) == CellRendererState.FOCUSED)
-            cr.set_source_rgba(0.0, 0.0, 0.0, 0.6);
-        else
-            cr.set_source_rgba(0.0, 0.0, 0.0, 0.3);
+            alpha -= 0.2;
+        
+        cr.set_source_rgba(0.0, 0.0, 0.0, alpha);
         cr.set_line_width(0);
         cr.rectangle(x_offset, 
                      rect_offset,
                      background_area.width - 2,
-                     rect_height);
+                     rect_height - 1);
         cr.fill();
         
         // DRAW FONT

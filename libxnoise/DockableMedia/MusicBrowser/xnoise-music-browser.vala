@@ -102,6 +102,9 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         
         Params.iparams_register(this);
         mediabrowsermodel = new MusicBrowserModel(dock);
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+        this.get_style_context().set_junction_sides(JunctionSides.RIGHT | JunctionSides.LEFT);
+        
         setup_view();
         Idle.add(this.populate_model);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -119,6 +122,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                           );
         
         this.dragging = false;
+        
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         
         //Signals
         this.row_activated.connect(this.on_row_activated);

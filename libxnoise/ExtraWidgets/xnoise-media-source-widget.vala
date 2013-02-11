@@ -57,6 +57,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.mwindow = mwindow;
         
         setup_widgets();
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
     }
     
     public void set_focus_on_selector() {
@@ -200,10 +201,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 media_source_selector = new TreeMediaSelector(this);
                 var mss_sw = new ScrolledWindow(null, null);
                 mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
-                mss_sw.set_border_width(1);
+//                mss_sw.set_border_width(1);
                 mss_sw.add(media_source_selector);
-                mss_sw.set_shadow_type(ShadowType.IN);
+                mss_sw.set_shadow_type(ShadowType.NONE);
                 media_source_selector_box.add(mss_sw);
+                mss_sw.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+                var sep = new Gtk.Separator(Orientation.HORIZONTAL);
+                sep.show();
+                media_source_selector_box.add(sep);
                 media_source_selector_window = mss_sw;
                 break;
         }

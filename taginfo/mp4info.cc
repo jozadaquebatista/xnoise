@@ -51,16 +51,17 @@ bool Mp4Info::read(void) {
                 composer = m_Mp4Tag->itemListMap()["\xa9wrt"].toStringList().front();
             }
             if(m_Mp4Tag->itemListMap().contains("disk")) {
-                char* c_disk_str;
-                if(asprintf(&c_disk_str, "%i/%i", m_Mp4Tag->itemListMap()["disk"].toIntPair().first,
-                                                m_Mp4Tag->itemListMap()["disk"].toIntPair().second) >= 0) {
-                    disk_str = c_disk_str;
-                    free(c_disk_str);
-                }
+//                char* c_disk_str;
+                disk_str = format("%i/%i", m_Mp4Tag->itemListMap()["disk"].toIntPair().first,
+                                           m_Mp4Tag->itemListMap()["disk"].toIntPair().second).c_str();
+//                if(asprintf(&c_disk_str, "%i/%i", m_Mp4Tag->itemListMap()["disk"].toIntPair().first,
+//                                                m_Mp4Tag->itemListMap()["disk"].toIntPair().second) >= 0) {
+//                    disk_str = c_disk_str;
+//                    free(c_disk_str);
+//                }
 //                disk_str = wxString::Format(wxT("%i/%i"),
 //                    m_Mp4Tag->itemListMap()["disk"].toIntPair().first,
 //                    m_Mp4Tag->itemListMap()["disk"].toIntPair().second);
-
             }
             if(m_Mp4Tag->itemListMap().contains("cpil")) {
                 is_compilation = m_Mp4Tag->itemListMap()["cpil"].toBool();
@@ -150,17 +151,21 @@ bool Mp4Info::write(const int changedflag) {
         }
         
         if(changedflag & CHANGED_DATA_RATING) {
-            char* c_rating;
-            if(asprintf (&c_rating, "%u", rating_to_popularity(rating)) >= 0) {
-                m_Mp4Tag->itemListMap()["----:com.apple.iTunes:RATING" ] = TagLib::MP4::Item(c_rating);
-                free(c_rating);
-            }
+//            char* c_rating;
+//            if(asprintf (&c_rating, "%u", rating_to_popularity(rating)) >= 0) {
+//                m_Mp4Tag->itemListMap()["----:com.apple.iTunes:RATING" ] = TagLib::MP4::Item(c_rating);
+//                free(c_rating);
+//            }
+            m_Mp4Tag->itemListMap()["----:com.apple.iTunes:RATING" ] = 
+                TagLib::MP4::Item(format("%u", rating_to_popularity(rating)).c_str());
             
-            char* c_count;
-            if(asprintf (&c_count, "%u", playcount) >= 0) {
-                m_Mp4Tag->itemListMap()[ "----:com.apple.iTunes:PLAY_COUNTER" ] = TagLib::MP4::Item(c_count);
-                free(c_count);
-            }
+//            char* c_count;
+//            if(asprintf (&c_count, "%u", playcount) >= 0) {
+//                m_Mp4Tag->itemListMap()[ "----:com.apple.iTunes:PLAY_COUNTER" ] = TagLib::MP4::Item(c_count);
+//                free(c_count);
+//            }
+            m_Mp4Tag->itemListMap()[ "----:com.apple.iTunes:PLAY_COUNTER" ] = 
+                TagLib::MP4::Item(format("%u", playcount).c_str());
         }
         
         if(changedflag & CHANGED_DATA_LABELS) {
@@ -178,17 +183,14 @@ bool Mp4Info::can_handle_images(void) {
     return true;
 }
 
-bool Mp4Info::get_image(char*& data, int &data_length) const {
+bool Mp4Info::get_image(char*& data, int &data_length, ImageType &image_type) {
     if(m_Mp4Tag) {
-        String mime = get_mp4_cover_art(m_Mp4Tag, data, data_length);
-        if(! data || data_length <= 0)
-            return false;
-        return true;
+        return get_mp4_cover_art(m_Mp4Tag, data, data_length, image_type);
     }
     return false;
 }
 
-bool Mp4Info::set_image(char* data, int data_length) {
+bool Mp4Info::set_image(char* data, int data_length, ImageType image_type) {
     return false;
 }
 

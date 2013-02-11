@@ -163,20 +163,14 @@ bool OggInfo::can_handle_images(void) {
     return true;
 }
 
-bool OggInfo::get_image(char*& data, int &data_length) const {
+bool OggInfo::get_image(char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;
-    
-    get_xiph_comment_cover_art(m_XiphComment, data, data_length);
-    
-    if(! (data) || (data_length <= 0)) {
-            return false;
-    }
-    return true;
+    return get_xiph_comment_cover_art(m_XiphComment, data, data_length, image_type);
 }
 
-bool OggInfo::set_image(char* data, int data_length) {
-    return false;
+bool OggInfo::set_image(char* data, int data_length, ImageType image_type) {
+    return set_xiph_comment_cover_art(m_XiphComment, data, data_length, image_type);
 }
 
 //bool OggInfo::can_handle_images(void)

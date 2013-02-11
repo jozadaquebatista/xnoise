@@ -25,7 +25,7 @@
 #include <xiphcomment.h>
 
 
-static const string base64_chars = 
+static const string base64_char_string = 
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
              "abcdefghijklmnopqrstuvwxyz"
              "0123456789+/";
@@ -44,11 +44,11 @@ inline string base64_decode(const char* encoded_string) {
     unsigned char char_array_4[4], char_array_3[3];
     string ret;
     
-    while(in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
+    while(in_len-- && (encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
         char_array_4[i++] = encoded_string[in_]; in_++;
         if (i ==4) {
         for (i = 0; i <4; i++)
-            char_array_4[i] = base64_chars.find(char_array_4[i]);
+            char_array_4[i] = base64_char_string.find(char_array_4[i]);
         
         char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
         char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -65,7 +65,7 @@ inline string base64_decode(const char* encoded_string) {
             char_array_4[j] = 0;
         
         for (j = 0; j <4; j++)
-            char_array_4[j] = base64_chars.find(char_array_4[j]);
+            char_array_4[j] = base64_char_string.find(char_array_4[j]);
         
         char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
         char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -75,6 +75,58 @@ inline string base64_decode(const char* encoded_string) {
             ret += char_array_3[j];
     }
     return ret;
+}
+
+
+static const char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const char base64_pad = '=';
+
+inline int base64encode_internal(const char * src, const size_t srclen, char * dst, const size_t dstlen) {
+    if(((srclen / 3) + ((srclen % 3) > 0)) * 4 > dstlen)
+        return -1;
+    
+    unsigned int tmp;
+    const unsigned char * dat = ( unsigned char * ) src;
+    int OutPos = 0;
+    for(int i = 0; i < ( int ) srclen / 3; i++) {
+        tmp  = (*dat++) << 16;
+        tmp |= ((*dat++) <<  8);
+        tmp |= (*dat++);
+        dst[ OutPos++ ] = base64_chars[(tmp & 0x00FC0000 ) >> 18];
+        dst[ OutPos++ ] = base64_chars[(tmp & 0x0003F000 ) >> 12];
+        dst[ OutPos++ ] = base64_chars[(tmp & 0x00000FC0 ) >>  6];
+        dst[ OutPos++ ] = base64_chars[(tmp & 0x0000003F )      ];
+    }
+    switch( srclen % 3 ) {
+        case 1 :
+            tmp = (* dat++) << 16;
+            dst[OutPos++] = base64_chars[(tmp & 0x00FC0000 ) >> 18];
+            dst[OutPos++] = base64_chars[(tmp & 0x0003F000 ) >> 12];
+            dst[OutPos++] = base64_pad;
+            dst[OutPos++] = base64_pad;
+            break;
+        case 2 :
+            tmp  = (*dat++) << 16;
+            tmp += (*dat++) <<  8;
+            dst[OutPos++] = base64_chars[(tmp & 0x00FC0000 ) >> 18];
+            dst[OutPos++] = base64_chars[(tmp & 0x0003F000 ) >> 12];
+            dst[OutPos++] = base64_chars[(tmp & 0x00000FC0 ) >>  6];
+            dst[OutPos++] = base64_pad;
+            break;
+    }
+    return OutPos;
+}
+
+inline String base64encode(const char* src, const size_t srclen) {
+    String RetVal;
+    int dstlen = ((srclen / 3) + ((srclen % 3) > 0)) * 4;
+    char * dst = (char *) malloc(dstlen);
+    if(base64encode_internal(src, srclen, dst, dstlen) > 0) {
+        ByteVector vect(dst, dstlen);
+        RetVal = String(vect);
+    }
+    free(dst);
+    return RetVal;
 }
 
 
@@ -119,86 +171,49 @@ void check_xiph_label_frame(Ogg::XiphComment * xiphcomment,
 }
 
 
-String get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, char*& data, int &data_length) {
-    String CoverMime = "";
+bool get_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, 
+                                char*& data, int &data_length, 
+                                ImageType &image_type) {
     if(xiphcomment && xiphcomment->contains("COVERART")) {
-        CoverMime = xiphcomment->fieldListMap()[ "COVERARTMIME" ].front().to8Bit(false);
+        String mimetype = xiphcomment->fieldListMap()[ "COVERARTMIME" ].front().to8Bit(false);
+        if(mimetype.find("/jpeg") != -1 || mimetype.find("/jpg") != -1)
+            image_type = IMAGE_TYPE_JPEG;
+        else if(mimetype.find("/png") != -1)
+            image_type = IMAGE_TYPE_PNG;
         
-        const char* CoverEncData = xiphcomment->fieldListMap()[ "COVERART" ].front().toCString(true); // TODO: deprecated, use METADATA_BLOCK_PICTURE 
+        // TODO: deprecated, use METADATA_BLOCK_PICTURE 
+        const char* CoverEncData = xiphcomment->fieldListMap()[ "COVERART" ].front().toCString(true); 
         
-        //guLogMessage(wxT("Image:\n%s\n"), CoverEncData.c_str());
-//        const string encoded_string = CoverEncData.data();
+        string CoverDecData = base64_decode(CoverEncData);
         
-        string CoverDecData = base64_decode(CoverEncData);//.data());  //TODO needed?
-        
-        
-//        wxMemoryBuffer CoverDecData = guBase64Decode(CoverEncData.data());
-        
-        //guLogMessage(wxT("Image Decoded Data : (%i) %i bytes"), CoverDecData.GetBufSize(), CoverDecData.GetDataLen());
-
-        //wxFileOutputStream FOut(wxT("/home/jrios/test.jpg"));
-        //FOut.write(CoverDecData.GetData(), CoverDecData.GetDataLen());
-        //FOut.Close();
-
-//        wxMemoryInputStream ImgInputStream(CoverDecData.GetData(), CoverDecData.GetDataLen());
-
         data_length = CoverDecData.size();
         data = new char[data_length];
         memcpy(data, CoverDecData.data(), CoverDecData.size());
-
-//        data = strdup(CoverDecData.c_str());
-//        data_length = CoverDecData.size();
-//        wxImage * CoverImage = new wxImage(ImgInputStream, CoverMime);
-//        if(CoverImage)
-//        {
-//            if(CoverImage->IsOk())
-//            {
-//                return CoverImage;
-//            }
-//            else
-//            {
-//                delete CoverImage;
-//            }
-//        }
+        
+        return true;
     }
-    return CoverMime;
+    return false;
 }
 
-//
-//bool set_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, const wxImage * image)
-//{
-//    if(xiphcomment)
-//    {
-//        if(xiphcomment->contains("COVERART"))
-//        {
-//            xiphcomment->removeField("COVERARTMIME");
-//            xiphcomment->removeField("COVERART");
-//        }
-//        if(image)
-//        {
-//            wxMemoryOutputStream ImgOutputStream;
-//            if(image->SaveFile(ImgOutputStream, wxBITMAP_TYPE_JPEG))
-//            {
-//                //ByteVector ImgData((TagLib::uint) ImgOutputStream.GetSize());
-//                //ImgOutputStream.CopyTo(ImgData.data(), ImgOutputStream.GetSize());
-//                char * ImgData = (char *) malloc(ImgOutputStream.GetSize());
-//                if(ImgData)
-//                {
-//                    ImgOutputStream.CopyTo(ImgData, ImgOutputStream.GetSize());
-//                    xiphcomment->addField("COVERARTMIME", "image/jpeg");
-//                    xiphcomment->addField("COVERART", guBase64Encode(ImgData, ImgOutputStream.GetSize()).data());
-//                    free(ImgData);
-//                    return true;
-//                }
-//                else
-//                {
-//                    guLogMessage(wxT("Couldnt allocate memory saving the image to ogg"));
-//                }
-//            }
-//            return false;
-//        }
-//        return true;
-//    }
-//    return false;
-//}
+
+bool set_xiph_comment_cover_art(Ogg::XiphComment * xiphcomment, 
+                                char* data, int data_length, 
+                                ImageType image_type) {
+    if(xiphcomment) {
+        if(xiphcomment->contains("COVERART")) {
+            xiphcomment->removeField("COVERARTMIME");
+            xiphcomment->removeField("COVERART");
+        }
+        if(data && data_length > 0) {
+            if(image_type == IMAGE_TYPE_UNKNOWN || image_type == IMAGE_TYPE_JPEG)
+                xiphcomment->addField("COVERARTMIME", "image/jpeg");
+            else if(image_type == IMAGE_TYPE_PNG)
+                xiphcomment->addField("COVERARTMIME", "image/png");
+            xiphcomment->addField("COVERART", base64encode(data, data_length).toCString(false));
+            return true;
+        }
+        return true;
+    }
+    return false;
+}
 

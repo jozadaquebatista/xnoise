@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <id3v2tag.h>
 
+using namespace TagInfo;
+
 
 void id3v2_check_label_frame(ID3v2::Tag * tagv2, const String& description, const String &value) {
     ID3v2::UserTextIdentificationFrame * frame;
@@ -54,9 +56,10 @@ String get_id3v2_lyrics(ID3v2::Tag * tagv2) {
     return String("");
 }
 
-String get_typed_id3v2_image(char*& idata, int &idata_length,
-                         TagLib::ID3v2::FrameList &framelist,
-                         TagLib::ID3v2::AttachedPictureFrame::Type frametype) {
+void get_typed_id3v2_image(char*& idata, int &idata_length,
+                          TagLib::ID3v2::FrameList &framelist,
+                          TagLib::ID3v2::AttachedPictureFrame::Type frametype,
+                          ImageType &image_type) {
     TagLib::ID3v2::AttachedPictureFrame * PicFrame;
     String mimetype = "";
     idata = NULL;
@@ -70,18 +73,14 @@ String get_typed_id3v2_image(char*& idata, int &idata_length,
                 idata_length = PicFrame->picture().size();
                 idata = new char[idata_length];
                 memcpy(idata, PicFrame->picture().data(), PicFrame->picture().size());
-                //FILE * fout;
-                //fout = fopen("outputFile.jpg", "wb");
-                //cout<<"processing the file " <<endl <<endl;
-                //fwrite(idata, idata_length, 1, fout);
-                //fclose(fout);
-                //cout<<"The picture has been written" << endl;
-                mimetype = PicFrame->mimeType();//.toCString(true);
-//                find_and_replace(mimetype, "/jpg", "/jpeg"); TODO
+                mimetype = PicFrame->mimeType();
+                if(mimetype.find("/jpeg") != -1 || mimetype.find("/jpg") != -1)
+                    image_type = IMAGE_TYPE_JPEG;
+                else if(mimetype.find("/png") != -1)
+                    image_type = IMAGE_TYPE_PNG;
             }
         }
     }
-    return mimetype;
 }
 
 
@@ -99,22 +98,54 @@ TagLib::ID3v2::PopularimeterFrame * get_popularity_frame(TagLib::ID3v2::Tag * ta
 
 
 
-bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length) {
+bool get_id3v2_image(ID3v2::Tag * tagv2, char*& data, int &data_length, ImageType &image_type) {
     TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
     //cout << "get front cover" << endl;
-    String mime = get_typed_id3v2_image(data, data_length,
-                                     FrameList, 
-                                     TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+    get_typed_id3v2_image(data, data_length,
+                          FrameList, 
+                          TagLib::ID3v2::AttachedPictureFrame::FrontCover,
+                          image_type);
     
-    if(! (data) || (data_length <= 0)) {
+    if(!(data) || (data_length <= 0)) {
         //cout << "try get attached image" << endl;
-        get_typed_id3v2_image(data, data_length, FrameList, TagLib::ID3v2::AttachedPictureFrame::Other);
+        get_typed_id3v2_image(data, data_length, 
+                              FrameList, 
+                              TagLib::ID3v2::AttachedPictureFrame::Other,
+                              image_type);
     }
-    if(! (data) || (data_length <= 0)) {
+    if(!(data) || (data_length <= 0)) {
         //cout << "not getting image" << endl;
         return false;
     }
     return true;
+}
+
+
+
+void set_id3v2_image(ID3v2::Tag * tagv2, char* pdata, int pdata_length, ImageType image_type) {
+    TagLib::ID3v2::AttachedPictureFrame * PicFrame = NULL;
+    TagLib::ID3v2::FrameList FrameList = tagv2->frameListMap()["APIC"];
+    for(list<TagLib::ID3v2::Frame*>::iterator iter = FrameList.begin(); iter != FrameList.end(); iter++) {
+        PicFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(*iter);
+        // TODO : Ppl should be able to select which image types want guayadeque to remove from the audio files
+        if((PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::FrontCover) ||
+            (PicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::Other))
+            tagv2->removeFrame(PicFrame, true);
+    }
+    
+    if(!pdata || pdata_length == 0)
+        return;
+    
+    PicFrame = new TagLib::ID3v2::AttachedPictureFrame;
+    if(image_type == IMAGE_TYPE_JPEG || image_type == IMAGE_TYPE_UNKNOWN) //default to jpeg
+        PicFrame->setMimeType("image/jpeg");
+    if(image_type == IMAGE_TYPE_PNG)
+        PicFrame->setMimeType("image/png");
+    PicFrame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+    ByteVector ImgData((TagLib::uint) pdata_length);
+    memcpy(ImgData.data(), pdata, pdata_length);
+    PicFrame->setPicture(ImgData);
+    tagv2->addFrame(PicFrame);
 }
 
 

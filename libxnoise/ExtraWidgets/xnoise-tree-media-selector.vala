@@ -59,7 +59,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                       Gdk.EventMask.LEAVE_NOTIFY_MASK;
         this.msw = msw;
         selected_dockable_media = "";
-        //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.SINGLE);
