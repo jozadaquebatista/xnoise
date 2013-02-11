@@ -93,6 +93,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
+    ExtraWidgets/xnoise-cell-renderer-thumb.vala \
     ExtraWidgets/xnoise-combo-media-selector.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-equalizer-widget.vala \

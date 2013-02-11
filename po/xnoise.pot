@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-11 01:48+0100\n"
+"POT-Creation-Date: 2013-02-11 13:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -499,9 +499,9 @@ msgstr ""
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1244
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1374
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2050
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1237
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1367
 msgid "Artist"
 msgstr ""
 
@@ -511,21 +511,22 @@ msgstr ""
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2052
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1220
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1383
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2051
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1213
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1376
 msgid "Album"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1196
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
 msgid "Title"
 msgstr ""
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1290
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1392
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2052
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1283
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1385
 msgid "Genre"
 msgstr ""
 
@@ -535,14 +536,15 @@ msgstr ""
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:164
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1314
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1401
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2053
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1307
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1394
 msgid "Year"
 msgstr ""
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1365
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1358
 msgid "Tracknumber"
 msgstr ""
 
@@ -844,11 +846,15 @@ msgstr ""
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2055
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2054
+msgid "Playcount"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2058
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2057
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2060
 msgid "Descending"
 msgstr ""
 
@@ -985,8 +991,8 @@ msgid "Show Library"
 msgstr ""
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1410
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1259
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1403
 msgid "Length"
 msgstr ""
 

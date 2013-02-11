@@ -45,19 +45,20 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
         GLib.Object();
         var cells = new List<CellRenderer>();
         
-        this.@foreach( (cellr) => {
+        // remove other cellrenderer
+        base.@foreach( (cellr) => {
+            print("found cellrenderer\n");
             cells.prepend(cellr);
             return false;
         });
-        
-        
         foreach(var cell in cells)
             this.remove(cell);
-
+        
         font_description = new Pango.FontDescription();
         font_description.set_family(font_family);
         font_description.set_size((int)(font_size * Pango.SCALE));
-
+        
+        // Add own cellrenderer
         var renderer_thumb = new CellRendererThumb(font_description);
         
         this.pack_start(renderer_thumb, false);
@@ -74,74 +75,3 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
     }
 }
 
-private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
-    private unowned Pango.FontDescription font_description;
-    public string markup { get; set; }
-    
-    public CellRendererThumb(Pango.FontDescription font_description) {
-        this.font_description = font_description;
-        this.set_fixed_size(IconsModel.ICONSIZE, IconsModel.ICONSIZE);
-        ypad = 0;
-    }
-    
-    
-    public override void render(Cairo.Context cr, Widget widget,
-                                Gdk.Rectangle background_area,
-                                Gdk.Rectangle cell_area,
-                                CellRendererState flags) {
-        //print("render for %s\n", markup);
-        int x_offset = background_area.x + 1;
-        int y_offset = background_area.y + 1;
-        int wi, he = 0;
-        
-        // IMAGE
-        Gdk.cairo_set_source_pixbuf(cr, pixbuf, x_offset, y_offset);
-        cr.paint();
-        
-        //PANGO LAYOUT
-        int layout_width  = background_area.width - 2;
-        var pango_layout = Pango.cairo_create_layout(cr);
-        pango_layout.set_markup(markup , -1);
-        pango_layout.set_alignment(Pango.Alignment.CENTER);
-        pango_layout.set_font_description(font_description);
-        pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
-        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-        pango_layout.get_pixel_size(out wi, out he);
-        
-        int rect_offset = y_offset + (int)((2.0 * IconsModel.ICONSIZE) / 3.0);
-        int rect_height = (int)(IconsModel.ICONSIZE / 3.0);
-        bool was_to_large = false;
-        if(he > rect_height) {
-            was_to_large = true;
-            pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
-            pango_layout.set_height( (int)((IconsModel.ICONSIZE / 3.0) * Pango.SCALE));
-            pango_layout.get_pixel_size(out wi, out he);
-        }
-        //RECTANGLE
-        double alpha = 0.6;
-        
-        if((flags & CellRendererState.PRELIT) == CellRendererState.PRELIT)
-            alpha -= 0.1;
-        
-        if((flags & CellRendererState.SELECTED) == CellRendererState.SELECTED ||
-           (flags & CellRendererState.FOCUSED) == CellRendererState.FOCUSED)
-            alpha -= 0.2;
-        
-        cr.set_source_rgba(0.0, 0.0, 0.0, alpha);
-        cr.set_line_width(0);
-        cr.rectangle(x_offset, 
-                     rect_offset,
-                     background_area.width - 2,
-                     rect_height - 1);
-        cr.fill();
-        
-        // DRAW FONT
-        cr.set_source_rgba(1.0, 1.0, 1.0, 1.0);
-        cr.move_to(x_offset,
-                   y_offset 
-                    + 2.0 * IconsModel.ICONSIZE / 3.0 
-                    + (((IconsModel.ICONSIZE/3.0) -  he) / 2.0)
-        );
-        Pango.cairo_show_layout(cr, pango_layout);
-    }
-}

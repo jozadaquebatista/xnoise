@@ -98,28 +98,31 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             }
         });
         global.tag_changed.connect( () => {
-            if(upd_tl_data_src != 0)
-                Source.remove(upd_tl_data_src);
-            upd_tl_data_src = Timeout.add_seconds(2, () => {
-                HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
-                if(global.current_uri != null)
-                    ntags.insert(Column.ITEM,   global.current_uri); // cheating - the uri is not an item
-                else
+            Idle.add(() => {
+                if(upd_tl_data_src != 0)
+                    Source.remove(upd_tl_data_src);
+                upd_tl_data_src = Timeout.add_seconds(2, () => {
+                    HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
+                    if(global.current_uri != null)
+                        ntags.insert(Column.ITEM,   global.current_uri); // cheating - the uri is not an item
+                    else
+                        return false;
+                    if(global.current_artist != null)
+                        ntags.insert(Column.ARTIST, (global.current_artist.down() == "various artists" &&
+                                                     global.current_albumartist != null && 
+                                                     global.current_albumartist != EMPTYSTRING ? 
+                                                        global.current_albumartist : global.current_artist));
+                    if(global.current_album != null)
+                        ntags.insert(Column.ALBUM,  global.current_album);
+                    if(global.current_title != null)
+                        ntags.insert(Column.TITLE, global.current_title);
+                    if(global.current_genre != null)
+                        ntags.insert(Column.GENRE,  global.current_genre);
+                    // TODO: Add year, tracknumber
+                    upd_tl_data_src = 0;
+                    update_tracklist_data(ntags);
                     return false;
-                if(global.current_artist != null)
-                    ntags.insert(Column.ARTIST, (global.current_artist.down() == "various artists" &&
-                                                 global.current_albumartist != null && 
-                                                 global.current_albumartist != EMPTYSTRING ? 
-                                                    global.current_albumartist : global.current_artist));
-                if(global.current_album != null)
-                    ntags.insert(Column.ALBUM,  global.current_album);
-                if(global.current_title != null)
-                    ntags.insert(Column.TITLE, global.current_title);
-                if(global.current_genre != null)
-                    ntags.insert(Column.GENRE,  global.current_genre);
-                // TODO: Add year, tracknumber
-                upd_tl_data_src = 0;
-                update_tracklist_data(ntags);
+                });
                 return false;
             });
         });
@@ -137,7 +140,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         this.@foreach(update_foreach);
     }
     
-    private bool update_foreach(TreeModel m, TreePath p, TreeIter i) {
+    private bool update_foreach(TreeModel? m, TreePath? p, TreeIter? i) {
         if(ntags == null)
             return true;
         unowned TreeIter? it = null;

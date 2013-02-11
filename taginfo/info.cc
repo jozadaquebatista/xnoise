@@ -183,6 +183,7 @@ bool Info::can_handle_images(void) {
     return false;
 }
 
+
 bool Info::get_image(char*& data, int &data_length, ImageType &image_type) {
     data = NULL;
     data_length = 0;

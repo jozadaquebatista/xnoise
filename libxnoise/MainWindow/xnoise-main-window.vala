@@ -2046,20 +2046,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
             });
             aa_contr_bx.pack_start(album_search_entry, false, false, 0);
-            aa_contr_bx.pack_start(new Label(""), true, true, 0);
             album_view_sorting = new SerialButton();
-            album_view_sorting.insert("ARTIST", _("Artist"));
-            album_view_sorting.insert("ALBUM" , _("Album") );
+            album_view_sorting.insert("ARTIST",    _("Artist"));
+            album_view_sorting.insert("ALBUM" ,    _("Album") );
+            album_view_sorting.insert("GENRE",     _("Genre") );
+            album_view_sorting.insert("YEAR",      _("Year") );
+            album_view_sorting.insert("PLAYCOUNT", _("Playcount") );
             aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
+            aa_contr_bx.pack_start(new Label(""), true, true, 0);
             album_view_direction = new SerialButton(SerialButton.Presentation.IMAGE);
             album_view_direction.insert("ASC" , _("Ascending"), 
                 new Image.from_icon_name("go-up-symbolic", IconSize.MENU));
             album_view_direction.insert("DESC", _("Descending"), 
                 new Image.from_icon_name("go-down-symbolic", IconSize.MENU));
             aa_contr_bx.pack_start(album_view_direction, false, false, 1);
-            var sg01 = new SizeGroup(SizeGroupMode.HORIZONTAL);
-            sg01.add_widget(album_view_sorting);
-            sg01.add_widget(album_view_direction);
+//            var sg01 = new SizeGroup(SizeGroupMode.HORIZONTAL);
+//            sg01.add_widget(album_view_sorting);
+//            sg01.add_widget(album_view_direction);
             var aabx = new Box(Orientation.VERTICAL, 0);
             aabx.pack_start(aa_contr_bx, false, false, 2);
             var aasw = new ScrolledWindow(null, null);

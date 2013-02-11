@@ -542,7 +542,7 @@ public class Xnoise.TrackList : TreeView, IParams {
                     string attr = FileAttribute.STANDARD_TYPE + "," +
                                   FileAttribute.STANDARD_CONTENT_TYPE;
                     foreach(string uri in uris) {
-                    print("uri:%s\n", uri);
+                        print("uri:%s\n", uri);
                         bool is_stream = false;
                         file = File.new_for_uri(uri);
                         if(file.get_uri_scheme() in get_remote_schemes()) 
@@ -1060,29 +1060,22 @@ public class Xnoise.TrackList : TreeView, IParams {
         List<TreePath> pths = new List<TreePath>();
         tracklistmodel.foreach( (m,pa,i) => {
             Item? item = null;
-//            TreeIter i;
-//            tracklistmodel.get_iter(out i, p);
             this.tracklistmodel.get(i, TrackListModel.Column.ITEM, out item);
             if(item.uri == uri)
                 pths.prepend(pa);
             return false;
         });
-        foreach(unowned TreePath p in pths) {
-//            ListStore st = (ListStore)m;
-//            Item? item = null;
+        foreach(TreePath p in pths) {
             TreeIter it;
             tracklistmodel.get_iter(out it, p);
-//            this.tracklistmodel.get(i, TrackListModel.Column.ITEM, out item);
-//            if(item.uri == uri) {
-                path_2 = p;
-                if((global.position_reference!=null)&&
-                   (!removed_playing_title)&&
-                   (p.compare(global.position_reference.get_path()) == 0)) {
-                    removed_playing_title = true;
-                    global.position_reference = null;
-                }
-                this.tracklistmodel.remove(it);
-//            }
+            path_2 = p;
+            if((global.position_reference != null) &&
+               (!removed_playing_title) &&
+               (p.compare(global.position_reference.get_path()) == 0)) {
+                removed_playing_title = true;
+                global.position_reference = null;
+            }
+            this.tracklistmodel.remove(it);
         }
         TreeIter iter;
         if(path_2.prev() && removed_playing_title) {
