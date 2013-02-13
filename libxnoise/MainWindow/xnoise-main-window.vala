@@ -49,6 +49,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posX;
     private int _posY;
     private Gtk.Box contentvbox;
+    private Overlay content_overlay;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
     private ToolItem eqButtonTI;
@@ -1272,8 +1273,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     internal void show_content() {
-        print("content_notebook.page_num(contentvbox): %d\n", content_notebook.page_num(contentvbox));
-        content_notebook.set_current_page(content_notebook.page_num(contentvbox));
+        content_notebook.set_current_page(content_notebook.page_num(content_overlay));
     }
 
     private void on_location_add() {
@@ -1593,7 +1593,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_browser_box.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
             hpaned.pack1(media_browser_box, false, false);
             hpaned.pack2(content_notebook, true, false);
-            content_notebook.append_page(contentvbox, null);
+
+            content_overlay = new Overlay();
+            content_overlay.add(contentvbox);
+//            var spinner = new Spinner();
+//            spinner.start();
+//            spinner.set_size_request(160, 160);
+//            album_art_overlay.add_overlay(spinner);
+//            spinner.halign = Align.CENTER;
+//            spinner.valign = Align.CENTER;
+//            spinner.set_no_show_all(true);
+//            album_art_view.show();
+//            spinner.show();
+            
+            content_notebook.append_page(content_overlay, null);
             bottom_notebook.append_page(hpaned, null);
             
             ///BOX FOR MAIN MENU
@@ -1714,16 +1727,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 tl.set_focus_on_iter(ref iter);
             });
             posjumper.set_tooltip_text(_("Jump to current position"));
-            var bottom_box = new Box(Orientation.HORIZONTAL, 0);
-            bottom_box.pack_start(tbx, false, false, 0);
+//            var bottom_box = new Box(Orientation.HORIZONTAL, 0);
+//            bottom_box.pack_start(tbx, false, false, 0);
             main_view_sbutton = new SerialButton();
             main_view_sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
             main_view_sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-            
-            bottom_box.pack_start(new Label(""), true, true, 0);
-            bottom_box.pack_start(main_view_sbutton, false, false, 0);
-            contentvbox.pack_start(bottom_box, false, false, 0);
+            content_overlay.add_overlay(tbx);
+            tbx.halign = Align.START;
+            tbx.valign = Align.END;
+
+//            bottom_box.pack_start(new Label(""), true, true, 0);
+//            bottom_box.pack_start(main_view_sbutton, false, false, 0);
+            content_overlay.add_overlay(main_view_sbutton);
+            main_view_sbutton.halign = Align.END;
+            main_view_sbutton.valign = Align.END;
+//            contentvbox.pack_start(bottom_box, false, false, 0);
             this.notify["media-browser-visible"].connect( (s, val) => {
                 if(this.media_browser_visible == true) {
                     hide_button.remove(hide_button_image);
