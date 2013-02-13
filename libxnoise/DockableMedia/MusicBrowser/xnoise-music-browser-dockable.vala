@@ -57,7 +57,7 @@ private class Xnoise.MusicBrowserDockable : DockableMedia {
         win.musicBrScrollWin = new ScrolledWindow(null, null);
         win.musicBrScrollWin.border_width = 0;
         win.musicBrScrollWin.set_shadow_type(ShadowType.NONE);
-//        win.musicBrScrollWin.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+        win.musicBrScrollWin.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         win.musicBr = new MusicBrowser(this, win.musicBrScrollWin);
         win.musicBrScrollWin.add(win.musicBr);
         widget = win.musicBrScrollWin; // DockableMedia widget

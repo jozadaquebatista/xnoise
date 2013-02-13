@@ -51,6 +51,8 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
         }
         main_views.insert(view.get_view_name(), view);
         this.append_page(view);
+        view.vexpand = true;
+        view.vexpand_set = true;
     }
     
     public void remove_main_view(Xnoise.IMainView view) {

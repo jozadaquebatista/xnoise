@@ -1291,48 +1291,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)val;
     }
 
-//    public Item[] get_albums_with_genre_and_search(string searchtext, Item? artist, Item? genre) {
-//        return_val_if_fail(artist != null &&
-//                             artist.type == ItemType.COLLECTION_CONTAINER_ARTIST &&
-//                             genre != null &&
-//                             genre.type == ItemType.COLLECTION_CONTAINER_GENRE &&
-//                             artist.stamp == get_current_stamp(get_source_id()),
-//                           null);
-//        Item[] val = {};
-//        Statement stmt;
-//        if(searchtext != EMPTYSTRING) {
-//            string stcl = "%%%s%%".printf(searchtext.casefold());
-//            this.db.prepare_v2(STMT_GET_ALBUMS_WITH_GENRE_AND_SEARCH, -1, out stmt);
-//            if(stmt.bind_int (1, artist.db_id) != Sqlite.OK ||
-//               stmt.bind_text(2, stcl) != Sqlite.OK ||
-//               stmt.bind_text(3, stcl) != Sqlite.OK ||
-//               stmt.bind_text(4, stcl) != Sqlite.OK ||
-//               stmt.bind_text(5, stcl) != Sqlite.OK ||
-//               stmt.bind_int (6, genre.db_id) != Sqlite.OK||
-//               stmt.bind_int (7, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        else {
-//            this.db.prepare_v2(STMT_GET_ALBUMS_WITH_GENRE, -1, out stmt);
-//            if(stmt.bind_int(1, artist.db_id) != Sqlite.OK ||
-//               stmt.bind_int(2, genre.db_id) != Sqlite.OK||
-//               stmt.bind_int(3, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        while(stmt.step() == Sqlite.ROW) {
-//            Item i      = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
-//            i.text      = stmt.column_text(0);
-//            i.stamp     = get_current_stamp(get_source_id());
-//            i.source_id = get_source_id();
-//            val += i;
-//        }
-//        return (owned)val;
-//    }
-
     private static const string STMT_GET_ALBUMS_WITH_SEARCH =
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, genres g, artists art WHERE ar.id = t.artist AND art.id = t.album_artist AND al.id = t.album AND t.genre = g.id AND ar.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR art.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? ORDER BY al.year ASC, al.caseless_name COLLATE CUSTOM01 ASC";
     private static const string STMT_GET_ALBUMS_WITH_SEARCH_2 =
@@ -1448,9 +1406,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private static const string STMT_GET_ALL_ALBUMS_WITH_SEARCH =
         "SELECT DISTINCT al.name, al.id, ar.name, al.is_compilation FROM artists ar, albums al, items t, genres g, artists art WHERE ar.id = t.artist AND art.id = t.album_artist AND al.id = t.album AND t.genre = g.id AND (ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ?";
 
-    private static const string STMT_GET_ALL_ALBUMS_PLAYC =
-        "SELECT DISTINCT al.name, al.id, ar.name, al.is_compilation FROM artists ar, albums al, items t, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND t.mediatype = ?";
-    
     private static const string STMT_GET_ALL_ALBUMS_MOST_PLAYED =
         "SELECT al.name, al.id, ar.name, al.is_compilation FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND t.mediatype = ? ";//" ORDER BY st.playcount DESC LIMIT 100";
 
@@ -1470,26 +1425,27 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             string sql = STMT_GET_ALL_ALBUMS_WITH_SEARCH;
             switch(sorting) {
                 case "PLAYCOUNT":
-                    sql = STMT_GET_ALL_ALBUMS_MOST_PLAYED_WITH_SEARCH + " GROUP BY al.caseless_name ORDER BY st.playcount %s LIMIT 300".printf(dir);
+                    sql = STMT_GET_ALL_ALBUMS_MOST_PLAYED_WITH_SEARCH + 
+                        " GROUP BY al.id ORDER BY st.playcount %s LIMIT 300".printf(dir);
                     break;
                 case "YEAR":
-                    sql = sql + " ORDER BY al.year %s".printf(dir);
+                    sql = sql + 
+                        " ORDER BY al.year %s".printf(dir);
                     break;
                 case "GENRE":
-                    sql = sql + " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                    sql = sql + 
+                        " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
                 case "ALBUM":
-                    sql = sql + " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
+                    sql = sql + 
+                        " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
                     break;
                 case "ARTIST":
                 default:
-                    sql = sql +" ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                    sql = sql +
+                        " ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
             }
-//             +
-//                         (sorting == "ALBUM" ?
-//                            " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir) : 
-//                            " ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir));
             this.db.prepare_v2(sql, -1, out stmt);
             if(stmt.bind_text(1, stcl) != Sqlite.OK ||
                stmt.bind_text(2, stcl) != Sqlite.OK ||
@@ -1505,20 +1461,25 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             string sql = STMT_GET_ALL_ALBUMS;
             switch(sorting) {
                 case "PLAYCOUNT":
-                    sql = STMT_GET_ALL_ALBUMS_MOST_PLAYED + " GROUP BY al.caseless_name ORDER BY st.playcount %s LIMIT 300".printf(dir);
+                    sql = STMT_GET_ALL_ALBUMS_MOST_PLAYED + 
+                        " GROUP BY al.id ORDER BY st.playcount %s LIMIT 300".printf(dir);
                     break;
                 case "YEAR":
-                    sql = sql + " ORDER BY al.year %s".printf(dir);
+                    sql = sql + 
+                        " ORDER BY al.year %s".printf(dir);
                     break;
                 case "GENRE":
-                    sql = sql + " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                    sql = sql + 
+                        " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
                 case "ALBUM":
-                    sql = sql + " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
+                    sql = sql + 
+                        " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
                     break;
                 case "ARTIST":
                 default:
-                    sql = sql +" ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                    sql = sql +
+                        " ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
             }
             this.db.prepare_v2(sql, -1, out stmt);
@@ -1538,37 +1499,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             list += ad;
         }
         return (owned)list;
-    }
-
-//    private static const string STMT_GET_ALL_ALBUM_NAMES =
-//        "SELECT al.name FROM albums al GROUP BY al.caseless_name";
-
-//    public string[] get_all_album_names() {
-//        string[] val = {};
-//        Statement stmt;
-//        this.db.prepare_v2(STMT_GET_ALL_ALBUM_NAMES, -1, out stmt);
-//        while(stmt.step() == Sqlite.ROW) {
-//            val += stmt.column_text(0);
-//        }
-//        return (owned)val;
-//    }
-//    
-    private static const string STMT_ARTIST_CNT_WITH_ALBUM_NAME = 
-        "SELECT COUNT(DISTINCT ar.id) FROM items t, albums al, artists ar where t.album = al.id AND t.artist = ar.id AND al.caseless_name = ?";
-        
-    internal int32 get_artist_count_with_album_name(ref string? album_name) {
-        if(album_name == null)
-            return -1;
-        Statement stmt;
-        this.db.prepare_v2(STMT_ARTIST_CNT_WITH_ALBUM_NAME, -1, out stmt);
-        if(stmt.bind_text(1, album_name.strip().casefold()) != Sqlite.OK) {
-            this.db_error();
-            return -1;
-        }
-        if(stmt.step() == Sqlite.ROW) {
-            return stmt.column_int(0);
-        }
-        return 0;
     }
 }
 

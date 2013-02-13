@@ -530,6 +530,16 @@ typedef struct _XnoiseAlbumArtViewClass XnoiseAlbumArtViewClass;
 typedef struct _XnoiseFullscreenToolbar XnoiseFullscreenToolbar;
 typedef struct _XnoiseFullscreenToolbarClass XnoiseFullscreenToolbarClass;
 
+#define TYPE_CUSTOM_PANED (custom_paned_get_type ())
+#define CUSTOM_PANED(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CUSTOM_PANED, CustomPaned))
+#define CUSTOM_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CUSTOM_PANED, CustomPanedClass))
+#define IS_CUSTOM_PANED(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_CUSTOM_PANED))
+#define IS_CUSTOM_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_CUSTOM_PANED))
+#define CUSTOM_PANED_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_CUSTOM_PANED, CustomPanedClass))
+
+typedef struct _CustomPaned CustomPaned;
+typedef struct _CustomPanedClass CustomPanedClass;
+
 #define XNOISE_TYPE_PLAY_PAUSE_BUTTON (xnoise_play_pause_button_get_type ())
 #define XNOISE_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButton))
 #define XNOISE_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButtonClass))
@@ -1495,6 +1505,7 @@ struct _XnoiseMainClass {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	GtkBox* media_browser_box;
 	XnoiseSerialButton* album_view_sorting;
 	XnoiseSerialButton* album_view_direction;
 	XnoiseAlbumArtView* album_art_view;
@@ -1506,7 +1517,7 @@ struct _XnoiseMainWindow {
 	XnoiseFullscreenToolbar* fullscreentoolbar;
 	GtkBox* videovbox;
 	XnoiseVideoScreen* videoscreen;
-	GtkPaned* hpaned;
+	CustomPaned* hpaned;
 	GtkEntry* search_entry;
 	XnoisePlayPauseButton* playPauseButton;
 	XnoiseControlButton* previousButton;
@@ -2362,6 +2373,7 @@ void xnoise_value_set_fullscreen_toolbar (GValue* value, gpointer v_object);
 void xnoise_value_take_fullscreen_toolbar (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_fullscreen_toolbar (const GValue* value);
 GType xnoise_fullscreen_toolbar_get_type (void) G_GNUC_CONST;
+GType custom_paned_get_type (void) G_GNUC_CONST;
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;

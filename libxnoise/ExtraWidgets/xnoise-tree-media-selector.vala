@@ -36,7 +36,7 @@ using Gtk;
 private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private unowned MediaSoureWidget msw;
-    private TreeStore store;
+    private ListStore store;
     private bool mouse_over = false;
     private int row_height = 24;
     
@@ -63,33 +63,33 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         this.headers_visible = false;
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.SINGLE);
-        this.store = new TreeStore(Column.N_COLUMNS, 
-                                                              typeof(Gdk.Pixbuf),           //icon
-                                                              typeof(string),               //vis_text
-                                                              typeof(int),                  //weight
-                                                              typeof(DockableMedia.Category),
-                                                              typeof(bool),                 //selection state
-                                                              typeof(Gdk.Pixbuf),           //selection icon
-                                                              typeof(string)                //name
-                                                              );
+        this.store = new ListStore(Column.N_COLUMNS, 
+                                   typeof(Gdk.Pixbuf),           //icon
+                                   typeof(string),               //vis_text
+                                   typeof(int),                  //weight
+                                   typeof(DockableMedia.Category),
+                                   typeof(bool),                 //selection state
+                                   typeof(Gdk.Pixbuf),           //selection icon
+                                   typeof(string)                //name
+        );
         var column = new TreeViewColumn();
         TreeViewColumn first_col = column;
-        var renderer = new CellRendererText();
-        var rendererPb = new CellRendererPixbuf();
-        column.pack_start(rendererPb, false);
+        var renderer = new CustomCellRendererList();
+//        var rendererPb = new CellRendererPixbuf();
+//        column.pack_start(rendererPb, false);
         column.pack_start(renderer, true);
-        column.add_attribute(rendererPb, "pixbuf", Column.ICON);
+        column.add_attribute(renderer, "pix", Column.ICON);
         column.add_attribute(renderer, "text", Column.VIS_TEXT);
         column.add_attribute(renderer, "weight", Column.WEIGHT);
         this.insert_column(column, -1);
         
-        column = new TreeViewColumn();
-        rendererPb = new CellRendererPixbuf();
-        column.pack_start(rendererPb, false);
-        rendererPb.xalign = 1.0f;
+//        column = new TreeViewColumn();
+//        rendererPb = new CellRendererPixbuf();
+//        column.pack_start(rendererPb, false);
+//        rendererPb.xalign = 1.0f;
         
-        this.insert_column(column, -1);
-        column.add_attribute(rendererPb, "pixbuf", Column.SELECTION_ICON);
+//        this.insert_column(column, -1);
+//        column.add_attribute(rendererPb, "pixbuf", Column.SELECTION_ICON);
         
         this.model = this.store;
         
@@ -106,8 +106,8 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         build_model();
         dockable_media_sources.media_inserted.connect(on_media_inserted);
         dockable_media_sources.media_removed.connect(on_media_removed);
-        dockable_media_sources.category_removed.connect(on_category_removed);
-        dockable_media_sources.category_inserted.connect(on_category_inserted);
+//        dockable_media_sources.category_removed.connect(on_category_removed);
+//        dockable_media_sources.category_inserted.connect(on_category_inserted);
         
         Timeout.add_seconds(1, () => {
             if(this.get_window() == null)
@@ -115,7 +115,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             var path = new Gtk.TreePath.first();
             Gdk.Rectangle rect = Gdk.Rectangle();
             this.get_cell_area(path, first_col, out rect);
-            row_height = rect.height + 1;
+            row_height = int.max(rect.height + 1, 22);
             queue_resize();
             return false;
         });
@@ -137,7 +137,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private bool on_enter() {
         mouse_over = true;
-        Timeout.add(200, () => {
+        Timeout.add(300, () => {
             queue_resize();
             return false;
         }); 
@@ -162,6 +162,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     public override void get_preferred_height(out int minimum_height, out int natural_height) {
         //print("get_preferred_height\n");
         base.get_preferred_height(out l_minimum_height, out l_natural_height);
+        l_natural_height = int.max(l_natural_height, 24);
         if(mouse_over) { // SHOWING
             if(height_last < l_natural_height) {
                 if(height_last < row_height)
@@ -182,9 +183,10 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         }
         else { //HIDING
             if(height_last > row_height) {
-                natural_height = minimum_height = (height_last = height_last - STEPSIZE);
+                height_last = height_last - STEPSIZE;
                 if(height_last < row_height)
                     height_last = row_height;
+                natural_height = minimum_height = height_last;
                 Timeout.add(ANIMATION_SPEED, () => {
                     queue_resize();
                     return false;
@@ -223,7 +225,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         });
         if(path != null) {
             this.model.foreach( (mo,px,iy) => {
-                TreeStore mx = (TreeStore)mo;
+                ListStore mx = (ListStore)mo;
                 mx.set(iy, 
                        Column.SELECTION_STATE, false,
                        Column.SELECTION_ICON, null
@@ -232,7 +234,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             });
             TreeIter it;
             this.model.get_iter(out it, path);
-            ((TreeStore)this.model).set(it,
+            ((ListStore)this.model).set(it,
                            Column.SELECTION_STATE, true,
                            Column.SELECTION_ICON, icon_repo.selected_collection_icon
             );
@@ -258,21 +260,21 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             return true;
         
         TreeIter it;
-        TreeStore m = (TreeStore)this.get_model();
-        if(treepath.get_depth() == 1) {
-            if(!this.is_row_expanded(treepath)) {
-                this.expand_row(treepath, false);
-            }
-            else {
-                this.collapse_row(treepath);
-            }
-            this.get_selection().unselect_all();
-            this.get_selection().select_path(treepath);
-            return true;
-        }
-        if(treepath.get_depth() == 2) {
+        ListStore m = (ListStore)this.get_model();
+//        if(treepath.get_depth() == 1) {
+//            if(!this.is_row_expanded(treepath)) {
+//                this.expand_row(treepath, false);
+//            }
+//            else {
+//                this.collapse_row(treepath);
+//            }
+//            this.get_selection().unselect_all();
+//            this.get_selection().select_path(treepath);
+//            return true;
+//        }
+//        if(treepath.get_depth() == 2) {
             m.foreach( (mo,p,iy) => {
-                TreeStore mx = (TreeStore)mo;
+                ListStore mx = (ListStore)mo;
                 mx.set(iy, 
                        Column.SELECTION_STATE, false,
                        Column.SELECTION_ICON, null
@@ -291,7 +293,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             if(name == null)
                 name = "";
             selected_dockable_media = name;
-        }
+//        }
         return false;
     }
     
@@ -313,7 +315,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                         TreeIter iter;
                         this.model.get_iter(out iter, treepath);
                         m.foreach( (mo,p,iy) => {
-                            TreeStore mx = (TreeStore)mo;
+                            ListStore mx = (ListStore)mo;
                             mx.set(iy, 
                                    Column.SELECTION_STATE, false,
                                    Column.SELECTION_ICON, null
@@ -321,7 +323,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
                             return false;
                         });
                         this.set_cursor(treepath, null,false);
-                        TreeStore mx = (TreeStore)this.model;
+                        ListStore mx = (ListStore)this.model;
                         string? name;
                         mx.get(iter, Column.NAME, out name);
                         mx.set(iter, 
@@ -374,11 +376,10 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     private void build_model() {
         this.store.clear();
         TreeIter iter;
-        foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories())
-        {
+        foreach(DockableMedia.Category c in dockable_media_sources.get_existing_categories()) {
             int child_count = 0; 
-            this.store.append(out iter, null);
-            set_row_category(iter, c);
+//            this.store.append(out iter);//, null);
+//            set_row_category(iter, c);
             
             List<unowned DockableMedia> list = new List<unowned DockableMedia>();
             foreach(DockableMedia d in dockable_media_sources.get_media_for_category(c)) {
@@ -389,13 +390,13 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             }
             foreach(DockableMedia d in list) {
                 TreeIter iter_child; 
-                this.store.append(out iter_child, iter);
+                this.store.append(out iter_child);//, iter);
                 set_row_data(iter_child, d);
                 child_count++;
             }
             // if there were children being added, move up to toplevel again
-            if(child_count > 0)
-                this.store.iter_parent(out iter, iter);
+//            if(child_count > 0)
+//                this.store.iter_parent(out iter, iter);
         }
     }
     
@@ -405,24 +406,24 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         
         TreeIter iter_category;
         this.store.get_iter_first(out iter_category);
-        bool found_category = false;
+//        bool found_category = false;
+//        
+//        this.store.foreach((model, path, iter) => {
+//            Value v;
+//            this.store.get_value(iter, Column.CATEGORY, out v);
+//            if(v.get_enum() == d.category()) {
+//                iter_category = iter;
+//                found_category = true;
+//                return true;
+//            }
+//            return false;
+//        });
         
-        this.store.foreach((model, path, iter) => {
-            Value v;
-            this.store.get_value(iter, Column.CATEGORY, out v);
-            if(v.get_enum() == d.category()) {
-                iter_category = iter;
-                found_category = true;
-                return true;
-            }
-            return false;
-        });
-        
-        if(found_category) {
+//        if(found_category) {
             TreeIter iter;
-            this.store.append(out iter, iter_category);
+            this.store.append(out iter);//, iter_category);
             set_row_data(iter, d);
-        }
+//        }
     }
     
     private void on_media_removed(string name) {
@@ -430,7 +431,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
             Value v;
             this.store.get_value(iter, Column.NAME, out v);
             if(v.get_string() == name) {
-                this.store.remove(ref iter);
+                this.store.remove(iter);
                 return true;
             }
             return false;
@@ -438,22 +439,160 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     }
     
     private void on_category_inserted(DockableMedia.Category category) {
-        TreeIter iter;
-        this.store.append(out iter, null);
-        this.set_row_category(iter, category);    
+//        TreeIter iter;
+//        this.store.append(out iter, null);
+//        this.set_row_category(iter, category);    
     }
     
     private void on_category_removed(DockableMedia.Category category) {
-        this.store.foreach((model, path, iter) => {
-            Value v;
-            this.store.get_value(iter, Column.CATEGORY, out v);
-            if(v.get_enum() == category) {
-                this.store.remove(ref iter);
-                return true;
-            }
-            return false;
-        });
+//        this.store.foreach((model, path, iter) => {
+//            Value v;
+//            this.store.get_value(iter, Column.CATEGORY, out v);
+//            if(v.get_enum() == category) {
+//                this.store.remove(ref iter);
+//                return true;
+//            }
+//            return false;
+//        });
     }
     
 } // end class TreeMediaSelector
 
+
+
+private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
+//    private int maxiconwidth;
+//    private unowned Widget ow;
+    private unowned Pango.FontDescription font_description;
+//    private unowned TreeViewColumn col;
+//    private int expander;
+//    private int hsepar;
+    private int PIXPAD = 10; // space between pixbuf and text
+    private int INDENT = 15;
+//    private int calculated_widh[3];
+    
+//    public int level    { get; set; }
+    public unowned Gdk.Pixbuf pix { get; set; }
+    public string text            { get; set; }
+    public int weight             { get; set; }
+    
+    public CustomCellRendererList() {
+        GLib.Object();
+//        this.ow = ow;
+//        this.col = col;
+//        this.expander = expander;
+//        this.hsepar = hsepar;
+//        this.font_description = font_description;
+//        maxiconwidth = 0;
+//        calculated_widh[0] = 0;
+//        calculated_widh[1] = 0;
+//        calculated_widh[2] = 0;
+    }
+    
+    public override void get_preferred_height_for_width(Gtk.Widget widget,
+                                                        int width,
+                                                        out int minimum_height,
+                                                        out int natural_height) {
+//        Gdk.Window? w = ow.get_window();
+//        if(w == null) {
+//            print("no window\n");
+//            natural_height = minimum_height = 30;
+//            return;
+//        }
+//        int column_width = ow.get_allocated_width() - 2; //col.get_width();
+//        int cw = col.get_width();
+//        int sum = 0;
+//        int iconwidth = 30;
+//        if(maxiconwidth < iconwidth)
+//            maxiconwidth = iconwidth;
+//        calculated_widh[level] = maxiconwidth;
+//        sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2 + PIXPAD; 
+//        //print("column_width: %d  sum: %d\n", column_width, sum);
+//        //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
+//        var pango_layout = widget.create_pango_layout(text);
+//        pango_layout.set_font_description(this.font_description);
+//        pango_layout.set_alignment(Pango.Alignment.LEFT);
+//        pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
+//        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+//        int wi, he = 0;
+//        pango_layout.get_pixel_size(out wi, out he);
+        natural_height = minimum_height = (pix != null ? int.max(24, pix.get_height() + 2) : 24);
+    }
+
+    public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+                                  out int x_offset, out int y_offset,
+                                  out int width, out int height) {
+        // function not used for gtk+-3.0 !
+        x_offset = 0;
+        y_offset = 0;
+        width = 0;
+        height = 24;
+    }
+    
+    public override void render(Cairo.Context cr, Widget widget,
+                                Gdk.Rectangle background_area,
+                                Gdk.Rectangle cell_area,
+                                CellRendererState flags) {
+        
+        StyleContext context;
+        var pango_layout = widget.create_pango_layout(text);
+//        var font_description = widget.get_style_context().get_font(widget.get_state_flags());
+        pango_layout.set_alignment(Pango.Alignment.LEFT);
+//        font_description.set_weight(Pango.Weight.BOLD);
+//        pango_layout.set_font_description(font_description);
+        int pixwidth = (pix != null ? pix.get_width() : 16);
+//        pango_layout.set_width( 
+//            cell_area.width - (pixwidth + PIXPAD)
+////            (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
+//        );
+//        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+        context = main_window.media_browser_box.get_style_context();
+        context.add_class(STYLE_CLASS_SIDEBAR);
+        StateFlags state = widget.get_state_flags();
+        if((flags & CellRendererState.SELECTED) == 0) {
+            Gdk.cairo_rectangle(cr, background_area);
+            Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+            Gdk.cairo_set_source_rgba(cr, col);
+            cr.fill();
+        }
+        int wi = 0, he = 0;
+        pango_layout.get_pixel_size(out wi, out he);
+        
+        if(pix != null) {
+            int pixheight = pix.get_height();
+//            int x_offset = pix.get_width();
+//            if(calculated_widh[level] > x_offset)
+//                x_offset = (int)((calculated_widh[level] - x_offset) / 2.0);
+//            else
+//                x_offset = 0;
+            if(cell_area.height > pixheight)
+                Gdk.cairo_set_source_pixbuf(cr, 
+                                            pix, 
+                                            cell_area.x + INDENT,
+                                            cell_area.y + (cell_area.height - pixheight)/2
+                );
+            else
+                Gdk.cairo_set_source_pixbuf(cr,
+                                            pix, 
+                                            cell_area.x + INDENT,
+                                            cell_area.y
+                );
+            
+            cr.paint();
+        }
+        //print("calculated_widh[level]: %d  level: %d\n", calculated_widh[level], level);
+        context = widget.get_style_context();
+        if(cell_area.height > he)
+            context.render_layout(cr, 
+                                  pixwidth + 
+                                      PIXPAD + cell_area.x + INDENT,
+                                  cell_area.y +  (cell_area.height -he)/2,
+                                  pango_layout);
+        else
+            context.render_layout(cr, 
+                                  pixwidth + 
+                                      PIXPAD + cell_area.x + INDENT, 
+                                  cell_area.y, 
+                                  pango_layout);
+    }
+}

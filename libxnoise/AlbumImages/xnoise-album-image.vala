@@ -48,7 +48,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     private Gdk.Pixbuf? pixbuf = null;
 
     public AlbumImage() {
-        this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+        //this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
         this.set_size_request(SIZE, SIZE);
         this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK |

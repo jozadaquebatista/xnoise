@@ -56,8 +56,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         Params.iparams_register(this);
         this.mwindow = mwindow;
         
+        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
         setup_widgets();
-        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
     }
     
     public void set_focus_on_selector() {
@@ -134,7 +134,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         notebook = new Gtk.Notebook();
         notebook.set_show_tabs(false);
         notebook.show_border = true;
-            
+        notebook.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         
         this.media_source_selector_box = new Box(Orientation.VERTICAL, 0);
         this.pack_start(media_source_selector_box, false, false, 0);
@@ -205,10 +205,10 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 mss_sw.add(media_source_selector);
                 mss_sw.set_shadow_type(ShadowType.NONE);
                 media_source_selector_box.add(mss_sw);
-                mss_sw.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
-                var sep = new Gtk.Separator(Orientation.HORIZONTAL);
+//                mss_sw.get_style_context().add_class(STYLE_CLASS_BACKGROUND);
+                var sep = new SeparationArea();
                 sep.show();
-                media_source_selector_box.add(sep);
+                media_source_selector_box.pack_start(sep, false, false, 0);
                 media_source_selector_window = mss_sw;
                 break;
         }
@@ -230,4 +230,25 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     }
 }
 
+
+private class Xnoise.SeparationArea : Gtk.DrawingArea {
+    private int HEIGHT = 1;
+    
+    public SeparationArea() {
+        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
+    }
+    
+    public override bool draw(Cairo.Context cr) {
+        Allocation allocation;
+        this.get_allocation(out allocation);
+        var context = this.get_style_context();
+        render_line(context, cr, 4, 0, 
+                                 get_allocated_width(), 0);
+        return false;
+    }
+    
+    public override void get_preferred_height(out int minimum_height, out int natural_height) {
+        minimum_height = natural_height = HEIGHT;
+    }
+}
 
