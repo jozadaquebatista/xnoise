@@ -49,7 +49,6 @@ private class Xnoise.DockableStreams : DockableMedia {
         var sw = new ScrolledWindow(null, null);
         sw.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         var tv = new TreeViewStreams(this, window, (Widget)sw);
-        tv.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         sw.set_shadow_type(ShadowType.NONE);
         sw.add(tv);
         widget = sw;

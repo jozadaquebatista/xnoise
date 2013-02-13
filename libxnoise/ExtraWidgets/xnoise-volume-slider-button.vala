@@ -37,7 +37,7 @@ using Xnoise;
 /**
 * A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
 */
-internal class Xnoise.VolumeSliderButton : Gtk.ToolItem {
+internal class Xnoise.VolumeSliderButton : Gtk.Box {
     
     private unowned GstPlayer player;
     private uint src = 0;
@@ -46,20 +46,20 @@ internal class Xnoise.VolumeSliderButton : Gtk.ToolItem {
     public VolumeSliderButton(GstPlayer player) {
         this.player = player;
         
-        var box = new Gtk.Box(Orientation.VERTICAL, 0);
+//        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         button.set_relief(ReliefStyle.NONE);
         button.use_symbolic = true;
-        button.size = Gtk.IconSize.LARGE_TOOLBAR;
+        button.size = Gtk.IconSize.MENU;
         button.can_focus = false;
         button.set_value(0.1);
-        var eb = new Gtk.EventBox();
-        eb.visible_window = false;
-        box.pack_start(eb, true, true, 0);
-        box.pack_start(button, false, false, 0);
-        eb = new Gtk.EventBox();
-        eb.visible_window = false;
-        box.pack_start(eb, true, true, 0);
-        this.add(box);
+//        var eb = new Gtk.EventBox();
+//        eb.visible_window = false;
+//        box.pack_start(eb, true, true, 0);
+        this.pack_start(button, false, false, 0);
+//        eb = new Gtk.EventBox();
+//        eb.visible_window = false;
+//        box.pack_start(eb, true, true, 0);
+//        this.add(box);
         button.can_focus = false;
         this.can_focus = false;
         

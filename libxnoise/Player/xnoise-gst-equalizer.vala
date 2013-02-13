@@ -45,9 +45,16 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     public dynamic Gst.Element eq;
     
     public void read_params_data() {
-        for(int i = 0; i < 10; ++i)
-            this[i] = Params.get_double_value("eq_band%d".printf(i));
-        gst_player.preamplification = Params.get_double_value("preamp");
+        for(int i = 0; i < 10; ++i) {
+            if(!Params.get_bool_value("not_use_eq"))
+                this[i] = Params.get_double_value("eq_band%d".printf(i));
+            else
+                this[i] = 0.0;
+        }
+        if(!Params.get_bool_value("not_use_eq"))
+            gst_player.preamplification = Params.get_double_value("preamp");
+        else
+            gst_player.preamplification = 1.0;
     }
 
     public void write_params_data() {

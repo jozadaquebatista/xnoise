@@ -52,7 +52,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Overlay content_overlay;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
-    private ToolItem eqButtonTI;
+//    private ToolItem eqButtonTI;
     private Button repeatButton;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
@@ -232,6 +232,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), "<Control>KP_Space", N_("Toggle playback status"), menutoggle_playpause },
             { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), "<Control>n", N_("Go to next track"), menu_next },
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit },
+            { "EqAction", null /*icon*/, N_("E_qualizer"), null, N_("Open equalizer window"), on_eq_open },
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked },
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
@@ -708,7 +709,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         switch(this.repeatState) {
             case PlayerRepeatMode.NOT_AT_ALL : {
                 repeatimage.destroy();
-                repeatimage = IconRepo.get_themed_image_icon("xn-no-repeat-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage = IconRepo.get_themed_image_icon("xn-no-repeat-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
                 repeatButton.set_tooltip_text(_("Playback mode: ") + _("No repeat, one after another"));
@@ -716,7 +717,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             case PlayerRepeatMode.SINGLE : {
                 repeatimage.destroy();
-                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-single-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-single-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
@@ -725,7 +726,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             case PlayerRepeatMode.ALL : {
                 repeatimage.destroy();
-                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
@@ -734,7 +735,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             case PlayerRepeatMode.RANDOM : {
                 repeatimage.destroy();
-                repeatimage = IconRepo.get_themed_image_icon("xn-shuffle-symbolic", IconSize.LARGE_TOOLBAR);
+                repeatimage = IconRepo.get_themed_image_icon("xn-shuffle-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
                 repeatButton.has_tooltip = true;
@@ -1341,6 +1342,39 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    private void on_eq_open() {
+        if(eqdialog != null)
+            return;
+        var eq_widget = new EqualizerWidget(gst_player.equalizer);
+        eqdialog = new Gtk.Window();
+        eqdialog.set_resizable(false);
+        eqdialog.set_has_resize_grip(false);
+        eqdialog.add(eq_widget);
+        eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
+        eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
+        eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); eqdialog = null; });
+        eqdialog.set_title("xnoise - " + _("Equalizer"));
+        eqdialog.key_press_event.connect( (s,e) => {
+            switch(e.keyval) {
+                case Gdk.Key.q: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                        return false;
+                    main_window.quit_now();
+                    break;
+                }
+                default:
+                    break;
+            }
+            return false;
+        });
+        eqdialog.show_all();
+        eqdialog.delete_event.connect(  () => {
+            //print("remove equalizer window\n");
+            eqdialog = null;
+            return false;
+        });
+    }
+    
     private void on_file_add() {
         Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
             _("Select media file"),
@@ -1661,6 +1695,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             hide_button.set_relief(ReliefStyle.NONE);
             var tbx = new Box(Orientation.HORIZONTAL, 0);
             tbx.pack_start(hide_button, false, false, 0);
+            
+            //VOLUME SLIDE BUTTON
+            volume_slider = new VolumeSliderButton(gst_player);
+            tbx.pack_start(volume_slider, false, false, 0);
+            
+            repeatButton = new Gtk.Button();
+            repeatButton.can_focus = false;
+            repeatButton.clicked.connect(this.on_repeat_button_clicked);
+            repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.MENU);
+            repeatButton.add(repeatimage);
+            repeatButton.set_relief(ReliefStyle.NONE);
+            tbx.pack_start(repeatButton, false, false, 0);
+            
             var removeSelectedButton = new Gtk.Button();
             Gtk.Image remsel_button_image;
             if(theme.has_icon("list-remove-symbolic"))
@@ -1831,22 +1878,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             //---------------------
             
             //REPEAT MODE SELECTOR
-            var repeatButtonTI = new ToolItem();
-            var box = new Gtk.Box(Orientation.VERTICAL, 0);
-            repeatButton = new Gtk.Button();
-            repeatButton.can_focus = false;
-            repeatButton.clicked.connect(this.on_repeat_button_clicked);
-            repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
-            repeatButton.add(repeatimage);
-            repeatButton.set_relief(ReliefStyle.NONE);
-            var eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            box.pack_start(repeatButton, false, false, 0);
-            eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            repeatButtonTI.add(box);
+//            var repeatButtonTI = new ToolItem();
+            Gtk.Box box;
+            EventBox eb;
+//            box = new Gtk.Box(Orientation.VERTICAL, 0);
+//            repeatButton = new Gtk.Button();
+//            repeatButton.can_focus = false;
+//            repeatButton.clicked.connect(this.on_repeat_button_clicked);
+//            repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.LARGE_TOOLBAR);
+//            repeatButton.add(repeatimage);
+//            repeatButton.set_relief(ReliefStyle.NONE);
+////            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            box.pack_start(repeatButton, false, false, 0);
+//            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            repeatButtonTI.add(box);
             //--------------------
             
             //PLAYING TITLE IMAGE
@@ -1892,57 +1941,57 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_browser_box.pack_start(msw, true, true, 0);
             //----------------
             
-            eqButtonTI = new ToolItem();
-            
-            box = new Gtk.Box(Orientation.VERTICAL, 0);
-            var eqButton = new Button();
-            eqButton.set_tooltip_text(_("Open equalizer"));
-            Image eqi = IconRepo.get_themed_image_icon("xn-equalizer-symbolic", IconSize.LARGE_TOOLBAR);
-            eqi.show();
-            eqButton.add(eqi);
-            eqButton.can_focus = false;
-            eqButton.set_relief(ReliefStyle.NONE);
-            eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            box.pack_start(eqButton, false, false, 0);
-            eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            //--
-            eqButton.clicked.connect( () => {
-                if(eqdialog != null)
-                    return;
-                var eq_widget = new EqualizerWidget(gst_player.equalizer);
-                eqdialog = new Gtk.Window();
-                eqdialog.set_resizable(false);
-                eqdialog.set_has_resize_grip(false);
-                eqdialog.add(eq_widget);
-                eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
-                eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
-                eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); eqdialog = null; });
-                eqdialog.set_title("xnoise - " + _("Equalizer"));
-                eqdialog.key_press_event.connect( (s,e) => {
-                    switch(e.keyval) {
-                        case Gdk.Key.q: {
-                            if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
-                                return false;
-                            main_window.quit_now();
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    return false;
-                });
-                eqdialog.show_all();
-                eqdialog.delete_event.connect(  () => {
-                    //print("remove equalizer window\n");
-                    eqdialog = null;
-                    return false;
-                });
-            });
-            eqButtonTI.add(box);
+//            eqButtonTI = new ToolItem();
+//            
+//            box = new Gtk.Box(Orientation.VERTICAL, 0);
+//            var eqButton = new Button();
+//            eqButton.set_tooltip_text(_("Open equalizer"));
+//            Image eqi = IconRepo.get_themed_image_icon("xn-equalizer-symbolic", IconSize.LARGE_TOOLBAR);
+//            eqi.show();
+//            eqButton.add(eqi);
+//            eqButton.can_focus = false;
+//            eqButton.set_relief(ReliefStyle.NONE);
+//            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            box.pack_start(eqButton, false, false, 0);
+//            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            //--
+//            eqButton.clicked.connect( () => {
+//                if(eqdialog != null)
+//                    return;
+//                var eq_widget = new EqualizerWidget(gst_player.equalizer);
+//                eqdialog = new Gtk.Window();
+//                eqdialog.set_resizable(false);
+//                eqdialog.set_has_resize_grip(false);
+//                eqdialog.add(eq_widget);
+//                eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
+//                eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
+//                eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); eqdialog = null; });
+//                eqdialog.set_title("xnoise - " + _("Equalizer"));
+//                eqdialog.key_press_event.connect( (s,e) => {
+//                    switch(e.keyval) {
+//                        case Gdk.Key.q: {
+//                            if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+//                                return false;
+//                            main_window.quit_now();
+//                            break;
+//                        }
+//                        default:
+//                            break;
+//                    }
+//                    return false;
+//                });
+//                eqdialog.show_all();
+//                eqdialog.delete_event.connect(  () => {
+//                    //print("remove equalizer window\n");
+//                    eqdialog = null;
+//                    return false;
+//                });
+//            });
+//            eqButtonTI.add(box);
             
             var albumart_toggleb = new ToolItem();
             
@@ -1979,8 +2028,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
                 }
             });
-            //VOLUME SLIDE BUTTON
-            volume_slider = new VolumeSliderButton(gst_player);
+//            //VOLUME SLIDE BUTTON
+//            volume_slider = new VolumeSliderButton(gst_player);
 
             //PLAYBACK CONTROLLS
             this.previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
@@ -2004,15 +2053,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             //---------------------
             main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(albumart_toggleb, -1);
             main_toolbar.insert(previousButton, -1);
             main_toolbar.insert(playPauseButton, -1);
             main_toolbar.insert(stopButton, -1);
             main_toolbar.insert(nextButton, -1);
             main_toolbar.insert(this.track_infobar, -1);
-            main_toolbar.insert(repeatButtonTI, -1);
-            main_toolbar.insert(eqButtonTI, -1);
-            main_toolbar.insert(albumart_toggleb, -1);
-            main_toolbar.insert(volume_slider, -1);
+//            main_toolbar.insert(repeatButtonTI, -1);
+//            main_toolbar.insert(eqButtonTI, -1);
+//            main_toolbar.insert(volume_slider, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
             
@@ -2091,8 +2140,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             album_view_sorting.insert("GENRE",     _("Genre") );
             album_view_sorting.insert("YEAR",      _("Year")  );
             album_view_sorting.insert("PLAYCOUNT", _("Count") );
-            aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
             aa_contr_bx.pack_start(new Label(""), true, true, 0);
+            aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
             album_view_direction = new SerialButton(SerialButton.Presentation.IMAGE);
             album_view_direction.insert("ASC" , _("Ascending"), 
                 new Image.from_icon_name("go-up-symbolic", IconSize.MENU));
