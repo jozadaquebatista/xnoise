@@ -235,7 +235,7 @@ private class Xnoise.SeparationArea : Gtk.DrawingArea {
     private int HEIGHT = 1;
     
     public SeparationArea() {
-        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
+        this.get_style_context().add_class(STYLE_CLASS_SEPARATOR);
     }
     
     public override bool draw(Cairo.Context cr) {
