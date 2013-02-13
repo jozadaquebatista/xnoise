@@ -173,6 +173,7 @@ public class Xnoise.UserInfo : GLib.Object {
         uint current_id = id_count;
         id_count++;
         
+print("++1\n");
         var bar = new Xnoise.InfoBar(this, 
                                      content_class, 
                                      removal_type, 
@@ -181,14 +182,19 @@ public class Xnoise.UserInfo : GLib.Object {
                                      info_text,
                                      bold,
                                      extra_widget);
+print("++2\n");
 
         info_messages.insert(current_id, bar);
+print("++3\n");
         this.add_info_bar(bar); 
+print("++4\n");
         bar.show_all();
+print("++5\n");
         
         if(info_messages.size() > 3)
             this.popdown_oldest();
         
+print("++6\n");
         return current_id;
     }
 }

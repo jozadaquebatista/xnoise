@@ -56,7 +56,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         Params.iparams_register(this);
         this.mwindow = mwindow;
         
-        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         setup_widgets();
     }
     

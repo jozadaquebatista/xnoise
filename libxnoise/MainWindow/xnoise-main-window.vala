@@ -1588,7 +1588,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             content_notebook.show_border = false;
             content_notebook.show_tabs = false;
             var contentvbox = new Box(Orientation.VERTICAL, 0);
-            var infobox = new Box(Orientation.VERTICAL, 0);
+            infobox = new Box(Orientation.VERTICAL, 0);
             contentvbox.pack_start(infobox, false, false, 0);
             hpaned = new CustomPaned();
             media_browser_box = new Box(Orientation.VERTICAL, 0);
@@ -2158,7 +2158,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         album_view_toggle.set_active(tab == 0 ? false : true);
     }
     
-    internal void show_status_info(Xnoise.InfoBar bar) {
+    internal void show_status_info(Xnoise.InfoBar? bar) {
+        if(bar == null) {
+            print("info bar is null\n");
+            return;
+        }
+        if(infobox == null) {
+            print("infobox is null\n");
+            return;
+        }
         infobox.pack_start(bar, false, false, 0);
         bar.show_all();
     }
