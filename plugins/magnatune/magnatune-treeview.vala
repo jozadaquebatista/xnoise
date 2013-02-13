@@ -59,6 +59,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         this.dock = dock;
         this.widg = widg;
         this.ow = ow;
+        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
         mag_model = create_model();
         if(mag_model == null)
             return;

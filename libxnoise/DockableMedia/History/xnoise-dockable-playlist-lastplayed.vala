@@ -47,8 +47,10 @@ private class Xnoise.DockablePlaylistLastplayed : DockableMedia {
 
     public override Gtk.Widget? create_widget(Xnoise.MainWindow window) {
         var sw = new ScrolledWindow(null, null);
+        sw.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         var tv = new PlaylistTreeViewLastplayed(this, window, (Widget)sw);
-        sw.set_shadow_type(ShadowType.IN);
+        tv.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+        sw.set_shadow_type(ShadowType.NONE);
         sw.add(tv);
         widget = sw;
         return sw;

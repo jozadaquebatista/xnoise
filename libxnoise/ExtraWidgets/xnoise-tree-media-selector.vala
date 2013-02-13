@@ -493,29 +493,6 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
                                                         int width,
                                                         out int minimum_height,
                                                         out int natural_height) {
-//        Gdk.Window? w = ow.get_window();
-//        if(w == null) {
-//            print("no window\n");
-//            natural_height = minimum_height = 30;
-//            return;
-//        }
-//        int column_width = ow.get_allocated_width() - 2; //col.get_width();
-//        int cw = col.get_width();
-//        int sum = 0;
-//        int iconwidth = 30;
-//        if(maxiconwidth < iconwidth)
-//            maxiconwidth = iconwidth;
-//        calculated_widh[level] = maxiconwidth;
-//        sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2 + PIXPAD; 
-//        //print("column_width: %d  sum: %d\n", column_width, sum);
-//        //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
-//        var pango_layout = widget.create_pango_layout(text);
-//        pango_layout.set_font_description(this.font_description);
-//        pango_layout.set_alignment(Pango.Alignment.LEFT);
-//        pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
-//        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-//        int wi, he = 0;
-//        pango_layout.get_pixel_size(out wi, out he);
         natural_height = minimum_height = (pix != null ? int.max(24, pix.get_height() + 2) : 24);
     }
 

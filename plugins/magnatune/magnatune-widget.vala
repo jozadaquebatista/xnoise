@@ -368,7 +368,7 @@ private class MagnatuneWidget : Gtk.Box {
         this.remove(label);
         label = null;
         sw = new ScrolledWindow(null, null);
-        sw.set_shadow_type(ShadowType.IN);
+        sw.set_shadow_type(ShadowType.NONE);
         tv = new MagnatuneTreeView(this.dock, this, sw, this.plugin);
         if(tv != null)
             sw.add(tv);

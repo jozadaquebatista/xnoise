@@ -57,7 +57,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
     public TreeViewVideos(DockableMedia dock, MainWindow window, Widget ow) {
         this.win = window;
         this.dock = dock;
-        //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         this.ow = ow;
@@ -74,7 +74,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         this.style_get("horizontal-separator", out hsepar);
         renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
         
-        var rendererPb = new CellRendererPixbuf();
+        var rendererPb = new CustomCellRendererPixbuf();
         
         column.pack_start(rendererPb, false);
         column.pack_start(renderer, true);
@@ -212,7 +212,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
-            natural_height = minimum_height = he + 2;
+            natural_height = minimum_height = he + 5;
         }
     
         public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
@@ -235,9 +235,18 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            context = widget.get_style_context();
+            context = main_window.media_browser_box.get_style_context();
+            context.add_class(STYLE_CLASS_SIDEBAR);
+            StateFlags state = widget.get_state_flags();
+            if((flags & CellRendererState.SELECTED) == 0) {
+                Gdk.cairo_rectangle(cr, background_area);
+                Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+                Gdk.cairo_set_source_rgba(cr, col);
+                cr.fill();
+            }
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
+            context = widget.get_style_context();
             if(cell_area.height > he)
                 context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
             else
@@ -415,6 +424,94 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         }
         rightmenu.show_all();
         return rightmenu;
+    }
+}
+
+private class Xnoise.CustomCellRendererPixbuf : Gtk.CellRendererPixbuf {
+    
+//    public override void get_preferred_size(Gtk.Widget widget,
+//                                            out Gtk.Requisition minimum_req,
+//                                            out Gtk.Requisition natural_req) {
+////        int column_width = widget.get_allocated_width();//col.get_width();
+////        //print("cw: %d   cwo: %d\n", column_width, col.get_width());
+////        int sum = 0;
+////        int iconwidth = (pix == null) ? 16 : pix.get_width();
+////        if(maxiconwidth < iconwidth)
+////            maxiconwidth = iconwidth;
+////        sum = hsepar + (2 * (int)xpad) + maxiconwidth;
+////        var pango_layout = widget.create_pango_layout(text);
+////        pango_layout.set_font_description(this.font_description);
+////        pango_layout.set_alignment(Pango.Alignment.LEFT);
+////        pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
+////        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+////        int wi, he = 0;
+////        pango_layout.get_pixel_size(out wi, out he);
+//        Gtk.Requisition natural_width = Gtk.Requisition();
+//        Gtk.Requisition minimum_width = Gtk.Requisition();
+//        minimum_req.width = natural_req.width =   (pixbuf != null ? pixbuf.get_width()  + 2 : 22);
+//        minimum_req.height = natural_req.height = (pixbuf != null ? pixbuf.get_height() + 2 : 22);
+//    }
+
+//    public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+//                                  out int x_offset, out int y_offset,
+//                                  out int width, out int height) {
+//        // function not used for gtk+-3.0 !
+//        x_offset = 0;
+//        y_offset = 0;
+//        width = 0;
+//        height = 0;
+//    }
+
+    public override void render(Cairo.Context cr, Widget widget,
+                                Gdk.Rectangle background_area,
+                                Gdk.Rectangle cell_area,
+                                CellRendererState flags) {
+        StyleContext context;
+        StateFlags state = widget.get_state_flags();
+        context = main_window.media_browser_box.get_style_context();
+        context.add_class(STYLE_CLASS_SIDEBAR);
+        if((flags & CellRendererState.SELECTED) == 0) {
+            Gdk.cairo_rectangle(cr, cell_area);
+            Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+            Gdk.cairo_set_source_rgba(cr, col);
+            cr.fill();
+        }
+//        else {
+//            context = widget.get_style_context();
+//            context.add_class(STYLE_CLASS_SIDEBAR);
+//            Gdk.cairo_rectangle(cr, cell_area);
+//            Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+//            Gdk.cairo_set_source_rgba(cr, col);
+//            cr.fill();
+//        }
+        if(pixbuf != null) {
+            int pixheight = pixbuf.get_height();
+//            int x_offset = pixbuf.get_width();
+//            if(cell_area. > x_offset)
+//                x_offset = (int)((calculated_widh[level] - x_offset) / 2.0);
+//            else
+//                x_offset = 0;
+            if(cell_area.height > pixheight)
+                Gdk.cairo_set_source_pixbuf(cr, 
+                                            pixbuf, 
+                                            cell_area.x, 
+                                            cell_area.y + (cell_area.height -pixheight)/2
+                );
+            else
+                Gdk.cairo_set_source_pixbuf(cr,
+                                            pixbuf, 
+                                            cell_area.x, 
+                                            cell_area.y
+                );
+            cr.paint();
+        }
+//        int wi = 0, he = 0;
+//        pango_layout.get_pixel_size(out wi, out he);
+//        context = widget.get_style_context();
+//        if(cell_area.height > he)
+//            context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
+//        else
+//            context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
     }
 }
 
