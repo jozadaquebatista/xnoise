@@ -1272,6 +1272,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     internal void show_content() {
+        print("content_notebook.page_num(contentvbox): %d\n", content_notebook.page_num(contentvbox));
         content_notebook.set_current_page(content_notebook.page_num(contentvbox));
     }
 
@@ -1579,24 +1580,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             gb.add_from_file(MAIN_UI_FILE);
             
             unowned IconTheme theme = IconTheme.get_default();
-
             bottom_notebook  = gb.get_object("bottom_notebook") as Gtk.Notebook;
             
-            
-//content_notebook = gb.get_object("content_nb") as Gtk.Notebook;
             content_notebook = new Notebook();
             content_notebook.show_border = false;
             content_notebook.show_tabs = false;
-            var contentvbox = new Box(Orientation.VERTICAL, 0);
+            contentvbox = new Box(Orientation.VERTICAL, 0);
             infobox = new Box(Orientation.VERTICAL, 0);
             contentvbox.pack_start(infobox, false, false, 0);
             hpaned = new CustomPaned();
             media_browser_box = new Box(Orientation.VERTICAL, 0);
             media_browser_box.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
             hpaned.pack1(media_browser_box, false, false);
-            hpaned.pack2(contentvbox, true, false);
-            content_notebook.append_page(hpaned, null);
-            bottom_notebook.append_page(content_notebook, null);
+            hpaned.pack2(content_notebook, true, false);
+            content_notebook.append_page(contentvbox, null);
+            bottom_notebook.append_page(hpaned, null);
             
             ///BOX FOR MAIN MENU
             menuvbox = gb.get_object("menuvbox") as Gtk.Box;
