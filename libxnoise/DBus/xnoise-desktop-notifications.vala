@@ -200,12 +200,28 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     //        print("%s, %s, %s\n", name, vendor, version);
     //}
     
+    private int fail_counter = 0;
+    
     public void send_notification(string icon,
                                   string summary,
                                   string body,
                                   int32 timeout) {
-        if(notifications_proxy == null)
-            return;
+        if(notifications_proxy == null) {
+            fail_counter++;
+            if(fail_counter > 2) {
+                print("Could not wake up notifications deamon. Giving up...\n");
+                return;
+            }
+            print("Try waking up notification deamon...\n");
+            get_dbus_proxy.begin();
+            Timeout.add_seconds(2, () => {
+                send_notification(icon,
+                                  summary,
+                                  body,
+                                  timeout);
+                return false;
+            });
+        }
         if(!Main.instance.use_notifications)
             return;
         string[] actions = {};
@@ -245,11 +261,12 @@ private class Xnoise.DesktopNotifications : GLib.Object {
             print("Dbus: notification's name appeared but proxy is not available\n");
             return;
         }
+        fail_counter = 0;
     }
 
     private void on_name_vanished(DBusConnection conn, string name) {
         print("DBus: Notifications name disappeared\n");
-        notifications_proxy = null;
+//        notifications_proxy = null;
     }
     
     private async void get_dbus_proxy() {
