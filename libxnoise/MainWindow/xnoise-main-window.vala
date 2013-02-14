@@ -2270,4 +2270,54 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 }
 
-
+private class Xnoise.SideBarHeadline : Gtk.TreeView {
+    private ListStore store;
+    
+    
+    public SideBarHeadline(string headline = "") {
+        this.headers_visible = false;
+        this.get_selection().set_mode(SelectionMode.NONE);
+        setup_widgets();
+        TreeIter iter;
+        store.append(out iter);
+        store.set(iter,
+                  Column.TEXT, headline,
+                  Column.WEIGHT, Pango.Weight.BOLD
+        );
+        var context = this.get_style_context();
+        context.save();
+        context.add_class(STYLE_CLASS_PANE_SEPARATOR);
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL);
+        this.override_background_color(StateFlags.NORMAL, color);
+        context.restore();
+    }
+    
+    
+    private enum Column {
+        TEXT,
+        WEIGHT,
+        N_COUNT
+    }
+    
+    public void set_headline(string headline) {
+        TreeIter iter;
+        if(!store.get_iter_first(out iter))
+            return;
+        store.set(iter,
+                  Column.TEXT, headline,
+                  Column.WEIGHT, Pango.Weight.BOLD
+        );
+    }
+    
+    private void setup_widgets() {
+        store = new ListStore(Column.N_COUNT, typeof(string), typeof(int));
+        
+        var renderer = new CellRendererText();
+        var column = new TreeViewColumn();
+        column.pack_start(renderer, true);
+        column.add_attribute(renderer, "text",   Column.TEXT);
+        column.add_attribute(renderer, "weight", Column.WEIGHT);
+        this.append_column(column);
+        this.set_model(store);
+    }
+}
