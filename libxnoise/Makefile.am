@@ -102,6 +102,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-media-source-widget.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \
     ExtraWidgets/xnoise-serial-button.vala \
+    ExtraWidgets/xnoise-thin-paned.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
     ExtraWidgets/xnoise-tree-media-selector.vala \
     ExtraWidgets/xnoise-volume-slider-button.vala \

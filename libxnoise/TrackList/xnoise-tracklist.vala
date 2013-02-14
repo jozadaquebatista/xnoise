@@ -60,6 +60,14 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
         scrolled_window.set_shadow_type(Gtk.ShadowType.NONE);
         scrolled_window.add(tl);
+        
+        var context = this.get_style_context();
+        context.save();
+        context.add_class(STYLE_CLASS_CELL);
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        this.override_background_color(StateFlags.NORMAL, color);
+        context.restore();
+        
         this.pack_start(scrolled_window, true, true, 0);
     }
 }
@@ -138,7 +146,13 @@ public class Xnoise.TrackList : TreeView, IParams {
     public TrackList() {
         this.xn = Main.instance;
         theme = IconTheme.get_default();
-        
+//        this.get_style_context().add_class(STYLE_CLASS_VIEW);
+//        var context = this.get_style_context();
+//        context.save();
+//        context.add_class(STYLE_CLASS_CELL);
+//        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+//        this.override_background_color(StateFlags.NORMAL, color);
+//        context.restore();
         if(tlm == null)
             print("tracklist model instance not available\n");
         

@@ -960,6 +960,22 @@ namespace Xnoise {
 		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class ThinPaned : Gtk.Paned {
+		public ThinPaned ();
+		public override bool button_press_event (Gdk.EventButton event);
+		public override bool button_release_event (Gdk.EventButton event);
+		public override bool draw (Cairo.Context cr);
+		public unowned Gdk.Window get_overlay_handle_window ();
+		public override bool grab_broken_event (Gdk.EventGrabBroken event);
+		public override void map ();
+		public override bool motion_notify_event (Gdk.EventMotion event);
+		public override void realize ();
+		public override void size_allocate (Gtk.Allocation allocation);
+		public override void state_flags_changed (Gtk.StateFlags previous_state);
+		public override void unmap ();
+		public override void unrealize ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackData {
 		public string? album;
 		public string? albumartist;

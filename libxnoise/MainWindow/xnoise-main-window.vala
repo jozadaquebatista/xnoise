@@ -50,6 +50,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posY;
     private Gtk.Box contentvbox;
     private Overlay content_overlay;
+    private Overlay paned_overlay;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
 //    private ToolItem eqButtonTI;
@@ -91,7 +92,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal FullscreenToolbar fullscreentoolbar;
     internal Box videovbox;
     internal unowned VideoScreen videoscreen;
-    internal CustomPaned hpaned;
+    internal ThinPaned hpaned;
     internal Entry search_entry;
     internal PlayPauseButton playPauseButton;
     internal ControlButton previousButton;
@@ -1622,7 +1623,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             contentvbox = new Box(Orientation.VERTICAL, 0);
             infobox = new Box(Orientation.VERTICAL, 0);
             contentvbox.pack_start(infobox, false, false, 0);
-            hpaned = new CustomPaned();
+            hpaned = new ThinPaned();
             media_browser_box = new Box(Orientation.VERTICAL, 0);
             media_browser_box.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
             hpaned.pack1(media_browser_box, false, false);
@@ -1641,7 +1642,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            spinner.show();
             
             content_notebook.append_page(content_overlay, null);
-            bottom_notebook.append_page(hpaned, null);
+            paned_overlay = new Overlay();
+            paned_overlay.add(hpaned);
+            bottom_notebook.append_page(paned_overlay, null);
             
             ///BOX FOR MAIN MENU
             menuvbox = gb.get_object("menuvbox") as Gtk.Box;
@@ -1692,9 +1695,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             hide_button.add(hide_button_image);
             hide_button.can_focus = false;
             hide_button.clicked.connect(this.toggle_media_browser_visibility);
-            hide_button.set_relief(ReliefStyle.NONE);
+            hide_button.set_relief(ReliefStyle.HALF);
+            paned_overlay.add_overlay(hide_button);
+            hide_button.halign = Align.START;
+            hide_button.valign = Align.END;
             var tbx = new Box(Orientation.HORIZONTAL, 0);
-            tbx.pack_start(hide_button, false, false, 0);
+//            tbx.pack_start(hide_button, false, false, 0);
             
             //VOLUME SLIDE BUTTON
             volume_slider = new VolumeSliderButton(gst_player);
@@ -1731,8 +1737,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             //REMOVE TITLE OR ALL TITLES BUTTONS
             var removeAllButton = new Gtk.Button();
             Gtk.Image remove_button_image;
-            if(theme.has_icon("user-trash-symbolic"))
-                remove_button_image = IconRepo.get_themed_image_icon("user-trash-symbolic",
+            if(theme.has_icon("list-remove-all-symbolic"))
+                remove_button_image = IconRepo.get_themed_image_icon("list-remove-all-symbolic",
                                                                      IconSize.MENU
                 );
             else
@@ -1846,6 +1852,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.trackList = tl;
             tracklistview_widget = new TrackListViewWidget(this);
             trackListScrollWin = tracklistview_widget.scrolled_window;
+            trackListScrollWin.get_style_context().add_class(STYLE_CLASS_VIEW);
             mainview_box.add_main_view(tracklistview_widget);
             
             videoview_widget = new VideoViewWidget(this);
@@ -2263,280 +2270,4 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 }
 
-
-private class CustomPaned : Gtk.Paned {
-    
-    private bool child1_shrink = true;
-    private bool child2_shrink = true;
-    
-    private unowned Widget child1;
-    private unowned Widget child2;
-    private Gdk.Window child1_window;
-    private Gdk.Window child2_window;
-    private Gdk.Window handle;
-    private Gdk.CursorType cursor_type;
-    
-    
-    private Gdk.Rectangle handle_pos;
-    
-    public CustomPaned() {
-        GLib.Object(orientation:Orientation.HORIZONTAL);
-        handle_pos = Gdk.Rectangle();
-        this.cursor_type = Gdk.CursorType.SB_H_DOUBLE_ARROW;
-    }
-    
-    
-//    private Gdk.Window create_child_window(Widget? child) {
-//        Gdk.Window window;
-//        Gdk.WindowAttr attributes = Gdk.WindowAttr();
-//        Gdk.WindowAttributesType attributes_mask;
-//        
-//        attributes.window_type = Gdk.WindowType.CHILD;
-//        attributes.wclass = Gdk.WindowWindowClass.INPUT_OUTPUT;
-//        attributes.event_mask = this.get_events() | Gdk.EventMask.EXPOSURE_MASK;
-//        
-//        if (child != null) {
-//            Gtk.Allocation allocation;
-//            int handle_size;
-//            
-//            this.style_get("handle-size", out handle_size, null);
-//            
-//            this.get_allocation (out allocation);
-//            
-//            if(this.orientation == Orientation.HORIZONTAL &&
-//               child == this.child2 && this.child1 != null &&
-//               child1.get_visible())
-//                attributes.x = handle_pos.x;// + handle_size;
-//            else
-//                attributes.x = allocation.x;
-//            
-//            if(this.orientation == Orientation.VERTICAL &&
-//               child == this.child2 && this.child1 != null &&
-//               this.child1.get_visible())
-//                attributes.y = this.handle_pos.y;// + handle_size;
-//            else
-//                attributes.y = allocation.y;
-//            
-//            child.get_allocation(out allocation);
-//            attributes.width = allocation.width;
-//            attributes.height = allocation.height;
-//            attributes_mask = WindowAttributesType.X | WindowAttributesType.Y;
-//        }
-//        else {
-//            attributes.width = 1;
-//            attributes.height = 1;
-//            attributes_mask = 0;
-//        }
-//        
-//        window = new Gdk.Window(this.get_window(), attributes, attributes_mask);
-////        window.set_user_data (this); //???
-//        this.get_style_context().set_background(window);
-//        
-//        if(child != null)
-//            child.set_parent_window(window);
-//        return window;
-//    }
-
-//    private Gdk.Cursor xcursor;
-//    public override void realize() {
-//        Gdk.Window window;
-//        Gdk.WindowAttr attributes = Gdk.WindowAttr();
-//        Gdk.WindowAttributesType attributes_mask;
-//        
-//        this.set_realized(true);
-//        
-//        window = this.get_parent_window();
-//        this.set_window(window);
-//        
-//        attributes.window_type = Gdk.WindowType.CHILD;
-//        attributes.wclass = Gdk.WindowWindowClass.INPUT_ONLY;
-//        attributes.x = this.handle_pos.x;
-//        attributes.y = this.handle_pos.y;
-//        attributes.width = this.handle_pos.width;
-//        attributes.height = this.handle_pos.height;
-//        attributes.event_mask = this.get_events();
-//        attributes.event_mask |= (Gdk.EventMask.BUTTON_PRESS_MASK |
-//        Gdk.EventMask.BUTTON_RELEASE_MASK |
-//        Gdk.EventMask.ENTER_NOTIFY_MASK |
-//        Gdk.EventMask.LEAVE_NOTIFY_MASK |
-//        Gdk.EventMask.POINTER_MOTION_MASK);
-//        attributes_mask = Gdk.WindowAttributesType.X | Gdk.WindowAttributesType.Y;
-//        if(this.is_sensitive ()) {
-//            xcursor = new Gdk.Cursor.for_display(this.get_display(), this.cursor_type);
-//            attributes.cursor = xcursor;
-//            attributes_mask |= Gdk.WindowAttributesType.CURSOR;
-//        }
-
-//        this.handle = new Gdk.Window(window, attributes, attributes_mask);
-////        this.handle.set_user_data(paned); // ???
-//        if((attributes_mask & Gdk.WindowAttributesType.CURSOR) == Gdk.WindowAttributesType.CURSOR)
-//            attributes.cursor = null;
-////          g_object_unref (attributes.cursor);
-
-//        this.child1_window = create_child_window (this.child1);
-//        this.child2_window = create_child_window (this.child2);
-//    }
-    
-    public new void pack1(Widget child, bool resize, bool shrink) {
-        child1_shrink = shrink;
-        child1 = child;
-        base.pack1(child, resize, shrink);
-    }
-    
-    public new void pack2(Widget child, bool resize, bool shrink) {
-        child2_shrink = shrink;
-        child2 = child;
-        base.pack2(child, resize, shrink);
-    }
-    
-    private static void get_preferred_size_for_size(Widget widget, Orientation  orientation,
-                                             int size,
-                                             out int minimum,
-                                             out int natural) {
-      if(orientation == Orientation.HORIZONTAL)
-        if(size < 0)
-          widget.get_preferred_width(out minimum, out natural);
-        else
-          widget.get_preferred_width_for_height(size, out minimum, out natural);
-      else
-        if(size < 0)
-          widget.get_preferred_height(out minimum, out natural);
-        else
-          widget.get_preferred_height_for_width(size, out minimum, out natural);
-    }
-    
-    public new void get_preferred_size(Orientation orientation,
-                                       int size,
-                                       out int minimum,
-                                       out int natural) {
-      int child_min, child_nat;
-        
-      minimum = natural = 0;
-        
-      if(get_child1() != null && get_child1().get_visible()) {
-          get_preferred_size_for_size(get_child1(), orientation, size, out child_min, out child_nat);
-          if (child1_shrink && this.orientation == orientation)
-                minimum = 0;
-          else
-            minimum = child_min;
-          natural = child_nat;
-        }
-        
-      if(get_child2() != null && get_child1().get_visible()) {
-          get_preferred_size_for_size(get_child2(), orientation, size, out child_min, out child_nat);
-            
-          if (this.orientation == orientation) {
-              if (!child2_shrink)
-                 minimum += child_min;
-              natural += child_nat;
-            }
-          else {
-              minimum = int.max(minimum, child_min);
-              natural = int.max(natural, child_nat);
-            }
-        }
-        
-      if (get_child1() != null && get_child1().get_visible() &&
-          get_child2() != null && get_child2().get_visible()) {
-          int handle_size = 0;
-          this.style_get ("handle-size", out handle_size, null);
-            
-          if(this.orientation == orientation) {
-              minimum += handle_size;
-              natural += handle_size;
-            }
-        }
-    }
-
-    public override bool draw(Cairo.Context cr) {
-        if(cairo_should_draw_window(cr, get_child1().get_window())) {
-            cr.save ();
-            cairo_transform_to_window(cr, this, get_child1().get_window());
-            render_background(this.get_style_context (),
-                             cr,
-                             0, 0,
-                             get_child1().get_window().get_width() + 1,
-                             get_child1().get_window().get_height());
-            cr.restore ();
-        }
-
-        if(cairo_should_draw_window(cr, get_child2().get_window())) {
-            cr.save ();
-            cairo_transform_to_window (cr, this, get_child2().get_window());
-            render_background (this.get_style_context (),
-                             cr,
-                             0, 0,
-                             get_child2().get_window().get_width(),
-                             get_child2().get_window().get_height());
-            cr.restore ();
-        }
-
-        if(cairo_should_draw_window(cr, this.get_window()) &&
-            get_child1() != null && get_child1().get_visible() &&
-            get_child2() != null && get_child2().get_visible()) {
-            StyleContext context;
-            StateFlags state;
-            Allocation allocation;
-            this.get_allocation(out allocation);
-            context = this.get_style_context();
-            state = this.get_state_flags();
-            handle_pos.x = get_child1().get_allocated_width();
-            handle_pos.y = 0;
-            handle_pos.width = 1;
-//            this.style_get("handle-size", out handle.width, null);
-            handle_pos.height = allocation.height;
-    
-            //        
-            ////      if(this.is_focus())
-            ////        state |= GTK_STATE_FLAG_SELECTED;
-            ////      if (this.handle_prelit)
-            ////        state |= GTK_STATE_FLAG_PRELIGHT;
-            context.save ();
-            context.set_state(state);
-            context.add_class(STYLE_CLASS_SIDEBAR); // SIDEBAR also worked
-            Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
-            cr.set_source_rgb(col.red, col.green, col.blue);
-            cr.rectangle(handle_pos.x, handle_pos.y, handle_pos.width, handle_pos.height);
-            cr.fill();
-//            int handle_size = 0;
-//            Allocation alloc = Allocation();
-//            get_child1().get_allocation(out alloc);
-//            this.style_get ("handle-size", out handle_size, null);
-//            render_line(context, cr,
-//                        handle_pos.x + handle_size - 1, handle_pos.y,
-//                        handle_pos.x + handle_size - 1, handle_pos.y + handle_pos.height);
-            
-            context.restore();
-        }
-        //Chain up to draw children
-        this.forall( (w) => {
-            this.propagate_draw(w, cr);
-        });
-        return false;
-    }
-}
-
-
-//internal class BgBox : Gtk.Box {
-//    public BgBox(Orientation orientation = Orientation.VERTICAL, int spacing = 0) {
-//        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
-//        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
-//    }
-//    
-////    public override bool draw(Cairo.Context cr) {
-////                cr.save();
-////                cairo_transform_to_window(cr, this, this.get_window());
-////                render_background(main_window.musicBr.get_style_context(),
-////                                  cr,
-////                                  0, 0,
-////                                  this.get_window().get_width(),
-////                                  this.get_window().get_height());
-////                cr.restore();
-////        //Chain up to draw children
-////        this.forall( (w) => {
-////            this.propagate_draw(w, cr);
-////        });
-////        return false;
-////    }
-//}
 

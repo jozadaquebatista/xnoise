@@ -189,6 +189,11 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
                 });
             }
         });
+        context.save();
+        context.add_class(STYLE_CLASS_PANE_SEPARATOR);
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        this.override_background_color(StateFlags.NORMAL, color);
+        context.restore();
     }
     
     private bool update_stream_name_job(Worker.Job job) {

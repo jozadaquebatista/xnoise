@@ -56,7 +56,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         Params.iparams_register(this);
         this.mwindow = mwindow;
         
-        this.get_style_context().add_class("dim-label");//STYLE_CLASS_SIDEBAR);
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         setup_widgets();
     }
     
@@ -89,6 +89,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         widg.show_all();
         notebook.show_all();
         assert(notebook != null && notebook is Gtk.Container);
+        widg.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         notebook.append_page(widg, new Label("x"));
     }
     
@@ -116,6 +117,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     private void setup_widgets() {
         var buff = new Gtk.EntryBuffer(null);
         this.search_entry = new Gtk.Entry.with_buffer(buff); // media_source_widget.search_entry;
+        //this.search_entry.get_style_context().add_class(STYLE_CLASS_CELL);
         this.search_entry.events = this.search_entry.events |
                                    Gdk.EventMask.ENTER_NOTIFY_MASK |
                                    Gdk.EventMask.LEAVE_NOTIFY_MASK;

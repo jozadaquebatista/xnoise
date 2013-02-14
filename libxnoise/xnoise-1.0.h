@@ -14,6 +14,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <float.h>
 #include <math.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -381,6 +382,17 @@ typedef struct _XnoiseSerialButtonPrivate XnoiseSerialButtonPrivate;
 
 #define XNOISE_SERIAL_BUTTON_TYPE_PRESENTATION (xnoise_serial_button_presentation_get_type ())
 
+#define XNOISE_TYPE_THIN_PANED (xnoise_thin_paned_get_type ())
+#define XNOISE_THIN_PANED(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_THIN_PANED, XnoiseThinPaned))
+#define XNOISE_THIN_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_THIN_PANED, XnoiseThinPanedClass))
+#define XNOISE_IS_THIN_PANED(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_THIN_PANED))
+#define XNOISE_IS_THIN_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_THIN_PANED))
+#define XNOISE_THIN_PANED_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_THIN_PANED, XnoiseThinPanedClass))
+
+typedef struct _XnoiseThinPaned XnoiseThinPaned;
+typedef struct _XnoiseThinPanedClass XnoiseThinPanedClass;
+typedef struct _XnoiseThinPanedPrivate XnoiseThinPanedPrivate;
+
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
 #define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
@@ -529,16 +541,6 @@ typedef struct _XnoiseAlbumArtViewClass XnoiseAlbumArtViewClass;
 
 typedef struct _XnoiseFullscreenToolbar XnoiseFullscreenToolbar;
 typedef struct _XnoiseFullscreenToolbarClass XnoiseFullscreenToolbarClass;
-
-#define TYPE_CUSTOM_PANED (custom_paned_get_type ())
-#define CUSTOM_PANED(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CUSTOM_PANED, CustomPaned))
-#define CUSTOM_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CUSTOM_PANED, CustomPanedClass))
-#define IS_CUSTOM_PANED(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_CUSTOM_PANED))
-#define IS_CUSTOM_PANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_CUSTOM_PANED))
-#define CUSTOM_PANED_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_CUSTOM_PANED, CustomPanedClass))
-
-typedef struct _CustomPaned CustomPaned;
-typedef struct _CustomPanedClass CustomPanedClass;
 
 #define XNOISE_TYPE_PLAY_PAUSE_BUTTON (xnoise_play_pause_button_get_type ())
 #define XNOISE_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButton))
@@ -1322,6 +1324,15 @@ typedef enum  {
 	XNOISE_SERIAL_BUTTON_PRESENTATION_IMAGE
 } XnoiseSerialButtonPresentation;
 
+struct _XnoiseThinPaned {
+	GtkPaned parent_instance;
+	XnoiseThinPanedPrivate * priv;
+};
+
+struct _XnoiseThinPanedClass {
+	GtkPanedClass parent_class;
+};
+
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
@@ -1517,7 +1528,7 @@ struct _XnoiseMainWindow {
 	XnoiseFullscreenToolbar* fullscreentoolbar;
 	GtkBox* videovbox;
 	XnoiseVideoScreen* videoscreen;
-	CustomPaned* hpaned;
+	XnoiseThinPaned* hpaned;
 	GtkEntry* search_entry;
 	XnoisePlayPauseButton* playPauseButton;
 	XnoiseControlButton* previousButton;
@@ -2241,6 +2252,10 @@ void xnoise_serial_button_select (XnoiseSerialButton* self, const gchar* name, g
 void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, const gchar* name, gboolean sensitive_status);
 void xnoise_serial_button_del (XnoiseSerialButton* self, const gchar* name);
 gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
+GType xnoise_thin_paned_get_type (void) G_GNUC_CONST;
+XnoiseThinPaned* xnoise_thin_paned_new (void);
+XnoiseThinPaned* xnoise_thin_paned_construct (GType object_type);
+GdkWindow* xnoise_thin_paned_get_overlay_handle_window (XnoiseThinPaned* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 extern GCancellable* xnoise_global_access_main_cancellable;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
@@ -2373,7 +2388,6 @@ void xnoise_value_set_fullscreen_toolbar (GValue* value, gpointer v_object);
 void xnoise_value_take_fullscreen_toolbar (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_fullscreen_toolbar (const GValue* value);
 GType xnoise_fullscreen_toolbar_get_type (void) G_GNUC_CONST;
-GType custom_paned_get_type (void) G_GNUC_CONST;
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;

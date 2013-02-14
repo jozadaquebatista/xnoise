@@ -162,6 +162,11 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
                 });
             }
         });
+        context.save();
+        context.add_class(STYLE_CLASS_PANE_SEPARATOR);
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        this.override_background_color(StateFlags.NORMAL, color);
+        context.restore();
     }
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
