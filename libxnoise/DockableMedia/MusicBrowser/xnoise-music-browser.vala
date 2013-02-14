@@ -513,6 +513,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         private int expander;
         private int hsepar;
         private int PIXPAD = 2; // space between pixbuf and text
+        private int WRAP_BUF = 2;
         private int calculated_widh[3];
         private Pixbuf artist_unsel;
         private Pixbuf album_unsel;
@@ -567,7 +568,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
+            pango_layout.set_width( (int)((column_width - sum + WRAP_BUF) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
