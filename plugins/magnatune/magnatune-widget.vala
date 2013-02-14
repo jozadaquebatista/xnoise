@@ -130,13 +130,13 @@ private class MagnatuneWidget : Gtk.Box {
         if(!dbf.query_exists()) {
             print("magnatune database is not yet available\n");
             var job = new Worker.Job(Worker.ExecutionType.ONCE, copy_db_job);
-            io_worker.push_job(job);
+            plugin_worker.push_job(job);
         }
         else {
             string old_hash = (string)Params.get_string_value("magnatune_collection_hash");
             var job = new Worker.Job(Worker.ExecutionType.ONCE, check_online_hash_job);
             job.set_arg("old_hash", old_hash);
-            io_worker.push_job(job);
+            plugin_worker.push_job(job);
         }
     }
 
@@ -180,7 +180,7 @@ private class MagnatuneWidget : Gtk.Box {
             if(MagnatunePlugin.cancel.is_cancelled())
                 return false;
             var xjob = new Worker.Job(Worker.ExecutionType.ONCE, copy_db_job);
-            io_worker.push_job(xjob);
+            plugin_worker.push_job(xjob);
             return false;
         }
     }
@@ -239,7 +239,7 @@ private class MagnatuneWidget : Gtk.Box {
                         var decomp_job = new Worker.Job(Worker.ExecutionType.ONCE, decompress_db_job);
                         if(MagnatunePlugin.cancel.is_cancelled())
                             return false;
-                        io_worker.push_job(decomp_job);
+                        plugin_worker.push_job(decomp_job);
                         return false;
                     });
                     return false;
@@ -291,7 +291,7 @@ private class MagnatuneWidget : Gtk.Box {
                 return false;
             label.label = _("decompressing finished...");
             var conv_job = new Worker.Job(Worker.ExecutionType.ONCE, convert_db_job);
-            io_worker.push_job(conv_job);
+            plugin_worker.push_job(conv_job);
             return false;
         });
         try {

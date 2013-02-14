@@ -45,14 +45,14 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
         GLib.Object();
         var cells = new List<CellRenderer>();
         
-        // remove other cellrenderer
-        base.@foreach( (cellr) => {
-            print("found cellrenderer\n");
-            cells.prepend(cellr);
-            return false;
-        });
-        foreach(var cell in cells)
-            this.remove(cell);
+        // remove other cellrenderer 
+//        base.@foreach( (cellr) => {
+//            print("found cellrenderer\n");
+//            cells.prepend(cellr);
+//            return false;
+//        });
+//        foreach(var cell in cells)
+//            this.remove(cell);
         
         font_description = new Pango.FontDescription();
         font_description.set_family(font_family);

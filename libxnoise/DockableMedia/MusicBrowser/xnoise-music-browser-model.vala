@@ -892,7 +892,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.append(out iter_title, iter_album);
                 if(!td.is_compilation) {
                     this.set(iter_title,
-                             Column.ICON, icon_repo.title_icon,
+                             Column.ICON, icon_repo._title_pix,
                              Column.VIS_TEXT, td.title,
                              Column.ITEM, td.item,
                              Column.LEVEL, 2
@@ -903,7 +903,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                         "\n (" + "%s".printf(UNKNOWN_ARTIST_LOCALIZED) + ")" : 
                                         "\n (" + td.albumartist + ")");
                     this.set(iter_title,
-                             Column.ICON, icon_repo.title_icon,
+                             Column.ICON, icon_repo._title_pix,
                              Column.VIS_TEXT, td.title + append,
                              Column.ITEM, td.item,
                              Column.LEVEL, 2

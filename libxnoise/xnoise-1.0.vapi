@@ -1269,6 +1269,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.PluginModule.Loader plugin_loader;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.Worker plugin_worker;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackList tl;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackListModel tlm;

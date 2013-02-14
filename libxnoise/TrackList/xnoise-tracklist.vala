@@ -58,7 +58,7 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private void setup_widgets() {
         scrolled_window = new ScrolledWindow(null, null);
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
-        scrolled_window.set_shadow_type(Gtk.ShadowType.IN);
+        scrolled_window.set_shadow_type(Gtk.ShadowType.NONE);
         scrolled_window.add(tl);
         this.pack_start(scrolled_window, true, true, 0);
     }

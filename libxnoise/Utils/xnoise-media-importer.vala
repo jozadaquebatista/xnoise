@@ -107,7 +107,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             
             global.media_import_in_progress = true;
             
-            print("++%s\n", dir.get_path());
+            //print("++%s\n", dir.get_path());
             assert(dir != null);
             var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
             reader_job.set_arg("dir", dir);
@@ -209,7 +209,6 @@ public class Xnoise.MediaImporter : GLib.Object {
     private bool reimport_media_groups_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
-        print("##1\n");
         
         main_window.musicBr.mediabrowsermodel.cancel_fill_model(); // TODO
         
@@ -219,7 +218,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         foreach(Item? i in fldrs) //append
             tmp += i;
         
-        print("##2\n");
         //add streams to list
         Item[] strms = db_reader.get_stream_items("");
         foreach(Item? i in strms) //append
@@ -228,28 +226,21 @@ public class Xnoise.MediaImporter : GLib.Object {
         job.items = (owned)tmp;
         
         Timeout.add(200, () => {
-        print("##2.1\n");
             var prg_bar = new Gtk.ProgressBar();
-        print("##2.2\n");
             prg_bar.set_fraction(0.0);
             prg_bar.set_text("0 / 0");
-        print("##2.3\n");
             uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
                                          UserInfo.ContentClass.WAIT,
                                          _("Importing media data. This may take some time..."),
                                          true,
                                          5,
                                          prg_bar);
-        print("##2.4\n");
             global.media_import_in_progress = true;
-        print("##2.5\n");
             
             import_media_groups(job.items, msg_id, true, false);
-        print("##2.6\n");
             
             return false;
         });
-        print("##3\n");
         return false;
     }
 
@@ -285,7 +276,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                 }
             }
             renew_stamp(db_reader.get_datasource_name());
-            print("+++new stam for db\n");
+            print("+++new stamp for db\n");
             db_reader.refreshed_stamp(get_current_stamp(db_reader.get_source_id()));
             
             job = new Worker.Job(Worker.ExecutionType.ONCE, reset_local_data_library_job);

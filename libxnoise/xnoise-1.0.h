@@ -2867,6 +2867,7 @@ extern XnoiseWorker* xnoise_db_worker;
 extern XnoiseWorker* xnoise_io_worker;
 extern XnoiseWorker* xnoise_cache_worker;
 extern XnoiseWorker* xnoise_device_worker;
+extern XnoiseWorker* xnoise_plugin_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;

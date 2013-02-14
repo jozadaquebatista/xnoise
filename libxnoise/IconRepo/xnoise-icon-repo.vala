@@ -53,6 +53,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
     internal Gdk.Pixbuf album_art_default_icon      { get; private set; }
     internal Gdk.Pixbuf various_artists_icon        { get; private set; }
+    internal Gdk.Pixbuf _title_pix;
     
     internal signal void icon_theme_changed();
     
@@ -93,7 +94,7 @@ internal class Xnoise.IconRepo : GLib.Object {
             
             genre_icon = w.render_icon_pixbuf(Gtk.Stock.COPY, IconSize.BUTTON);
             
-            album_icon = w.render_icon_pixbuf(Gtk.Stock.CDROM, IconSize.BUTTON);
+            album_icon = null;//w.render_icon_pixbuf(Gtk.Stock.CDROM, IconSize.BUTTON);
             
             if(theme.has_icon("media-audio")) 
                 title_icon = theme.load_icon("media-audio", iconheight, IconLookupFlags.USE_BUILTIN);
@@ -162,6 +163,7 @@ internal class Xnoise.IconRepo : GLib.Object {
                 various_artists_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.USE_BUILTIN);
             else 
                 various_artists_icon = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
+            
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);

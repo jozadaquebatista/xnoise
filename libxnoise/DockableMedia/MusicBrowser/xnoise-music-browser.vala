@@ -32,6 +32,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Resources;
 
 
 
@@ -99,10 +100,11 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     public MusicBrowser(DockableMedia dock, Widget ow) {
         this.ow = ow;
         this.dock = dock;
-        
         Params.iparams_register(this);
         mediabrowsermodel = new MusicBrowserModel(dock);
 //        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+//        icon_repo._title_pix = IconRepo.get_themed_pixbuf_icon("emblem-music-symbolic", 
+//                                                              22, this.get_style_context());
         this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
         
         setup_view();
@@ -512,11 +514,15 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         private int hsepar;
         private int PIXPAD = 2; // space between pixbuf and text
         private int calculated_widh[3];
+        private Pixbuf artist_unsel;
+        private Pixbuf album_unsel;
+        private Pixbuf title_unsel;
+        private Pixbuf genre_unsel;
         
-        public int level    { get; set; }
+        public int level              { get; set; }
         public unowned Gdk.Pixbuf pix { get; set; }
-        public string text { get; set; }
-        public int size_points { get; set; }
+        public string text            { get; set; }
+        public int size_points        { get; set; }
         
         public FlowingTextRenderer(Widget ow, 
                                    Pango.FontDescription font_description,
@@ -545,13 +551,16 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 natural_height = minimum_height = 30;
                 return;
             }
-            int column_width = ow.get_allocated_width() - 2; //col.get_width();
+            int column_width = ow.get_allocated_width() - 2;
             int cw = col.get_width();
             int sum = 0;
             int iconwidth = 30;
             if(maxiconwidth < iconwidth)
                 maxiconwidth = iconwidth;
-            calculated_widh[level] = maxiconwidth;
+            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE)
+                calculated_widh[level] = (level == 1 ? maxiconwidth : 17);
+            else
+                calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2 + PIXPAD; 
             //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
@@ -562,7 +571,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
-            natural_height = minimum_height = (pix != null ? int.max(he, pix.get_height()) : he);
+            natural_height = minimum_height = (pix != null ? 
+                                                  int.max(he + 2, pix.get_height() + 2) : 
+                                                  he + 2
+                                              );
         }
     
         public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
@@ -599,22 +611,138 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             
-            if(pix != null) {
-                int pixheight = pix.get_height();
-                int x_offset = pix.get_width();
+            
+            Gdk.Pixbuf p = null;
+            if((flags & CellRendererState.SELECTED) == 0) {
+                switch(level) {
+                    case 0:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(text == VARIOUS_ARTISTS) {
+                                p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
+                                                      16, widget.get_style_context());
+                                break;
+                            }
+                            if(artist_unsel == null)
+                                artist_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = artist_unsel;
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            if(genre_unsel == null)
+                                genre_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("emblem-documents-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = genre_unsel;
+                        }
+                        break;
+                    case 1:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(pix != null) {
+                                p = pix;
+                                break;
+                            }
+                            if(album_unsel == null)
+                                album_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = album_unsel;
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            if(artist_unsel == null)
+                                artist_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = artist_unsel;
+                        }
+                        break;
+                    case 2:
+                    default:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(title_unsel == null)
+                                title_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = title_unsel;
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            if(pix != null) {
+                                p = pix;
+                                break;
+                            }
+                            if(album_unsel == null)
+                                album_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                                                                16, widget.get_style_context());
+                            p = album_unsel;
+                        }
+                        break;
+                }
+            }
+            else {
+                switch(level) {
+                    case 0:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(text == VARIOUS_ARTISTS) {
+                                p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
+                                                      16, widget.get_style_context());
+                                break;
+                            }
+                            p = IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                                                            16, widget.get_style_context());
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            p = IconRepo.get_themed_pixbuf_icon("emblem-documents-symbolic", 
+                                                                16, widget.get_style_context());
+                        }
+                        break;
+                    case 1:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(pix != null) {
+                                p = pix;
+                                break;
+                            }
+                            p = IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                                                                16, widget.get_style_context());
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            p = IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                                                                16, widget.get_style_context());
+                        }
+                        break;
+                    case 2:
+                    default:
+                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            p = IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
+                                                                16, widget.get_style_context());
+                        }
+                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                            if(pix != null) {
+                                p = pix;
+                                break;
+                            }
+                            p = IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                                                                16, widget.get_style_context());
+                        }
+                        break;
+                }
+            }
+            if(p != null) {
+                int pixheight = p.get_height();
+                int x_offset = p.get_width();
                 if(calculated_widh[level] > x_offset)
                     x_offset = (int)((calculated_widh[level] - x_offset) / 2.0);
                 else
                     x_offset = 0;
                 if(cell_area.height > pixheight)
                     Gdk.cairo_set_source_pixbuf(cr, 
-                                                pix, 
+                                                p, 
                                                 cell_area.x + x_offset, 
                                                 cell_area.y + (cell_area.height -pixheight)/2
                     );
                 else
                     Gdk.cairo_set_source_pixbuf(cr,
-                                                pix, 
+                                                p, 
                                                 cell_area.x + x_offset, 
                                                 cell_area.y
                     );
@@ -677,13 +805,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                     return false;
                 });
         });
-        
-//        var pixbufRenderer = new CellRendererPixbuf();
-//        pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
-        
-//        pixbufRenderer.set_fixed_size(30, -1);
-//        column.pack_start(pixbufRenderer, false);
-//        column.add_attribute(pixbufRenderer, "pixbuf", MusicBrowserModel.Column.ICON);
         column.pack_start(renderer, false);
         column.add_attribute(renderer, "text", MusicBrowserModel.Column.VIS_TEXT); // no markup!!
         column.add_attribute(renderer, "level", MusicBrowserModel.Column.LEVEL);

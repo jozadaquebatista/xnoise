@@ -1921,6 +1921,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             //--------------------
             msw = new MediaSoureWidget(this);
+            assert(msw != null);
             this.search_entry = msw.search_entry;
             this.search_entry.set_tooltip_text(_("Select search with <Ctrl-F>") +
                                                "\n"+
