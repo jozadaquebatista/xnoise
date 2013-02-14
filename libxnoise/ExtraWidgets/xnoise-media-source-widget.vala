@@ -140,7 +140,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
         this.media_source_selector_box = new Box(Orientation.VERTICAL, 0);
         
-        this.pack_start(new SideBarHeadline(_("Media Collections")), false, false, 2);
+        this.pack_start(new SideBarHeadline(_("Media Collections")), false, false, 0);
         this.pack_start(media_source_selector_box, false, false, 0);
         
         // initialize the proper type of media source selector
