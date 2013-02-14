@@ -103,7 +103,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection) {
-        if(global.media_import_in_progress)
+        if(global.media_import_in_progress || global.in_tag_rename)
             return null;
         if(selection != ItemSelectionType.SINGLE)
             return null;

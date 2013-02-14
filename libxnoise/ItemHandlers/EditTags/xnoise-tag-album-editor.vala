@@ -256,6 +256,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                 td.genre          = new_genre; //(string)tag_job.get_arg("new_genre");//
                 td.is_compilation = new_is_compilation;// (bool)  tag_job.get_arg("new_is_compilation");
             }
+            global.in_tag_rename = true;
             io_worker.push_job(job);
         }
         return false;
@@ -289,6 +290,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
             main_window.album_art_view.icons_model.filter();
+            global.in_tag_rename = false;
             return false;
         });
         Timeout.add(300, () => {

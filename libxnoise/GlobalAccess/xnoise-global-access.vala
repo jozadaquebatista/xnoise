@@ -155,6 +155,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
         }
     }
     
+    internal bool in_tag_rename              { get; set; default = false; }
+    
     public string active_dockable_media_name { get; set; default = ""; }
     
     public int fontsize_dockable { get; set; default = 10; }

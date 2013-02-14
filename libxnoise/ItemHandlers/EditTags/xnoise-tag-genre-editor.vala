@@ -191,6 +191,7 @@ private class Xnoise.TagGenreEditor : GLib.Object {
             foreach(TrackData td in job.track_dat)
                 td.genre = new_content_name;
             print("push filetags job\n");
+            global.in_tag_rename = true;
             io_worker.push_job(job);
         }
         return false;
@@ -246,6 +247,7 @@ private class Xnoise.TagGenreEditor : GLib.Object {
         Timeout.add(200, () => {
             main_window.musicBr.mediabrowsermodel.filter();
             main_window.album_art_view.icons_model.filter();
+            global.in_tag_rename = false;
             return false;
         });
         Timeout.add(300, () => {
