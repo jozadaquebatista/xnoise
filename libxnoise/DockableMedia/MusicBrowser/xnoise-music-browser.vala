@@ -561,7 +561,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 calculated_widh[level] = (level == 1 ? maxiconwidth : 17);
             else
                 calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
-            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2 + PIXPAD; 
+            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + calculated_widh[level] + 2 + PIXPAD; 
             //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
