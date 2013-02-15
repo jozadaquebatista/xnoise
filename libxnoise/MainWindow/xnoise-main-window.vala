@@ -545,7 +545,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             foreach(TrackData? td in track_dat) {
                 if(td == null)
                     continue;
-                tlm.insert_title(null, ref td, false);
+                tlm.insert_title(PlayerState.STOPPED, ref td, false);
             }
             return false;
         });

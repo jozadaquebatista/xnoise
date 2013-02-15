@@ -57,7 +57,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
     }
 
     private GLib.Type[] col_types = new GLib.Type[] {
-        typeof(Gdk.Pixbuf),  // ICON
+        typeof(PlayerState),  // ICON
         typeof(string),      // TRACKNUMBER
         typeof(string),      // TITLE
         typeof(string),      // ALBUM
@@ -126,7 +126,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                 return false;
             });
         });
-        icon_theme.changed.connect(update_icons); //TODO update icon
+//        icon_theme.changed.connect(update_icons); //TODO update icon
     }
     
     private HashTable<TrackListModel.Column,string?> ntags;
@@ -182,10 +182,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         return false;
     }
     
-    private void update_icons() {
-    print("update_icons tlm\n");
+//    private void update_icons() {
+//    print("update_icons tlm\n");
         //TODO
-    }
+//    }
     
     internal void on_before_position_reference_changed() {
         unbolden_row();
@@ -338,7 +338,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         return false;
     }
 
-    public TreeIter insert_title(Gdk.Pixbuf? pixbuf,
+    public TreeIter insert_title(PlayerState icon = PlayerState.STOPPED,
                                  ref TrackData? td,
                                  bool bold = false) {
         TreeIter iter = TreeIter();
@@ -369,7 +369,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         
         this.set(iter,
                  TrackListModel.Column.ITEM ,td.item,
-                 TrackListModel.Column.ICON, pixbuf,
+                 TrackListModel.Column.ICON, icon,
                  TrackListModel.Column.TRACKNUMBER, tracknumberString,
                  TrackListModel.Column.TITLE, td.title,
                  TrackListModel.Column.ALBUM, td.album,
@@ -476,24 +476,27 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
     // find active row, set state picture, bolden and set uri for gpl
     private bool set_player_state(PlayerState ts) {
-        Gdk.Pixbuf? pixbuf = null;
+        //Gdk.Pixbuf? pixbuf = null;
+        PlayerState icon = PlayerState.STOPPED;
         if((global.position_reference == null)||
           (!global.position_reference.valid())) {
             return false;
         }
         TreeIter citer;
         this.get_iter(out citer, global.position_reference.get_path());
-        if(ts==PlayerState.PLAYING) {
+        if(ts == PlayerState.PLAYING) {
             bolden_row();
-            pixbuf = icon_repo.symbolic_play_icon;
+//            pixbuf = icon_repo.symbolic_play_icon;
+            icon = PlayerState.PLAYING;
         }
         else if(ts==PlayerState.PAUSED) {
             bolden_row();
-            pixbuf = icon_repo.symbolic_pause_icon;
+//            pixbuf = icon_repo.symbolic_pause_icon;
+            icon = PlayerState.PAUSED;
         }
         else if(ts==PlayerState.STOPPED) {
             unbolden_row();
-            this.set(citer, Column.ICON, null);
+            this.set(citer, Column.ICON, PlayerState.STOPPED);
             return true;
         }
         Item? item;
@@ -501,7 +504,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                  Column.ITEM, out item
                  );
         if(item.uri == gst_player.uri) {
-            this.set(citer, Column.ICON, pixbuf);
+            this.set(citer, Column.ICON, icon);
         }
         return true;
     }
@@ -576,7 +579,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         }
         
         if(first == true) {
-            iter = this.insert_title(null, ref td, true);
+            iter = this.insert_title(PlayerState.STOPPED, ref td, true);
             
             global.position_reference = new TreeRowReference(this, this.get_path(iter));
             
@@ -584,7 +587,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             first = false;
         }
         else {
-            iter = this.insert_title(null, ref td, false);
+            iter = this.insert_title(PlayerState.STOPPED, ref td, false);
         }
         return item;
     }

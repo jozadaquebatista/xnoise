@@ -254,7 +254,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         int k = 0;
         TreeIter iter;
         while(tda[k] != null) {
-            iter = tlm.insert_title(null,
+            iter = tlm.insert_title(PlayerState.STOPPED,
                                     ref tda[k],
                                     false);
             k++;

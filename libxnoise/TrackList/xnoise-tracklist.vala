@@ -1160,11 +1160,11 @@ public class Xnoise.TrackList : TreeView, IParams {
         int position = -1;
         
         // STATUS ICON
-        var pixbufRenderer = new CellRendererPixbuf();
+        var pixbufRenderer = new PlayerStatePixbuf();
         columnPixb         = new TrackListColumn();
         pixbufRenderer.set_fixed_size(-1,22);
         columnPixb.pack_start(pixbufRenderer, false);
-        columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModel.Column.ICON);
+        columnPixb.add_attribute(pixbufRenderer, "state", TrackListModel.Column.ICON);
         columnPixb.set_fixed_width(30);
         columnPixb.min_width = 30;
         columnPixb.reorderable = false;
@@ -1444,3 +1444,50 @@ public class Xnoise.TrackList : TreeView, IParams {
     }
 }
 
+
+private class PlayerStatePixbuf : Gtk.CellRendererPixbuf {
+    private const int ICONSIZE = 16;
+    private const int X_OFFSET = 2;
+    
+    public PlayerState state { get; set; default = PlayerState.STOPPED; }
+    
+    public override void render(Cairo.Context cr, Widget widget,
+                                Gdk.Rectangle background_area,
+                                Gdk.Rectangle cell_area,
+                                CellRendererState flags) {
+        
+        Gdk.Pixbuf p = null;
+        switch(state) {
+            case PlayerState.PAUSED:
+                p = IconRepo.get_themed_pixbuf_icon("media-playback-pause-symbolic", 
+                                                    ICONSIZE, widget.get_style_context());
+                break;
+            case PlayerState.PLAYING:
+                p = IconRepo.get_themed_pixbuf_icon("media-playback-start-symbolic", 
+                                                    ICONSIZE, widget.get_style_context());
+                break;
+            case PlayerState.STOPPED:
+            default:
+                p = null;
+                break;
+        }
+        if(p != null) {
+            int pixheight = p.get_height();
+            if(cell_area.height > pixheight)
+                Gdk.cairo_set_source_pixbuf(cr, 
+                                            p, 
+                                            cell_area.x + X_OFFSET, 
+                                            cell_area.y + (cell_area.height -pixheight)/2
+                );
+            else
+                Gdk.cairo_set_source_pixbuf(cr,
+                                            p, 
+                                            cell_area.x + X_OFFSET, 
+                                            cell_area.y
+                );
+            
+            cr.paint();
+        }
+    }
+
+}

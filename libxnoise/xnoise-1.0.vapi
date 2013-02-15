@@ -1010,7 +1010,7 @@ namespace Xnoise {
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
-		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData? td, bool bold = false);
+		public Gtk.TreeIter insert_title (Xnoise.PlayerState icon = PlayerState.STOPPED, ref Xnoise.TrackData? td, bool bold = false);
 		public bool not_empty ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);

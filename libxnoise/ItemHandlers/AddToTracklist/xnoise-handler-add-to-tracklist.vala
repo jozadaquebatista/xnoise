@@ -436,7 +436,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         TreeIter iter, iter_2 = {}, xiter = {};
         while(tda[k] != null) {
             if(k == 0 && immediate_play) { // First track
-                iter = tlm.insert_title(null,
+                iter = tlm.insert_title(PlayerState.STOPPED,
                                         ref tda[k],
                                         true);
                 global.position_reference = null;
@@ -444,7 +444,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
                 iter_2 = iter;
             }
             else { // from second to last track
-                iter = tlm.insert_title(null,
+                iter = tlm.insert_title(PlayerState.STOPPED,
                                         ref tda[k],
                                         false);
                 if(k == 0) {

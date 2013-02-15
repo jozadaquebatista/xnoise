@@ -2787,7 +2787,7 @@ gboolean xnoise_track_list_model_get_random_row (XnoiseTrackListModel* self, Gtk
 gboolean xnoise_track_list_model_path_is_last_row (XnoiseTrackListModel* self, GtkTreePath** path, gboolean* trackList_is_empty);
 gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
-void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, XnoiseTrackData** td, gboolean bold, GtkTreeIter* result);
+void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, XnoisePlayerState icon, XnoiseTrackData** td, gboolean bold, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 XnoiseTrackData** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
