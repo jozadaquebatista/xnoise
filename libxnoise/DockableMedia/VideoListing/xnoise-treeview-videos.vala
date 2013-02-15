@@ -74,13 +74,10 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         this.style_get("horizontal-separator", out hsepar);
         renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
         
-        var rendererPb = new CustomCellRendererPixbuf();
-        
-        column.pack_start(rendererPb, false);
         column.pack_start(renderer, true);
-        column.add_attribute(rendererPb, "pixbuf", 0);
-        column.add_attribute(renderer, "text", 1);
-        column.add_attribute(renderer, "pix", 0);
+        column.add_attribute(renderer, "itype", TreeViewVideosModel.Column.ITEMTYPE);
+        column.add_attribute(renderer, "text", TreeViewVideosModel.Column.VIS_TEXT);
+        column.add_attribute(renderer, "pix", TreeViewVideosModel.Column.ICON);
         
         this.insert_column(column, -1);
         tvm = new TreeViewVideosModel(dock, this);
@@ -182,82 +179,82 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         return false;
     }
 
-    private class ListFlowingTextRenderer : CellRendererText {
-        private int maxiconwidth;
-        private unowned Pango.FontDescription font_description;
-        private unowned TreeViewColumn col;
-        private int hsepar;
-        
-        public int level                { get; set; }
-        public unowned Gdk.Pixbuf pix   { get; set; }
-        
-        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
-            GLib.Object();
-            this.col = col;
-            this.hsepar = hsepar;
-            this.font_description = font_description;
-            maxiconwidth = 0;
-        }
-        
-        public override void get_preferred_height_for_width(Gtk.Widget widget,
-                                                            int width,
-                                                            out int minimum_height,
-                                                            out int natural_height) {
-            int column_width = widget.get_allocated_width();//col.get_width();
-            //print("cw: %d   cwo: %d\n", column_width, col.get_width());
-            int sum = 0;
-            int iconwidth = (pix == null) ? 16 : pix.get_width();
-            if(maxiconwidth < iconwidth)
-                maxiconwidth = iconwidth;
-            sum = hsepar + (2 * (int)xpad) + maxiconwidth;
-            var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
-            pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
-            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            int wi, he = 0;
-            pango_layout.get_pixel_size(out wi, out he);
-            natural_height = minimum_height = he + 5;
-        }
-    
-        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
-                                      out int x_offset, out int y_offset,
-                                      out int width, out int height) {
-            // function not used for gtk+-3.0 !
-            x_offset = 0;
-            y_offset = 0;
-            width = 0;
-            height = 0;
-        }
-    
-        public override void render(Cairo.Context cr, Widget widget,
-                                    Gdk.Rectangle background_area,
-                                    Gdk.Rectangle cell_area,
-                                    CellRendererState flags) {
-            StyleContext context;
-            var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
-            pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
-            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            context = main_window.media_browser_box.get_style_context();
-            context.add_class(STYLE_CLASS_SIDEBAR);
-            StateFlags state = widget.get_state_flags();
-            if((flags & CellRendererState.SELECTED) == 0) {
-                Gdk.cairo_rectangle(cr, background_area);
-                Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
-                Gdk.cairo_set_source_rgba(cr, col);
-                cr.fill();
-            }
-            int wi = 0, he = 0;
-            pango_layout.get_pixel_size(out wi, out he);
-            context = widget.get_style_context();
-            if(cell_area.height > he)
-                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
-            else
-                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
-        }
-    }
+//    private class ListFlowingTextRenderer : CellRendererText {
+//        private int maxiconwidth;
+//        private unowned Pango.FontDescription font_description;
+//        private unowned TreeViewColumn col;
+//        private int hsepar;
+//        
+//        public int level                { get; set; }
+//        public unowned Gdk.Pixbuf pix   { get; set; }
+//        
+//        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
+//            GLib.Object();
+//            this.col = col;
+//            this.hsepar = hsepar;
+//            this.font_description = font_description;
+//            maxiconwidth = 0;
+//        }
+//        
+//        public override void get_preferred_height_for_width(Gtk.Widget widget,
+//                                                            int width,
+//                                                            out int minimum_height,
+//                                                            out int natural_height) {
+//            int column_width = widget.get_allocated_width();//col.get_width();
+//            //print("cw: %d   cwo: %d\n", column_width, col.get_width());
+//            int sum = 0;
+//            int iconwidth = (pix == null) ? 16 : pix.get_width();
+//            if(maxiconwidth < iconwidth)
+//                maxiconwidth = iconwidth;
+//            sum = hsepar + (2 * (int)xpad) + maxiconwidth;
+//            var pango_layout = widget.create_pango_layout(text);
+//            pango_layout.set_font_description(this.font_description);
+//            pango_layout.set_alignment(Pango.Alignment.LEFT);
+//            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
+//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+//            int wi, he = 0;
+//            pango_layout.get_pixel_size(out wi, out he);
+//            natural_height = minimum_height = he + 5;
+//        }
+//    
+//        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+//                                      out int x_offset, out int y_offset,
+//                                      out int width, out int height) {
+//            // function not used for gtk+-3.0 !
+//            x_offset = 0;
+//            y_offset = 0;
+//            width = 0;
+//            height = 0;
+//        }
+//    
+//        public override void render(Cairo.Context cr, Widget widget,
+//                                    Gdk.Rectangle background_area,
+//                                    Gdk.Rectangle cell_area,
+//                                    CellRendererState flags) {
+//            StyleContext context;
+//            var pango_layout = widget.create_pango_layout(text);
+//            pango_layout.set_font_description(this.font_description);
+//            pango_layout.set_alignment(Pango.Alignment.LEFT);
+//            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
+//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+//            context = main_window.media_browser_box.get_style_context();
+//            context.add_class(STYLE_CLASS_SIDEBAR);
+//            StateFlags state = widget.get_state_flags();
+//            if((flags & CellRendererState.SELECTED) == 0) {
+//                Gdk.cairo_rectangle(cr, background_area);
+//                Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+//                Gdk.cairo_set_source_rgba(cr, col);
+//                cr.fill();
+//            }
+//            int wi = 0, he = 0;
+//            pango_layout.get_pixel_size(out wi, out he);
+//            context = widget.get_style_context();
+//            if(cell_area.height > he)
+//                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
+//            else
+//                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
+//        }
+//    }
     
     private void on_drag_begin(Gtk.Widget sender, DragContext context) {
         this.dragging = true;

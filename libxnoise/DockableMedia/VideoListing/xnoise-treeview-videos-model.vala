@@ -47,13 +47,15 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
         typeof(string),     //VIS_TEXT
-        typeof(Xnoise.Item?)//ITEM
+        typeof(Xnoise.Item?), //ITEM
+        typeof(ItemType)//ITEMTYPE
     };
     
     public enum Column {
         ICON = 0,
         VIS_TEXT,
         ITEM,
+        ITEMTYPE,
         N_COLUMNS
     }
 
@@ -154,9 +156,10 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                 }
                 this.prepend(out iter);
                 this.set(iter,
-                         Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                         Column.ICON, (has_thumbnail == true ? thumbnail : null),
                          Column.VIS_TEXT, i.text,
-                         Column.ITEM, i
+                         Column.ITEM, i,
+                         Column.ITEMTYPE, i.type
                 );
                 if(!has_thumbnail) {
                     if(uri_list == null)
@@ -245,9 +248,10 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out iter);
                 this.set(iter,
-                         Column.ICON,  (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                         Column.ICON,  (has_thumbnail == true ? thumbnail : null),
                          Column.VIS_TEXT, job.item.text,
-                         Column.ITEM, job.item
+                         Column.ITEM, job.item,
+                         Column.ITEMTYPE, job.item.type
                          );
                 return false;
             }
@@ -272,9 +276,10 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     TreeIter new_iter;
                     this.insert_before(out new_iter, iter);
                     this.set(new_iter,
-                             Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                             Column.ICON, (has_thumbnail == true ? thumbnail : null),
                              Column.VIS_TEXT, job.item.text,
-                             Column.ITEM, job.item
+                             Column.ITEM, job.item,
+                             Column.ITEMTYPE, job.item.type
                              );
                     iter = new_iter;
                     return false;
@@ -284,9 +289,10 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
             this.insert_after(out x_iter, iter);
             iter = x_iter;
             this.set(iter,
-                     Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                     Column.ICON, (has_thumbnail == true ? thumbnail : null),
                      Column.VIS_TEXT, job.item.text,
-                     Column.ITEM, job.item
+                     Column.ITEM, job.item,
+                     Column.ITEMTYPE, job.item.type
                      );
             return false;
         });
