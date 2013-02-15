@@ -114,17 +114,18 @@ private class DockableMagnatuneMS : DockableMedia {
 //        win.msw.select_dockable_by_name(MAGNATUNE_MUSIC_STORE_NAME, true);
 //    }
     
-    public override Gdk.Pixbuf get_icon() {
-        Gdk.Pixbuf? icon = null;
-        try {
-            unowned Gtk.IconTheme thm = Gtk.IconTheme.get_default();
-            icon = thm.load_icon("xn-magnatune", 24, IconLookupFlags.FORCE_SIZE);
-        }
-        catch(Error e) {
-            icon = null;
-            print("Magnatune icon error: %s\n", e.message);
-        }
-        return (owned)icon;
+    public override string get_icon_name() {
+        return "xn-magnatune";
+//        Gdk.Pixbuf? icon = null;
+//        try {
+//            unowned Gtk.IconTheme thm = Gtk.IconTheme.get_default();
+//            icon = thm.load_icon("xn-magnatune", 24, IconLookupFlags.FORCE_SIZE);
+//        }
+//        catch(Error e) {
+//            icon = null;
+//            print("Magnatune icon error: %s\n", e.message);
+//        }
+//        return (owned)icon;
     }
 }
 

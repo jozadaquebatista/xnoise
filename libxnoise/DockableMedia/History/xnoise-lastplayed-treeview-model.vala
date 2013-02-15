@@ -45,13 +45,15 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
         typeof(string),     //VIS_TEXT
-        typeof(Xnoise.Item?)//ITEM
+        typeof(Item?),      //ITEM
+        typeof(ItemType)    //ITEMTYPE
     };
     
     public enum Column {
         ICON = 0,
         VIS_TEXT,
         ITEM,
+        ITEMTYPE,
         N_COLUMNS
     }
 
@@ -137,25 +139,28 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
                     }
                     this.append(out iter);
                     this.set(iter,
-                             Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                             Column.ICON, (has_thumbnail == true ? thumbnail : null),
                              Column.VIS_TEXT, i.text,
-                             Column.ITEM, i
+                             Column.ITEM, i,
+                             Column.ITEMTYPE, i.type
                     );
                 }
                 else if(i.type == ItemType.STREAM) {
                     this.append(out iter);
                     this.set(iter,
-                             Column.ICON, icon_repo.radios_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, i.text,
-                             Column.ITEM, i
+                             Column.ITEM, i,
+                             Column.ITEMTYPE, i.type
                     );
                 }
                 else {
                     this.append(out iter);
                     this.set(iter,
-                             Column.ICON, icon_repo.title_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, i.text,
-                             Column.ITEM, i
+                             Column.ITEM, i,
+                             Column.ITEMTYPE, i.type
                     );
                 }
             }

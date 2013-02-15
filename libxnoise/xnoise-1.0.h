@@ -11,9 +11,9 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <sqlite3.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <float.h>
 #include <math.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
 
@@ -1123,7 +1123,7 @@ struct _XnoiseDockableMediaClass {
 	gchar* (*name) (XnoiseDockableMedia* self);
 	gchar* (*headline) (XnoiseDockableMedia* self);
 	XnoiseDockableMediaCategory (*category) (XnoiseDockableMedia* self);
-	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
+	gchar* (*get_icon_name) (XnoiseDockableMedia* self);
 	GtkWidget* (*create_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 	void (*remove_main_view) (XnoiseDockableMedia* self);
 };
@@ -2115,7 +2115,7 @@ gchar* xnoise_dockable_media_category_to_string (XnoiseDockableMediaCategory sel
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
 XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia* self);
-GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
+gchar* xnoise_dockable_media_get_icon_name (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_create_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 void xnoise_dockable_media_remove_main_view (XnoiseDockableMedia* self);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);

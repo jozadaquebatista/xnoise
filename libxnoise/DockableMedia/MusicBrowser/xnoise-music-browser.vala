@@ -398,10 +398,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         treepaths = selection.get_selected_rows(null);
         if(treepaths != null) {
             TreeIter iter;
-            Pixbuf p;
+            Pixbuf? p;
             this.mediabrowsermodel.get_iter(out iter, treepaths.nth_data(0));
             this.mediabrowsermodel.get(iter, MusicBrowserModel.Column.ICON, out p);
-            Gtk.drag_source_set_icon_pixbuf(this, p);
+            if(p != null)
+                Gtk.drag_source_set_icon_pixbuf(this, p);
+            else
+                Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
         }
         else {
             if(selection.count_selected_rows() > 1) {

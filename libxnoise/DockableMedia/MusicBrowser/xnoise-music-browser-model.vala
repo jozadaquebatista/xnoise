@@ -161,7 +161,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out genre_iter, null);
                 this.set(genre_iter,
-                         Column.ICON, icon_repo.genre_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, job.item.text,
                          Column.ITEM, job.item,
                          Column.LEVEL, 0
@@ -169,7 +169,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.prepend(out iter_search, genre_iter);
                 this.set(iter_search,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -199,7 +199,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     TreeIter new_genre_iter;
                     this.insert_before(out new_genre_iter, null, genre_iter);
                     this.set(new_genre_iter,
-                             Column.ICON, icon_repo.genre_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, job.item.text,
                              Column.ITEM, job.item,
                              Column.LEVEL, 0
@@ -208,7 +208,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     Item? loader_item = Item(ItemType.LOADER);
                     this.prepend(out iter_search, genre_iter);
                     this.set(iter_search,
-                             Column.ICON, icon_repo.loading_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, LOADING,
                              Column.ITEM, loader_item,
                              Column.LEVEL, 1
@@ -221,7 +221,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             genre_iter = x_genre_iter;
 //            this.append(out genre_iter, null);
             this.set(genre_iter,
-                     Column.ICON, icon_repo.artist_icon,
+                     Column.ICON, null,
                      Column.VIS_TEXT, job.item.text,
                      Column.ITEM, job.item,
                      Column.LEVEL, 0
@@ -229,7 +229,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             Item? loader_item = Item(ItemType.LOADER);
             this.append(out iter_search, genre_iter);
             this.set(iter_search,
-                     Column.ICON, icon_repo.loading_icon,
+                     Column.ICON, null,
                      Column.VIS_TEXT, LOADING,
                      Column.ITEM, loader_item,
                      Column.LEVEL, 1
@@ -267,7 +267,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 if(ins_va) {
                     this.prepend(out artist_iter, null);
                     this.set(artist_iter,
-                             Column.ICON, icon_repo.various_artists_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, job.item.text,
                              Column.ITEM, job.item,
                              Column.LEVEL, 0
@@ -275,7 +275,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     Item? loader_item = Item(ItemType.LOADER);
                     this.prepend(out iter_search, artist_iter);
                     this.set(iter_search,
-                             Column.ICON, icon_repo.loading_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, LOADING,
                              Column.ITEM, loader_item,
                              Column.LEVEL, 1
@@ -286,7 +286,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out artist_iter, null);
                 this.set(artist_iter,
-                         Column.ICON, icon_repo.artist_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, job.item.text,
                          Column.ITEM, job.item,
                          Column.LEVEL, 0
@@ -294,7 +294,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.prepend(out iter_search, artist_iter);
                 this.set(iter_search,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -328,7 +328,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     TreeIter new_artist_iter;
                     this.insert_before(out new_artist_iter, null, artist_iter);
                     this.set(new_artist_iter,
-                             Column.ICON, icon_repo.artist_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, job.item.text,
                              Column.ITEM, job.item,
                              Column.LEVEL, 0
@@ -337,7 +337,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     Item? loader_item = Item(ItemType.LOADER);
                     this.prepend(out iter_search, artist_iter);
                     this.set(iter_search,
-                             Column.ICON, icon_repo.loading_icon,
+                             Column.ICON, null,
                              Column.VIS_TEXT, LOADING,
                              Column.ITEM, loader_item,
                              Column.LEVEL, 1
@@ -349,7 +349,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.insert_after(out x_artist_iter, null, artist_iter);
             artist_iter = x_artist_iter;
             this.set(artist_iter,
-                     Column.ICON, icon_repo.artist_icon,
+                     Column.ICON, null,
                      Column.VIS_TEXT, job.item.text,
                      Column.ITEM, job.item,
                      Column.LEVEL, 0
@@ -357,7 +357,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             Item? loader_item = Item(ItemType.LOADER);
             this.append(out iter_search, artist_iter);
             this.set(iter_search,
-                     Column.ICON, icon_repo.loading_icon,
+                     Column.ICON, null,
                      Column.VIS_TEXT, LOADING,
                      Column.ITEM, loader_item,
                      Column.LEVEL, 1
@@ -446,7 +446,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     break;
                 this.prepend(out iter_artist, null);
                 this.set(iter_artist,
-                         Column.ICON, icon_repo.genre_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, artist.text,
                          Column.ITEM, artist,
                          Column.LEVEL, 0
@@ -454,7 +454,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_search, iter_artist);
                 this.set(iter_search,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -495,7 +495,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 }
                 this.prepend(out iter_artist, null);
                 this.set(iter_artist,
-                         Column.ICON, icon_repo.artist_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, artist.text,
                          Column.ITEM, artist,
                          Column.LEVEL, 0
@@ -503,7 +503,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_search, iter_artist);
                 this.set(iter_search,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -512,7 +512,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(va_buf != null) {
                 this.prepend(out iter_artist, null);
                 this.set(iter_artist,
-                         Column.ICON, icon_repo.various_artists_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, va_buf.text,
                          Column.ITEM, va_buf,
                          Column.LEVEL, 0
@@ -520,7 +520,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_search, iter_artist);
                 this.set(iter_search,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -548,7 +548,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_loader, iter);
                 this.set(iter_loader,
-                         Column.ICON, icon_repo.loading_icon,
+                         Column.ICON, null,
                          Column.VIS_TEXT, LOADING,
                          Column.ITEM, loader_item,
                          Column.LEVEL, 1
@@ -630,8 +630,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //                        File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
                         this.append(out iter_artist, iter_genre);
                         this.set(iter_artist,
-                                 Column.ICON, (artist.text == VARIOUS_ARTISTS ? 
-                                                   icon_repo.various_artists_icon : icon_repo.artist_icon),
+                                 Column.ICON, null,
                                  Column.VIS_TEXT, artist.text,
                                  Column.ITEM, artist,
                                  Column.LEVEL, 1
@@ -712,7 +711,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         }
                         this.append(out iter_album, iter_artist);
                         this.set(iter_album,
-                                 Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                                 Column.ICON, (albumimage != null ? albumimage : null),
                                  Column.VIS_TEXT, album.text,
                                  Column.ITEM, album,
                                  Column.LEVEL, 1
@@ -808,7 +807,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 if(strcmp(text, album != null ? album.down().strip() : EMPTYSTRING) == 0) {
                     //found album
                     this.set(album_iter,
-                             Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                             Column.ICON, (albumimage != null ? albumimage : null),
                              Column.LEVEL, 1
                              );
                     break;
@@ -860,7 +859,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 }
                 this.append(out iter_album, iter_artist);
                 this.set(iter_album,
-                         Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                         Column.ICON, (albumimage != null ? albumimage : null),
                          Column.VIS_TEXT, it.text,
                          Column.ITEM, it,
                          Column.LEVEL, 2
@@ -892,7 +891,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.append(out iter_title, iter_album);
                 if(!td.is_compilation) {
                     this.set(iter_title,
-                             Column.ICON, icon_repo._title_pix,
+                             Column.ICON, null,
                              Column.VIS_TEXT, td.title,
                              Column.ITEM, td.item,
                              Column.LEVEL, 2
@@ -903,7 +902,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                         "\n (" + "%s".printf(UNKNOWN_ARTIST_LOCALIZED) + ")" : 
                                         "\n (" + td.albumartist + ")");
                     this.set(iter_title,
-                             Column.ICON, icon_repo._title_pix,
+                             Column.ICON, null,
                              Column.VIS_TEXT, td.title + append,
                              Column.ITEM, td.item,
                              Column.LEVEL, 2

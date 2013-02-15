@@ -64,8 +64,8 @@ private class Xnoise.MusicBrowserDockable : DockableMedia {
         return win.musicBrScrollWin;
     }
     
-    public override Gdk.Pixbuf get_icon() {
-        return icon_repo.title_icon;
+    public override string get_icon_name() {
+        return "audio-x-generic-symbolic";
     }
 
     public override void remove_main_view() {

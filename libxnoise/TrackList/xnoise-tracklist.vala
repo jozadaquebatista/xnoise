@@ -1455,7 +1455,6 @@ private class PlayerStatePixbuf : Gtk.CellRendererPixbuf {
                                 Gdk.Rectangle background_area,
                                 Gdk.Rectangle cell_area,
                                 CellRendererState flags) {
-        
         Gdk.Pixbuf p = null;
         switch(state) {
             case PlayerState.PAUSED:
@@ -1485,9 +1484,7 @@ private class PlayerStatePixbuf : Gtk.CellRendererPixbuf {
                                             cell_area.x + X_OFFSET, 
                                             cell_area.y
                 );
-            
             cr.paint();
         }
     }
-
 }

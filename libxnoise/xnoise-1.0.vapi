@@ -648,7 +648,7 @@ namespace Xnoise {
 		public DockableMedia ();
 		public abstract Xnoise.DockableMedia.Category category ();
 		public abstract Gtk.Widget? create_widget (Xnoise.MainWindow window);
-		public abstract Gdk.Pixbuf get_icon ();
+		public abstract string get_icon_name ();
 		public abstract string headline ();
 		public abstract string name ();
 		public abstract void remove_main_view ();

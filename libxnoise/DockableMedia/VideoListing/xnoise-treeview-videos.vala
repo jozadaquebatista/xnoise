@@ -270,7 +270,10 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
             Pixbuf p;
             this.model.get_iter(out iter, treepaths.nth_data(0));
             this.model.get(iter, TreeViewVideosModel.Column.ICON, out p);
-            Gtk.drag_source_set_icon_pixbuf(this, p);
+            if(p != null)
+                Gtk.drag_source_set_icon_pixbuf(this, p);
+            else
+                Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
         }
         else {
             if(selection.count_selected_rows() > 1) {

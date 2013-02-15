@@ -59,7 +59,7 @@ public abstract class Xnoise.DockableMedia : GLib.Object {
     public abstract string name();
     public abstract string headline();
     public abstract DockableMedia.Category category();
-    public abstract Gdk.Pixbuf  get_icon();
+    public abstract string get_icon_name();
     public abstract Gtk.Widget? create_widget(Xnoise.MainWindow window);
     public abstract void remove_main_view();
 }

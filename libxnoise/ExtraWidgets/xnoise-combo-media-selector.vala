@@ -52,7 +52,7 @@ private class Xnoise.ComboMediaSelector : ComboBox, MediaSelector {
     public ComboMediaSelector() {
         selected_dockable_media = "";
         store = new TreeStore(Column.N_COLUMNS, 
-                              typeof(Gdk.Pixbuf),           //icon
+                              typeof(string),           //icon
                               typeof(string),               //vis_text
                               typeof(int),                  //weight
                               typeof(DockableMedia.Category),
@@ -60,12 +60,12 @@ private class Xnoise.ComboMediaSelector : ComboBox, MediaSelector {
                               typeof(string)                //name
                               );
         var renderer = new CellRendererText();
-        var rendererPb = new CellRendererPixbuf();
+        var rendererPb = new IconCellRenderer();
         
         this.pack_start(rendererPb, false);
         this.pack_start(renderer, true);
         
-        this.add_attribute(rendererPb, "pixbuf", Column.ICON);
+        this.add_attribute(rendererPb, "icon", Column.ICON);
         this.add_attribute(renderer, "text", Column.VIS_TEXT);
         this.add_attribute(renderer, "weight", Column.WEIGHT);
         this.set_row_separator_func(separator_func);
@@ -134,7 +134,7 @@ private class Xnoise.ComboMediaSelector : ComboBox, MediaSelector {
         assert(media != null);
         
         this.store.set(iter,
-              ComboMediaSelector.Column.ICON, media.get_icon(),
+              ComboMediaSelector.Column.ICON, media.get_icon_name(),
               ComboMediaSelector.Column.VIS_TEXT, media.headline(),
               ComboMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
               ComboMediaSelector.Column.CATEGORY, media.category,
@@ -279,3 +279,37 @@ private class Xnoise.ComboMediaSelector : ComboBox, MediaSelector {
     }   
 }
 
+
+
+private class Xnoise.IconCellRenderer : Gtk.CellRendererPixbuf {
+    private const int ICONSIZE = 16;
+    private const int X_OFFSET = 2;
+    
+    public string? icon { get; set; default = null; }
+    
+    public override void render(Cairo.Context cr, Widget widget,
+                                Gdk.Rectangle background_area,
+                                Gdk.Rectangle cell_area,
+                                CellRendererState flags) {
+        if(icon == null || icon.strip() == "")
+            return;
+        Gdk.Pixbuf p = null;
+        p = IconRepo.get_themed_pixbuf_icon(icon, ICONSIZE, widget.get_style_context());
+        if(p != null) {
+            int pixheight = p.get_height();
+            if(cell_area.height > pixheight)
+                Gdk.cairo_set_source_pixbuf(cr, 
+                                            p, 
+                                            cell_area.x + X_OFFSET, 
+                                            cell_area.y + (cell_area.height -pixheight)/2
+                );
+            else
+                Gdk.cairo_set_source_pixbuf(cr,
+                                            p, 
+                                            cell_area.x + X_OFFSET, 
+                                            cell_area.y
+                );
+            cr.paint();
+        }
+    }
+}

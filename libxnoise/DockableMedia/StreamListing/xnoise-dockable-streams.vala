@@ -55,8 +55,8 @@ private class Xnoise.DockableStreams : DockableMedia {
         return sw;
     }
 
-    public override Gdk.Pixbuf get_icon() {
-        return icon_repo.radios_icon;
+    public override string get_icon_name() {
+        return "network-cellular-signal-excellent-symbolic";
     }
     
     public override void remove_main_view() {

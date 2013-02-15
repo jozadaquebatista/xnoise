@@ -64,7 +64,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.SINGLE);
         this.store = new ListStore(Column.N_COLUMNS, 
-                                   typeof(Gdk.Pixbuf),           //icon
+                                   typeof(string),           //icon
                                    typeof(string),               //vis_text
                                    typeof(int),                  //weight
                                    typeof(DockableMedia.Category),
@@ -78,7 +78,7 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
 //        var rendererPb = new CellRendererPixbuf();
 //        column.pack_start(rendererPb, false);
         column.pack_start(renderer, true);
-        column.add_attribute(renderer, "pix", Column.ICON);
+        column.add_attribute(renderer, "icon", Column.ICON);
         column.add_attribute(renderer, "text", Column.VIS_TEXT);
         column.add_attribute(renderer, "weight", Column.WEIGHT);
         this.insert_column(column, -1);
@@ -344,14 +344,14 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
     
     private void set_row_data(TreeIter iter, DockableMedia media) {
         assert(media != null);
-        Gdk.Pixbuf? pix;
-        pix = media.get_icon();
+        string? icon;
+        icon = media.get_icon_name();
         
-        if(pix != null && pix.get_height() != 22)
-            pix = pix.scale_simple(22, 22, Gdk.InterpType.BILINEAR);
+//        if(pix != null && pix.get_height() != 22)
+//            pix = pix.scale_simple(22, 22, Gdk.InterpType.BILINEAR);
         
         this.store.set(iter,
-              TreeMediaSelector.Column.ICON, pix,
+              TreeMediaSelector.Column.ICON, icon,
               TreeMediaSelector.Column.VIS_TEXT, media.headline(),
               TreeMediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
               TreeMediaSelector.Column.CATEGORY, media.category,
@@ -469,10 +469,11 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
 //    private int hsepar;
     private int PIXPAD = 10; // space between pixbuf and text
     private int INDENT = 15;
+    private const int ICONSIZE = 16;
 //    private int calculated_widh[3];
     
 //    public int level    { get; set; }
-    public unowned Gdk.Pixbuf pix { get; set; }
+    public string icon            { get; set; }
     public string text            { get; set; }
     public int weight             { get; set; }
     
@@ -493,7 +494,7 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
                                                         int width,
                                                         out int minimum_height,
                                                         out int natural_height) {
-        natural_height = minimum_height = (pix != null ? int.max(24, pix.get_height() + 2) : 24);
+        natural_height = minimum_height = 20;//(pix != null ? int.max(24, pix.get_height() + 2) : 24);
     }
 
     public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
@@ -517,7 +518,7 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
         pango_layout.set_alignment(Pango.Alignment.LEFT);
 //        font_description.set_weight(Pango.Weight.BOLD);
 //        pango_layout.set_font_description(font_description);
-        int pixwidth = (pix != null ? pix.get_width() : 16);
+//        int pixwidth = (pix != null ? pix.get_width() : 16);
 //        pango_layout.set_width( 
 //            cell_area.width - (pixwidth + PIXPAD)
 ////            (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
@@ -534,29 +535,34 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
         }
         int wi = 0, he = 0;
         pango_layout.get_pixel_size(out wi, out he);
-        
-        if(pix != null) {
-            int pixheight = pix.get_height();
-//            int x_offset = pix.get_width();
-//            if(calculated_widh[level] > x_offset)
-//                x_offset = (int)((calculated_widh[level] - x_offset) / 2.0);
-//            else
-//                x_offset = 0;
-            if(cell_area.height > pixheight)
-                Gdk.cairo_set_source_pixbuf(cr, 
-                                            pix, 
-                                            cell_area.x + INDENT,
-                                            cell_area.y + (cell_area.height - pixheight)/2
-                );
-            else
-                Gdk.cairo_set_source_pixbuf(cr,
-                                            pix, 
-                                            cell_area.x + INDENT,
-                                            cell_area.y
-                );
+        Gdk.Pixbuf p = null;
+        if(icon != null && icon.strip() != "") {
+            p = IconRepo.get_themed_pixbuf_icon(icon, ICONSIZE, widget.get_style_context());
             
-            cr.paint();
+            if(p != null) {
+                int pixheight = p.get_height();
+    //            int x_offset = pix.get_width();
+    //            if(calculated_widh[level] > x_offset)
+    //                x_offset = (int)((calculated_widh[level] - x_offset) / 2.0);
+    //            else
+    //                x_offset = 0;
+                if(cell_area.height > pixheight)
+                    Gdk.cairo_set_source_pixbuf(cr, 
+                                                p, 
+                                                cell_area.x + INDENT,
+                                                cell_area.y + (cell_area.height - pixheight)/2
+                    );
+                else
+                    Gdk.cairo_set_source_pixbuf(cr,
+                                                p, 
+                                                cell_area.x + INDENT,
+                                                cell_area.y
+                    );
+                
+                cr.paint();
+            }
         }
+        int pixwidth = (p != null ? p.get_width() : ICONSIZE);
         //print("calculated_widh[level]: %d  level: %d\n", calculated_widh[level], level);
         context = widget.get_style_context();
         if(cell_area.height > he)
@@ -573,3 +579,4 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
                                   pango_layout);
     }
 }
+

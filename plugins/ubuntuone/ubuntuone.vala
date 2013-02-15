@@ -261,15 +261,16 @@ private class DockableUbuntuOneMS : DockableMedia {
         Xnoise.media_importer.import_media_folder(ms.get_library_location());
     }
     
-    public override Gdk.Pixbuf get_icon() {
-        Gdk.Pixbuf? icon = null;
-        try {
-            icon = Gtk.IconTheme.get_default().load_icon("ubuntuone", 24, IconLookupFlags.FORCE_SIZE);
-        }
-        catch(Error e) {
-            print("Ubuntu one icon error: %s\n", e.message);
-        }
-        return icon;
+    public override string get_icon_name() {
+        return "ubuntuone";
+//        Gdk.Pixbuf? icon = null;
+//        try {
+//            icon = Gtk.IconTheme.get_default().load_icon("ubuntuone", 24, IconLookupFlags.FORCE_SIZE);
+//        }
+//        catch(Error e) {
+//            print("Ubuntu one icon error: %s\n", e.message);
+//        }
+//        return icon;
     }
 }
 

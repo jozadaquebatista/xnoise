@@ -56,8 +56,8 @@ private class Xnoise.DockableVideos : DockableMedia {
         return sw;
     }
 
-    public override Gdk.Pixbuf get_icon() {
-        return icon_repo.videos_icon;
+    public override string get_icon_name() {
+        return "video-x-generic-symbolic";
     }
     
     public override void remove_main_view() {
