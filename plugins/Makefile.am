@@ -4,6 +4,7 @@ SUBDIRS =  \
     $(NULL)
 
 DIST_SUBDIRS =  \
+    app_indicator \
     azlyrics \
     chartlyrics \
     databaseLyrics \
@@ -18,6 +19,10 @@ DIST_SUBDIRS =  \
     titleToDecoration \
     ubuntuone \
     $(NULL)
+
+if ENABLE_APPINDICATOR
+    SUBDIRS += app_indicator
+endif
 
 if ENABLE_AZLYRICS
     SUBDIRS += azlyrics

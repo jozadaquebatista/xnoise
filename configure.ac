@@ -119,6 +119,23 @@ AC_SUBST(LIBXML_LIBS)
 dnl ================================================================
 
 
+
+dnl ================================================================
+dnl plugin check for plugins dependent on appindicator3
+
+PKG_CHECK_MODULES(APPI, \
+                  appindicator3-0.1, \
+                  have_appi=yes, \
+                  have_appi=no)
+if test "x$have_appi" = "xno"; then
+    AC_MSG_NOTICE([appindicator3 is not available.])
+fi
+AC_SUBST(APPI_CFLAGS)
+AC_SUBST(APPI_LIBS)
+dnl ================================================================
+
+
+
 dnl ================================================================
 dnl plugin check for plugins dependent on GDBus
 
@@ -200,6 +217,29 @@ AC_SUBST(UBUNTUONEUI_CFLAGS)
 AC_SUBST(UBUNTUONEUI_LIBS)
 dnl ================================================================
 
+
+dnl ================================================================
+dnl dependency check for optional build of app indicator plugin 
+
+AC_ARG_ENABLE([appindicator],
+    AS_HELP_STRING([--disable-appindicator],
+    [Disable appindicator plugin (default: enabled)]),
+    [enable_appindicator=$enableval],
+    [enable_appindicator=yes])
+
+if test "x$enable_appindicator" = "xyes"; then
+    if test "x$have_appi" = "xyes"; then
+        enable_appindicator=yes
+    else
+        enable_appindicator=no
+        AC_MSG_NOTICE([appindicator plugin will not be included in the build.])
+    fi
+else
+    enable_appindicator=no
+    AC_MSG_NOTICE([appindicator plugin will not be included in the build.])
+fi
+AM_CONDITIONAL(ENABLE_APPINDICATOR, test x"$enable_appindicator" = "xyes")
+dnl ================================================================
 
 
 dnl ================================================================
@@ -498,6 +538,7 @@ AC_CONFIG_FILES([
     src/Makefile
     packaging/Makefile
     plugins/Makefile
+    plugins/app_indicator/Makefile
     plugins/azlyrics/Makefile
     plugins/chartlyrics/Makefile
     plugins/databaseLyrics/Makefile
@@ -549,6 +590,7 @@ echo "
     Test plugin (Demo Plugin)      yes (always)
     Title-To-Decoration            yes (always)
     Ubuntu soundmenu               ${enable_soundmenu2}
+    Application Indicator          ${enable_appindicator}
     
     ${bold}Music Store Plugins:${normal}
     Ubuntu One Music Store         ${enable_ubuntuone}
