@@ -366,7 +366,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             
             Gtk.Image back_image;
             
-            if(IconTheme.get_default().has_icon("network-transmit-symbolic"))
+            if(IconTheme.get_default().has_icon("user-home-symbolic"))
                 back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.LARGE_TOOLBAR);
             else
                 back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.SMALL_TOOLBAR);
@@ -444,6 +444,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             if(plugin_loader.plugin_htable.lookup(plugin_name).info.category != cat)
                 continue;
             var plugin_switch = new PluginSwitch(plugin_name, this.plugin_label_sizegroup);
+            plugin_switch.margin_left = 5;
             box.pack_start(plugin_switch,
                            false,
                            false,

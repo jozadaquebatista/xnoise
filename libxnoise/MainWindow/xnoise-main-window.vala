@@ -38,9 +38,6 @@ using Xnoise.Utilities;
 [CCode (cname = "gdk_window_ensure_native")]
 private extern bool ensure_native(Gdk.Window window);
 
-//[CCode (cname = "gtk_widget_style_get_property")]
-//private extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
-
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
@@ -232,8 +229,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), "<Control>p", N_("Go to previous track"), menu_prev },
             { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), "<Control>KP_Space", N_("Toggle playback status"), menutoggle_playpause },
             { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), "<Control>n", N_("Go to next track"), menu_next },
-            { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit },
             { "EqAction", null /*icon*/, N_("E_qualizer"), null, N_("Open equalizer window"), on_eq_open },
+            { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit },
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked },
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
@@ -2060,7 +2057,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             //---------------------
-            main_toolbar.insert(albumimageTI, -1);
             main_toolbar.insert(albumart_toggleb, -1);
             main_toolbar.insert(previousButton, -1);
             main_toolbar.insert(playPauseButton, -1);
@@ -2070,6 +2066,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            main_toolbar.insert(repeatButtonTI, -1);
 //            main_toolbar.insert(eqButtonTI, -1);
 //            main_toolbar.insert(volume_slider, -1);
+            main_toolbar.insert(albumimageTI, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
             

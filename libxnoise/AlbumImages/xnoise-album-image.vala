@@ -37,7 +37,7 @@ using Xnoise.Resources;
 using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
-    internal static const int SIZE = 48;
+    internal static const int SIZE = 40;
     private AlbumImageLoader loader = null;
     private string artist = EMPTYSTRING;
     private string album = EMPTYSTRING;

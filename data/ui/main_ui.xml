@@ -21,9 +21,9 @@
 			<menuitem action="PlayPauseAction"/>
 			<menuitem action="NextTrackAction"/>
 			<separator />
-			<menuitem action="SettingsAction"/>
-			<separator />
 			<menuitem action="EqAction"/>
+			<separator />
+			<menuitem action="SettingsAction"/>
 		</menu>
 
 		<menu name="ViewMenu" action="ViewMenuAction">

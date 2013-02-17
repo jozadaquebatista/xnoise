@@ -38,17 +38,17 @@ private class Xnoise.AppMenuButton : Gtk.ToolItem {
     private Image img;
     
     public AppMenuButton(Gtk.Menu menu, string? tooltip_text = null) {
-        var box = new Gtk.Box(Orientation.VERTICAL, 0);
+//        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         content = new Gtk.ToggleButton();
         content.set_relief(ReliefStyle.NORMAL);
-        var eb = new Gtk.EventBox();
-        eb.visible_window = false;
-        box.pack_start(eb, true, true, 0);
-        box.pack_start(content, false, false, 0);
-        eb = new Gtk.EventBox();
-        eb.visible_window = false;
-        box.pack_start(eb, true, true, 0);
-        this.add(box);
+//        var eb = new Gtk.EventBox();
+//        eb.visible_window = false;
+//        box.pack_start(eb, true, true, 0);
+//        box.pack_start(content, false, false, 0);
+//        eb = new Gtk.EventBox();
+//        eb.visible_window = false;
+//        box.pack_start(eb, true, true, 0);
+        this.add(content);
         
         unowned IconTheme theme = IconTheme.get_default();
         
