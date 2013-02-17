@@ -534,6 +534,8 @@ AC_CONFIG_FILES([
     data/icons/48x48/Makefile
     data/icons/256x256/Makefile
     data/icons/scalable/Makefile
+    data/icons/ubuntu-mono-dark/Makefile
+    data/icons/ubuntu-mono-light/Makefile
     libxnoise/Makefile
     src/Makefile
     packaging/Makefile
