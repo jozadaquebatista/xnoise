@@ -145,10 +145,28 @@ public class Xnoise.AppIndicator : GLib.Object, IPlugin {
             global.next();
         });
         traymenu.append(nextItem);
-
+        
         var separator = new SeparatorMenuItem();
         traymenu.append(separator);
-
+        
+        var raiseImage = new Image();
+        raiseImage.set_from_stock(Gtk.Stock.LEAVE_FULLSCREEN, IconSize.MENU);
+        var raiseLabel = new Label(_("Show"));
+        raiseLabel.set_alignment(0, 0);
+        var raiseItem = new Gtk.MenuItem();
+        var raiseHbox = new Box(Orientation.HORIZONTAL, 1);
+        raiseHbox.set_spacing(10);
+        raiseHbox.pack_start(raiseImage, false, true, 0);
+        raiseHbox.pack_start(raiseLabel, true, true, 0);
+        raiseItem.add(raiseHbox);
+        raiseItem.activate.connect( () => {
+            main_window.show_window();
+            main_window.present();
+        });
+        traymenu.append(raiseItem);
+        
+        traymenu.append(new SeparatorMenuItem());
+        
         var exitImage = new Image();
         exitImage.set_from_stock(Gtk.Stock.QUIT, IconSize.MENU);
         var exitLabel = new Label(_("Exit"));
