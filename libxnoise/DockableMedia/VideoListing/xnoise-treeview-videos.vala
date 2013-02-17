@@ -57,7 +57,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
     public TreeViewVideos(DockableMedia dock, MainWindow window, Widget ow) {
         this.win = window;
         this.dock = dock;
-        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         this.ow = ow;

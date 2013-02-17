@@ -58,6 +58,12 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
         this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         setup_widgets();
+        var context = this.get_style_context();
+        context.save();
+        context.add_class(STYLE_CLASS_PANE_SEPARATOR);
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        this.override_background_color(StateFlags.NORMAL, color);
+        context.restore();
     }
     
     public void set_focus_on_selector() {
@@ -153,7 +159,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
 //        notebook.margin_top = 2;
         current_selected_media = new SideBarHeadline(_("Media Source"));
-        this.pack_start(current_selected_media, false, false, 2);
+        this.pack_start(current_selected_media, false, false, 0);
         this.pack_start(notebook, true, true, 0);
         
         //load pre-existing
@@ -218,9 +224,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
                 mss_sw.set_shadow_type(ShadowType.NONE);
                 media_source_selector_box.add(mss_sw);
 //                mss_sw.get_style_context().add_class(STYLE_CLASS_BACKGROUND);
-                var sep = new SeparationArea();
-                sep.show();
-                media_source_selector_box.pack_start(sep, false, false, 0);
+//                var sep = new SeparationArea();
+//                sep.show();
+//                media_source_selector_box.pack_start(sep, false, false, 0);
                 media_source_selector_window = mss_sw;
                 break;
         }
@@ -243,24 +249,24 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
 }
 
 
-private class Xnoise.SeparationArea : Gtk.DrawingArea {
-    private int HEIGHT = 1;
-    
-    public SeparationArea() {
-        this.get_style_context().add_class(STYLE_CLASS_SEPARATOR);
-    }
-    
-    public override bool draw(Cairo.Context cr) {
-        Allocation allocation;
-        this.get_allocation(out allocation);
-        var context = this.get_style_context();
-        render_line(context, cr, 4, 0, 
-                                 get_allocated_width(), 0);
-        return false;
-    }
-    
-    public override void get_preferred_height(out int minimum_height, out int natural_height) {
-        minimum_height = natural_height = HEIGHT;
-    }
-}
+//private class Xnoise.SeparationArea : Gtk.DrawingArea {
+//    private int HEIGHT = 1;
+//    
+//    public SeparationArea() {
+//        this.get_style_context().add_class(STYLE_CLASS_SEPARATOR);
+//    }
+//    
+//    public override bool draw(Cairo.Context cr) {
+//        Allocation allocation;
+//        this.get_allocation(out allocation);
+//        var context = this.get_style_context();
+//        render_line(context, cr, 4, 0, 
+//                                 get_allocated_width(), 0);
+//        return false;
+//    }
+//    
+//    public override void get_preferred_height(out int minimum_height, out int natural_height) {
+//        minimum_height = natural_height = HEIGHT;
+//    }
+//}
 

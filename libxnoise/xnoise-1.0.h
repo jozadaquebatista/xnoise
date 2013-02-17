@@ -394,6 +394,17 @@ typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 
+#define XNOISE_TYPE_ICON_REPO (xnoise_icon_repo_get_type ())
+#define XNOISE_ICON_REPO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ICON_REPO, XnoiseIconRepo))
+#define XNOISE_ICON_REPO_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ICON_REPO, XnoiseIconRepoClass))
+#define XNOISE_IS_ICON_REPO(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ICON_REPO))
+#define XNOISE_IS_ICON_REPO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ICON_REPO))
+#define XNOISE_ICON_REPO_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ICON_REPO, XnoiseIconRepoClass))
+
+typedef struct _XnoiseIconRepo XnoiseIconRepo;
+typedef struct _XnoiseIconRepoClass XnoiseIconRepoClass;
+typedef struct _XnoiseIconRepoPrivate XnoiseIconRepoPrivate;
+
 #define XNOISE_TYPE_EXTERN_QUERYABLE (xnoise_extern_queryable_get_type ())
 #define XNOISE_EXTERN_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_EXTERN_QUERYABLE, XnoiseExternQueryable))
 #define XNOISE_IS_EXTERN_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_EXTERN_QUERYABLE))
@@ -1338,6 +1349,16 @@ typedef enum  {
 	XNOISE_PLAYER_STATE_PLAYING,
 	XNOISE_PLAYER_STATE_PAUSED
 } XnoisePlayerState;
+
+struct _XnoiseIconRepo {
+	GObject parent_instance;
+	XnoiseIconRepoPrivate * priv;
+	GdkPixbuf* _title_pix;
+};
+
+struct _XnoiseIconRepoClass {
+	GObjectClass parent_class;
+};
 
 struct _XnoiseExternQueryableIface {
 	GTypeInterface parent_iface;
@@ -2296,6 +2317,11 @@ const gchar* xnoise_global_access_get_image_path_embedded (XnoiseGlobalAccess* s
 void xnoise_global_access_set_image_path_embedded (XnoiseGlobalAccess* self, const gchar* value);
 gboolean xnoise_global_access_get_in_preview (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_in_preview (XnoiseGlobalAccess* self, gboolean value);
+GType xnoise_icon_repo_get_type (void) G_GNUC_CONST;
+GtkImage* xnoise_icon_repo_get_themed_image_icon (const gchar* name, GtkIconSize size, gint pixelsize);
+GdkPixbuf* xnoise_icon_repo_get_themed_pixbuf_icon (const gchar* name, gint pixel_size, GtkStyleContext* style_context);
+XnoiseIconRepo* xnoise_icon_repo_new (void);
+XnoiseIconRepo* xnoise_icon_repo_construct (GType object_type);
 GType xnoise_extern_queryable_get_type (void) G_GNUC_CONST;
 gint xnoise_extern_queryable_get_model_item_column (XnoiseExternQueryable* self);
 XnoiseDataSource* xnoise_extern_queryable_get_data_source (XnoiseExternQueryable* self);

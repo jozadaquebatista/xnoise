@@ -32,7 +32,7 @@
 
 using Gtk;
 
-internal class Xnoise.IconRepo : GLib.Object {
+public class Xnoise.IconRepo : GLib.Object {
     private unowned IconTheme theme = null;
 
     internal Gdk.Pixbuf artist_icon                 { get; private set; }
@@ -170,7 +170,7 @@ internal class Xnoise.IconRepo : GLib.Object {
         }
     }
 
-    internal static Gtk.Image? get_themed_image_icon(string name, IconSize size, int pixelsize = -1) {
+    public static Gtk.Image? get_themed_image_icon(string name, IconSize size, int pixelsize = -1) {
         Gtk.Image? image = null;
         GLib.Icon gicon = new ThemedIcon(name);
         if(name != null)
@@ -184,7 +184,7 @@ internal class Xnoise.IconRepo : GLib.Object {
         return image;
     }
     
-    internal static Gdk.Pixbuf? get_themed_pixbuf_icon(string name,
+    public static Gdk.Pixbuf? get_themed_pixbuf_icon(string name,
                                                        int pixel_size,
                                                        Gtk.StyleContext? style_context = null) {
         Gtk.Image? image = null;

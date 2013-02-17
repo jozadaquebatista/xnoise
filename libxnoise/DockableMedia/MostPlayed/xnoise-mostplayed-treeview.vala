@@ -56,7 +56,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
         this.dock = dock;
-        this.get_style_context().add_class(STYLE_CLASS_PANE_SEPARATOR);
+        this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -169,7 +169,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         });
         context.save();
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
-        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL);
         this.override_background_color(StateFlags.NORMAL, color);
         context.restore();
     }

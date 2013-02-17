@@ -2276,6 +2276,7 @@ private class Xnoise.SideBarHeadline : Gtk.TreeView {
     
     public SideBarHeadline(string headline = "") {
         this.headers_visible = false;
+        this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.get_selection().set_mode(SelectionMode.NONE);
         setup_widgets();
         TreeIter iter;

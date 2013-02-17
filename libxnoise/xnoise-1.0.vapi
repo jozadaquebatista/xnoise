@@ -769,6 +769,12 @@ namespace Xnoise {
 		public signal void sign_video_playing ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class IconRepo : GLib.Object {
+		public IconRepo ();
+		public static Gtk.Image? get_themed_image_icon (string name, Gtk.IconSize size, int pixelsize = -1);
+		public static Gdk.Pixbuf? get_themed_pixbuf_icon (string name, int pixel_size, Gtk.StyleContext? style_context = null);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class InfoBar : Gtk.InfoBar {
 		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds = 5, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);

@@ -194,7 +194,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 if(strcmp(text, album != null ? album.down().strip() : EMPTYSTRING) == 0) {
                     //found album
                     this.set(album_iter,
-                             Column.ICON, (albumimage != null ? albumimage : album_icon),
+                             Column.ICON, (albumimage != null ? albumimage : null),
                              Column.LEVEL, 1
                              );
                     break;
@@ -365,7 +365,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 }
                 this.append(out iter_album, iter_artist);
                 this.set(iter_album,
-                         Column.ICON, (albumimage != null ? albumimage : album_icon),
+                         Column.ICON, (albumimage != null ? albumimage : null),
                          Column.VIS_TEXT, album.text,
                          Column.ITEM, album,
                          Column.LEVEL, 1
@@ -407,7 +407,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                     return false;
                 this.append(out iter_title, iter_album);
                 this.set(iter_title,
-                              Column.ICON, title_icon,
+                              Column.ICON, null,
                               Column.VIS_TEXT, td.title,
                               Column.ITEM, (Item?)td.item,
                               Column.LEVEL, 2
@@ -446,7 +446,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                     return false;
                 this.prepend(out iter, null);
                 this.set(iter,
-                              Column.ICON, artist_icon,
+                              Column.ICON, null,
                               Column.VIS_TEXT, i.text,
                               Column.ITEM, i,
                               Column.LEVEL, 0

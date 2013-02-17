@@ -115,7 +115,7 @@ private class DockableMagnatuneMS : DockableMedia {
 //    }
     
     public override string get_icon_name() {
-        return "xn-magnatune";
+        return "xn-magnatune-symbolic";
 //        Gdk.Pixbuf? icon = null;
 //        try {
 //            unowned Gtk.IconTheme thm = Gtk.IconTheme.get_default();
