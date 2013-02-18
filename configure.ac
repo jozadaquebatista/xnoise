@@ -77,7 +77,7 @@ LT_INIT
 dnl ================================================================
 TAGLIB_C_REQUIRED=1.6
 
-TAGINFO_VERSION="0.0.8"
+TAGINFO_VERSION="0.0.9"
 TAGINFO_NAME="taginfo"
 AC_SUBST(TAGINFO_VERSION)
 AC_SUBST(TAGINFO_NAME)
@@ -98,7 +98,8 @@ PKG_CHECK_MODULES(XNOISE, \
     gobject-2.0 >= $GLIB_REQUIRED \
     gio-2.0 >= $GIO_REQUIRED \
     gstreamer-1.0 >= $GSTREAMER_REQUIRED \
-    gstreamer-plugins-base-1.0 \
+    gstreamer-video-1.0 >= $GSTREAMER_REQUIRED \
+    gstreamer-plugins-base-1.0 >= $GSTREAMER_REQUIRED \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     cairo)
@@ -570,7 +571,6 @@ bold=`tput bold`
 normal=`tput sgr0`
 
 echo "
-
   ${bold}${PACKAGE} ${VERSION}${normal}
   ~~~~~~~~~~~~~
   

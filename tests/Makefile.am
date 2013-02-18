@@ -13,6 +13,7 @@ noinst_PROGRAMS = $(TEST_PROGS)
 
 progs_ldadd = $(GLIB_LIBS) \
               ../libxnoise/libxnoise.la \
+              -lm \
               $(XNOISE_LIBS)
 
 BUILT_SOURCES = tests.vala.stamp

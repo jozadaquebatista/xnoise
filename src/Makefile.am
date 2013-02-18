@@ -35,6 +35,7 @@ VALAFLAGS = \
 xnoise_LDADD = \
     $(XNOISE_LIBS) \
     -lgstpbutils-1.0 \
+    -lm \
     $(top_builddir)/libxnoise/libxnoise.la \
     $(top_builddir)/bindings/c/libtaginfo_c.la \
     $(NULL)
