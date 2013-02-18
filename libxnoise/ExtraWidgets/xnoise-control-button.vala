@@ -37,7 +37,7 @@ using Gdk;
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
 private class Xnoise.ControlButton : Gtk.ToolItem {
-    
+    private const int PIXELSIZE = 22;
     private Image image;
     private Function function;
 
@@ -55,7 +55,7 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         
 //        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         var button = new Gtk.Button();
-//        button.set_relief(ReliefStyle.NORMAL);
+        button.set_relief(ReliefStyle.NONE);
 //        button.set_size_request(48, -1);
 //        var eb = new Gtk.EventBox();
 //        eb.visible_window = false;
@@ -72,28 +72,28 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
             case Function.NEXT: {
                 if(theme.has_icon("media-skip-forward-symbolic"))
                     image = IconRepo.get_themed_image_icon("media-skip-forward-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
                     image = IconRepo.get_themed_image_icon("xn-media-skip-forward-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             case Function.PREVIOUS: {
                 if(theme.has_icon("media-skip-backward-symbolic"))
                     image = IconRepo.get_themed_image_icon("media-skip-backward-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
                     image = IconRepo.get_themed_image_icon("xn-media-skip-backward-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             case Function.STOP: {
                 if(theme.has_icon("media-playback-stop-symbolic"))
                     image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
                     image = IconRepo.get_themed_image_icon("xn-media-playback-stop-symbolic",
-                                                           IconSize.LARGE_TOOLBAR);
+                                                           IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             default:

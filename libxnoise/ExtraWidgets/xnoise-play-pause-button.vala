@@ -42,6 +42,7 @@ using Xnoise.Resources;
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
 private class Xnoise.PlayPauseButton: Gtk.ToolItem {
+    private const int PIXELSIZE = 36;
     private unowned Main xn;
     private Gtk.Image? play  = null;
     private Gtk.Image? pause = null;
@@ -56,8 +57,8 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         this.can_focus = false;
 //        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         button = new Gtk.Button();
-        button.set_relief(ReliefStyle.NORMAL);
-        button.set_size_request(48, -1);
+        button.set_relief(ReliefStyle.NONE);
+//        button.set_size_request(48, -1);
 //        var eb = new Gtk.EventBox();
 //        eb.visible_window = false;
 //        box.pack_start(eb, true, true, 0);
@@ -71,18 +72,18 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         // use standard icon theme or local fallback
         if(theme.has_icon("media-playback-start-symbolic"))
             play = IconRepo.get_themed_image_icon("media-playback-start-symbolic",
-                                                  IconSize.LARGE_TOOLBAR);
+                                                  IconSize.LARGE_TOOLBAR, PIXELSIZE);
         else
             play = IconRepo.get_themed_image_icon("xn-media-playback-start-symbolic",
-                                                  IconSize.LARGE_TOOLBAR);
+                                                  IconSize.LARGE_TOOLBAR, PIXELSIZE);
         play.show();
         
         if(theme.has_icon("media-playback-pause-symbolic"))
             pause = IconRepo.get_themed_image_icon("media-playback-pause-symbolic",
-                                                  IconSize.LARGE_TOOLBAR);
+                                                  IconSize.LARGE_TOOLBAR, PIXELSIZE);
         else
             pause = IconRepo.get_themed_image_icon("xn-media-playback-pause-symbolic",
-                                                  IconSize.LARGE_TOOLBAR);
+                                                  IconSize.LARGE_TOOLBAR, PIXELSIZE);
         pause.show();
         
         button.add(play);

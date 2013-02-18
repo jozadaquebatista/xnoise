@@ -31,13 +31,14 @@
  */
 
 using Gtk;
+using Cairo;
 
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
-    internal static const int SIZE = 40;
+    internal static const int SIZE = 48;
     private AlbumImageLoader loader = null;
     private string artist = EMPTYSTRING;
     private string album = EMPTYSTRING;
@@ -51,10 +52,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         //this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
         this.set_size_request(SIZE, SIZE);
         this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
-                        Gdk.EventMask.BUTTON_RELEASE_MASK |
-                        Gdk.EventMask.ENTER_NOTIFY_MASK |
-                        Gdk.EventMask.LEAVE_NOTIFY_MASK
-        );
+                        Gdk.EventMask.BUTTON_RELEASE_MASK
+        );// |
+//                        Gdk.EventMask.ENTER_NOTIFY_MASK |
+//                        Gdk.EventMask.LEAVE_NOTIFY_MASK
         this.load_default_image();
         loader = new AlbumImageLoader();
         global.sign_album_image_fetched.connect(on_album_image_fetched);
@@ -132,25 +133,59 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         return false;
     }
     
-//    private Gdk.Pixbuf? album_art_default_icon = null;
+    private const double radius = SIZE / 2.4;
     
     public override bool draw(Cairo.Context cr) {
+        Allocation allocation;
         assert(icon_repo.album_art_default_icon != null);
+        this.get_allocation(out allocation);
+        cr.set_source_rgb(0.8, 0.8, 0.8);
+        cr.set_line_width(0);
+        cr.arc(SIZE / 2.0, 
+               SIZE / 2.0,
+               radius + 2, 
+               0.0, 
+               2.0 * Math.PI);
+        cr.fill();
+        cr.set_source_rgb(0.0, 0.0, 0.0);
+        cr.set_line_width(0);
+        cr.arc(SIZE / 2.0, 
+               SIZE / 2.0,
+               radius + 1, 
+               0.0, 
+               2.0 * Math.PI);
+        cr.fill();
+        cr.arc(SIZE / 2.0, 
+               SIZE / 2.0,
+               radius, 
+               0.0, 
+               2.0 * Math.PI);
+        cr.clip ();
+        cr.new_path(); /* path not consumed by clip()*/
         if(this.pixbuf == null) {
             Gdk.cairo_set_source_pixbuf(cr, icon_repo.album_art_default_icon, 0, 0);
         }
         else {
-            cr.set_source_rgb(0.8, 0.8, 0.8);
-            cr.set_line_width(0);
-            cr.rectangle(0, 0, SIZE, SIZE);
-            cr.fill();
-            cr.set_source_rgb(0.0, 0.0, 0.0);
-            cr.rectangle(1, 1, SIZE - 2, SIZE - 2);
-            cr.fill();
-            Gdk.cairo_set_source_pixbuf(cr, pixbuf, 2, 2);
+            Gdk.cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
         }
+        
         cr.paint();
-        return true;
+        return false;
+//        if(this.pixbuf == null) {
+//            Gdk.cairo_set_source_pixbuf(cr, icon_repo.album_art_default_icon, 0, 0);
+//        }
+//        else {
+//            cr.set_source_rgb(0.8, 0.8, 0.8);
+//            cr.set_line_width(0);
+//            cr.rectangle(0, 0, SIZE, SIZE);
+//            cr.fill();
+//            cr.set_source_rgb(0.0, 0.0, 0.0);
+//            cr.rectangle(1, 1, SIZE - 2, SIZE - 2);
+//            cr.fill();
+//            Gdk.cairo_set_source_pixbuf(cr, pixbuf, 2, 2);
+//        }
+//        cr.paint();
+//        return true;
     }
 
     // Startes via timeout because gst_player is sending the tag_changed signals
@@ -286,7 +321,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             return false;
         }
         
-        px = px.scale_simple(SIZE - 4, SIZE - 4, Gdk.InterpType.HYPER);
+        px = px.scale_simple(SIZE, SIZE, Gdk.InterpType.HYPER);
         
         Idle.add(() => {
             this.pixbuf = px;

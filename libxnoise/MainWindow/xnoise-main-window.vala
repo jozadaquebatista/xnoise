@@ -41,7 +41,8 @@ private extern bool ensure_native(Gdk.Window window);
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
-    private unowned Main xn;
+    private const int HIDE_BUTTON_SIZE     = 12;
+//    private unowned Main xn;
     private VolumeSliderButton volume_slider;
     private int _posX;
     private int _posY;
@@ -78,6 +79,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private AlbumImage albumimage;
     private Gtk.Entry album_search_entry;
     private unowned TrackList trackList;
+    private BackgroundBox tbx;
     internal SerialButton album_view_sorting;
     internal SerialButton album_view_direction;
     internal AlbumArtView album_art_view;
@@ -292,7 +294,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     public MainWindow() {
-        this.xn = Main.instance;
         Params.iparams_register(this);
         
         toggle_action_entries = {};
@@ -914,7 +915,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.get_position(out _posX, out _posY);
         this.hide();
         window_in_foreground = false;
-        xn.quit();
+        Main.instance.quit();
     }
 
     private void on_show_video_menu_clicked() {
@@ -1682,26 +1683,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Gtk.Image hide_button_image;
             if(theme.has_icon("go-first-symbolic"))
                 hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-                                                                   IconSize.MENU
+                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
                 );
             else
                 hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-                                                                   IconSize.MENU
+                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
                 );
             
             hide_button.add(hide_button_image);
             hide_button.can_focus = false;
             hide_button.clicked.connect(this.toggle_media_browser_visibility);
-            hide_button.set_relief(ReliefStyle.HALF);
+            hide_button.set_relief(ReliefStyle.NONE);
             paned_overlay.add_overlay(hide_button);
             hide_button.halign = Align.START;
             hide_button.valign = Align.END;
-            var tbx = new Box(Orientation.HORIZONTAL, 0);
+            tbx = new BackgroundBox(Orientation.VERTICAL, 0);
 //            tbx.pack_start(hide_button, false, false, 0);
             
             //VOLUME SLIDE BUTTON
             volume_slider = new VolumeSliderButton(gst_player);
-            tbx.pack_start(volume_slider, false, false, 0);
+//            tbx.pack_start(volume_slider, false, false, 0);
             
             repeatButton = new Gtk.Button();
             repeatButton.can_focus = false;
@@ -1784,8 +1785,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_view_sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
             content_overlay.add_overlay(tbx);
-            tbx.halign = Align.START;
-            tbx.valign = Align.END;
+            content_overlay.get_child_position.connect(on_content_overlay_child_pos);
+            tbx.halign = Align.END;
+            tbx.valign = Align.CENTER;
 
 //            bottom_box.pack_start(new Label(""), true, true, 0);
 //            bottom_box.pack_start(main_view_sbutton, false, false, 0);
@@ -1798,11 +1800,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     hide_button.remove(hide_button_image);
                     if(theme.has_icon("go-first-symbolic"))
                         hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-                                                                           IconSize.MENU
+                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
                         );
                     else
                         hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-                                                                           IconSize.MENU
+                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
                         );
                     hide_button_image.show();
                     hide_button.add(hide_button_image);
@@ -1812,11 +1814,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     hide_button.remove(hide_button_image);
                     if(theme.has_icon("go-last-symbolic"))
                         hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
-                                                                           IconSize.MENU
+                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
                         );
                     else
                         hide_button_image = IconRepo.get_themed_image_icon("xn-go-last-symbolic",
-                                                                           IconSize.MENU
+                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
                         );
                     hide_button_image.show();
                     hide_button.add(hide_button_image);
@@ -1875,7 +1877,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.set_icon_size(IconSize.LARGE_TOOLBAR);
             main_toolbar.set_show_arrow(false);
             toolbarbox.pack_start(main_toolbar, true, true, 0);
-//            main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+            main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
             //-----------------
             
             main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
@@ -1908,21 +1910,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             albumimageTI.add(albumimage);
             aimage_timeout = 0;
             albumimage.button_press_event.connect(ai_button_clicked);
-            albumimage.enter_notify_event.connect(ai_ebox_enter);
-            albumimage.leave_notify_event.connect( (s, e) => {
-                if(not_show_art_on_hover_image)
-                    return false;
-                if(fullscreenwindowvisible)
-                    return false;
-                if(aimage_timeout != 0) {
-                    Source.remove(aimage_timeout);
-                    aimage_timeout = 0;
-                    return false;
-                }
-                mainview_box.select_main_view(mainview_page_buffer);
-                main_view_sbutton.select(mainview_page_buffer, true);
-                return false;
-            });
+//            albumimage.enter_notify_event.connect(ai_ebox_enter);
+//            albumimage.leave_notify_event.connect( (s, e) => {
+//                if(not_show_art_on_hover_image)
+//                    return false;
+//                if(fullscreenwindowvisible)
+//                    return false;
+//                if(aimage_timeout != 0) {
+//                    Source.remove(aimage_timeout);
+//                    aimage_timeout = 0;
+//                    return false;
+//                }
+//                mainview_box.select_main_view(mainview_page_buffer);
+//                main_view_sbutton.select(mainview_page_buffer, true);
+//                return false;
+//            });
             //--------------------
             msw = new MediaSoureWidget(this);
             assert(msw != null);
@@ -2057,16 +2059,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             //---------------------
-            main_toolbar.insert(albumart_toggleb, -1);
+//            main_toolbar.insert(albumart_toggleb, -1);
+            main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(previousButton, -1);
             main_toolbar.insert(playPauseButton, -1);
             main_toolbar.insert(stopButton, -1);
             main_toolbar.insert(nextButton, -1);
+            main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(this.track_infobar, -1);
 //            main_toolbar.insert(repeatButtonTI, -1);
 //            main_toolbar.insert(eqButtonTI, -1);
-//            main_toolbar.insert(volume_slider, -1);
-            main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(volume_slider, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
             
@@ -2214,6 +2218,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.key_press_event.connect(this.on_key_pressed);
     }
     
+    private bool on_content_overlay_child_pos(Overlay sender,
+                                              Widget widget,
+                                              Gdk.Rectangle allocation) {
+        if(widget != tbx)
+            return false;
+        Gtk.Requisition min, nat;
+        allocation = Gdk.Rectangle();
+        widget.get_preferred_size(out min, out nat);
+        allocation.x      = sender.get_allocated_width() - nat.width - 5;
+        allocation.y      = int.max(0, sender.get_allocated_height()/2 - 60);
+        allocation.width  = nat.width;
+        allocation.height = nat.height;
+        return true;
+    }
+    
     public void reset_mainview_to_tracklist() {
         main_view_sbutton.select(TRACKLIST_VIEW_NAME, true);
     }
@@ -2242,13 +2261,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         bar.show_all();
     }
     
+    private bool aa_vis = false;
     private bool ai_button_clicked(Gtk.Widget sender, Gdk.EventButton e) {
-        if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) {
-            return false; //exit here, if it's no double-click
+        if(!aa_vis) {
+            aa_vis = true;
+            bottom_notebook.set_current_page(1);
+            album_art_view.grab_focus();
+            update_toggle_action_state("ShowAlbumArtViewAction", true);
+            set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
         }
         else {
-            toggle_fullscreen();
+            aa_vis = false;
+            bottom_notebook.set_current_page(0);
+            tl.grab_focus();
+            update_toggle_action_state("ShowAlbumArtViewAction", false);
+            set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
         }
+//        if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) {
+//            return false; //exit here, if it's no double-click
+//        }
+//        else {
+//            toggle_fullscreen();
+//        }
         return true;
     }
     
@@ -2317,5 +2351,25 @@ private class Xnoise.SideBarHeadline : Gtk.TreeView {
         column.add_attribute(renderer, "weight", Column.WEIGHT);
         this.append_column(column);
         this.set_model(store);
+    }
+}
+
+
+private class BackgroundBox : Gtk.Box {
+    
+    public BackgroundBox(Orientation _orientation, int _spacing) {
+        GLib.Object(orientation:_orientation,spacing:_spacing);
+    }
+    
+    public override bool draw(Cairo.Context cr) {
+        var context = this.get_style_context();
+        cr.set_source_rgba(0.0, 0.0, 0.0, 0.4);
+        cr.set_line_width(0.8);
+        cr.rectangle(0, 0, this.get_allocated_width(), this.get_allocated_height());
+        cr.stroke();
+        this.forall( (w) => {
+            this.propagate_draw(w, cr);
+        });
+        return false;
     }
 }
