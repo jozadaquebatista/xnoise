@@ -51,8 +51,8 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
                                 Gdk.Rectangle cell_area,
                                 CellRendererState flags) {
         //print("render for %s\n", markup);
-        int x_offset = cell_area.x + 1;
-        int y_offset = cell_area.y + 1;
+        int x_offset = cell_area.x;
+        int y_offset = cell_area.y;
         int wi, he = 0;
         
         // IMAGE
@@ -92,7 +92,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         cr.set_line_width(0);
         cr.rectangle(x_offset, 
                      rect_offset,
-                     cell_area.width - 2,
+                     cell_area.width, // - 2,
                      rect_height - 1);
         cr.fill();
         
