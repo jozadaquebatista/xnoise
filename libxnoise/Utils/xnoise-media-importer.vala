@@ -38,7 +38,7 @@ using Xnoise.TagAccess;
 
 public class Xnoise.MediaImporter : GLib.Object {
     
-    private static int FILE_COUNT = 150;
+    private static const int FILE_COUNT = 500;
     
     public delegate void DatabaseResetCallback();
     
