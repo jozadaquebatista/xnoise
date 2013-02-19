@@ -160,6 +160,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     internal void populate_model() {
         if(populating_model)
             return;
+        if(global.media_import_in_progress)
+            return;
         //print("populate model\n");
         populating_model = true;
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_job);
@@ -172,6 +174,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     private const int FIRST_RUN_CNT = 30;
     private bool populate_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
+        if(global.media_import_in_progress)
+            return false;
         //t.reset();
         //t.start();
         AlbumData[] ad_list = db_reader.get_all_albums_with_search(

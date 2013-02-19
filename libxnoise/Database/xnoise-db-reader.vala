@@ -1466,7 +1466,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     break;
                 case "YEAR":
                     sql = sql + 
-                        " GROUP BY al.id ORDER BY al.year %s".printf(dir);
+                        " GROUP BY al.id ORDER BY al.year %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
                 case "GENRE":
                     sql = sql + 
