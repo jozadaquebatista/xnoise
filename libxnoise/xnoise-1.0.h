@@ -1530,8 +1530,6 @@ struct _XnoiseMainWindow {
 	XnoiseSerialButton* album_view_sorting;
 	XnoiseSerialButton* album_view_direction;
 	XnoiseAlbumArtView* album_art_view;
-	GtkToggleButton* album_view_toggle;
-	gboolean quit_if_closed;
 	GtkScrolledWindow* musicBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	GtkActionGroup* action_group;
@@ -2430,6 +2428,8 @@ void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_window_in_foreground (XnoiseMainWindow* self);
+gboolean xnoise_main_window_get_album_art_view_visible (XnoiseMainWindow* self);
+void xnoise_main_window_set_album_art_view_visible (XnoiseMainWindow* self, gboolean value);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;

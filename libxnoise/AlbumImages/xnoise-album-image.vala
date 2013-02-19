@@ -45,17 +45,40 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     private static uint timeout = 0;
     private string default_size = "medium";
     private string? current_path = null;
-    
+    private bool _selected = false;
     private Gdk.Pixbuf? pixbuf = null;
-
+    
+    public signal void sign_selected();
+    
+    internal bool selected { 
+        get {
+            return _selected;
+        } 
+        set {
+            if(_selected != value) {
+                _selected = value;
+                Idle.add(() => {
+                    queue_draw();
+                    this.sign_selected();
+                    return false;
+                });
+            }
+        }
+    }
+    
+    
     public AlbumImage() {
         //this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
         this.set_size_request(SIZE, SIZE);
         this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
-                        Gdk.EventMask.BUTTON_RELEASE_MASK
-        );// |
-//                        Gdk.EventMask.ENTER_NOTIFY_MASK |
-//                        Gdk.EventMask.LEAVE_NOTIFY_MASK
+                        Gdk.EventMask.BUTTON_RELEASE_MASK |
+                        Gdk.EventMask.ENTER_NOTIFY_MASK |
+                        Gdk.EventMask.LEAVE_NOTIFY_MASK
+        );
+        this.set_tooltip_text(_("Toggle visibility of album art view") +
+                              "\n" +
+                              _("<Ctrl+B>")
+        );
         this.load_default_image();
         loader = new AlbumImageLoader();
         global.sign_album_image_fetched.connect(on_album_image_fetched);
@@ -66,8 +89,32 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         });
         gst_player.sign_found_embedded_image.connect(load_embedded);
         this.set_visible_window(false);
+        this.button_press_event.connect( (s,e) => {
+            if(e.button == 1) {
+                this.selected = !this.selected;
+                return true;
+            }
+            if(e.button == 3) {
+                print("open context menu\n");
+                return true;
+            }
+            return false;
+        });
+        this.enter_notify_event.connect( (s, e) => {
+            StateFlags flags = this.get_state_flags();
+            flags |= StateFlags.PRELIGHT;
+            this.set_state_flags(flags|StateFlags.PRELIGHT, false);
+            queue_draw();
+            return false;
+        });
+        this.leave_notify_event.connect( (s, e) => {
+            this.unset_state_flags(StateFlags.PRELIGHT);
+            queue_draw();
+            return false;
+        });
     }
-
+    
+    
     private void load_embedded(Object sender, string uri, string _artist, string _album) {
         if(uri != global.current_uri)
             return;
@@ -134,19 +181,16 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     }
     
     private const double radius = SIZE / 2.4;
+    private Gdk.Pixbuf? prelit_image = null;
+    private Gdk.Pixbuf? seleted_image = null;
+    private Gdk.Pixbuf? prelitseleted_image = null;
+    private const int WSYM = 28;
+    private const int ipos = (int)((SIZE / 2.0) - (WSYM / 2.0));
     
     public override bool draw(Cairo.Context cr) {
         Allocation allocation;
         assert(icon_repo.album_art_default_icon != null);
         this.get_allocation(out allocation);
-        cr.set_source_rgb(0.8, 0.8, 0.8);
-        cr.set_line_width(0);
-        cr.arc(SIZE / 2.0, 
-               SIZE / 2.0,
-               radius + 2, 
-               0.0, 
-               2.0 * Math.PI);
-        cr.fill();
         cr.set_source_rgb(0.0, 0.0, 0.0);
         cr.set_line_width(0);
         cr.arc(SIZE / 2.0, 
@@ -161,14 +205,53 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
                0.0, 
                2.0 * Math.PI);
         cr.clip ();
-        cr.new_path(); /* path not consumed by clip()*/
+        cr.new_path();
         if(this.pixbuf == null) {
             Gdk.cairo_set_source_pixbuf(cr, icon_repo.album_art_default_icon, 0, 0);
         }
         else {
             Gdk.cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
         }
-        
+        StateFlags flags = this.get_state_flags();
+        if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && !_selected) {
+            cr.paint();
+            if(prelit_image == null)
+                prelit_image = IconTheme.get_default().load_icon("xn-grid-prelit",
+                                                                 WSYM, 
+                                                                 IconLookupFlags.USE_BUILTIN);
+            if(prelit_image != null) {
+                Gdk.cairo_set_source_pixbuf(cr, prelit_image, ipos, ipos);
+            }
+            else {
+                print("grid pix1 is null!\n");
+            }
+        }
+        else if((flags & StateFlags.PRELIGHT) != StateFlags.PRELIGHT && _selected) {
+            cr.paint();
+            if(seleted_image == null)
+                seleted_image = IconTheme.get_default().load_icon("xn-grid", 
+                                                                   WSYM, 
+                                                                   IconLookupFlags.USE_BUILTIN);
+            if(seleted_image != null) {
+                Gdk.cairo_set_source_pixbuf(cr, seleted_image, ipos, ipos);
+            }
+            else {
+                print("grid pix2 is null!\n");
+            }
+        }
+        else if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && _selected) {
+            cr.paint();
+            if(prelitseleted_image == null)
+                prelitseleted_image = IconTheme.get_default().load_icon("xn-grid-prelitselected", 
+                                                                   WSYM, 
+                                                                   IconLookupFlags.USE_BUILTIN);
+            if(prelitseleted_image != null) {
+                Gdk.cairo_set_source_pixbuf(cr, prelitseleted_image, ipos, ipos);
+            }
+            else {
+                print("grid pix3 is null!\n");
+            }
+        }
         cr.paint();
         return false;
 //        if(this.pixbuf == null) {

@@ -202,7 +202,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             Params.set_bool_value("quit_if_closed", true);
 //            if(tray_icon != null)
 //                tray_icon.visible = false;
-            main_window.quit_if_closed = true;
+//            main_window.quit_if_closed = true;
         }
         else {
             Params.set_bool_value("quit_if_closed", false);
@@ -210,7 +210,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
 //                tray_icon = new TrayIcon();
 //            }
 //            tray_icon.visible = !Application.hidden_window;
-            main_window.quit_if_closed = false;
+//            main_window.quit_if_closed = false;
         }
     }
     

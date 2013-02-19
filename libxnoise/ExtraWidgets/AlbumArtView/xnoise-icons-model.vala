@@ -75,7 +75,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         global.sign_searchtext_changed.connect( (s,t) => {
             if(!cache_ready)
                 return;
-            if(main_window.album_view_toggle.get_active()) {
+            if(main_window.album_art_view_visible) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Timeout.add(700, () => { // give the user time for typing

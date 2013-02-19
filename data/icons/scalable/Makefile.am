@@ -19,6 +19,9 @@ status_DATA = \
     xn-media-skip-backward-symbolic.svg \
     xn-media-skip-forward-symbolic.svg \
     xn-emblem-system-symbolic.svg \
+    xn-grid.svg \
+    xn-grid-prelit.svg \
+    xn-grid-prelitselected.svg \
     xn-go-first-symbolic.svg \
     xn-go-last-symbolic.svg \
     xn-list-remove-symbolic.svg \

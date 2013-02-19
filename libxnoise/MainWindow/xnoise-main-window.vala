@@ -51,6 +51,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Overlay paned_overlay;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
+    private Gtk.Scrollbar tracklist_scrollbar;
 //    private ToolItem eqButtonTI;
     private Button repeatButton;
     private TrackListViewWidget tracklistview_widget;
@@ -83,8 +84,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal SerialButton album_view_sorting;
     internal SerialButton album_view_direction;
     internal AlbumArtView album_art_view;
-    internal ToggleButton album_view_toggle;
-    internal bool quit_if_closed;
+//    internal ToggleButton album_view_toggle;
+//    internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
     internal Gtk.ActionGroup action_group;
@@ -566,7 +567,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     internal void ask_for_initial_media_import() {
         Idle.add(() => {
-            album_view_toggle.set_active(false);
+            album_art_view_visible = false;
+//            album_view_toggle.set_active(false);
             media_browser_visible = false;
             return false;
         });
@@ -841,7 +843,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             case Gdk.Key.f: {
                 if((e.state & ModifierType.CONTROL_MASK) == ModifierType.CONTROL_MASK) {
-                    if(album_view_toggle.get_active()) {
+                    if(album_art_view_visible) {
                         album_search_entry.grab_focus();
                         return true;
                     }
@@ -920,7 +922,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_video_menu_clicked() {
         Idle.add( () => {
-            album_view_toggle.set_active(false);
+            album_art_view_visible = false;
+//            album_view_toggle.set_active(false);
             mainview_page_buffer = VIDEOVIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -933,7 +936,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_tracklist_menu_clicked() {
         Idle.add( () => {
-            album_view_toggle.set_active(false);
+            album_art_view_visible = false;
+//            album_view_toggle.set_active(false);
             mainview_page_buffer = TRACKLIST_VIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -946,7 +950,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_lyrics_menu_clicked() {
         Idle.add( () => {
-            album_view_toggle.set_active(false);
+            album_art_view_visible = false;
+//            album_view_toggle.set_active(false);
             mainview_page_buffer = LYRICS_VIEW_NAME;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
@@ -1201,7 +1206,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     private void on_reload_collection_button_clicked() {
-        album_view_toggle.set_active(false);
+        album_art_view_visible = false;
+//        album_view_toggle.set_active(false);
         media_importer.reimport_media_groups();
     }
 
@@ -1242,7 +1248,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             active_notifier = 0;
         }
         
-        if(!quit_if_closed) {
+        if(!Params.get_bool_value("quit_if_closed")) {
             this.get_position(out _posX, out _posY);
             this.hide();
             Timeout.add(500, () => {
@@ -1267,7 +1273,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     private void on_menu_add() {
-        album_view_toggle.set_active(false);
+        album_art_view_visible = false;
+//        album_view_toggle.set_active(false);
         content_notebook.set_current_page(content_notebook.page_num(settings_widget));
         settings_widget.select_media_tab();
     }
@@ -1421,7 +1428,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void on_settings_edit() {
-        album_view_toggle.set_active(false);
+//        album_view_toggle.set_active(false);
+        album_art_view_visible = false;
         settings_widget.select_general_tab();
         content_notebook.set_current_page(content_notebook.page_num(settings_widget));
 //        mainview_box.select_main_view(settings_widget.get_view_name());
@@ -1829,20 +1837,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             mainview_box.notify["current-name"].connect( () => {
                 if(mainview_box.current_name == TRACKLIST_VIEW_NAME) {
-                    removeSelectedButton.set_no_show_all(false);
-                    removeSelectedButton.show_all();
-                    posjumper.set_no_show_all(false);
-                    posjumper.show_all();
-                    removeAllButton.set_no_show_all(false);
-                    removeAllButton.show_all();
+                    tbx.set_no_show_all(false);
+                    tbx.show_all();
+//                    removeSelectedButton.set_no_show_all(false);
+//                    removeSelectedButton.show_all();
+//                    posjumper.set_no_show_all(false);
+//                    posjumper.show_all();
+//                    removeAllButton.set_no_show_all(false);
+//                    removeAllButton.show_all();
                 }
                 else {
-                    removeSelectedButton.set_no_show_all(true);
-                    removeSelectedButton.hide();
-                    posjumper.set_no_show_all(true);
-                    posjumper.hide();
-                    removeAllButton.set_no_show_all(true);
-                    removeAllButton.hide();
+                    tbx.set_no_show_all(true);
+                    tbx.hide();
+//                    removeSelectedButton.set_no_show_all(true);
+//                    removeSelectedButton.hide();
+//                    posjumper.set_no_show_all(true);
+//                    posjumper.hide();
+//                    removeAllButton.set_no_show_all(true);
+//                    removeAllButton.hide();
                 }
             });
             
@@ -1852,6 +1864,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tracklistview_widget = new TrackListViewWidget(this);
             trackListScrollWin = tracklistview_widget.scrolled_window;
             trackListScrollWin.get_style_context().add_class(STYLE_CLASS_VIEW);
+            tracklist_scrollbar = (Gtk.Scrollbar)trackListScrollWin.get_vscrollbar();
             mainview_box.add_main_view(tracklistview_widget);
             
             videoview_widget = new VideoViewWidget(this);
@@ -1909,7 +1922,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             ToolItem albumimageTI = new ToolItem();
             albumimageTI.add(albumimage);
             aimage_timeout = 0;
-            albumimage.button_press_event.connect(ai_button_clicked);
+            albumimage.sign_selected.connect(ai_button_clicked);
+//            albumimage.button_press_event.connect(ai_button_clicked);
 //            albumimage.enter_notify_event.connect(ai_ebox_enter);
 //            albumimage.leave_notify_event.connect( (s, e) => {
 //                if(not_show_art_on_hover_image)
@@ -2000,41 +2014,41 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            });
 //            eqButtonTI.add(box);
             
-            var albumart_toggleb = new ToolItem();
+//            var albumart_toggleb = new ToolItem();
             
-            box = new Gtk.Box(Orientation.VERTICAL, 0);
-            album_view_toggle = new ToggleButton();
-            album_view_toggle.set_tooltip_text(_("Toggle visibility of album art view") +
-                                               "\n" +
-                                               _("<Ctrl+B>")
-            );
-            var aart_im = IconRepo.get_themed_image_icon("xn-grid-symbolic", IconSize.LARGE_TOOLBAR);
-            album_view_toggle.add(aart_im);
-            album_view_toggle.can_focus = false;
-            album_view_toggle.set_relief(ReliefStyle.NONE);
-            eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            box.pack_start(album_view_toggle, false, false, 0);
-            eb = new Gtk.EventBox();
-            eb.visible_window = false;
-            box.pack_start(eb, true, true, 0);
-            albumart_toggleb.add(box);
+//            box = new Gtk.Box(Orientation.VERTICAL, 0);
+//            album_view_toggle = new ToggleButton();
+//            album_view_toggle.set_tooltip_text(_("Toggle visibility of album art view") +
+//                                               "\n" +
+//                                               _("<Ctrl+B>")
+//            );
+//            var aart_im = IconRepo.get_themed_image_icon("xn-grid-symbolic", IconSize.LARGE_TOOLBAR);
+//            album_view_toggle.add(aart_im);
+//            album_view_toggle.can_focus = false;
+//            album_view_toggle.set_relief(ReliefStyle.NONE);
+//            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            box.pack_start(album_view_toggle, false, false, 0);
+//            eb = new Gtk.EventBox();
+//            eb.visible_window = false;
+//            box.pack_start(eb, true, true, 0);
+//            albumart_toggleb.add(box);
             
-            album_view_toggle.notify["active"].connect( () => {
-                if(album_view_toggle.active) {
-                    bottom_notebook.set_current_page(1);
-                    album_art_view.grab_focus();
-                    update_toggle_action_state("ShowAlbumArtViewAction", true);
-                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
-                }
-                else {
-                    bottom_notebook.set_current_page(0);
-                    tl.grab_focus();
-                    update_toggle_action_state("ShowAlbumArtViewAction", false);
-                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
-                }
-            });
+//            album_view_toggle.notify["active"].connect( () => {
+//                if(album_view_toggle.active) {
+//                    bottom_notebook.set_current_page(1);
+//                    album_art_view.grab_focus();
+//                    update_toggle_action_state("ShowAlbumArtViewAction", true);
+//                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
+//                }
+//                else {
+//                    bottom_notebook.set_current_page(0);
+//                    tl.grab_focus();
+//                    update_toggle_action_state("ShowAlbumArtViewAction", false);
+//                    set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
+//                }
+//            });
 //            //VOLUME SLIDE BUTTON
 //            volume_slider = new VolumeSliderButton(gst_player);
 
@@ -2148,7 +2162,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             album_view_sorting.insert("ALBUM" ,    _("Album") );
             album_view_sorting.insert("GENRE",     _("Genre") );
             album_view_sorting.insert("YEAR",      _("Year")  );
-            album_view_sorting.insert("PLAYCOUNT", _("Count") );
+//            album_view_sorting.insert("PLAYCOUNT", _("Count") ); //TODO Maybe later!
             aa_contr_bx.pack_start(new Label(""), true, true, 0);
             aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
             album_view_direction = new SerialButton(SerialButton.Presentation.IMAGE);
@@ -2162,6 +2176,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            sg01.add_widget(album_view_direction);
             var aabx = new Box(Orientation.VERTICAL, 0);
             aabx.pack_start(aa_contr_bx, false, false, 2);
+//            Gdk.RGBA aa_col = Gdk.RGBA();
+//            aa_col.red   = 0.0;
+//            aa_col.green = 0.0;
+//            aa_col.blue  = 0.0;
+//            aa_col.alpha = 1.0;
+//            aabx.override_background_color(StateFlags.NORMAL, aa_col);
+//            aa_contr_bx.override_background_color(StateFlags.NORMAL, aa_col);
             var aasw = new ScrolledWindow(null, null);
             aasw.set_shadow_type(ShadowType.IN);
             aasw.add(album_art_view);
@@ -2226,7 +2247,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         Gtk.Requisition min, nat;
         allocation = Gdk.Rectangle();
         widget.get_preferred_size(out min, out nat);
-        allocation.x      = sender.get_allocated_width() - nat.width - 5;
+        int slider_width = 0;
+        tracklist_scrollbar.style_get("slider-width", out slider_width);
+        allocation.x      = sender.get_allocated_width() - nat.width - 2 - slider_width;
         allocation.y      = int.max(0, sender.get_allocated_height()/2 - 60);
         allocation.width  = nat.width;
         allocation.height = nat.height;
@@ -2240,12 +2263,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void toggle_bottom_view() {
         if(in_update_toggle_action)
             return;
-        album_view_toggle.set_active(!album_view_toggle.get_active());
-        update_toggle_action_state("ShowAlbumArtViewAction", album_view_toggle.get_active());
+        album_art_view_visible = !album_art_view_visible;
+//        album_view_toggle.set_active(!album_view_toggle.get_active());
+//        update_toggle_action_state("ShowAlbumArtViewAction", album_view_toggle.get_active());
     }
     
     internal void set_bottom_view(int tab) {
-        album_view_toggle.set_active(tab == 0 ? false : true);
+        album_art_view_visible = (tab == 0 ? false : true);
+//        album_view_toggle.set_active(tab == 0 ? false : true);
     }
     
     internal void show_status_info(Xnoise.InfoBar? bar) {
@@ -2261,29 +2286,54 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         bar.show_all();
     }
     
-    private bool aa_vis = false;
-    private bool ai_button_clicked(Gtk.Widget sender, Gdk.EventButton e) {
-        if(!aa_vis) {
-            aa_vis = true;
-            bottom_notebook.set_current_page(1);
-            album_art_view.grab_focus();
-            update_toggle_action_state("ShowAlbumArtViewAction", true);
-            set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
+//    private bool aa_vis = false;
+    private bool _album_art_view_visible;
+    
+    public bool album_art_view_visible {
+        get {
+            return _album_art_view_visible;
         }
-        else {
-            aa_vis = false;
-            bottom_notebook.set_current_page(0);
-            tl.grab_focus();
-            update_toggle_action_state("ShowAlbumArtViewAction", false);
-            set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
+        set {
+            _album_art_view_visible = value;
+            albumimage.selected = value;
+            if(value) {
+                bottom_notebook.set_current_page(1);
+                album_art_view.grab_focus();
+                update_toggle_action_state("ShowAlbumArtViewAction", true);
+                set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
+            }
+            else {
+                bottom_notebook.set_current_page(0);
+                tl.grab_focus();
+                update_toggle_action_state("ShowAlbumArtViewAction", false);
+                set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
+            }
         }
+    }
+    
+    private void ai_button_clicked() {
+        album_art_view_visible = albumimage.selected;
+//        if(!aa_vis) {
+//            aa_vis = true;
+//            bottom_notebook.set_current_page(1);
+//            album_art_view.grab_focus();
+//            update_toggle_action_state("ShowAlbumArtViewAction", true);
+//            set_sensitive_toggle_action_state("ShowMediaBrowserAction", false);
+//        }
+//        else {
+//            aa_vis = false;
+//            bottom_notebook.set_current_page(0);
+//            tl.grab_focus();
+//            update_toggle_action_state("ShowAlbumArtViewAction", false);
+//            set_sensitive_toggle_action_state("ShowMediaBrowserAction", true);
+//        }
 //        if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) {
 //            return false; //exit here, if it's no double-click
 //        }
 //        else {
 //            toggle_fullscreen();
 //        }
-        return true;
+//        return true;
     }
     
     private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {

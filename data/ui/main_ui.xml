@@ -53,11 +53,11 @@
 			<menuitem action="OpenAction"/>
 			<menuitem action="OpenLocationAction"/>
 			<separator />
+			<menuitem action="EqAction"/>
 			<menuitem action="AddRemoveAction"/>
 			<menuitem action="SettingsAction"/>
-			<menuitem action="EqAction"/>
 			<separator />
-			<menuitem action="ClearTrackListAction"/>
+			<menuitem action="ShowAlbumArtViewAction"/>
 			<separator />
 			<menuitem action="AboutAction"/>
 			<menuitem action="QuitAction"/>
