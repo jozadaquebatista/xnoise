@@ -1887,6 +1887,7 @@ struct _XnoiseAlbumData {
 	gchar* artist;
 	gchar* album;
 	gchar* comment;
+	gchar* genre;
 	guint year;
 	guint trackcount;
 	gboolean is_compilation;

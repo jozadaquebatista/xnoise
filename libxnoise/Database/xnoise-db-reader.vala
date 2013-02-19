@@ -1401,16 +1401,16 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_ALL_ALBUMS =
-        "SELECT DISTINCT al.name, al.id, ar.name, al.is_compilation FROM artists ar, albums al, items t, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND t.mediatype = ?";
+        "SELECT al.name, al.id, ar.name, al.is_compilation, g.name, al.year FROM artists ar, albums al, items t, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND t.mediatype = ?";
 
     private static const string STMT_GET_ALL_ALBUMS_WITH_SEARCH =
-        "SELECT DISTINCT al.name, al.id, ar.name, al.is_compilation FROM artists ar, albums al, items t, genres g, artists art WHERE ar.id = t.artist AND art.id = t.album_artist AND al.id = t.album AND t.genre = g.id AND (ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ?";
+        "SELECT al.name, al.id, ar.name, al.is_compilation, g.name, al.year FROM artists ar, albums al, items t, genres g, artists art WHERE ar.id = t.artist AND art.id = t.album_artist AND al.id = t.album AND t.genre = g.id AND (ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ?";
 
     private static const string STMT_GET_ALL_ALBUMS_MOST_PLAYED =
-        "SELECT al.name, al.id, ar.name, al.is_compilation FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND t.mediatype = ? ";//" ORDER BY st.playcount DESC LIMIT 100";
+        "SELECT al.name, al.id, ar.name, al.is_compilation, g.name, al.year FROM artists ar, items t, albums al, uris u, statistics st, genres g WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND t.mediatype = ? ";//" ORDER BY st.playcount DESC LIMIT 100";
 
     private static const string STMT_GET_ALL_ALBUMS_MOST_PLAYED_WITH_SEARCH =
-        "SELECT al.name, al.id, ar.name, al.is_compilation FROM artists ar, items t, albums al, uris u, statistics st, genres g, artists art WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND art.id = t.album_artist AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? ";//" ORDER BY st.playcount DESC LIMIT 100";
+        "SELECT al.name, al.id, ar.name, al.is_compilation, g.name, al.year FROM artists ar, items t, albums al, uris u, statistics st, genres g, artists art WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND art.id = t.album_artist AND t.uri = u.id AND st.uri = u.name AND t.genre = g.id AND (ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? ";//" ORDER BY st.playcount DESC LIMIT 100";
 
     public AlbumData[] get_all_albums_with_search(string searchtext, 
                                                   string? sorting = "ARTIST",
@@ -1430,20 +1430,20 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     break;
                 case "YEAR":
                     sql = sql + 
-                        " ORDER BY al.year %s".printf(dir);
+                        " GROUP BY al.id ORDER BY al.year %s".printf(dir);
                     break;
                 case "GENRE":
                     sql = sql + 
-                        " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                        " GROUP BY al.id ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
                 case "ALBUM":
                     sql = sql + 
-                        " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
+                        " GROUP BY al.id ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
                     break;
                 case "ARTIST":
                 default:
                     sql = sql +
-                        " ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                        " GROUP BY al.id ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
             }
             this.db.prepare_v2(sql, -1, out stmt);
@@ -1466,20 +1466,20 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     break;
                 case "YEAR":
                     sql = sql + 
-                        " ORDER BY al.year %s".printf(dir);
+                        " GROUP BY al.id ORDER BY al.year %s".printf(dir);
                     break;
                 case "GENRE":
                     sql = sql + 
-                        " ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                        " GROUP BY al.id ORDER BY g.caseless_name COLLATE CUSTOM01 %s, ar.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
                 case "ALBUM":
                     sql = sql + 
-                        " ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
+                        " GROUP BY al.id ORDER BY al.caseless_name COLLATE CUSTOM01 %s".printf(dir);
                     break;
                 case "ARTIST":
                 default:
                     sql = sql +
-                        " ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
+                        " GROUP BY al.id ORDER BY ar.caseless_name COLLATE CUSTOM01 %s, al.caseless_name COLLATE CUSTOM01 %s".printf(dir, dir);
                     break;
             }
             this.db.prepare_v2(sql, -1, out stmt);
@@ -1496,6 +1496,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             ad.artist = stmt.column_text(2);
             ad.album  = stmt.column_text(0);
             ad.is_compilation = (stmt.column_int(3) != 0 ? true : false);
+            ad.genre = stmt.column_text(4);
+            ad.year = (uint)stmt.column_int(5);
             list += ad;
         }
         return (owned)list;

@@ -53,8 +53,9 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
         var renderer_thumb = new CellRendererThumb(font_description);
         
         this.pack_start(renderer_thumb, false);
-        this.attribute_connect(renderer_thumb, "pixbuf", IconsModel.Column.ICON);
-        this.attribute_connect(renderer_thumb, "markup", IconsModel.Column.TEXT);
+        this.attribute_connect(renderer_thumb, "pixbuf",     IconsModel.Column.ICON);
+        this.attribute_connect(renderer_thumb, "markup",     IconsModel.Column.TEXT);
+        this.attribute_connect(renderer_thumb, "extra-info", IconsModel.Column.EXTRA_INFO);
     }
     
     public override void get_preferred_width(Gtk.CellAreaContext context,

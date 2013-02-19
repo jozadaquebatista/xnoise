@@ -602,6 +602,7 @@ namespace Xnoise {
 		public string? comment;
 		public int32 dat1;
 		public int32 dat2;
+		public string? genre;
 		public bool is_compilation;
 		public Xnoise.Item? item;
 		public uint trackcount;

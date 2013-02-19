@@ -37,8 +37,8 @@ using Xnoise;
 
 private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
     private unowned Pango.FontDescription font_description;
-    public string markup { get; set; }
-    
+    public string? markup { get; set; }
+    public string? extra_info { get; set; }
     public CellRendererThumb(Pango.FontDescription font_description) {
         this.font_description = font_description;
         this.set_fixed_size(IconsModel.ICONSIZE, IconsModel.ICONSIZE);
@@ -51,8 +51,8 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
                                 Gdk.Rectangle cell_area,
                                 CellRendererState flags) {
         //print("render for %s\n", markup);
-        int x_offset = background_area.x + 1;
-        int y_offset = background_area.y + 1;
+        int x_offset = cell_area.x + 1;
+        int y_offset = cell_area.y + 1;
         int wi, he = 0;
         
         // IMAGE
@@ -60,7 +60,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         cr.paint();
         
         //PANGO LAYOUT
-        int layout_width  = background_area.width - 2;
+        int layout_width  = cell_area.width - 2;
         var pango_layout = Pango.cairo_create_layout(cr);
         pango_layout.set_markup(markup , -1);
         pango_layout.set_alignment(Pango.Alignment.CENTER);
@@ -92,7 +92,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         cr.set_line_width(0);
         cr.rectangle(x_offset, 
                      rect_offset,
-                     background_area.width - 2,
+                     cell_area.width - 2,
                      rect_height - 1);
         cr.fill();
         
@@ -104,5 +104,32 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
                     + (((IconsModel.ICONSIZE/3.0) -  he) / 2.0)
         );
         Pango.cairo_show_layout(cr, pango_layout);
+        
+        if(extra_info != null) {
+            //PANGO LAYOUT
+            int info_width  = (int)(cell_area.width * 2.0 / 3.0);
+            var info_layout = Pango.cairo_create_layout(cr);
+            info_layout.set_text(extra_info, -1);
+            info_layout.set_alignment(Pango.Alignment.LEFT);
+            info_layout.set_font_description(font_description);
+            info_layout.set_width( (int)(info_width  * Pango.SCALE));
+            info_layout.set_ellipsize(Pango.EllipsizeMode.END);
+            info_layout.get_pixel_size(out wi, out he);
+            info_layout.set_height(-1); // one line
+            
+            //RECTANGLE
+            cr.set_source_rgba(0.0, 0.0, 0.0, alpha);
+            cr.set_line_width(0);
+            cr.rectangle(cell_area.x + 1, 
+                         cell_area.y + 1,
+                         wi + 2,
+                         he + 2);
+            cr.fill();
+            
+            // DRAW FONT
+            cr.set_source_rgba(1.0, 1.0, 1.0, 1.0);
+            cr.move_to(cell_area.x + 2, cell_area.y + 2);
+            Pango.cairo_show_layout(cr, info_layout);
+        }
     }
 }

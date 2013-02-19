@@ -47,6 +47,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         STATE,
         ARTIST,
         ALBUM,
+        EXTRA_INFO,
         ITEM,
         IMAGE_PATH
     }
@@ -57,6 +58,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         typeof(IconState),   // STATE
         typeof(string),      // ARTIST
         typeof(string),      // ALBUM
+        typeof(string),      // EXTRA_INFO
         typeof(Xnoise.Item?),// ITEM
         typeof(string)       //IMAGE_PATH
     };
@@ -203,6 +205,20 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 Item? it  = ad_list[i].item;
                 TreeIter iter;
                 this.append(out iter);
+                string? extra_info = null;
+                switch(main_window.album_view_sorting.get_active_name()) {
+                    case "YEAR":
+                        extra_info = ad_list[i].year != 0 ? ad_list[i].year.to_string() : null;
+                        break;
+                    case "GENRE":
+                        if(ad_list[i].genre != null &&
+                           ad_list[i].genre != "")  {
+                            extra_info = ad_list[i].genre;
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 this.set(iter,
                          Column.ICON, art,
                          Column.TEXT, albumname,
@@ -210,6 +226,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                          Column.ARTIST, ar,
                          Column.ALBUM,  al,
                          Column.ITEM,  it,
+                         Column.EXTRA_INFO, extra_info,
                          Column.IMAGE_PATH, (f != null ? f.get_path() : null)
                 );
             }
@@ -232,6 +249,20 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                         string ar = ad_list[i].artist;
                         string al = ad_list[i].album;
                         Item? it  = ad_list[i].item;
+                        string? extra_info = null;
+                        switch(main_window.album_view_sorting.get_active_name()) {
+                            case "YEAR":
+                                extra_info = ad_list[i].year != 0 ? ad_list[i].year.to_string() : null;
+                                break;
+                            case "GENRE":
+                                if(ad_list[i].genre != null &&
+                                   ad_list[i].genre != "")  {
+                                    extra_info = ad_list[i].genre;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         Idle.add(() => {
                             TreeIter iter;
                             this.append(out iter);
@@ -242,6 +273,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                                      Column.ARTIST, ar,
                                      Column.ALBUM,  al,
                                      Column.ITEM,  it,
+                                     Column.EXTRA_INFO, extra_info,
                                      Column.IMAGE_PATH, (f != null ? f.get_path() : null)
                             );
                             return false;

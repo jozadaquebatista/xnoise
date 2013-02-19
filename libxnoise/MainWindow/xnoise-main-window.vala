@@ -1698,13 +1698,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                                                                    IconSize.MENU, HIDE_BUTTON_SIZE
                 );
             
+            var bgb = new BackgroundBox(Orientation.HORIZONTAL, 0);
             hide_button.add(hide_button_image);
             hide_button.can_focus = false;
             hide_button.clicked.connect(this.toggle_media_browser_visibility);
             hide_button.set_relief(ReliefStyle.NONE);
-            paned_overlay.add_overlay(hide_button);
-            hide_button.halign = Align.START;
-            hide_button.valign = Align.END;
+            bgb.add(hide_button);
+            paned_overlay.add_overlay(bgb);
+            bgb.halign = Align.START;
+            bgb.valign = Align.END;
             tbx = new BackgroundBox(Orientation.VERTICAL, 0);
 //            tbx.pack_start(hide_button, false, false, 0);
             
@@ -2163,7 +2165,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             album_view_sorting.insert("GENRE",     _("Genre") );
             album_view_sorting.insert("YEAR",      _("Year")  );
 //            album_view_sorting.insert("PLAYCOUNT", _("Count") ); //TODO Maybe later!
-            aa_contr_bx.pack_start(new Label(""), true, true, 0);
+            var dummy = new Label("");
+            aa_contr_bx.pack_start(dummy, true, true, 0);
             aa_contr_bx.pack_start(album_view_sorting, false, false, 1);
             album_view_direction = new SerialButton(SerialButton.Presentation.IMAGE);
             album_view_direction.insert("ASC" , _("Ascending"), 
@@ -2176,13 +2179,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            sg01.add_widget(album_view_direction);
             var aabx = new Box(Orientation.VERTICAL, 0);
             aabx.pack_start(aa_contr_bx, false, false, 2);
-//            Gdk.RGBA aa_col = Gdk.RGBA();
-//            aa_col.red   = 0.0;
-//            aa_col.green = 0.0;
-//            aa_col.blue  = 0.0;
-//            aa_col.alpha = 1.0;
-//            aabx.override_background_color(StateFlags.NORMAL, aa_col);
-//            aa_contr_bx.override_background_color(StateFlags.NORMAL, aa_col);
             var aasw = new ScrolledWindow(null, null);
             aasw.set_shadow_type(ShadowType.IN);
             aasw.add(album_art_view);
