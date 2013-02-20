@@ -57,7 +57,7 @@ private class Xnoise.DockablePlaylistLastplayed : DockableMedia {
     }
 
     public override string get_icon_name() {
-        return "playlist-automatic-symbolic";
+        return "xn-playlist-symbolic";
     }
 
     public override void remove_main_view() {

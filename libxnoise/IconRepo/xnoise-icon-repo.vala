@@ -155,8 +155,8 @@ public class Xnoise.IconRepo : GLib.Object {
             else
                 network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
             
-            if(theme.has_icon("xnoise-grey"))
-                album_art_default_icon = theme.load_icon("xnoise-grey",
+            if(theme.has_icon("xn-circle-icon"))
+                album_art_default_icon = theme.load_icon("xn-circle-icon",
                                                         AlbumImage.SIZE,
                                                         IconLookupFlags.FORCE_SIZE);
             if(theme.has_icon("system-users")) 

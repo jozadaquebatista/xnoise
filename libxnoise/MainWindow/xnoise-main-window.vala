@@ -1717,6 +1717,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            tbx.pack_start(volume_slider, false, false, 0);
             
             repeatButton = new Gtk.Button();
+            repeatButton.set_tooltip_text(_("Set repeat mode"));
+            repeatButton.set_has_tooltip(true);
             repeatButton.can_focus = false;
             repeatButton.clicked.connect(this.on_repeat_button_clicked);
             repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.MENU);
@@ -1738,6 +1740,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             removeSelectedButton.add(remsel_button_image);
             removeSelectedButton.can_focus = false;
             removeSelectedButton.set_relief(ReliefStyle.NONE);
+            removeSelectedButton.set_tooltip_text(_("Remove selected tracks"));
+            removeSelectedButton.set_has_tooltip(true);
             tbx.pack_start(removeSelectedButton, false, false, 0);
             removeSelectedButton.clicked.connect( () => {
                 tl.remove_selected_rows();
@@ -1759,13 +1763,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             removeAllButton.add(remove_button_image);
             removeAllButton.can_focus      = false;
             removeAllButton.set_relief(ReliefStyle.NONE);
+            removeAllButton.set_tooltip_text(_("Clear the tracklist"));
+            removeAllButton.set_has_tooltip(true);
             tbx.pack_start(removeAllButton, false, false, 0);
             removeAllButton.clicked.connect( () => {
                 global.position_reference = null;
                 var store = (ListStore)tlm;
                 store.clear();
             });
-            removeAllButton.set_tooltip_text(_("Remove all"));
             var posjumper = new Gtk.Button();
             Gtk.Image posjumper_image;
             if(theme.has_icon("format-justify-fill-symbolic"))
@@ -1779,6 +1784,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             posjumper.add(posjumper_image);
             posjumper.can_focus      = false;
             posjumper.set_relief(ReliefStyle.NONE);
+            posjumper.set_tooltip_text(_("Jump to currently playing track"));
+            posjumper.set_has_tooltip(true);
             tbx.pack_start(posjumper, false, false, 0);
             posjumper.clicked.connect( () => {
                 if(global.position_reference == null || !global.position_reference.valid())
@@ -1800,7 +1807,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             content_overlay.get_child_position.connect(on_content_overlay_child_pos);
             tbx.halign = Align.END;
             tbx.valign = Align.CENTER;
-
 //            bottom_box.pack_start(new Label(""), true, true, 0);
             content_top_box.pack_start(main_view_sbutton, false, false, 0);
 //            content_overlay.add_overlay(main_view_sbutton);

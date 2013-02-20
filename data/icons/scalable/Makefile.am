@@ -5,27 +5,28 @@ icon_DATA = xnoise.svg
 
 statusdir = $(datadir)/icons/hicolor/scalable/status
 status_DATA = \
-    xn-no-repeat-symbolic.svg \
-    xn-repeat-all-symbolic.svg \
-    xn-repeat-single-symbolic.svg \
-    xn-shuffle-symbolic.svg \
-    xn-equalizer-symbolic.svg \
-    xn-grid-symbolic.svg \
     xn-albumart.svg \
-    xn-shadow.svg \
+    xn-circle-icon.svg \
+    xn-emblem-system-symbolic.svg \
+    xn-equalizer-symbolic.svg \
+    xn-format-justify-fill-symbolic.svg \
+    xn-go-first-symbolic.svg \
+    xn-go-last-symbolic.svg \
+    xn-grid.svg \
+    xn-grid-prelit.svg \
+    xn-grid-prelitselected.svg \
+    xn-grid-symbolic.svg \
+    xn-list-remove-symbolic.svg \
     xn-media-playback-pause-symbolic.svg \
     xn-media-playback-start-symbolic.svg \
     xn-media-playback-stop-symbolic.svg \
     xn-media-skip-backward-symbolic.svg \
     xn-media-skip-forward-symbolic.svg \
-    xn-emblem-system-symbolic.svg \
-    xn-grid.svg \
-    xn-grid-prelit.svg \
-    xn-grid-prelitselected.svg \
-    xn-go-first-symbolic.svg \
-    xn-go-last-symbolic.svg \
-    xn-list-remove-symbolic.svg \
-    xn-format-justify-fill-symbolic.svg \
+    xn-playlist-symbolic.svg \
+    xn-no-repeat-symbolic.svg \
+    xn-repeat-all-symbolic.svg \
+    xn-repeat-single-symbolic.svg \
+    xn-shuffle-symbolic.svg \
     $(NULL)
 
 paneldir = $(datadir)/icons/hicolor/scalable/apps
