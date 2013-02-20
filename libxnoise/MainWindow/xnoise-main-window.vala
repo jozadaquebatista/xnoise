@@ -1632,8 +1632,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             hpaned = new ThinPaned();
             media_browser_box = new Box(Orientation.VERTICAL, 0);
             media_browser_box.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
+            var content_top_box = new Gtk.Box(Orientation.VERTICAL, 0);
+            content_top_box.pack_start(content_notebook, true, true, 0);
             hpaned.pack1(media_browser_box, false, false);
-            hpaned.pack2(content_notebook, true, false);
+            hpaned.pack2(content_top_box, true, false);
 
             content_overlay = new Overlay();
             content_overlay.add(contentvbox);
@@ -1800,10 +1802,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tbx.valign = Align.CENTER;
 
 //            bottom_box.pack_start(new Label(""), true, true, 0);
-//            bottom_box.pack_start(main_view_sbutton, false, false, 0);
-            content_overlay.add_overlay(main_view_sbutton);
-            main_view_sbutton.halign = Align.END;
-            main_view_sbutton.valign = Align.END;
+            content_top_box.pack_start(main_view_sbutton, false, false, 0);
+//            content_overlay.add_overlay(main_view_sbutton);
+//            main_view_sbutton.halign = Align.END;
+//            main_view_sbutton.valign = Align.END;
 //            contentvbox.pack_start(bottom_box, false, false, 0);
             this.notify["media-browser-visible"].connect( (s, val) => {
                 if(this.media_browser_visible == true) {
