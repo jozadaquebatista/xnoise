@@ -1,0 +1,329 @@
+using TagInfo;
+using Xnoise;
+
+
+[DBus(name = "org.gtk.xnoise.ImageExtractor")]
+public class ImageExtractorDbus : GLib.Object {
+    private Queue<string> queue = new Queue<string>();
+    private unowned DBusConnection conn;
+    private unowned ImageExtractorService parent;
+    
+    public signal void found_image(string artist, string album, string image);
+    
+    private const string INTERFACE_NAME = "org.gtk.xnoise.ImageExtractor";
+    
+    public uint waiting_jobs {
+        get {
+            return queue.get_length();
+        }
+        set {
+        }
+    }
+
+    private string? _currently_processed_uri = "";
+    
+    public string? currently_processed_uri {
+        get {
+            return _currently_processed_uri;
+        }
+        set {
+        }
+    }
+    
+    public ImageExtractorDbus(DBusConnection conn, ImageExtractorService parent) {
+        this.conn = conn;
+        this.parent = parent;
+    }
+    
+    
+    public string ping() {
+        parent.refresh_quit_timeout(); // delay app quit
+        return "pong";
+    }
+    
+    private uint handle_uris_source = 0;
+    private void handle_uris() {
+        if(handle_uris_source != 0)
+            Source.remove(handle_uris_source);
+        handle_uris_source = Timeout.add_seconds(5, () => {
+            handle_uris_source = 0;
+            Idle.add(handle_each_uri);
+            return false;
+        });
+    }
+    
+    private bool handle_each_uri() {
+        parent.refresh_quit_timeout(); // delay app quit
+        
+        string? uri;
+        
+        while((uri = queue.pop_head()) != null) {
+            string u = uri;
+            Idle.add(() => {
+                parent.refresh_quit_timeout(); // delay app quit
+                File f = File.new_for_uri(u);
+                if(f == null || f.get_path() == null)
+                    return false;
+                handle_single_file(f);
+                return false;
+            });
+        }
+        return false;
+    }
+    
+    private void handle_single_file(File f) {
+        _currently_processed_uri = f.get_path();
+        Info? info = Info.factory_make(f.get_path());
+        if(info == null)
+            return;
+        if(!info.read())
+            return;
+        string artist = info.artist;
+        string album  = info.album;
+        if(artist == null || artist == "" ||
+           album == null || album == "")
+            return;
+        
+        File? pf = get_albumimage_for_artistalbum(artist, album, "extralarge");
+        if(pf.query_exists(null))
+            return;
+        uint8[] data;
+        ImageType image_type;
+        Gdk.Pixbuf? pixbuf = null;
+        
+//        if(info.has_image) {
+//            info.get_image(out data, out image_type);
+//            if(data != null && data.length > 0) {
+//                var pbloader = new Gdk.PixbufLoader();
+//                try {
+//                    pbloader.write(data);
+//                }
+//                catch(Error e) {
+//                    print("Error 1: %s\n", e.message);
+//                    try { pbloader.close(); } catch(Error e) { print("Error 2\n");}
+//                }
+//                try { 
+//                    pbloader.close(); 
+//                    pixbuf = pbloader.get_pixbuf();
+//                } 
+//                catch(Error e) { 
+//                    print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
+//                }
+//            }
+//            if(pixbuf != null)
+//                save_pixbuf_to_file(artist, album, pixbuf, image_type);
+//        }
+//        else {
+            try_find_image_in_folder(f, artist, album);
+//        }
+        _currently_processed_uri = "";
+    }
+    
+    private void save_pixbuf_to_file(string artist,
+                                     string album,
+                                     Gdk.Pixbuf pixbuf,
+                                     ImageType image_type) {
+        if(pixbuf != null) {
+            File? pf2 = null;
+            File? pf = get_albumimage_for_artistalbum(artist, album, "embedded");
+            if(pf == null) {
+                return;
+            }
+            if(!pf.query_exists(null)) {
+                try {
+                    File parentpath = pf.get_parent();
+                    if(!parentpath.query_exists(null))
+                        parentpath.make_directory_with_parents(null);
+                    string itype;
+                    switch(image_type) {
+                        case ImageType.PNG:
+                            itype = "jpeg";
+                            break;
+                        case ImageType.JPEG:
+                        default:
+                            itype = "jpeg";
+                            break;
+                    }
+                    pixbuf.save(pf.get_path(), itype);
+                    pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_extralarge"));
+                    if(!pf2.query_exists(null)) {
+                        pixbuf.save(pf2.get_path(), itype);
+                        found_image(artist, album, pf2.get_path());
+                    }
+                    pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_medium"));
+                    if(!pf2.query_exists(null)) {
+                        pixbuf.save(pf2.get_path(), itype);
+                    }
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return;
+                }
+            }
+        }
+    }
+    
+    private void try_find_image_in_folder(File f,
+                                          string artist,
+                                          string album) {
+        
+        File? pf = get_albumimage_for_artistalbum(artist, album, "extralarge");
+        var folder = f.get_parent();
+        FileEnumerator enumerator;
+        string attr = FileAttribute.STANDARD_NAME + "," +
+                      FileAttribute.STANDARD_TYPE + "," +
+                      FileAttribute.STANDARD_CONTENT_TYPE;
+        try {
+            enumerator = folder.enumerate_children(attr, FileQueryInfoFlags.NONE);
+        } 
+        catch(Error e) {
+            print("Error importing directory %s. %s\n", folder.get_path(), e.message);
+            return;
+        }
+        GLib.FileInfo info;
+        try {
+            while((info = enumerator.next_file()) != null) {
+                TrackData td = null;
+                string filename = info.get_name();
+                string filepath = Path.build_filename(folder.get_path(), filename);
+                File file = File.new_for_path(filepath);
+                FileType filetype = info.get_file_type();
+                if(filetype == FileType.DIRECTORY) {
+                    continue;
+                }
+                else {
+                    string uri_lc = filename.down();
+                    string mime = GLib.ContentType.get_mime_type(info.get_content_type());
+                    if((mime == "image/png" ||
+                        mime == "image/jpeg" ||
+                        mime == "image/jpg") &&
+                       (filename.down() == "folder.jpeg" ||
+                        filename.down() == "folder.png" ||
+                        filename.down().contains("cover") ||
+                        filename.down().contains("album"))) {
+                        
+                        File parentpath = pf.get_parent();
+                        if(!parentpath.query_exists(null))
+                            parentpath.make_directory_with_parents(null);
+                        try {
+                            file.copy(pf, FileCopyFlags.NONE, null, null);
+                            found_image(artist, album, pf.get_path());
+                        }
+                        catch(Error e) {
+                            print("%s\n", e.message);
+                        }
+                        File pf2 = File.new_for_path(pf.get_path().replace("_extralarge", "_medium"));
+                        if(!pf2.query_exists(null)) {
+                            try {
+                                file.copy(pf, FileCopyFlags.NONE, null, null);
+                            }
+                            catch(Error e) {
+                                print("%s\n", e.message);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+    }
+    
+    public void add_path(string path) {
+    
+        print("path: %s\n", path);
+        File f = File.new_for_path(path);
+        queue.push_tail(f.get_uri());
+        handle_uris();
+    }
+    
+    public void add_uris(string[] uris) {
+        parent.refresh_quit_timeout(); // delay app quit
+        foreach(string uri in uris) {
+            queue.push_tail(uri);
+        }
+        handle_uris();
+    }
+}
+
+public class ImageExtractorService : GLib.Object {
+    internal static MainLoop loop;
+    private uint owner_id;
+    private uint object_id_service;
+    private ImageExtractorDbus service = null;
+    private unowned DBusConnection conn;
+    private const int QUIT_TIMEOUT = 80;
+    
+    
+    public ImageExtractorService() {
+        refresh_quit_timeout();
+    }
+    
+    public void setup_dbus() {
+        owner_id = Bus.own_name(BusType.SESSION,
+                                "org.gtk.xnoise.ImageExtractor",
+                                 GLib.BusNameOwnerFlags.NONE,
+                                 on_bus_acquired,
+                                 on_name_acquired,
+                                 on_name_lost);
+        assert(owner_id != 0);
+        refresh_quit_timeout();
+    }
+    
+    ~ImageExtractorService() {
+        clean_up();
+    }
+    
+    
+    private void on_bus_acquired(DBusConnection connection, string name) {
+        //print("bus acquired : %s\n", name);
+        this.conn = connection;
+        try {
+            service = new ImageExtractorDbus(connection, this);
+            object_id_service = connection.register_object("/ImageExtractor", service);
+        }
+        catch(IOError e) {
+            print("%s\n", e.message);
+        }
+    }
+
+    private void on_name_acquired(DBusConnection connection, string name) {
+        //print("name acquired: %s\n", name);
+    }    
+    
+    private void on_name_lost(DBusConnection connection, string name) {
+//        loop.quit();
+        //print("name_lost: %s\n", name);
+    }
+    
+    private uint quit_timeout_source = 0;
+    
+    internal void refresh_quit_timeout() {
+        if(quit_timeout_source != 0)
+            Source.remove(quit_timeout_source);
+//        quit_timeout_source = Timeout.add_seconds(QUIT_TIMEOUT, () => {
+//            print("DONE\n"); // after 60 of inactivity
+//            loop.quit();
+//            return false;
+//        });
+    }
+    
+    private void clean_up() {
+        if(owner_id == 0)
+            return;
+        Bus.unown_name(owner_id);
+        owner_id = 0;
+    }
+    
+    
+    public static int main(string[] args) {
+        var ser = new ImageExtractorService();
+        ser.setup_dbus();
+        loop = new MainLoop(null, false);
+        loop.run();
+        return 0;
+    }
+}
+

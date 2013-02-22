@@ -197,6 +197,9 @@ public class Xnoise.MediaImporter : GLib.Object {
             tda += td;
             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
             db_job.track_dat = (owned)tda;
+            string[] uris = {};
+            uris += f.get_uri();
+            dbus_image_extractor.queue_uris(uris);
             uint msg_id = 0;
             db_job.set_arg("msg_id", msg_id);
             db_worker.push_job(db_job);
@@ -334,6 +337,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     }
 
     private TrackData[] tda = {}; 
+    private string[] uris_for_image_extraction  = {};
 
     // running in io thread
     private void end_import(Worker.Job job) {
@@ -548,6 +552,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                         td = tr.read_tag(filepath, false);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+                            uris_for_image_extraction += file.get_uri();
                             tda += td;
                             job.big_counter[1]++;
                             lock(current_import_track_count) {
@@ -576,6 +581,8 @@ public class Xnoise.MediaImporter : GLib.Object {
                             db_job.track_dat = (owned)tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
                             tda = {};
+                            dbus_image_extractor.queue_uris(uris_for_image_extraction);
+                            uris_for_image_extraction = {};
                             db_worker.push_job(db_job);
                         }
                     }
@@ -591,6 +598,8 @@ public class Xnoise.MediaImporter : GLib.Object {
                 var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                 db_job.track_dat = (owned)tda;
                 tda = {};
+                dbus_image_extractor.queue_uris(uris_for_image_extraction);
+                uris_for_image_extraction = {};
                 db_worker.push_job(db_job);
             }
             end_import(job);

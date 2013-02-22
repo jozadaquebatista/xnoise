@@ -713,7 +713,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 repeatimage = IconRepo.get_themed_image_icon("xn-no-repeat-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
-                repeatButton.set_tooltip_text(_("Playback mode: ") + _("No repeat, one after another"));
+                repeatimage.has_tooltip = true;
+                repeatimage.set_tooltip_text(_("Playback mode: ") + _("No repeat, one after another"));
                 break;
             }
             case PlayerRepeatMode.SINGLE : {
@@ -721,8 +722,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 repeatimage = IconRepo.get_themed_image_icon("xn-repeat-single-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
-                repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat single track"));
+                repeatimage.has_tooltip = true;
+                repeatimage.set_tooltip_text(_("Playback mode: ") + _("Repeat single track"));
                 break;
             }
             case PlayerRepeatMode.ALL : {
@@ -730,8 +731,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
-                repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Repeat all"));
+                repeatimage.has_tooltip = true;
+                repeatimage.set_tooltip_text(_("Playback mode: ") + _("Repeat all"));
                 break;
             }
             case PlayerRepeatMode.RANDOM : {
@@ -739,8 +740,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 repeatimage = IconRepo.get_themed_image_icon("xn-shuffle-symbolic", IconSize.MENU);
                 repeatimage.show();
                 repeatButton.add(repeatimage);
-                repeatButton.has_tooltip = true;
-                repeatButton.set_tooltip_text(_("Playback mode: ") + _("Random playlist track playing"));
+                repeatimage.has_tooltip = true;
+                repeatimage.set_tooltip_text(_("Playback mode: ") + _("Random playlist track playing"));
                 break;
             }
         }
@@ -1687,6 +1688,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             contentvbox.pack_start(mainview_box, true, true, 0);
             
             
+            EventBox ebxb;
             var hide_button = new Gtk.Button();
             
             // use standard icon theme or local fallback
@@ -1717,14 +1719,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //            tbx.pack_start(volume_slider, false, false, 0);
             
             repeatButton = new Gtk.Button();
-            repeatButton.set_tooltip_text(_("Set repeat mode"));
-            repeatButton.set_has_tooltip(true);
+
             repeatButton.can_focus = false;
             repeatButton.clicked.connect(this.on_repeat_button_clicked);
             repeatimage = IconRepo.get_themed_image_icon("xn-repeat-all-symbolic", IconSize.MENU);
+            repeatimage.set_has_tooltip(true);
             repeatButton.add(repeatimage);
             repeatButton.set_relief(ReliefStyle.NONE);
-            tbx.pack_start(repeatButton, false, false, 0);
+            ebxb = new EventBox();
+            ebxb.visible_window = false;
+            ebxb.set_tooltip_text(_("Repeat Mode"));
+            ebxb.set_has_tooltip(true);
+            ebxb.add(repeatButton);
+            tbx.pack_start(ebxb, false, false, 0);
             
             var removeSelectedButton = new Gtk.Button();
             Gtk.Image remsel_button_image;
@@ -1736,17 +1743,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 remsel_button_image = IconRepo.get_themed_image_icon("xn-list-remove-symbolic",
                                                                      IconSize.MENU
                 );
-            
             removeSelectedButton.add(remsel_button_image);
             removeSelectedButton.can_focus = false;
             removeSelectedButton.set_relief(ReliefStyle.NONE);
-            removeSelectedButton.set_tooltip_text(_("Remove selected tracks"));
-            removeSelectedButton.set_has_tooltip(true);
-            tbx.pack_start(removeSelectedButton, false, false, 0);
+            ebxb = new EventBox();
+            ebxb.visible_window = false;
+            ebxb.set_tooltip_text(_("Remove selected tracks"));
+            ebxb.set_has_tooltip(true);
+            ebxb.add(removeSelectedButton);
+            tbx.pack_start(ebxb, false, false, 0);
             removeSelectedButton.clicked.connect( () => {
                 tl.remove_selected_rows();
             });
-            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+//            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+//            remsel_button_image.set_events(remsel_button_image.events| Gdk.EventMask.ENTER_NOTIFY_MASK);
+//            remsel_button_image.enter_notify_event.connect( (s, e) => {
+//                print("enter repeat image\n");;
+//                return false;
+//            });
             
             //REMOVE TITLE OR ALL TITLES BUTTONS
             var removeAllButton = new Gtk.Button();
@@ -1763,9 +1777,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             removeAllButton.add(remove_button_image);
             removeAllButton.can_focus      = false;
             removeAllButton.set_relief(ReliefStyle.NONE);
-            removeAllButton.set_tooltip_text(_("Clear the tracklist"));
-            removeAllButton.set_has_tooltip(true);
-            tbx.pack_start(removeAllButton, false, false, 0);
+//            remove_button_image.set_tooltip_text(_("Clear the tracklist"));
+//            remove_button_image.set_has_tooltip(true);
+            ebxb = new EventBox();
+            ebxb.visible_window = false;
+            ebxb.set_tooltip_text(_("Clear the tracklist"));
+            ebxb.set_has_tooltip(true);
+            ebxb.add(removeAllButton);
+            tbx.pack_start(ebxb, false, false, 0);
             removeAllButton.clicked.connect( () => {
                 global.position_reference = null;
                 var store = (ListStore)tlm;
@@ -1784,9 +1803,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             posjumper.add(posjumper_image);
             posjumper.can_focus      = false;
             posjumper.set_relief(ReliefStyle.NONE);
-            posjumper.set_tooltip_text(_("Jump to currently playing track"));
-            posjumper.set_has_tooltip(true);
-            tbx.pack_start(posjumper, false, false, 0);
+            posjumper_image.set_tooltip_text(_("Jump to currently playing track"));
+            posjumper_image.set_has_tooltip(true);
+            ebxb = new EventBox();
+            ebxb.visible_window = false;
+            ebxb.set_tooltip_text(_("Jump to currently playing track"));
+            ebxb.set_has_tooltip(true);
+            ebxb.add(posjumper);
+            tbx.pack_start(ebxb, false, false, 0);
             posjumper.clicked.connect( () => {
                 if(global.position_reference == null || !global.position_reference.valid())
                     return;
@@ -1797,6 +1821,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 tl.set_focus_on_iter(ref iter);
             });
             posjumper.set_tooltip_text(_("Jump to current position"));
+            posjumper.set_has_tooltip(true);
 //            var bottom_box = new Box(Orientation.HORIZONTAL, 0);
 //            bottom_box.pack_start(tbx, false, false, 0);
             main_view_sbutton = new SerialButton();
@@ -1807,12 +1832,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             content_overlay.get_child_position.connect(on_content_overlay_child_pos);
             tbx.halign = Align.END;
             tbx.valign = Align.CENTER;
-//            bottom_box.pack_start(new Label(""), true, true, 0);
             content_top_box.pack_start(main_view_sbutton, false, false, 0);
-//            content_overlay.add_overlay(main_view_sbutton);
-//            main_view_sbutton.halign = Align.END;
-//            main_view_sbutton.valign = Align.END;
-//            contentvbox.pack_start(bottom_box, false, false, 0);
             this.notify["media-browser-visible"].connect( (s, val) => {
                 if(this.media_browser_visible == true) {
                     hide_button.remove(hide_button_image);

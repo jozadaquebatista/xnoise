@@ -47,6 +47,8 @@ namespace Xnoise {
     public static Worker device_worker = null;
     public static Worker plugin_worker = null;
     
+    private static DbusImageExtractor dbus_image_extractor = null;
+    
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
@@ -192,6 +194,8 @@ namespace Xnoise {
         main_window = new MainWindow();
 //        if(!Params.get_bool_value("not_use_systray") && !Application.hidden_window)
 //            tray_icon = new TrayIcon();
+        
+        dbus_image_extractor = new DbusImageExtractor();
     }
     
     // A data source is an implementor of DataSoure abstr.class

@@ -41,6 +41,7 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-writer.vala \
     DataSource/xnoise-data-source.vala \
     DBus/xnoise-dbus.vala \
+    DBus/xnoise-dbus-image-extraction.vala \
     DBus/xnoise-dbus-thumbnailer.vala \
     DBus/xnoise-desktop-notifications.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \

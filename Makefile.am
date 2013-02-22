@@ -10,6 +10,7 @@ SUBDIRS = \
     plugins \
     po \
     doc \
+    utils \
     vapi \
     $(NULL)
 
@@ -23,6 +24,7 @@ DIST_SUBDIRS = \
     plugins \
     po \
     doc \
+    utils \
     vapi \
     tests \
     $(NULL)

@@ -561,8 +561,9 @@ AC_CONFIG_FILES([
     plugins/ubuntuone/Makefile
     po/Makefile.in
     doc/Makefile
-    vapi/Makefile
     tests/Makefile
+    utils/Makefile
+    vapi/Makefile
 ])
 
 AC_OUTPUT
