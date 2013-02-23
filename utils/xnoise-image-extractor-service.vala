@@ -12,23 +12,23 @@ public class ImageExtractorDbus : GLib.Object {
     
     private const string INTERFACE_NAME = "org.gtk.xnoise.ImageExtractor";
     
-    public uint waiting_jobs {
-        get {
-            return queue.get_length();
-        }
-        set {
-        }
-    }
+//    public uint waiting_jobs {
+//        get {
+//            return queue.get_length();
+//        }
+//        set {
+//        }
+//    }
 
-    private string? _currently_processed_uri = "";
-    
-    public string? currently_processed_uri {
-        get {
-            return _currently_processed_uri;
-        }
-        set {
-        }
-    }
+//    private string? _currently_processed_uri = "";
+//    
+//    public string? currently_processed_uri {
+//        get {
+//            return _currently_processed_uri;
+//        }
+//        set {
+//        }
+//    }
     
     public ImageExtractorDbus(DBusConnection conn, ImageExtractorService parent) {
         this.conn = conn;
@@ -52,6 +52,8 @@ public class ImageExtractorDbus : GLib.Object {
         });
     }
     
+    private uint32 cnt = 0;
+    
     private bool handle_each_uri() {
         parent.refresh_quit_timeout(); // delay app quit
         
@@ -64,6 +66,7 @@ public class ImageExtractorDbus : GLib.Object {
                 File f = File.new_for_uri(u);
                 if(f == null || f.get_path() == null)
                     return false;
+                print("handle file number %u\n", ++cnt);
                 handle_single_file(f);
                 return false;
             });
@@ -72,7 +75,6 @@ public class ImageExtractorDbus : GLib.Object {
     }
     
     private void handle_single_file(File f) {
-        _currently_processed_uri = f.get_path();
         Info? info = Info.factory_make(f.get_path());
         if(info == null)
             return;
@@ -84,14 +86,17 @@ public class ImageExtractorDbus : GLib.Object {
            album == null || album == "")
             return;
         
-        File? pf = get_albumimage_for_artistalbum(artist, album, "extralarge");
-        if(pf.query_exists(null))
-            return;
         uint8[] data;
         ImageType image_type;
         Gdk.Pixbuf? pixbuf = null;
         
         if(info.has_image) {
+            File? pf = get_albumimage_for_artistalbum(artist, album, "embedded");
+            if(pf == null) {
+                return;
+            }
+            if(pf.query_exists(null))
+                return;
             info.get_image(out data, out image_type);
             if(data != null && data.length > 0) {
                 var pbloader = new Gdk.PixbufLoader();
@@ -108,15 +113,22 @@ public class ImageExtractorDbus : GLib.Object {
                 } 
                 catch(Error e) { 
                     print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
+                    return;
                 }
             }
             if(pixbuf != null)
                 save_pixbuf_to_file(artist, album, pixbuf, image_type);
         }
         else {
+            File? pf = get_albumimage_for_artistalbum(artist, album, "medium");
+            if(pf == null) {
+                print("handle_single_file pf null for %s - %s\n", artist, album);
+                return;
+            }
+            if(pf.query_exists(null))
+                return;
             try_find_image_in_folder(f, artist, album);
         }
-        _currently_processed_uri = "";
     }
     
     private void save_pixbuf_to_file(string artist,
@@ -167,7 +179,7 @@ public class ImageExtractorDbus : GLib.Object {
                                           string artist,
                                           string album) {
         
-        File? pf = get_albumimage_for_artistalbum(artist, album, "extralarge");
+        File? pf = get_albumimage_for_artistalbum(artist, album, "medium");
         var folder = f.get_parent();
         FileEnumerator enumerator;
         string attr = FileAttribute.STANDARD_NAME + "," +
@@ -205,22 +217,28 @@ public class ImageExtractorDbus : GLib.Object {
                         File parentpath = pf.get_parent();
                         if(!parentpath.query_exists(null))
                             parentpath.make_directory_with_parents(null);
-                        try {
-                            file.copy(pf, FileCopyFlags.NONE, null, null);
-                            found_image(artist, album, pf.get_path());
-                        }
-                        catch(Error e) {
-                            print("%s\n", e.message);
-                        }
-                        File pf2 = File.new_for_path(pf.get_path().replace("_extralarge", "_medium"));
-                        if(!pf2.query_exists(null)) {
+                        bool success = false;
+                        if(!pf.query_exists(null)) {
                             try {
                                 file.copy(pf, FileCopyFlags.NONE, null, null);
+                                success = true;
                             }
                             catch(Error e) {
                                 print("%s\n", e.message);
                             }
                         }
+                        File pf2 = File.new_for_path(pf.get_path().replace("_medium", "_extralarge"));
+                        if(!pf2.query_exists(null)) {
+                            try {
+                                file.copy(pf2, FileCopyFlags.NONE, null, null);
+                            }
+                            catch(Error e) {
+                                print("%s\n", e.message);
+                            }
+                        }
+                        if(success)
+                            found_image(artist, album, pf2.get_path());
+                        
                         break;
                     }
                 }
@@ -231,18 +249,18 @@ public class ImageExtractorDbus : GLib.Object {
         }
     }
     
-    public void add_path(string path) {
-    
-        print("path: %s\n", path);
-        File f = File.new_for_path(path);
-        queue.push_tail(f.get_uri());
-        handle_uris();
-    }
+//    public void add_path(string path) {
+//    
+//        print("path: %s\n", path);
+//        File f = File.new_for_path(path);
+//        queue.push_tail(f.get_uri());
+//        handle_uris();
+//    }
     
     public void add_uris(string[] uris) {
         parent.refresh_quit_timeout(); // delay app quit
         foreach(string uri in uris) {
-            queue.push_tail(uri);
+            queue.push_head(uri);
         }
         handle_uris();
     }
@@ -303,11 +321,11 @@ public class ImageExtractorService : GLib.Object {
     internal void refresh_quit_timeout() {
         if(quit_timeout_source != 0)
             Source.remove(quit_timeout_source);
-//        quit_timeout_source = Timeout.add_seconds(QUIT_TIMEOUT, () => {
-//            print("DONE\n"); // after 60 of inactivity
-//            loop.quit();
-//            return false;
-//        });
+        quit_timeout_source = Timeout.add_seconds(QUIT_TIMEOUT, () => {
+            print("DONE\n"); // after 60 of inactivity
+            loop.quit();
+            return false;
+        });
     }
     
     private void clean_up() {

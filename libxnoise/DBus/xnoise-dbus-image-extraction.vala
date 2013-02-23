@@ -48,21 +48,26 @@ private interface ImageExtractor : GLib.Object {
 
 
 private class Xnoise.DbusImageExtractor : Object {
-    private uint32  current_handle  = 0;
-    private uint    watch           = 0;
-    private uint    handle_queue_timeout = 0;
+    private uint watch = 0;
     
     private ImageExtractor extractor_proxy = null;
-//    private Queue<string> queue = new Queue<string>();
-    private string[] uris_buffer = {};
     
-    public signal void sign_found_album_image(string uri, string thumb_uri);
+    public signal void sign_found_album_image(string uri);
     
     private ImageExtractor iextr;
     
     
     public DbusImageExtractor() {
         get_dbus();
+    }
+    
+    ~DbusImageExtractor() {
+        if(watch != 0)
+            Bus.unwatch_name(watch);
+        if(iextr != null && ready_sign_handler_id != 0)
+            iextr.disconnect(ready_sign_handler_id);
+        ready_sign_handler_id = 0;
+        iextr = null;
     }
     
     public void queue_uris(string[] uris) {
@@ -79,107 +84,35 @@ private class Xnoise.DbusImageExtractor : Object {
           stderr.printf ("Service is not available.\n%s", e.message);
           return;
         }
-
-//print("queue_uris ##1\n");
-//        if(uris == null || uris.length == 0)
-//            return;
-//print("queue_uris ##2\n");
-//        if(extractor_proxy == null) {
-//            get_dbus();
-//            try {
-////              ImageExtractor extractor_proxy = Bus.get_proxy_sync(BusType.SESSION,
-////                                                                  ImageExtractor.UNIQUE_NAME,
-////                                                                  ImageExtractor.OBJECT_PATH);
-//              extractor_proxy.add_uris(uris);
-//            }
-//            catch (IOError e) {
-//              stderr.printf ("Service is not available.\n%s", e.message);
-//              return;
-//            }
-//        }
-//        if(extractor_proxy == null) {
-//            get_dbus.begin();
-//print("queue_uris ##3\n");
-//            foreach(string s in uris)
-//                uris_buffer += s;
-//print("queue_uris ##4\n");
-//            return;
-//        }
-//print("queue_uris ##5\n");
-//        Idle.add(() => {
-//print("queue_uris ##6\n");
-//            try {
-//print("queue_uris ##7\n");
-//                if(uris.length > 0)
-//                    extractor_proxy.add_uris(uris);
-//                if(uris_buffer.length > 0) {
-//print("queue_uris ##8\n");
-//                    extractor_proxy.add_uris(uris_buffer);
-//                    uris_buffer = {};
-//print("queue_uris ##9\n");
-//                }
-//            }
-//            catch(IOError e) {
-//                print("Extractor Error: %s\n", e.message);
-//            }
-//print("queue_uris ##10\n");
-//            return false;
-//        });
     }
     
     private void on_name_appeared(DBusConnection conn, string name) {
-print("name appeared\n");
-//        Timeout.add_seconds(1, () => {
-//            if(iextr != null)
-//                ready_sign_handler_id = iextr.found_image.connect(on_found_image);
-//            return false;
-//        });
-//        if(extractor_proxy == null) {
-//            print("name appeared but proxy is not available\n");
-//            return;
-//        }
-//        string[] uris = {};
-//        queue_uris(uris);
-//        if(handle_queue_timeout != 0) 
-//            return;
-//        handle_queue_timeout = Idle.add( () => {
-//            handle_queue_timeout = 0;
-//            handle_queue();
-//            return false;
-//        });
+        Timeout.add_seconds(1, () => {
+            if(iextr != null)
+                ready_sign_handler_id = iextr.found_image.connect(on_found_image);
+            return false;
+        });
     }
 
     private void on_name_vanished(DBusConnection conn, string name) {
-print("name vanished\n");
-//        if(iextr != null && ready_sign_handler_id != 0)
-//            iextr.disconnect(ready_sign_handler_id);
-//        ready_sign_handler_id = 0;
-//        iextr = null;
+        if(iextr != null && ready_sign_handler_id != 0)
+            iextr.disconnect(ready_sign_handler_id);
+        ready_sign_handler_id = 0;
+        iextr = null;
     }
     
     private ulong ready_sign_handler_id = 0;
     private void get_dbus() {
-print("get_dbus\n");
-//        try {
-//            extractor_proxy = Bus.get_proxy_sync(BusType.SESSION,
-//                                                    ImageExtractor.UNIQUE_NAME,
-//                                                    ImageExtractor.OBJECT_PATH
-//            );
-//            ready_sign_handler_id = extractor_proxy.found_image.connect(on_found_image);
-//        } 
-//        catch(IOError er) {
-//            print("%s\n", er.message);
-//        }
-        
-//        watch = Bus.watch_name(BusType.SESSION,
-//                               ImageExtractor.UNIQUE_NAME,
-//                               BusNameWatcherFlags.NONE,
-//                               on_name_appeared,
-//                               on_name_vanished);
+        watch = Bus.watch_name(BusType.SESSION,
+                               ImageExtractor.UNIQUE_NAME,
+                               BusNameWatcherFlags.NONE,
+                               on_name_appeared,
+                               on_name_vanished);
     }
 
     private void on_found_image(string artist, string album, string image) {
-        print("found image for %s - %s\n", album, artist);
+        //print("found image for %s - %s\n", album, artist);
+        sign_found_album_image(image);
     }
 }
 

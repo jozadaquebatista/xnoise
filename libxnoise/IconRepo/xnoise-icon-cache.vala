@@ -72,6 +72,35 @@ private class Xnoise.IconCache : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache_job);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
+        dbus_image_extractor.sign_found_album_image.connect(on_new_album_art_found);
+    }
+    
+    private void on_new_album_art_found(string image) {
+        print("icon cache got new image %s\n", image);
+        if(image == null)
+            return;
+        File? file = File.new_for_path(image);
+        if(file == null)
+            return;
+        Gdk.Pixbuf? px = null;
+        try {
+            px = new Gdk.Pixbuf.from_file(file.get_path());
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+            return;
+        }
+        if(px == null) {
+            return;
+        }
+        else {
+            px = prepare(px);
+            insert_image(file.get_path(), px);
+            Idle.add(() => {
+                sign_new_album_art_loaded(file.get_path());
+                return false;
+            });
+        }
     }
     
     public void handle_image(string image_path) {

@@ -188,14 +188,12 @@ namespace Xnoise {
         d = new DockableStreams();              // STREAMS
         dockable_media_sources.insert(d);
         
+        dbus_image_extractor = new DbusImageExtractor();
+        
         // STATIC WIDGETS
         tlm = new TrackListModel();
         tl = new TrackList();
         main_window = new MainWindow();
-//        if(!Params.get_bool_value("not_use_systray") && !Application.hidden_window)
-//            tray_icon = new TrayIcon();
-        
-        dbus_image_extractor = new DbusImageExtractor();
     }
     
     // A data source is an implementor of DataSoure abstr.class
