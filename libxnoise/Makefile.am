@@ -5,6 +5,24 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
     $(NULL)
 
+
+@INTLTOOL_XML_RULE@
+@INTLTOOL_DESKTOP_RULE@
+
+# Dbus service file
+servicedir = $(datadir)/dbus-1/services
+service_in_files = \
+    org.gtk.xnoise.PlayerEngine.service.in \
+    $(NULL)
+
+service_DATA = $(service_in_files:.service.in=.service)
+
+# Rule to make the service file with bindir expanded
+$(service_DATA): $(service_in_files) Makefile
+	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
+
+
+
 INCLUDES = \
     -include $(CONFIG_HEADER) \
     $(XNOISE_CFLAGS) \

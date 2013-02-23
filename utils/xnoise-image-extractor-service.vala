@@ -91,31 +91,31 @@ public class ImageExtractorDbus : GLib.Object {
         ImageType image_type;
         Gdk.Pixbuf? pixbuf = null;
         
-//        if(info.has_image) {
-//            info.get_image(out data, out image_type);
-//            if(data != null && data.length > 0) {
-//                var pbloader = new Gdk.PixbufLoader();
-//                try {
-//                    pbloader.write(data);
-//                }
-//                catch(Error e) {
-//                    print("Error 1: %s\n", e.message);
-//                    try { pbloader.close(); } catch(Error e) { print("Error 2\n");}
-//                }
-//                try { 
-//                    pbloader.close(); 
-//                    pixbuf = pbloader.get_pixbuf();
-//                } 
-//                catch(Error e) { 
-//                    print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
-//                }
-//            }
-//            if(pixbuf != null)
-//                save_pixbuf_to_file(artist, album, pixbuf, image_type);
-//        }
-//        else {
+        if(info.has_image) {
+            info.get_image(out data, out image_type);
+            if(data != null && data.length > 0) {
+                var pbloader = new Gdk.PixbufLoader();
+                try {
+                    pbloader.write(data);
+                }
+                catch(Error e) {
+                    print("Error 1: %s\n", e.message);
+                    try { pbloader.close(); } catch(Error e) { print("Error 2\n");}
+                }
+                try { 
+                    pbloader.close(); 
+                    pixbuf = pbloader.get_pixbuf();
+                } 
+                catch(Error e) { 
+                    print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
+                }
+            }
+            if(pixbuf != null)
+                save_pixbuf_to_file(artist, album, pixbuf, image_type);
+        }
+        else {
             try_find_image_in_folder(f, artist, album);
-//        }
+        }
         _currently_processed_uri = "";
     }
     

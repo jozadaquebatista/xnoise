@@ -12,7 +12,6 @@ SUBDIRS = \
 servicedir = $(datadir)/dbus-1/services
 service_in_files = \
     org.gtk.xnoise.ImageExtractor.service.in \
-    org.gtk.xnoise.PlayerEngine.service.in \
     $(NULL)
 
 service_DATA = $(service_in_files:.service.in=.service)
