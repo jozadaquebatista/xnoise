@@ -27,6 +27,7 @@ usr/lib/libtaginfo.s*
 usr/lib/libtaginfo_c.s*
 usr/lib/libxnoise.s*
 usr/share/applications
+usr/share/dbus-1/services
 usr/share/icons
 usr/share/locale
 usr/share/xnoise

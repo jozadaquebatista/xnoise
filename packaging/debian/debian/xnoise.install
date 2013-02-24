@@ -3,6 +3,7 @@ usr/lib/libtaginfo.*
 usr/lib/libtaginfo_c.*
 usr/lib/libxnoise.*
 usr/share/applications
+usr/share/dbus-1/services
 usr/share/icons
 usr/share/locale
 usr/share/xnoise
