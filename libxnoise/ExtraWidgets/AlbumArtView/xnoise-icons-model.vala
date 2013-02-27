@@ -118,8 +118,12 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Idle.add( () => {
-                    this.filter();
                     search_idlesource = 0;
+                    if(immediate_search_flag) {
+                        immediate_search_flag = false;
+                        return false;
+                    }
+                    this.filter();
                     return false;
                 });
             });
@@ -130,13 +134,30 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Idle.add( () => {
-                    this.filter();
                     search_idlesource = 0;
+                    if(immediate_search_flag) {
+                        immediate_search_flag = false;
+                        return false;
+                    }
+                    this.filter();
                     return false;
                 });
             });
             return false;
         });
+    }
+    
+    private bool immediate_search_flag = false;
+    public void immediate_search(string text) {
+        if(text == null)
+            return;
+        global.searchtext = text;
+        if(search_idlesource != 0) {
+            Source.remove(search_idlesource);
+            search_idlesource = 0;
+        }
+        immediate_search_flag = true;
+        this.filter();
     }
     
     public bool cache_ready = false;

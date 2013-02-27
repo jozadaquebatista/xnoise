@@ -135,6 +135,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/EditTags/xnoise-tag-artist-editor.vala \
     ItemHandlers/EditTags/xnoise-tag-genre-editor.vala \
     ItemHandlers/EditTags/xnoise-tag-title-editor.vala \
+    ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala \
     ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala \
     ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
     ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala \

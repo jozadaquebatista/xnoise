@@ -270,8 +270,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
                         i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
                     string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
                     var l = new Gtk.Label(n);
-//                    l.set_ellipsize(Pango.EllipsizeMode.END);
-//                    l.max_width_chars = 10;
+                    l.max_width_chars = 10;
                     sg_tab.add_widget(l);
                     b.pack_start(i, true, true, 0);
                     b.pack_start(l, false, false, 0);
@@ -377,9 +376,9 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             back_button.halign = 
             back_button.halign = Align.END;
             back_button.valign = Align.START;
-            back_button.margin_left   = 10;
+            back_button.margin_left   = 20;
             back_button.margin_top    = 60;
-            back_button.margin_right  = 10;
+            back_button.margin_right  = 20;
             back_button.margin_bottom = 10;
             back_button.show_all();
             notebook.scrollable = false;
