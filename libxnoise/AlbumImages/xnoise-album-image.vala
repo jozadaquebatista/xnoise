@@ -214,6 +214,15 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         StateFlags flags = this.get_state_flags();
         if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && !_selected) {
             cr.paint();
+            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA / 2.0);
+            cr.set_line_width(0);
+            cr.arc(SIZE / 2.0, 
+                   SIZE / 2.0,
+                   radius + 1, 
+                   0.0, 
+                   2.0 * Math.PI);
+            cr.fill();
+            cr.paint();
             if(prelit_image == null)
                 prelit_image = IconTheme.get_default().load_icon("xn-grid-prelit",
                                                                  WSYM, 
