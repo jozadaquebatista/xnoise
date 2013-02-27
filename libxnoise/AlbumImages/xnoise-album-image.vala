@@ -39,7 +39,6 @@ using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
     internal static const int SIZE = 48;
-    private uint clicker_source = 0;
     private AlbumImageLoader loader = null;
     private string artist = EMPTYSTRING;
     private string album = EMPTYSTRING;
@@ -69,7 +68,6 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     
     
     public AlbumImage() {
-        //this.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
         this.set_size_request(SIZE, SIZE);
         this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK |
@@ -91,27 +89,14 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         gst_player.sign_found_embedded_image.connect(load_embedded);
         this.set_visible_window(false);
         this.button_press_event.connect( (s,e) => {
-            if(e.button == 1 && e.type == Gdk.EventType.@2BUTTON_PRESS) {
-                if(clicker_source != 0)
-                    Source.remove(clicker_source);
-                clicker_source = 0;
+            if(e.button == 3 && e.type == Gdk.EventType.@2BUTTON_PRESS) {
                 main_window.toggle_fullscreen();
                 return true;
             }
             if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS) {
-                if(clicker_source != 0)
-                    Source.remove(clicker_source);
-                clicker_source = Timeout.add(300, () => {
-                    clicker_source = 0;
-                    this.selected = !this.selected;
-                    return false;
-                });
+                this.selected = !this.selected;
                 return true;
             }
-            //if(e.button == 3) {
-            //    print("open context menu\n");
-            //    return false;
-            //}
             return false;
         });
         this.enter_notify_event.connect( (s, e) => {
@@ -194,6 +179,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     }
     
     private const double radius = SIZE / 2.4;
+    private const double SELECTED_BACKGROUND_ALPHA = 0.4;
     private Gdk.Pixbuf? prelit_image = null;
     private Gdk.Pixbuf? seleted_image = null;
     private Gdk.Pixbuf? prelitseleted_image = null;
@@ -241,6 +227,15 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         }
         else if((flags & StateFlags.PRELIGHT) != StateFlags.PRELIGHT && _selected) {
             cr.paint();
+            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_line_width(0);
+            cr.arc(SIZE / 2.0, 
+                   SIZE / 2.0,
+                   radius + 1, 
+                   0.0, 
+                   2.0 * Math.PI);
+            cr.fill();
+            cr.paint();
             if(seleted_image == null)
                 seleted_image = IconTheme.get_default().load_icon("xn-grid", 
                                                                    WSYM, 
@@ -253,6 +248,15 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             }
         }
         else if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && _selected) {
+            cr.paint();
+            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_line_width(0);
+            cr.arc(SIZE / 2.0, 
+                   SIZE / 2.0,
+                   radius + 1, 
+                   0.0, 
+                   2.0 * Math.PI);
+            cr.fill();
             cr.paint();
             if(prelitseleted_image == null)
                 prelitseleted_image = IconTheme.get_default().load_icon("xn-grid-prelitselected", 

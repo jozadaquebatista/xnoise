@@ -216,14 +216,14 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0.76862745"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="17.312012"
-     inkscape:cy="13.854971"
+     inkscape:zoom="11.2"
+     inkscape:cx="5.1723307"
+     inkscape:cy="17.42334"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -261,22 +261,22 @@
      transform="translate(0,-1020.3622)">
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.76816487;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 20.884082,1023.2464 0,8.2317 8.231835,0 0,-8.2317 -8.231835,0 z"
+       d="m 18.884082,1025.2464 0,8.2317 8.231835,0 0,-8.2317 -8.231835,0 z"
        id="path7149"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        id="path7155"
-       d="m 2.8840822,1023.2464 0,8.2317 8.2318358,0 0,-8.2317 -8.2318358,0 z"
+       d="m 4.8840823,1025.2464 0,8.2317 8.2318357,0 0,-8.2317 -8.2318357,0 z"
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.76816452;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     <path
        inkscape:connector-curvature="0"
        id="path7157"
-       d="m 20.884017,1041.2463 0,8.2318 8.231907,0 0,-8.2318 -8.231907,0 z"
+       d="m 18.88409,1039.2463 0,8.2318 8.231907,0 0,-8.2318 -8.231907,0 z"
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.76818025;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.76816452;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 2.8840822,1041.2464 0,8.2317 8.2318358,0 0,-8.2317 -8.2318358,0 z"
+       d="m 4.8840823,1039.2464 0,8.2317 8.2318357,0 0,-8.2317 -8.2318357,0 z"
        id="path7159"
        inkscape:connector-curvature="0" />
   </g>

@@ -40,7 +40,7 @@ private class Xnoise.AppMenuButton : Gtk.ToolItem {
     public AppMenuButton(Gtk.Menu menu, string? tooltip_text = null) {
 //        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         content = new Gtk.ToggleButton();
-        content.set_relief(ReliefStyle.NORMAL);
+        content.set_relief(ReliefStyle.NONE);
 //        var eb = new Gtk.EventBox();
 //        eb.visible_window = false;
 //        box.pack_start(eb, true, true, 0);
