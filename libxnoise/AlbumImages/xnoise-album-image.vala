@@ -39,6 +39,7 @@ using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
     internal static const int SIZE = 48;
+    private uint clicker_source = 0;
     private AlbumImageLoader loader = null;
     private string artist = EMPTYSTRING;
     private string album = EMPTYSTRING;
@@ -90,14 +91,27 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         gst_player.sign_found_embedded_image.connect(load_embedded);
         this.set_visible_window(false);
         this.button_press_event.connect( (s,e) => {
-            if(e.button == 1) {
-                this.selected = !this.selected;
+            if(e.button == 1 && e.type == Gdk.EventType.@2BUTTON_PRESS) {
+                if(clicker_source != 0)
+                    Source.remove(clicker_source);
+                clicker_source = 0;
+                main_window.toggle_fullscreen();
                 return true;
             }
-            if(e.button == 3) {
-                print("open context menu\n");
+            if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS) {
+                if(clicker_source != 0)
+                    Source.remove(clicker_source);
+                clicker_source = Timeout.add(300, () => {
+                    clicker_source = 0;
+                    this.selected = !this.selected;
+                    return false;
+                });
                 return true;
             }
+            //if(e.button == 3) {
+            //    print("open context menu\n");
+            //    return false;
+            //}
             return false;
         });
         this.enter_notify_event.connect( (s, e) => {
@@ -113,7 +127,6 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             return false;
         });
     }
-    
     
     private void load_embedded(Object sender, string uri, string _artist, string _album) {
         if(uri != global.current_uri)

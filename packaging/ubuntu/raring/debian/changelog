@@ -1,0 +1,184 @@
+xnoise (0.2.15-1ppa1~raring) raring; urgency=low
+  * Handle 'Various artists' albums and compilations
+  * Add CD Rom device type (preview listening, only)
+  * Change button style in toolbar
+  * Handle tray icon visibility via setting, only
+  * Add sequencial loading for album art view for better user experience on large search results
+  * Add commandline option for 'hidden window' mode
+  * Translate and extend unity quicklist options
+  * Add DockableMediaManager class (tradiaz)
+  * Add combobox media selector (tradiaz)
+  * Add animated showing/hiding of tree media selector
+  * Add gstreamer-plugins-base to runtime dependencies
+  * Allow editing of genre
+  * Adjust volume on scroll on video screen/'now playing' pane
+  * Add local fallback icons for xnoise
+  * Use gnome's 'emblem-system-symbolic' for the application button (0rAX0)
+  * More icon work
+  * Update some translations
+  * Many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 06 Feb 2013 16:54:59 +0100
+
+
+xnoise (0.2.14-1ppa1~raring) raring; urgency=low
+  * Add support for Android and some other player devices
+  * Use themed symbolic icons
+  * Add optional GENRE-ARTIST-ALBUM sort mode in music browser
+  * Add some sort modes for album-art-view
+  * Allow editing of genres
+  * Equalizer is now activatable from the equalizer window, only
+  * Show album art in album tag editor
+  * Rework settings dialog, again
+  * Localization updates
+  * Code cleanups
+  * Many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 21 Dec 2012 22:04:51 +0100
+
+
+xnoise (0.2.13-1ppa1~raring) raring; urgency=low
+  * Add new Album Art view with search
+  * New Xnoise Icon (icon by Reda Lazri)
+  * Recreated 'Now Playing' image rendering with reflections
+  * Add weblink to keyboard shortcuts in help menu
+  * Add Ctr-B keybinding for toggling album art view
+  * Use symbolic icon in volume slider
+  * Implement MPRIS 2 seek
+  * Mingw compatibility fixes
+  * Enable support for more media types
+  * Update translations
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 29 Oct 2012 17:10:15 +0100
+
+
+xnoise (0.2.12-1ppa1~raring) raring; urgency=low
+  * Integrate Unity quicklists
+  * Add new application icon
+  * Add new first-start-widget for initial media import
+  * Redo Settings dialog with integration of plugins
+  * Redo Add-Media dialog
+  * Add preamp to equalizer
+  * Replace libotify based notifications with dbus based notifications
+  * Remove libnotify dependency
+  * Code cleanup
+  * Improve loading of embedded images
+  * Add keyboard shortcuts for various control actions
+  * Double-click on album image now toggles video fullscreen
+  * Add menu entry for fullscreen video and update translations
+  * Hide track progressbar in fullscreen window for streams
+  * Speed up album art update
+  * Do not import playlist files when scanning local folders
+  * Update translatations
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 02 Oct 2012 14:15:46 +0200
+
+
+xnoise (0.2.11-2ppa1~raring) raring; urgency=low
+  * Avoid opening of more than one eq window
+  * Magnatune: fix initialization issue 
+  * Magnatune: workaround db update issue
+  * Magnatune: fix issue with random crashes on deativation
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 16 Sep 2012 20:05:54 +0200
+
+
+xnoise (0.2.10-1ppa1~raring) raring; urgency=low
+  * Add equalizer
+  * Add eq presets and store/restore eq setups
+  * Settings: option to de/activate equalizer
+  * Several small GUI updates
+  * Restore last used tracks of external sources
+  * Allow cancelling initial tracklist restore
+  * Use less default plugins
+  * Improve visual presentation on Ubuntu Quantal
+  * Update po/es.po (faidoc)
+  * Update debian package generation script (Tal)
+  * Magnatune: remove temporary files
+  * Magnatune: fix database update check
+  * Magnatune: remove album download option, if usern./pasword is not available
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 14 Sep 2012 11:18:55 +0200
+
+
+xnoise (0.2.9-1ppa1~raring) raring; urgency=low
+  * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
+  * use strip function on artist and album imports
+  * Extend media import API
+  * Extend item handler API
+  * Add fix for window hiding/howing (Tal)
+  * Update portugse translation (Sergio Marques)
+  * Activate standard item handlers for dynamic playlists, too
+  * Context menus for dynamic playlists
+  * Add query interface for dynamic playlists
+  * Fix keyboard opened menus for tracklist and musicbrowser
+  * Use nautilus feature (if available) for file indication
+  * Add FAQ entry to help menu
+  * Magnatune: add support for 'speechless' streaming with user login
+  * Magnatune: album downloads for registered users
+  * Magnatune: add online change monitoring
+  * Magnatune: use album images in Magnatune plugin
+  * Magnatune: use genre in search/filtering
+  * Magnatune: change store location of db
+  * Update packaging data
+  * Replace hard coded keycodes with the (now available) Gdk.Key.* constants
+  * Recommend tumbler thumbnailing in packaging
+  * Update debian package creation script (Tal)
+  * Code cleanups
+  * Various bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 31 Aug 2012 17:05:49 +0200
+
+
+
+xnoise (0.2.8-1ppa1~raring1) raring; urgency=low
+  * Add Magnatune plugin
+  * Put the UbuntuOne plugin into a seperate deb, so that dependeny to 
+    libubuntuoneui is avoided
+  * Add script that autoamtically creates *.deb pakages on dabian and debian 
+    based distros (Tal Hadad)
+  * Add packaging folder to source distrubution
+  * Update packaging data
+  * Update po/cs.po (psimacek)
+  * Use blue color to indicate active searches because red looks like nothing 
+    was found
+  * Automatically distribute changelog
+  * Fix crasher with title-to-decoration plugin
+  * Fix potential crasher in signal handler of mpris plugin
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 18 Aug 2012 10:00:46 +0200
+
+
+
+xnoise (0.2.5.6-raring) raring; urgency=low
+  * add ubuntuone music store plugin
+  * code cleanup
+  * preview mode for stores
+  * Update zh_CN translation (tuhaihe)
+  * Update cs translation ( psimacek )
+  * update portugese translation (Sérgio Marques)
+  * update hebrew translation (Tal Hadad)
+  * update czech translation
+  * create new media-source-widget for dockable media
+  * azlyrics plugin: replace invalid linebreak char
+  * notifications plugin: do not show notifications on insufficient song info
+  * add packaging data for raring
+  * add main menu entry for media browser visibility
+  * small fixes and improvements
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 08 Aug 2012 19:30:17 +0200
+
+
+
+
+xnoise (0.2.4.1-1ubuntu1) raring; urgency=low
+  * update translations
+  * extend db for future unity support
+  * various bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 27 Jul 2012 17:32:10 +0200
+

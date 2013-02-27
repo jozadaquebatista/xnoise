@@ -17,7 +17,6 @@ DIST_SUBDIRS =  \
     soundmenu2 \
     testplugin \
     titleToDecoration \
-    ubuntuone \
     $(NULL)
 
 if ENABLE_APPINDICATOR
@@ -61,10 +60,6 @@ endif
 
 SUBDIRS += testplugin
 SUBDIRS += titleToDecoration
-
-if ENABLE_UBUNTUONE_MUSICSTORE
-    SUBDIRS += ubuntuone
-endif
 
 DISTCLEANFILES = \
     Makefile.in \

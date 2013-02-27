@@ -45,7 +45,7 @@ SQLITE_REQUIRED=3.6
 dnl required versions for plugins
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
-UBUNTUONEUI_REQUIRED=3.0
+LIBAPPINDICATOR_REQUIRED=0.26
 
 VALA_REQUIRED=0.18.0
 
@@ -125,7 +125,7 @@ dnl ================================================================
 dnl plugin check for plugins dependent on appindicator3
 
 PKG_CHECK_MODULES(APPI, \
-                  appindicator3-0.1, \
+                  appindicator3-0.1 >= $LIBAPPINDICATOR_REQUIRED, \
                   have_appi=yes, \
                   have_appi=no)
 if test "x$have_appi" = "xno"; then
@@ -200,23 +200,6 @@ AC_SUBST(GDKX11_CFLAGS)
 AC_SUBST(GDKX11_LIBS)
 dnl ================================================================
 
-
-
-
-dnl ================================================================
-dnl plugin check for plugins dependent on libubuntuoneui
-
-PKG_CHECK_MODULES(UBUNTUONEUI, \
-                  libubuntuoneui-3.0 >= $UBUNTUONEUI_REQUIRED, \
-                  have_libubuntuoneui=yes, \
-                  have_libubuntuoneui=no)
-
-if test "x$have_libubuntuoneui" != "xyes"; then
-    AC_MSG_NOTICE([libubuntuoneui $UBUNTUONEUI_REQUIRED or greater not found.])
-fi
-AC_SUBST(UBUNTUONEUI_CFLAGS)
-AC_SUBST(UBUNTUONEUI_LIBS)
-dnl ================================================================
 
 
 dnl ================================================================
@@ -413,29 +396,6 @@ AM_CONDITIONAL(ENABLE_AZLYRICS, test x"$enable_azlyrics" = "xyes")
 dnl ================================================================
 
 
-dnl ================================================================
-dnl dependency check for optional build of ubuntuone plugin 
-
-AC_ARG_ENABLE([ubuntuone],
-    AS_HELP_STRING([--disable-ubuntuone],
-    [Disable ubuntuone music store plugin (default: enabled)]),
-    [enable_ubuntuone=$enableval],
-    [enable_ubuntuone=yes])
-
-if test "x$enable_ubuntuone" = "xyes"; then
-    if test "x$have_libubuntuoneui" = "xyes"; then
-        enable_ubuntuone=yes
-    else
-        enable_ubuntuone=no
-        AC_MSG_NOTICE([ubuntuone music store plugin will not be included in the build.])
-    fi
-else
-    enable_ubuntuone=no
-    AC_MSG_NOTICE([ubuntuone music store plugin will not be included in the build.])
-fi
-AM_CONDITIONAL(ENABLE_UBUNTUONE_MUSICSTORE, test x"$enable_ubuntuone" = "xyes")
-dnl ================================================================
-
 
 dnl ================================================================
 dnl dependency check for optional build of magnatune plugin 
@@ -558,7 +518,6 @@ AC_CONFIG_FILES([
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile
     plugins/soundmenu2/Makefile
-    plugins/ubuntuone/Makefile
     po/Makefile.in
     doc/Makefile
     tests/Makefile
@@ -593,10 +552,9 @@ echo "
     Test plugin (Demo Plugin)      yes (always)
     Title-To-Decoration            yes (always)
     Ubuntu soundmenu               ${enable_soundmenu2}
-    Application Indicator          ${enable_appindicator}
+    AppIndicator                   ${enable_appindicator}
     
     ${bold}Music Store Plugins:${normal}
-    Ubuntu One Music Store         ${enable_ubuntuone}
     Magnatune Music Store          ${enable_magnatune}
     
     ${bold}Lyrics Provider Plugins:${normal}

@@ -15,20 +15,19 @@ noinst_DATA = \
     debian/debian/xnoise-plugins.install \
     debian/debian/source/format \
     debian/debian/source/include-binaries \
-    ubuntu/precise/debian/changelog \
-    ubuntu/precise/debian/compat \
-    ubuntu/precise/debian/control \
-    ubuntu/precise/debian/copyright \
-    ubuntu/precise/debian/docs \
-    ubuntu/precise/debian/rules \
-    ubuntu/precise/debian/watch \
-    ubuntu/precise/debian/xnoise.1 \
-    ubuntu/precise/debian/xnoise-dev.install \
-    ubuntu/precise/debian/xnoise.install \
-    ubuntu/precise/debian/xnoise.manpages \
-    ubuntu/precise/debian/xnoise-ubuntuone-music-store-plugin.install \
-    ubuntu/precise/debian/source/format \
-    ubuntu/precise/debian/source/include-binaries \
+    ubuntu/raring/debian/changelog \
+    ubuntu/raring/debian/compat \
+    ubuntu/raring/debian/control \
+    ubuntu/raring/debian/copyright \
+    ubuntu/raring/debian/docs \
+    ubuntu/raring/debian/rules \
+    ubuntu/raring/debian/watch \
+    ubuntu/raring/debian/xnoise.1 \
+    ubuntu/raring/debian/xnoise-dev.install \
+    ubuntu/raring/debian/xnoise.install \
+    ubuntu/raring/debian/xnoise.manpages \
+    ubuntu/raring/debian/source/format \
+    ubuntu/raring/debian/source/include-binaries \
     ubuntu/quantal/debian/changelog \
     ubuntu/quantal/debian/compat \
     ubuntu/quantal/debian/control \
@@ -40,7 +39,6 @@ noinst_DATA = \
     ubuntu/quantal/debian/xnoise-dev.install \
     ubuntu/quantal/debian/xnoise.install \
     ubuntu/quantal/debian/xnoise.manpages \
-    ubuntu/quantal/debian/xnoise-ubuntuone-music-store-plugin.install \
     ubuntu/quantal/debian/source/format \
     ubuntu/quantal/debian/source/include-binaries \
     $(NULL)

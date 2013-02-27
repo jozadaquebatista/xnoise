@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-11 13:52+0100\n"
+"POT-Creation-Date: 2013-02-24 01:08+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -49,6 +49,14 @@ msgstr "Ir para a faixa anterior"
 msgid "Quit application"
 msgstr "Sair da aplicação"
 
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+msgid "Toggle visibility of album art view"
+msgstr "Alternar visibilidade da vista de álbuns"
+
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+msgid "<Ctrl+B>"
+msgstr "<Ctrl+B>"
+
 #: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
@@ -76,10 +84,10 @@ msgstr "desconhecido"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1428
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1456
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1498
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1528
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1471
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1499
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1541
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1571
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -89,10 +97,10 @@ msgstr "por"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1430
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1458
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1500
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1530
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1473
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1501
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1543
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1573
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -108,21 +116,21 @@ msgstr "Últimas reproduções"
 msgid "Music"
 msgstr "Músicas"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:339
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:362
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
-#: ../plugins/magnatune/magnatune-treeview.vala:221
+#: ../plugins/magnatune/magnatune-treeview.vala:257
 msgid "Collapse all"
 msgstr "Recolher"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:344
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:367
 msgid "Sort Mode"
 msgstr "Ordenação"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:354
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:377
 msgid "ARTIST-ALBUM-TITLE"
 msgstr "Artista-Álbum-Título"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:361
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:384
 msgid "GENRE-ARTIST-ALBUM"
 msgstr "Género-Artista-Álbum"
 
@@ -240,7 +248,7 @@ msgstr "Localização"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:258
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
-#: ../libxnoise/Utils/xnoise-media-importer.vala:235
+#: ../libxnoise/Utils/xnoise-media-importer.vala:237
 msgid "Importing media data. This may take some time..."
 msgstr "A importar dados. Pode levar algum tempo..."
 
@@ -382,10 +390,20 @@ msgstr "Sair de ecrã completo"
 msgid "Fullscreen"
 msgstr "Ecrã completo"
 
-#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:126
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2040
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2181
 msgid "Search..."
 msgstr "Procurar..."
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:149
+msgid "Media Collections"
+msgstr "Coleções multimédia"
+
+#. notebook.margin_top = 2;
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:161
+#, fuzzy
+msgid "Media Source"
+msgstr "Pastas multimédia:"
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:214
 msgid "Preset:"
@@ -512,9 +530,9 @@ msgstr "Género:"
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2050
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1237
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1367
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2191
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1251
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1381
 msgid "Artist"
 msgstr "Artista"
 
@@ -524,22 +542,22 @@ msgstr "Artista do álbum"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1213
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1376
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2192
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1390
 msgid "Album"
 msgstr "Álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1203
 msgid "Title"
 msgstr "Título"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2052
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1283
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1385
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2193
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1297
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1399
 msgid "Genre"
 msgstr "Género"
 
@@ -549,15 +567,15 @@ msgstr "Uri"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:164
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2053
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1307
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1394
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2194
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1321
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1408
 msgid "Year"
 msgstr "Ano"
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1358
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1372
 msgid "Tracknumber"
 msgstr "Número da faixa"
 
@@ -633,156 +651,168 @@ msgstr ""
 "\n"
 "A utilizar %s ..."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
 msgid "_File"
 msgstr "_Ficheiro"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:221
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
 msgid "open file"
 msgstr "abrir ficheiro"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "Open _Stream"
 msgstr "Abrir emi_ssão"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "open remote location"
 msgstr "abrir localização remota"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "_Add or Remove media"
 msgstr "A_dicionar ou remover multimédia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "manage the content of the xnoise media library"
 msgstr "gestão do conteúdo da coleção xnoise"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 msgid "C_lear tracklist"
 msgstr "Apagar li_sta de faixas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1784
 msgid "Clear the tracklist"
 msgstr "Apagar lista de faixas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_Rescan collection"
 msgstr "_Reanalisar coleção"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "Rescan collection"
 msgstr "Reanalisar coleção"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "_Increase volume"
 msgstr "_Aumentar volume"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "Increase playback volume"
 msgstr "Aumentar volume de reprodução"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "_Decrease volume"
 msgstr "_Diminuir volume"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "Decrease playback volume"
 msgstr "Diminuir volume de reprodução"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "_Previous track"
 msgstr "Faixa _anterior"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "Go to previous track"
 msgstr "Ir para a faixa anterior"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "_Toggle play"
 msgstr "Al_ternar reprodução"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "Toggle playback status"
 msgstr "Alternar o estado de reprodução"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "_Next track"
 msgstr "Faixa segui_nte"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "Go to next track"
 msgstr "Ir para a faixa seguinte"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
+#. icon
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#, fuzzy
+msgid "E_qualizer"
+msgstr "Equalizador"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#, fuzzy
+msgid "Open equalizer window"
+msgstr "Abrir equalizador"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 #: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_Ver"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "_Tracklist"
 msgstr "Lis_ta de faixas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "Go to the tracklist."
 msgstr "Ir para a lista de faixas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "_Lyrics"
 msgstr "_Letras musicais"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "Go to the lyrics view."
 msgstr "Ir para letras musicais"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:240
 msgid "_Now Playing"
 msgstr "A reprodu_zir"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
 msgid "Go to the 'Now Playing' screen in the main window."
 msgstr "Ir para o ecrã \"A reproduzir\" da janela principal"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
 msgid "_Help"
 msgstr "Aj_uda"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Frequently Asked Questions"
 msgstr "Perguntas _frequentes"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Open Frequently Asked Questions in web browser"
 msgstr "Abrir perguntas frequentes n_o navegador web"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Keyboard Shortcuts"
 msgstr "Atal_hos de teclado"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Open Keyboard Shortcuts in web browser"
 msgstr "Abrir atalh_os de teclado no navegador web"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:243
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:246
 msgid "_Config"
 msgstr "_Configurar"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:302
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:304
 msgid "_Show Media Browser"
 msgstr "Mo_strar explorador multimédia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:311
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:313
 msgid "Show _Video Fullscreen"
 msgstr "Mostrar _vídeos em ecrã completo"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:320
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:322
 msgid "Show _Album Art view"
 msgstr "Mostr_ar vista de álbuns"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:512
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:514
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
@@ -791,134 +821,125 @@ msgstr ""
 "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
 "o arranque do xnoise."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:713
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:722
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:731
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:740
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:717
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:726
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:735
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Playback mode: "
 msgstr "Modo de reprodução:"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:713
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:717
 msgid "No repeat, one after another"
 msgstr "Sem repetição"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:722
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:726
 msgid "Repeat single track"
 msgstr "Repetir uma faixa"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:731
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:735
 msgid "Repeat all"
 msgstr "Repetir todas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:740
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Random playlist track playing"
 msgstr "Reprodução aleatória de faixas"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1329
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1338
 msgid "Enter the URL for playing"
 msgstr "Indique o URL a reproduzir"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1345
-msgid "Select media file"
-msgstr "Selecione o ficheiro"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1656
-msgid "Remove selected titles"
-msgstr "Remover títulos selecionados"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1679
-msgid "Remove all"
-msgstr "Remover tudo"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1703
-msgid "Jump to current position"
-msgstr "Ir para a posição atual"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1849
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2036
-msgid "Select search with <Ctrl-F>"
-msgstr "Escolha a procura com <Ctrl-F>"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1851
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2038
-msgid "Remove search filter with <Ctrl-D>"
-msgstr "Remover filtro de procurar com <Ctrl-d>"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1862
-msgid "Open equalizer"
-msgstr "Abrir equalizador"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1887
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1363
 msgid "Equalizer"
 msgstr "Equalizador"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1914
-msgid "Toggle visibility of album art view"
-msgstr "Alternar visibilidade da vista de álbuns"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1387
+msgid "Select media file"
+msgstr "Selecione o ficheiro"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1916
-msgid "<Ctrl+B>"
-msgstr "<Ctrl+B>"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1731
+#, fuzzy
+msgid "Repeat Mode"
+msgstr "Repetir todas"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1751
+#, fuzzy
+msgid "Remove selected tracks"
+msgstr "Remover faixa selecionada"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1806
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1810
+#, fuzzy
+msgid "Jump to currently playing track"
+msgstr "Ir para a posição atual"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1823
+msgid "Jump to current position"
+msgstr "Ir para a posição atual"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1976
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2177
+msgid "Select search with <Ctrl-F>"
+msgstr "Escolha a procura com <Ctrl-F>"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1978
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2179
+msgid "Remove search filter with <Ctrl-D>"
+msgstr "Remover filtro de procurar com <Ctrl-d>"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1964
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2101
 msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2054
-#, fuzzy
-msgid "Playcount"
-msgstr "Reproduzir"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2058
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2200
 msgid "Ascending"
 msgstr "Ascendente"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2060
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2202
 msgid "Descending"
 msgstr "Descendente"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:153
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:160
 msgid "Dance"
 msgstr "Dança"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:158
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:165
 msgid "Pop"
 msgstr "Pop"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:163
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:170
 msgid "Techno"
 msgstr "Techno"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:168
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
 msgid "Club"
 msgstr "Clube"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:173
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:180
 msgid "Jazz"
 msgstr "Jazz"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:178
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:185
 msgid "Rock"
 msgstr "Rock"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:183
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:190
 msgid "Maximum Treble"
 msgstr "Agudos"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:188
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:195
 msgid "Maximum Bass"
 msgstr "Graves"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:193
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:200
 msgid "Classic"
 msgstr "Clássica"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:199
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:206
 msgid "Custom"
 msgstr "Personalizado"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:205
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:212
 msgid "Default"
 msgstr "Pré-definido"
 
@@ -1012,8 +1033,8 @@ msgid "Show Library"
 msgstr "Mostrar coleção"
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1259
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1403
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1273
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1417
 msgid "Length"
 msgstr "Duração"
 
@@ -1047,12 +1068,12 @@ msgstr "em pausa"
 msgid "ready to rock"
 msgstr "pronto"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:355
+#: ../libxnoise/Utils/xnoise-media-importer.vala:358
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Encontradas %u faixas. Atualizar coleção..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:570
+#: ../libxnoise/Utils/xnoise-media-importer.vala:574
 #, c-format
 msgid "%u new tracks found"
 msgstr "Encontradas %u novas faixas"
@@ -1171,19 +1192,19 @@ msgstr "Loja de música Magnatune"
 msgid "Magnatune"
 msgstr "Magnatune"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:230
+#: ../plugins/magnatune/magnatune-treeview.vala:266
 msgid "Download whole album to disk"
 msgstr "Transferir álbum para o disco"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:280
+#: ../plugins/magnatune/magnatune-treeview.vala:316
 msgid "Downloading album "
 msgstr "A transferir álbum"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:282
+#: ../plugins/magnatune/magnatune-treeview.vala:318
 msgid "This may take some time..."
 msgstr "Isto pode levar algum tempo..."
 
-#: ../plugins/magnatune/magnatune-treeview.vala:396
+#: ../plugins/magnatune/magnatune-treeview.vala:432
 msgid "Download finished for \""
 msgstr "Terminou a transferência de \""
 
@@ -1295,14 +1316,21 @@ msgstr "Mostrar loja _UbuntuOne"
 msgid "Show UbuntuOne Store"
 msgstr "Mostrar loja UbuntuOne"
 
+#~ msgid "Remove selected titles"
+#~ msgstr "Remover títulos selecionados"
+
+#~ msgid "Remove all"
+#~ msgstr "Remover tudo"
+
+#, fuzzy
+#~ msgid "Playcount"
+#~ msgstr "Reproduzir"
+
 #~ msgid "Use Compact Menu"
 #~ msgstr "Utilizar menu compacto"
 
 #~ msgid "Use Equalizer"
 #~ msgstr "Utilizar equalizador"
-
-#~ msgid "Media Collections"
-#~ msgstr "Coleções multimédia"
 
 #~ msgid "Playlists"
 #~ msgstr "Listas de reprodução"
