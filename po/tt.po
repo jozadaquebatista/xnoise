@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: 2005-11-09 13:19+0300\n"
 "Last-Translator: \n"
 "Language-Team: Tatarish\n"
@@ -44,11 +44,11 @@ msgstr ""
 msgid "Quit application"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr ""
 
@@ -590,6 +590,10 @@ msgstr ""
 msgid "Do you want to move the selected file to trash?"
 msgstr ""
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr ""
@@ -723,7 +727,6 @@ msgid "Open equalizer window"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr ""
 
@@ -1253,28 +1256,4 @@ msgstr ""
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
-msgstr ""
-
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr ""
-
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr ""
-
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr ""
-
-#: ../plugins/ubuntuone/ubuntuone.vala:163
-msgid "UbuntuOne"
-msgstr ""
-
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr ""
-
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
 msgstr ""

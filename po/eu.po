@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: 2013-02-05 20:21+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
@@ -46,11 +46,11 @@ msgstr "Joan aurreko pistara"
 msgid "Quit application"
 msgstr "Irten aplikaziotik"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr "Erakutsi/ezkutatu album-irudien ikuspegia"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr "<Ktrl+B>"
 
@@ -609,6 +609,10 @@ msgstr "Bota zakarrontzira"
 msgid "Do you want to move the selected file to trash?"
 msgstr "Hautaturiko elementua zakarrontzira bota nahi duzu?"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "Erreproduzitu"
@@ -748,7 +752,6 @@ msgid "Open equalizer window"
 msgstr "Ireki ekualizadorea"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_Ikusi"
 
@@ -1294,29 +1297,23 @@ msgstr "Erakutsi abestiaren titulua leihoaren barran"
 msgid "Set the window name to the current title"
 msgstr "Ezarri uneko abestiaren titulua leihoaren izen gisa"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr "UbuntuOne musika-denda"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "UbuntuOne musika-denda"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "Ubuntu One musika-denda"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "Ubuntu One musika-denda"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "UbuntuOne musika"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "UbuntuOne musika"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
-msgid "UbuntuOne"
-msgstr "UbuntuOne"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "Erakutsi _UbuntuOne denda"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "Erakutsi _UbuntuOne denda"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "Erakutsi UbuntuOne denda"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "Erakutsi UbuntuOne denda"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "Kendu hautaturiko tituluak"

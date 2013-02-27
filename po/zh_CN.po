@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -46,11 +46,11 @@ msgstr "转到上一首"
 msgid "Quit application"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr "切换专辑封面视图"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
@@ -608,6 +608,10 @@ msgstr "移动到回收站"
 msgid "Do you want to move the selected file to trash?"
 msgstr "您要将选中的文件移动到回收站吗？"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "播放"
@@ -747,7 +751,6 @@ msgid "Open equalizer window"
 msgstr "打开均衡器"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "查看(_V)"
 
@@ -1287,30 +1290,24 @@ msgstr "在窗口标题栏显示歌曲名称"
 msgid "Set the window name to the current title"
 msgstr "设置窗口名称为当前标题"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr "UbuntuOne 音乐商店"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "UbuntuOne 音乐商店"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "Ubuntu One 音乐商店"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "Ubuntu One 音乐商店"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "UbuntuOne 音乐"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "UbuntuOne 音乐"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
 #, fuzzy
-msgid "UbuntuOne"
-msgstr "UbuntuOne 音乐"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne 音乐"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "显示 UbuntuOne 商店(_U)"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "显示 UbuntuOne 商店(_U)"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "显示 UbuntuOne 商店"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "移除所选标题"

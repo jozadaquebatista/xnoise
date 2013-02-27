@@ -36,7 +36,7 @@ using Xnoise.Resources;
 
 
 internal class Xnoise.HandlerRemoveCoverImage : ItemHandler {
-    private Action a;
+    private Action a; 
     private static const string ainfo = _("Remove Cover Image");
     private static const string aname = "A HandlerRemoveCoverImage";
     
@@ -99,20 +99,44 @@ internal class Xnoise.HandlerRemoveCoverImage : ItemHandler {
         File? exl = get_albumimage_for_artistalbum(artist, album, "extralarge");
         File? emb = get_albumimage_for_artistalbum(artist, album, "embedded");
         
+        var del_job = new Worker.Job(Worker.ExecutionType.ONCE, this.del_album_cover_job);
+        if(med != null)
+            del_job.set_arg("med", med.get_path());
+        else
+            return false;
+        if(exl != null)
+            del_job.set_arg("exl", exl.get_path());
+        if(emb != null)
+            del_job.set_arg("emb", emb.get_path());
+        
+        del_job.set_arg("artist", artist);
+        del_job.set_arg("album", album);
+        
+        io_worker.push_job(del_job);
+        return false;
+    }
+    
+    private bool del_album_cover_job(Worker.Job job) {
+        File? med = File.new_for_path((string)job.get_arg("med"));
+        File? exl = File.new_for_path((string)job.get_arg("exl"));
+        File? emb = File.new_for_path((string)job.get_arg("emb"));
+        string artist = (string)job.get_arg("artist");
+        string album  = (string)job.get_arg("album");
+        
+        try {
+            if(med != null && med.query_exists(null))
+                med.delete();
+            if(exl != null && exl.query_exists(null)) {
+                exl.delete();
+                global.sign_album_image_removed(artist, album, exl.get_path());
+            }
+            if(emb != null && emb.query_exists(null))
+                emb.delete();
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
         Idle.add(() => {
-            try {
-                if(med != null && med.query_exists(null))
-                    med.delete();
-                if(exl != null && exl.query_exists(null)) {
-                    exl.delete();
-                    global.sign_album_image_removed(artist, album, exl.get_path());
-                }
-                if(emb != null && emb.query_exists(null))
-                    emb.delete();
-            }
-            catch(Error e) {
-                print("%s\n", e.message);
-            }
             string buf = global.searchtext;
             global.searchtext = Random.next_int().to_string();
             global.searchtext = buf;

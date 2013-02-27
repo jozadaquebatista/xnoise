@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -48,11 +48,11 @@ msgstr "轉到前一首曲目"
 msgid "Quit application"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr ""
 
@@ -626,6 +626,10 @@ msgstr "移至回收筒"
 msgid "Do you want to move the selected file to trash?"
 msgstr "您想要移動所選檔案到回收筒嗎？"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "播放"
@@ -766,7 +770,6 @@ msgid "Open equalizer window"
 msgstr "使用等化器"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "檢視(_V)"
 
@@ -1321,31 +1324,25 @@ msgstr ""
 msgid "Set the window name to the current title"
 msgstr "針對目前的標題，設定視窗的名稱"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
 #, fuzzy
-msgid "UbuntuOne Music Store"
-msgstr "Ubuntu One 音樂商店"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "Ubuntu One 音樂商店"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "Ubuntu One 音樂商店"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "Ubuntu One 音樂商店"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "UbuntuOne 音樂"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "UbuntuOne 音樂"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
 #, fuzzy
-msgid "UbuntuOne"
-msgstr "UbuntuOne 音樂"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne 音樂"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "顯示 UbuntuOne 商店(_U)"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "顯示 UbuntuOne 商店(_U)"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "顯示 UbuntuOne 商店"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "顯示 UbuntuOne 商店"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "移除選取的標題"

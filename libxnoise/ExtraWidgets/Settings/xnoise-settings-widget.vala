@@ -35,7 +35,7 @@ using Xnoise.PluginModule;
 using Xnoise.Resources;
 
 
-private class Xnoise.SettingsWidget : Gtk.Box {
+private class Xnoise.SettingsWidget : Gtk.Overlay {
     private Builder builder;
     private const string SETTINGS_UI_FILE = Config.XN_UIDIR + "settings.ui";
     private Notebook notebook;
@@ -72,7 +72,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     }
     
     public SettingsWidget() {
-        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
+//        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.setup_widgets();
         initialize_members();
         connect_signals();
@@ -369,16 +369,20 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             if(IconTheme.get_default().has_icon("user-home-symbolic"))
                 back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.LARGE_TOOLBAR);
             else
-                back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.SMALL_TOOLBAR);
+                back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.LARGE_TOOLBAR);
             var back_button = new Button();
             back_button.add(back_image);
             back_button.tooltip_markup = Markup.printf_escaped(_("Go Back"));
             back_button.clicked.connect(on_back_button_clicked);
-            notebook.set_action_widget(back_button, PackType.START);
+            back_button.halign = 
+            back_button.halign = Align.END;
+            back_button.valign = Align.START;
+//            notebook.set_action_widget(back_button, PackType.START);
             back_button.show_all();
             notebook.scrollable = false;
             notebook.show_border = false;
-            this.pack_start(notebook, true, true, 0);
+            this.add(notebook);
+            this.add_overlay(back_button);
 
             var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;
             fontsize_label.label = _("Media browser fontsize");

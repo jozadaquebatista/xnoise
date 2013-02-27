@@ -42,8 +42,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
     private const int HIDE_BUTTON_SIZE     = 12;
-//    private unowned Main xn;
+    private Box content_top_box;
     private VolumeSliderButton volume_slider;
+    private Notebook paned2notebook;
     private int _posX;
     private int _posY;
     private Gtk.Box contentvbox;
@@ -1276,12 +1277,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_menu_add() {
         album_art_view_visible = false;
 //        album_view_toggle.set_active(false);
-        content_notebook.set_current_page(content_notebook.page_num(settings_widget));
+        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
         settings_widget.select_media_tab();
     }
     
     internal void show_content() {
-        content_notebook.set_current_page(content_notebook.page_num(content_overlay));
+        paned2notebook.set_current_page(paned2notebook.page_num(content_top_box));
     }
 
     private void on_location_add() {
@@ -1432,7 +1433,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //        album_view_toggle.set_active(false);
         album_art_view_visible = false;
         settings_widget.select_general_tab();
-        content_notebook.set_current_page(content_notebook.page_num(settings_widget));
+        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
 //        mainview_box.select_main_view(settings_widget.get_view_name());
     }
 
@@ -1626,17 +1627,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             content_notebook = new Notebook();
             content_notebook.show_border = false;
-            content_notebook.show_tabs = false;
+            content_notebook.show_tabs   = false;
             contentvbox = new Box(Orientation.VERTICAL, 0);
             infobox = new Box(Orientation.VERTICAL, 0);
             contentvbox.pack_start(infobox, false, false, 0);
             hpaned = new ThinPaned();
             media_browser_box = new Box(Orientation.VERTICAL, 0);
             media_browser_box.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
-            var content_top_box = new Gtk.Box(Orientation.VERTICAL, 0);
+            content_top_box = new Gtk.Box(Orientation.VERTICAL, 0);
             content_top_box.pack_start(content_notebook, true, true, 0);
+            paned2notebook = new Notebook();
+            paned2notebook.show_border = false;
+            paned2notebook.show_tabs   = false;
+            paned2notebook.append_page(content_top_box, null);
+            
             hpaned.pack1(media_browser_box, false, false);
-            hpaned.pack2(content_top_box, true, false);
+            hpaned.pack2(paned2notebook, true, false);
 
             content_overlay = new Overlay();
             content_overlay.add(contentvbox);
@@ -1908,7 +1914,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             mainview_box.add_main_view(lyricsview_widget);
             
             settings_widget = new SettingsWidget();
-            content_notebook.append_page(settings_widget, null);
+//            content_notebook.append_page(settings_widget, null);
+            paned2notebook.append_page(settings_widget, null);
 //            mainview_box.add_main_view(settings_widget);
             
             mainview_box.select_main_view(TRACKLIST_VIEW_NAME);

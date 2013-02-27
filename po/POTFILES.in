@@ -54,6 +54,7 @@ libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala
 libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala
 libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala
+libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala
 libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala
 libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala
 libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala
@@ -116,6 +117,3 @@ plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/soundmenu2/soundmenu2.xnplugin.desktop.in
 plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in
-plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in
-plugins/ubuntuone/ubuntuone.vala
-

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: 2013-02-05 20:40+0100\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -48,11 +48,11 @@ msgstr "Jít na předchozí skladbu"
 msgid "Quit application"
 msgstr "Ukončit program"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr "Přepnout zobrazení přehledu alb"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
@@ -611,6 +611,10 @@ msgstr "Vyhodit do koše"
 msgid "Do you want to move the selected file to trash?"
 msgstr "Chcete vyhodit vybraný soubor do koše?"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "Přehrát"
@@ -751,7 +755,6 @@ msgid "Open equalizer window"
 msgstr "Ukázat ekvalizér"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_Pohled"
 
@@ -1302,29 +1305,23 @@ msgstr "Zobrazit název skladby v liště okna"
 msgid "Set the window name to the current title"
 msgstr "Název okna pojmenovat po současné skladbě"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr "Hudební obchod UbuntuOne"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "Hudební obchod UbuntuOne"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "Hudební obchod Ubuntu One"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "Hudební obchod Ubuntu One"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "UbuntuOne Music"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "UbuntuOne Music"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
-msgid "UbuntuOne"
-msgstr "UbuntuOne"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "Zobrazit _hudební obchod Ubuntu"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "Zobrazit _hudební obchod Ubuntu"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "Zobrazit hudební obchod Ubuntu"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "Zobrazit hudební obchod Ubuntu"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "Odstranit vybrané skladby"

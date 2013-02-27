@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: 2013-01-25 14:12+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -60,11 +60,11 @@ msgstr "חזור לרצועה הקודמת"
 msgid "Quit application"
 msgstr ""
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr "הצג/הסתר תצוגת אלבום"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
@@ -610,6 +610,10 @@ msgstr "העבר אל האשפה"
 msgid "Do you want to move the selected file to trash?"
 msgstr "האם ברצונך להעביר את הקובץ הנבחר אל האשפה?"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "נגן"
@@ -749,7 +753,6 @@ msgid "Open equalizer window"
 msgstr "פתח באקולייזר"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_תצוגה"
 
@@ -1291,29 +1294,23 @@ msgstr "הצג כותרת השיר בפס החלון"
 msgid "Set the window name to the current title"
 msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr "חנות המוזיקה של UbuntuOne"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "חנות המוזיקה של UbuntuOne"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "חנות המוזיקה של Ubuntu One"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "חנות המוזיקה של Ubuntu One"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "UbuntuOne מוזיקה"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "UbuntuOne מוזיקה"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
-msgid "UbuntuOne"
-msgstr "UbuntuOne"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "הצג את החנות _UbuntuOne"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "הצג את החנות _UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "הצג את החנות UbuntuOne"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "הצג את החנות UbuntuOne"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "הסרת כל הכותרות הנבחרות"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-24 01:08+0100\n"
+"POT-Creation-Date: 2013-02-27 15:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -49,11 +49,11 @@ msgstr "Ir para a faixa anterior"
 msgid "Quit application"
 msgstr "Sair da aplicação"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:78
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:77
 msgid "Toggle visibility of album art view"
 msgstr "Alternar visibilidade da vista de álbuns"
 
-#: ../libxnoise/AlbumImages/xnoise-album-image.vala:80
+#: ../libxnoise/AlbumImages/xnoise-album-image.vala:79
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
@@ -609,6 +609,10 @@ msgstr "Mover para o lixo"
 msgid "Do you want to move the selected file to trash?"
 msgstr "Pretende mover o ficheiro selecionado para o lixo?"
 
+#: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
+msgid "Remove Cover Image"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "Reproduzir"
@@ -748,7 +752,6 @@ msgid "Open equalizer window"
 msgstr "Abrir equalizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
-#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_Ver"
 
@@ -1292,29 +1295,23 @@ msgstr "Mostrar nome da faixa na barra"
 msgid "Set the window name to the current title"
 msgstr "Utilizar o título da faixa como título da janela"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "UbuntuOne Music Store"
-msgstr "Loja de música UbuntuOne"
+#~ msgid "UbuntuOne Music Store"
+#~ msgstr "Loja de música UbuntuOne"
 
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
-msgid "Ubuntu One Music Store"
-msgstr "Loja de música UbuntuOne"
+#~ msgid "Ubuntu One Music Store"
+#~ msgstr "Loja de música UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:128
-msgid "UbuntuOne Music"
-msgstr "Música UbuntuOne"
+#~ msgid "UbuntuOne Music"
+#~ msgstr "Música UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:163
-msgid "UbuntuOne"
-msgstr "UbuntuOne"
+#~ msgid "UbuntuOne"
+#~ msgstr "UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show _UbuntuOne Store"
-msgstr "Mostrar loja _UbuntuOne"
+#~ msgid "Show _UbuntuOne Store"
+#~ msgstr "Mostrar loja _UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:231
-msgid "Show UbuntuOne Store"
-msgstr "Mostrar loja UbuntuOne"
+#~ msgid "Show UbuntuOne Store"
+#~ msgstr "Mostrar loja UbuntuOne"
 
 #~ msgid "Remove selected titles"
 #~ msgstr "Remover títulos selecionados"

@@ -387,8 +387,6 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
         int sum = 0;
         int iconwidth = (pix == null) ? 18 : pix.get_width();
         int iconheight = (pix == null) ? 18 : pix.get_height();
-//            if(maxiconwidth < iconwidth)
-//                maxiconwidth = iconwidth;
         sum = hsepar + (2 * (int)xpad) + iconwidth + INDENT;
         var pango_layout = widget.create_pango_layout(text);
         pango_layout.set_font_description(this.font_description);
