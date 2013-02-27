@@ -151,6 +151,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     public void immediate_search(string text) {
         if(text == null)
             return;
+        if(!cache_ready)
+            return;
         global.searchtext = text;
         if(search_idlesource != 0) {
             Source.remove(search_idlesource);
