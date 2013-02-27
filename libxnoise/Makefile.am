@@ -137,6 +137,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/EditTags/xnoise-tag-title-editor.vala \
     ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala \
     ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
+    ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala \
     ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala \
     ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala \
     ItemHandlers/xnoise-external-queryable.vala \

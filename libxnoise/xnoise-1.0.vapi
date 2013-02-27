@@ -716,6 +716,7 @@ namespace Xnoise {
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
 		public signal void sign_album_image_fetched (string artist, string album, string image_path);
+		public signal void sign_album_image_removed (string artist, string album, string image_path);
 		public signal void sign_image_path_embedded_changed ();
 		public signal void sign_image_path_large_changed ();
 		public signal void sign_image_path_small_changed ();

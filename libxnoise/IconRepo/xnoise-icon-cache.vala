@@ -73,6 +73,12 @@ private class Xnoise.IconCache : GLib.Object {
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
         dbus_image_extractor.sign_found_album_image.connect(on_new_album_art_found);
+        global.sign_album_image_removed.connect(on_image_removed);
+    }
+    
+    private void on_image_removed(string artist, string album, string path) {
+        print("Image Cache: remove image for %s - %s\n", artist, album);
+        insert_image(path, null);  // remove
     }
     
     private void on_new_album_art_found(string image) {

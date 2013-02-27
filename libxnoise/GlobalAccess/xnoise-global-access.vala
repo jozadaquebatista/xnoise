@@ -128,6 +128,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public signal void player_in_shutdown();
 
     public signal void sign_album_image_fetched(string artist, string album, string image_path);
+    public signal void sign_album_image_removed(string artist, string album, string image_path);
 
     // PRIVATE FIELDS
     private PlayerState _player_state = PlayerState.STOPPED;

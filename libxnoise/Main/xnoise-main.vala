@@ -64,6 +64,7 @@ public class Xnoise.Main : GLib.Object {
         itemhandler_manager.add_handler(new HandlerAddAllToTracklist());
         itemhandler_manager.add_handler(new HandlerShowInFileManager());
         itemhandler_manager.add_handler(new HandlerMoveToTrash());
+        itemhandler_manager.add_handler(new HandlerRemoveCoverImage());
         
         // LOAD PLUGINS
         if(!no_plugins) {
