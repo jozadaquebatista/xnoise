@@ -45,7 +45,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
     private CheckButton switch_usetray;
     private CheckButton switch_compact;
     private CheckButton switch_usestop;
-    private CheckButton switch_hoverimage;
+//    private CheckButton switch_hoverimage;
     private CheckButton switch_quitifclosed;
     private CheckButton switch_use_notifications;
     private CheckButton switch_compact_media_selector;
@@ -92,8 +92,8 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         assert(switch_usetray != null);
         switch_usetray.clicked.connect(this.on_checkbutton_usetray_clicked);
         
-        assert(switch_hoverimage != null);
-        switch_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+//        assert(switch_hoverimage != null);
+//        switch_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
         
         assert(switch_compact != null);
         switch_compact.clicked.connect(this.on_checkbutton_compact_clicked);
@@ -127,7 +127,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         switch_usestop.active = Params.get_bool_value("usestop");
         
         //not_show_art_on_hover_image
-        switch_hoverimage.active = !Params.get_bool_value("not_show_art_on_hover_image");
+//        switch_hoverimage.active = !Params.get_bool_value("not_show_art_on_hover_image");
         
         switch_use_notifications.active = !Params.get_bool_value("not_use_notifications");
         
@@ -225,16 +225,16 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         }
     }
     
-    private void on_checkbutton_mediabr_hoverimage_clicked() {
-        if(!this.switch_hoverimage.active) {
-            Params.set_bool_value("not_show_art_on_hover_image", true);
-            main_window.not_show_art_on_hover_image = true;
-        }
-        else {
-            Params.set_bool_value("not_show_art_on_hover_image", false);
-            main_window.not_show_art_on_hover_image = false;
-        }
-    }
+//    private void on_checkbutton_mediabr_hoverimage_clicked() {
+//        if(!this.switch_hoverimage.active) {
+//            Params.set_bool_value("not_show_art_on_hover_image", true);
+//            main_window.not_show_art_on_hover_image = true;
+//        }
+//        else {
+//            Params.set_bool_value("not_show_art_on_hover_image", false);
+//            main_window.not_show_art_on_hover_image = false;
+//        }
+//    }
     
     private void on_switch_compact_media_selector_clicked() {
         if(!this.switch_compact_media_selector.active) {
@@ -270,7 +270,9 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
                         i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
                     string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
                     var l = new Gtk.Label(n);
-                    l.max_width_chars = 10;
+//                    l.set_ellipsize(Pango.EllipsizeMode.END);
+//                    l.max_width_chars = 10;
+                    sg_tab.add_widget(l);
                     b.pack_start(i, true, true, 0);
                     b.pack_start(l, false, false, 0);
                     var scw = new ScrolledWindow(null, null);
@@ -310,6 +312,8 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         this.show_all();
     }
 
+    private SizeGroup sg_tab = new SizeGroup(SizeGroupMode.HORIZONTAL);
+    
     private bool setup_widgets() {
         builder = new Builder();
         try {
@@ -319,6 +323,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             general_label.set_text(_("Settings"));
             var media_label = this.builder.get_object("media_label") as Gtk.Label;
             media_label.set_text(_("Media"));
+            sg_tab.add_widget(media_label);
             
             plugin_label_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             
@@ -331,11 +336,6 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             switch_usetray.can_focus = false;
             switch_usetray.set_label(_("Use systray icon"));
             switch_usetray.tooltip_text = _("Use a status icon on your panel for showing, hiding and controlling xnoise");
-            
-            switch_hoverimage = this.builder.get_object("cb_hoverimage") as CheckButton;
-            switch_hoverimage.can_focus = false;
-            switch_hoverimage.set_label(_("Show picture on hover album image"));
-            switch_hoverimage.tooltip_text = _("Show a larger view on the album art while the mouse pointer is over the album image in the main window");
             
             switch_compact = this.builder.get_object("cb_compact") as CheckButton;
             switch_compact.can_focus = false;
@@ -377,7 +377,10 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             back_button.halign = 
             back_button.halign = Align.END;
             back_button.valign = Align.START;
-//            notebook.set_action_widget(back_button, PackType.START);
+            back_button.margin_left   = 10;
+            back_button.margin_top    = 60;
+            back_button.margin_right  = 10;
+            back_button.margin_bottom = 10;
             back_button.show_all();
             notebook.scrollable = false;
             notebook.show_border = false;
