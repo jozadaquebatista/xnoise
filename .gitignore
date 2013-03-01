@@ -10,7 +10,6 @@ syntax: glob
 *.lo
 *.Po
 *.Plo
-*.xnplugin
 *~
 Makefile
 Makefile.in
@@ -37,6 +36,10 @@ missing
 mkinstalldirs
 .intltool-merge-cache
 Makefile.in.in
+*.xnplugin
+.anjuta*
+src/xnoise
+*.anjuta
 POTFILES
 *.gmo
 *.mo
@@ -44,15 +47,12 @@ po/stamp-it
 data/misc/xnoise.desktop.in
 .libs
 .deps
-src/xnoise
+taginfo/taginfo.la
 stamp-h1
 stamp-h2
 *.bz2
 *.gz
-.anjuta/
-.anjuta*
 TODO.tasks
-xnoise.anjuta
 .dirstamp
 tests/tests
 tests/playlist-examples/tmp_*.asx
