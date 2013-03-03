@@ -35,7 +35,7 @@ libMagnatune_la_VALAFLAGS = \
     --basedir $(top_srcdir)/plugins/magnatune \
     --vapidir $(top_srcdir)/libxnoise \
     --vapidir $(top_srcdir)/bindings/vala \
-    --pkg taginfo_c \
+    --pkg libtaginfo_c \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \
     $(NULL)

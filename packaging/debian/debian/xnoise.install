@@ -1,6 +1,4 @@
 usr/bin
-usr/lib/libtaginfo.*
-usr/lib/libtaginfo_c.*
 usr/lib/libxnoise.*
 usr/share/applications
 usr/share/dbus-1/services

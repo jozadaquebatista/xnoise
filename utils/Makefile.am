@@ -29,7 +29,6 @@ INCLUDES = \
     -I$(top_srcdir)/libxnoise \
     $(XNOISE_CFLAGS) \
     -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
-    -I$(top_srcdir)/bindings/c \
     $(NULL)
 
 xnoise_image_extractor_service_SOURCES = \
@@ -41,8 +40,6 @@ VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/libxnoise \
     --pkg xnoise-1.0 \
-    --vapidir $(top_srcdir)/bindings/vala \
-    --pkg taginfo_c \
     --vapidir $(top_srcdir)/vapi \
     -g \
     --save-temps \
@@ -54,7 +51,6 @@ xnoise_image_extractor_service_LDADD = \
     -lgstpbutils-1.0 \
     -lm \
     $(top_builddir)/libxnoise/libxnoise.la \
-    $(top_builddir)/bindings/c/libtaginfo_c.la \
     $(NULL)
 
 xnoise_image_extractor_service_LDFLAGS = -export-dynamic

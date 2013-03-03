@@ -41,11 +41,13 @@ LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=TARGET_GLIB_VERSION
 GTK_REQUIRED=3.2.0
 SQLITE_REQUIRED=3.6
+TAGINFO_REQUIRED=0.0.11
 
 dnl required versions for plugins
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 LIBAPPINDICATOR_REQUIRED=0.26
+
 
 VALA_REQUIRED=0.18.0
 
@@ -75,20 +77,7 @@ dnl ================================================================
 LT_INIT
 
 dnl ================================================================
-TAGLIB_C_REQUIRED=1.6
 
-TAGINFO_VERSION="0.0.9"
-TAGINFO_NAME="taginfo"
-AC_SUBST(TAGINFO_VERSION)
-AC_SUBST(TAGINFO_NAME)
-
-PKG_CHECK_MODULES(TAGINFO, \
-    taglib >= $TAGLIB_C_REQUIRED)
-
-AC_SUBST(TAGINFO_CFLAGS)
-AC_SUBST(TAGINFO_LIBS)
-
-dnl ================================================================
 
 PKG_CHECK_MODULES(XNOISE, \
     gdk-3.0 \
@@ -102,6 +91,7 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-plugins-base-1.0 >= $GSTREAMER_REQUIRED \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
+    libtaginfo_c >= $TAGINFO_REQUIRED \
     cairo)
 
 
@@ -450,7 +440,7 @@ XNOISE_PACKAGES="\
     --pkg gtk+-3.0 \
     --pkg posix \
     --pkg sqlite3 \
-    --pkg taginfo_c \
+    --pkg libtaginfo_c \
     --target-glib=`echo $TARGET_GLIB_VERSION` \
 "
 
@@ -479,12 +469,6 @@ AM_SILENT_RULES([yes])
 
 AC_CONFIG_FILES([
     Makefile
-    taginfo/taginfo.pc:taginfo/taginfo.pc.in
-    taginfo/Makefile
-    bindings/Makefile
-    bindings/c/Makefile
-    bindings/c/taginfo_c.pc:bindings/c/taginfo_c.pc.in
-    bindings/vala/Makefile
     data/Makefile
     data/misc/xnoise.desktop.in
     data/misc/Makefile

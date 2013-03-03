@@ -30,7 +30,7 @@ libDatabaseLyrics_la_VALAFLAGS = \
     --vapidir $(top_srcdir)/libxnoise \
     --pkg xnoise-1.0 \
     --vapidir $(top_srcdir)/bindings/vala \
-    --pkg taginfo_c \
+    --pkg libtaginfo_c \
     @XNOISE_PACKAGES@ \
     $(NULL)
 

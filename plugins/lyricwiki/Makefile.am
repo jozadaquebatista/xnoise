@@ -31,7 +31,7 @@ libLyricwiki_la_VALAFLAGS = \
     --basedir $(top_srcdir)/plugins/lyricwiki \
     --vapidir $(top_srcdir)/libxnoise \
     --vapidir $(top_srcdir)/bindings/vala \
-    --pkg taginfo_c \
+    --pkg libtaginfo_c \
     --pkg libsoup-2.4 \
     --pkg libxml-2.0 \
     --pkg xnoise-1.0 \

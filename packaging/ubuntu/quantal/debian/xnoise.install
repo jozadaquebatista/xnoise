@@ -23,8 +23,6 @@ usr/lib/xnoise/libxnoisetest.so
 usr/lib/xnoise/xnoisetest.xnplugin
 usr/lib/xnoise/libsoundmenu2.so
 usr/lib/xnoise/soundmenu2.xnplugin
-usr/lib/libtaginfo.s*
-usr/lib/libtaginfo_c.s*
 usr/lib/libxnoise.s*
 usr/share/applications
 usr/share/dbus-1/services

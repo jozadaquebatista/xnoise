@@ -32,7 +32,6 @@ INCLUDES = \
     -DXN_LICENSEDIR=\"$(datadir)/xnoise/license/\" \
     -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
     -I$(top_builddir) \
-    -I$(top_srcdir)/bindings/c \
     $(NULL)
 
 libxnoise_hdir = $(includedir)/xnoise
@@ -206,8 +205,7 @@ libxnoise_la_VALAFLAGS = \
     --thread \
     --pkg gio-2.0 \
     --vapidir $(top_srcdir)/vapi \
-    --vapidir $(top_srcdir)/bindings/vala \
-    --pkg taginfo_c \
+    --pkg libtaginfo_c \
     --basedir $(top_srcdir)/libxnoise \
     @XNOISE_PACKAGES@ \
     $(NULL)
@@ -223,7 +221,6 @@ libxnoise_la_LDFLAGS = \
 
 libxnoise_la_LIBADD = \
     $(XNOISE_LIBS) \
-    $(top_builddir)/bindings/c/libtaginfo_c.la \
     -lgstpbutils-1.0 \
     $(NULL)
 
