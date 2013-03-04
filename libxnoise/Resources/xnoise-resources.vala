@@ -60,12 +60,12 @@ namespace Xnoise.Resources {
     internal const string SHOWVIDEO              = _("Now Playing");
     internal const string SHOWTRACKLIST          = _("Tracklist");
     internal const string SHOWLYRICS             = _("Lyrics");
-    internal const string HIDE_LIBRARY           = _("Hide Library");
-    internal const string SHOW_LIBRARY           = _("Show Library");
+    internal const string HIDE_LIBRARY           = _("Hide Media Library");
+    internal const string SHOW_LIBRARY           = _("Show Media Library");
 
     internal const string COPYRIGHT       = "Copyright \xc2\xa9 2008-2013 Jörn Magens";
     internal const string PROGRAM_NAME    = "xnoise";
     internal const string WEBSITE         = "http://www.xnoise-media-player.com/";
-    internal const string WEB_FAQ         = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
-    internal const string WEB_KEYBOARD_SC = "https://github.com/shuerhaaken/xnoise/wiki/KeyBindings";
+    internal const string WEB_FAQ         = "https://bitbucket.org/shuerhaaken/xnoise/wiki/FAQ";
+    internal const string WEB_KEYBOARD_SC = "https://bitbucket.org/shuerhaaken/xnoise/wiki/KeyBindings";
 }
