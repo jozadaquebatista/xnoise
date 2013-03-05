@@ -106,6 +106,7 @@ plugins/chartlyrics/chartlyrics.xnplugin.desktop.in
 plugins/lastfm/lastfm.xnplugin.desktop.in
 plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
 plugins/azlyrics/azlyrics.xnplugin.desktop.in
+plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in
 plugins/mediakeys/mediakeys.xnplugin.desktop.in
 plugins/magnatune/Magnatune.xnplugin.desktop.in
 plugins/magnatune/magnatune-dockable.vala
