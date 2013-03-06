@@ -236,6 +236,11 @@ EXTRA_DIST = \
     $(BUILT_SOURCES) \
     $(libxnoise_DATA) \
     $(libxnoise_la_SOURCES) \
+    $(service_in_files) \
+    $(NULL)
+
+CLEANFILES = \
+    org.gtk.xnoise.PlayerEngine.service \
     $(NULL)
 
 DISTCLEANFILES = \

@@ -1,3 +1,24 @@
+xnoise (0.2.16-1ppa1~quantal) quantal; urgency=low
+  * Port to Gstreamer-1.0
+  * New dbus album art collector service
+  * New round Icon Button for Album Art view
+  * Add appindicator plugin for Ubuntu
+  * New sidebar style with symbolic icons
+  * Add item handler for cover image removal
+  * Add 'Filter for artist' item handler
+  * Dbus service file for xnoise playerengine
+  * Add new sortings for albumart view
+  * Render some extra info into album art view
+  * Visual adjustments for settings dialog
+  * Redo album art rendering
+  * Explicitly link against m and gstvideo to fix linknig with ld.gold
+  * update translations
+  * Various fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 05 Mar 2013 16:01:19 +0100
+
+
+
 xnoise (0.2.15-1ppa1~quantal) quantal; urgency=low
   * Handle 'Various artists' albums and compilations
   * Add CD Rom device type (preview listening, only)

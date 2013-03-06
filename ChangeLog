@@ -1,3 +1,384 @@
+commit 90ac0dddc81e3f238db1995ccc6f27cb2195b22e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 5 14:23:39 2013 +0100
+
+    update translations
+
+commit dd4c5342fc39311f556c1b73e6137f111baf83f8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 4 11:42:17 2013 +0100
+
+    mention libtaginfo
+
+commit f4f696c37972f72f5a32c2572c269406146bcd5f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 4 11:31:32 2013 +0100
+
+    gui fixes
+
+commit c1f1617c79c923d6d803a9e7ca06953686b1b833
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Mar 3 10:32:54 2013 +0100
+
+    tear out taginfo
+
+commit d5e025d26882cdda383d45e73e82043d369b6358
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Mar 1 14:21:11 2013 +0100
+
+    fix issue with cs.po
+
+commit 6a9fce0316fd4a71b73a0666b85a1ce13a2cd1a7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 20:25:32 2013 +0100
+
+    change alpha
+
+commit 56160db2363ba227e347069fb2d64ec037a7635f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 19:21:26 2013 +0100
+
+    dark background for prelit image
+
+commit e9be564ff8f71d922a0037c73db615cfa3ec8eae
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 19:12:06 2013 +0100
+
+    no search before cache isn't filled
+
+commit f2dea946dfdedb74ebd70f54daed5010055085da
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 18:33:30 2013 +0100
+
+    add 'Filter for artist' item handler
+
+commit c17bb30f7839e9d57a86ffa08fa20b59b2b199e7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 16:48:04 2013 +0100
+
+    adjust settings widget
+
+commit 2631f86002db48774b0838b5ce028624321b7496
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 16:25:01 2013 +0100
+
+    move settings widget
+
+commit cca143cf9c8d13cc8cb73980fef77af2aded50eb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 15:07:05 2013 +0100
+
+    add item handler for cover image removal
+
+commit 49ab36fbfabda1380220385ea6a1a61e9bb6fa4d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 15:06:07 2013 +0100
+
+    fix space calculation for ListFlowingTextRenderer
+
+commit 319f9ffb67b9e3a07fa7e6f4523de8724182bdb1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 12:12:29 2013 +0100
+
+    semi transparent dark bg for selected album art view button
+
+commit da3c26484870c7751418c194d800e970f24e099f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 27 09:45:22 2013 +0100
+
+    update packaging data
+
+commit 30ca6d670457d657007400375b5b23398e615cba
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 24 01:08:09 2013 +0100
+
+    fix packaging of dbus service files
+
+commit bb61159b593e2683cb7c9ac01251979dc81799ae
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 24 00:35:04 2013 +0100
+
+    fix image collection and propagation to icon cache
+
+commit 075613deee3719c7342677d48f7c14823cc35869
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 23 19:36:46 2013 +0100
+
+    fix dbus service file for xnoise playerengine
+
+commit f108e11cb6929cef76f7a5ca66899241b2b89c7f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 22 18:11:34 2013 +0100
+
+    start with dbus image extractor
+
+commit 64e3bc2385c8b99a80c4b0188a1176aac30e8cfe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 21 00:13:18 2013 +0100
+
+    various visual adjustments
+
+commit 153cc2f9a51c94928b88c9feb5080361ce022f7c
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Thu Feb 21 00:12:33 2013 +0100
+
+    new round icon
+
+commit dc18307135a6daa73c5ac07e5bc1b8b2c954dc15
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 20 23:38:04 2013 +0100
+
+    expand main view selector
+
+commit 1e593732ca64cfd4ae9ecafdf3af1103503d121a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 20 21:23:50 2013 +0100
+
+    update panel icon
+
+commit b5b3ead4bfe1e9abaef26e563d9dad4e05dcf74a
+Merge: 70cefa1 f6c5844
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 20 00:01:56 2013 +0100
+
+    merge raring with precise version
+    
+    Merge branch 'master' of bitbucket.org:shuerhaaken/xnoise
+
+commit 70cefa138a3d2973d46a665017df3006387971ed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 20 00:00:45 2013 +0100
+
+    change rendering offsets
+
+commit f6c58440b3345c97acb6d0519a44f13a8f7b1b13
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 19 23:41:48 2013 +0100
+
+    do less commits on import
+
+commit 46286276ce1d7594eff10c205fd549f559dc0050
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 19 17:14:07 2013 +0100
+
+    change sorting
+
+commit 1f479f83455aaf4e9c13f2f4e551cc3356e4ed6a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 19 16:39:58 2013 +0100
+
+    render some extra info into album art view
+
+commit d72e7c457bd4dffc02bb1d1e3d9a95d72d38f9ba
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 19 14:38:11 2013 +0100
+
+    change prelight overlay
+
+commit 72fbb93612995a26f4e0066e4d285a7ada1f8106
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Feb 19 14:21:58 2013 +0100
+
+    Even more design experiments
+
+commit 9fe6ea4891e1fb42fc6ffeaab7df25437f3af528
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Feb 18 16:24:12 2013 +0100
+
+    More design experiments
+
+commit 4766f27297cc5d31fb305bf94da39648e40435e6
+Author: Franz Fellner <alpine.art.de@googlemail.com>
+Date:   Mon Feb 18 13:51:59 2013 +0100
+
+    explicitly link against m and gstvideo to fix linknig with ld.gold
+
+commit 614b109d1661cd427c98d23821b806082f5db922
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 17 18:14:51 2013 +0100
+
+    visual adjustments for settings dialog
+
+commit 8286b37843cf8489f44bfcac1057f7f72200d565
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 17 17:06:05 2013 +0100
+
+    visual adjustments for magnatune tree, etc.
+
+commit f8557a269f448ef503e2adfab9fb4d061115e2fe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 17 12:23:12 2013 +0100
+
+    add app indicator entry for window showing
+
+commit 4cf1e42d9518e9f1b8178df4d3d5cdbdd93a8a14
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Feb 17 12:13:51 2013 +0100
+
+    add forgotten files
+
+commit 5d1b054be56c2093b19aefdf8b1f5c4d71afe4c6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 16 21:23:38 2013 +0100
+
+    add basic appindicator implementation as plugin
+
+commit 4ef7e552305e02445a29fea61e52731aff5f09ed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Feb 16 00:15:23 2013 +0100
+
+    use symbolics in video tree
+
+commit 4a92cf7155a93a7d856d6b8e22dd5e6269d5f42d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 15 17:42:22 2013 +0100
+
+    use symbolics in dockables
+
+commit 4dd6939d236f1b97b873fb0f706aae755335f3c4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Feb 15 10:59:00 2013 +0100
+
+    change tracklist status icon rendering
+
+commit e045b7681c3f9b654acdaf84671d7b04b6807425
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 20:15:07 2013 +0100
+
+    lock for tag editing
+
+commit 811f7bc50604250dc5e97f378bfc447f3821b437
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 18:29:18 2013 +0100
+
+    adjustments
+
+commit 35afe80641dec148f12798dd00653775ce76add6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 17:56:35 2013 +0100
+
+    add headine widget for sidebar
+
+commit d207d8530fd63e3d26d7199cdfbe7b11c08403ed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 16:51:44 2013 +0100
+
+    small handle for paned
+
+commit 6c386407b18447467fc06254d798fca5dc49cb98
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 12:19:45 2013 +0100
+
+    more accurate size calculation
+
+commit 4c81315192008941620abda40bdd4e28c9eadcea
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 12:14:52 2013 +0100
+
+    handle disappeared notification deamon
+
+commit 9cc7e98d2571952159089a403fa700eb9f3cd8f9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 10:54:33 2013 +0100
+
+    fix some rendering issues 2
+
+commit 8a33528d836aeae2ab079c116a57ce25fd2e001e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 14 10:26:04 2013 +0100
+
+    fix some rendering issues
+
+commit d60b0300be6c3058fd7b1ea39aa3b730fc9909ed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 18:00:47 2013 +0100
+
+    move around some buttons
+
+commit 1838ec022b71b007a1fcc05e920c0337a3cc7a61
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 16:59:06 2013 +0100
+
+    put main view serial button into overlay
+
+commit 3cd3a890fff23a2253c8719d931b7fffbebfe833
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 16:43:34 2013 +0100
+
+    fix issue with rerurning from settings
+
+commit 2090a2c5a5cb3c495c5979c3a1b51860b9c6e91e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 16:22:08 2013 +0100
+
+    add sidebar style for other dockable media
+
+commit da61f3a47f6664196dc4cb5ac2674e19f75b01c7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 11:02:21 2013 +0100
+
+    fix reimport infobar
+
+commit 0a8144fdc273242e0f18795e960926954dd38664
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 10:28:26 2013 +0100
+
+    different style for separator
+
+commit 639a6fc31a6d282dcee86e64831d2978964a6105
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Feb 13 10:25:26 2013 +0100
+
+    some works on sidebar rendering
+
+commit 3ba72b3643292f2323bd89c30338c7dbb9bdb7ff
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Feb 11 13:53:34 2013 +0100
+
+    add new sortings for albumart view
+
+commit 8eb6626821333dc9dd035770f221eade8dae54b3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Feb 11 09:43:36 2013 +0100
+
+    add pot file
+
+commit 627e2de0cb2acdcd42fd5ffdb1c4c85e0123648b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Feb 11 01:47:58 2013 +0100
+
+    improve image handling with libtaginfo
+
+commit df8b86a2fe61a33f3479838880f9030bd58e03fb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 7 21:54:52 2013 +0100
+
+    correctly restore preamp setting
+
+commit cceab3ab51cb8095d4cee13b17dc9e97370e0aed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 7 21:35:09 2013 +0100
+
+    port to Gstreamer-1.0
+
+commit 99c9fffd90216c210a4937f51db24f9a7da19dd0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 7 18:03:41 2013 +0100
+
+    redo album art rendering
+
+commit 21826705b9c9df2761f97146743d684a62c5537a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 7 18:03:18 2013 +0100
+
+    remove unused code
+
+commit ba5b28c0ad260eedd0b8347f5c1b1d207ca75fa2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Feb 7 18:02:48 2013 +0100
+
+    post release version increment
+
 commit 1735e39a1ea9de9ef9b7e7f3c4c776e89578ce67
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Feb 6 10:56:30 2013 +0100

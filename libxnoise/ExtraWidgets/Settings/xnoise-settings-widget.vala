@@ -365,8 +365,8 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             
             Gtk.Image back_image;
             
-            if(IconTheme.get_default().has_icon("user-home-symbolic"))
-                back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.LARGE_TOOLBAR);
+            if(IconTheme.get_default().has_icon("go-previous-symbolic"))
+                back_image = new Gtk.Image.from_icon_name("go-previous-symbolic", IconSize.LARGE_TOOLBAR);
             else
                 back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.LARGE_TOOLBAR);
             var back_button = new Button();
