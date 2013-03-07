@@ -642,10 +642,10 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             int iconwidth = 30;
             if(maxiconwidth < iconwidth)
                 maxiconwidth = iconwidth;
-            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE)
-                calculated_widh[level] = (level == 1 ? maxiconwidth : 17);
-            else
-                calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
+//            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE)
+                calculated_widh[level] = (level == 1 ? (pix != null ? pix.get_width() : maxiconwidth) : 17);
+//            else
+//                calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + calculated_widh[level] + 2 + PIXPAD; 
             //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
