@@ -1,5 +1,5 @@
-# This file is in public domain
-# Sérgio Marques &lt;smarquespt@gmail.com&gt;, 2011
+# This file is public domain
+# Sérgio Marques &lt;smarquespt@gmail.com&gt;, 2011-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
@@ -389,9 +389,8 @@ msgstr "Coleções multimédia"
 
 #. notebook.margin_top = 2;
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:161
-#, fuzzy
 msgid "Media Source"
-msgstr "Pastas multimédia:"
+msgstr "Fonte multimédia"
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:214
 msgid "Preset:"
@@ -599,7 +598,7 @@ msgstr "Pretende mover o ficheiro selecionado para o lixo?"
 
 #: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
 msgid "Remove Cover Image"
-msgstr ""
+msgstr "Remover capa do álbum"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
@@ -730,14 +729,12 @@ msgstr "Ir para a faixa seguinte"
 
 #. icon
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "E_qualizer"
-msgstr "Equalizador"
+msgstr "E_qualizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "Open equalizer window"
-msgstr "Abrir equalizador"
+msgstr "Abrir janela do equalizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 msgid "_View"
@@ -848,14 +845,12 @@ msgid "Select media file"
 msgstr "Selecione o ficheiro"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1730
-#, fuzzy
 msgid "Repeat Mode"
-msgstr "Repetir todas"
+msgstr "Modo de repetição"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1752
-#, fuzzy
 msgid "Remove selected tracks"
-msgstr "Remover faixa selecionada"
+msgstr "Remover faixas selecionadas"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1803
 msgid "Jump to current position"
@@ -1010,14 +1005,12 @@ msgid "Lyrics"
 msgstr "Letras musicais"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:63
-#, fuzzy
 msgid "Hide Media Library"
-msgstr "Ocultar coleção"
+msgstr "Ocultar coleção multimédia"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:64
-#, fuzzy
 msgid "Show Media Library"
-msgstr "Mostrar coleção"
+msgstr "Mostrar coleção multimédia"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1273
@@ -1160,11 +1153,11 @@ msgstr "Procurar letras em azlyrics.com"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:1
 msgid "AppIndicator plugin"
-msgstr ""
+msgstr "AppIndicator"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
-msgstr ""
+msgstr "Plugin Ubuntu Application Indicator para o xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"
