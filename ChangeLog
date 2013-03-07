@@ -1,3 +1,27 @@
+commit 20a733e10d076838009b68455b5da3a746e57b5e
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Thu Mar 7 13:04:48 2013 +0100
+
+    update po/pt.po
+
+commit ace23cdb234e634297ad71c760c8a10622c73f27
+Author: Petr Simacek <psimacek@radiobeat.cz>
+Date:   Thu Mar 7 12:37:35 2013 +0100
+
+    update po/cs.po
+
+commit 816a0facc2a9ee037588790ce87b920ad3791a04
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Thu Mar 7 12:35:44 2013 +0100
+
+    update po/eu.po
+
+commit e117ff4ef042b078ed97bfe59b761571026784eb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 6 13:43:14 2013 +0100
+
+    update packaging data
+
 commit 90ac0dddc81e3f238db1995ccc6f27cb2195b22e
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Tue Mar 5 14:23:39 2013 +0100
