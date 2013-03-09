@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 14:20+0100\n"
+"POT-Creation-Date: 2013-03-09 14:19+0100\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -34,6 +34,7 @@ msgstr "Организовывайте и проигрывайте ваши му
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr "Проигрывать/Пауза"
 
@@ -1070,14 +1071,17 @@ msgid "Length"
 msgstr "Длина"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:121
 msgid "Previous"
 msgstr "Предыдущий"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:136
 msgid "Next"
 msgstr "Следующий"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:172
 msgid "Exit"
 msgstr "Выход"
 
@@ -1213,6 +1217,10 @@ msgstr ""
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
+msgstr ""
+
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:154
+msgid "Show xnoise"
 msgstr ""
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 14:20+0100\n"
+"POT-Creation-Date: 2013-03-09 14:19+0100\n"
 "PO-Revision-Date: 2010-03-07 01:38+0600\n"
 "Last-Translator: \n"
 "Language-Team: Bengali\n"
@@ -30,6 +30,7 @@ msgstr ""
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr ""
 
@@ -1003,14 +1004,17 @@ msgid "Length"
 msgstr ""
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:121
 msgid "Previous"
 msgstr ""
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:136
 msgid "Next"
 msgstr ""
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:172
 msgid "Exit"
 msgstr ""
 
@@ -1140,6 +1144,10 @@ msgstr ""
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
+msgstr ""
+
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:154
+msgid "Show xnoise"
 msgstr ""
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 14:20+0100\n"
+"POT-Creation-Date: 2013-03-09 14:19+0100\n"
 "PO-Revision-Date: 2013-01-25 14:12+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -39,6 +39,7 @@ msgstr "ארגון ונגינת אוספי המוזיקה והווידאו של�
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr "נגן/השהה"
 
@@ -1028,14 +1029,17 @@ msgid "Length"
 msgstr "אורך"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:121
 msgid "Previous"
 msgstr "הקודם"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:136
 msgid "Next"
 msgstr "הבא"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:172
 msgid "Exit"
 msgstr "צא"
 
@@ -1165,6 +1169,10 @@ msgstr ""
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
+msgstr ""
+
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:154
+msgid "Show xnoise"
 msgstr ""
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1

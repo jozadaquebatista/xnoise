@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 14:20+0100\n"
+"POT-Creation-Date: 2013-03-09 14:19+0100\n"
 "PO-Revision-Date: 2013-03-06 19:39+0100\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -29,6 +29,7 @@ msgstr "Spravovat a přehrávat hudební a filmové sbírky"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr "Přehrát/Pozastavit"
 
@@ -56,19 +57,16 @@ msgstr "Přepnout zobrazení přehledu alb"
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
-#: ../libxnoise/Application/xnoise-application.vala:244
-#: ../src/xnoise.vala:158
+#: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise je přehrávač multimédií pro Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:245
-#: ../src/xnoise.vala:159
+#: ../libxnoise/Application/xnoise-application.vala:245 ../src/xnoise.vala:159
 msgid "It uses the gstreamer framework."
 msgstr "Používá soustavu GStreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:246
-#: ../src/xnoise.vala:160
+#: ../libxnoise/Application/xnoise-application.vala:246 ../src/xnoise.vala:160
 msgid "More information on the project website:"
 msgstr "Více informací na stránkách projektu:"
 
@@ -288,8 +286,11 @@ msgid "Use systray icon"
 msgstr "Použít ikonu v systémové části panelu"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
-msgid "Use a status icon on your panel for showing, hiding and controlling xnoise"
-msgstr "Zobrazit stavovou ikonu ve vašem panelu kvůli ukázání, skrytí a ovládání Xnoise"
+msgid ""
+"Use a status icon on your panel for showing, hiding and controlling xnoise"
+msgstr ""
+"Zobrazit stavovou ikonu ve vašem panelu kvůli ukázání, skrytí a ovládání "
+"Xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:341
 msgid "Use menu button"
@@ -305,7 +306,8 @@ msgstr "Zobrazit tlačítko pro zastavení"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show a stop button along with the other playback control buttons"
-msgstr "Ukazovat tlačítko pro zastavení společně s ostatními tlačítky pro přehrávání"
+msgstr ""
+"Ukazovat tlačítko pro zastavení společně s ostatními tlačítky pro přehrávání"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:351
 msgid "Quit on window close"
@@ -320,8 +322,12 @@ msgid "Use desktop notifications"
 msgstr "Použít systémová oznámení"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
-msgid "Use desktop notifications that inform about played media while the main window of xnoise is not visible"
-msgstr "Použít systémová oznámení, jež informují o přehrávaném záznamu, když hlavní okno Xnoise není viditelné"
+msgid ""
+"Use desktop notifications that inform about played media while the main "
+"window of xnoise is not visible"
+msgstr ""
+"Použít systémová oznámení, jež informují o přehrávaném záznamu, když hlavní "
+"okno Xnoise není viditelné"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
 msgid "Use combo box selector for media types"
@@ -329,7 +335,9 @@ msgstr "Používat volič rozbalovacího seznamu pro typy multimédií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use a combo box for selecting media types like music, video or streams"
-msgstr "Používat rozbalovací seznam pro výběr typů multimédií, jako jsou hudba, obrazový záznam nebo datové proudy"
+msgstr ""
+"Používat rozbalovací seznam pro výběr typů multimédií, jako jsou hudba, "
+"obrazový záznam nebo datové proudy"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:374
 msgid "Go Back"
@@ -478,14 +486,21 @@ msgstr "Album:"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:163
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:203
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:200
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, pokud nechcete čekat."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
+"pokud nechcete čekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:207
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:204
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Počkejte, prosím, na dokončení nahrávání dat. Nebo nahrávání zrušte, pokud nechcete čekat."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Počkejte, prosím, na dokončení nahrávání dat. Nebo nahrávání zrušte, pokud "
+"nechcete čekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
 msgid "Album data"
@@ -790,8 +805,12 @@ msgstr "Zobrazit _obal alba"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:514
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "Obnovuje se %u položek v seznamu skladeb. To je poměrně velký počet, který může zpomalit spuštění Xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"Obnovuje se %u položek v seznamu skladeb. To je poměrně velký počet, který "
+"může zpomalit spuštění Xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:716
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:728
@@ -908,8 +927,11 @@ msgid "Default"
 msgstr "Výchozí"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:229
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se nepoužívá."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se "
+"nepoužívá."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:747
 #, c-format
@@ -919,7 +941,8 @@ msgstr "Chybějící přídavný modul pro GStreamer se nepodařilo nainstalovat
 #: ../libxnoise/Player/xnoise-gst-player.vala:751
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "Uživatelem přerušená instalace chybějícího přídavného modulu pro GStreamer"
+msgstr ""
+"Uživatelem přerušená instalace chybějícího přídavného modulu pro GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:755
 #, c-format
@@ -929,7 +952,9 @@ msgstr "Přídavný modul pro Gstreamer se v repozitářích nepodařilo najít"
 #: ../libxnoise/Player/xnoise-gst-player.vala:761
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr "Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu GStreameru"
+msgstr ""
+"Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu "
+"GStreameru"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:806
 #: ../libxnoise/Player/xnoise-gst-player.vala:817
@@ -944,11 +969,13 @@ msgstr "Automatické hledání chybějícího kodeku není podporováno"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:819
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "Automatickou instalaci přídavného modulu pro GStreamer se nepodařilo spustit"
+msgstr ""
+"Automatickou instalaci přídavného modulu pro GStreamer se nepodařilo spustit"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:832
 msgid "Trying to install missing gstreamer plugin"
-msgstr "Proveden pokus o nainstalování chybějícího přídavného modulu pro GStreamer"
+msgstr ""
+"Proveden pokus o nainstalování chybějícího přídavného modulu pro GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:932
 msgid "Subtitle #"
@@ -1001,14 +1028,17 @@ msgid "Length"
 msgstr "Délka"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:121
 msgid "Previous"
 msgstr "Předchozí"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:136
 msgid "Next"
 msgstr "Další"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:172
 msgid "Exit"
 msgstr "Ukončit"
 
@@ -1041,7 +1071,8 @@ msgid "%u new tracks found"
 msgstr "Nalezeno %u skladeb"
 
 #: ../src/xnoise.vala:169
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "Zadejte 'xnoise --help', pro celý seznam dostupných příkazů.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
@@ -1089,7 +1120,9 @@ msgstr "Heslo:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:510
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "Poslat přehrávané skladby na Last.fm (Poslat píseň kvůli vytvoření statististik)"
+msgstr ""
+"Poslat přehrávané skladby na Last.fm (Poslat píseň kvůli vytvoření "
+"statististik)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
@@ -1138,6 +1171,10 @@ msgstr "Zásuvný modul Indikátor"
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
 msgstr "Indikátor Ubuntu pro Xnoise"
+
+#: ../plugins/app_indicator/xnoise-app-indicator.vala:154
+msgid "Show xnoise"
+msgstr ""
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"

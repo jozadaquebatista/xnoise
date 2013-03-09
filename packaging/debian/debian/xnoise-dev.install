@@ -1,4 +1,5 @@
 usr/include
 usr/include/xnoise
+usr/lib/libxnoise.so
 usr/lib/pkgconfig
 usr/share/vala

@@ -151,7 +151,7 @@ public class Xnoise.AppIndicator : GLib.Object, IPlugin {
         
         var raiseImage = new Image();
         raiseImage.set_from_stock(Gtk.Stock.LEAVE_FULLSCREEN, IconSize.MENU);
-        var raiseLabel = new Label(_("Show"));
+        var raiseLabel = new Label(_("Show xnoise"));
         raiseLabel.set_alignment(0, 0);
         var raiseItem = new Gtk.MenuItem();
         var raiseHbox = new Box(Orientation.HORIZONTAL, 1);

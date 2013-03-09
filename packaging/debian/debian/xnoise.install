@@ -1,7 +1,5 @@
 usr/bin
-usr/lib/libxnoise.s*
-usr/lib/xnoise/lib*.so
-usr/lib/xnoise/*.xnplugin
+usr/lib/libxnoise.so.*
 usr/share/applications
 usr/share/dbus-1/services
 usr/share/icons
