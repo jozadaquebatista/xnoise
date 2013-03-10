@@ -103,6 +103,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     
     public new double get(int idx) {
         double gain = 0.0;
+        if(eq == null)
+            return 0.0;
         GLib.Object bandgain =
             ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(idx));
         
@@ -118,6 +120,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     }
 
     public new void set(int idx, double gain) {
+        if(eq == null)
+            return;
         GLib.Object bandgain =
             ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(idx));
         

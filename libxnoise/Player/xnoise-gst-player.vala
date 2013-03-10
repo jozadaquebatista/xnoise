@@ -292,19 +292,6 @@ public class Xnoise.GstPlayer : GLib.Object {
                     return -1;
             return pos / Gst.USECOND;
         }
-//        set {
-//            if(seeking == false) {
-//                if(value > 1.0)
-//                    value = 1.0;
-//                int64 len;
-//                Gst.Format fmt = Gst.Format.TIME;
-//                playbin.query_duration(ref fmt, out len);
-//                _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
-//                playbin.seek_simple(Gst.Format.TIME,
-//                                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-//                                   (int64)(value * _length_nsecs));
-//            }
-//        }
     }
 
     public double position {
@@ -334,10 +321,6 @@ public class Xnoise.GstPlayer : GLib.Object {
                                         Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
                                        (int64)(value * _length_nsecs));
                 }
-//                Idle.add( () => {
-//                    on_cyclic_send_song_position();
-//                    return false;
-//                });
             }
         }
     }
@@ -440,52 +423,6 @@ public class Xnoise.GstPlayer : GLib.Object {
         return pixbuf;
     }
 
-//    private bool _eq_active;
-//    public bool eq_active {
-//        get {
-//            return _eq_active;
-//        }
-//        set {
-//            if(value) {
-//                activate_equalizer();
-//            }
-//            else {
-//                deactivate_equalizer();
-//            }
-//        }
-//    }
-
-//    private void activate_equalizer() {
-        //print("activate_equalizer\n");
-//        if(equalizer.eq != null  && equalizer.available) {
-//            playbin.set_state(State.NULL);
-//            queue.unlink(asink);
-//            queue.link_many(
-//                ac1,
-//                preamp,
-//                equalizer.eq,
-//                ac2,
-//                asink
-//            );
-//        }
-//        _eq_active = true;
-//    }
-    
-//    private void deactivate_equalizer() {
-//        print("deactivate_equalizer 1\n");
-//        if(equalizer.eq != null && equalizer.available) {
-//        print("deactivate_equalizer 2\n");
-//            playbin.set_state(State.NULL);
-//            queue.unlink(ac1);
-//            queue.unlink(preamp);
-//            queue.unlink(equalizer.eq);
-//            queue.unlink(ac2);
-//            queue.unlink(asink);
-//            queue.link_many(asink);
-//        }
-//        _eq_active = false;
-//    }
-
     private void request_location(string? xuri) {
         bool playing_buf = playing;
         playbin.set_state(State.READY);
@@ -520,12 +457,21 @@ public class Xnoise.GstPlayer : GLib.Object {
         assert(playbin != null);
         
         asink     = ElementFactory.make("autoaudiosink", null);
+        if(asink == null) {
+            print("autoaudiosink is not available. Maybe you are mising an installation of gstreamer1.0-plugins-good.\n");
+        }
         assert(asink != null);
         
         ac1       = ElementFactory.make("audioconvert", null);
+        if(ac1 == null) {
+            print("audioconvert is not available. Maybe you are mising an installation of gstreamer1.0-plugins-base.\n");
+        }
         assert(ac1 != null);
         
         ac2       = ElementFactory.make("audioconvert", null);
+        if(ac2 == null) {
+            print("audioconvert is not available. Maybe you are mising an installation of gstreamer1.0-plugins-base.\n");
+        }
         assert(ac2 != null);
         
         preamp    = ElementFactory.make("volume", null);
@@ -586,9 +532,6 @@ public class Xnoise.GstPlayer : GLib.Object {
                 ac2,
                 asink
         );
-//        _eq_active = true;
-
-        
         
         playbin.text_changed.connect(() => {
             //print("text_changed\n");

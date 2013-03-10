@@ -2231,13 +2231,79 @@ private class Xnoise.SideBarHeadline : Gtk.TreeView {
     private void setup_widgets() {
         store = new ListStore(Column.N_COUNT, typeof(string), typeof(int));
         
-        var renderer = new CellRendererText();
+        var renderer = new CustomCellRendererHeadline();
         var column = new TreeViewColumn();
         column.pack_start(renderer, true);
         column.add_attribute(renderer, "text",   Column.TEXT);
         column.add_attribute(renderer, "weight", Column.WEIGHT);
         this.append_column(column);
         this.set_model(store);
+    }
+    
+    
+
+    private class CustomCellRendererHeadline : Gtk.CellRendererText {
+        private unowned Pango.FontDescription font_description;
+//        private int PIXPAD = 10; // space between pixbuf and text
+//        private int INDENT = 15;
+        private const int ICONSIZE = 16;
+//        public string icon            { get; set; }
+//        public string text            { get; set; }
+//        public int weight             { get; set; }
+        
+        public CustomCellRendererHeadline() {
+            GLib.Object();
+        }
+        
+//        public override void get_preferred_height_for_width(Gtk.Widget widget,
+//                                                            int width,
+//                                                            out int minimum_height,
+//                                                            out int natural_height) {
+//            natural_height = minimum_height = 20;//(pix != null ? int.max(24, pix.get_height() + 2) : 24);
+//        }
+
+//        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+//                                      out int x_offset, out int y_offset,
+//                                      out int width, out int height) {
+//            // function not used for gtk+-3.0 !
+//            x_offset = 0;
+//            y_offset = 0;
+//            width = 0;
+//            height = 24;
+//        }
+        
+        public override void render(Cairo.Context cr, Widget widget,
+                                    Gdk.Rectangle background_area,
+                                    Gdk.Rectangle cell_area,
+                                    CellRendererState flags) {
+            
+            StyleContext context;
+            var pango_layout = widget.create_pango_layout(text);
+            pango_layout.set_alignment(Pango.Alignment.LEFT);
+            context = main_window.media_browser_box.get_style_context();
+            context.add_class(STYLE_CLASS_SIDEBAR);
+            StateFlags state = widget.get_state_flags();
+            if((flags & CellRendererState.SELECTED) == 0) {
+                Gdk.cairo_rectangle(cr, background_area);
+                Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
+                Gdk.cairo_set_source_rgba(cr, col);
+                cr.fill();
+            }
+            int wi = 0, he = 0;
+            pango_layout.get_pixel_size(out wi, out he);
+            //print("calculated_widh[level]: %d  level: %d\n", calculated_widh[level], level);
+            context = widget.get_style_context();
+            if(cell_area.height > he)
+                context.render_layout(cr, 
+                                      2 + cell_area.x,
+                                      cell_area.y +  (cell_area.height -he)/2,
+                                      pango_layout);
+            else
+                context.render_layout(cr, 
+                                      2 + cell_area.x, 
+                                      cell_area.y, 
+                                      pango_layout);
+        }
     }
 }
 
