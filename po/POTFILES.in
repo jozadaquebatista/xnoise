@@ -58,6 +58,7 @@ libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala
 libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala
 libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala
 libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala
+libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala
 libxnoise/ItemHandlers/xnoise-item-converter.vala
 libxnoise/ItemHandlers/xnoise-item-handler-manager.vala
 libxnoise/ItemHandlers/xnoise-item-handler.vala

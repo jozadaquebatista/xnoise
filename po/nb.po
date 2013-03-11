@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: glib 2.33.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-09 14:19+0100\n"
+"POT-Creation-Date: 2013-03-11 09:54+0100\n"
 "PO-Revision-Date: 2012-07-23 11:42+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -601,6 +601,10 @@ msgstr ""
 msgid "Show in parent folder"
 msgstr ""
 
+#: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:40
+msgid "Filter for artist"
+msgstr ""
+
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
 msgid "Insufficient track information. Not searching for lyrics."
@@ -861,47 +865,47 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:160
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:164
 msgid "Dance"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:165
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:169
 msgid "Pop"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:170
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:174
 msgid "Techno"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:179
 msgid "Club"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:180
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
 msgid "Jazz"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:185
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
 msgid "Rock"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:190
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:194
 msgid "Maximum Treble"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:195
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:199
 msgid "Maximum Bass"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:200
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:204
 msgid "Classic"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:206
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:210
 msgid "Custom"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:212
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:216
 msgid "Default"
 msgstr ""
 
@@ -910,51 +914,51 @@ msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:747
+#: ../libxnoise/Player/xnoise-gst-player.vala:690
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:751
+#: ../libxnoise/Player/xnoise-gst-player.vala:694
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:755
+#: ../libxnoise/Player/xnoise-gst-player.vala:698
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:761
+#: ../libxnoise/Player/xnoise-gst-player.vala:704
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:806
-#: ../libxnoise/Player/xnoise-gst-player.vala:817
-#: ../libxnoise/Player/xnoise-gst-player.vala:830
+#: ../libxnoise/Player/xnoise-gst-player.vala:749
+#: ../libxnoise/Player/xnoise-gst-player.vala:760
+#: ../libxnoise/Player/xnoise-gst-player.vala:773
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:808
+#: ../libxnoise/Player/xnoise-gst-player.vala:751
 #, fuzzy
 msgid "Automatic missing codec installation not supported"
 msgstr "Avbrytbar initiering er ikke støttet"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:819
+#: ../libxnoise/Player/xnoise-gst-player.vala:762
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:832
+#: ../libxnoise/Player/xnoise-gst-player.vala:775
 msgid "Trying to install missing gstreamer plugin"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:932
+#: ../libxnoise/Player/xnoise-gst-player.vala:875
 msgid "Subtitle #"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:944
+#: ../libxnoise/Player/xnoise-gst-player.vala:887
 msgid "Audio Track #"
 msgstr ""
 
