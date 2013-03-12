@@ -136,9 +136,16 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.drag_data_received.connect(this.on_drag_data_received);
         var context = this.get_style_context();
         context.save();
+        Gdk.RGBA color, scolor;//, icolor;
+        scolor = context.get_background_color(StateFlags.SELECTED);
+//        icolor = context.get_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
-        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
         this.override_background_color(StateFlags.NORMAL, color);
+        this.override_background_color(StateFlags.SELECTED, scolor);
+//        this.override_color(StateFlags.SELECTED, icolor);
+//        color = context.get_color(StateFlags.NORMAL);
+//        this.override_color(StateFlags.NORMAL, color);
         context.restore();
 
 //        var context = ow.get_style_context();
@@ -609,7 +616,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                                     Gdk.Rectangle cell_area,
                                     CellRendererState flags) {
             
-            StyleContext context;
+            StyleContext context = widget.get_style_context();
+            
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
@@ -618,7 +626,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             );
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             //context = ow.get_style_context();
-            //StateFlags state = ow.get_state_flags();
+            StateFlags state = widget.get_state_flags();
             //if((flags & CellRendererState.SELECTED) == 0) {
             //    Gdk.cairo_rectangle(cr, cell_area);
             //    Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
@@ -631,25 +639,31 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             
             Gdk.Pixbuf p = null;
             if((flags & CellRendererState.SELECTED) == 0) {
+//                context.add_class(STYLE_CLASS_VIEW);
+//                    context.set_state(context.get_state() | StateFlags.SELECTED);
+//                else
+//                    context.set_state(context.get_state() & ~StateFlags.SELECTED);
+//                print("render bg\n");
+//                Gtk.render_background(context, cr, cell_area.x, cell_area.y, cell_area.width, cell_area.height);
                 switch(level) {
                     case 0:
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             if(text == VARIOUS_ARTISTS) {
                                 p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
-                                                      16, widget.get_style_context());
+                                                      16, context);
                                 break;
                             }
                             if(artist_unsel == null)
                                 artist_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = artist_unsel;
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             if(genre_unsel == null)
                                 genre_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("emblem-documents-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = genre_unsel;
                         }
                         break;
@@ -662,14 +676,14 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                             if(album_unsel == null)
                                 album_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = album_unsel;
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             if(artist_unsel == null)
                                 artist_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = artist_unsel;
                         }
                         break;
@@ -679,7 +693,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                             if(title_unsel == null)
                                 title_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = title_unsel;
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
@@ -690,7 +704,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                             if(album_unsel == null)
                                 album_unsel = 
                                     IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                             p = album_unsel;
                         }
                         break;
@@ -702,15 +716,15 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             if(text == VARIOUS_ARTISTS) {
                                 p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
-                                                      16, widget.get_style_context());
+                                                      16, context);
                                 break;
                             }
                             p = IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
-                                                            16, widget.get_style_context());
+                                                            16, context);
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             p = IconRepo.get_themed_pixbuf_icon("emblem-documents-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                         }
                         break;
                     case 1:
@@ -720,18 +734,18 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                                 break;
                             }
                             p = IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             p = IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                         }
                         break;
                     case 2:
                     default:
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             p = IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                         }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             if(pix != null) {
@@ -739,7 +753,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                                 break;
                             }
                             p = IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
-                                                                16, widget.get_style_context());
+                                                                16, context);
                         }
                         break;
                 }
@@ -767,7 +781,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 cr.paint();
             }
             //print("calculated_widh[level]: %d  level: %d\n", calculated_widh[level], level);
-            context = widget.get_style_context();
             if(cell_area.height > he)
                 context.render_layout(cr, 
                                       calculated_widh[level] + 

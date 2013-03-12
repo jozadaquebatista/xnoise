@@ -121,9 +121,12 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         });
         var context = this.get_style_context();
         context.save();
+        Gdk.RGBA color, scolor;
+        scolor = context.get_background_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
-        Gdk.RGBA color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        color = context.get_background_color(StateFlags.NORMAL);
         this.override_background_color(StateFlags.NORMAL, color);
+        this.override_background_color(StateFlags.SELECTED, scolor);
         context.restore();
     }
     
