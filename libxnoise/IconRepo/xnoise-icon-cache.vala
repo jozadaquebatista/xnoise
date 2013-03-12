@@ -280,6 +280,6 @@ private class Xnoise.IconCache : GLib.Object {
     private const int frame_width = 1;
     
     private Gdk.Pixbuf? prepare(Gdk.Pixbuf pixbuf) {
-        return pixbuf.scale_simple(IconsModel.ICONSIZE - 2, IconsModel.ICONSIZE - 1, Gdk.InterpType.BILINEAR);
+        return pixbuf.scale_simple(IconsModel.ICONSIZE - 3, IconsModel.ICONSIZE - 1, Gdk.InterpType.BILINEAR);
     }
 }
