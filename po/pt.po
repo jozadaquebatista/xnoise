@@ -616,7 +616,7 @@ msgstr "Mostrar na pasta"
 
 #: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:40
 msgid "Filter for artist"
-msgstr ""
+msgstr "Filtrar artista"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
@@ -1169,7 +1169,7 @@ msgstr "Plugin Ubuntu Application Indicator para o xnoise"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:154
 msgid "Show xnoise"
-msgstr ""
+msgstr "Mostrar xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"
