@@ -79,7 +79,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
             pango_layout.get_pixel_size(out wi, out he);
         }
         //RECTANGLE
-        double alpha = 0.6;
+        double alpha = 0.65;
         
         if((flags & CellRendererState.PRELIT) == CellRendererState.PRELIT)
             alpha -= 0.15;
@@ -92,7 +92,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         cr.set_line_width(0);
         cr.rectangle(x_offset, 
                      rect_offset,
-                     cell_area.width - 2,
+                     cell_area.width - 1,
                      rect_height - 1);
         cr.fill();
         

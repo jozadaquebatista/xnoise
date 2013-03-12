@@ -63,7 +63,7 @@ private class Xnoise.AlbumArtCellArea : Gtk.CellAreaBox {
                                              out int minimum_width,
                                              out int natural_width) {
         //print("get_preferred_width\n");
-        minimum_width = natural_width = IconsModel.ICONSIZE;
+        minimum_width = natural_width = IconsModel.ICONSIZE + 1;
     }
 }
 
