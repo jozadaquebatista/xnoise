@@ -41,7 +41,7 @@ private extern bool ensure_native(Gdk.Window window);
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
-    private const int HIDE_BUTTON_SIZE     = 20;
+//    private const int HIDE_BUTTON_SIZE     = 20;
     private Box content_top_box;
     private VolumeSliderButton volume_slider;
     private Notebook paned2notebook;
@@ -1686,35 +1686,35 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             EventBox ebxb;
-            var hide_button = new Gtk.Button();
+//            var hide_button = new Gtk.Button();
             
             // use standard icon theme or local fallback
-            Gtk.Image hide_button_image;
-            if(theme.has_icon("go-first-symbolic"))
-                hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
-                );
-            else
-                hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
-                );
+//            Gtk.Image hide_button_image;
+//            if(theme.has_icon("go-first-symbolic"))
+//                hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+//                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
+//                );
+//            else
+//                hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
+//                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
+//                );
             
-            var bgb = new BackgroundBox(Orientation.HORIZONTAL, 0);
-            hide_button.add(hide_button_image);
-            hide_button.can_focus = false;
-            hide_button.clicked.connect(this.toggle_media_browser_visibility);
-            hide_button.set_relief(ReliefStyle.NONE);
-            hide_button.set_has_tooltip(true);
-            hide_button.events = hide_button.events |
-                                 Gdk.EventMask.ENTER_NOTIFY_MASK |
-                                 Gdk.EventMask.LEAVE_NOTIFY_MASK |
-                                 Gdk.EventMask.POINTER_MOTION_MASK;
+//            var bgb = new BackgroundBox(Orientation.HORIZONTAL, 0);
+//            hide_button.add(hide_button_image);
+//            hide_button.can_focus = false;
+//            hide_button.clicked.connect(this.toggle_media_browser_visibility);
+//            hide_button.set_relief(ReliefStyle.NONE);
+//            hide_button.set_has_tooltip(true);
+//            hide_button.events = hide_button.events |
+//                                 Gdk.EventMask.ENTER_NOTIFY_MASK |
+//                                 Gdk.EventMask.LEAVE_NOTIFY_MASK |
+//                                 Gdk.EventMask.POINTER_MOTION_MASK;
 
-            bgb.add(hide_button);
-            paned_overlay.add_overlay(bgb);
-            bgb.halign = Align.START;
-            bgb.valign = Align.END;
-            bgb.margin_bottom = 30;
+//            bgb.add(hide_button);
+//            paned_overlay.add_overlay(bgb);
+//            bgb.halign = Align.START;
+//            bgb.valign = Align.END;
+//            bgb.margin_bottom = 30;
             tbx = new BackgroundBox(Orientation.VERTICAL, 0);
             
             //VOLUME SLIDE BUTTON
@@ -1825,36 +1825,38 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tbx.halign = Align.END;
             tbx.valign = Align.CENTER;
             content_top_box.pack_start(main_view_sbutton, false, false, 0);
-            this.notify["media-browser-visible"].connect( (s, val) => {
-                if(this.media_browser_visible == true) {
-                    hide_button.remove(hide_button_image);
-                    if(theme.has_icon("go-first-symbolic"))
-                        hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-                        );
-                    else
-                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-                        );
-                    hide_button_image.show();
-                    hide_button.add(hide_button_image);
-                    hide_button.set_tooltip_text(HIDE_LIBRARY);
-                }
-                else {
-                    hide_button.remove(hide_button_image);
-                    if(theme.has_icon("go-last-symbolic"))
-                        hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
-                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-                        );
-                    else
-                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-last-symbolic",
-                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-                        );
-                    hide_button_image.show();
-                    hide_button.add(hide_button_image);
-                    hide_button.set_tooltip_text(SHOW_LIBRARY);
-                }
-            });
+//            this.notify["media-browser-visible"].connect( (s, val) => {
+//                if(this.media_browser_visible == true) {
+//                    hide_button.remove(hide_button_image);
+//                    if(theme.has_icon("go-first-symbolic"))
+//                        hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
+//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
+//                        );
+//                    else
+//                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
+//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
+//                        );
+//                    hide_button_image.show();
+//                    hide_button.add(hide_button_image);
+//                    bgb.show_all();
+//                    hide_button.set_tooltip_text(HIDE_LIBRARY);
+//                }
+//                else {
+//                    hide_button.remove(hide_button_image);
+//                    if(theme.has_icon("go-last-symbolic"))
+//                        hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
+//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
+//                        );
+//                    else
+//                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-last-symbolic",
+//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
+//                        );
+//                    hide_button_image.show();
+//                    hide_button.add(hide_button_image);
+//                    bgb.show_all();
+//                    hide_button.set_tooltip_text(SHOW_LIBRARY);
+//                }
+//            });
             
             
             mainview_box.notify["current-name"].connect( () => {

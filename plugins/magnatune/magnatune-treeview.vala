@@ -130,7 +130,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         context.restore();
     }
     
-    ~MagnatuneTreeView() {        
+    ~MagnatuneTreeView() {
         global.notify["active-dockable-media-name"].disconnect(on_active_dockable_media_changed);
     }
     
