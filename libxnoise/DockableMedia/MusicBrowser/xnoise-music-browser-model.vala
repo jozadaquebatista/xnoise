@@ -301,7 +301,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                          );
                 return false;
             }
-            string itemtext_prep = job.item.text.down().strip();
+            string itemtext_prep = job.item.text.down().strip().collate_key();
             
             for(int i = 0; i < this.iter_n_children(null); i++) {
                 if(i == 0) {
@@ -320,11 +320,11 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     continue;
                 
                 text = text != null ? text.down().strip() : EMPTYSTRING;
-                if(strcmp(text.collate_key(), itemtext_prep.collate_key()) == 0) {
+                if(strcmp(text.collate_key(), itemtext_prep) == 0) {
                     //found artist
                     return false;
                 }
-                if(strcmp(text.collate_key(), itemtext_prep.collate_key()) > 0) {
+                if(strcmp(text.collate_key(), itemtext_prep) > 0) {
                     TreeIter new_artist_iter;
                     this.insert_before(out new_artist_iter, null, artist_iter);
                     this.set(new_artist_iter,

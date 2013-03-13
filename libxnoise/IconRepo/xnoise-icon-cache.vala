@@ -223,7 +223,7 @@ private class Xnoise.IconCache : GLib.Object {
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(cache_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-        job.set_arg("file", file.get_path());
+//        job.set_arg("file", file.get_path());
         if(file == null ||
             (!file.get_path().has_suffix("_extralarge") &&
              !file.get_path().has_suffix("_embedded"))) {

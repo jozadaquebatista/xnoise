@@ -536,13 +536,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         private int expander;
         private int hsepar;
         private int calculated_widh[3];
-        private Pixbuf artist_unsel;
-        private Pixbuf album_unsel;
-        private Pixbuf title_unsel;
-        private Pixbuf genre_unsel;
+        private static Pixbuf artist_unsel;
+        private static Pixbuf album_unsel;
+        private static Pixbuf title_unsel;
+        private static Pixbuf genre_unsel;
         
         public int level              { get; set; }
-        public unowned Gdk.Pixbuf pix { get; set; }
+        public Gdk.Pixbuf pix         { get; set; }
         public string text            { get; set; }
         public int size_points        { get; set; }
         

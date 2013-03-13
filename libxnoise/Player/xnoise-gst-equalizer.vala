@@ -52,7 +52,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
                 this[i] = 0.0;
         }
         if(!Params.get_bool_value("not_use_eq"))
-            gst_player.preamplification = Params.get_double_value("preamp");
+            gst_player.preamplification = 
+                (Params.get_double_value("preamp") == 0.0 ? 1.0 : Params.get_double_value("preamp"));
         else
             gst_player.preamplification = 1.0;
     }

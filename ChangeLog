@@ -1,3 +1,93 @@
+commit 5800aaf2a1fdcbea5f025860c7adfdb9795109a6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 12 16:45:44 2013 +0100
+
+    adjustment
+
+commit b9915c6696d97e07fb5bdf146b38b33a67785c25
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 12 16:33:40 2013 +0100
+
+    make some compromise between renderings of different gtk versions
+
+commit 84314a6a16b719cb32e6b9d11827cb795414a4d3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 12 15:47:43 2013 +0100
+
+    change image positioning in album art view
+
+commit 76640ba2adf2938e825d7d0db7797282d56c5954
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 12 14:06:55 2013 +0100
+
+    remove hide button for media browser
+
+commit b257553377fcd986648c3945cf40522067a81444
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Tue Mar 12 13:43:42 2013 +0100
+
+    update po/pt.po
+
+commit 219df0b684e519fef8aed0e029a54e1ac375289b
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Tue Mar 12 13:42:50 2013 +0100
+
+    update po/eu.po
+
+commit d9a0119a13e192a21d63abd7fb49f22e28c9cf04
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 12 13:35:05 2013 +0100
+
+    fix rendering for Adwaita and some other themes
+
+commit c3918ba0dcb80e79c2ee6d807f0eb9fc5db00bdf
+Author: Petr Simacek <psimacek@radiobeat.cz>
+Date:   Mon Mar 11 10:59:21 2013 +0100
+
+    update po/cs.po
+
+commit 7c26de987f745973191b322ce51bff87573c0814
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 11 09:55:21 2013 +0100
+
+    add missing strings
+
+commit d03e6d4af7825b4ea64fc17cf0589d4aecf1c6e3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Mar 10 23:38:48 2013 +0100
+
+    bolden headline
+
+commit f96b290440e0d0ea3f2352ee8942427f641b9139
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Mar 10 23:09:33 2013 +0100
+
+    rendering fix
+
+commit 32910a715eaa8194c153367ef3ce3faa7f25b56f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Mar 9 14:22:41 2013 +0100
+
+    update packaging data
+
+commit 73d6582fb153ccb4b1871e868cfd02a53c8e4728
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 7 19:13:07 2013 +0100
+
+    update magnatune treeview
+
+commit 96a2586fb640eaf8c246838bac16537738a0e861
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 7 19:12:45 2013 +0100
+
+    update packaging data
+
+commit f635bd674f1fe9b046c87ff97cdc5cb5bd1d7d00
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Thu Mar 7 13:32:52 2013 +0100
+
+    update album art default image
+
 commit 20a733e10d076838009b68455b5da3a746e57b5e
 Author: Sérgio Marques <smarquespt@gmail.com>
 Date:   Thu Mar 7 13:04:48 2013 +0100

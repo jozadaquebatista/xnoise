@@ -91,12 +91,12 @@ public class Xnoise.Worker : Object {
         
         // using the setter/getter will use a copy of the values for simple types, strings, arrays and structs
         // only for classes a reference is used
-        public void set_arg(string? name, Value? val) {
+        public void set_arg(string? name, owned Value? val) {
             if(name == null)
                 return;
-            this.ht.insert(name, val);
+            this.ht.insert(name, (owned)val);
         }
-        public Value? get_arg(string name) {
+        public unowned Value? get_arg(string name) {
             return this.ht.lookup(name);
         }
         
