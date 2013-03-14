@@ -264,8 +264,24 @@ media_source_selector_type=tree
 
 [settings_double]
 volume=0.8
+eq_band9=0
+eq_band8=0
+eq_band7=0
+eq_band6=0
+eq_band5=0
+eq_band4=0
+eq_band3=0
+eq_band2=0
+eq_band1=0
+eq_band0=0
+preamp=1
 
 [settings_string]
+album_art_view_direction=ASC
+eq_combo=0
+MainViewName=TrackListView
+media_source_selector_type=tree
+album_art_view_sorting=ARTIST
 activated_plugins=soundmenu2;mpris;lastfm;mediakeys
 """;
 }
