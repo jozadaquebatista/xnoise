@@ -33,39 +33,39 @@
 
 namespace Xnoise.Resources {
     
-    public const string UNKNOWN_ARTIST           = "unknown artist";
-    public const string VARIOUS_ARTISTS          = "Various artists";
-    public const string UNKNOWN_TITLE            = "unknown title";
-    public const string UNKNOWN_ALBUM            = "unknown album";
-    public const string UNKNOWN_GENRE            = "unknown genre";
-    public const string UNKNOWN_ORGANIZATION     = "unknown organization";
-    public const string UNKNOWN_LOCATION         = "unknown location";
-    public const string EMPTYSTRING              = "";
+    public static const string UNKNOWN_ARTIST           = "unknown artist";
+    public static const string VARIOUS_ARTISTS          = "Various artists";
+    public static const string UNKNOWN_TITLE            = "unknown title";
+    public static const string UNKNOWN_ALBUM            = "unknown album";
+    public static const string UNKNOWN_GENRE            = "unknown genre";
+    public static const string UNKNOWN_ORGANIZATION     = "unknown organization";
+    public static const string UNKNOWN_LOCATION         = "unknown location";
+    public static const string EMPTYSTRING              = "";
     
-    public const string MAIN_DATABASE_NAME       = "db.sqlite";
-    public const string INIFILE                  = "xnoise.ini";
+    public static const string MAIN_DATABASE_NAME       = "db.sqlite";
+    public static const string INIFILE                  = "xnoise.ini";
     
-    public const string VIDEOVIEW_NAME           = "VideoView"; 
-    public const string TRACKLIST_VIEW_NAME      = "TrackListView";
-    public const string LYRICS_VIEW_NAME         = "LyricsView";  
+    public static const string VIDEOVIEW_NAME           = "VideoView"; 
+    public static const string TRACKLIST_VIEW_NAME      = "TrackListView";
+    public static const string LYRICS_VIEW_NAME         = "LyricsView";  
 
     public static const int VIDEOTHUMBNAILSIZE   = 40; //TODO
     internal static const int DB_VERSION_MAJOR   = 18;
     internal static const int DB_VERSION_MINOR   = 0;
 
-    public const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
-    public const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
-    public const string UNKNOWN_ALBUM_LOCALIZED  = _("unknown album");
+    public static const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
+    public static const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
+    public static const string UNKNOWN_ALBUM_LOCALIZED  = _("unknown album");
     
-    internal const string SHOWVIDEO              = _("Now Playing");
-    internal const string SHOWTRACKLIST          = _("Tracklist");
-    internal const string SHOWLYRICS             = _("Lyrics");
-    internal const string HIDE_LIBRARY           = _("Hide Media Library");
-    internal const string SHOW_LIBRARY           = _("Show Media Library");
+    internal static const string SHOWVIDEO              = _("Now Playing");
+    internal static const string SHOWTRACKLIST          = _("Tracklist");
+    internal static const string SHOWLYRICS             = _("Lyrics");
+    internal static const string HIDE_LIBRARY           = _("Hide Media Library");
+    internal static const string SHOW_LIBRARY           = _("Show Media Library");
 
-    internal const string COPYRIGHT       = "Copyright \xc2\xa9 2008-2013 Jörn Magens";
-    internal const string PROGRAM_NAME    = "xnoise";
-    internal const string WEBSITE         = "http://www.xnoise-media-player.com/";
-    internal const string WEB_FAQ         = "https://bitbucket.org/shuerhaaken/xnoise/wiki/FAQ";
-    internal const string WEB_KEYBOARD_SC = "https://bitbucket.org/shuerhaaken/xnoise/wiki/KeyBindings";
+    internal static const string COPYRIGHT       = "Copyright \xc2\xa9 2008-2013 Jörn Magens";
+    internal static const string PROGRAM_NAME    = "xnoise";
+    internal static const string WEBSITE         = "http://www.xnoise-media-player.com/";
+    internal static const string WEB_FAQ         = "https://bitbucket.org/shuerhaaken/xnoise/wiki/FAQ";
+    internal static const string WEB_KEYBOARD_SC = "https://bitbucket.org/shuerhaaken/xnoise/wiki/KeyBindings";
 }

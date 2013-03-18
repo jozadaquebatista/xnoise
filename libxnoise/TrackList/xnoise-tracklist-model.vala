@@ -407,14 +407,17 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         global.position_reference_next = new TreeRowReference(this, tpath);
     }
 
+    private TrackData[] tda = {};
+    
     // used for saving current tracks in list before quit
     public TrackData[] get_all_tracks() {
-        TrackData[] tda = {};
+        return_val_if_fail(Main.instance.is_same_thread(), null);
+        tda = {};
         
         this.foreach( (sender, path, iter) => {
-            string tracknumberString = EMPTYSTRING;
-            string lengthString = EMPTYSTRING;
-            string yearString = EMPTYSTRING;
+            string tracknumberString;
+            string lengthString;
+            string yearString;
             TrackData td = new TrackData();
             sender.get(iter, 
                        Column.TRACKNUMBER, out tracknumberString,
@@ -444,8 +447,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             tda += td;
             return false;
         });
-        
-        return (owned)tda;
+        TrackData[]? ret = (owned) tda;
+        tda = {};
+        return ret;
     }
 
     public string get_uri_for_current_position() {
