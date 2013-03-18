@@ -306,7 +306,7 @@ public class MprisPlayer : GLib.Object {
             }
         });
         gst_player.sign_position_changed.connect( (g,p,s) => {
-            int64 x = (int64)p * 1000;
+            int64 x = p * 1000;
             Seeked(x);
         });
         this._CanSeek = true;

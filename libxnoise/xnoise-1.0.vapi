@@ -765,7 +765,7 @@ namespace Xnoise {
 		public signal void sign_found_embedded_image (string track_uri, string artist, string album);
 		public signal void sign_paused ();
 		public signal void sign_playing ();
-		public signal void sign_position_changed (uint msecs, uint ms_total);
+		public signal void sign_position_changed (int64 msecs, int64 ms_total);
 		public signal void sign_stopped ();
 		public signal void sign_subtitles_available ();
 		public signal void sign_video_playing ();

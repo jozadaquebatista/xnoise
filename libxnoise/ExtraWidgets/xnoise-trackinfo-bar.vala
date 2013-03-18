@@ -225,7 +225,7 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         set_value(0,0);
     }
 
-    public void set_value(uint pos, uint len) {
+    public void set_value(int64 pos, int64 len) {
         // pos and len are ms
         if(!progress.get_visible())
             return;

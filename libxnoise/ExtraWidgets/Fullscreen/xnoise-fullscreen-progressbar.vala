@@ -138,7 +138,7 @@ private class Xnoise.FullscreenProgressBar : Gtk.EventBox {
         set_value(0,0);
     }
 
-    public void set_value(uint pos, uint len) {
+    public void set_value(int64 pos, int64 len) {
         if(len > 0) {
             int dur_min, dur_sec, pos_min, pos_sec;
             double fraction = (double)pos/(double)len;

@@ -192,7 +192,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             available_subtitles = null;
             available_audiotracks = null;
             this.playbin.suburi = null;
-            length_nsecs =(int64)0;
+            length_nsecs = 0;
             this.playbin.uri =(value == null ? EMPTYSTRING : value);
             // set_automatic_subtitles();
             if(value != null) {
@@ -200,7 +200,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(file.get_uri_scheme() in get_remote_schemes())
                     is_stream = true;
             }
-            sign_position_changed((uint)0,(uint)0); //immediately reset song progressbar
+            sign_position_changed(0, 0); //immediately reset song progressbar
         }
     }
     
@@ -315,17 +315,17 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(!playbin.query_duration(fmt, out len))
                     if(!playbin.query_duration(fmt, out len))
                         return;
-                _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
+                _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ? 0 : len);
                 if(_length_nsecs > 0) {
                     playbin.seek_simple(Gst.Format.TIME,
                                         Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-                                       (int64)(value * _length_nsecs));
+                                        (int64)(value * _length_nsecs));
                 }
             }
         }
     }
 
-    public signal void sign_position_changed(uint msecs, uint ms_total);
+    public signal void sign_position_changed(int64 msecs, int64 ms_total);
     public signal void sign_playing();
     public signal void sign_paused();
     public signal void sign_stopped();
@@ -361,7 +361,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         global.sign_restart_song.connect(() => {
             playbin.seek_simple(Gst.Format.TIME,
                                 Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-                               (int64)0);
+                                0);
             this.playSong();
         });
 //        eq_active = !Params.get_bool_value("not_use_eq");
@@ -1014,11 +1014,13 @@ public class Xnoise.GstPlayer : GLib.Object {
             }
             if(seeking == false) {
                 playbin.query_duration(fmt, out len);
-                length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
+                length_nsecs = (this._uri == null || this._uri == EMPTYSTRING ? 0 : len);
                 if(playing == false) return true;
                 if(!playbin.query_position(fmt, out pos))
                     return true;
-                sign_position_changed((uint)(pos/Gst.MSECOND),(uint)(len/Gst.MSECOND));
+                pos /= Gst.MSECOND;
+                len /= Gst.MSECOND;
+                sign_position_changed(pos, len);
             }
         }
         //print("flags: %d\n",(int)playbin.flags);
@@ -1065,6 +1067,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         playbin.volume = volume; // TODO: Volume should have a global representation
     }
     
+    private uint pos_changed_source = 0;
     public void request_micro_time_offset(int64 micro_seconds) {
         if(playing == false && paused == false)
             return;
@@ -1074,7 +1077,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 int64 pos, new_pos;
                 if(!playbin.query_position(fmt, out pos))
                     return;
-                new_pos = pos +(int64)((int64)micro_seconds * Gst.USECOND);
+                new_pos = pos + (micro_seconds * Gst.USECOND);
                 //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
             
                 if(new_pos > _length_nsecs) new_pos = _length_nsecs;
@@ -1083,7 +1086,14 @@ public class Xnoise.GstPlayer : GLib.Object {
                 playbin.seek_simple(Gst.Format.TIME,
                                     Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
                                     new_pos);
-                sign_position_changed((uint)(new_pos/Gst.MSECOND),(uint)(_length_nsecs/Gst.MSECOND));
+                new_pos /= Gst.MSECOND;
+                if(pos_changed_source != 0)
+                    Source.remove(pos_changed_source);
+                pos_changed_source = Idle.add(() => {
+                    pos_changed_source = 0;
+                    sign_position_changed(new_pos, (_length_nsecs/Gst.MSECOND));
+                    return false;
+                });
             }
         }
     }
@@ -1097,7 +1107,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 int64 pos, new_pos;
                 if(!playbin.query_position(fmt, out pos))
                     return;
-                new_pos = pos +(int64)((int64)seconds * Gst.SECOND);
+                new_pos = pos + (seconds * Gst.SECOND);
                 //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
             
                 if(new_pos > _length_nsecs) new_pos = _length_nsecs;
@@ -1106,7 +1116,14 @@ public class Xnoise.GstPlayer : GLib.Object {
                 playbin.seek_simple(Gst.Format.TIME,
                                     Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
                                     new_pos);
-                sign_position_changed((uint)(new_pos/Gst.MSECOND),(uint)(_length_nsecs/Gst.MSECOND));
+                new_pos /= Gst.MSECOND;
+                if(pos_changed_source != 0)
+                    Source.remove(pos_changed_source);
+                pos_changed_source = Idle.add(() => {
+                    pos_changed_source = 0;
+                    sign_position_changed(new_pos, (_length_nsecs/Gst.MSECOND));
+                    return false;
+                });
             }
         }
     }
