@@ -268,7 +268,12 @@ namespace Xnoise {
                 print("For the '--no-dbus' option, please restart xnoise. \n");
             }
         }
-        return app.run(sa_args);
+        int re = app.run(sa_args);
+#if REF_TRACKING_ENABLED
+        print("dumping\n");
+        BaseObject.print_object_dump();
+#endif
+        return re;
     }
 }
 

@@ -107,7 +107,7 @@ namespace Xnoise {
 			public signal void progress (int cnt);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public abstract class Device : GLib.Object {
+		public abstract class Device : Xnoise.BaseObject {
 			protected Xnoise.ItemHandler? handler;
 			public weak GLib.Mount mount;
 			public Device ();
@@ -619,6 +619,11 @@ namespace Xnoise {
 		public static bool hidden_window { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public abstract class BaseObject : GLib.Object {
+		protected BaseObject ();
+		public static void print_object_dump ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
@@ -969,7 +974,7 @@ namespace Xnoise {
 		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackData {
+	public class TrackData : Xnoise.BaseObject {
 		public string? album;
 		public string? albumartist;
 		public string? artist;
@@ -1065,7 +1070,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
-		public class Job {
+		public class Job : Xnoise.BaseObject {
 			public int32 big_counter[4];
 			public GLib.Cancellable? cancellable;
 			public int counter[4];
@@ -1108,12 +1113,12 @@ namespace Xnoise {
 		public signal void MediaPlayerKeyPressed (string application, string key);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public interface IAlbumCoverImage : GLib.Object {
+	public interface IAlbumCoverImage : Xnoise.BaseObject {
 		public abstract void find_image ();
 		public signal void sign_image_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public interface IAlbumCoverImageProvider : GLib.Object {
+	public interface IAlbumCoverImageProvider : Xnoise.BaseObject {
 		public abstract Xnoise.IAlbumCoverImage from_tags (string artist, string album);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

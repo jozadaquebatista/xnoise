@@ -62,4 +62,4 @@ tests/playlist-examples/tmp_*.xspf
 package_result/
 utils/xnoise_image_extractor_service
 po/xnoise.pot
-
+*.service

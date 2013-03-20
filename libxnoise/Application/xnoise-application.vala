@@ -322,7 +322,7 @@ public class Xnoise.Application : GLib.Application {
             });
             
         }
-       this.activate();
+        this.activate();
         if(!command_line.get_is_remote()) {
             this.hold();
         }

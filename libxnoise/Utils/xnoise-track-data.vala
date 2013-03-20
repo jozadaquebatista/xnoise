@@ -36,7 +36,12 @@
  */
 namespace Xnoise {
     
-    public class TrackData {
+    public class TrackData 
+#if REF_TRACKING_ENABLED
+    : BaseObject {
+#else
+    {
+#endif
         public string? artist = null;
         public string? albumartist = null;
         public string? album = null;

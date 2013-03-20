@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.gtk.xnoise.PlayerEngine
-Exec=/usr/local/bin/xnoise

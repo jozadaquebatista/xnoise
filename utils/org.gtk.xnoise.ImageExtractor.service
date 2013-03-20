@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.gtk.xnoise.ImageExtractor
-Exec=/usr/local/bin/xnoise_image_extractor_service

@@ -1901,7 +1901,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.set_icon_size(IconSize.LARGE_TOOLBAR);
             main_toolbar.set_show_arrow(false);
             toolbarbox.pack_start(main_toolbar, true, true, 0);
-            main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+//            main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
             //-----------------
             
             main_view_sbutton.sign_selected.connect(on_serial_button_clicked);

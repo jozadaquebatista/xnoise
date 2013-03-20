@@ -188,6 +188,7 @@ libxnoise_la_SOURCES = \
     UserInfoSystem/xnoise-info-bar.vala \
     UserInfoSystem/xnoise-user-info.vala \
     Utils/xnoise-album-data.vala \
+    Utils/xnoise-base-object.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
@@ -212,6 +213,10 @@ libxnoise_la_VALAFLAGS = \
 
 if HAVE_MIN_GTK_34
     libxnoise_la_VALAFLAGS+= -D HAVE_MIN_GTK_34
+endif
+
+if REF_TRACKING_ENABLED
+    libxnoise_la_VALAFLAGS+= -D REF_TRACKING_ENABLED
 endif
 
 libxnoise_la_LDFLAGS = \

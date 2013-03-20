@@ -28,13 +28,19 @@
  *     Jörn Magens
  */
 
-
+using Xnoise;
 
 /**
  * IAlbumCoverImage implementors should be asynchronously look for images
  * The reply is checked for matching artist/album
  */
-public interface Xnoise.IAlbumCoverImage : GLib.Object {
+public interface Xnoise.IAlbumCoverImage
+#if REF_TRACKING_ENABLED
+    : BaseObject {
+#else
+    : GLib.Object {
+#endif
+
     //delivers local image path on success, EMPTYSTRING otherwise
     public signal void sign_image_fetched(string artist, string album, string image_path);
     //start image search

@@ -28,8 +28,15 @@
  *     Jörn Magens
  */
 
+using Xnoise;
+
+public interface Xnoise.IAlbumCoverImageProvider
+#if REF_TRACKING_ENABLED
+    : BaseObject {
+#else
+    : GLib.Object {
+#endif
 
 
-public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
     public abstract IAlbumCoverImage from_tags(string artist, string album);
 }

@@ -37,7 +37,12 @@ using Xnoise.Utilities;
 using Xnoise.PluginModule;
 
 
-public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
+public class Xnoise.Lfm : 
+#if REF_TRACKING_ENABLED
+    BaseObject, IPlugin, IAlbumCoverImageProvider {
+#else
+    GLib.Object, IPlugin, IAlbumCoverImageProvider {
+#endif
     public Main xn { get; set; }
     private unowned PluginModule.Container _owner;
     private Session session;
@@ -212,7 +217,13 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
  * the artist name and the album name for identification.
  * 
  */
-public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
+public class Xnoise.LastFmCovers : 
+#if REF_TRACKING_ENABLED
+    BaseObject, IAlbumCoverImage {
+#else
+    GLib.Object, IAlbumCoverImage {
+#endif
+
     private const int SECONDS_FOR_TIMEOUT = 12;
     
     private string artist;
