@@ -772,12 +772,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private void colorize_search_background(bool colored = false) {
         if(colored) {
-            search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
-            album_search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
+//            search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
+//            album_search_entry.get_style_context().add_class(Gtk.STYLE_CLASS_INFO);
         }
         else {
-            search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
-            album_search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
+//            search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
+//            album_search_entry.get_style_context().remove_class(Gtk.STYLE_CLASS_INFO);
         }
     }
     
@@ -2048,12 +2048,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 new Image.from_icon_name("go-down-symbolic", IconSize.MENU));
             aa_contr_bx.pack_start(album_view_direction, false, false, 1);
             var aabx = new Box(Orientation.VERTICAL, 0);
-            aabx.pack_start(aa_contr_bx, false, false, 2);
+            aabx.pack_start(aa_contr_bx, false, false, 0);
             var aasw = new ScrolledWindow(null, null);
             aasw.set_shadow_type(ShadowType.IN);
             aasw.add(album_art_view);
             album_art_overlay.add(aasw);
-            aabx.pack_start(album_art_overlay, true, true, 2);
+            aabx.pack_start(album_art_overlay, true, true, 0);
             bottom_notebook.append_page(aabx);
             //Fullscreen window
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);

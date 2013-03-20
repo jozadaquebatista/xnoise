@@ -133,8 +133,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.search_entry.set_sensitive(true);
         this.search_entry.set_placeholder_text (_("Search..."));
         
-        search_entry.margin_top = 2;
-        search_entry.margin_bottom = 1;
+//        search_entry.margin_top = 2;
+//        search_entry.margin_bottom = 1;
         this.pack_start(search_entry, false, false, 0);
             
         // DOCKABLE MEDIA
@@ -185,7 +185,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             if(dx != null)
                 current_selected_media.set_headline(dx.headline());
         });
-        this.margin_left = 1;
+//        this.margin_left = 1;
     }
     
     private string _media_source_selector_type = "tree";

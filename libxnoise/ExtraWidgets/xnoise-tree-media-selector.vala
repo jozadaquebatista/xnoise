@@ -92,8 +92,8 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
 //        column.add_attribute(rendererPb, "pixbuf", Column.SELECTION_ICON);
         
         this.model = this.store;
-        
-        this.key_release_event.connect(this.on_key_released);
+        this.get_selection().changed.connect(on_seletion_changed);
+//        this.key_release_event.connect(this.on_key_released);
         
         this.button_press_event.connect(this.on_button_pressed);
         
@@ -297,49 +297,23 @@ private class Xnoise.TreeMediaSelector : TreeView, MediaSelector {
         return false;
     }
     
-    private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
-        //print("%d\n",(int)e.keyval);
-        Gtk.TreeModel m;
-        switch(e.keyval) {
-            case Gdk.Key.Up:
-            case Gdk.Key.Down:
-                Gtk.TreeSelection selection = this.get_selection();
-                if(selection.count_selected_rows() < 1) break;
-                GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
-                TreePath? treepath = selected_rows.nth_data(0);
-                if(treepath!=null) {
-                    if(treepath.get_depth() == 1) {
-                        this.expand_row(treepath, false);
-                    }
-                    else if(treepath.get_depth() == 2) {
-                        TreeIter iter;
-                        this.model.get_iter(out iter, treepath);
-                        m.foreach( (mo,p,iy) => {
-                            ListStore mx = (ListStore)mo;
-                            mx.set(iy, 
-                                   Column.SELECTION_STATE, false,
-                                   Column.SELECTION_ICON, null
-                            );
-                            return false;
-                        });
-                        this.set_cursor(treepath, null,false);
-                        ListStore mx = (ListStore)this.model;
-                        string? name;
-                        mx.get(iter, Column.NAME, out name);
-                        mx.set(iter, 
-                              Column.SELECTION_STATE, true,
-                              Column.SELECTION_ICON, icon_repo.selected_collection_icon
-                        );
-                        if(name == null)
-                            name = "";
-                        selected_dockable_media = name;
-                    }
-                }
-                break;
-            default:
-                break;
+    private void on_seletion_changed(Gtk.TreeSelection selection) {
+        ListStore mx = (ListStore)this.model;
+        TreeModel? mod;
+        List<TreePath> list = selection.get_selected_rows(out mod);
+        TreeIter iter;
+        if(list != null && list.length() > 0) {
+            mx.get_iter(out iter, list.nth_data(0));
+            string? name;
+            mx.get(iter, Column.NAME, out name);
+            mx.set(iter, 
+                  Column.SELECTION_STATE, true//,
+    //              Column.SELECTION_ICON, icon_repo.selected_collection_icon
+            );
+            if(name == null)
+                name = "";
+            selected_dockable_media = name;
         }
-        return false;
     }
     
     private void set_row_data(TreeIter iter, DockableMedia media) {
