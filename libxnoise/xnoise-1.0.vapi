@@ -107,7 +107,7 @@ namespace Xnoise {
 			public signal void progress (int cnt);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public abstract class Device : Xnoise.BaseObject {
+		public abstract class Device : GLib.Object {
 			protected Xnoise.ItemHandler? handler;
 			public weak GLib.Mount mount;
 			public Device ();
@@ -621,7 +621,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class BaseObject : GLib.Object {
 		protected BaseObject ();
-		public static void print_object_dump ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {
@@ -974,7 +973,7 @@ namespace Xnoise {
 		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackData : Xnoise.BaseObject {
+	public class TrackData {
 		public string? album;
 		public string? albumartist;
 		public string? artist;
@@ -1070,7 +1069,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
-		public class Job : Xnoise.BaseObject {
+		public class Job {
 			public int32 big_counter[4];
 			public GLib.Cancellable? cancellable;
 			public int counter[4];
@@ -1113,12 +1112,12 @@ namespace Xnoise {
 		public signal void MediaPlayerKeyPressed (string application, string key);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public interface IAlbumCoverImage : Xnoise.BaseObject {
+	public interface IAlbumCoverImage : GLib.Object {
 		public abstract void find_image ();
 		public signal void sign_image_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public interface IAlbumCoverImageProvider : Xnoise.BaseObject {
+	public interface IAlbumCoverImageProvider : GLib.Object {
 		public abstract Xnoise.IAlbumCoverImage from_tags (string artist, string album);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
