@@ -42,7 +42,7 @@ using Xnoise.Resources;
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
 private class Xnoise.PlayPauseButton: Gtk.ToolItem {
-    private const int PIXELSIZE = 38;
+    private const int PIXELSIZE = 32;
     private unowned Main xn;
     private Gtk.Image? play  = null;
     private Gtk.Image? pause = null;

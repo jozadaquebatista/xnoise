@@ -37,7 +37,7 @@ using Gdk;
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
 private class Xnoise.ControlButton : Gtk.ToolItem {
-    private const int PIXELSIZE = 20;
+    private const int PIXELSIZE = 24;
     private Image image;
     private Function function;
 
