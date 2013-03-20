@@ -1,6 +1,6 @@
 /* magnatune-db-reader.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,9 @@ using Xnoise.Resources;
 public class MagnatuneDatabaseReader : Xnoise.DataSource {
 //    private const string DATABASE_NAME = "/tmp/xnoise_magnatune.sqlite";
     private string DATABASE;
+    private Statement get_genres_with_search_stmt;
+    private Statement get_genres_with_search2_stmt;
+
     
     private string _username;
     internal string username { 
@@ -127,6 +130,9 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             }
             login_data_available_last = _login_data_available;
         });
+        
+        this.db.prepare_v2(STMT_GET_GENRES_WITH_SEARCH, -1, out get_genres_with_search_stmt);
+        this.db.prepare_v2(STMT_GET_GENRES, -1, out get_genres_with_search2_stmt);
     }
 
     private bool login_data_available_last;
@@ -406,6 +412,55 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             return stmt.column_text(0);
         }
         return val;
+    }
+
+    private static const string STMT_GET_GENRES_WITH_SEARCH =
+        "SELECT DISTINCT g.id, g.name FROM artists ar, items t, albums al, genres g, artists art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.genre = g.id AND (al.caseless_name LIKE ? OR ar.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? ORDER BY g.caseless_name DESC";
+
+    private static const string STMT_GET_GENRES =
+        "SELECT DISTINCT g.id, g.name FROM genres g, items t WHERE t.genre = g.id AND t.mediatype = ? ORDER BY g.caseless_name DESC";
+    
+    public Item[] get_genres_with_search(string searchtext) {
+        Item[] val = {};
+        uint32 stmp = get_current_stamp(get_source_id());
+        if(searchtext != EMPTYSTRING) {
+            string stcl = "%%%s%%".printf(searchtext.casefold());
+            get_genres_with_search_stmt.reset();
+            if(get_genres_with_search_stmt.bind_text(1, stcl) != Sqlite.OK ||
+               get_genres_with_search_stmt.bind_text(2, stcl) != Sqlite.OK ||
+               get_genres_with_search_stmt.bind_text(3, stcl) != Sqlite.OK ||
+               get_genres_with_search_stmt.bind_text(4, stcl) != Sqlite.OK ||
+               get_genres_with_search_stmt.bind_text(5, stcl) != Sqlite.OK ||
+               get_genres_with_search_stmt.bind_int (6, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
+                this.db_error();
+                return (owned)val;
+            }
+            while(get_genres_with_search_stmt.step() == Sqlite.ROW) {
+                Item i = Item(ItemType.COLLECTION_CONTAINER_GENRE,
+                              null,
+                              get_genres_with_search_stmt.column_int(0)
+                );
+                i.text = get_genres_with_search_stmt.column_text(1);
+                i.source_id = get_source_id();
+                i.stamp = stmp;
+                val += i;
+            }
+        }
+        else {
+            get_genres_with_search2_stmt.reset();
+            if(get_genres_with_search2_stmt.bind_int(1, ItemType.LOCAL_AUDIO_TRACK) != Sqlite.OK) {
+                this.db_error();
+                return (owned)val;
+            }
+            while(get_genres_with_search2_stmt.step() == Sqlite.ROW) {
+                Item i = Item(ItemType.COLLECTION_CONTAINER_GENRE, null, get_genres_with_search2_stmt.column_int(0));
+                i.text = get_genres_with_search2_stmt.column_text(1);
+                i.source_id = get_source_id();
+                i.stamp = stmp;
+                val += i;
+            }
+        }
+        return (owned)val;
     }
     
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =

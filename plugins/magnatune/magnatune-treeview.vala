@@ -507,7 +507,17 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             Pixbuf p;
             this.mag_model.get_iter(out iter, treepaths.nth_data(0));
             this.mag_model.get(iter, MusicBrowserModel.Column.ICON, out p);
-            Gtk.drag_source_set_icon_pixbuf(this, p);
+            if(p != null) {
+                Gtk.drag_source_set_icon_pixbuf(this, p);
+            }
+            else {
+                if(selection.count_selected_rows() > 1) {
+                    Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
+                }
+                else {
+                    Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
+                }
+            }
         }
         else {
             if(selection.count_selected_rows() > 1) {
@@ -688,14 +698,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                 (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
             );
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            //context = ow.get_style_context();
-            //StateFlags state = ow.get_state_flags();
-            //if((flags & CellRendererState.SELECTED) == 0) {
-            //    Gdk.cairo_rectangle(cr, cell_area);
-            //    Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
-            //    Gdk.cairo_set_source_rgba(cr, col);
-            //    cr.fill();
-            //}
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             
@@ -706,13 +708,13 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                     case 0:
 //                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
+                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
                                                       16, widget.get_style_context());
                                 break;
                             }
                             if(artist_unsel == null)
                                 artist_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
                                                                 16, widget.get_style_context());
                             p = artist_unsel;
 //                        }
@@ -732,7 +734,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                             }
                             if(album_unsel == null)
                                 album_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                                    IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
                                                                 16, widget.get_style_context());
                             p = album_unsel;
 //                        }
@@ -749,7 +751,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
 //                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             if(title_unsel == null)
                                 title_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
+                                    IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
                                                                 16, widget.get_style_context());
                             p = title_unsel;
 //                        }
@@ -772,11 +774,11 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                     case 0:
 //                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
                             if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon("system-users-symbolic", 
+                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
                                                       16, widget.get_style_context());
                                 break;
                             }
-                            p = IconRepo.get_themed_pixbuf_icon("avatar-default-symbolic", 
+                            p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
                                                             16, widget.get_style_context());
 //                        }
 //                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
@@ -790,7 +792,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                 p = pix;
                                 break;
                             }
-                            p = IconRepo.get_themed_pixbuf_icon("media-optical-symbolic", 
+                            p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
                                                                 16, widget.get_style_context());
 //                        }
 //                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
@@ -801,7 +803,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                     case 2:
                     default:
 //                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            p = IconRepo.get_themed_pixbuf_icon("audio-x-generic-symbolic", 
+                            p = IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
                                                                 16, widget.get_style_context());
 //                        }
 //                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)

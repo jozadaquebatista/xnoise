@@ -404,7 +404,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         main_window.musicBr.set_model(null);
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
-                print("GENRE_ARTIST_ALBUM\n");
+                //print("GENRE_ARTIST_ALBUM\n");
                 var g_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                            this.populate_genres_job);
                 g_job.cancellable = populate_model_cancellable;

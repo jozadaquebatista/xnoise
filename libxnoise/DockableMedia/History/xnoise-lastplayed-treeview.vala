@@ -432,23 +432,23 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
         pango_layout.get_pixel_size(out wi, out he);
         Gdk.Pixbuf? p = pix;
         if(p == null) {
-            string name = "";
+            unowned string? name = null;
             
             switch(itype) {
                 case ItemType.LOCAL_VIDEO_TRACK:
-                    name = "video-x-generic-symbolic";
+                    name = VIDEO_ICON_SYMBOLIC;
                     break;
                 case ItemType.STREAM:
-                    name = "network-cellular-signal-excellent-symbolic";
+                    name = STREAM_ICON_SYMBOLIC;
                     break;
                 case ItemType.LOCAL_AUDIO_TRACK:
-                    name = "audio-x-generic-symbolic";
+                    name = TITLE_ICON_SYMBOLIC;
                     break;
                 case ItemType.UNKNOWN:
                 default:
                     break;
             }
-            if(name != "") {
+            if(name != null) {
                 p = IconRepo.get_themed_pixbuf_icon(name, 16, widget.get_style_context());
             }
         }

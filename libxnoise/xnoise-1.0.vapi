@@ -421,13 +421,23 @@ namespace Xnoise {
 	}
 	namespace Resources {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string ALBUM_ICON_SYMBOLIC;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string ARTIST_ICON_SYMBOLIC;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string EMPTYSTRING;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string GENRE_ICON_SYMBOLIC;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string INIFILE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string LYRICS_VIEW_NAME;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string MAIN_DATABASE_NAME;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string STREAM_ICON_SYMBOLIC;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string TITLE_ICON_SYMBOLIC;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string TRACKLIST_VIEW_NAME;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -451,9 +461,13 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string VARIOUS_ARTISTS;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string VA_ICON_SYMBOLIC;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const int VIDEOTHUMBNAILSIZE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string VIDEOVIEW_NAME;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string VIDEO_ICON_SYMBOLIC;
 	}
 	namespace SimpleMarkup {
 		[CCode (cheader_filename = "xnoise-1.0.h")]

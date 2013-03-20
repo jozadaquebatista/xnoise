@@ -42,6 +42,14 @@ namespace Xnoise.Resources {
     public static const string UNKNOWN_LOCATION         = "unknown location";
     public static const string EMPTYSTRING              = "";
     
+    public static const string VA_ICON_SYMBOLIC         = "system-users-symbolic";
+    public static const string ARTIST_ICON_SYMBOLIC     = "avatar-default-symbolic";
+    public static const string ALBUM_ICON_SYMBOLIC      = "media-optical-symbolic";
+    public static const string TITLE_ICON_SYMBOLIC      = "audio-x-generic-symbolic";
+    public static const string GENRE_ICON_SYMBOLIC      = "emblem-documents-symbolic";
+    public static const string VIDEO_ICON_SYMBOLIC      = "video-x-generic-symbolic";
+    public static const string STREAM_ICON_SYMBOLIC     = "network-cellular-signal-excellent-symbolic";
+    
     public static const string MAIN_DATABASE_NAME       = "db.sqlite";
     public static const string INIFILE                  = "xnoise.ini";
     

@@ -423,8 +423,24 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             return false;
         view.model = null;
         this.clear();
-        var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
-        db_worker.push_job(a_job);
+//        switch(global.collection_sort_mode) {
+//            case CollectionSortMode.GENRE_ARTIST_ALBUM:
+//                print("magnatune GENRE_ARTIST_ALBUM\n");
+//                var g_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+//                                           this.populate_genres_job);
+//                g_job.cancellable = this.cancel;
+//                db_worker.push_job(g_job);
+//                g_job.finished.connect(on_populate_finished);
+//                break;
+//            case CollectionSortMode.ARTIST_ALBUM_TITLE:
+//            default:
+                var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                           this.populate_artists_job);
+                a_job.cancellable = this.cancel;
+                db_worker.push_job(a_job);
+                a_job.finished.connect(on_populate_finished);
+//                break;
+//        }
         return false;
     }
     
@@ -459,15 +475,58 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                               Column.ITEM, loader_item,
                               Column.LEVEL, 1
                 );
+                if(this.cancel.is_cancelled())
+                    return false;
             }
-            if(this.cancel.is_cancelled())
-                return false;
-            view.set_model(this);
+//            view.set_model(this);
             return false;
         });
         return false;
     }
 
+    private void on_populate_finished(Worker.Job sender) {
+        return_if_fail(Main.instance.is_same_thread());
+        //return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+        sender.finished.disconnect(on_populate_finished);
+        view.set_model(this);
+//        populating_model = false;
+    }
+    
+
+    // used for populating the data model
+    private bool populate_genres_job(Worker.Job job) {
+        if(job.cancellable.is_cancelled())
+            return false;
+        job.items = dbreader.get_genres_with_search(global.searchtext);
+        //print("job.items.length = %d\n", job.items.length);
+        Idle.add( () => {
+            if(job.cancellable.is_cancelled())
+                return false;
+            TreeIter iter_artist, iter_search;
+            foreach(Item? artist in job.items) {
+                if(job.cancellable.is_cancelled())
+                    break;
+                this.prepend(out iter_artist, null);
+                this.set(iter_artist,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, artist.text,
+                         Column.ITEM, artist,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_search, iter_artist);
+                this.set(iter_search,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+            }
+            return false;
+        });
+        return false;
+    }
+    
     public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
         TreeIter iter;
         DndData[] dnd_data_array = {};
