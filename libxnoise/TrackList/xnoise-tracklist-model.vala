@@ -108,10 +108,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                     else
                         return false;
                     if(global.current_artist != null)
-                        ntags.insert(Column.ARTIST, (global.current_artist.down() == "various artists" &&
-                                                     global.current_albumartist != null && 
-                                                     global.current_albumartist != EMPTYSTRING ? 
-                                                        global.current_albumartist : global.current_artist));
+                        ntags.insert(Column.ARTIST, global.current_artist);
                     if(global.current_album != null)
                         ntags.insert(Column.ALBUM,  global.current_album);
                     if(global.current_title != null)

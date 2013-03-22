@@ -6,6 +6,49 @@
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <child>
+      <object class="GtkBox" id="box7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label_aa">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Album Artist:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">3</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry_albumartist">
+            <property name="width_request">500</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">•</property>
+            <property name="invisible_char_set">True</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="padding">2</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="padding">5</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -14,7 +57,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Artist:</property>
+            <property name="label" translatable="yes">Title Artist:</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -45,7 +88,7 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="padding">5</property>
-        <property name="position">0</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
@@ -68,49 +111,6 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_album">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
-            <property name="primary_icon_activatable">False</property>
-            <property name="secondary_icon_activatable">False</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="padding">2</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">False</property>
-        <property name="padding">5</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="box7">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <child>
-          <object class="GtkLabel" id="label_aa">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Album Artist:</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">3</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_albumartist">
-            <property name="width_request">500</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">•</property>
@@ -333,7 +333,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="padding">10</property>
+            <property name="padding">2</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -391,7 +391,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="padding">10</property>
+            <property name="padding">2</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -417,6 +417,64 @@
       </packing>
     </child>
     <child>
+      <object class="GtkBox" id="box12">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="disk_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Disk number:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="spinbutton_disk">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="max_length">4</property>
+            <property name="invisible_char">•</property>
+            <property name="width_chars">3</property>
+            <property name="invisible_char_set">True</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="climb_rate">1</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_dummy2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="padding">3</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="padding">5</property>
+        <property name="position">9</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkLabel" id="label5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -427,7 +485,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="position">10</property>
       </packing>
     </child>
     <child>
@@ -490,7 +548,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
   </object>
@@ -516,12 +574,14 @@
       <widget name="label1"/>
       <widget name="label_aa"/>
       <widget name="label6"/>
+      <widget name="disk_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sb_sizegroup">
     <widgets>
       <widget name="spinbutton_tracknumber"/>
       <widget name="spinbutton_year"/>
+      <widget name="spinbutton_disk"/>
     </widgets>
   </object>
 </interface>

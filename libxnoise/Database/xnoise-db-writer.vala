@@ -365,25 +365,25 @@ public class Xnoise.Database.Writer : GLib.Object {
             if(get_artist_max_id_statement.step() == Sqlite.ROW)
                 artist_id = get_artist_max_id_statement.column_int(0);
             // change notification
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
-            item.source_id = db_reader.get_source_id();
-            item.stamp = get_current_stamp(db_reader.get_source_id());
-            item.text = stripped_art;
-            foreach(NotificationData cxd in change_callbacks) {
-                if(cxd.cb != null)
-                    cxd.cb(ChangeType.ADD_ARTIST, item);
-            }
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+//            item.source_id = db_reader.get_source_id();
+//            item.stamp = get_current_stamp(db_reader.get_source_id());
+//            item.text = stripped_art;
+//            foreach(NotificationData cxd in change_callbacks) {
+//                if(cxd.cb != null)
+//                    cxd.cb(ChangeType.ADD_ARTIST, item);
+//            }
         }
-        else if(artist_id == 1) {
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
-            item.source_id = db_reader.get_source_id();
-            item.stamp = get_current_stamp(db_reader.get_source_id());
-            item.text = stripped_art;
-            foreach(NotificationData cxd in change_callbacks) {
-                if(cxd.cb != null)
-                    cxd.cb(ChangeType.ADD_ARTIST, item);
-            }
-        }
+//        else if(artist_id == 1) {
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+//            item.source_id = db_reader.get_source_id();
+//            item.stamp = get_current_stamp(db_reader.get_source_id());
+//            item.text = stripped_art;
+//            foreach(NotificationData cxd in change_callbacks) {
+//                if(cxd.cb != null)
+//                    cxd.cb(ChangeType.ADD_ARTIST, item);
+//            }
+//        }
         if(update_artist) {
             Statement stmt;
             db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
@@ -408,10 +408,15 @@ public class Xnoise.Database.Writer : GLib.Object {
         // return id for artist
         string artist;
         string caseless_artist;
-        if(td.albumartist == null || td.albumartist == EMPTYSTRING)
-            artist = WILDCARD;
-        else
+        if(td.albumartist == null || td.albumartist == EMPTYSTRING) {
+            if(td.artist != null && td.artist.strip() != EMPTYSTRING)
+                artist = td.artist.strip();
+            else
+                artist = (td.is_compilation ? VARIOUS_ARTISTS : UNKNOWN_ARTIST);//WILDCARD;
+        }
+        else {
             artist = td.albumartist.strip();
+        }
         caseless_artist = artist.casefold();
         
         int artist_id = -1;
@@ -437,6 +442,24 @@ public class Xnoise.Database.Writer : GLib.Object {
             get_artist_max_id_statement.reset();
             if(get_artist_max_id_statement.step() == Sqlite.ROW)
                 artist_id = get_artist_max_id_statement.column_int(0);
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            item.source_id = db_reader.get_source_id();
+            item.stamp = get_current_stamp(db_reader.get_source_id());
+            item.text = artist;
+            foreach(NotificationData cxd in change_callbacks) {
+                if(cxd.cb != null)
+                    cxd.cb(ChangeType.ADD_ARTIST, item);
+            }
+        }
+        else if(artist_id == 1) {
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            item.source_id = db_reader.get_source_id();
+            item.stamp = get_current_stamp(db_reader.get_source_id());
+            item.text = artist;
+            foreach(NotificationData cxd in change_callbacks) {
+                if(cxd.cb != null)
+                    cxd.cb(ChangeType.ADD_ARTIST, item);
+            }
         }
         if(update_artist) { // ??? TODO
             Statement stmt;
@@ -566,7 +589,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         string stripped_album;
         string stripped_art;
         string caseless_album;
-        stripped_art = td.artist != null ? td.artist.strip() : EMPTYSTRING;
+        stripped_art = td.albumartist != null ? td.albumartist.strip() : EMPTYSTRING;
         stripped_album = td.album != null ? td.album.strip() : EMPTYSTRING;
         caseless_album = stripped_album.casefold();
         
@@ -600,39 +623,40 @@ public class Xnoise.Database.Writer : GLib.Object {
                    caseless_album != "unknown" && caseless_album != "greatest hits" &&
                    caseless_album != "no title" && caseless_album != "%s".printf(_("unknown").down()) &&
                    !caseless_album.has_prefix("http") && caseless_album != "live") {
-                    
-                    int[] xids = get_ids_for_album_name_different_artist(ref caseless_album, artist_id);
-                    if(xids.length > 0) {
-                        if(xids.length > 1)
-                            print("this should never happen!\n");
-                        insert_album_statement.reset();
-                        artist_id = VA_ID; //insrt al and later title as VA
-                        td.is_compilation = true;
-                        if(insert_album_statement.bind_int (1, artist_id)       != Sqlite.OK ||
-                           insert_album_statement.bind_text(2, stripped_album)  != Sqlite.OK ||
-                           insert_album_statement.bind_int (3, (int)td.year)    != Sqlite.OK ||
-                           insert_album_statement.bind_int (4, 1)               != Sqlite.OK ||
-                           insert_album_statement.bind_text(5, caseless_album)  != Sqlite.OK) {
-                            this.db_error();
-                            return -1;
+                    if(td.is_compilation) {
+                        int[] xids = get_ids_for_album_name_different_artist(ref caseless_album, artist_id);
+                        if(xids.length > 0) {
+                            if(xids.length > 1)
+                                print("this should never happen!\n");
+                            insert_album_statement.reset();
+                            artist_id = VA_ID; //insrt al and later title as VA
+                            td.is_compilation = true;
+                            if(insert_album_statement.bind_int (1, artist_id)       != Sqlite.OK ||
+                               insert_album_statement.bind_text(2, stripped_album)  != Sqlite.OK ||
+                               insert_album_statement.bind_int (3, (int)td.year)    != Sqlite.OK ||
+                               insert_album_statement.bind_int (4, 1)               != Sqlite.OK ||
+                               insert_album_statement.bind_text(5, caseless_album)  != Sqlite.OK) {
+                                this.db_error();
+                                return -1;
+                            }
+                            if(insert_album_statement.step() != Sqlite.DONE) {
+                                this.db_error();
+                                return -1;
+                            }
+                            //Return id
+                            get_albums_max_id_statement.reset();
+                            if(get_albums_max_id_statement.step() == Sqlite.ROW)
+                                al_id = get_albums_max_id_statement.column_int(0);
+                            else {
+                                warning("should not happen !!\n");
+                                return -1;
+                            }
+                            
+                            //Method: remove xids-albums, update items for xid-album
+                            set_albumname_is_va_album(ref stripped_album, ref xids, al_id);
+                            
+                            return al_id;
                         }
-                        if(insert_album_statement.step() != Sqlite.DONE) {
-                            this.db_error();
-                            return -1;
-                        }
-                        //Return id
-                        get_albums_max_id_statement.reset();
-                        if(get_albums_max_id_statement.step() == Sqlite.ROW)
-                            al_id = get_albums_max_id_statement.column_int(0);
-                        else {
-                            warning("should not happen !!\n");
-                            return -1;
-                        }
-                        
-                        //Method: remove xids-albums, update items for xid-album
-                        set_albumname_is_va_album(ref stripped_album, ref xids, al_id);
-                        
-                        return al_id;
                     }
                 }
                 // Insert album
@@ -1246,25 +1270,32 @@ public class Xnoise.Database.Writer : GLib.Object {
         // make entries in other tables and get references from there
 //        t.reset();
 //        t.start();
-        if(td.artist != null && (td.artist.strip().down() == "various artists" ||
-                                 td.artist.strip().down() == "various")) {
+        if(td.albumartist != null && (td.albumartist.strip().down() == "various artists" ||
+                                      td.albumartist.strip().down() == "various")) {
             td.is_compilation = true;
         }
-        else {
-            if(td.albumartist == null || td.albumartist.strip() == EMPTYSTRING)
-                td.albumartist = td.artist;
-            td.is_compilation = false; //???
-        }
+//        else {
+//            if(td.albumartist == null || td.albumartist.strip() == EMPTYSTRING)
+//                td.albumartist = td.artist;
+//            td.is_compilation = false; //???
+//        }
+        if(td.albumartist == null || td.albumartist.strip() == EMPTYSTRING)
+            td.albumartist = td.artist;
 //        t.stop();
 //        ulong usec;
 //        t.elapsed(out usec);
 //        str1_usec = (FACTOR * str1_usec + usec) / (FACTOR + 1 );
         
-        if(td.is_compilation)
-            td.artist = VARIOUS_ARTISTS; // We are save here, it's only database
+//        if(td.is_compilation)
+//            td.albumartist = VARIOUS_ARTISTS; // We are save here, it's only database
         
 //        t.reset();
 //        t.start();
+        td.dat3 = handle_albumartist(ref td, false);
+        if(td.dat3 == -1) {
+            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.albumartist);
+            return false;
+        }
         td.dat1 = handle_artist(ref td.artist, false);
         if(td.dat1 == -1) {
             print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
@@ -1276,26 +1307,21 @@ public class Xnoise.Database.Writer : GLib.Object {
         
 //        t.reset();
 //        t.start();
-        td.dat3 = handle_albumartist(ref td, false);
-        if(td.dat3 == -1) {
-            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.albumartist);
-            return false;
-        }
 //        t.stop();
 //        t.elapsed(out usec);
 //        albumartist_usec = (FACTOR * albumartist_usec + usec) / (FACTOR + 1 );
 
 //        t.reset();
 //        t.start();
-        td.dat2 = handle_album(ref td.dat1, ref td, false);
+        td.dat2 = handle_album(ref td.dat3, ref td, false);
         if(td.dat2 == -1) {
             print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
             return false;
         }
-        if(td.dat2 == VA_ID) {
-            td.is_compilation = true;
-            td.artist = VARIOUS_ARTISTS; // We are save here, it's only database
-        }
+//        if(td.dat2 == VA_ID) {
+//            td.is_compilation = true;
+//            td.albumartist = VARIOUS_ARTISTS; // We are save here, it's only database
+//        }
 //        t.stop();
 //        t.elapsed(out usec);
 //        album_usec = (FACTOR * album_usec + usec) / (FACTOR + 1 );

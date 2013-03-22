@@ -118,19 +118,19 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                         albumimage.pixbuf = xicon;
                     }
                     entry.text         = td.album;
-                    artist_entry.text  = (td.is_compilation ? VARIOUS_ARTISTS : td.artist);
+                    artist_entry.text  = td.albumartist;//(td.is_compilation ? VARIOUS_ARTISTS : td.artist);
                     year_entry.text    = (td.year > 0 ? td.year.to_string() : "");
                     genre_entry.text   = (td.genre != null ? td.genre : "");
-                    checkb_comp.notify["active"].connect( () => {
-                        if(checkb_comp.active) {
-                            artist_entry.text = VARIOUS_ARTISTS;
-                            artist_entry.set_sensitive(false);
-                        }
-                        else {
-                            artist_entry.text = td_old[0].artist;
-                            artist_entry.set_sensitive(true);
-                        }
-                    });
+//                    checkb_comp.notify["active"].connect( () => {
+//                        if(checkb_comp.active) {
+//                            artist_entry.text = VARIOUS_ARTISTS;
+//                            artist_entry.set_sensitive(false);
+//                        }
+//                        else {
+//                            artist_entry.text = td_old[0].artist;
+//                            artist_entry.set_sensitive(true);
+//                        }
+//                    });
                     checkb_comp.active = td.is_compilation;
                     return false;
                 });
@@ -178,7 +178,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             switch(item.type) {
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
                     explainer_label.label =  _("Please enter new album data.");
-                    artist_label.label    =  _("Artist:");
+                    artist_label.label    =  _("Album Artist:");
                     content_label.label   =  _("Album:");
                     year_label.label      =  _("Year:");
                     genre_label.label     =  _("Genre:");
@@ -250,7 +250,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                 return false;
             job.item = tag_job.item;
             foreach(unowned TrackData td in job.track_dat) {
-                td.artist         = new_artist_name;//(string)tag_job.get_arg("new_content_name");//
+                td.albumartist    = new_artist_name;//(string)tag_job.get_arg("new_content_name");//
                 td.album          = new_content_name;//(string)tag_job.get_arg("new_content_name");//
                 td.year           = new_year;//(uint)  tag_job.get_arg("new_year");//
                 td.genre          = new_genre; //(string)tag_job.get_arg("new_genre");//

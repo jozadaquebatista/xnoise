@@ -329,7 +329,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
             return;
         
-        artist = remove_linebreaks(global.current_artist);
+        artist = remove_linebreaks((global.current_albumartist != null ? global.current_albumartist : global.current_artist));
         album  = remove_linebreaks(global.current_album );
         
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);

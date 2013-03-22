@@ -49,6 +49,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
     private CheckButton check_compilation;
     private SpinButton spinbutton_tracknumber;
     private SpinButton spinbutton_year;
+    private SpinButton spinbutton_disk;
     private Entry entry_genre;
     private Entry entry_uri;
     private Item? item;
@@ -137,13 +138,14 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             check_compilation      = builder.get_object("check_compilation") as Gtk.CheckButton;
             spinbutton_tracknumber = builder.get_object("spinbutton_tracknumber") as Gtk.SpinButton;
             spinbutton_year        = builder.get_object("spinbutton_year")        as Gtk.SpinButton;
+            spinbutton_disk        = builder.get_object("spinbutton_disk")        as Gtk.SpinButton;
             entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
             entry_uri              = builder.get_object("entry_uri")         as Gtk.Entry;
             infolabel              = builder.get_object("label5")            as Gtk.Label;
             infolabel.label = _("With this dialog you can change the metatags in the according files. \nHandle with care!");;
 
             var artist_label       = builder.get_object("label1")            as Gtk.Label;
-            artist_label.set_text(_("Artist") + ":");
+            artist_label.set_text(_("Title Artist") + ":");
             
             var aart_label         = builder.get_object("label_aa")          as Gtk.Label;
             aart_label.set_text(_("Album Artist") + ":");
@@ -164,7 +166,10 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             year_label.set_text(_("Year") + ":");
 
             var trakno_label       = builder.get_object("tracknumberlabel")  as Gtk.Label;
-            trakno_label.set_text(_("Tracknumber") + ":");
+            trakno_label.set_text(_("Track No.") + ":");
+
+            var disk_label         = builder.get_object("disk_label")  as Gtk.Label;
+            trakno_label.set_text(_("Disk No.") + ":");
 
             spinbutton_tracknumber.set_numeric(true);
             spinbutton_tracknumber.configure(new Gtk.Adjustment(0.0, 0.0, 999.0, 1.0, 1.0, 0.0), 1.0, (uint)0);

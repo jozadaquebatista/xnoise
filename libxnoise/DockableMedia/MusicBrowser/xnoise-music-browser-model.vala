@@ -898,9 +898,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                              );
                 }
                 else {
-                    string append = (td.albumartist == "*" ?
-                                        "\n (" + "%s".printf(UNKNOWN_ARTIST_LOCALIZED) + ")" : 
-                                        "\n (" + td.albumartist + ")");
+                    string append = "\n (" + td.artist + ")";
                     this.set(iter_title,
                              Column.ICON, null,
                              Column.VIS_TEXT, td.title + append,

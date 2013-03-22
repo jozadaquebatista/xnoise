@@ -89,17 +89,17 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 Idle.add( () => {
                     // put data to entry
-                    entry.text  = td.artist;
+                    entry.text  = td.albumartist;
                     return false;
                 });
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
-                Idle.add( () => {
-                    // put data to entry
-                    entry.text  = td.album;
-                    return false;
-                });
-                break;
+//                Idle.add( () => {
+//                    // put data to entry
+////                    entry.text  = td.album;
+//                    return false;
+//                });
+//                break;
             default:
                 Idle.add( () => {
                     sign_finish();
@@ -175,9 +175,9 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 do_artist_rename();
                 break;
-            case ItemType.COLLECTION_CONTAINER_ALBUM:
-                do_album_rename();
-                break;
+//            case ItemType.COLLECTION_CONTAINER_ALBUM:
+//                do_album_rename();
+//                break;
             default:
                 break;    
         }
@@ -210,8 +210,11 @@ private class Xnoise.TagArtistEditor : GLib.Object {
         if(job.track_dat == null)
             return false;
         job.item = tag_job.item;
-        foreach(TrackData td in job.track_dat)
-            td.artist = new_content_name;
+        foreach(TrackData td in job.track_dat) {
+            td.albumartist = new_content_name;
+            if(td.artist == VARIOUS_ARTISTS)
+                td.artist = td.albumartist;
+        }
         print("push filetags job\n");
         global.in_tag_rename = true;
         io_worker.push_job(job);
