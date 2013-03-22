@@ -68,7 +68,7 @@ public class Xnoise.TagAccess.TagReader {
                 td.length         = info.length;
                 td.is_compilation = info.is_compilation;
                 td.has_embedded_image = info.has_image;
-                td.cd_number_str  = EMPTYSTRING;
+                td.disk_number    = (info.disk_number < 1 ? 1 : info.disk_number);
                 if(try_read_image_data) {
                     uint8[] data = null;
                     TagInfo.ImageType image_type;
@@ -99,7 +99,6 @@ public class Xnoise.TagAccess.TagReader {
                 td.album       = UNKNOWN_ALBUM;
                 td.genre       = UNKNOWN_GENRE;
                 td.albumartist = EMPTYSTRING;
-                td.cd_number_str  = EMPTYSTRING;
 //                td.year        = 0;
 //                td.tracknumber = (uint)0;
 //                td.length      = 0;//(int32)ap.length;
@@ -111,7 +110,6 @@ public class Xnoise.TagAccess.TagReader {
             td.album       = UNKNOWN_ALBUM;
             td.genre       = UNKNOWN_GENRE;
             td.albumartist = EMPTYSTRING;
-            td.cd_number_str  = EMPTYSTRING;
 //            td.year        = 0;
 //            td.tracknumber = (uint)0;
 //            td.length      = (int32)0;

@@ -349,6 +349,8 @@
       <widget name="genre_label"/>
       <widget name="dummy_label1"/>
       <widget name="artist_label"/>
+      <widget name="disk_label"/>
+      <widget name="disk_label"/>
     </widgets>
   </object>
 </interface>

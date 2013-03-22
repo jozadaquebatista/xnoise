@@ -53,11 +53,12 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         GENRE,
         YEAR,
         ITEM,
-        SOURCE_NAME
+        SOURCE_NAME,
+        DISK_NUMBER
     }
 
     private GLib.Type[] col_types = new GLib.Type[] {
-        typeof(PlayerState),  // ICON
+        typeof(PlayerState), // ICON
         typeof(string),      // TRACKNUMBER
         typeof(string),      // TITLE
         typeof(string),      // ALBUM
@@ -67,7 +68,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         typeof(string),      // GENRE
         typeof(string),      // YEAR
         typeof(Xnoise.Item?),// Item
-        typeof(string)       // SOURCE_NAME
+        typeof(string),      // SOURCE_NAME
+        typeof(string)       // DISK_NUMBER
     };
 
     public signal void sign_active_path_changed(PlayerState ts);
@@ -171,6 +173,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             string? tracknumber = ntags.lookup(Column.TRACKNUMBER);
             if(tracknumber != null && tracknumber.strip() != "0")
                 this.set(i, Column.TRACKNUMBER, tracknumber);
+            
+//            string? disk_number = ntags.lookup(Column.DISK_NUMBER);
+//            if(disk_number != null && disk_number.strip() != "0")
+//                this.set(i, Column.DISK_NUMBER, disk_number);
             
             string? year = ntags.lookup(Column.YEAR);
             if(year != null && year.strip() != "0")
@@ -341,6 +347,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         TreeIter iter = TreeIter();
         int int_bold = Pango.Weight.NORMAL;
         string? tracknumberString = null;
+        string? disk_number_string = null;
         string? lengthString = null;
         string? yearString = null;
         if(td == null)
@@ -348,6 +355,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         this.append(out iter);
         if(!(td.tracknumber==0))
             tracknumberString = "%u".printf(td.tracknumber);
+        
+        if(td.disk_number > 0)
+            disk_number_string = "%d".printf(td.disk_number);
         
         if(td.length > 0) {
             // convert seconds to a user convenient mm:ss display
@@ -374,7 +384,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                  TrackListModel.Column.LENGTH, lengthString,
                  TrackListModel.Column.WEIGHT, int_bold,
                  TrackListModel.Column.YEAR, yearString,
-                 TrackListModel.Column.GENRE, td.genre
+                 TrackListModel.Column.GENRE, td.genre,
+                 TrackListModel.Column.DISK_NUMBER, disk_number_string
                  );
         return iter;
     }
@@ -413,6 +424,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         
         this.foreach( (sender, path, iter) => {
             string tracknumberString;
+            string disk_number_string;
             string lengthString;
             string yearString;
             TrackData td = new TrackData();
@@ -425,8 +437,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                        Column.GENRE, out td.genre,
                        Column.YEAR, out yearString,
                        Column.ITEM, out td.item,
+                       Column.DISK_NUMBER, out disk_number_string,
                        Column.SOURCE_NAME, out td.item.text
             );
+            if(disk_number_string != null && disk_number_string != EMPTYSTRING)
+                td.disk_number = int.parse(disk_number_string);
+            else
+                td.disk_number = 1;
+            
             if(tracknumberString != null && tracknumberString != EMPTYSTRING)
                 td.tracknumber = int.parse(tracknumberString);
             else

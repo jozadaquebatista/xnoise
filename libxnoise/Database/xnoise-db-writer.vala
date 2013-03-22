@@ -1361,7 +1361,7 @@ public class Xnoise.Database.Writer : GLib.Object {
 
 //        t.reset();
 //        t.start();
-        string cd_number = td.cd_number_str != null ? td.cd_number_str.strip() : EMPTYSTRING;
+        int disk_number = td.disk_number < 1 ? 1 : td.disk_number;
         //print("insert_title td.item.type %s\n", td.item.type.to_string());
         string stripped_title = td.title.strip();
         string caseless_title = stripped_title.casefold();
@@ -1376,11 +1376,11 @@ public class Xnoise.Database.Writer : GLib.Object {
            insert_title_statement.bind_int (7,  path_id)             != Sqlite.OK ||
            insert_title_statement.bind_int (8,  uri_id)              != Sqlite.OK ||
            insert_title_statement.bind_int (9,  td.item.type)        != Sqlite.OK ||
-           insert_title_statement.bind_int (10,  td.length)           != Sqlite.OK ||
+           insert_title_statement.bind_int (10, td.length )          != Sqlite.OK ||
            insert_title_statement.bind_int (11, td.bitrate)          != Sqlite.OK ||
            insert_title_statement.bind_text(12, td.mimetype)         != Sqlite.OK ||
            insert_title_statement.bind_int (13, td.dat3)             != Sqlite.OK ||
-           insert_title_statement.bind_text(14, cd_number)           != Sqlite.OK ||
+           insert_title_statement.bind_int (14, disk_number)         != Sqlite.OK ||
            insert_title_statement.bind_text(15, caseless_title)      != Sqlite.OK ||
            insert_title_statement.bind_int (16, embedded_image)      != Sqlite.OK) {
             this.db_error();
@@ -1526,7 +1526,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     }
     
     private static const string STMT_INSERT_LASTUSED =
-        "INSERT INTO lastused (uri, mediatype, tracknumber, title, album, artist, length, genre, year, id, source) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO lastused (uri, mediatype, tracknumber, title, album, artist, length, genre, year, id, source, cd_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     
     private void insert_lastused_track(ref TrackData td) {
         this.insert_lastused_entry_statement.reset();
@@ -1555,6 +1555,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.insert_lastused_entry_statement.bind_text(9, "0");
         this.insert_lastused_entry_statement.bind_int (10, td.item.db_id);
         this.insert_lastused_entry_statement.bind_text(11, td.item.text);
+        this.insert_lastused_entry_statement.bind_text(12, td.disk_number.to_string());
         
         if(insert_lastused_entry_statement.step() != Sqlite.DONE) {
             this.db_error();

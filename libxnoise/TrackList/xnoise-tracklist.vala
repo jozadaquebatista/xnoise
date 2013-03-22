@@ -1,6 +1,6 @@
 /* xnoise-tracklist.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,6 +89,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
     private const string USE_LEN_COL     = "use_length_column";
     private const string USE_TR_NO_COL   = "use_tracknumber_column";
+    private const string USE_DISK_NO_COL = "use_disknumber_column";
     private const string USE_ARTIST_COL  = "use_artist_column";
     private const string USE_ALBUM_COL   = "use_album_column";
     private const string USE_GENRE_COL   = "use_genre_column";
@@ -100,6 +101,7 @@ public class Xnoise.TrackList : TreeView, IParams {
     private TextColumn columnArtist;
     private TextColumn columnLength;
     private TextColumn columnTracknumber;
+    private TextColumn columnDisknumber;
     private TextColumn columnGenre;
     private TextColumn columnYear;
     private int variable_col_count = 0;
@@ -119,6 +121,11 @@ public class Xnoise.TrackList : TreeView, IParams {
     private bool column_tracknumber_visible {
         get { return this.columnTracknumber.visible; }
         set { this.columnTracknumber.visible = value; }
+    }
+    
+    private bool column_disknumber_visible {
+        get { return this.columnDisknumber.visible; }
+        set { this.columnDisknumber.visible = value; }
     }
     
     private bool column_artist_visible { 
@@ -725,6 +732,10 @@ public class Xnoise.TrackList : TreeView, IParams {
                     if(tdx.year > 0) {
                         yearString = "%u".printf(tdx.year);
                     }
+                    string? disk_number_string = null;
+                    if(tdx.disk_number > 0)
+                        disk_number_string = "%d".printf(tdx.disk_number);
+                    
                     tracklistmodel.set(new_iter,
                                        TrackListModel.Column.TRACKNUMBER, tracknumberString,
                                        TrackListModel.Column.TITLE, tdx.title,
@@ -736,7 +747,8 @@ public class Xnoise.TrackList : TreeView, IParams {
                                        TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
                                        TrackListModel.Column.ITEM, tdx.item,
                                        TrackListModel.Column.YEAR, yearString,
-                                       TrackListModel.Column.GENRE, tdx.genre);
+                                       TrackListModel.Column.GENRE, tdx.genre,
+                                       TrackListModel.Column.DISK_NUMBER, disk_number_string);
                     path = tracklistmodel.get_path(new_iter);
                 }
                 return false;
@@ -1194,6 +1206,27 @@ public class Xnoise.TrackList : TreeView, IParams {
             cols_postions.insert(r, columnTracknumber);
         }
 
+        // DISK_NUMBER
+        renderer = new CellRendererText();
+        columnDisknumber = new TextColumn(_("Disk"), renderer, TrackListModel.Column.DISK_NUMBER);
+        columnDisknumber.add_attribute(renderer,
+                                        "text", TrackListModel.Column.DISK_NUMBER);
+        columnDisknumber.add_attribute(renderer,
+                                        "weight", TrackListModel.Column.WEIGHT);
+        columnDisknumber.min_width = 38;
+        columnDisknumber.resizable = true;
+        columnDisknumber.reorderable = true;
+        columnDisknumber.name = "disknumber";
+        columnDisknumber.visible = (Params.get_int_value(USE_DISK_NO_COL) == 1);
+        
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnDisknumber).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnDisknumber);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnDisknumber);
+        }
+
 
 
         // TITLE
@@ -1369,55 +1402,64 @@ public class Xnoise.TrackList : TreeView, IParams {
         CheckMenuItem menu_item;
         
         // TRACKNUMBER
-        menu_item = new CheckMenuItem.with_label(_("Tracknumber"));
-        menu_item.set_active((Params.get_int_value("use_tracknumber_column") == 1 ? true : false));
+        menu_item = new CheckMenuItem.with_label(_("Track number"));
+        menu_item.set_active((Params.get_int_value(USE_TR_NO_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_tracknumber_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_TR_NO_COL, (s.get_active() == true ? 1 : 0));
             this.column_tracknumber_visible = s.get_active();
+        });
+        rightmenu.append(menu_item);
+        
+        // DISK_NUMBER
+        menu_item = new CheckMenuItem.with_label(_("Disk number"));
+        menu_item.set_active((Params.get_int_value(USE_DISK_NO_COL) == 1 ? true : false));
+        menu_item.toggled.connect( (s) => {
+            Params.set_int_value(USE_DISK_NO_COL, (s.get_active() == true ? 1 : 0));
+            this.column_disknumber_visible = s.get_active();
         });
         rightmenu.append(menu_item);
         
         // ARTIST
         menu_item = new CheckMenuItem.with_label(_("Artist"));
-        menu_item.set_active((Params.get_int_value("use_artist_column") == 1 ? true : false));
+        menu_item.set_active((Params.get_int_value(USE_ARTIST_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_artist_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_ARTIST_COL, (s.get_active() == true ? 1 : 0));
             this.column_artist_visible = s.get_active();
         });
         rightmenu.append(menu_item);
 
         // ALBUM
         menu_item = new CheckMenuItem.with_label(_("Album"));
-        menu_item.set_active((Params.get_int_value("use_album_column") == 1 ? true : false));
+        menu_item.set_active((Params.get_int_value(USE_ALBUM_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_album_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_ALBUM_COL, (s.get_active() == true ? 1 : 0));
             this.column_album_visible = s.get_active();
         });
         rightmenu.append(menu_item);
         
         // GENRE
         menu_item = new CheckMenuItem.with_label(_("Genre"));
-        menu_item.set_active((Params.get_int_value("use_genre_column") == 1 ? true : false));
+        menu_item.set_active((Params.get_int_value(USE_GENRE_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_GENRE_COL, (s.get_active() == true ? 1 : 0));
             this.column_genre_visible = s.get_active();
         });
         rightmenu.append(menu_item);
         
         // YEAR
         menu_item = new CheckMenuItem.with_label(_("Year"));
-        menu_item.set_active((Params.get_int_value("use_year_column") == 1 ? true : false));
+        menu_item.set_active((Params.get_int_value(USE_YEAR_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_year_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_YEAR_COL, (s.get_active() == true ? 1 : 0));
             this.column_year_visible = s.get_active();
         });
         rightmenu.append(menu_item);
         
         // LENGTH 
         menu_item = new CheckMenuItem.with_label(_("Length"));
-        menu_item.set_active((Params.get_int_value("use_length_column") == 1 ? true : false));
+        menu_item.set_active((Params.get_int_value(USE_LEN_COL) == 1 ? true : false));
         menu_item.toggled.connect( (s) => {
-            Params.set_int_value("use_length_column", (s.get_active() == true ? 1 : 0));
+            Params.set_int_value(USE_LEN_COL, (s.get_active() == true ? 1 : 0));
             this.column_length_visible = s.get_active();
         });
         rightmenu.append(menu_item);

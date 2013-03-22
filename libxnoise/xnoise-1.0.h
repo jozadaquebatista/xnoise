@@ -1845,7 +1845,8 @@ typedef enum  {
 	XNOISE_TRACK_LIST_MODEL_COLUMN_GENRE,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_YEAR,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_SOURCE_NAME
+	XNOISE_TRACK_LIST_MODEL_COLUMN_SOURCE_NAME,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_DISK_NUMBER
 } XnoiseTrackListModelColumn;
 
 struct _XnoiseTrayIcon {
@@ -1997,7 +1998,7 @@ struct _XnoiseTrackData {
 	gchar* genre;
 	gchar* name;
 	gchar* mimetype;
-	gchar* cd_number_str;
+	gint disk_number;
 	guint year;
 	guint tracknumber;
 	gint32 length;

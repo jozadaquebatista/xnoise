@@ -992,10 +992,10 @@ namespace Xnoise {
 		public string? albumartist;
 		public string? artist;
 		public int bitrate;
-		public string? cd_number_str;
 		public int32 dat1;
 		public int32 dat2;
 		public int32 dat3;
+		public int disk_number;
 		public string? genre;
 		public bool has_embedded_image;
 		public bool is_compilation;
@@ -1028,7 +1028,8 @@ namespace Xnoise {
 			GENRE,
 			YEAR,
 			ITEM,
-			SOURCE_NAME
+			SOURCE_NAME,
+			DISK_NUMBER
 		}
 		public TrackListModel ();
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);

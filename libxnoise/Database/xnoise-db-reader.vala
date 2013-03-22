@@ -442,7 +442,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_SOME_LASTUSED_ITEMS =
-        "SELECT mediatype, uri, id, source, artist, album, title, length, genre, year, tracknumber FROM lastused LIMIT ? OFFSET ?";
+        "SELECT mediatype, uri, id, source, artist, album, title, length, genre, year, tracknumber, cd_number FROM lastused LIMIT ? OFFSET ?";
 //        "SELECT mediatype, uri, id FROM lastused LIMIT ? OFFSET ?";
     public TrackData[] get_some_lastused_items(int limit, int offset) {
         TrackData[] val = {};
@@ -470,6 +470,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                 td.year        = int.parse(stmt.column_text(9));
             if(stmt.column_text(10) != null && stmt.column_text(10) != EMPTYSTRING)
                 td.tracknumber = int.parse(stmt.column_text(10));
+            if(stmt.column_text(11) != null && stmt.column_text(11) != EMPTYSTRING)
+                td.disk_number = int.parse(stmt.column_text(11));
             val += td;
         }
         return (owned)val;
@@ -849,16 +851,16 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //    private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_GENRE =
 //        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.album_artist = ar.id AND t.artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.tracknumber ASC, t.caseless_name ASC";
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_GENRE_AND_SEARCH =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_GENRE =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     public override TrackData[]? get_trackdata_for_album(string searchtext,
                                                          CollectionSortMode sort_mode,
@@ -914,6 +916,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
@@ -961,6 +964,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
@@ -987,16 +991,16 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //    
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE_AND_SEARCH =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_GENRE =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, al.is_compilation, art.name, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists art  WHERE t.artist = ar.id AND t.album = al.id AND t.album_artist = art.id AND t.uri = u.id AND t.genre = g.id AND art.id = ? AND t.mediatype = ? GROUP BY t.caseless_name, al.id ORDER BY al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     public override TrackData[]? get_trackdata_for_artist(string searchtext,
                                                          CollectionSortMode sort_mode,
@@ -1057,6 +1061,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
@@ -1105,6 +1110,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
@@ -1223,13 +1229,13 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
 //    private static const string STMT_GET_TRACKDATA_BY_GENRE =
 //        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.album_artist = ar.id AND t.artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY ar.caseless_name COLLATE CUSTOM01 ASC, al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
     private static const string STMT_GET_TRACKDATA_BY_TITLEID =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation, t.cd_number FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
     
     private static const string STMT_GET_TRACKDATA_BY_GENRE_WITH_SEARCH =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation  FROM artists ar, items t, albums al, uris u, genres g, artists art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND g.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title) ORDER BY ar.caseless_name COLLATE CUSTOM01 ASC, al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND g.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR art.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?) AND t.mediatype = ? GROUP BY utf8_lower(t.title) ORDER BY ar.caseless_name COLLATE CUSTOM01 ASC, al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_GENRE =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY ar.caseless_name COLLATE CUSTOM01 ASC, al.caseless_name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.caseless_name ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation, t.cd_number  FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.artist = ar.id AND t.album_artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND g.id = ? AND t.mediatype = ? GROUP BY t.caseless_name ORDER BY ar.caseless_name COLLATE CUSTOM01 ASC, al.caseless_name COLLATE CUSTOM01 ASC, t.cd_number ASC, t.tracknumber ASC, t.caseless_name ASC";
 
     public override TrackData[] get_trackdata_for_item(string searchtext, Item? item) {
         return_val_if_fail(item != null && item.stamp == get_current_stamp(get_source_id()), null);
@@ -1262,6 +1268,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);
@@ -1311,6 +1318,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                     td.title       = stmt.column_text(0);
                     td.item        = i;
                     td.tracknumber = stmt.column_int(3);
+                    td.disk_number = stmt.column_int(12);
                     td.length      = stmt.column_int(7);
                     td.genre       = stmt.column_text(8);
                     td.year        = stmt.column_int(9);

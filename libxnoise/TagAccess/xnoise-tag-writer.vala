@@ -67,6 +67,9 @@ public class Xnoise.TagAccess.TagWriter {
             if(td.tracknumber >= 0)
                 info.tracknumber = (int)td.tracknumber;
             
+            if(td.disk_number >= 1)
+                info.disk_number = (int)td.disk_number;
+            
             info.is_compilation  = td.is_compilation;
             
             retval = info.write();

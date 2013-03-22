@@ -109,6 +109,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             entry_genre.text       = td.genre;
             check_compilation.active = td.is_compilation;
             spinbutton_tracknumber.set_value(td.tracknumber);
+            spinbutton_disk.set_value(td.disk_number);
             spinbutton_year.set_value(td.year);
             
             File f = File.new_for_uri(td.item.uri);
@@ -170,7 +171,13 @@ private class Xnoise.TagTitleEditor : GLib.Object {
 
             var disk_label         = builder.get_object("disk_label")  as Gtk.Label;
             trakno_label.set_text(_("Disk No.") + ":");
-
+            
+            spinbutton_disk.set_numeric(true);
+            spinbutton_disk.configure(new Gtk.Adjustment(0.0, 1.0, 999.0, 1.0, 1.0, 1.0), 1.0, (uint)0);
+            spinbutton_disk.changed.connect( (sender) => {
+                if((int)(((Gtk.SpinButton)sender).value) < 0.0 ) ((Gtk.SpinButton)sender).value = 0.0;
+                if((int)(((Gtk.SpinButton)sender).value) > 999.0) ((Gtk.SpinButton)sender).value = 999.0;
+            });
             spinbutton_tracknumber.set_numeric(true);
             spinbutton_tracknumber.configure(new Gtk.Adjustment(0.0, 0.0, 999.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
             spinbutton_tracknumber.changed.connect( (sender) => {
@@ -227,7 +234,8 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             td_new.genre  = entry_genre.text.strip();
         td_new.is_compilation = check_compilation.active;
         td_new.year         = spinbutton_year.get_value_as_int();
-        td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int(); //TODO: add check
+        td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int();
+        td_new.disk_number  = spinbutton_disk.get_value_as_int();
         
         do_track_rename(td_old, td_new);
         HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);

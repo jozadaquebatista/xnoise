@@ -49,7 +49,7 @@ namespace Xnoise {
         public string? genre = null;
         public string? name = null;
         public string? mimetype = null;
-        public string? cd_number_str = null;
+        public int disk_number = 1;
         public uint year = 0;
         public uint tracknumber = 0;
         public int32 length = 0;
@@ -72,14 +72,19 @@ namespace Xnoise {
         td_new.album       = td.album;
         td_new.title       = td.title;
         td_new.genre       = td.genre;
+        td_new.mimetype    = td.mimetype;
+        td_new.disk_number = td.disk_number;
         td_new.year        = td.year;
         td_new.tracknumber = td.tracknumber;
         td_new.length      = td.length;
         td_new.bitrate     = td.bitrate;
         td_new.item        = td.item;
-        td_new.is_compilation = td.is_compilation;
+        td_new.is_compilation     = td.is_compilation;
+        td_new.has_embedded_image = td.has_embedded_image;
+        td_new.pixbuf      = td.pixbuf;
         td_new.dat1        = td.dat1;
         td_new.dat2        = td.dat2;
+        td_new.dat3        = td.dat3;
         return td_new;
     }
 }
