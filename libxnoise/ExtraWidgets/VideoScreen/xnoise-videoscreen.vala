@@ -68,7 +68,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private Gdk.Pixbuf default_image;
     private Gdk.Pixbuf cover_image_pixb;
     private unowned Main xn;
-//    private bool cover_image_available;
     private Gtk.Menu? menu;
     private uint refresh_source = 0;
     private unowned GstPlayer player;
@@ -97,6 +96,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         this.set_events(ev|Gdk.EventMask.SCROLL_MASK);
         this.button_release_event.connect(on_button_released);
         this.scroll_event.connect(this.on_scrolled);
+        global.notify["current-albumartist"].connect(on_tag_changed);
+        global.notify["current-artist"].connect(on_tag_changed);
+        global.notify["current-album"].connect(on_tag_changed);
     }
     
     private bool on_scrolled(Gdk.EventScroll event) {
@@ -111,7 +113,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         return false;
     }
     
+    private uint redraw_source = 0;
     private void on_tag_changed() {
+        if(redraw_source != 0)
+            Source.remove(redraw_source);
+        redraw_source = Timeout.add(300, () => {
+            queue_draw();
+            redraw_source = 0;
+            return false;
+        });
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
@@ -235,6 +245,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private void on_image_changed() {
         if(refresh_source != 0)
             Source.remove(refresh_source);
+        if(redraw_source != 0)
+            Source.remove(redraw_source);
         
         refresh_source = Timeout.add(500, () => {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_job);

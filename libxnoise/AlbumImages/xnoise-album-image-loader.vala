@@ -324,10 +324,8 @@ namespace Xnoise {
                                                      global.current_album,
                                                      "medium");
             if(fmedium != null && fmedium.query_exists(null)) {
-                if(fmedium.get_path() != image_path_small) {
-                    image_small = create_image_from_file(ref fmedium);
-                    image_path_small = image_small != null ? fmedium.get_path() : null;
-                }
+                image_small = create_image_from_file(ref fmedium);
+                image_path_small = image_small != null ? fmedium.get_path() : null;
             }
             else {
                 image_small = null;
@@ -350,10 +348,8 @@ namespace Xnoise {
                                                 global.current_album,
                                                 "extralarge");
             if(flarge != null && flarge.query_exists(null)) {
-                if(flarge.get_path() != image_path_large) {
-                    image_large = create_image_from_file(ref flarge);
-                    image_path_large = image_large != null ? flarge.get_path() : null;
-                }
+                image_large = create_image_from_file(ref flarge);
+                image_path_large = image_large != null ? flarge.get_path() : null;
             }
             else {
                 image_large = null;
@@ -367,10 +363,8 @@ namespace Xnoise {
                                                 global.current_album,
                                                 "embedded");
             if(fembedded != null && fembedded.query_exists(null)) {
-                if(fembedded.get_path() != image_path_embedded) {
-                    image_embedded = create_image_from_file(ref fembedded);
-                    image_path_embedded = image_embedded != null ? fembedded.get_path() : null;
-                }
+                image_embedded = create_image_from_file(ref fembedded);
+                image_path_embedded = image_embedded != null ? fembedded.get_path() : null;
             }
             else {
                 image_embedded = null;

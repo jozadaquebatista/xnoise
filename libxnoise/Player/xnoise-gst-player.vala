@@ -419,7 +419,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         }
         pixbuf = pbloader.get_pixbuf();
         try { pbloader.close(); } catch(Error e) {}
-        print("extracted image\n");
+        //print("extracted image\n");
         return pixbuf;
     }
 
@@ -951,7 +951,9 @@ public class Xnoise.GstPlayer : GLib.Object {
                     string al = null;
                     if(taglist_buffer == null)
                         return false;
-                    taglist_buffer.get_string(Gst.Tags.ARTIST, out ar);
+                    taglist_buffer.get_string(Gst.Tags.ALBUM_ARTIST, out ar);
+                    if(ar == null || ar == EMPTYSTRING)
+                        taglist_buffer.get_string(Gst.Tags.ARTIST, out ar);
                     taglist_buffer.get_string(Gst.Tags.ALBUM, out al);
                     Gdk.Pixbuf pix = extract_embedded_image(taglist_buffer);
                     if(pix != null) {
@@ -979,13 +981,13 @@ public class Xnoise.GstPlayer : GLib.Object {
                                 imarge_src = 0;
                                 return false;
                             }
+                            sign_found_embedded_image(this.uri, ar, al);
+                            Idle.add( () => {
+                                if(pf2 != null) 
+                                    global.sign_album_image_fetched(ar, al, pf2.get_path());
+                                return false;
+                            });
                         }
-                        sign_found_embedded_image(this.uri, ar, al);
-                        Idle.add( () => {
-//                            if(pf2 != null) 
-//                                global.sign_album_image_fetched(ar, al, pf2.get_path());
-                            return false;
-                        });
                     }
                     imarge_src = 0;
                     return false;

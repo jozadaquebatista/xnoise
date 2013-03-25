@@ -12,23 +12,6 @@ public class ImageExtractorDbus : GLib.Object {
     
     private const string INTERFACE_NAME = "org.gtk.xnoise.ImageExtractor";
     
-//    public uint waiting_jobs {
-//        get {
-//            return queue.get_length();
-//        }
-//        set {
-//        }
-//    }
-
-//    private string? _currently_processed_uri = "";
-//    
-//    public string? currently_processed_uri {
-//        get {
-//            return _currently_processed_uri;
-//        }
-//        set {
-//        }
-//    }
     
     public ImageExtractorDbus(DBusConnection conn, ImageExtractorService parent) {
         this.conn = conn;
@@ -249,14 +232,6 @@ public class ImageExtractorDbus : GLib.Object {
             print("%s\n", e.message);
         }
     }
-    
-//    public void add_path(string path) {
-//    
-//        print("path: %s\n", path);
-//        File f = File.new_for_path(path);
-//        queue.push_tail(f.get_uri());
-//        handle_uris();
-//    }
     
     public void add_uris(string[] uris) {
         parent.refresh_quit_timeout(); // delay app quit
