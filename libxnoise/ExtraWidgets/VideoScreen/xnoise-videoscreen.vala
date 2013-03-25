@@ -68,7 +68,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private Gdk.Pixbuf default_image;
     private Gdk.Pixbuf cover_image_pixb;
     private unowned Main xn;
-    private bool cover_image_available;
+//    private bool cover_image_available;
     private Gtk.Menu? menu;
     private uint refresh_source = 0;
     private unowned GstPlayer player;
@@ -88,14 +88,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         this.xn = Main.instance;
         rect = Gdk.Rectangle();
         init_video_screen();
-        cover_image_available = false;
-        global.notify["image-path-large"].connect(on_image_path_changed);
-        global.notify["image-path-embedded"].connect(on_image_path_changed);
+        Timeout.add_seconds(1, () => {
+            global.image_loader.notify["image-large"   ].connect(on_image_changed);
+            global.image_loader.notify["image-embedded"].connect(on_image_changed);
+            return false;
+        });
         int ev = this.get_events();
         this.set_events(ev|Gdk.EventMask.SCROLL_MASK);
         this.button_release_event.connect(on_button_released);
         this.scroll_event.connect(this.on_scrolled);
-        global.tag_changed.connect(on_tag_changed);
     }
     
     private bool on_scrolled(Gdk.EventScroll event) {
@@ -115,7 +116,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             Source.remove(refresh_source);
         
         refresh_source = Timeout.add(500, () => {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_job);
             io_worker.push_job(job);
             refresh_source = 0;
             return false;
@@ -231,57 +232,44 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         fcdialog = null;
     }
 
-    private void on_image_path_changed() {
+    private void on_image_changed() {
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
         refresh_source = Timeout.add(500, () => {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_from_path_job);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_job);
             io_worker.push_job(job);
             refresh_source = 0;
             return false;
         });
     }
     
-    private bool load_image_from_path_job(Worker.Job job) {
-        if(global.image_path_embedded != null) {
+    private bool load_image_job(Worker.Job job) {
+        if(global.image_loader.image_embedded != null) {
             try {
-                cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_embedded);
+                cover_image_pixb = global.image_loader.image_embedded;
             }
             catch(GLib.Error e) {
-                cover_image_available = false;
                 cover_image_pixb = null;
                 return false;
             }
-            cover_image_available = true;
-            Idle.add(() => {
-                queue_draw();
-                return false;
-            });
         }
-        else if(global.image_path_large != null) {
+        else if(global.image_loader.image_large != null) {
             try {
-                cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
+                cover_image_pixb = global.image_loader.image_large;
             }
             catch(GLib.Error e) {
-                cover_image_available = false;
                 cover_image_pixb = null;
                 return false;
             }
-            cover_image_available = true;
-            Idle.add(() => {
-                queue_draw();
-                return false;
-            });
         }
         else {
             cover_image_pixb = null;
-            cover_image_available = false;
-            Idle.add(() => {
-                trigger_expose();
-                return false;
-            });
         }
+        Idle.add(() => {
+            queue_draw();
+            return false;
+        });
         return false;
     }
     
@@ -308,7 +296,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         h = this.get_allocated_height();
             
         if(!gst_player.current_has_video_track) {
-            if(!cover_image_available || cover_image_pixb == null) {
+            if(cover_image_pixb == null) {
                 cr.set_source_rgb(0.0f, 0.0f, 0.0f);
                 cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
                 cr.fill();

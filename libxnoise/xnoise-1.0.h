@@ -9,14 +9,25 @@
 #include <string.h>
 #include <gio/gio.h>
 #include <glib-object.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtk.h>
 #include <sqlite3.h>
 #include <float.h>
 #include <math.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
 
+
+#define XNOISE_TYPE_ALBUM_IMAGE_LOADER (xnoise_album_image_loader_get_type ())
+#define XNOISE_ALBUM_IMAGE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoader))
+#define XNOISE_ALBUM_IMAGE_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoaderClass))
+#define XNOISE_IS_ALBUM_IMAGE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER))
+#define XNOISE_IS_ALBUM_IMAGE_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_IMAGE_LOADER))
+#define XNOISE_ALBUM_IMAGE_LOADER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoaderClass))
+
+typedef struct _XnoiseAlbumImageLoader XnoiseAlbumImageLoader;
+typedef struct _XnoiseAlbumImageLoaderClass XnoiseAlbumImageLoaderClass;
+typedef struct _XnoiseAlbumImageLoaderPrivate XnoiseAlbumImageLoaderPrivate;
 
 #define XNOISE_TYPE_IALBUM_COVER_IMAGE (xnoise_ialbum_cover_image_get_type ())
 #define XNOISE_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImage))
@@ -933,6 +944,15 @@ typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
 typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 
+struct _XnoiseAlbumImageLoader {
+	GObject parent_instance;
+	XnoiseAlbumImageLoaderPrivate * priv;
+};
+
+struct _XnoiseAlbumImageLoaderClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseIAlbumCoverImageIface {
 	GTypeInterface parent_iface;
 	void (*find_image) (XnoiseIAlbumCoverImage* self);
@@ -1347,6 +1367,7 @@ typedef enum  {
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
+	XnoiseAlbumImageLoader* image_loader;
 	gboolean cellrenderer_in_edit;
 	XnoiseGstPlayer* player;
 };
@@ -2022,6 +2043,21 @@ GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* 
 gboolean xnoise_thumbnail_available (const gchar* uri, GFile** _thumb);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* artist, const gchar* album_name);
 gchar* xnoise_check_album_name (const gchar* artistname, const gchar* albumname);
+GType xnoise_album_image_loader_get_type (void) G_GNUC_CONST;
+XnoiseAlbumImageLoader* xnoise_album_image_loader_new (void);
+XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type);
+GdkPixbuf* xnoise_album_image_loader_get_image_small (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_small (XnoiseAlbumImageLoader* self, GdkPixbuf* value);
+GdkPixbuf* xnoise_album_image_loader_get_image_large (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_large (XnoiseAlbumImageLoader* self, GdkPixbuf* value);
+GdkPixbuf* xnoise_album_image_loader_get_image_embedded (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_embedded (XnoiseAlbumImageLoader* self, GdkPixbuf* value);
+const gchar* xnoise_album_image_loader_get_image_path_small (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_path_small (XnoiseAlbumImageLoader* self, const gchar* value);
+const gchar* xnoise_album_image_loader_get_image_path_large (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_path_large (XnoiseAlbumImageLoader* self, const gchar* value);
+const gchar* xnoise_album_image_loader_get_image_path_embedded (XnoiseAlbumImageLoader* self);
+void xnoise_album_image_loader_set_image_path_embedded (XnoiseAlbumImageLoader* self, const gchar* value);
 GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
 void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
 GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;
@@ -2288,7 +2324,6 @@ void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
 void xnoise_global_access_handle_eos (XnoiseGlobalAccess* self);
 void xnoise_global_access_preview_uri (XnoiseGlobalAccess* self, const gchar* uri);
-void xnoise_global_access_check_image_for_current_track (XnoiseGlobalAccess* self);
 void xnoise_global_access_prev (XnoiseGlobalAccess* self);
 void xnoise_global_access_play (XnoiseGlobalAccess* self, gboolean pause_if_playing);
 void xnoise_global_access_pause (XnoiseGlobalAccess* self);
@@ -2329,12 +2364,6 @@ const gchar* xnoise_global_access_get_current_genre (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_genre (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_current_organization (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_organization (XnoiseGlobalAccess* self, const gchar* value);
-const gchar* xnoise_global_access_get_image_path_small (XnoiseGlobalAccess* self);
-void xnoise_global_access_set_image_path_small (XnoiseGlobalAccess* self, const gchar* value);
-const gchar* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self);
-void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const gchar* value);
-const gchar* xnoise_global_access_get_image_path_embedded (XnoiseGlobalAccess* self);
-void xnoise_global_access_set_image_path_embedded (XnoiseGlobalAccess* self, const gchar* value);
 gboolean xnoise_global_access_get_in_preview (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_in_preview (XnoiseGlobalAccess* self, gboolean value);
 GType xnoise_icon_repo_get_type (void) G_GNUC_CONST;

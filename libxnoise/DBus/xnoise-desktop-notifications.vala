@@ -71,13 +71,13 @@ private class Xnoise.DesktopNotifications : GLib.Object {
             Idle.add(() => {
                 if(Main.instance.use_notifications) {
                     global.tag_changed.connect(on_tag_changed);
-                    global.sign_image_path_small_changed.connect(on_image_changed);
-                    global.sign_image_path_embedded_changed.connect(on_image_changed);
+                    global.image_loader.image_path_small_changed.connect(on_image_changed);
+                    global.image_loader.image_path_embedded_changed.connect(on_image_changed);
                 }
                 else {
                     global.tag_changed.disconnect(on_tag_changed);
-                    global.sign_image_path_small_changed.disconnect(on_image_changed);
-                    global.sign_image_path_embedded_changed.disconnect(on_image_changed);
+                    global.image_loader.image_path_small_changed.disconnect(on_image_changed);
+                    global.image_loader.image_path_embedded_changed.disconnect(on_image_changed);
                 }
                 return false;
             });
@@ -159,9 +159,9 @@ private class Xnoise.DesktopNotifications : GLib.Object {
                             (_("on") + " " + Markup.printf_escaped("%s", album)) : 
                             "");
         string image = 
-            ((global.image_path_embedded != null && global.image_path_embedded != "") ? 
-                global.image_path_embedded : 
-                global.image_path_small);
+            ((global.image_loader.image_path_embedded != null && global.image_loader.image_path_embedded != "") ? 
+                global.image_loader.image_path_embedded : 
+                global.image_loader.image_path_small);
         
         if(image == null || image == "")
             image = "xnoise";

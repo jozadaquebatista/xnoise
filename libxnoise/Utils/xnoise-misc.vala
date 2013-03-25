@@ -175,6 +175,8 @@ namespace Xnoise {
         // PLUGINS
         plugin_loader = new PluginModule.Loader();
         
+        global.image_loader = new AlbumImageLoader();
+        
         // DOCKABLE MEDIA
         DockableMedia d;
         d = new MusicBrowserDockable();         // LOCAL COLLECTION
@@ -189,6 +191,7 @@ namespace Xnoise {
         dockable_media_sources.insert(d);
         
         dbus_image_extractor = new DbusImageExtractor();
+        
         
         // STATIC WIDGETS
         tlm = new TrackListModel();

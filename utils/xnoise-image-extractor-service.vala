@@ -80,8 +80,9 @@ public class ImageExtractorDbus : GLib.Object {
             return;
         if(!info.read())
             return;
-        string artist = info.artist;
+        string artist = info.albumartist;
         string album  = info.album;
+        
         if(artist == null || artist == "" ||
            album == null || album == "")
             return;
@@ -192,20 +193,20 @@ public class ImageExtractorDbus : GLib.Object {
             print("Error importing directory %s. %s\n", folder.get_path(), e.message);
             return;
         }
-        GLib.FileInfo info;
+        GLib.FileInfo fileinfo;
         try {
-            while((info = enumerator.next_file()) != null) {
+            while((fileinfo = enumerator.next_file()) != null) {
                 TrackData td = null;
-                string filename = info.get_name();
+                string filename = fileinfo.get_name();
                 string filepath = Path.build_filename(folder.get_path(), filename);
                 File file = File.new_for_path(filepath);
-                FileType filetype = info.get_file_type();
+                FileType filetype = fileinfo.get_file_type();
                 if(filetype == FileType.DIRECTORY) {
                     continue;
                 }
                 else {
                     string uri_lc = filename.down();
-                    string mime = GLib.ContentType.get_mime_type(info.get_content_type());
+                    string mime = GLib.ContentType.get_mime_type(fileinfo.get_content_type());
                     if((mime == "image/png" ||
                         mime == "image/jpeg" ||
                         mime == "image/jpg") &&

@@ -1,6 +1,6 @@
 /* xnoise-i-album-cover-image-provider.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011, 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,13 +30,6 @@
 
 using Xnoise;
 
-public interface Xnoise.IAlbumCoverImageProvider
-#if REF_TRACKING_ENABLED
-    : BaseObject {
-#else
-    : GLib.Object {
-#endif
-
-
+public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
     public abstract IAlbumCoverImage from_tags(string artist, string album);
 }

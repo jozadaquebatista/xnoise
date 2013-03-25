@@ -29,6 +29,8 @@
  *     Jörn Magens
  */
 
+using Gdk;
+
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Utilities;
@@ -62,7 +64,11 @@ namespace Xnoise {
     
     public static bool thumbnail_available(string uri, out File? _thumb) {
         string md5string = Checksum.compute_for_string(ChecksumType.MD5, uri);
-        File thumb = File.new_for_path(GLib.Path.build_filename(Environment.get_home_dir(), ".thumbnails", "normal", md5string + ".png"));
+        File thumb = File.new_for_path(GLib.Path.build_filename(Environment.get_home_dir(), 
+                                                                ".thumbnails", 
+                                                                "normal", 
+                                                                md5string + ".png")
+        );
         if(thumb.query_exists(null)) {
             _thumb = thumb;
             return true;
@@ -176,67 +182,263 @@ namespace Xnoise {
         return (owned)_albumname;
     }
 
-    internal class AlbumImageLoader : GLib.Object {
-//        private static IAlbumCoverImageProvider provider;
-        private static GLib.List<IAlbumCoverImageProvider> providers;
-        private static Main xn;
-        internal string artist;
-        internal string album;
-    
+    public class AlbumImageLoader : GLib.Object {
+        private static GLib.List<IAlbumCoverImageProvider> providers = 
+            new List<IAlbumCoverImageProvider>();
+        
+        public signal void image_path_large_changed();
+        public signal void image_path_small_changed();
+        public signal void image_path_embedded_changed();
+        
+        public Gdk.Pixbuf? image_small      { get; set; }
+        public Gdk.Pixbuf? image_large      { get; set; }
+        public Gdk.Pixbuf? image_embedded   { get; set; }
+        
+        private string? _image_path_small = null;
+        public string? image_path_small { 
+            get {
+                return _image_path_small;
+            }
+            set {
+                if(_image_path_small == value)
+                    return;
+                _image_path_small = value;
+                image_path_small_changed();
+            }
+        }
+        
+        private string? _image_path_large = null;
+        public string? image_path_large { 
+            get {
+                return _image_path_large;
+            }
+            set {
+                if(_image_path_large == value)
+                    return;
+                _image_path_large = value;
+                image_path_large_changed();
+            }
+        }
+        
+        private string? _image_path_embedded = null;
+        public string? image_path_embedded { 
+            get {
+                return _image_path_embedded;
+            }
+            set {
+                if(_image_path_embedded == value)
+                    return;
+                _image_path_embedded = value;
+                image_path_embedded_changed();
+            }
+        }
+        
+        
         public AlbumImageLoader() {
-            xn = Main.instance;
+            connect_signals();
+        }
+        
+        
+        private void connect_signals() {
             plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
             plugin_loader.sign_plugin_deactivated.connect(AlbumImageLoader.on_backend_deactivated);
-//            backend_iter = 0;
+            
+            global.notify["current-artist"].connect(on_tag_changed);
+            global.notify["current-albumartist"].connect(on_tag_changed);
+            global.notify["current-album"].connect(on_tag_changed);
+            
+            gst_player.sign_found_embedded_image.connect(load_embedded);
+        }
+        
+        private void load_embedded(Object sender, string uri, string _artist, string _album) {
+            File? pf = get_albumimage_for_artistalbum(_artist, _album, "embedded");
+            if(pf == null || !pf.query_exists(null)) 
+                return;
+            Idle.add(() => {
+                on_tag_changed();
+                return false;
+            });
+            AlbumArtView.icon_cache.handle_image(pf.get_path());
+//            using_thumbnail = false;
         }
 
+        private uint local_source  = 0;
+        private uint remote_source = 0;
+        
+        private void on_tag_changed() {
+            File f;
+            if(!check_image_for_current_tags(out f)) {
+                if(local_source != 0)
+                    Source.remove(local_source);
+                local_source = Timeout.add_seconds(1, () => {
+                    image_path_small = null;
+                    image_path_large = null;
+                    image_path_embedded = null;
+                    image_small = null;
+                    image_large = null;
+                    image_embedded = null;
+                    local_source = 0;
+                    return false;
+                });
+                return;
+            }
+            else {
+                if(remote_source != 0) {
+                    Source.remove(remote_source);
+                    remote_source = 0;
+                }
+                if(local_source != 0)
+                    Source.remove(local_source);
+                local_source = Timeout.add(100, () => {
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, setup_images_job);
+                    io_worker.push_job(job);
+                    local_source = 0;
+                    return false;
+                });
+            }
+        }
+        
+        private int backend_iter = 0;
+        
+        private IAlbumCoverImage? create_provider() {
+            string? artist = global.current_albumartist != null ? 
+                                global.current_albumartist : 
+                                global.current_artist;
+            string? album = global.current_album;
+            IAlbumCoverImage? prov =
+                providers.nth_data(backend_iter).from_tags(artist, check_album_name(artist, album));
+            if(prov == null)
+                return null;
+            prov.sign_image_fetched.connect(on_image_fetched);
+            prov.ref(); //prevent destruction before ready
+            prov.find_image();
+            return prov;
+        }
+        
+        private bool setup_images_job(Worker.Job job) {
+            assert(io_worker.is_same_thread());
+            File? fmedium = null, flarge = null, fembedded = null;
+            fmedium = get_albumimage_for_artistalbum((global.current_albumartist != null ? 
+                                                         global.current_albumartist :
+                                                         global.current_artist),
+                                                     global.current_album,
+                                                     "medium");
+            if(fmedium != null && fmedium.query_exists(null)) {
+                if(fmedium.get_path() != image_path_small) {
+                    image_small = create_image_from_file(ref fmedium);
+                    image_path_small = image_small != null ? fmedium.get_path() : null;
+                }
+            }
+            else {
+                image_small = null;
+                image_path_small = null;
+                if(remote_source != 0) {
+                    Source.remove(remote_source);
+                    remote_source = 0;
+                }
+                remote_source = Timeout.add_seconds(1, () => {
+                    var provider = create_provider();
+                    remote_source = 0;
+                    return false;
+                });
+            }
+            
+            flarge = 
+                get_albumimage_for_artistalbum((global.current_albumartist != null ? 
+                                                    global.current_albumartist :
+                                                    global.current_artist),
+                                                global.current_album,
+                                                "extralarge");
+            if(flarge != null && flarge.query_exists(null)) {
+                if(flarge.get_path() != image_path_large) {
+                    image_large = create_image_from_file(ref flarge);
+                    image_path_large = image_large != null ? flarge.get_path() : null;
+                }
+            }
+            else {
+                image_large = null;
+                image_path_large = null;
+            }
+            
+            fembedded =
+                get_albumimage_for_artistalbum((global.current_albumartist != null ? 
+                                                    global.current_albumartist :
+                                                    global.current_artist),
+                                                global.current_album,
+                                                "embedded");
+            if(fembedded != null && fembedded.query_exists(null)) {
+                if(fembedded.get_path() != image_path_embedded) {
+                    image_embedded = create_image_from_file(ref fembedded);
+                    image_path_embedded = image_embedded != null ? fembedded.get_path() : null;
+                }
+            }
+            else {
+                image_embedded = null;
+                image_path_embedded = null;
+            }
+            
+            return false;
+        }
+        
+        private Pixbuf? create_image_from_file(ref File file) {
+            Pixbuf pb = null;
+            try {
+                pb = new Pixbuf.from_file(file.get_path());
+            }
+            catch(Error e) {
+                return null;
+            }
+            return pb;
+        }
+        
+        private bool check_image_for_current_tags(out File? f) {
+            f = null;
+            if((global.current_albumartist == null && global.current_artist == null) || 
+               global.current_album == null)
+                return false;
+            
+            f = get_albumimage_for_artistalbum((global.current_albumartist != null ? 
+                                                    global.current_albumartist :
+                                                    global.current_artist),
+                                               global.current_album,
+                                               "medium");
+            if(f != null)
+                return true;
+            return false;
+        }
+        
         private static void on_plugin_activated(Container p) {
             if(!p.is_album_image_plugin) 
                 return;
-        
             IAlbumCoverImageProvider provider = p.loaded_plugin as IAlbumCoverImageProvider;
             if(provider == null) 
                 return;
-        
-//            AlbumImageLoader.provider = provider;
             providers.prepend(provider);
         }
-    
-        //forward signal from current provider
-        private void on_image_fetched(string _artist, string _album, string _image_path) {
-            global.sign_album_image_fetched(_artist, _album, _image_path);
-        }
-
+        
         private static void on_backend_deactivated(Container p) {
             if(!p.is_album_image_plugin) 
                 return;
-            
             IAlbumCoverImageProvider provider = p.loaded_plugin as IAlbumCoverImageProvider;
             if(provider == null) 
                 return;
             providers.remove(provider);
         }
-
-        private uint backend_iter = 0;
         
-        internal bool fetch_image() {
-            if(providers == null) {
-                global.sign_album_image_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
-                return false;
-            }
-            Idle.add( () => {
-                var album_image_provider = providers.nth_data(backend_iter).from_tags(artist,
-                                                                                      check_album_name(artist,
-                                                                                                       album)
-                                                                                      );
-                if(album_image_provider == null)
-                    return false;
-                album_image_provider.sign_image_fetched.connect(on_image_fetched);
-                album_image_provider.ref(); //prevent destruction before ready
-                album_image_provider.find_image();
+        private void on_image_fetched(string _artist, string _album, string _image_path) {
+            //print("called on_image_fetched %s - %s : %s\n", _artist, _album, _image_path);
+            if(_image_path == EMPTYSTRING) 
+                return;
+            
+            Idle.add(() => {
+                on_tag_changed();
                 return false;
             });
-            return true;
+            
+            File f = File.new_for_path(_image_path);
+            if(f == null || f.get_path() == null)
+                return;
+            AlbumArtView.icon_cache.handle_image(f.get_path());
         }
     }
 }

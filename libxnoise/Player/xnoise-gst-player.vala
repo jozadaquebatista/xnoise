@@ -982,8 +982,8 @@ public class Xnoise.GstPlayer : GLib.Object {
                         }
                         sign_found_embedded_image(this.uri, ar, al);
                         Idle.add( () => {
-                            if(pf2 != null) 
-                                global.sign_album_image_fetched(ar, al, pf2.get_path());
+//                            if(pf2 != null) 
+//                                global.sign_album_image_fetched(ar, al, pf2.get_path());
                             return false;
                         });
                     }

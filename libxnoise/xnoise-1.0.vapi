@@ -624,6 +624,19 @@ namespace Xnoise {
 		public AlbumData ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class AlbumImageLoader : GLib.Object {
+		public AlbumImageLoader ();
+		public Gdk.Pixbuf? image_embedded { get; set; }
+		public Gdk.Pixbuf? image_large { get; set; }
+		public string? image_path_embedded { get; set; }
+		public string? image_path_large { get; set; }
+		public string? image_path_small { get; set; }
+		public Gdk.Pixbuf? image_small { get; set; }
+		public signal void image_path_embedded_changed ();
+		public signal void image_path_large_changed ();
+		public signal void image_path_small_changed ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Application : GLib.Application {
 		public static Xnoise.Main xn;
 		public Application ();
@@ -691,10 +704,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
 		public bool cellrenderer_in_edit;
+		public Xnoise.AlbumImageLoader image_loader;
 		public static GLib.Cancellable main_cancellable;
 		public weak Xnoise.GstPlayer player;
 		public GlobalAccess ();
-		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
 		public void handle_eos ();
 		public void next ();
@@ -715,9 +728,6 @@ namespace Xnoise {
 		public string current_title { get; set; }
 		public string? current_uri { get; set; }
 		public int fontsize_dockable { get; set; }
-		public string? image_path_embedded { get; set; }
-		public string? image_path_large { get; set; }
-		public string? image_path_small { get; set; }
 		public bool in_preview { get; set; }
 		public bool media_import_in_progress { get; set; }
 		public Xnoise.PlayerState player_state { get; set; }
@@ -735,9 +745,6 @@ namespace Xnoise {
 		public signal void sig_media_path_changed ();
 		public signal void sign_album_image_fetched (string artist, string album, string image_path);
 		public signal void sign_album_image_removed (string artist, string album, string image_path);
-		public signal void sign_image_path_embedded_changed ();
-		public signal void sign_image_path_large_changed ();
-		public signal void sign_image_path_small_changed ();
 		public signal void sign_main_view_changed (string new_view_name);
 		public signal void sign_restart_song ();
 		public signal void sign_searchtext_changed (string text);

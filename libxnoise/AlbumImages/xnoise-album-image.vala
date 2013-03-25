@@ -39,13 +39,8 @@ using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
     internal static const int SIZE = 48;
-    private AlbumImageLoader loader = null;
-    private string artist = EMPTYSTRING;
-    private string album = EMPTYSTRING;
-    private static uint timeout = 0;
-    private string default_size = "medium";
-    private string? current_path = null;
     private bool _selected = false;
+    
     private Gdk.Pixbuf? pixbuf = null;
     
     public signal void sign_selected();
@@ -68,6 +63,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     
     
     public AlbumImage() {
+        this.pixbuf = null;
         this.set_size_request(SIZE, SIZE);
         this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK |
@@ -78,16 +74,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
                               "\n" +
                               _("<Ctrl+B>")
         );
-        this.load_default_image();
-        loader = new AlbumImageLoader();
-        global.sign_album_image_fetched.connect(on_album_image_fetched);
-        global.uri_changed.connect(on_uri_changed);
-        global.sign_image_path_large_changed.connect( () => {
-            set_image_via_idle(global.image_path_large);
-            using_thumbnail = false;
-        });
-        gst_player.sign_found_embedded_image.connect(load_embedded);
+        global.image_loader.notify["image-small"].connect(on_image_changed);
+        global.image_loader.notify["image-embedded"].connect(on_image_changed);
         this.set_visible_window(false);
+        
         this.button_press_event.connect( (s,e) => {
             if(e.button == 3 && e.type == Gdk.EventType.@2BUTTON_PRESS) {
                 main_window.toggle_fullscreen();
@@ -113,71 +103,83 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         });
     }
     
-    private void load_embedded(Object sender, string uri, string _artist, string _album) {
-        if(uri != global.current_uri)
-            return;
-        
-        File? pf = get_albumimage_for_artistalbum(_artist, _album, "embedded");
-        
-        if(!pf.query_exists(null)) 
-            return;
-        
-        global.check_image_for_current_track();
-        set_image_via_idle(pf.get_path());
-        using_thumbnail = false;
+    private void on_image_changed() {
+        if(global.image_loader.image_embedded != null) {
+            this.pixbuf = global.image_loader.image_embedded.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+        }
+        else if(global.image_loader.image_small != null) {
+            this.pixbuf = global.image_loader.image_small.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+        }
+        else
+            this.pixbuf = null;
+        queue_draw();
     }
+    
+//    private void load_embedded(Object sender, string uri, string _artist, string _album) {
+//        if(uri != global.current_uri)
+//            return;
+//        
+//        File? pf = get_albumimage_for_artistalbum(_artist, _album, "embedded");
+//        
+//        if(!pf.query_exists(null)) 
+//            return;
+//        
+//        global.check_image_for_current_track();
+//        set_image_via_idle(pf.get_path());
+//        using_thumbnail = false;
+//    }
 
-    private void on_uri_changed(string? uri) {
-        global.check_image_for_current_track();
-        Timeout.add(200, () => {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_uri_changed_job);
-            job.set_arg("uri", uri);
-            io_worker.push_job(job);
-            return false;
-        });
-    }
-    
-    private bool handle_uri_changed_job(Worker.Job job) {
-        assert(io_worker.is_same_thread());
-        string current_uri = (string)job.get_arg("uri");
-        if(global.image_path_small == null) {
-            File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
-            if(f != null && f.query_exists(null)) {
-                return false;
-            }
-            else {
-                f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
-                if(f != null && f.query_exists(null)) {
-                    return false;
-                }
-            }
-            string current_uri1 = current_uri;
-            load_default_image();
-            Idle.add(() => {
-                if(timeout != 0) {
-                    Source.remove(timeout);
-                    timeout = 0;
-                }
-                timeout = Timeout.add_seconds(1, () => {
-                    search_image(current_uri1);
-                    return false;
-                });
-                return false;
-            });
-        }
-        else {
-            File f = File.new_for_path(global.image_path_small);
-            if(!f.query_exists(null)) {
-                load_default_image();
-            }
-            else {
-                set_image_via_idle(global.image_path_small);
-                using_thumbnail = false;
-            }
-        }
-        return false;
-    }
-    
+//    private void on_uri_changed(string? uri) {
+//        global.check_image_for_current_track();
+//        Timeout.add(200, () => {
+//            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_uri_changed_job);
+//            job.set_arg("uri", uri);
+//            io_worker.push_job(job);
+//            return false;
+//        });
+//    }
+//    
+//    private bool handle_uri_changed_job(Worker.Job job) {
+//        assert(io_worker.is_same_thread());
+//        string current_uri = (string)job.get_arg("uri");
+//        if(global.image_path_small == null) {
+//            File f = get_albumimage_for_artistalbum((global.current_albumartist != null ? global.current_albumartist : global.current_artist), global.current_album, "embedded");
+//            if(f != null && f.query_exists(null)) {
+//                return false;
+//            }
+//            else {
+//                f = get_albumimage_for_artistalbum((global.current_albumartist != null ? global.current_albumartist : global.current_artist), global.current_album, "medium");
+//                if(f != null && f.query_exists(null)) {
+//                    return false;
+//                }
+//            }
+//            string current_uri1 = current_uri;
+//            load_default_image();
+//            Idle.add(() => {
+//                if(timeout != 0) {
+//                    Source.remove(timeout);
+//                    timeout = 0;
+//                }
+//                timeout = Timeout.add_seconds(1, () => {
+//                    search_image(current_uri1);
+//                    return false;
+//                });
+//                return false;
+//            });
+//        }
+//        else {
+//            File f = File.new_for_path(global.image_path_small);
+//            if(!f.query_exists(null)) {
+//                load_default_image();
+//            }
+//            else {
+//                set_image_via_idle(global.image_path_small);
+//                using_thumbnail = false;
+//            }
+//        }
+//        return false;
+//    }
+//    
     private const double radius = SIZE / 2.4;
     private const double SELECTED_BACKGROUND_ALPHA = 0.4;
     private Gdk.Pixbuf? prelit_image = null;
@@ -297,232 +299,247 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
 //        return true;
     }
 
-    // Startes via timeout because gst_player is sending the tag_changed signals
-    // sometimes very often at the beginning of a track.
-    private void search_image(string? uri) {
-        if(MainContext.current_source().is_destroyed())
-            return;
-        
-        if(uri == null || uri == EMPTYSTRING)
-            return;
-        string _artist = EMPTYSTRING;
-        string _album = EMPTYSTRING;
-        string _artist_raw = EMPTYSTRING;
-        string _album_raw = EMPTYSTRING;
-        
-        if((global.current_artist != null && global.current_artist != UNKNOWN_ARTIST) && 
-           (global.current_album != null && global.current_album != UNKNOWN_ALBUM)) {
-            _artist_raw = global.current_artist;
-            _album_raw  = global.current_album;
-            _artist = escape_for_local_folder_search(_artist_raw);
-            _album  = escape_album_for_local_folder_search(_artist, _album_raw );
-        }
-        else {
-            File? thumb = null;
-            if(thumbnail_available(global.current_uri, out thumb)) {
-                set_image_via_idle(thumb.get_path());
-                using_thumbnail = true;
-            }
-            return;
-        }
-        
-        if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
-            return;
-        
-        artist = remove_linebreaks((global.current_albumartist != null ? global.current_albumartist : global.current_artist));
-        album  = remove_linebreaks(global.current_album );
-        
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
-        job.set_arg("artist", artist);
-        job.set_arg("album", album);
-        job.set_arg("uri", gst_player.uri);
-        db_worker.push_job(job);
-    }
-    
-    
-    private bool fetch_trackdata_job(Worker.Job job) {
-        string jartist = (string)job.get_arg("artist");
-        string jalbum  = (string)job.get_arg("album");
-        //string uri    = (string)job.get_arg("uri");
-        
-        if((jartist==EMPTYSTRING)||(jartist==null)||(jartist==UNKNOWN_ARTIST)||
-           (jalbum ==EMPTYSTRING)||(jalbum ==null)||(jalbum ==UNKNOWN_ALBUM )) {
-            return false;
-        }
-        var fileout = get_albumimage_for_artistalbum(jartist, jalbum, "embedded");
-        
-        if(fileout.query_exists(null)) {
-            global.check_image_for_current_track();
-        }
-        else {
-            fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
-            if(fileout.query_exists(null)) {
-                global.check_image_for_current_track();
-            }
-            Idle.add( () => {
-                loader.artist = jartist;
-                loader.album  = check_album_name(jartist, jalbum);
-                loader.fetch_image();
-                return false;
-            });
-        }
-        return false;
-    }
+//    // Startes via timeout because gst_player is sending the tag_changed signals
+//    // sometimes very often at the beginning of a track.
+//    private void search_image(string? uri) {
+//        if(MainContext.current_source().is_destroyed())
+//            return;
+//        
+//        if(uri == null || uri == EMPTYSTRING)
+//            return;
+//        string _artist = EMPTYSTRING;
+//        string _album = EMPTYSTRING;
+//        string _artist_raw = EMPTYSTRING;
+//        string _album_raw = EMPTYSTRING;
+//        
+//        if((global.current_albumartist != null && global.current_albumartist != UNKNOWN_ARTIST) && 
+//           (global.current_album != null && global.current_album != UNKNOWN_ALBUM)) {
+//            _artist_raw = global.current_albumartist;
+//            _album_raw  = global.current_album;
+//            _artist = escape_for_local_folder_search(_artist_raw);
+//            _album  = escape_album_for_local_folder_search(_artist, _album_raw );
+//        }
+//        else {
+//            File? thumb = null;
+//            if(thumbnail_available(global.current_uri, out thumb)) {
+//                set_image_via_idle(thumb.get_path());
+//                using_thumbnail = true;
+//            }
+//            return;
+//        }
+//        
+//        if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
+//            return;
+//        
+//        string? tmp = global.current_albumartist;
+//        if(tmp == null)
+//            tmp = global.current_artist;
+//        if(tmp == null)
+//            return;
+//        if(tmp.down().strip() == "various")
+//            tmp = VARIOUS_ARTISTS;
+//        artist = remove_linebreaks(tmp);
+//        album  = remove_linebreaks(global.current_album );
+//        
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
+//        job.set_arg("artist", artist);
+//        job.set_arg("album", album);
+//        job.set_arg("uri", gst_player.uri);
+//        db_worker.push_job(job);
+//    }
+//    
+//    
+//    private bool fetch_trackdata_job(Worker.Job job) {
+//        string jartist = (string)job.get_arg("artist");
+//        string jalbum  = (string)job.get_arg("album");
+//        //string uri    = (string)job.get_arg("uri");
+//        
+//        if((jartist==EMPTYSTRING)||(jartist==null)||(jartist==UNKNOWN_ARTIST)||
+//           (jalbum ==EMPTYSTRING)||(jalbum ==null)||(jalbum ==UNKNOWN_ALBUM )) {
+//            return false;
+//        }
+//        var fileout = get_albumimage_for_artistalbum(jartist, jalbum, "embedded");
+//        
+//        if(fileout.query_exists(null)) {
+//            global.check_image_for_current_track();
+//        }
+//        else {
+//            fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
+//            if(fileout.query_exists(null)) {
+//                global.check_image_for_current_track();
+//            }
+//            Idle.add( () => {
+//                image_loader.artist = jartist;
+//                image_loader.album  = check_album_name(jartist, jalbum);
+//                image_loader.fetch_image();
+//                return false;
+//            });
+//        }
+//        return false;
+//    }
 
-    private bool set_local_image_if_available(ref string _artist, ref string _album) {
-        var fileout = get_albumimage_for_artistalbum(_artist, _album, "embedded");
-        if(fileout.query_exists(null)) {
-            set_image_via_idle(fileout.get_path());
-            using_thumbnail = false;
-            return true;
-        }
-        else {
-            fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
-            if(fileout.query_exists(null)) {
-                set_image_via_idle(fileout.get_path());
-                using_thumbnail = false;
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    internal void load_default_image() {
-        this.pixbuf = null;
-        Idle.add(() => {
-            this.set_size_request(SIZE, SIZE);
-//            this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
-            current_path = "default";
-            queue_draw();
-            return false;
-        });
-    }
+//    private bool set_local_image_if_available(ref string _artist, ref string _album) {
+//        var fileout = get_albumimage_for_artistalbum(_artist, _album, "embedded");
+//        if(fileout.query_exists(null)) {
+//            set_image_via_idle(fileout.get_path());
+//            using_thumbnail = false;
+//            return true;
+//        }
+//        else {
+//            fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
+//            if(fileout.query_exists(null)) {
+//                set_image_via_idle(fileout.get_path());
+//                using_thumbnail = false;
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    
+//    internal void load_default_image() {
+//        this.pixbuf = null;
+//        Idle.add(() => {
+//            this.set_size_request(SIZE, SIZE);
+//            current_path = "default";
+//            queue_draw();
+//            return false;
+//        });
+//    }
 
-    private void set_albumimage_from_path(string? image_path) {
-        if(MainContext.current_source().is_destroyed())
-            return;
-        
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_albumimage_file_job);
-        job.set_arg("image_path", image_path);
-        io_worker.push_job(job);
-        
-    }
-    
-    private bool load_albumimage_file_job(Worker.Job job) {
-        string? image_path = (string?)job.get_arg("image_path");
-        if(image_path == null || image_path == EMPTYSTRING) {
-            load_default_image();
-            return false;
-        }
-        File f = File.new_for_path(image_path);
-        if(!f.query_exists(null)) {
-            load_default_image();
-            return false;
-        }
-        Gdk.Pixbuf? px = null;
-        try {
-            px = new Gdk.Pixbuf.from_file(image_path);
-        }
-        catch(Error e) {
-            print("%s\n", e.message);
-            this.pixbuf = null;
-            image_path = "default";
-            return false;
-        }
-        
-        px = px.scale_simple(SIZE, SIZE, Gdk.InterpType.HYPER);
-        
-        Idle.add(() => {
-            this.pixbuf = px;
-            current_path = image_path;
-            queue_draw();
-            return false;
-        });
-        if(!using_thumbnail) {
-            Timeout.add_seconds(1, () => {
-                var fileout  = get_albumimage_for_artistalbum(global.current_artist,
-                                                              global.current_album,
-                                                              "medium");
-                var fileout2 = get_albumimage_for_artistalbum(global.current_artist,
-                                                              global.current_album,
-                                                              "embedded");
-                if(fileout == null && fileout2 == null) {
-                    //print("image not fitting. set default\n");
-                    if(current_path != "default") {
-                        load_default_image();
-                    }
-                    return false;
-                }
-                if(fileout.get_path() != current_path && fileout2.get_path() != current_path) {
-                    //print("this.file not fitting curren album image (%s). redoing search\n", current_path);
-                    string _artist_raw = global.current_artist;
-                    string _album_raw  = global.current_album;
-                    if(!set_local_image_if_available(ref _artist_raw, ref _album_raw)) {
-                        if(current_path != "default")
-                            load_default_image();
-                    }
-                    return false;
-                }
-                return false;
-            });
-        }
-        return false;
-    }
+//    private void set_albumimage_from_path(string? image_path) {
+//        if(MainContext.current_source().is_destroyed())
+//            return;
+//        
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_albumimage_file_job);
+//        job.set_arg("image_path", image_path);
+//        io_worker.push_job(job);
+//        
+//    }
+//    
+//    private bool load_albumimage_file_job(Worker.Job job) {
+//        string? image_path = (string?)job.get_arg("image_path");
+//        if(image_path == null || image_path == EMPTYSTRING) {
+//            load_default_image();
+//            return false;
+//        }
+//        File f = File.new_for_path(image_path);
+//        if(!f.query_exists(null)) {
+//            load_default_image();
+//            return false;
+//        }
+//        Gdk.Pixbuf? px = null;
+//        try {
+//            px = new Gdk.Pixbuf.from_file(image_path);
+//        }
+//        catch(Error e) {
+//            print("%s\n", e.message);
+//            this.pixbuf = null;
+//            image_path = "default";
+//            return false;
+//        }
+//        
+//        px = px.scale_simple(SIZE, SIZE, Gdk.InterpType.HYPER);
+//        
+//        Idle.add(() => {
+//            this.pixbuf = px;
+//            current_path = image_path;
+//            queue_draw();
+//            return false;
+//        });
+//        if(!using_thumbnail) {
+//            Timeout.add_seconds(1, () => {
+//                var fileout  = get_albumimage_for_artistalbum(global.current_artist,
+//                                                              global.current_album,
+//                                                              "medium");
+//                var fileout2 = get_albumimage_for_artistalbum(global.current_artist,
+//                                                              global.current_album,
+//                                                              "embedded");
+//                if(fileout == null && fileout2 == null) {
+//                    //print("image not fitting. set default\n");
+//                    if(current_path != "default") {
+//                        load_default_image();
+//                    }
+//                    return false;
+//                }
+//                if(fileout.get_path() != current_path && fileout2.get_path() != current_path) {
+//                    //print("this.file not fitting curren album image (%s). redoing search\n", current_path);
+//                    string _artist_raw = global.current_artist;
+//                    string _album_raw  = global.current_album;
+//                    if(!set_local_image_if_available(ref _artist_raw, ref _album_raw)) {
+//                        if(current_path != "default")
+//                            load_default_image();
+//                    }
+//                    return false;
+//                }
+//                return false;
+//            });
+//        }
+//        return false;
+//    }
 
-    private uint source = 0;
-    
-    private void on_album_image_fetched(string _artist, string _album, string image_path) {
-        //print("\ncalled on_image_fetched %s - %s : %s", _artist, _album, image_path);
-        if(image_path == EMPTYSTRING) 
-            return;
-        
-        if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
-           (prepare_for_comparison(check_album_name(artist, album))  != 
-                prepare_for_comparison(check_album_name(_artist, _album)))) 
-            return;
-        
-        File f = File.new_for_path(image_path);
-        
-        if(f == null || f.get_path() == null)
-            return;
-        
-        var fjob = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.read_file_job);
-        fjob.set_arg("file", f);
-        io_worker.push_job(fjob);
-        
-        AlbumArtView.icon_cache.handle_image(f.get_path());
-    }
-    
-    private bool read_file_job(Worker.Job job) {
-        File f = (File)job.get_arg("file");
-        
-        if(f == null || !f.query_exists(null)) 
-            return false;
-        
-        Idle.add(() => {
-            global.check_image_for_current_track();
-            set_image_via_idle(f.get_path());
-            return false;
-        });
-        using_thumbnail = false;
-        return false;
-    }
-    
-    private bool using_thumbnail = false;
-    
-    private void set_image_via_idle(string? image_path) {
-        if(image_path == null || image_path == EMPTYSTRING)
-            return;
-        
-        if(source != 0) {
-            Source.remove(source);
-            source = 0;
-        }
-            
-        source = Timeout.add(200, () => {
-            this.set_albumimage_from_path(image_path);
-            source = 0;
-            return false;
-        });
-    }
+//    private uint source = 0;
+//    
+//    private void on_album_image_fetched(string _artist, string _album, string image_path) {
+//        print("\ncalled on_image_fetched %s - %s : %s", _artist, _album, image_path);
+//        if(image_path == EMPTYSTRING) 
+//            return;
+//        string? tmp = global.current_albumartist;
+//        if(tmp == null)
+//            tmp = global.current_artist;
+//        if(tmp == null)
+//            return;
+//        if(tmp.down().strip() == "various")
+//            tmp = VARIOUS_ARTISTS;
+//        artist = remove_linebreaks(tmp);
+//        album  = remove_linebreaks(global.current_album );
+//        
+//        if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
+//           (prepare_for_comparison(check_album_name(artist, album))  != 
+//                prepare_for_comparison(check_album_name(_artist, _album)))) 
+//            return;
+//        
+//        File f = File.new_for_path(image_path);
+//        
+//        if(f == null || f.get_path() == null)
+//            return;
+//        
+//        var fjob = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.read_file_job);
+//        fjob.set_arg("file", f);
+//        io_worker.push_job(fjob);
+//        
+//        AlbumArtView.icon_cache.handle_image(f.get_path());
+//    }
+//    
+//    private bool read_file_job(Worker.Job job) {
+//        File f = (File)job.get_arg("file");
+//        
+//        if(f == null || !f.query_exists(null)) 
+//            return false;
+//        
+//        Idle.add(() => {
+//            global.check_image_for_current_track();
+//            set_image_via_idle(f.get_path());
+//            return false;
+//        });
+//        using_thumbnail = false;
+//        return false;
+//    }
+//    
+//    private bool using_thumbnail = false;
+//    
+//    private void set_image_via_idle(string? image_path) {
+//        if(image_path == null || image_path == EMPTYSTRING)
+//            return;
+//        
+//        if(source != 0) {
+//            Source.remove(source);
+//            source = 0;
+//        }
+//            
+//        source = Timeout.add(200, () => {
+//            this.set_albumimage_from_path(image_path);
+//            source = 0;
+//            return false;
+//        });
+//    }
 }
