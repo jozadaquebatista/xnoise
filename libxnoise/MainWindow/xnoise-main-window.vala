@@ -575,14 +575,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         first_start_widget = new FirstStartWidget();
         first_start_widget.show();
         if(first_start_widget.parent == null) {
-            content_notebook.append_page(first_start_widget, null);
-            content_notebook.set_current_page(content_notebook.page_num(first_start_widget));
+            paned2notebook.append_page(first_start_widget, null);
+            paned2notebook.set_current_page(paned2notebook.page_num(first_start_widget));
         }
         first_start_widget.finish_button.clicked.connect( () =>  {
             Idle.add(() => {
                 main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 show_content();
-                content_notebook.remove_page(content_notebook.page_num(first_start_widget));
+                paned2notebook.remove_page(paned2notebook.page_num(first_start_widget));
                 first_start_widget.destroy();
                 first_start_widget = null;
                 if(!global.media_import_in_progress) {
@@ -606,7 +606,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Idle.add(() => {
                 main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 show_content();
-                content_notebook.remove_page(content_notebook.page_num(first_start_widget));
+                paned2notebook.remove_page(paned2notebook.page_num(first_start_widget));
                 first_start_widget.destroy();
                 first_start_widget = null;
                 if(!global.media_import_in_progress) {
@@ -628,7 +628,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
         });
         Idle.add(() => {
-            content_notebook.set_current_page(content_notebook.page_num(first_start_widget));
+            paned2notebook.set_current_page(paned2notebook.page_num(first_start_widget));
             if(actions_list == null)
                 actions_list = action_group.list_actions();
             foreach(Gtk.Action a in actions_list) {
