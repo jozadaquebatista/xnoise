@@ -1620,7 +1620,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tl.grab_focus();
     }
     
+    private Gtk.Settings settings;
+    
     private void setup_widgets() {
+        settings = Gtk.Settings.get_default();
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(MAIN_UI_FILE);
@@ -1901,7 +1904,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.set_icon_size(IconSize.LARGE_TOOLBAR);
             main_toolbar.set_show_arrow(false);
             toolbarbox.pack_start(main_toolbar, true, true, 0);
-//            main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+            
+            //-----------------
+            if(settings.gtk_theme_name == "Ambiance" || settings.gtk_theme_name == "Radiance")
+                main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+            
+            settings.notify["gtk-theme-name"].connect( () => {
+                var ctxt = main_toolbar.get_style_context();
+                if(settings.gtk_theme_name == "Ambiance" || 
+                   settings.gtk_theme_name == "Radiance") {
+                    if(!ctxt.has_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR))
+                        ctxt.add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+                }
+                else {
+                    if(ctxt.has_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR))
+                        ctxt.remove_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+                }
+            });
             //-----------------
             
             main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
