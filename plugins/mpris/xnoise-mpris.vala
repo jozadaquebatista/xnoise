@@ -270,8 +270,8 @@ public class MprisPlayer : GLib.Object {
             queue_property_for_notification("Volume", variant);
         });
         
-        Xnoise.global.notify["image-path-large"].connect( () => {
-            string? s = Xnoise.global.image_path_large;
+        Xnoise.global.image_loader.notify["image-path-large"].connect( () => {
+            string? s = Xnoise.global.image_loader.image_path_large;
             if(s == null) {
                 _metadata.insert("mpris:artUrl", EMPTYSTRING);
             }
