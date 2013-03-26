@@ -124,10 +124,10 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
                     if((handler = d.get_item_handler()) != null)
                         itemhandler_manager.add_handler(handler);
                     
-                    Idle.add(() => {
-                        main_window.main_view_sbutton.select(d.get_identifier(), true);
-                        return false;
-                    });
+                    //Idle.add(() => {
+                    //    main_window.main_view_sbutton.select(d.get_identifier(), true);
+                    //    return false;
+                    //});
                     return false;
                 });
             }
