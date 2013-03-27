@@ -41,8 +41,8 @@ private class Xnoise.IconCache : GLib.Object {
     
     private File dir;
     private int icon_size;
-    private int import_job_count;
-    private bool all_jobs_in_queue;
+    private int import_job_count = 0;
+    private bool all_jobs_in_queue = false;
     
     public Cancellable cancellable;
     
@@ -149,6 +149,17 @@ private class Xnoise.IconCache : GLib.Object {
             enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
         } 
         catch(Error e) {
+//            print("%s", e.message);
+            lock(import_job_count) {
+                if(import_job_count <=0) {
+                    Timeout.add(100, () => {
+                        print("Icon Cache: inital import done 2.\n");
+                        loading_in_progress = false;
+                        on_loading_finished();
+                        return false;
+                    });
+                }
+            }
             return;
         }
         job.big_counter[0]++;
@@ -181,6 +192,16 @@ private class Xnoise.IconCache : GLib.Object {
         if(job.big_counter[0] == 0) {
             lock(all_jobs_in_queue) {
                 all_jobs_in_queue = true;
+            }
+        }
+        lock(import_job_count) {
+            if(import_job_count <=0) {
+                Timeout.add(100, () => {
+                    print("Icon Cache: inital import done 2.\n");
+                    loading_in_progress = false;
+                    on_loading_finished();
+                    return false;
+                });
             }
         }
     }
@@ -223,7 +244,6 @@ private class Xnoise.IconCache : GLib.Object {
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(cache_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-//        job.set_arg("file", file.get_path());
         if(file == null ||
             (!file.get_path().has_suffix("_extralarge") &&
              !file.get_path().has_suffix("_embedded"))) {
@@ -264,7 +284,6 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private void insert_image(string name, Gdk.Pixbuf? pix) {
-        //print("insert image : %s\n", name);
         if(pix == null) {
             lock(cache) {
                 print("remove image %s\n", name);
