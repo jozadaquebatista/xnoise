@@ -49,7 +49,7 @@ public class ImageExtractorDbus : GLib.Object {
                 File f = File.new_for_uri(u);
                 if(f == null || f.get_path() == null)
                     return false;
-                print("handle file number %u\n", ++cnt);
+                //print("handle file number %u\n", ++cnt);
                 handle_single_file(f);
                 return false;
             });
@@ -63,24 +63,31 @@ public class ImageExtractorDbus : GLib.Object {
             return;
         if(!info.read())
             return;
-        string artist = info.albumartist;
+        string artist = ((info.albumartist != null && info.albumartist != "") ? 
+                            info.albumartist : 
+                            info.artist);
         string album  = info.album;
         
         if(artist == null || artist == "" ||
-           album == null || album == "")
+           album == null || album == "") {
+            print("no valid data for %s\n", f.get_path());
             return;
+        }
         
         uint8[] data;
         ImageType image_type;
         Gdk.Pixbuf? pixbuf = null;
         
         if(info.has_image) {
-            File? pf = get_albumimage_for_artistalbum(artist, album, "embedded");
-            if(pf == null) {
+            File? pf  = get_albumimage_for_artistalbum(artist, album, "embedded");
+            File? pf2 = get_albumimage_for_artistalbum(artist, album, "extralarge");
+            
+            if(pf == null)
                 return;
-            }
-            if(pf.query_exists(null))
+            
+            if(pf.query_exists(null) && pf2.query_exists(null))
                 return;
+            
             info.get_image(out data, out image_type);
             if(data != null && data.length > 0) {
                 var pbloader = new Gdk.PixbufLoader();
@@ -100,13 +107,14 @@ public class ImageExtractorDbus : GLib.Object {
                     return;
                 }
             }
-            if(pixbuf != null)
+            if(pixbuf != null) {
                 save_pixbuf_to_file(artist, album, pixbuf, image_type);
+            }
         }
         else {
             File? pf = get_albumimage_for_artistalbum(artist, album, "medium");
             if(pf == null) {
-                print("handle_single_file pf null for %s - %s\n", artist, album);
+                //print("handle_single_file pf null for %s - %s\n", artist, album);
                 return;
             }
             if(pf.query_exists(null))
@@ -125,31 +133,43 @@ public class ImageExtractorDbus : GLib.Object {
             if(pf == null) {
                 return;
             }
+            string itype;
+            switch(image_type) {
+                case ImageType.PNG:
+                    itype = "png";
+                    break;
+                case ImageType.JPEG:
+                default:
+                    itype = "jpeg";
+                    break;
+            }
             if(!pf.query_exists(null)) {
                 try {
                     File parentpath = pf.get_parent();
                     if(!parentpath.query_exists(null))
                         parentpath.make_directory_with_parents(null);
-                    string itype;
-                    switch(image_type) {
-                        case ImageType.PNG:
-                            itype = "jpeg";
-                            break;
-                        case ImageType.JPEG:
-                        default:
-                            itype = "jpeg";
-                            break;
-                    }
                     pixbuf.save(pf.get_path(), itype);
-                    pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_extralarge"));
-                    if(!pf2.query_exists(null)) {
-                        pixbuf.save(pf2.get_path(), itype);
-                        found_image(artist, album, pf2.get_path());
-                    }
-                    pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_medium"));
-                    if(!pf2.query_exists(null)) {
-                        pixbuf.save(pf2.get_path(), itype);
-                    }
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return;
+                }
+            }
+            pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_extralarge"));
+            if(!pf2.query_exists(null)) {
+                try {
+                    pixbuf.save(pf2.get_path(), itype);
+                    found_image(artist, album, pf2.get_path());
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return;
+                }
+            }
+            pf2 = File.new_for_path(pf.get_path().replace("_embedded", "_medium"));
+            if(!pf2.query_exists(null)) {
+                try {
+                    pixbuf.save(pf2.get_path(), itype);
                 }
                 catch(Error e) {
                     print("%s\n", e.message);

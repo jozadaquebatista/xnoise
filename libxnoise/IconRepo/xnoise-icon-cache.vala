@@ -136,14 +136,12 @@ private class Xnoise.IconCache : GLib.Object {
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(cache_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-        if(file == null ||
-            (!file.get_path().has_suffix("_extralarge") &&
-             !file.get_path().has_suffix("_embedded"))) {
+        if(file == null)
             return false;
-        }
-        if(!file.query_exists(null)) {
+        
+        if(!file.query_exists(null))
             return false;
-        }
+        
         Gdk.Pixbuf? px = null;
         string pth = file.get_path();
         try {
@@ -179,6 +177,7 @@ private class Xnoise.IconCache : GLib.Object {
         }
         if(p == null) {
             var fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+            //print("path: %s\n", path);
             fjob.set_arg("file", path);
             fjob.cancellable = this.cancellable;
             cache_worker.push_job(fjob);
