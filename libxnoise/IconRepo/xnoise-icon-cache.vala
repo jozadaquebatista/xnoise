@@ -75,6 +75,10 @@ private class Xnoise.IconCache : GLib.Object {
         io_worker.push_job(job);
         dbus_image_extractor.sign_found_album_image.connect(on_new_album_art_found);
         global.sign_album_image_removed.connect(on_image_removed);
+        Idle.add(() => {
+            loading_done();
+            return false;
+        });
     }
     
     
