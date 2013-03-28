@@ -1,6 +1,6 @@
 /* xnoise-icons-model.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,8 +73,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         logo = AlbumArtView.icon_cache.album_art;
         
         global.sign_searchtext_changed.connect( (s,t) => {
-            if(!cache_ready)
-                return;
+//            if(!cache_ready)
+//                return;
             if(main_window.album_art_view_visible) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
@@ -111,8 +111,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         Timeout.add_seconds(3, () => {
             main_window.album_view_sorting.sign_selected.connect( (sender,nme) => {
                 Params.set_string_value("album_art_view_sorting", nme);
-                if(!cache_ready)
-                    return;
+//                if(!cache_ready)
+//                    return;
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Idle.add( () => {
@@ -127,8 +127,8 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             });
             main_window.album_view_direction.sign_selected.connect( (sender,nme) => {
                 Params.set_string_value("album_art_view_direction", nme);
-                if(!cache_ready)
-                    return;
+//                if(!cache_ready)
+//                    return;
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
                 search_idlesource = Idle.add( () => {
@@ -143,17 +143,14 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             });
             return false;
         });
-        AlbumArtView.icon_cache.memory_cleanup.connect( () => {
-            this.filter();
-        });
     }
     
     private bool immediate_search_flag = false;
     public void immediate_search(string text) {
         if(text == null)
             return;
-        if(!cache_ready)
-            return;
+//        if(!cache_ready)
+//            return;
         global.searchtext = text;
         if(search_idlesource != 0) {
             Source.remove(search_idlesource);
@@ -163,7 +160,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         this.filter();
     }
     
-    public bool cache_ready = true;//false;
+//    public bool cache_ready = true;//false;
     
     public void remove_all() {
         view.set_model(null);
@@ -216,19 +213,20 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 //AT FIRST PUT SOME RESULTS INTO THE ALBUM ART VIEW, SO
                 // THE USER WILL SEE SOMETHING FOR LARGE RESULT SETS.
                 IconState st = IconState.UNRESOLVED;
+                string artist_name = ad_list[i].artist;
                 string albumname = Markup.printf_escaped("<b>%s</b>\n", ad_list[i].album) + 
-                                   Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
+                                   Markup.printf_escaped("<i>%s</i>", artist_name);
                 Gdk.Pixbuf? art = null;
                 File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
-//                if(f != null)
-//                    art = AlbumArtView.icon_cache.get_image(f.get_path());
+                if(f != null)
+                    art = AlbumArtView.icon_cache.get_image(f.get_path());
                 
-//                if(art == null)
+                if(art == null)
                     art = logo;
-//                else
-//                    st = IconState.RESOLVED;
+                else
+                    st = IconState.RESOLVED;
                 
-                string ar = ad_list[i].artist;
+//                string ar = ad_list[i].albumartist;
                 string al = ad_list[i].album;
                 Item? it  = ad_list[i].item;
                 TreeIter iter;
@@ -251,7 +249,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                          Column.ICON, art,
                          Column.TEXT, albumname,
                          Column.STATE, st,
-                         Column.ARTIST, ar,
+                         Column.ARTIST, artist_name,
                          Column.ALBUM,  al,
                          Column.ITEM,  it,
                          Column.EXTRA_INFO, extra_info,
@@ -262,19 +260,20 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                 if(FIRST_RUN_CNT < ad_list.length) {
                     for(int i = FIRST_RUN_CNT; i < ad_list.length; i++) { //foreach(AlbumData ad in ad_list) 
                         IconState st = IconState.UNRESOLVED;
+                        string artist_name = ad_list[i].artist;
                         string albumname = Markup.printf_escaped("<b>%s</b>\n", ad_list[i].album) + 
-                                           Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
+                                           Markup.printf_escaped("<i>%s</i>", artist_name);
                         Gdk.Pixbuf? art = null;
-                        File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
-//                        if(f != null)
-//                            art = AlbumArtView.icon_cache.get_image(f.get_path());
+                        File? f = get_albumimage_for_artistalbum(artist_name, ad_list[i].album, "extralarge");
+                        if(f != null)
+                            art = AlbumArtView.icon_cache.get_image(f.get_path());
                         
-//                        if(art == null)
+                        if(art == null)
                             art = logo;
-//                        else
-//                            st = IconState.RESOLVED;
+                        else
+                            st = IconState.RESOLVED;
                         
-                        string ar = ad_list[i].artist;
+//                        string ar = ad_list[i].artist;
                         string al = ad_list[i].album;
                         Item? it  = ad_list[i].item;
                         string? extra_info = null;
@@ -298,7 +297,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                                      Column.ICON, art,
                                      Column.TEXT, albumname,
                                      Column.STATE, st,
-                                     Column.ARTIST, ar,
+                                     Column.ARTIST, artist_name,
                                      Column.ALBUM,  al,
                                      Column.ITEM,  it,
                                      Column.EXTRA_INFO, extra_info,

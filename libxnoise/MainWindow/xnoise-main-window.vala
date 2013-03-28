@@ -2001,16 +2001,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             spinner.valign = Align.CENTER;
             spinner.set_no_show_all(true);
             album_art_view.show();
-            spinner.show();
+//            spinner.show();
             album_art_view.notify.connect( (s,p) => {
-                if(p.name != "in-loading" && p.name != "in-import")
+                if(p.name != "in-import")
                     return;
-                if(album_art_view.in_loading || album_art_view.in_import) {
+                if(album_art_view.in_import) {
+                print("in import\n");
                     spinner.start();
                     spinner.set_no_show_all(false);
                     spinner.show_all();
                 }
                 else {
+                print("not in import\n");
                     spinner.stop();
                     spinner.hide();
                     spinner.set_no_show_all(true);

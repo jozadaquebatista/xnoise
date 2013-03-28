@@ -1,6 +1,6 @@
 /* xnoise-albumart-view.vala
  *
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2012 - 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,10 +55,10 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         return this.get_selected_items();
     }
     
-    public bool in_loading { get; private set; }
+//    public bool in_loading { get; private set; }
     public bool in_import  { get; private set; }
     
-    private bool black = false;
+    private bool black = true;
     
     public AlbumArtView(CellArea area) {
         GLib.Object(cell_area:area);
@@ -85,19 +85,13 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
             icon_cache = new IconCache(album_image_dir, IconsModel.ICONSIZE, a_art_pixb);
         }
-        icon_cache.notify["loading-in-progress"].connect( () => {
-            if(icon_cache.loading_in_progress)
-                in_loading = true;
-            else
-                in_loading = false;
-        });
         icons_model = new IconsModel(this);
         this.set_item_width(IconsModel.ICONSIZE);
         this.set_model(icons_model);
-        icon_cache.loading_done.connect(() => {
-            icons_model.cache_ready = true;
-            this.icons_model.populate_model();
-        });
+//        icon_cache.loading_done.connect(() => {
+//            icons_model.cache_ready = true;
+//            this.icons_model.populate_model();
+//        });
         icon_cache.sign_new_album_art_loaded.connect( (p) => {
             print("queue_draw\n");
             queue_draw();
@@ -111,9 +105,9 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         media_importer.register_reset_callback(cbr);
         
         this.notify.connect( (s,p) => {
-            if(p.name != "in-loading" && p.name != "in-import")
+            if(p.name != "in-import")
                 return;
-            if(this.in_loading || this.in_import) {
+            if(this.in_import) {
                 black = false;
                 queue_draw();
             }
@@ -139,6 +133,15 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         //            this.queue_draw(); 
         //            return false; 
         //        });
+        Idle.add(() => {
+            icons_model.populate_model();
+            return false;
+        });
+        Timeout.add_seconds(5, () => {
+            in_import = false;
+            this.icons_model.filter();
+            return false;
+        });
     }
     
     private CellArea area = null;
