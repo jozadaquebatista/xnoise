@@ -143,6 +143,9 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             });
             return false;
         });
+        AlbumArtView.icon_cache.memory_cleanup.connect( () => {
+            this.filter();
+        });
     }
     
     private bool immediate_search_flag = false;
@@ -160,7 +163,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         this.filter();
     }
     
-    public bool cache_ready = false;
+    public bool cache_ready = true;//false;
     
     public void remove_all() {
         view.set_model(null);
@@ -217,13 +220,13 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                                    Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
                 Gdk.Pixbuf? art = null;
                 File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
-                if(f != null)
-                    art = AlbumArtView.icon_cache.get_image(f.get_path());
+//                if(f != null)
+//                    art = AlbumArtView.icon_cache.get_image(f.get_path());
                 
-                if(art == null)
+//                if(art == null)
                     art = logo;
-                else
-                    st = IconState.RESOLVED;
+//                else
+//                    st = IconState.RESOLVED;
                 
                 string ar = ad_list[i].artist;
                 string al = ad_list[i].album;
@@ -263,13 +266,13 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
                                            Markup.printf_escaped("<i>%s</i>", ad_list[i].artist);
                         Gdk.Pixbuf? art = null;
                         File? f = get_albumimage_for_artistalbum(ad_list[i].artist, ad_list[i].album, "extralarge");
-                        if(f != null)
-                            art = AlbumArtView.icon_cache.get_image(f.get_path());
+//                        if(f != null)
+//                            art = AlbumArtView.icon_cache.get_image(f.get_path());
                         
-                        if(art == null)
+//                        if(art == null)
                             art = logo;
-                        else
-                            st = IconState.RESOLVED;
+//                        else
+//                            st = IconState.RESOLVED;
                         
                         string ar = ad_list[i].artist;
                         string al = ad_list[i].album;
