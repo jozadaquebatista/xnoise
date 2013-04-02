@@ -32,13 +32,13 @@ AM_PROG_CC_C_O
 AC_DISABLE_STATIC
 
 # Vala generated C source targets GLIB Version
-TARGET_GLIB_VERSION=2.30
+TARGET_GLIB_VERSION=2.34
 
 dnl required versions for xnoise
-GSTREAMER_REQUIRED=1.0.1
 GLIB_REQUIRED=TARGET_GLIB_VERSION
+GIO_REQUIRED=GLIB_REQUIRED
+GSTREAMER_REQUIRED=1.0.1
 LIBXML_REQUIRED=2.6.32
-GIO_REQUIRED=TARGET_GLIB_VERSION
 GTK_REQUIRED=3.2.0
 SQLITE_REQUIRED=3.6
 TAGINFO_REQUIRED=0.1.4
@@ -457,6 +457,8 @@ XNOISE_PACKAGES="\
     --pkg sqlite3 \
     --pkg libtaginfo_c \
     --target-glib=`echo $TARGET_GLIB_VERSION` \
+    --disable-version-header \
+    --enable-checking \
 "
 
 
