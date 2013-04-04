@@ -1274,6 +1274,10 @@ public class Xnoise.Database.Writer : GLib.Object {
                                       td.albumartist.strip().down() == "various")) {
             td.is_compilation = true;
         }
+        
+        if(td.albumartist != null && td.albumartist.strip().down() == "various") {
+            td.albumartist = VARIOUS_ARTISTS;
+        }
 //        else {
 //            if(td.albumartist == null || td.albumartist.strip() == EMPTYSTRING)
 //                td.albumartist = td.artist;
