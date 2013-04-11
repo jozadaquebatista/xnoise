@@ -36,7 +36,7 @@ using Xnoise.Resources;
 
 private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     
-    private enum IconState {
+    internal enum IconState {
         UNRESOLVED,
         RESOLVED
     }

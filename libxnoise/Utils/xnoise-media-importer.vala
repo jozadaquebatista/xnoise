@@ -548,8 +548,10 @@ public class Xnoise.MediaImporter : GLib.Object {
                 else {
                     string uri_lc = filename.down();
                     if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                        //print("filepath: %s\n", filepath);
                         var tr = new TagReader();
                         td = tr.read_tag(filepath, false);
+                        //print("2filepath: %s\n", filepath);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             uris_for_image_extraction += file.get_uri();

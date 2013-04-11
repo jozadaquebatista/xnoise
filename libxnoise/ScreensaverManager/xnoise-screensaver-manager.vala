@@ -35,7 +35,11 @@ using GLib;
 namespace Xnoise {
     class ScreenSaverManager {
         private SSMBackend backend = null;
+        private bool backlight_prevent;
+        
+        
         public ScreenSaverManager() {
+            backlight_prevent = true;
             var xdgssm = new XdgSSM();
             if(xdgssm.is_available()) backend = xdgssm;
             if(backend == null) return;
@@ -44,15 +48,94 @@ namespace Xnoise {
             
         public bool inhibit() {
             message("calling Inhibit");
+            backlight_prevent = true;
             if (backend == null) {
                 print("cannot suspend screensaver, install xdg-utils");
                 return false;
             }
+            Timeout.add_seconds(10, () => {
+                print("event\n");
+                Idle.add(() => {
+                    main_window.grab_focus();
+                    
+                    Gdk.KeymapKey[] keys;
+                    uint[] keyvals;
+                    Gdk.Keymap keymap = Gdk.Keymap.get_default();
+                    keymap.get_entries_for_keyval(Gdk.Key.Shift_L, out keys);
+                    
+                    Gdk.Event e = new Gdk.Event(Gdk.EventType.KEY_PRESS);
+                    ((Gdk.EventKey*)e)->keyval = Gdk.Key.Shift_L;
+                    ((Gdk.EventKey*)e)->window = main_window.get_window();
+                    ((Gdk.EventKey*)e)->send_event = 1;
+                    ((Gdk.EventKey*)e)->time = Gdk.CURRENT_TIME;
+                    ((Gdk.EventKey*)e)->state = Gdk.ModifierType.SHIFT_MASK;
+                    ((Gdk.EventKey*)e)->keyval = Gdk.Key.Shift_L;
+                    ((Gdk.EventKey*)e)->hardware_keycode = (uint16)keys[0].keycode;
+                    ((Gdk.EventKey*)e)->group = (uint8)keys[0].group;
+                    
+                    e.put();
+                    return false;
+                });
+                Idle.add(() => {
+                    main_window.grab_focus();
+                    
+                    Gdk.KeymapKey[] keys;
+                    uint[] keyvals;
+                    Gdk.Keymap keymap = Gdk.Keymap.get_default();
+                    keymap.get_entries_for_keyval(Gdk.Key.Shift_L, out keys);
+                    
+                    Gdk.Event e = new Gdk.Event(Gdk.EventType.KEY_RELEASE);
+                    ((Gdk.EventKey*)e)->keyval = Gdk.Key.Shift_L;
+                    ((Gdk.EventKey*)e)->window = main_window.get_window();
+                    ((Gdk.EventKey*)e)->send_event = 1;
+                    ((Gdk.EventKey*)e)->time = Gdk.CURRENT_TIME;
+                    ((Gdk.EventKey*)e)->state = 0;
+                    ((Gdk.EventKey*)e)->keyval = Gdk.Key.Shift_L;
+                    ((Gdk.EventKey*)e)->hardware_keycode = (uint16)keys[0].keycode;
+                    ((Gdk.EventKey*)e)->group = (uint8)keys[0].group;
+                    
+                    e.put();
+                    return false;
+                });
+//        guint keyval = GDK_Page_Down;
+
+//	// Note: GdkEvent is an union
+//        GdkEvent* event = gdk_event_new(GDK_KEY_PRESS);
+//        ((Gdk.EventKey*)e)->window =
+//                             <YOUR TREEVIEW>get_window()->gobj();
+//        ((Gdk.EventKey*)e)->send_event = TRUE;
+//        ((Gdk.EventKey*)e)->time = GDK_CURRENT_TIME;
+//        ((Gdk.EventKey*)e)->state = GDK_KEY_PRESS_MASK;
+//        ((Gdk.EventKey*)e)->keyval = keyval;
+//        ((Gdk.EventKey*)e)->hardware_keycode = keys[0].keycode;
+//        ((Gdk.EventKey*)e)->group = keys[0].group;
+
+//                Idle.add(() => {
+//                    Gdk.Event re = new Gdk.Event(Gdk.EventType.KEY_RELEASE);
+//                    ((Gdk.EventKey*)re)->keyval = Gdk.Key.Shift_L;
+//                    re.put();
+//                    return false;
+//                });
+//                string? nautilus_install_path = Environment.find_program_in_path("xdotool");
+//                if(nautilus_install_path == null)
+//                    return false;
+//                print("event\n");
+//                try {
+//                    GLib.Process.spawn_command_line_async(
+//                       "xdotool keydown Shift_L keyup Shift_L");
+                    return backlight_prevent;
+//                }
+//                catch(Error e) {
+//                    print("%s\n", e.message);
+//                    return false;
+//                }
+            });
             return backend.inhibit();
         }
     
         public bool uninhibit() {
             message("calling UnInhibit");
+            backlight_prevent = false;
             if (backend == null) return false;
             return backend.uninhibit();
         }
