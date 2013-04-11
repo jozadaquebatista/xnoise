@@ -35,7 +35,7 @@ using Xnoise.Utilities;
 
 [DBus(name = "org.freedesktop.Notifications")]
 private interface Xnoise.IDesktopNotifications : GLib.Object {
-    //public abstract void close_notification(uint32 id) throws IOError;
+    public abstract void close_notification(uint32 id) throws IOError;
     //public abstract string[] get_capabilities() throws IOError;
     //public abstract void get_server_information(out string name,
     //                                            out string vendor,
@@ -48,8 +48,7 @@ private interface Xnoise.IDesktopNotifications : GLib.Object {
                                   string body,
                                   string[] actions,
                                   HashTable<string,Variant> hints,
-                                  int32 timeout
-                                  ) throws IOError;
+                                  int32 timeout) throws IOError;
 }
 
 
@@ -237,6 +236,13 @@ private class Xnoise.DesktopNotifications : GLib.Object {
                                            hints,
                                            timeout
                                            );
+            if(removal_timeout != 0)
+                Source.remove(removal_timeout);
+            removal_timeout = Timeout.add_seconds(5, () => {
+                removal_timeout = 0;
+                close_notification(i);
+                return false;
+            });
         }
         catch(IOError e) {
             print("%s\n", e.message);
@@ -245,16 +251,19 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         current_id = i;
     }
     
-    //public void close_notification() {
-    //    if(notifications_proxy == null)
-    //        return;
-    //    print("Trying to close current notification...\n");
-    //    try {
-    //        notifications_proxy.close_notification(current_id);
-    //    }
-    //    catch(IOError e) {
-    //    }
-    //}
+    private uint removal_timeout = 0;
+    
+    public void close_notification(uint32 id) {
+        if(notifications_proxy == null)
+            return;
+        //print("Trying to close current notification...\n");
+        try {
+            notifications_proxy.close_notification(id);
+        }
+        catch(IOError e) {
+            print("error closing notification\n");
+        }
+    }
     
     private void on_name_appeared(DBusConnection conn, string name) {
         if(notifications_proxy == null) {
