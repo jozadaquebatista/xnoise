@@ -238,7 +238,7 @@ private class Xnoise.DesktopNotifications : GLib.Object {
                                            );
             if(removal_timeout != 0)
                 Source.remove(removal_timeout);
-            removal_timeout = Timeout.add_seconds(5, () => {
+            removal_timeout = Timeout.add_seconds(timeout, () => {
                 removal_timeout = 0;
                 close_notification(i);
                 return false;
