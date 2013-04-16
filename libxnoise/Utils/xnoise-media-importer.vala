@@ -250,7 +250,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     internal void update_item_tag(ref Item? item, ref TrackData td) {
         
         //this function uses the database so use it in the database thread
-        return_val_if_fail(db_worker.is_same_thread(), false);
+        return_if_fail(db_worker.is_same_thread());
         
         if(global.media_import_in_progress == true)
             return;
