@@ -64,114 +64,10 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
                 natural_height = minimum_height;
         }
     }
-
-//    private class CustomProgress : Gtk.EventBox {
-//        private static const int PHEIGHT = 8;
-//        private double _fraction = 0.0;
-//        public double fraction { 
-//            get {
-//                return _fraction;
-//            } 
-//            set {
-//                if(_fraction == value)
-//                    return;
-//                _fraction = value;
-//                Idle.add(() => {
-//                    this.queue_draw();
-//                    return false;
-//                });
-//            }
-//        }
-//        
-//        public CustomProgress () {
-//            this.set_events(Gdk.EventMask.SCROLL_MASK |
-//                            Gdk.EventMask.BUTTON1_MOTION_MASK |
-//                            Gdk.EventMask.BUTTON_PRESS_MASK |
-//                            Gdk.EventMask.BUTTON_RELEASE_MASK
-//                            );
-//            this.set_visible_window(false);
-//            this.get_style_context().add_class(STYLE_CLASS_TROUGH);
-//        }
-//        
-//        private static bool is_rtl() {
-//            if(Widget.get_default_direction() == TextDirection.RTL)
-//                return true;
-//            // TextDirection.NONE isn't allowed for Gtk default direction
-//            return false;
-//        }
-//        
-//        public override bool draw(Cairo.Context cr) {
-//            bool inverted;
-//            StyleContext context;
-//            StateFlags state;
-//            Gtk.Border padding;
-//            int width, height;
-//            
-//            context = this.get_style_context();
-//            state = this.get_state_flags();
-//            padding = context.get_padding(state);
-//            
-//            inverted = is_rtl();
-//            width = this.get_allocated_width();
-//            height = PHEIGHT;
-//            
-//            Gdk.RGBA backg = context.get_background_color(state);
-//            Gdk.RGBA fg1   = context.get_color(state);
-//            
-//            cr.set_source_rgb(backg.red, backg.green, backg.blue);
-//            cr.set_line_width(0);
-//            cr.rectangle(0, 
-//                         0,
-//                         width,
-//                         height);
-//            cr.fill();
-//            
-//            cr.set_source_rgb(fg1.red, fg1.green, fg1.blue);
-//            cr.set_line_width(1);
-//            cr.rectangle(0, 
-//                         0,
-//                         width,
-//                         height);
-//            cr.stroke();
-//            
-//            int amount;
-//            int space;
-//            
-//            space = width - padding.left - padding.right;
-//            
-//            amount = (int)((double)space * _fraction);
-//            
-////            print("amount: %d  fraction:%lf   space:%lf\n", amount, _fraction, space);
-//            Gdk.Rectangle area = {};
-//            context.save();
-//            area.width = amount;
-//            area.height = height - 2;
-//            area.y = 1;
-
-//            if (!inverted)
-//                area.x = 1;
-//            else
-//                area.x = width - amount - 1;
-//            this.get_style_context().add_class(STYLE_CLASS_PROGRESSBAR);
-//            Gdk.RGBA backgfill = context.get_background_color(state);
-//            cr.set_source_rgb(backgfill.red, backgfill.green, backgfill.blue);
-//            cr.set_line_width(0);
-//            cr.rectangle(area.x, area.y, area.width, area.height);
-//            cr.fill();
-//            
-//            context.restore();
-//            return false;
-//        }
-//        
-//        public override void get_preferred_height(out int minimum_height, out int natural_height) {
-//            minimum_height = natural_height = PHEIGHT;
-//        }
-//    }
-
     
-    private class CustomProgress : ProgressBar { //LEAKING AS CRAZY BECAUSE OF CAIRO BUG
+    private class CustomProgress : ProgressBar {
         public CustomProgress () {
-            set_size_request(-1, 8);
+            GLib.Object();
         }
         
         public override void get_preferred_height(out int minimum_height, out int natural_height) {
@@ -378,7 +274,6 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
         vbox.set_border_width(VBOX_BORDER_WIDTH);
         progress = new CustomProgress();
-        progress.set_size_request(-1, 8);
         vbox.pack_start(progress, false, true, 0);
         
         hbox.pack_start(vbox, true, true, 0);
