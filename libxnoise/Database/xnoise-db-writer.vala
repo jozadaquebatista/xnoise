@@ -566,11 +566,13 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_INSERT_ALBUM =
         "INSERT INTO albums (artist, name, year, is_compilation, caseless_name) VALUES (?,?,?,?,?)";
     private static const string STMT_GET_ALBUM_NAME_IDS =
-        "SELECT id FROM albums WHERE caseless_name = ? AND artist != ?";
+        "SELECT id, year FROM albums WHERE caseless_name = ? AND artist != ?";
     
     private static const int VA_ID = 1;
     
-    private int[] get_ids_for_album_name_different_artist(ref string casefolded_album_name, int artist_id) {
+    private int[] get_ids_for_album_name_different_artist(ref string casefolded_album_name,
+                                                          int artist_id,
+                                                          int year) {
         int[] ids = {};
         get_album_name_ids_statement.reset();
         if(get_album_name_ids_statement.bind_text(1, casefolded_album_name) != Sqlite.OK ||
@@ -578,9 +580,12 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
             return ids;
         }
-        while(get_album_name_ids_statement.step() == Sqlite.ROW)
-            ids += get_album_name_ids_statement.column_int(0);
-        
+        while(get_album_name_ids_statement.step() == Sqlite.ROW) {
+            if(year == get_album_name_ids_statement.column_int(1))
+                ids += get_album_name_ids_statement.column_int(0);
+        }
+        // TODO If there is something in ids, then compare the year. 
+        //      If year is same, then we might have a real VA album
         return ids;
     }
     
@@ -617,46 +622,57 @@ public class Xnoise.Database.Writer : GLib.Object {
                     al_id = get_album_id_statement.column_int(0);
             }
             
+//print("##0  %s %d  al_id: %d \n", caseless_album, artist_id, al_id);
             if(al_id == -1) {
                 
                 if(stripped_album != UNKNOWN_ALBUM && caseless_album != "self titled" &&
                    caseless_album != "unknown" && caseless_album != "greatest hits" &&
                    caseless_album != "no title" && caseless_album != "%s".printf(_("unknown").down()) &&
                    !caseless_album.has_prefix("http") && caseless_album != "live") {
-                    if(td.is_compilation) {
-                        int[] xids = get_ids_for_album_name_different_artist(ref caseless_album, artist_id);
-                        if(xids.length > 0) {
-                            if(xids.length > 1)
-                                print("this should never happen!\n");
-                            insert_album_statement.reset();
-                            artist_id = VA_ID; //insrt al and later title as VA
-                            td.is_compilation = true;
-                            if(insert_album_statement.bind_int (1, artist_id)       != Sqlite.OK ||
-                               insert_album_statement.bind_text(2, stripped_album)  != Sqlite.OK ||
-                               insert_album_statement.bind_int (3, (int)td.year)    != Sqlite.OK ||
-                               insert_album_statement.bind_int (4, 1)               != Sqlite.OK ||
-                               insert_album_statement.bind_text(5, caseless_album)  != Sqlite.OK) {
-                                this.db_error();
-                                return -1;
-                            }
-                            if(insert_album_statement.step() != Sqlite.DONE) {
-                                this.db_error();
-                                return -1;
-                            }
-                            //Return id
-                            get_albums_max_id_statement.reset();
-                            if(get_albums_max_id_statement.step() == Sqlite.ROW)
-                                al_id = get_albums_max_id_statement.column_int(0);
-                            else {
-                                warning("should not happen !!\n");
-                                return -1;
-                            }
-                            
-                            //Method: remove xids-albums, update items for xid-album
-                            set_albumname_is_va_album(ref stripped_album, ref xids, al_id);
-                            
-                            return al_id;
+                    int[] xids = get_ids_for_album_name_different_artist(ref caseless_album,
+                                                                         artist_id, 
+                                                                         (int)td.year);
+                    if(xids.length > 0) {
+                        if(xids.length > 1)
+                            print("this should never happen!\n");
+                        insert_album_statement.reset();
+                        artist_id = VA_ID; //insrt al and later title as VA
+                        td.is_compilation = true;
+                        if(insert_album_statement.bind_int (1, artist_id)       != Sqlite.OK ||
+                           insert_album_statement.bind_text(2, stripped_album)  != Sqlite.OK ||
+                           insert_album_statement.bind_int (3, (int)td.year)    != Sqlite.OK ||
+                           insert_album_statement.bind_int (4, 1)               != Sqlite.OK || // compilation
+                           insert_album_statement.bind_text(5, caseless_album)  != Sqlite.OK) {
+                            this.db_error();
+                            return -1;
                         }
+                        if(insert_album_statement.step() != Sqlite.DONE) {
+                            this.db_error();
+                            return -1;
+                        }
+                        //Return id
+                        get_albums_max_id_statement.reset();
+                        if(get_albums_max_id_statement.step() == Sqlite.ROW)
+                            al_id = get_albums_max_id_statement.column_int(0);
+                        else {
+                            warning("should not happen !!\n");
+                            return -1;
+                        }
+                        
+                        //Method: remove xids-albums, update items for xid-album
+                        set_albumname_is_va_album(ref stripped_album, ref xids, al_id);
+                        
+                        if(artist_id == VA_ID) {
+                            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, VA_ID);
+                            item.source_id = db_reader.get_source_id();
+                            item.stamp = get_current_stamp(db_reader.get_source_id());
+                            item.text = VARIOUS_ARTISTS;
+                            foreach(NotificationData cxd in change_callbacks) {
+                                if(cxd.cb != null)
+                                    cxd.cb(ChangeType.ADD_ARTIST, item);
+                            }
+                        }
+                        return al_id;
                     }
                 }
                 // Insert album
@@ -1571,18 +1587,23 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_REMOVE_ALBUM =
         "DELETE FROM albums WHERE id=?";
     private static const string STMT_REPLACE_ARTIST_A_ALBUM_IN_ITEMS =
-        "UPDATE items SET artist=?, album=? WHERE album=?";
+        "UPDATE items SET album_artist=?, album=? WHERE album=?";
     
     private void set_albumname_is_va_album(ref string stripped_album, ref int[] ids, int va_al_id) {
         string caseless_album;
         caseless_album = stripped_album.casefold();
         
+print("##2\n");
+foreach(int d in ids) {
+    print("## alid: %d -> %d\n", d, va_al_id);
+}
         Statement stmt;
         //Method: remove xids-albums, update items for xid-album
-        
+        //TODO remove-album-callback
         this.db.prepare_v2(STMT_REMOVE_ALBUM, -1, out stmt);
         
         foreach(int xi in ids) {
+
             stmt.reset();
             if(stmt.bind_int (1, xi) != Sqlite.OK) {
                 this.db_error();

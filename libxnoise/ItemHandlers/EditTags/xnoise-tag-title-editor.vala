@@ -244,10 +244,12 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         ntags.insert(TrackListModel.Column.ALBUM, td_new.album);
         ntags.insert(TrackListModel.Column.TITLE, td_new.title);
         ntags.insert(TrackListModel.Column.GENRE, td_new.genre);
-        if(td_new.year > 0)
-            ntags.insert(TrackListModel.Column.YEAR, "%u".printf(td_new.year));
-        if(td_new.tracknumber > 0)
-            ntags.insert(TrackListModel.Column.TRACKNUMBER, "%u".printf(td_new.tracknumber));
+        if(td_new.year < 0)
+            td_new.year = 0;
+        ntags.insert(TrackListModel.Column.YEAR, "%u".printf(td_new.year));
+        if(td_new.tracknumber < 0)
+            td_new.tracknumber = 0;
+        ntags.insert(TrackListModel.Column.TRACKNUMBER, "%u".printf(td_new.tracknumber));
         tlm.update_tracklist_data(ntags);
         
         Idle.add( () => {

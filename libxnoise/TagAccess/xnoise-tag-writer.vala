@@ -61,8 +61,9 @@ public class Xnoise.TagAccess.TagWriter {
             info.album        = td.album       != null ? td.album       : EMPTYSTRING;
             info.albumartist  = td.albumartist != null ? td.albumartist : EMPTYSTRING;
             info.genre        = td.genre       != null ? td.genre       : EMPTYSTRING;
-            if(td.year >= 0)
-                info.year = (int)td.year;
+            if(td.year < 0)
+                td.year = 0;
+            info.year = (int)td.year;
             
             if(td.tracknumber >= 0)
                 info.tracknumber = (int)td.tracknumber;
