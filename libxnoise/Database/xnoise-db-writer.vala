@@ -622,7 +622,6 @@ public class Xnoise.Database.Writer : GLib.Object {
                     al_id = get_album_id_statement.column_int(0);
             }
             
-//print("##0  %s %d  al_id: %d \n", caseless_album, artist_id, al_id);
             if(al_id == -1) {
                 
                 if(stripped_album != UNKNOWN_ALBUM && caseless_album != "self titled" &&
@@ -1593,13 +1592,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         string caseless_album;
         caseless_album = stripped_album.casefold();
         
-print("##2\n");
-foreach(int d in ids) {
-    print("## alid: %d -> %d\n", d, va_al_id);
-}
         Statement stmt;
-        //Method: remove xids-albums, update items for xid-album
-        //TODO remove-album-callback
         this.db.prepare_v2(STMT_REMOVE_ALBUM, -1, out stmt);
         
         foreach(int xi in ids) {

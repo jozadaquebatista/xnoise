@@ -575,16 +575,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         first_start_widget = new FirstStartWidget();
         first_start_widget.show();
         if(first_start_widget.parent == null) {
-            paned2notebook.append_page(first_start_widget, null);
-            paned2notebook.set_current_page(paned2notebook.page_num(first_start_widget));
+            bottom_notebook.append_page(first_start_widget, null);
+            bottom_notebook.set_current_page(bottom_notebook.page_num(first_start_widget));
         }
         first_start_widget.finish_button.clicked.connect( () =>  {
             Idle.add(() => {
                 main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 show_content();
-                paned2notebook.remove_page(paned2notebook.page_num(first_start_widget));
+                bottom_notebook.set_current_page(bottom_notebook.page_num(paned_overlay));
+                bottom_notebook.remove_page(bottom_notebook.page_num(first_start_widget));
                 first_start_widget.destroy();
                 first_start_widget = null;
+                bottom_notebook.set_current_page(bottom_notebook.page_num(paned_overlay));
                 if(!global.media_import_in_progress) {
                     if(actions_list == null)
                         actions_list = action_group.list_actions();
@@ -606,7 +608,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Idle.add(() => {
                 main_view_sbutton.select(TRACKLIST_VIEW_NAME);
                 show_content();
-                paned2notebook.remove_page(paned2notebook.page_num(first_start_widget));
+                bottom_notebook.remove_page(bottom_notebook.page_num(first_start_widget));
                 first_start_widget.destroy();
                 first_start_widget = null;
                 if(!global.media_import_in_progress) {
@@ -628,7 +630,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
         });
         Idle.add(() => {
-            paned2notebook.set_current_page(paned2notebook.page_num(first_start_widget));
+            bottom_notebook.set_current_page(bottom_notebook.page_num(first_start_widget));
             if(actions_list == null)
                 actions_list = action_group.list_actions();
             foreach(Gtk.Action a in actions_list) {
