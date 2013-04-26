@@ -53,7 +53,7 @@ namespace Lastfm {
             print("xml reading 2 with errors\n");
             return false;
         }
-        if(lfm.attributes["status"] != "ok") {
+        if(lfm.attributes["status"] == null || lfm.attributes["status"] != "ok") {
             var error = lfm.get_child_by_name("error");
             print("bad status response\n");
             print("LastFm error code %s: %s\n", error.attributes["code"], error.text);

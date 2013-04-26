@@ -221,7 +221,14 @@ namespace Lastfm {
         private void scrobble_cb(int id, string response) {
             //print("response:\n%s\n", response);
             var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
+            
+            if(mr == null)
+                return;
+            
             mr.read();
+            
+            if(mr.root == null)
+                return;
             
             if(!check_response_status_ok(ref mr.root)) {
                 string ar = this.artist_name;
@@ -231,6 +238,7 @@ namespace Lastfm {
                     scrobbled(ar, al, ti, false);
                     return false;
                 });
+                return;
             }
             
             var n = mr.root.get_child_by_name("lfm").get_child_by_name("scrobbles");
