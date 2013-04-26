@@ -65,14 +65,37 @@ public class Xnoise.TagAccess.TagWriter {
                 td.year = 0;
             info.year = (int)td.year;
             
-            if(td.tracknumber >= 0)
-                info.tracknumber = (int)td.tracknumber;
+            if(td.tracknumber < 0)
+                td.tracknumber = 0;
+            info.tracknumber = (int)td.tracknumber;
             
-            if(td.disk_number >= 1)
-                info.disk_number = (int)td.disk_number;
+            if(td.disk_number < 1)
+                td.disk_number = 1;
+            info.disk_number = (int)td.disk_number;
             
             info.is_compilation  = td.is_compilation;
             
+            retval = info.write();
+        }
+        return retval;
+    }
+
+    public bool remove_compilation_flag(File? file) {
+        if(file == null)
+            return false;
+        
+        bool retval = false;
+        
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
+        
+        Info info = null;
+        info = Info.factory_make(path);
+        
+        if(info != null) {
+            info.is_compilation  = false;
             retval = info.write();
         }
         return retval;

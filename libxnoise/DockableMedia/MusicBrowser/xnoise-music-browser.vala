@@ -337,6 +337,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
         Item? parent_item = Item(ItemType.UNKNOWN);
+        bool is_va_album = false;
         if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             TreePath treepath = path.copy();
             while(treepath.get_depth() > 1) {
@@ -351,6 +352,15 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             //print("parent_item type : %s\n", parent_item.type.to_string());
         }
+        else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+            TreePath treepath = path.copy();
+            treepath.up();
+            Item? ar_item = null;
+            mediabrowsermodel.get_iter(out iter, treepath);
+            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
+            if(ar_item.text == VARIOUS_ARTISTS)
+                is_va_album = true;
+        }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
             //print("%s\n", x.name);
@@ -364,6 +374,14 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         if(array.length > 0) {
             var sptr_item = new SeparatorMenuItem();
             rightmenu.append(sptr_item);
+        }
+        if(is_va_album) {
+            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
+            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
+            not_compilation_item.activate.connect( () => {
+                // TODO
+            });
+            rightmenu.append(not_compilation_item);
         }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));

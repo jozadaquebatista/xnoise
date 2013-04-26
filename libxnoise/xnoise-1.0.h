@@ -2855,6 +2855,7 @@ void xnoise_tag_access_value_take_tag_writer (GValue* value, gpointer v_object);
 gpointer xnoise_tag_access_value_get_tag_writer (const GValue* value);
 GType xnoise_tag_access_tag_writer_get_type (void) G_GNUC_CONST;
 gboolean xnoise_tag_access_tag_writer_write_tag (XnoiseTagAccessTagWriter* self, GFile* file, XnoiseTrackData* td, gboolean read_before_write);
+gboolean xnoise_tag_access_tag_writer_remove_compilation_flag (XnoiseTagAccessTagWriter* self, GFile* file);
 XnoiseTagAccessTagWriter* xnoise_tag_access_tag_writer_new (void);
 XnoiseTagAccessTagWriter* xnoise_tag_access_tag_writer_construct (GType object_type);
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;

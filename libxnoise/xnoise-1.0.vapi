@@ -560,6 +560,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {
 			public TagWriter ();
+			public bool remove_compilation_flag (GLib.File? file);
 			public bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
 		}
 	}
