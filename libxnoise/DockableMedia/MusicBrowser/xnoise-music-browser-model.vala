@@ -411,6 +411,13 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 db_worker.push_job(g_job);
                 g_job.finished.connect(on_populate_finished);
                 break;
+            case CollectionSortMode.ALBUM_ARTIST_TITLE:
+                var al_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                           this.populate_albums_job);
+                al_job.cancellable = populate_model_cancellable;
+                db_worker.push_job(al_job);
+                al_job.finished.connect(on_populate_finished);
+                break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
             default:
                 var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
@@ -465,6 +472,72 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         return false;
     }
     
+    // used for populating the data model
+    private bool populate_albums_job(Worker.Job job) {
+        if(job.cancellable.is_cancelled())
+            return false;
+        job.items = db_reader.get_albums(global.searchtext,
+                                          global.collection_sort_mode,
+                                          null
+                                          );
+        Idle.add( () => {
+            if(job.cancellable.is_cancelled())
+                return false;
+            TreeIter iter_album, iter_search;
+            Item? va_buf = null;
+            foreach(Item? album in job.items) {
+                if(job.cancellable.is_cancelled())
+                    break;
+                File? albumimage_file = get_albumimage_for_artistalbum(album.text2, album.text, "medium");
+                Gdk.Pixbuf albumimage = null;
+                if(albumimage_file != null) {
+                    try {
+                        albumimage = global.icon_cache.get_image(albumimage_file.get_path());
+//                        if(albumimage != null)
+//                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                    }
+                    catch(Error e) {
+                        albumimage = null;
+                    }
+                }
+                this.prepend(out iter_album, null);
+                this.set(iter_album,
+                         Column.ICON, albumimage,
+                         Column.VIS_TEXT, album.text,
+                         Column.ITEM, album,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_search, iter_album);
+                this.set(iter_search,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+            }
+            if(va_buf != null) {
+                this.prepend(out iter_album, null);
+                this.set(iter_album,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, va_buf.text,
+                         Column.ITEM, va_buf,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.append(out iter_search, iter_album);
+                this.set(iter_search,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+            }
+            return false;
+        });
+        return false;
+    }
+
     // used for populating the data model
     private bool populate_artists_job(Worker.Job job) {
         if(job.cancellable.is_cancelled())

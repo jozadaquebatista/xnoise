@@ -41,6 +41,7 @@ namespace Xnoise {
         public int32     db_id;      // the id in the database or -1
         public string?   uri;        // uri of item
         public string?   text;       // some text for any purpose
+        public string?   text2;      // some text for any purpose
         public int       source_id;  // data source id refering to Xnoise.DataSource
     }
 

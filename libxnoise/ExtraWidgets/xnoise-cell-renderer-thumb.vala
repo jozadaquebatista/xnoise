@@ -32,6 +32,7 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.Resources;
 
 
 
@@ -41,7 +42,7 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
     public string? extra_info { get; set; }
     public CellRendererThumb(Pango.FontDescription font_description) {
         this.font_description = font_description;
-        this.set_fixed_size(IconsModel.ICONSIZE, IconsModel.ICONSIZE);
+        this.set_fixed_size(ICON_LARGE_PIXELSIZE, ICON_LARGE_PIXELSIZE);
         ypad = 0;
     }
     
@@ -69,13 +70,13 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
         pango_layout.get_pixel_size(out wi, out he);
         
-        int rect_offset = y_offset + (int)((2.0 * IconsModel.ICONSIZE) / 3.0);
-        int rect_height = (int)(IconsModel.ICONSIZE / 3.0);
+        int rect_offset = y_offset + (int)((2.0 * ICON_LARGE_PIXELSIZE) / 3.0);
+        int rect_height = (int)(ICON_LARGE_PIXELSIZE / 3.0);
         bool was_to_large = false;
         if(he > rect_height) {
             was_to_large = true;
             pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
-            pango_layout.set_height( (int)((IconsModel.ICONSIZE / 3.0) * Pango.SCALE));
+            pango_layout.set_height( (int)((ICON_LARGE_PIXELSIZE / 3.0) * Pango.SCALE));
             pango_layout.get_pixel_size(out wi, out he);
         }
         //RECTANGLE
@@ -100,8 +101,8 @@ private class Xnoise.CellRendererThumb : Gtk.CellRendererPixbuf {
         cr.set_source_rgba(1.0, 1.0, 1.0, 1.0);
         cr.move_to(x_offset,
                    y_offset 
-                    + 2.0 * IconsModel.ICONSIZE / 3.0 
-                    + (((IconsModel.ICONSIZE/3.0) -  he) / 2.0)
+                    + 2.0 * ICON_LARGE_PIXELSIZE / 3.0 
+                    + (((ICON_LARGE_PIXELSIZE/3.0) -  he) / 2.0)
         );
         Pango.cairo_show_layout(cr, pango_layout);
         

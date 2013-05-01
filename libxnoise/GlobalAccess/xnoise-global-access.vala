@@ -36,6 +36,7 @@
 
 using Xnoise;
 using Xnoise.Resources;
+using Xnoise.Utilities;
 
 
 public class Xnoise.GlobalAccess : GLib.Object {
@@ -136,6 +137,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     private Gtk.TreeRowReference? _position_reference = null;
     private Gtk.TreeRowReference? _position_reference_next = null;
     private string _searchtext = "";
+    private IconCache _icon_cache;
 //    private uint check_image_for_current_track_source = 0;
     
     // PROPERTIES
@@ -163,6 +165,27 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public int fontsize_dockable { get; set; default = 10; }
     
     public CollectionSortMode collection_sort_mode { get; set; }
+    
+    internal IconCache icon_cache { 
+        get {
+            if(_icon_cache == null) {
+                Gdk.Pixbuf? a_art_pixb = null;
+                try {
+                    if(Gtk.IconTheme.get_default().has_icon("xn-albumart"))
+                        a_art_pixb = Gtk.IconTheme.get_default().load_icon("xn-albumart",
+                                                                   ICON_LARGE_PIXELSIZE,
+                                                                   Gtk.IconLookupFlags.FORCE_SIZE);
+                }
+                catch(Error e) {
+                    print("albumart icon missing. %s\n", e.message);
+                }
+                File album_image_dir =
+                    File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
+                _icon_cache = new IconCache(album_image_dir, ICON_LARGE_PIXELSIZE, a_art_pixb);
+            }
+            return _icon_cache;
+        }
+    }
     
     public PlayerState player_state {
         get {

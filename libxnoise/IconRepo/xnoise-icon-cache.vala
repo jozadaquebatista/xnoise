@@ -47,14 +47,13 @@ private class Xnoise.IconCache : GLib.Object {
     public Cancellable cancellable;
     
     public signal void sign_new_album_art_loaded(string path);
-//    public signal void loading_done();
     
     public bool loading_in_progress { get; private set; }
     
     public Gdk.Pixbuf? album_art { get; private set; }
     
     
-    public IconCache(File dir, int icon_size = IconsModel.ICONSIZE, Gdk.Pixbuf dummy_pixbuf) {
+    public IconCache(File dir, int icon_size = ICON_LARGE_PIXELSIZE, Gdk.Pixbuf dummy_pixbuf) {
         assert(io_worker != null);
         assert(cache_worker != null);
         assert(dir.get_path() != null);
@@ -65,17 +64,11 @@ private class Xnoise.IconCache : GLib.Object {
         }
         this.cancellable = GlobalAccess.main_cancellable;
         this.dir = dir;
-        this.icon_size = IconsModel.ICONSIZE;
+        this.icon_size = ICON_LARGE_PIXELSIZE;
         this.album_art = prepare(dummy_pixbuf);
-//        loading_in_progress = true;
         
         dbus_image_extractor.sign_found_album_image.connect(on_new_album_art_found);
         global.sign_album_image_removed.connect(on_image_removed);
-//        Idle.add(() => {
-//            loading_in_progress = false;
-//            loading_done();
-//            return false;
-//        });
     }
     
     
@@ -103,7 +96,10 @@ private class Xnoise.IconCache : GLib.Object {
             return;
         }
         else {
-            px = prepare(px);
+            if(image.has_suffix("_medium"))
+                prepare_medium(px);
+            else
+                px = prepare(px);
             insert_image(file.get_path(), px);
             Idle.add(() => {
                 sign_new_album_art_loaded(file.get_path());
@@ -128,11 +124,6 @@ private class Xnoise.IconCache : GLib.Object {
         cache_worker.push_job(fjob);
     }
     
-//    private void on_loading_finished() {
-//        return_if_fail(Main.instance.is_same_thread());
-//        loading_done();
-//    }
-    
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(cache_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
@@ -155,7 +146,10 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = prepare(px);
+            if(file.get_path().has_suffix("_medium"))
+                px = prepare_medium(px);
+            else
+                px = prepare(px);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
             if(signal_source != 0)
                 Source.remove(signal_source);
@@ -201,6 +195,10 @@ private class Xnoise.IconCache : GLib.Object {
     private const int frame_width = 1;
     
     private Gdk.Pixbuf? prepare(Gdk.Pixbuf pixbuf) {
-        return pixbuf.scale_simple(IconsModel.ICONSIZE - 3, IconsModel.ICONSIZE - 1, Gdk.InterpType.BILINEAR);
+        return pixbuf.scale_simple(ICON_LARGE_PIXELSIZE - 3, ICON_LARGE_PIXELSIZE - 1, Gdk.InterpType.BILINEAR);
+    }
+
+    private Gdk.Pixbuf? prepare_medium(Gdk.Pixbuf pixbuf) {
+        return pixbuf.scale_simple(ICON_SMALL_PIXELSIZE, ICON_SMALL_PIXELSIZE, Gdk.InterpType.BILINEAR);
     }
 }

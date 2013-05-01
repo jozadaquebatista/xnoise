@@ -375,14 +375,14 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             var sptr_item = new SeparatorMenuItem();
             rightmenu.append(sptr_item);
         }
-        if(is_va_album) {
-            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
-            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
-            not_compilation_item.activate.connect( () => {
-                // TODO
-            });
-            rightmenu.append(not_compilation_item);
-        }
+//        if(is_va_album) {
+//            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
+//            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
+//            not_compilation_item.activate.connect( () => {
+//                // TODO
+//            });
+//            rightmenu.append(not_compilation_item);
+//        }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));
         collapse_item.activate.connect( () => {
@@ -409,6 +409,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         item.set_label(_("GENRE-ARTIST-ALBUM"));
         item.activate.connect( () => {
             global.collection_sort_mode = CollectionSortMode.GENRE_ARTIST_ALBUM;
+            Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
+        });
+        m.append(item);
+        item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        item.set_label(_("ALBUM-ARTIST-TITLE"));
+        item.activate.connect( () => {
+            global.collection_sort_mode = CollectionSortMode.ALBUM_ARTIST_TITLE;
             Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
         });
         m.append(item);
@@ -601,6 +608,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 maxiconwidth = iconwidth;
             if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE)
                 calculated_widh[level] = (level == 1 ? maxiconwidth : 17);
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE)
+                calculated_widh[level] = (level == 0 ? maxiconwidth : 17);
             else
                 calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + calculated_widh[level] + 2 + PIXPAD; 
@@ -627,6 +636,58 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             y_offset = 0;
             width = 0;
             height = 0;
+        }
+        
+        private Gdk.Pixbuf? get_level_1_icon(ref StyleContext context, ref CellRendererState flags) {
+            Gdk.Pixbuf? p = null;
+            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                if(text == VARIOUS_ARTISTS) {
+                    p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+                                          16, context);
+                    return p;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(artist_unsel == null)
+                        artist_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = artist_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                    16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                if(pix != null) {
+                    return pix;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(album_unsel == null)
+                        album_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = album_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(genre_unsel == null)
+                        genre_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = genre_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            return p;
         }
         
         public override void render(Cairo.Context cr, Widget widget,
@@ -659,25 +720,37 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             if((flags & CellRendererState.SELECTED) == 0) {
                 switch(level) {
                     case 0:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
-                                                      16, context);
-                                break;
-                            }
-                            if(artist_unsel == null)
-                                artist_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = artist_unsel;
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            if(genre_unsel == null)
-                                genre_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = genre_unsel;
-                        }
+//                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+//                            if(text == VARIOUS_ARTISTS) {
+//                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+//                                                      16, context);
+//                                break;
+//                            }
+//                            if(artist_unsel == null)
+//                                artist_unsel = 
+//                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+//                                                                16, context);
+//                            p = artist_unsel;
+//                        }
+//                        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+//                            if(pix != null) {
+//                                p = pix;
+//                                break;
+//                            }
+//                            if(album_unsel == null)
+//                                album_unsel = 
+//                                    IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+//                                                                16, context);
+//                            p = album_unsel;
+//                        }
+//                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+//                            if(genre_unsel == null)
+//                                genre_unsel = 
+//                                    IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+//                                                                16, context);
+//                            p = genre_unsel;
+//                        }
+                        p = get_level_1_icon(ref context, ref flags);
                         break;
                     case 1:
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
@@ -691,6 +764,18 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                                                                 16, context);
                             p = album_unsel;
                         }
+                        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                            if(text == VARIOUS_ARTISTS) {
+                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+                                                      16, context);
+                                break;
+                            }
+                            if(artist_unsel == null)
+                                artist_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                                16, context);
+                            p = artist_unsel;
+                        }
                         else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
                             if(artist_unsel == null)
                                 artist_unsel = 
@@ -702,6 +787,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                     case 2:
                     default:
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                            if(title_unsel == null)
+                                title_unsel = 
+                                    IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
+                                                                16, context);
+                            p = title_unsel;
+                        }
+                        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
                             if(title_unsel == null)
                                 title_unsel = 
                                     IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
@@ -725,19 +817,20 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             else {
                 switch(level) {
                     case 0:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
-                                                      16, context);
-                                break;
-                            }
-                            p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                            16, context);
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            p = IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
+//                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+//                            if(text == VARIOUS_ARTISTS) {
+//                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+//                                                      16, context);
+//                                break;
+//                            }
+//                            p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+//                                                            16, context);
+//                        }
+//                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
+//                            p = IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+//                                                                16, context);
+//                        }
+                        p = get_level_1_icon(ref context, ref flags);
                         break;
                     case 1:
                         if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {

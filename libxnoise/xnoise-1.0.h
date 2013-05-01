@@ -1012,6 +1012,7 @@ struct _XnoiseItem {
 	gint32 db_id;
 	gchar* uri;
 	gchar* text;
+	gchar* text2;
 	gint source_id;
 };
 
@@ -1057,7 +1058,8 @@ typedef enum  {
 #define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
 typedef enum  {
 	XNOISE_COLLECTION_SORT_MODE_ARTIST_ALBUM_TITLE = 0,
-	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM
+	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM,
+	XNOISE_COLLECTION_SORT_MODE_ALBUM_ARTIST_TITLE
 } XnoiseCollectionSortMode;
 
 struct _XnoiseDataSource {

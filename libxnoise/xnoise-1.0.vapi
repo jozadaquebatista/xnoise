@@ -1191,6 +1191,7 @@ namespace Xnoise {
 		public int32 db_id;
 		public string? uri;
 		public string? text;
+		public string? text2;
 		public int source_id;
 		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
 	}
@@ -1216,7 +1217,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum CollectionSortMode {
 		ARTIST_ALBUM_TITLE,
-		GENRE_ARTIST_ALBUM
+		GENRE_ARTIST_ALBUM,
+		ALBUM_ARTIST_TITLE
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum DynPlaylistType {
