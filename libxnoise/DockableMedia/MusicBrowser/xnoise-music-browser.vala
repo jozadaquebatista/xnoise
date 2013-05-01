@@ -352,7 +352,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             //print("parent_item type : %s\n", parent_item.type.to_string());
         }
-        else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+        else if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE && 
+                item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             TreePath treepath = path.copy();
             treepath.up();
             Item? ar_item = null;
@@ -360,6 +361,20 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
             if(ar_item.text == VARIOUS_ARTISTS)
                 is_va_album = true;
+        }
+        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE && 
+                item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+            TreePath treepath = path.copy();
+            while(treepath.get_depth() > 1) {
+                if(treepath.get_depth() > 1) {
+                    treepath.up();
+                }
+                else {
+                    break;
+                }
+            }
+            mediabrowsermodel.get_iter(out iter, treepath);
+            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
         }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);

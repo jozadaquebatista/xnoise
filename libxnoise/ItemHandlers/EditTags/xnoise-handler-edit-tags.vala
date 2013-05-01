@@ -175,14 +175,14 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
     
     private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
-        Item? i = null;
-        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+        Item? i = Item(ItemType.UNKNOWN);
+//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             if(data2 != null) {
                 i = (Item)data2;
             }
-        }
+//        }
         HashTable<ItemType,Item?>? item_ht = null;
-        if(i != null) {
+        if(i != null && i.type != ItemType.UNKNOWN) {
             item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
             item_ht.insert(i.type, i);
         }

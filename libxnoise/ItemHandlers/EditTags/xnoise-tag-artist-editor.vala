@@ -82,8 +82,11 @@ private class Xnoise.TagArtistEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
+print("##1\n");
+foreach(ItemType it in restrictions.get_keys())
+    print("## %s\n", it.to_string());
         td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
-        
+print("td_old.length : %d\n", td_old.length);
         TrackData td = td_old[0];
         switch(item.type) {
             case ItemType.COLLECTION_CONTAINER_ARTIST:
