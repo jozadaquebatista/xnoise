@@ -127,9 +127,16 @@ public class Xnoise.ItemConverter : Object {
                         new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                     item_ht.insert(item.type, item);
                     if(extra_items != null) {
-                        Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-                        if(genre != null)
-                            item_ht.insert(genre.type, genre);
+                        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                            Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+                            if(genre != null)
+                                item_ht.insert(genre.type, genre);
+                        }
+                        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                            Item? album = extra_items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
+                            if(album != null)
+                                item_ht.insert(album.type, album);
+                        }
                     }
                     result = ds.get_trackdata_for_artist(global.searchtext,
                                                          global.collection_sort_mode,

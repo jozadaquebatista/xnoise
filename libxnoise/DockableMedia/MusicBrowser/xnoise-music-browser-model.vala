@@ -1117,6 +1117,22 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 dnd_data.extra_mediatype[0] = parent_item.type;
                 dnd_data.extra_stamps[0] = parent_item.stamp;
             }
+            if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                while(treepath.get_depth() > 1) {
+                    if(treepath.get_depth() > 1) {
+                        treepath.up();
+                    }
+                    else {
+                        break;
+                    }
+                }
+                Item? parent_item = null;
+                this.get_iter(out iter, treepath);
+                this.get(iter, Column.ITEM, out parent_item);
+                dnd_data.extra_db_id[0] = parent_item.db_id;
+                dnd_data.extra_mediatype[0] = parent_item.type;
+                dnd_data.extra_stamps[0] = parent_item.stamp;
+            }
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;
