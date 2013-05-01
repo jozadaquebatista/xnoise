@@ -491,14 +491,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 File? albumimage_file = get_albumimage_for_artistalbum(album.text2, album.text, "medium");
                 Gdk.Pixbuf albumimage = null;
                 if(albumimage_file != null) {
-                    try {
-                        albumimage = global.icon_cache.get_image(albumimage_file.get_path());
-//                        if(albumimage != null)
-//                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
-                    }
-                    catch(Error e) {
-                        albumimage = null;
-                    }
+                    albumimage = global.icon_cache.get_image(albumimage_file.get_path());
                 }
                 this.prepend(out iter_album, null);
                 this.set(iter_album,
@@ -641,7 +634,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private void load_content(ref TreeIter iter) {
-        //print("load_content\n");
+        print("load_content\n");
         Item? item = Item(ItemType.UNKNOWN);
         
         TreePath path = this.get_path(iter);
@@ -649,7 +642,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             return;
         TreeRowReference treerowref = new TreeRowReference(this, path);
         this.get(iter, Column.ITEM, out item);
-        //print("item.type: %s\n", item.type.to_string());
+        print("item.type: %s\n", item.type.to_string());
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
@@ -664,6 +657,15 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
                     var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                              this.load_artist_content_job);
+                    job.set_arg("treerowref", treerowref);
+                    job.item = item;
+                    db_worker.push_job(job);
+                }
+                break;
+            case CollectionSortMode.ALBUM_ARTIST_TITLE:
+                if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.load_album_content_job);
                     job.set_arg("treerowref", treerowref);
                     job.item = item;
                     db_worker.push_job(job);
@@ -717,9 +719,6 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         temp_items[0] = artist;
                         temp_items[1] = genre;
                         job_album.items = temp_items;
-//                        job_album.set_arg("genre", genre.db_id);
-//                        job_album.set_arg("artist", artist.db_id);
-//                        job_album.set_arg("stamp", artist.stamp);
                         db_worker.push_job(job_album);
                     }
                     remove_loader_child(ref iter_genre);
@@ -798,6 +797,62 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         db_worker.push_job(job_title);
                     }
                     remove_loader_child(ref iter_artist);
+                    return false;
+                });
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+    
+    private bool load_album_content_job(Worker.Job job) {
+        if(this.populating_model)
+            return false;
+        switch(global.collection_sort_mode) {
+            case CollectionSortMode.ALBUM_ARTIST_TITLE:
+                HashTable<ItemType,Item?>? item_ht = 
+                    new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                item_ht.insert(job.item.type, job.item);
+                job.items = db_reader.get_artists(global.searchtext,
+                                                  global.collection_sort_mode,
+                                                  item_ht);
+                //print("job.items cnt = %d\n", job.items.length);
+                Idle.add( () => {
+                    TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+                    if(row_ref == null || !row_ref.valid())
+                        return false;
+                    TreePath p = row_ref.get_path();
+                    TreeIter iter_artist, iter_album;
+                    this.get_iter(out iter_album, p);
+                    Item? album;
+                    string album_name;
+                    this.get(iter_album, Column.ITEM, out album, Column.VIS_TEXT, out album_name);
+                    foreach(Item? artist in job.items) {     //ARTISTS
+                        this.append(out iter_artist, iter_album);
+                        this.set(iter_artist,
+                                 Column.ICON, null,
+                                 Column.VIS_TEXT, artist.text,
+                                 Column.ITEM, artist,
+                                 Column.LEVEL, 1
+                                 );
+                        Gtk.TreePath p1 = this.get_path(iter_artist);
+                        TreeRowReference treerowref = new TreeRowReference(this, p1);
+//                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+//                                                       this.load_titles_job);
+//                        job_title.set_arg("treerowref", treerowref);
+//                        job_title.item = artist;
+//                        db_worker.push_job(job_title);
+                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                                       this.load_titles_job);
+                        job_album.set_arg("treerowref", treerowref);
+                        Item[] temp_items = new Item[2];
+                        temp_items[0] = artist;
+                        temp_items[1] = album;
+                        job_album.items = temp_items;
+                        db_worker.push_job(job_album);
+                    }
+                    remove_loader_child(ref iter_album);
                     return false;
                 });
                 break;
@@ -949,39 +1004,77 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             return false;
         HashTable<ItemType,Item?>? item_ht =
             new HashTable<ItemType,Item?>(direct_hash, direct_equal);
-        item_ht.insert(job.item.type, job.item);
-        job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
-                                                          CollectionSortMode.ARTIST_ALBUM_TITLE,
-                                                          item_ht);
-        Idle.add( () => {
-            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
-            if((row_ref == null) || (!row_ref.valid()))
+        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+            item_ht.insert(job.item.type, job.item);
+            job.track_dat = db_reader.get_trackdata_for_album(global.searchtext,
+                                                              global.collection_sort_mode,
+                                                              item_ht);
+            Idle.add( () => {
+                TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+                if((row_ref == null) || (!row_ref.valid()))
+                    return false;
+                TreePath p = row_ref.get_path();
+                TreeIter iter_title, iter_album;
+                this.get_iter(out iter_album, p);
+                foreach(unowned TrackData td in job.track_dat) {
+                    this.append(out iter_title, iter_album);
+                    if(!td.is_compilation) {
+                        this.set(iter_title,
+                                 Column.ICON, null,
+                                 Column.VIS_TEXT, td.title,
+                                 Column.ITEM, td.item,
+                                 Column.LEVEL, 2
+                                 );
+                    }
+                    else {
+                        string append = "\n (" + td.artist + ")";
+                        this.set(iter_title,
+                                 Column.ICON, null,
+                                 Column.VIS_TEXT, td.title + append,
+                                 Column.ITEM, td.item,
+                                 Column.LEVEL, 2
+                                 );
+                    }
+                }
                 return false;
-            TreePath p = row_ref.get_path();
-            TreeIter iter_title, iter_album;
-            this.get_iter(out iter_album, p);
-            foreach(unowned TrackData td in job.track_dat) {
-                this.append(out iter_title, iter_album);
-                if(!td.is_compilation) {
-                    this.set(iter_title,
-                             Column.ICON, null,
-                             Column.VIS_TEXT, td.title,
-                             Column.ITEM, td.item,
-                             Column.LEVEL, 2
-                             );
+            });
+        }
+        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+            item_ht.insert(job.items[0].type, job.items[0]);
+            item_ht.insert(job.items[1].type, job.items[1]);
+            job.track_dat = db_reader.get_trackdata_for_artist(global.searchtext,
+                                                               global.collection_sort_mode,
+                                                               item_ht);
+            Idle.add( () => {
+                TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+                if((row_ref == null) || (!row_ref.valid()))
+                    return false;
+                TreePath p = row_ref.get_path();
+                TreeIter iter_title, iter_artist;
+                this.get_iter(out iter_artist, p);
+                foreach(unowned TrackData td in job.track_dat) {
+                    this.append(out iter_title, iter_artist);
+//                    if(!td.is_compilation) {
+                        this.set(iter_title,
+                                 Column.ICON, null,
+                                 Column.VIS_TEXT, td.title,
+                                 Column.ITEM, td.item,
+                                 Column.LEVEL, 2
+                                 );
+//                    }
+//                    else {
+//                        string append = "\n (" + td.artist + ")";
+//                        this.set(iter_title,
+//                                 Column.ICON, null,
+//                                 Column.VIS_TEXT, td.title + append,
+//                                 Column.ITEM, td.item,
+//                                 Column.LEVEL, 2
+//                                 );
+//                    }
                 }
-                else {
-                    string append = "\n (" + td.artist + ")";
-                    this.set(iter_title,
-                             Column.ICON, null,
-                             Column.VIS_TEXT, td.title + append,
-                             Column.ITEM, td.item,
-                             Column.LEVEL, 2
-                             );
-                }
-            }
-            return false;
-        });
+                return false;
+            });
+        }
         return false;
     }
 
