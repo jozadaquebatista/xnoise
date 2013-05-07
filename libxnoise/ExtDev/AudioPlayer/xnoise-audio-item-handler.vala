@@ -100,7 +100,8 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
         if(item.type == ItemType.LOCAL_AUDIO_TRACK || item.type == ItemType.LOCAL_VIDEO_TRACK) {
             var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                             Gtk.ButtonsType.OK_CANCEL,
-                                            _("Do you want to delete the selected file from the device?"));
+                                            _("Do you want to delete the selected file from the device?"),
+                                            null);
             msg.response.connect( (s, response_id) => {
                 //print("response id %d\n", response_id);
                 if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
@@ -122,7 +123,8 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
         else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                             Gtk.ButtonsType.OK_CANCEL,
-                                            _("Do you want to delete the selected album from the device?"));
+                                            _("Do you want to delete the selected album from the device?"),
+                                            null);
             msg.response.connect( (s, response_id) => {
                 //print("response id %d\n", response_id);
                 if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
@@ -152,7 +154,8 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
         else if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
             var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                             Gtk.ButtonsType.OK_CANCEL,
-                                            _("Do you want to delete the selected artist from the device?"));
+                                            _("Do you want to delete the selected artist from the device?"),
+                                            null);
             msg.response.connect( (s, response_id) => {
                 //print("response id %d\n", response_id);
                 if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {

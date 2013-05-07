@@ -2105,7 +2105,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         catch(GLib.Error e) {
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
                                             Gtk.ButtonsType.OK,
-                                            "Failed to build main window! \n" + e.message);
+                                            "Failed to build main window! \n%s",
+                                            e.message);
             msg.run();
             return;
         }
