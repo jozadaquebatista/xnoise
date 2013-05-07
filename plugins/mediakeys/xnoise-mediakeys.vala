@@ -194,7 +194,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
     }
     
     public bool init() {
-        // Try to use gnome settings deamon via dbus interface, first
+        // Try to use gnome settings daemon via dbus interface, first
         Idle.add( () => {
             get_keys_dbus();
             return false;
