@@ -32,12 +32,12 @@
 using Gtk;
 
 using Xnoise;
-using Xnoise.Utilities;
+using Xnoise.Resources;
 
 
 private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     
-    internal static IconCache icon_cache;
+    internal static unowned IconCache icon_cache;
     internal IconsModel icons_model;
     private uint col_count_source = 0;
     private uint update_icons_source = 0;
@@ -70,28 +70,25 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_padding(0);
         this.set_row_spacing(0);
         this.set_spacing(0);
-        Gdk.Pixbuf? a_art_pixb = null;
-        try {
-            if(IconTheme.get_default().has_icon("xn-albumart"))
-                a_art_pixb = IconTheme.get_default().load_icon("xn-albumart",
-                                                           IconsModel.ICONSIZE,
-                                                           IconLookupFlags.FORCE_SIZE);
-        }
-        catch(Error e) {
-            print("albumart icon missing. %s\n", e.message);
-        }
+//        Gdk.Pixbuf? a_art_pixb = null;
+//        try {
+//            if(IconTheme.get_default().has_icon("xn-albumart"))
+//                a_art_pixb = IconTheme.get_default().load_icon("xn-albumart",
+//                                                           ICON_LARGE_PIXELSIZE,
+//                                                           IconLookupFlags.FORCE_SIZE);
+//        }
+//        catch(Error e) {
+//            print("albumart icon missing. %s\n", e.message);
+//        }
         if(icon_cache == null) {
-            File album_image_dir =
-                File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
-            icon_cache = new IconCache(album_image_dir, IconsModel.ICONSIZE, a_art_pixb);
+            icon_cache = global.icon_cache;
+//            File album_image_dir =
+//                File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
+//            icon_cache = new IconCache(album_image_dir, ICON_LARGE_PIXELSIZE, a_art_pixb);
         }
         icons_model = new IconsModel(this);
-        this.set_item_width(IconsModel.ICONSIZE);
+        this.set_item_width(ICON_LARGE_PIXELSIZE);
         this.set_model(icons_model);
-//        icon_cache.loading_done.connect(() => {
-//            icons_model.cache_ready = true;
-//            this.icons_model.populate_model();
-//        });
         icon_cache.sign_new_album_art_loaded.connect( (p) => {
             print("queue_draw\n");
             queue_draw();

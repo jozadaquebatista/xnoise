@@ -319,18 +319,6 @@ namespace Xnoise {
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
-//internal enum Xnoise.TrackListNoteBookTab { // used in various places
-//    TRACKLIST = 0,
-//    VIDEO,
-//    LYRICS
-//}
-
-//public enum Gst.StreamType {
-//    UNKNOWN = 0,
-//    AUDIO   = 1,
-//    VIDEO   = 2
-//}
-
 public enum Xnoise.PlayerState {
     STOPPED = 0,
     PLAYING,
@@ -339,7 +327,8 @@ public enum Xnoise.PlayerState {
 
 public enum Xnoise.CollectionSortMode {
     ARTIST_ALBUM_TITLE = 0,
-    GENRE_ARTIST_ALBUM
+    GENRE_ARTIST_ALBUM,
+    ALBUM_ARTIST_TITLE
 }
 
 //public enum Xnoise.SortDirection {

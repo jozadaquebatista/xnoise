@@ -57,6 +57,9 @@ namespace Xnoise.Resources {
     public static const string TRACKLIST_VIEW_NAME      = "TrackListView";
     public static const string LYRICS_VIEW_NAME         = "LyricsView";  
 
+    internal static const int ICON_LARGE_PIXELSIZE      = 180;
+    internal static const int ICON_SMALL_PIXELSIZE      = 30;
+    
     public static const int VIDEOTHUMBNAILSIZE   = 40; //TODO
     internal static const int DB_VERSION_MAJOR   = 19;
     internal static const int DB_VERSION_MINOR   = 0;

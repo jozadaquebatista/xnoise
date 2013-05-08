@@ -82,11 +82,14 @@ private class Xnoise.TagArtistEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
+print("##1\n");
+foreach(ItemType it in restrictions.get_keys())
+    print("## %s\n", it.to_string());
         td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
-        
+print("td_old.length : %d\n", td_old.length);
         TrackData td = td_old[0];
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 Idle.add( () => {
                     // put data to entry
                     entry.text  = td.albumartist;
@@ -135,7 +138,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             
             this.dialog.set_title(_("xnoise - Edit metadata"));
             switch(item.type) {
-                case ItemType.COLLECTION_CONTAINER_ARTIST:
+                case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                     explainer_label.label = _("Type new artist name.");
                     content_label.label = _("Artist:");
                     break;
@@ -173,7 +176,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             new_content_name = entry.text.strip();
         // TODO: UTF-8 validation
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 do_artist_rename();
                 break;
 //            case ItemType.COLLECTION_CONTAINER_ALBUM:
@@ -204,7 +207,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
 
 
     private bool update_tags_job(Worker.Job tag_job) {
-        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
+        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
         //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
         job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);

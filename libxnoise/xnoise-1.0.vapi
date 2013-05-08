@@ -14,10 +14,10 @@ namespace Xnoise {
 			public uint count_lastused_items ();
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
+			public override Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext, string? sorting = "ARTIST", string? direction = "ASC");
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
-			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item[] get_artists (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
 			public Xnoise.Item? get_genreitem_by_genreid (string searchtext, int32 id, uint32 stmp);
@@ -32,6 +32,7 @@ namespace Xnoise {
 			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
 			public override Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+			public override Xnoise.TrackData[]? get_trackdata_for_albumartist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[] get_trackdata_for_item (string searchtext, Xnoise.Item? item);
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
@@ -92,13 +93,14 @@ namespace Xnoise {
 			public AudioPlayerTempDb (GLib.Cancellable cancel);
 			public void begin_transaction ();
 			public void commit_transaction ();
+			public override Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stamp);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
-			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stamp);
 			public override Xnoise.Item[] get_artists (string searchtext = "", Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
 			public override bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData val);
 			public override Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+			public override Xnoise.TrackData[]? get_trackdata_for_albumartist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[] get_trackdata_for_item (string searchterm, Xnoise.Item? item);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
@@ -654,14 +656,15 @@ namespace Xnoise {
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
+		public abstract Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[]? get_all_tracks (string searchtext);
-		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.Item[] get_artists (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract unowned string get_datasource_name ();
 		public int get_source_id ();
 		public abstract bool get_stream_trackdata_for_item (Xnoise.Item? item, out Xnoise.TrackData td);
 		public abstract Xnoise.TrackData[]? get_trackdata_for_album (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
+		public abstract Xnoise.TrackData[]? get_trackdata_for_albumartist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[]? get_trackdata_for_artist (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[] get_trackdata_for_item (string searchterm, Xnoise.Item? item);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
@@ -1191,6 +1194,7 @@ namespace Xnoise {
 		public int32 db_id;
 		public string? uri;
 		public string? text;
+		public string? text2;
 		public int source_id;
 		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
 	}
@@ -1216,7 +1220,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum CollectionSortMode {
 		ARTIST_ALBUM_TITLE,
-		GENRE_ARTIST_ALBUM
+		GENRE_ARTIST_ALBUM,
+		ALBUM_ARTIST_TITLE
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum DynPlaylistType {
@@ -1252,13 +1257,12 @@ namespace Xnoise {
 		CDROM_TRACK,
 		PLAYLIST,
 		LOCAL_FOLDER,
+		COLLECTION_CONTAINER_ALBUMARTIST,
 		COLLECTION_CONTAINER_ARTIST,
 		COLLECTION_CONTAINER_ALBUM,
 		COLLECTION_CONTAINER_GENRE,
 		COLLECTION_CONTAINER_YEAR,
-		LOADER,
-		CUSTOM_DATA_COL_ID,
-		MAXCOUNT
+		LOADER
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum PlayerState {

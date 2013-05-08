@@ -352,7 +352,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             //print("parent_item type : %s\n", parent_item.type.to_string());
         }
-        else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+        else if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE && 
+                item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             TreePath treepath = path.copy();
             treepath.up();
             Item? ar_item = null;
@@ -360,6 +361,20 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
             if(ar_item.text == VARIOUS_ARTISTS)
                 is_va_album = true;
+        }
+        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE && 
+                item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
+            TreePath treepath = path.copy();
+            while(treepath.get_depth() > 1) {
+                if(treepath.get_depth() > 1) {
+                    treepath.up();
+                }
+                else {
+                    break;
+                }
+            }
+            mediabrowsermodel.get_iter(out iter, treepath);
+            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
         }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
@@ -375,14 +390,14 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             var sptr_item = new SeparatorMenuItem();
             rightmenu.append(sptr_item);
         }
-        if(is_va_album) {
-            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
-            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
-            not_compilation_item.activate.connect( () => {
-                // TODO
-            });
-            rightmenu.append(not_compilation_item);
-        }
+//        if(is_va_album) {
+//            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
+//            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
+//            not_compilation_item.activate.connect( () => {
+//                // TODO
+//            });
+//            rightmenu.append(not_compilation_item);
+//        }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));
         collapse_item.activate.connect( () => {
@@ -409,6 +424,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         item.set_label(_("GENRE-ARTIST-ALBUM"));
         item.activate.connect( () => {
             global.collection_sort_mode = CollectionSortMode.GENRE_ARTIST_ALBUM;
+            Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
+        });
+        m.append(item);
+        item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        item.set_label(_("ALBUM-ARTIST-TITLE"));
+        item.activate.connect( () => {
+            global.collection_sort_mode = CollectionSortMode.ALBUM_ARTIST_TITLE;
             Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
         });
         m.append(item);
@@ -601,6 +623,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 maxiconwidth = iconwidth;
             if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE)
                 calculated_widh[level] = (level == 1 ? maxiconwidth : 17);
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE)
+                calculated_widh[level] = (level == 0 ? maxiconwidth : 17);
             else
                 calculated_widh[level] = (level == 2 ? maxiconwidth : 17);
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + calculated_widh[level] + 2 + PIXPAD; 
@@ -629,6 +653,160 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             height = 0;
         }
         
+        private Gdk.Pixbuf? get_level_1_icon(ref StyleContext context, ref CellRendererState flags) {
+            Gdk.Pixbuf? p = null;
+            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                if(text == VARIOUS_ARTISTS) {
+                    p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+                                          16, context);
+                    return p;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(artist_unsel == null)
+                        artist_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = artist_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                    16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                if(pix != null) {
+                    return pix;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(album_unsel == null)
+                        album_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = album_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(genre_unsel == null)
+                        genre_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = genre_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            return p;
+        }
+        
+        private Gdk.Pixbuf? get_level_2_icon(ref StyleContext context, ref CellRendererState flags) {
+            Gdk.Pixbuf? p = null;
+            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                if(pix != null) {
+                    return pix;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(album_unsel == null)
+                        album_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = album_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                if(text == VARIOUS_ARTISTS) {
+                    p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
+                                          16, context);
+                    return p;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(artist_unsel == null)
+                        artist_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = artist_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(artist_unsel == null)
+                        artist_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = artist_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            return p;
+        }
+        
+        private Gdk.Pixbuf? get_level_3_icon(ref StyleContext context, ref CellRendererState flags) {
+            Gdk.Pixbuf? p = null;
+            if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
+                if(pix != null) {
+                    return pix;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(title_unsel == null)
+                        title_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = title_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(title_unsel == null)
+                        title_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = title_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            else if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                if(pix != null) {
+                    return pix;
+                }
+                if((flags & CellRendererState.SELECTED) == 0) {
+                    if(album_unsel == null)
+                        album_unsel = 
+                            IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                    p = album_unsel;
+                }
+                else {
+                    p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
+                                                        16, context);
+                }
+            }
+            return p;
+        }
+        
         public override void render(Cairo.Context cr, Widget widget,
                                     Gdk.Rectangle background_area,
                                     Gdk.Rectangle cell_area,
@@ -643,132 +821,25 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
             );
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            //context = ow.get_style_context();
             StateFlags state = widget.get_state_flags();
-            //if((flags & CellRendererState.SELECTED) == 0) {
-            //    Gdk.cairo_rectangle(cr, cell_area);
-            //    Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL);
-            //    Gdk.cairo_set_source_rgba(cr, col);
-            //    cr.fill();
-            //}
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             
             
             Gdk.Pixbuf p = null;
-            if((flags & CellRendererState.SELECTED) == 0) {
-                switch(level) {
-                    case 0:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
-                                                      16, context);
-                                break;
-                            }
-                            if(artist_unsel == null)
-                                artist_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = artist_unsel;
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            if(genre_unsel == null)
-                                genre_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = genre_unsel;
-                        }
-                        break;
-                    case 1:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(pix != null) {
-                                p = pix;
-                                break;
-                            }
-                            if(album_unsel == null)
-                                album_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = album_unsel;
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            if(artist_unsel == null)
-                                artist_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = artist_unsel;
-                        }
-                        break;
-                    case 2:
-                    default:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(title_unsel == null)
-                                title_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = title_unsel;
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            if(pix != null) {
-                                p = pix;
-                                break;
-                            }
-                            if(album_unsel == null)
-                                album_unsel = 
-                                    IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
-                                                                16, context);
-                            p = album_unsel;
-                        }
-                        break;
-                }
-            }
-            else {
-                switch(level) {
-                    case 0:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(text == VARIOUS_ARTISTS) {
-                                p = IconRepo.get_themed_pixbuf_icon(VA_ICON_SYMBOLIC, 
-                                                      16, context);
-                                break;
-                            }
-                            p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                            16, context);
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            p = IconRepo.get_themed_pixbuf_icon(GENRE_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
-                        break;
-                    case 1:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            if(pix != null) {
-                                p = pix;
-                                break;
-                            }
-                            p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            p = IconRepo.get_themed_pixbuf_icon(ARTIST_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
-                        break;
-                    case 2:
-                    default:
-                        if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                            p = IconRepo.get_themed_pixbuf_icon(TITLE_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
-                        else {//(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM)
-                            if(pix != null) {
-                                p = pix;
-                                break;
-                            }
-                            p = IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 
-                                                                16, context);
-                        }
-                        break;
-                }
+            switch(level) {
+                case 0:
+                    p = get_level_1_icon(ref context, ref flags);
+                    break;
+                case 1:
+                    p = get_level_2_icon(ref context, ref flags);
+                    break;
+                case 2:
+                    p = get_level_3_icon(ref context, ref flags);
+                    break;
+                default:
+                    p = null;
+                    break;
             }
             if(p != null) {
                 int pixheight = p.get_height();

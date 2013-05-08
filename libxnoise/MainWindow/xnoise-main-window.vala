@@ -2216,9 +2216,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 private class Xnoise.SideBarHeadline : Gtk.TreeView {
     private ListStore store;
-    
+    private string headline = "";
     
     public SideBarHeadline(string headline = "") {
+        this.headline = headline;
         this.headers_visible = false;
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.get_selection().set_mode(SelectionMode.NONE);
@@ -2244,12 +2245,20 @@ private class Xnoise.SideBarHeadline : Gtk.TreeView {
         N_COUNT
     }
     
-    public void set_headline(string headline) {
+    public override void get_preferred_height(out int minimum_height, out int natural_height) {
+        if(headline == null || headline == "")
+            minimum_height = natural_height = 8;
+        else
+            base.get_preferred_height(out minimum_height, out natural_height);
+    }
+
+    public void set_headline(string text) {
+        this.headline = text;
         TreeIter iter;
         if(!store.get_iter_first(out iter))
             return;
         store.set(iter,
-                  Column.TEXT, headline,
+                  Column.TEXT, this.headline,
                   Column.WEIGHT, Pango.Weight.BOLD
         );
     }

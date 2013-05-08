@@ -662,10 +662,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 
     private bool insert_dnd_data_job(Worker.Job job) {
         assert(db_worker.is_same_thread());
-        DndData[] ids = job.dnd_data;
+//        DndData[] ids = job.dnd_data;
         bool is_first = true;
         TrackData[] localarray = {};
-        foreach(DndData ix in ids) {
+        foreach(DndData ix in job.dnd_data) { //ids
             Item i = Item(ix.mediatype, null, ix.db_id);
             i.source_id = ix.source_id;
             i.stamp = ix.stamp;

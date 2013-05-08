@@ -997,13 +997,12 @@ typedef enum  {
 	XNOISE_ITEM_TYPE_CDROM_TRACK,
 	XNOISE_ITEM_TYPE_PLAYLIST,
 	XNOISE_ITEM_TYPE_LOCAL_FOLDER,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUMARTIST,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ARTIST,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUM,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_GENRE,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_YEAR,
-	XNOISE_ITEM_TYPE_LOADER,
-	XNOISE_ITEM_TYPE_CUSTOM_DATA_COL_ID,
-	XNOISE_ITEM_TYPE_MAXCOUNT
+	XNOISE_ITEM_TYPE_LOADER
 } XnoiseItemType;
 
 struct _XnoiseItem {
@@ -1012,6 +1011,7 @@ struct _XnoiseItem {
 	gint32 db_id;
 	gchar* uri;
 	gchar* text;
+	gchar* text2;
 	gint source_id;
 };
 
@@ -1057,7 +1057,8 @@ typedef enum  {
 #define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
 typedef enum  {
 	XNOISE_COLLECTION_SORT_MODE_ARTIST_ALBUM_TITLE = 0,
-	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM
+	XNOISE_COLLECTION_SORT_MODE_GENRE_ARTIST_ALBUM,
+	XNOISE_COLLECTION_SORT_MODE_ALBUM_ARTIST_TITLE
 } XnoiseCollectionSortMode;
 
 struct _XnoiseDataSource {
@@ -1071,8 +1072,9 @@ struct _XnoiseDataSourceClass {
 	const gchar* (*get_datasource_name) (XnoiseDataSource* self);
 	gboolean (*get_trackdata_for_uri) (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 	XnoiseItem* (*get_artists) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+	XnoiseTrackData** (*get_trackdata_for_albumartist) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_for_artist) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
-	XnoiseItem* (*get_artistitem_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
+	XnoiseItem* (*get_albumartist_item_from_id) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseTrackData** (*get_trackdata_for_album) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseItem* (*get_albums) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_for_item) (XnoiseDataSource* self, const gchar* searchterm, XnoiseItem* item, int* result_length1);
@@ -2168,8 +2170,9 @@ gint xnoise_data_source_get_source_id (XnoiseDataSource* self);
 const gchar* xnoise_data_source_get_datasource_name (XnoiseDataSource* self);
 gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 XnoiseItem* xnoise_data_source_get_artists (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+XnoiseTrackData** xnoise_data_source_get_trackdata_for_albumartist (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_artist (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
-XnoiseItem* xnoise_data_source_get_artistitem_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
+XnoiseItem* xnoise_data_source_get_albumartist_item_from_id (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_album (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseItem* xnoise_data_source_get_albums (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_item (XnoiseDataSource* self, const gchar* searchterm, XnoiseItem* item, int* result_length1);

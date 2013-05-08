@@ -158,7 +158,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         });
         
 //        notebook.margin_top = 2;
-        current_selected_media = new SideBarHeadline(_("Media Source"));
+        current_selected_media = new SideBarHeadline("");//_("Media Source"));
         this.pack_start(current_selected_media, false, false, 0);
         this.pack_start(notebook, true, true, 0);
         
@@ -179,12 +179,12 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
         string dname = dm_mb.name();
         media_source_selector.selected_dockable_media = dname;
-        current_selected_media.set_headline(dm_mb.headline());
-        global.notify["active-dockable-media-name"].connect( () => {
-            DockableMedia? dx = dockable_media_sources.lookup(global.active_dockable_media_name);
-            if(dx != null)
-                current_selected_media.set_headline(dx.headline());
-        });
+        current_selected_media.set_headline("");//dm_mb.headline());
+//        global.notify["active-dockable-media-name"].connect( () => {
+//            DockableMedia? dx = dockable_media_sources.lookup(global.active_dockable_media_name);
+//            if(dx != null)
+//                current_selected_media.set_headline(dx.headline());
+//        });
 //        this.margin_left = 1;
     }
     

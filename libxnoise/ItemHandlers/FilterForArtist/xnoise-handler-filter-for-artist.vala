@@ -64,7 +64,7 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
         if(selection != ItemSelectionType.SINGLE)
             return null;
-        if(type == ItemType.COLLECTION_CONTAINER_ARTIST ||
+        if(type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST ||
            type == ItemType.COLLECTION_CONTAINER_ALBUM ||
            type == ItemType.LOCAL_AUDIO_TRACK) {
             return a;
@@ -78,7 +78,7 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
     private void set_filter(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
            item.type != ItemType.COLLECTION_CONTAINER_ALBUM &&
-           item.type != ItemType.COLLECTION_CONTAINER_ARTIST) 
+           item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST) 
             return;
         
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_artist_name_job);

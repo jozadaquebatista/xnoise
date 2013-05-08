@@ -64,7 +64,7 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     };
 
     private Gdk.Pixbuf? logo = null;
-    public const int ICONSIZE = 180;
+//    public const int ICONSIZE = 180;
     private unowned AlbumArtView view;
     
     public IconsModel(AlbumArtView view) {

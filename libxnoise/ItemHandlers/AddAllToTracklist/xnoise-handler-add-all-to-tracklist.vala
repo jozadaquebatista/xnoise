@@ -224,7 +224,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     private bool menu_add_job(Worker.Job job) {
         switch(job.item.type) {
             case ItemType.LOCAL_AUDIO_TRACK:
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
             case ItemType.COLLECTION_CONTAINER_ALBUM:
             case ItemType.COLLECTION_CONTAINER_GENRE:
                 job.track_dat = db_reader.get_all_tracks(global.searchtext);

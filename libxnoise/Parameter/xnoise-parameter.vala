@@ -282,7 +282,7 @@ eq_combo=0
 MainViewName=TrackListView
 media_source_selector_type=tree
 album_art_view_sorting=ARTIST
-activated_plugins=soundmenu2;mpris;lastfm;mediakeys
+activated_plugins=lastfm;soundmenu2;mpris
 """;
 }
 

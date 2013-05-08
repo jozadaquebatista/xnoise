@@ -487,16 +487,12 @@ private class Xnoise.CustomCellRendererList : Gtk.CellRenderer {
         
         StyleContext context;
         var pango_layout = widget.create_pango_layout(text);
-//        var font_description = widget.get_style_context().get_font(widget.get_state_flags());
         pango_layout.set_alignment(Pango.Alignment.LEFT);
-//        font_description.set_weight(Pango.Weight.BOLD);
-//        pango_layout.set_font_description(font_description);
-//        int pixwidth = (pix != null ? pix.get_width() : 16);
-//        pango_layout.set_width( 
-//            cell_area.width - (pixwidth + PIXPAD)
-////            (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
-//        );
-//        pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+        if((flags & CellRendererState.SELECTED) == CellRendererState.SELECTED) {
+            var font_description = widget.get_style_context().get_font(widget.get_state_flags());
+            font_description.set_weight(Pango.Weight.BOLD);
+            pango_layout.set_font_description(font_description);
+        }
         context = main_window.media_browser_box.get_style_context();
         context.add_class(STYLE_CLASS_SIDEBAR);
         StateFlags state = widget.get_state_flags();
