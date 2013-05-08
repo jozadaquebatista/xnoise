@@ -201,7 +201,8 @@ private class Xnoise.TagTitleEditor : GLib.Object {
                                             Gtk.DialogFlags.MODAL,
                                             Gtk.MessageType.ERROR,
                                             Gtk.ButtonsType.CANCEL,
-                                            "Failed to build dialog! %s\n".printf(e.message));
+                                            "Failed to build dialog! %s\n",
+                                            e.message);
             msg.run();
             return;
         }

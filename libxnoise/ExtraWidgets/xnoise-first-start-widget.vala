@@ -212,7 +212,8 @@ private class Xnoise.FirstStartWidget : Box {
             print("ERROR with welcome screen\n");
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
                                             Gtk.ButtonsType.OK,
-                                            "Failed to build welcome screen! \n" + e.message);
+                                            "Failed to build welcome screen! \n%s",
+                                            e.message);
             msg.run();
             return;
         }

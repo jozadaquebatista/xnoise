@@ -84,7 +84,8 @@ internal class Xnoise.HandlerMoveToTrash : ItemHandler {
         this.uri = item.uri;
         var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                         Gtk.ButtonsType.OK_CANCEL,
-                                        _("Do you want to move the selected file to trash?"));
+                                        _("Do you want to move the selected file to trash?"),
+                                        null);
         msg.response.connect( (s, response_id) => {
             //print("response id %d\n", response_id);
             if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {

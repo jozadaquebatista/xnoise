@@ -436,7 +436,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-                Gtk.ButtonsType.OK, "Failed to build settings window! \n" + e.message);
+                Gtk.ButtonsType.OK, "Failed to build settings window! \n%s", e.message);
             msg.run();
         }
         return true;
