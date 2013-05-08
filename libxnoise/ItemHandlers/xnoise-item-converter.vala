@@ -161,8 +161,10 @@ public class Xnoise.ItemConverter : Object {
                         }
                         else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
                             Item? album = extra_items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
-                            if(album != null)
+                            if(album != null) {
                                 item_ht.insert(album.type, album);
+                            }
+                            
                             result = ds.get_trackdata_for_artist(global.searchtext,
                                                                  global.collection_sort_mode,
                                                                  item_ht

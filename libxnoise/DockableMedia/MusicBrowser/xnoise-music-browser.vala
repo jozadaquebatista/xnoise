@@ -338,7 +338,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
         Item? parent_item = Item(ItemType.UNKNOWN);
         bool is_va_album = false;
-        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM ||
+           global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
             TreePath treepath = path.copy();
             while(treepath.get_depth() > 1) {
                 if(treepath.get_depth() > 1) {

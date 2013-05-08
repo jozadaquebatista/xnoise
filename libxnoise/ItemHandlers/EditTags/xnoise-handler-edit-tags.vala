@@ -43,9 +43,11 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     private static const string albuminfo = _("Change album data");
     private static const string albumname = "HandlerEditTagsActionAlbum";
     
-    private Action edit_artist_mediabrowser;
+    private Action edit_albumartist_mediabrowser;
     private static const string artistinfo = _("Change artist data");
     private static const string artistname = "HandlerEditTagsActionArtist";
+    
+    private Action edit_artist_mediabrowser;
     
     private Action edit_genre_mediabrowser;
     private static const string genreinfo = _("Change genre name");
@@ -76,6 +78,13 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         edit_genre_mediabrowser.name = genrename;
         edit_genre_mediabrowser.stock_item = Gtk.Stock.EDIT;
         edit_genre_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
+
+        edit_albumartist_mediabrowser = new Action(); 
+        edit_albumartist_mediabrowser.action = on_edit_albumartist_mediabrowser;
+        edit_albumartist_mediabrowser.info = artistinfo;
+        edit_albumartist_mediabrowser.name = artistname;
+        edit_albumartist_mediabrowser.stock_item = Gtk.Stock.EDIT;
+        edit_albumartist_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_artist_mediabrowser = new Action(); 
         edit_artist_mediabrowser.action = on_edit_artist_mediabrowser;
@@ -113,6 +122,8 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
                 case ItemType.COLLECTION_CONTAINER_GENRE:
                     return edit_genre_mediabrowser;
                 case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
+                    return edit_albumartist_mediabrowser;
+                case ItemType.COLLECTION_CONTAINER_ARTIST:
                     return edit_artist_mediabrowser;
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
                     return edit_album_mediabrowser;
@@ -174,7 +185,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             this.open_tag_genre_changer(item, item_ht);
     }
     
-    private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
+    private void on_edit_albumartist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         Item? i = Item(ItemType.UNKNOWN);
 //        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             if(data2 != null) {
@@ -187,6 +198,23 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             item_ht.insert(i.type, i);
         }
         if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST)
+            this.open_tagalbumartist_changer(item, item_ht);
+    }
+    
+    private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
+        Item? i = Item(ItemType.UNKNOWN);
+//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+            if(data2 != null) {
+                i = (Item)data2;
+            }
+//        }
+        HashTable<ItemType,Item?>? item_ht = null;
+        if(i != null && i.type != ItemType.UNKNOWN) {
+print("ää1 : %s\n", i.type.to_string());
+            item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+            item_ht.insert(i.type, i);
+        }
+        if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
             this.open_tagartist_changer(item, item_ht);
     }
     
@@ -201,7 +229,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
 //        var rightmenu = new Menu();
 //        var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
 //        menu_item.set_label(_("Change artist name"));
-//        menu_item.activate.connect(this.open_tagartist_changer);
+//        menu_item.activate.connect(this.open_tagalbumartist_changer);
 //        rightmenu.append(menu_item);
 //        rightmenu.show_all();
 //        return rightmenu;
@@ -226,6 +254,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     private TagGenreEditor tge;
+    private TagAlbumArtistEditor taae;
     private TagArtistEditor tae;
     private TagAlbumEditor taled;
     
@@ -235,6 +264,13 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             tge = null;
         });
     }
+    private void open_tagalbumartist_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
+        taae = new TagAlbumArtistEditor(item, restrictions);
+        taae.sign_finish.connect( () => {
+            taae = null;
+        });
+    }
+
     private void open_tagartist_changer(Item item, HashTable<ItemType,Item?>? restrictions = null) {
         tae = new TagArtistEditor(item, restrictions);
         tae.sign_finish.connect( () => {

@@ -1,4 +1,4 @@
-/* xnoise-tag-artist-editor.vala
+/* xnoise-tag-albumartist-editor.vala
  *
  * Copyright (C) 2011 - 2013  Jörn Magens
  *
@@ -35,7 +35,7 @@ using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
-private class Xnoise.TagArtistEditor : GLib.Object {
+private class Xnoise.TagAlbumArtistEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
@@ -49,7 +49,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
     private HashTable<ItemType,Item?>? restrictions;
     public signal void sign_finish();
 
-    public TagArtistEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
+    public TagAlbumArtistEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
         this.item = _item;
         this.restrictions = restrictions;
         xn = Main.instance;
@@ -82,18 +82,27 @@ private class Xnoise.TagArtistEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
-        //print("this.item.type:%s\n", this.item.type.to_string());
+print("##1\n");
+foreach(ItemType it in restrictions.get_keys())
+    print("## %s\n", it.to_string());
         td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
-        assert(td_old[0] != null);
-        TrackData? td = td_old[0];
+print("td_old.length : %d\n", td_old.length);
+        TrackData td = td_old[0];
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 Idle.add( () => {
                     // put data to entry
-                    entry.text  = td.artist;
+                    entry.text  = td.albumartist;
                     return false;
                 });
                 break;
+            case ItemType.COLLECTION_CONTAINER_ALBUM:
+//                Idle.add( () => {
+//                    // put data to entry
+////                    entry.text  = td.album;
+//                    return false;
+//                });
+//                break;
             default:
                 Idle.add( () => {
                     sign_finish();
@@ -129,14 +138,14 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             
             this.dialog.set_title(_("xnoise - Edit metadata"));
             switch(item.type) {
-                case ItemType.COLLECTION_CONTAINER_ARTIST:
+                case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                     explainer_label.label = _("Type new artist name.");
                     content_label.label = _("Artist:");
                     break;
-//                case ItemType.COLLECTION_CONTAINER_ALBUM:
-//                    explainer_label.label = _("Type new album name.");
-//                    content_label.label = _("Album:");
-//                    break;
+                case ItemType.COLLECTION_CONTAINER_ALBUM:
+                    explainer_label.label = _("Type new album name.");
+                    content_label.label = _("Album:");
+                    break;
                 default:
                     break;    
             }
@@ -167,7 +176,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             new_content_name = entry.text.strip();
         // TODO: UTF-8 validation
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 do_artist_rename();
                 break;
 //            case ItemType.COLLECTION_CONTAINER_ALBUM:
@@ -189,16 +198,16 @@ private class Xnoise.TagArtistEditor : GLib.Object {
         db_worker.push_job(job);
     }
 
-//    private void do_album_rename() {
-//        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-//        job.set_arg("new_content_name", new_content_name);
-//        job.item = this.item;
-//        io_worker.push_job(job);
-//    }
+    private void do_album_rename() {
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
+        job.set_arg("new_content_name", new_content_name);
+        job.item = this.item;
+        io_worker.push_job(job);
+    }
 
 
     private bool update_tags_job(Worker.Job tag_job) {
-        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
+        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
         //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
         job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);
@@ -206,7 +215,9 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             return false;
         job.item = tag_job.item;
         foreach(TrackData td in job.track_dat) {
-            td.artist = new_content_name;
+            td.albumartist = new_content_name;
+            if(td.artist == VARIOUS_ARTISTS)
+                td.artist = td.albumartist;
         }
         print("push filetags job\n");
         global.in_tag_rename = true;
