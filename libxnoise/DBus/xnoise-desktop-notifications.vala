@@ -208,10 +208,10 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         if(notifications_proxy == null) {
             fail_counter++;
             if(fail_counter > 2) {
-                print("Could not wake up notifications deamon. Giving up...\n");
+                print("Could not wake up notifications daemon. Giving up...\n");
                 return;
             }
-            print("Try waking up notification deamon...\n");
+            print("Try waking up notification daemon...\n");
             get_dbus_proxy.begin();
             Timeout.add_seconds(2, () => {
                 send_notification(icon,
