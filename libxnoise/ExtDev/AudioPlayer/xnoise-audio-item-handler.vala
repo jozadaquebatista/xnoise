@@ -149,7 +149,7 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
             });
             msg.run();
         }
-        else if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+        else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
             var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                             Gtk.ButtonsType.OK_CANCEL,
                                             _("Do you want to delete the selected artist from the device?"));
@@ -159,7 +159,7 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
                     HashTable<ItemType,Item?>? items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
                     items.insert(item.type, item);
                     TrackData[] tda = 
-                        audio_player_device.db.get_trackdata_for_artist(EMPTYSTRING,
+                        audio_player_device.db.get_trackdata_for_albumartist(EMPTYSTRING,
                                                                         CollectionSortMode.ARTIST_ALBUM_TITLE,
                                                                         items);
                     foreach(TrackData td in tda) {
@@ -277,7 +277,7 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
                 }
                 continue;
             }
-            if(i.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+            if(i.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
                 TrackData[] track_dat = item_converter.to_trackdata(i, global.searchtext, null);
                 foreach(var td in track_dat) {
                     ia += td;

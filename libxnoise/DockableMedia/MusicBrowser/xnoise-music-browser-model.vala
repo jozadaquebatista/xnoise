@@ -118,7 +118,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         switch(changetype) {
             case Writer.ChangeType.ADD_ARTIST:
                 if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE) {
-                    if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+                    if(item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST)
                         break;
                         //print("got new artist\n");
                     if(item.db_id == -1){
@@ -240,7 +240,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private bool add_imported_artist_job(Worker.Job job) {
-        job.item = db_reader.get_artistitem_by_artistid(global.searchtext,
+        job.item = db_reader.get_albumartist_item_from_id(global.searchtext,
                                                         job.item.db_id,
                                                         job.item.stamp);
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
@@ -313,7 +313,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 }
                 Item? current_item;
                 this.get(artist_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
-                if(current_item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+                if(current_item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST)
                     continue;
                     
                 if(current_item.db_id == 1)
@@ -609,7 +609,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 TreeIter iter_loader;
                 Item? item = Item(ItemType.UNKNOWN);
                 this.get(iter, Column.ITEM, out item);
-                if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+                if(item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST)
                     return;
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_loader, iter);
@@ -642,7 +642,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             return;
         TreeRowReference treerowref = new TreeRowReference(this, path);
         this.get(iter, Column.ITEM, out item);
-        print("item.type: %s\n", item.type.to_string());
+        //print("item.type: %s\n", item.type.to_string());
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
@@ -654,7 +654,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 }
                 break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
-                if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+                if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
                     var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
                                              this.load_artist_content_job);
                     job.set_arg("treerowref", treerowref);
@@ -817,7 +817,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 job.items = db_reader.get_artists(global.searchtext,
                                                   global.collection_sort_mode,
                                                   item_ht);
-                //print("job.items cnt = %d\n", job.items.length);
+                print("job.items cnt = %d  %s\n", job.items.length, job.items[0].type.to_string());
                 Idle.add( () => {
                     TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
                     if(row_ref == null || !row_ref.valid())
@@ -1045,6 +1045,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             job.track_dat = db_reader.get_trackdata_for_artist(global.searchtext,
                                                                global.collection_sort_mode,
                                                                item_ht);
+            //print("titles job.track_dat.length: %d\n", job.track_dat.length);
             Idle.add( () => {
                 TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
                 if((row_ref == null) || (!row_ref.valid()))
@@ -1054,23 +1055,12 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.get_iter(out iter_artist, p);
                 foreach(unowned TrackData td in job.track_dat) {
                     this.append(out iter_title, iter_artist);
-//                    if(!td.is_compilation) {
-                        this.set(iter_title,
-                                 Column.ICON, null,
-                                 Column.VIS_TEXT, td.title,
-                                 Column.ITEM, td.item,
-                                 Column.LEVEL, 2
-                                 );
-//                    }
-//                    else {
-//                        string append = "\n (" + td.artist + ")";
-//                        this.set(iter_title,
-//                                 Column.ICON, null,
-//                                 Column.VIS_TEXT, td.title + append,
-//                                 Column.ITEM, td.item,
-//                                 Column.LEVEL, 2
-//                                 );
-//                    }
+                    this.set(iter_title,
+                             Column.ICON, null,
+                             Column.VIS_TEXT, td.title,
+                             Column.ITEM, td.item,
+                             Column.LEVEL, 2
+                             );
                 }
                 return false;
             });
@@ -1117,7 +1107,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 dnd_data.extra_mediatype[0] = parent_item.type;
                 dnd_data.extra_stamps[0] = parent_item.stamp;
             }
-            if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+            else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
                 while(treepath.get_depth() > 1) {
                     if(treepath.get_depth() > 1) {
                         treepath.up();

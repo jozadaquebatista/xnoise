@@ -263,7 +263,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         });
         rightmenu.append(collapse_item);
         if(this.plugin != null && this.plugin.username != "" && this.plugin.username != null
-           && this.plugin.password != "" && this.plugin.password != null && item.type != ItemType.COLLECTION_CONTAINER_ARTIST) {
+           && this.plugin.password != "" && this.plugin.password != null && item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
             rightmenu.append(new SeparatorMenuItem());
             var downloaditem = new ImageMenuItem.from_stock(Gtk.Stock.SAVE, null);
             downloaditem.set_label(_("Download whole album to disk"));
@@ -283,7 +283,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         string? sku = null;
         string artist = EMPTYSTRING, album = EMPTYSTRING;
         switch(job.item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 sku = this.mag_model.dbreader.get_sku_for_album(job.item.db_id);

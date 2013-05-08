@@ -118,7 +118,7 @@ public class Xnoise.ItemConverter : Object {
                     break;
                 }
                 break;
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
@@ -138,7 +138,39 @@ public class Xnoise.ItemConverter : Object {
                                 item_ht.insert(album.type, album);
                         }
                     }
-                    result = ds.get_trackdata_for_artist(global.searchtext,
+                    result = ds.get_trackdata_for_albumartist(global.searchtext,
+                                                         global.collection_sort_mode,
+                                                         item_ht
+                    );
+                    break;
+                }
+                break;
+            case ItemType.COLLECTION_CONTAINER_ARTIST:
+                if(item.db_id > -1 && db_worker.is_same_thread()) {
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
+                    HashTable<ItemType,Item?>? item_ht =
+                        new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+                    item_ht.insert(item.type, item);
+                    if(extra_items != null) {
+                        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                            Item? genre = extra_items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
+                            if(genre != null)
+                                item_ht.insert(genre.type, genre);
+                        }
+                        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                            Item? album = extra_items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
+                            if(album != null)
+                                item_ht.insert(album.type, album);
+                            result = ds.get_trackdata_for_artist(global.searchtext,
+                                                                 global.collection_sort_mode,
+                                                                 item_ht
+                            );
+                            break;
+                        }
+                    }
+                    result = ds.get_trackdata_for_albumartist(global.searchtext,
                                                          global.collection_sort_mode,
                                                          item_ht
                     );

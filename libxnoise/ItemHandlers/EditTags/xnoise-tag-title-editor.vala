@@ -170,7 +170,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             trakno_label.set_text(_("Track No.") + ":");
 
             var disk_label         = builder.get_object("disk_label")  as Gtk.Label;
-            trakno_label.set_text(_("Disk No.") + ":");
+            disk_label.set_text(_("Disk No.") + ":");
             
             spinbutton_disk.set_numeric(true);
             spinbutton_disk.configure(new Gtk.Adjustment(0.0, 1.0, 999.0, 1.0, 1.0, 1.0), 1.0, (uint)0);
@@ -250,6 +250,9 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         if(td_new.tracknumber < 0)
             td_new.tracknumber = 0;
         ntags.insert(TrackListModel.Column.TRACKNUMBER, "%u".printf(td_new.tracknumber));
+        if(td_new.disk_number < 1)
+            td_new.disk_number = 1;
+        ntags.insert(TrackListModel.Column. DISK_NUMBER, "%u".printf(td_new.disk_number));
         tlm.update_tracklist_data(ntags);
         
         Idle.add( () => {

@@ -112,7 +112,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             switch(type) {
                 case ItemType.COLLECTION_CONTAINER_GENRE:
                     return edit_genre_mediabrowser;
-                case ItemType.COLLECTION_CONTAINER_ARTIST:
+                case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                     return edit_artist_mediabrowser;
                 case ItemType.COLLECTION_CONTAINER_ALBUM:
                     return edit_album_mediabrowser;
@@ -186,7 +186,7 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
             item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
             item_ht.insert(i.type, i);
         }
-        if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
+        if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST)
             this.open_tagartist_changer(item, item_ht);
     }
     

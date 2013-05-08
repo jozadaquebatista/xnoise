@@ -1,6 +1,6 @@
 /* xnoise-item.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011, 2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,13 +53,13 @@ namespace Xnoise {
         CDROM_TRACK,                         // not possible, yet
         PLAYLIST,                            // item can be converted
         LOCAL_FOLDER,                        // item can be converted
+        COLLECTION_CONTAINER_ALBUMARTIST,    // item can be converted
         COLLECTION_CONTAINER_ARTIST,         // item can be converted
         COLLECTION_CONTAINER_ALBUM,          // item can be converted
         COLLECTION_CONTAINER_GENRE,          // item can be converted
         COLLECTION_CONTAINER_YEAR,           // item can be converted
-        LOADER,
-        CUSTOM_DATA_COL_ID,
-        MAXCOUNT
+        LOADER//,
+        //CUSTOM_DATA_COL_ID
         //to be extended
     }
 }

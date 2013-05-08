@@ -365,7 +365,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             if(get_artist_max_id_statement.step() == Sqlite.ROW)
                 artist_id = get_artist_max_id_statement.column_int(0);
             // change notification
-//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, artist_id);
 //            item.source_id = db_reader.get_source_id();
 //            item.stamp = get_current_stamp(db_reader.get_source_id());
 //            item.text = stripped_art;
@@ -375,7 +375,7 @@ public class Xnoise.Database.Writer : GLib.Object {
 //            }
         }
 //        else if(artist_id == 1) {
-//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, artist_id);
 //            item.source_id = db_reader.get_source_id();
 //            item.stamp = get_current_stamp(db_reader.get_source_id());
 //            item.text = stripped_art;
@@ -442,7 +442,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             get_artist_max_id_statement.reset();
             if(get_artist_max_id_statement.step() == Sqlite.ROW)
                 artist_id = get_artist_max_id_statement.column_int(0);
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, artist_id);
             item.source_id = db_reader.get_source_id();
             item.stamp = get_current_stamp(db_reader.get_source_id());
             item.text = artist;
@@ -452,7 +452,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             }
         }
         else if(artist_id == 1) {
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, artist_id);
             item.source_id = db_reader.get_source_id();
             item.stamp = get_current_stamp(db_reader.get_source_id());
             item.text = artist;
@@ -662,7 +662,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                         set_albumname_is_va_album(ref stripped_album, ref xids, al_id);
                         
                         if(artist_id == VA_ID) {
-                            Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, VA_ID);
+                            Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, VA_ID);
                             item.source_id = db_reader.get_source_id();
                             item.stamp = get_current_stamp(db_reader.get_source_id());
                             item.text = VARIOUS_ARTISTS;
@@ -990,7 +990,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                     delete_album_statement.step();
                 }
             }
-            else if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+            else if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
                 count_artist_in_items_statement.reset();
                 if(count_artist_in_items_statement.bind_int (1, item.db_id) != Sqlite.OK) {
                     this.db_error();

@@ -259,7 +259,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             while(get_artists_with_search_stmt.step() == Sqlite.ROW) {
                 if(cancel.is_cancelled())
                     return val;
-                Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
+                Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, get_artists_with_search_stmt.column_int(0));
                 i.text = get_artists_with_search_stmt.column_text(1);
                 i.source_id = get_source_id();
                 i.stamp = stamp;
@@ -271,7 +271,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
                 if(cancel.is_cancelled())
                     return val;
-                Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, 
+                Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, 
                               null, 
                               get_artists_with_search2_stmt.column_int(0)
                 );
@@ -293,10 +293,10 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
-    public override TrackData[]? get_trackdata_for_artist(string searchtext,
+    public override TrackData[]? get_trackdata_for_albumartist(string searchtext,
                                                           CollectionSortMode sort_mode,
                                                           HashTable<ItemType,Item?>? items) {
-        Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ARTIST);
+        Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         return_val_if_fail(artist != null && get_current_stamp(get_source_id()) == artist.stamp, null);
         
         TrackData[] val = {};
@@ -339,6 +339,12 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)val;
     }
 
+    public override TrackData[]? get_trackdata_for_artist(string searchtext,
+                                                          CollectionSortMode sort_mode,
+                                                          HashTable<ItemType,Item?>? items) {
+        return get_trackdata_for_albumartist(searchtext, sort_mode, items);
+    }
+
 
 
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
@@ -347,7 +353,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
-    public override Item? get_artistitem_by_artistid(string searchtext, int32 id, uint32 stamp) {
+    public override Item? get_albumartist_item_from_id(string searchtext, int32 id, uint32 stamp) {
         return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
@@ -372,7 +378,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             }
         }
         if(stmt.step() == Sqlite.ROW) {
-            i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, id);
+            i = Item(ItemType.COLLECTION_CONTAINER_ALBUMARTIST, null, id);
             i.text = stmt.column_text(0);
             i.source_id = get_source_id();
             i.stamp = stamp;
@@ -523,7 +529,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     public override Item[] get_albums(string searchtext,
                                       CollectionSortMode sort_mode,
                                       HashTable<ItemType,Item?>? items) {
-        Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ARTIST);
+        Item? artist = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         return_val_if_fail(artist != null &&
                              get_current_stamp(this.get_source_id()) == artist.stamp,
                            null);

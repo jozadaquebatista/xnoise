@@ -680,7 +680,6 @@ public class Xnoise.TrackList : TreeView, IParams {
             }
             TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext, extra_items);
             if(tmp != null) {
-print("tmp is null\n");
                 foreach(TrackData tmpdata in tmp) {
                     if(tmpdata == null) {
                         print("tmpdata is null\n");

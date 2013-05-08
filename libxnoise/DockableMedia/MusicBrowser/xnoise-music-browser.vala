@@ -363,7 +363,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 is_va_album = true;
         }
         else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE && 
-                item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+                item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
             TreePath treepath = path.copy();
             while(treepath.get_depth() > 1) {
                 if(treepath.get_depth() > 1) {
@@ -789,10 +789,10 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 }
             }
             else if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
+                if(pix != null) {
+                    return pix;
+                }
                 if((flags & CellRendererState.SELECTED) == 0) {
-                    if(pix != null) {
-                        return pix;
-                    }
                     if(album_unsel == null)
                         album_unsel = 
                             IconRepo.get_themed_pixbuf_icon(ALBUM_ICON_SYMBOLIC, 

@@ -89,7 +89,7 @@ foreach(ItemType it in restrictions.get_keys())
 print("td_old.length : %d\n", td_old.length);
         TrackData td = td_old[0];
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 Idle.add( () => {
                     // put data to entry
                     entry.text  = td.albumartist;
@@ -138,7 +138,7 @@ print("td_old.length : %d\n", td_old.length);
             
             this.dialog.set_title(_("xnoise - Edit metadata"));
             switch(item.type) {
-                case ItemType.COLLECTION_CONTAINER_ARTIST:
+                case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                     explainer_label.label = _("Type new artist name.");
                     content_label.label = _("Artist:");
                     break;
@@ -175,7 +175,7 @@ print("td_old.length : %d\n", td_old.length);
             new_content_name = entry.text.strip();
         // TODO: UTF-8 validation
         switch(item.type) {
-            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 do_artist_rename();
                 break;
 //            case ItemType.COLLECTION_CONTAINER_ALBUM:
@@ -206,7 +206,7 @@ print("td_old.length : %d\n", td_old.length);
 
 
     private bool update_tags_job(Worker.Job tag_job) {
-        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
+        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
         //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
         job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);

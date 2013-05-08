@@ -174,9 +174,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             if(tracknumber != null && tracknumber.strip() != "0")
                 this.set(i, Column.TRACKNUMBER, tracknumber);
             
-//            string? disk_number = ntags.lookup(Column.DISK_NUMBER);
-//            if(disk_number != null && disk_number.strip() != "0")
-//                this.set(i, Column.DISK_NUMBER, disk_number);
+            string? disk_number = ntags.lookup(Column.DISK_NUMBER);
+            if(disk_number != null && disk_number.strip() != "")
+                this.set(i, Column.DISK_NUMBER, disk_number);
             
             string? year = ntags.lookup(Column.YEAR);
             if(year != null && year.strip() != "0")
