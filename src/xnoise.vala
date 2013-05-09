@@ -76,7 +76,7 @@ namespace Xnoise {
           0,
           OptionArg.NONE,
           ref _noplugins,
-          "Start without loding any plugins.",
+          "Start without loading any plugins.",
           null
         },
         { "no-dbus",
