@@ -49,6 +49,7 @@ libxnoise/ExtraWidgets/xnoise-first-start-widget.vala
 libxnoise/GlobalAccess/xnoise-global-access.vala
 libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala
+libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala
