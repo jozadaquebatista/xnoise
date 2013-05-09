@@ -1691,35 +1691,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             EventBox ebxb;
-//            var hide_button = new Gtk.Button();
-            
-            // use standard icon theme or local fallback
-//            Gtk.Image hide_button_image;
-//            if(theme.has_icon("go-first-symbolic"))
-//                hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-//                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
-//                );
-//            else
-//                hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-//                                                                   IconSize.MENU, HIDE_BUTTON_SIZE
-//                );
-            
-//            var bgb = new BackgroundBox(Orientation.HORIZONTAL, 0);
-//            hide_button.add(hide_button_image);
-//            hide_button.can_focus = false;
-//            hide_button.clicked.connect(this.toggle_media_browser_visibility);
-//            hide_button.set_relief(ReliefStyle.NONE);
-//            hide_button.set_has_tooltip(true);
-//            hide_button.events = hide_button.events |
-//                                 Gdk.EventMask.ENTER_NOTIFY_MASK |
-//                                 Gdk.EventMask.LEAVE_NOTIFY_MASK |
-//                                 Gdk.EventMask.POINTER_MOTION_MASK;
-
-//            bgb.add(hide_button);
-//            paned_overlay.add_overlay(bgb);
-//            bgb.halign = Align.START;
-//            bgb.valign = Align.END;
-//            bgb.margin_bottom = 30;
             tbx = new BackgroundBox(Orientation.VERTICAL, 0);
             
             //VOLUME SLIDE BUTTON
@@ -1830,39 +1801,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tbx.halign = Align.END;
             tbx.valign = Align.CENTER;
             content_top_box.pack_start(main_view_sbutton, false, false, 0);
-//            this.notify["media-browser-visible"].connect( (s, val) => {
-//                if(this.media_browser_visible == true) {
-//                    hide_button.remove(hide_button_image);
-//                    if(theme.has_icon("go-first-symbolic"))
-//                        hide_button_image = IconRepo.get_themed_image_icon("go-first-symbolic",
-//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-//                        );
-//                    else
-//                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-first-symbolic",
-//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-//                        );
-//                    hide_button_image.show();
-//                    hide_button.add(hide_button_image);
-//                    bgb.show_all();
-//                    hide_button.set_tooltip_text(HIDE_LIBRARY);
-//                }
-//                else {
-//                    hide_button.remove(hide_button_image);
-//                    if(theme.has_icon("go-last-symbolic"))
-//                        hide_button_image = IconRepo.get_themed_image_icon("go-last-symbolic",
-//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-//                        );
-//                    else
-//                        hide_button_image = IconRepo.get_themed_image_icon("xn-go-last-symbolic",
-//                                                                           IconSize.MENU, HIDE_BUTTON_SIZE
-//                        );
-//                    hide_button_image.show();
-//                    hide_button.add(hide_button_image);
-//                    bgb.show_all();
-//                    hide_button.set_tooltip_text(SHOW_LIBRARY);
-//                }
-//            });
-            
             
             mainview_box.notify["current-name"].connect( () => {
                 if(mainview_box.current_name == TRACKLIST_VIEW_NAME) {
@@ -2003,7 +1941,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             spinner.valign = Align.CENTER;
             spinner.set_no_show_all(true);
             album_art_view.show();
-//            spinner.show();
             album_art_view.notify.connect( (s,p) => {
                 if(p.name != "in-import")
                     return;
@@ -2135,7 +2072,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         widget.get_preferred_size(out min, out nat);
         int slider_width = 0;
         tracklist_scrollbar.style_get("slider-width", out slider_width);
-        allocation.x      = sender.get_allocated_width() - nat.width - 2 - slider_width;
+        allocation.x      = sender.get_allocated_width() - nat.width - 5 - slider_width;
         allocation.y      = int.max(0, sender.get_allocated_height()/2 - 60);
         allocation.width  = nat.width;
         allocation.height = nat.height;
