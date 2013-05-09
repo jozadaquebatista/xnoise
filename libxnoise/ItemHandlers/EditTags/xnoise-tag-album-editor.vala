@@ -43,12 +43,12 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     private Gtk.Builder builder;
     private string new_content_name = "";
     private string new_artist_name = "";
-    private uint new_year = 0;
+    private int new_year = 0;
     private string new_genre = "";
     private bool new_is_compilation = false;
     private unowned MusicBrowserModel mbm = null;
     private Label infolabel;
-    private Entry year_entry;
+    private SpinButton spinbutton_year;
     private Entry artist_entry;
     private Entry genre_entry;
     private Image albumimage;
@@ -119,8 +119,15 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     }
                     entry.text         = td.album;
                     artist_entry.text  = td.albumartist;//(td.is_compilation ? VARIOUS_ARTISTS : td.artist);
-                    year_entry.text    = (td.year > 0 ? td.year.to_string() : "");
+                    spinbutton_year.set_numeric(true);
+                    spinbutton_year.configure(new Gtk.Adjustment(0.0, 0.0, 2100.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
+                    spinbutton_year.changed.connect( (sender) => {
+                        if((int)(((Gtk.SpinButton)sender).value) < 0.0 ) ((Gtk.SpinButton)sender).value = 0.0;
+                        if((int)(((Gtk.SpinButton)sender).value) > 2100.0) ((Gtk.SpinButton)sender).value = 2100.0;
+                    });
+                    spinbutton_year.set_value(td.year);
                     genre_entry.text   = (td.genre != null ? td.genre : "");
+
 //                    checkb_comp.notify["active"].connect( () => {
 //                        if(checkb_comp.active) {
 //                            artist_entry.text = VARIOUS_ARTISTS;
@@ -160,7 +167,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             entry                  = builder.get_object("entry1")          as Gtk.Entry;
             artist_entry           = builder.get_object("artist_entry")    as Gtk.Entry;
             checkb_comp            = builder.get_object("checkbutton1")    as Gtk.CheckButton;
-            year_entry             = builder.get_object("year_entry")      as Gtk.Entry;
+            spinbutton_year              = builder.get_object("spinbutton_year") as Gtk.SpinButton;
             genre_entry            = builder.get_object("genre_entry")     as Gtk.Entry;
             infolabel              = builder.get_object("label5")          as Gtk.Label;
             infolabel.label = 
@@ -235,8 +242,8 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         //print(" entry.text.strip() : %s\n",  entry.text.strip());
         new_content_name = entry.text.strip();
         new_artist_name = artist_entry.text.strip();
-        if(year_entry.text.strip() != EMPTYSTRING)
-            new_year = (uint)int.parse(year_entry.text.strip());
+//        if(year_entry.text.strip() != EMPTYSTRING)
+        new_year = spinbutton_year.get_value_as_int();
         new_genre = genre_entry.text.strip();
         new_is_compilation = checkb_comp.active;
         job.item = this.item;
@@ -253,7 +260,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             foreach(unowned TrackData td in job.track_dat) {
                 td.albumartist    = new_artist_name;//(string)tag_job.get_arg("new_content_name");//
                 td.album          = new_content_name;//(string)tag_job.get_arg("new_content_name");//
-                td.year           = new_year;//(uint)  tag_job.get_arg("new_year");//
+                td.year           = (uint)new_year;//(uint)  tag_job.get_arg("new_year");//
                 td.genre          = new_genre; //(string)tag_job.get_arg("new_genre");//
                 td.is_compilation = new_is_compilation;// (bool)  tag_job.get_arg("new_is_compilation");
             }
