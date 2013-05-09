@@ -692,6 +692,10 @@ public class Xnoise.ExtDev.AudioPlayerTempDb : Xnoise.DataSource {
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
+    public override Item? get_album_item_from_id(string searchtext, int32 id, uint32 stamp) {
+        return null;
+    }
+    
     public override Item? get_albumartist_item_from_id(string searchtext, int32 id, uint32 stamp) {
         return_val_if_fail(get_current_stamp(get_source_id()) == stamp, null);
         Statement stmt;

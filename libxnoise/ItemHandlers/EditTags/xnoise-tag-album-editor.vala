@@ -67,7 +67,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         td_old = {};
         builder = new Gtk.Builder();
         setup_widgets();
-        mbm = main_window.musicBr.mediabrowsermodel;
+        mbm = main_window.musicBr.music_browser_model;
         mbm.notify["populating-model"].connect( () => {
             if(!global.media_import_in_progress && !mbm.populating_model)
                 infolabel.label = _("With this dialog you can change the metatags in the according files. \nHandle with care!");;
@@ -289,7 +289,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     
     private bool finish_job(Worker.Job job) {
         Timeout.add(200, () => {
-            main_window.musicBr.mediabrowsermodel.filter();
+            main_window.musicBr.music_browser_model.filter();
             main_window.album_art_view.icons_model.filter();
             global.in_tag_rename = false;
             return false;

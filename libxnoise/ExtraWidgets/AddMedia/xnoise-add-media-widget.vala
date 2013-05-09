@@ -239,7 +239,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         main_window.show_content();
 //        main_window.dialognotebook.set_current_page(0);
         bool interrupted_populate_model = false;
-        if(main_window.musicBr.mediabrowsermodel.populating_model) {
+        if(main_window.musicBr.music_browser_model.populating_model) {
             interrupted_populate_model = true; 
             // that means we have to complete filling of the model after import
             //print("was still populating model\n");

@@ -58,6 +58,8 @@ public abstract class Xnoise.DataSource : GLib.Object {
     public abstract TrackData[]? get_trackdata_for_artist(string searchtext,
                                                          CollectionSortMode sort_mode,
                                                          HashTable<ItemType,Item?>? items);
+    public abstract Item? get_album_item_from_id(string searchtext, int32 id, uint32 stamp);
+    
     public abstract Item? get_albumartist_item_from_id(string searchtext, int32 id, uint32 stamp);
     
     public abstract TrackData[]? get_trackdata_for_album(string searchtext,

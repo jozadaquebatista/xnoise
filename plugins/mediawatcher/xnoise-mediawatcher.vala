@@ -369,7 +369,7 @@ print("++1\n");
             td.db_id = dbw.insert_title(td, f.get_uri());
             TrackData[] tdy = { td };
             Idle.add( () => {
-                main_window.musicBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
+                main_window.musicBr.music_browser_model.insert_trackdata_sorted(tdy); 
                 return false; 
             });
         }

@@ -1074,6 +1074,7 @@ struct _XnoiseDataSourceClass {
 	XnoiseItem* (*get_artists) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_for_albumartist) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_for_artist) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+	XnoiseItem* (*get_album_item_from_id) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseItem* (*get_albumartist_item_from_id) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 	XnoiseTrackData** (*get_trackdata_for_album) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 	XnoiseItem* (*get_albums) (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
@@ -2172,6 +2173,7 @@ gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar
 XnoiseItem* xnoise_data_source_get_artists (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_albumartist (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_artist (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
+XnoiseItem* xnoise_data_source_get_album_item_from_id (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseItem* xnoise_data_source_get_albumartist_item_from_id (XnoiseDataSource* self, const gchar* searchtext, gint32 id, guint32 stamp);
 XnoiseTrackData** xnoise_data_source_get_trackdata_for_album (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);
 XnoiseItem* xnoise_data_source_get_albums (XnoiseDataSource* self, const gchar* searchtext, XnoiseCollectionSortMode sort_mode, GHashTable* items, int* result_length1);

@@ -42,7 +42,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     private MusicBrowserCellRenderer renderer = null;
     private Gtk.Menu menu;
     
-    public MusicBrowserModel mediabrowsermodel;
+    public MusicBrowserModel music_browser_model;
     
     public bool use_treelines {
         get {
@@ -101,7 +101,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.ow = ow;
         this.dock = dock;
         Params.iparams_register(this);
-        mediabrowsermodel = new MusicBrowserModel(dock);
+        music_browser_model = new MusicBrowserModel(dock);
         this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
 //        icon_repo._title_pix = IconRepo.get_themed_pixbuf_icon("emblem-music-symbolic", 
 //                                                              22, this.get_style_context());
@@ -138,19 +138,17 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         context.save();
         Gdk.RGBA color, scolor;//, icolor;
         scolor = context.get_background_color(StateFlags.SELECTED);
-//        icolor = context.get_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
-        color = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
+        color = context.get_background_color(StateFlags.NORMAL);
         this.override_background_color(StateFlags.NORMAL, color);
         this.override_background_color(StateFlags.SELECTED, scolor);
-//        this.override_color(StateFlags.SELECTED, icolor);
-//        color = context.get_color(StateFlags.NORMAL);
-//        this.override_color(StateFlags.NORMAL, color);
         context.restore();
-
-//        var context = ow.get_style_context();
-//        Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
-//        this.override_background_color(StateFlags.NORMAL, col);
+        if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+            Timeout.add_seconds(5, () => {
+                music_browser_model.filter();
+                return false;
+            });
+        }
     }
     
     private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y,
@@ -175,7 +173,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     // This function is intended for the usage
     // with GLib.Idle
     private bool populate_model() {
-        mediabrowsermodel.filter();
+        music_browser_model.filter();
         return false;
     }
 
@@ -262,7 +260,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             }
             case 3: {
                 TreeIter iter;
-                this.mediabrowsermodel.get_iter(out iter, treepath);
+                this.music_browser_model.get_iter(out iter, treepath);
                 if(!selection.path_is_selected(treepath)) {
                     selection.unselect_all();
                     selection.select_path(treepath);
@@ -333,8 +331,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         Item? item = null;
         Array<unowned Action?> array = null;
         TreePath path = (TreePath)list.data;
-        mediabrowsermodel.get_iter(out iter, path);
-        mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
+        music_browser_model.get_iter(out iter, path);
+        music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out item);
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
         Item? parent_item = Item(ItemType.UNKNOWN);
         bool is_va_album = false;
@@ -349,8 +347,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                     break;
                 }
             }
-            mediabrowsermodel.get_iter(out iter, treepath);
-            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
+            music_browser_model.get_iter(out iter, treepath);
+            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             //print("parent_item type : %s\n", parent_item.type.to_string());
         }
         else if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE && 
@@ -358,8 +356,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             TreePath treepath = path.copy();
             treepath.up();
             Item? ar_item = null;
-            mediabrowsermodel.get_iter(out iter, treepath);
-            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
+            music_browser_model.get_iter(out iter, treepath);
+            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
             if(ar_item.text == VARIOUS_ARTISTS)
                 is_va_album = true;
         }
@@ -374,8 +372,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                     break;
                 }
             }
-            mediabrowsermodel.get_iter(out iter, treepath);
-            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
+            music_browser_model.get_iter(out iter, treepath);
+            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
         }
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
@@ -447,8 +445,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         if(treepaths != null) {
             TreeIter iter;
             Pixbuf? p;
-            this.mediabrowsermodel.get_iter(out iter, treepaths.nth_data(0));
-            this.mediabrowsermodel.get(iter, MusicBrowserModel.Column.ICON, out p);
+            this.music_browser_model.get_iter(out iter, treepaths.nth_data(0));
+            this.music_browser_model.get(iter, MusicBrowserModel.Column.ICON, out p);
             if(p != null)
                 Gtk.drag_source_set_icon_pixbuf(this, p);
             else
@@ -474,7 +472,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             return;
         foreach(TreePath treepath in treepaths) { 
             //TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-            DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref treepath); 
+            DndData[] l = music_browser_model.get_dnd_data_for_path(ref treepath); 
             foreach(DndData u in l) {
                 //print("dnd data get %d  %s\n", u.db_id, u.items[0].type.to_string());
                 ids += u; // this is necessary, if more than one path can be selected
@@ -502,8 +500,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         if(treepath.get_depth() > 1) {
             Item? item = Item(ItemType.UNKNOWN);
             TreeIter iter;
-            this.mediabrowsermodel.get_iter(out iter, treepath);
-            this.mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
+            this.music_browser_model.get_iter(out iter, treepath);
+            this.music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out item);
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
@@ -521,8 +519,8 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 }
             }
             Item? parent_item = null;
-            mediabrowsermodel.get_iter(out iter, path);
-            mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
+            music_browser_model.get_iter(out iter, path);
+            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             Value? val = parent_item;
             if(action != null)
                 action.action(item, val, null);
@@ -535,7 +533,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     }
 
     public bool change_model_data() {
-        mediabrowsermodel.filter();
+        music_browser_model.filter();
         return false;
     }
     
@@ -546,7 +544,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         double scroll_position = main_window.musicBrScrollWin.vadjustment.value;
         in_update_view = true;
         this.set_model(null);
-        this.set_model(mediabrowsermodel);
+        this.set_model(music_browser_model);
         Idle.add( () => {
             in_update_view = false;
             return false;
@@ -559,11 +557,11 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     
     private void on_row_expanded(TreeIter iter, TreePath path) {
 //        print("FIXME: xnoise-music-browser.vala - on_row_expanded\n");
-        mediabrowsermodel.load_children(ref iter);
+        music_browser_model.load_children(ref iter);
     }
     
     private void on_row_collapsed(TreeIter iter, TreePath path) {
-        mediabrowsermodel.unload_children(ref iter);
+        music_browser_model.unload_children(ref iter);
     }
 
     private class MusicBrowserCellRenderer : CellRenderer {

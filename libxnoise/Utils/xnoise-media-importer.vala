@@ -213,7 +213,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         
-        main_window.musicBr.mediabrowsermodel.cancel_fill_model(); // TODO
+        main_window.musicBr.music_browser_model.cancel_fill_model(); // TODO
         
         Item[] tmp = {};
         //add folders

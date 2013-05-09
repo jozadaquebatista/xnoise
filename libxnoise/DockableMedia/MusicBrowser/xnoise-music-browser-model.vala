@@ -132,6 +132,22 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     db_worker.push_job(job);
                 }
                 break;
+            case Writer.ChangeType.ADD_ALBUM:
+                if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
+                    if(item.type != ItemType.COLLECTION_CONTAINER_ALBUM)
+                        break;
+                        //print("got new album\n");
+                    if(item.db_id == -1){
+                        print("ADD_ALBUM:GOT -1\n");
+                        return;
+                    }
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                             this.add_imported_album_job
+                    );
+                    job.item = item;
+                    db_worker.push_job(job);
+                }
+                break;
             case Writer.ChangeType.ADD_GENRE:
                 if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
                     if(item.type != ItemType.COLLECTION_CONTAINER_GENRE)
@@ -228,6 +244,113 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                      );
             Item? loader_item = Item(ItemType.LOADER);
             this.append(out iter_search, genre_iter);
+            this.set(iter_search,
+                     Column.ICON, null,
+                     Column.VIS_TEXT, LOADING,
+                     Column.ITEM, loader_item,
+                     Column.LEVEL, 1
+                     );
+            return false;
+        });
+        return false;
+    }
+    
+    private bool add_imported_album_job(Worker.Job job) {
+        job.item = db_reader.get_album_item_from_id(global.searchtext,
+                                                    job.item.db_id,
+                                                    job.item.stamp);
+        if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
+            return false;
+        Idle.add( () => {
+            if(populating_model) // don't try to put an album to the model in case we are filling anyway
+                return false;
+            string text = null;
+            TreeIter iter_search, album_iter = TreeIter();
+            if(this.iter_n_children(null) == 0) {
+                File? albumimage_file = get_albumimage_for_artistalbum(job.item.text2, job.item.text, "medium");
+                Gdk.Pixbuf albumimage = null;
+                if(albumimage_file != null) {
+                    albumimage = global.icon_cache.get_image(albumimage_file.get_path());
+                }
+                this.prepend(out album_iter, null);
+                this.set(album_iter,
+                         Column.ICON, albumimage,
+                         Column.VIS_TEXT, job.item.text,
+                         Column.ITEM, job.item,
+                         Column.LEVEL, 0
+                         );
+                Item? loader_item = Item(ItemType.LOADER);
+                this.prepend(out iter_search, album_iter);
+                this.set(iter_search,
+                         Column.ICON, null,
+                         Column.VIS_TEXT, LOADING,
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
+                         );
+                return false;
+            }
+            string itemtext_prep = job.item.text.down().strip().collate_key();
+            
+            for(int i = 0; i < this.iter_n_children(null); i++) {
+                if(i == 0) {
+                    this.iter_nth_child(out album_iter, null, i);
+                }
+                else {
+                    if(!iter_next(ref album_iter))
+                        break;
+                }
+                Item? current_item;
+                this.get(album_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
+                if(current_item.type != ItemType.COLLECTION_CONTAINER_ALBUM)
+                    continue;
+                    
+                text = text != null ? text.down().strip() : EMPTYSTRING;
+                if(strcmp(text.collate_key(), itemtext_prep) == 0) {
+                    //found album
+                    return false;
+                }
+                if(strcmp(text.collate_key(), itemtext_prep) > 0) {
+                    File? albumimage_file = get_albumimage_for_artistalbum(job.item.text2, job.item.text, "medium");
+                    Gdk.Pixbuf albumimage = null;
+                    if(albumimage_file != null) {
+                        albumimage = global.icon_cache.get_image(albumimage_file.get_path());
+                    }
+                    TreeIter new_album_iter;
+                    this.insert_before(out new_album_iter, null, album_iter);
+                    this.set(new_album_iter,
+                             Column.ICON, albumimage,
+                             Column.VIS_TEXT, job.item.text,
+                             Column.ITEM, job.item,
+                             Column.LEVEL, 0
+                             );
+                    album_iter = new_album_iter;
+                    Item? loader_item = Item(ItemType.LOADER);
+                    this.prepend(out iter_search, album_iter);
+                    this.set(iter_search,
+                             Column.ICON, null,
+                             Column.VIS_TEXT, LOADING,
+                             Column.ITEM, loader_item,
+                             Column.LEVEL, 1
+                             );
+                    return false;
+                }
+            }
+            TreeIter x_album_iter;
+            this.insert_after(out x_album_iter, null, album_iter);
+            album_iter = x_album_iter;
+            File? albumimage_file = get_albumimage_for_artistalbum(job.item.text2, job.item.text, "medium");
+            Gdk.Pixbuf albumimage = null;
+            if(albumimage_file != null) {
+                albumimage = global.icon_cache.get_image(albumimage_file.get_path());
+            }
+            this.set(album_iter,
+                     Column.ICON, albumimage,
+                     Column.VIS_TEXT, job.item.text,
+                     Column.ITEM, job.item,
+                     Column.LEVEL, 0
+                     );
+            Item? loader_item = Item(ItemType.LOADER);
+            this.append(out iter_search, album_iter);
             this.set(iter_search,
                      Column.ICON, null,
                      Column.VIS_TEXT, LOADING,

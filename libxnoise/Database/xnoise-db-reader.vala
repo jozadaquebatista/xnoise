@@ -1314,6 +1314,47 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)i;
     }
 
+    private static const string STMT_GET_ALBUMITEM_BY_ID_WITH_SEARCH =
+        "SELECT DISTINCT al.name, ar.name FROM artists ar, items t, albums al, genres g WHERE t.album_artist = ar.id AND t.album = al.id AND t.genre = g.id AND al.id = ? AND (ar.caseless_name LIKE ? OR al.caseless_name LIKE ? OR t.caseless_name LIKE ? OR g.caseless_name LIKE ?)";
+    
+    private static const string STMT_GET_ALBUMITEM_BY_ID =
+        "SELECT DISTINCT al.name, ar.name FROM artists ar, items t, albums al WHERE t.album_artist = ar.id AND t.album = al.id AND al.id = ?";
+    
+
+    // function used only to verify if an item matches the searchtext
+    public override Item? get_album_item_from_id(string searchtext, int32 id, uint32 stmp) {
+        return_val_if_fail(stmp == get_current_stamp(get_source_id()), null);
+        Statement stmt;
+        Item? i = Item(ItemType.UNKNOWN);
+        if(searchtext != EMPTYSTRING) {
+            string stcl = "%%%s%%".printf(searchtext.casefold());
+            this.db.prepare_v2(STMT_GET_ALBUMITEM_BY_ID_WITH_SEARCH, -1, out stmt);
+            if((stmt.bind_int (1, id) != Sqlite.OK) ||
+               (stmt.bind_text(2, stcl) != Sqlite.OK) ||
+               (stmt.bind_text(3, stcl) != Sqlite.OK) ||
+               (stmt.bind_text(4, stcl) != Sqlite.OK) ||
+               (stmt.bind_text(5, stcl) != Sqlite.OK)) {
+                this.db_error();
+                return (owned)i;
+            }
+        }
+        else {
+            this.db.prepare_v2(STMT_GET_ALBUMITEM_BY_ID, -1, out stmt);
+            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+                this.db_error();
+                return (owned)i;
+            }
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, id);
+            i.text  = stmt.column_text(0);
+            i.text2 = stmt.column_text(1);
+            i.source_id = get_source_id();
+            i.stamp = stmp;
+        }
+        return (owned)i;
+    }
+
 //    private static const string STMT_GET_TRACKDATA_BY_TITLEID =
 //        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year, art.name, al.is_compilation FROM artists ar, items t, albums al, uris u, genres g, artists AS art WHERE t.album_artist = ar.id AND t.artist = art.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
 //    

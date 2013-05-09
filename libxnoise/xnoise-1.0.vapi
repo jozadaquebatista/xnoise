@@ -14,6 +14,7 @@ namespace Xnoise {
 			public uint count_lastused_items ();
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
+			public override Xnoise.Item? get_album_item_from_id (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stmp);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext, string? sorting = "ARTIST", string? direction = "ASC");
@@ -93,6 +94,7 @@ namespace Xnoise {
 			public AudioPlayerTempDb (GLib.Cancellable cancel);
 			public void begin_transaction ();
 			public void commit_transaction ();
+			public override Xnoise.Item? get_album_item_from_id (string searchtext, int32 id, uint32 stamp);
 			public override Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stamp);
 			public override Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
@@ -656,6 +658,7 @@ namespace Xnoise {
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
+		public abstract Xnoise.Item? get_album_item_from_id (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.Item? get_albumartist_item_from_id (string searchtext, int32 id, uint32 stamp);
 		public abstract Xnoise.Item[] get_albums (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items);
 		public abstract Xnoise.TrackData[]? get_all_tracks (string searchtext);

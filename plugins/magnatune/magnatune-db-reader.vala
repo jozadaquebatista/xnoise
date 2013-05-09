@@ -346,6 +346,9 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     }
 
 
+    public override Item? get_album_item_from_id(string searchtext, int32 id, uint32 stamp) {
+        return null;
+    }
 
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?)";
