@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: glib\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-08 23:29+0200\n"
+"POT-Creation-Date: 2013-05-09 08:26+0200\n"
 "PO-Revision-Date: 2011-03-15 14:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -115,25 +115,25 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:402
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:403
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
 #: ../plugins/magnatune/magnatune-treeview.vala:260
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:407
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:408
 msgid "Sort Mode"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:417
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:418
 msgid "ARTIST-ALBUM-TITLE"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:424
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:425
 msgid "GENRE-ARTIST-ALBUM"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:431
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:432
 msgid "ALBUM-ARTIST-TITLE"
 msgstr ""
 
@@ -438,7 +438,10 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:62
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:66
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:131
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:122
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:62
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:66
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:131
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:73
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:77
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:167
@@ -448,29 +451,24 @@ msgid ""
 "Handle with care!"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:130
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:139
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:197
 msgid "xnoise - Edit metadata"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:133
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:142
 msgid "Type new artist name."
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:143
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:134
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:143
 msgid "Artist:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:146
-msgid "Type new album name."
-msgstr ""
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:147
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:182
-msgid "Album:"
-msgstr ""
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:167
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:158
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:204
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:213
 msgid ""
@@ -478,11 +476,21 @@ msgid ""
 "wait."
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:171
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:171
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:208
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:217
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:146
+msgid "Type new album name."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:147
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:182
+msgid "Album:"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
@@ -568,7 +576,7 @@ msgstr ""
 msgid "Change artist data"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:51
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:53
 msgid "Change genre name"
 msgstr ""
 
