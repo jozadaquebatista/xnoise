@@ -283,7 +283,7 @@ msgid "Grid lines in media browser"
 msgstr "Pomocné linky v prohlížeči médií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
+msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr "Zobrazení řádků v prohlížeči médií, může ukázat hierarchii jasněji"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336

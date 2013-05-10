@@ -329,7 +329,7 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
             switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
             switch_showL.can_focus = false;
             switch_showL.set_label(_("Grid lines in media browser"));
-            switch_showL.tooltip_text = _("Showing lines in the media browser might show hierachies more clear");
+            switch_showL.tooltip_text = _("Showing lines in the media browser might show hierarchies more clear");
             
             switch_usetray = this.builder.get_object("cb_usetray") as Gtk.CheckButton;
             switch_usetray.can_focus = false;

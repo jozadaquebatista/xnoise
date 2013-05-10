@@ -306,7 +306,7 @@ msgid "Grid lines in media browser"
 msgstr "Activar las líneas de cuadrícula en el explorador de medios"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
+msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336

@@ -282,7 +282,7 @@ msgid "Grid lines in media browser"
 msgstr "Sareta-lerroak multimedia-arakatzailean"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
+msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr ""
 "Multimedia-arakatzailean lerroak erakutsiz hierarkiak garbiago ikus daitezke"
 

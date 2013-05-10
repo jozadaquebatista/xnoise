@@ -281,7 +281,7 @@ msgid "Grid lines in media browser"
 msgstr "Hilfslinien im Medienbrowser"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
+msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr "Linien im Medienbrowser können die Hierarchie besser sichtbar machen "
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
