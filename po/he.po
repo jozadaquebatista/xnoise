@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-09 08:26+0200\n"
-"PO-Revision-Date: 2013-01-25 14:12+0200\n"
+"PO-Revision-Date: 2013-05-10 11:06+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
 "Language: he\n"
@@ -31,7 +31,7 @@ msgstr "Xnoise"
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Media Player"
-msgstr "נגן המדיה"
+msgstr "נגן מדיה"
 
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Organize and play your music and video collections"
@@ -45,40 +45,41 @@ msgstr "נגן/השהה"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 msgid "Stop"
-msgstr ""
+msgstr "עצירה"
 
 #: ../data/misc/xnoise.desktop.in.in.h:6
-#, fuzzy
 msgid "Goto next track"
-msgstr "קפוץ לרצועה הבאה"
+msgstr "מעבר לרצועה הבאה"
 
 #: ../data/misc/xnoise.desktop.in.in.h:7
-#, fuzzy
 msgid "Goto previous track"
-msgstr "חזור לרצועה הקודמת"
+msgstr "חזרה לרצועה הקודמת"
 
 #: ../data/misc/xnoise.desktop.in.in.h:8
 msgid "Quit application"
-msgstr ""
+msgstr "יציאה מהתכנית"
 
 #: ../libxnoise/AlbumImages/xnoise-album-image.vala:81
 msgid "Toggle visibility of album art view"
-msgstr "הצג/הסתר תצוגת אלבום"
+msgstr "הצגת/הסתרת תצוגת אלבום"
 
 #: ../libxnoise/AlbumImages/xnoise-album-image.vala:83
 msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
-#: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
+#: ../libxnoise/Application/xnoise-application.vala:244
+#: ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise הוא נגן המדיה עבור Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:245 ../src/xnoise.vala:159
+#: ../libxnoise/Application/xnoise-application.vala:245
+#: ../src/xnoise.vala:159
 msgid "It uses the gstreamer framework."
 msgstr "הנגן משתמש בסביבת העבודה של gstreamer."
 
-#: ../libxnoise/Application/xnoise-application.vala:246 ../src/xnoise.vala:160
+#: ../libxnoise/Application/xnoise-application.vala:246
+#: ../src/xnoise.vala:160
 msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
@@ -90,9 +91,9 @@ msgid "no lyrics found..."
 msgstr "לא נמצאו כתוביות..."
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:629
-#, fuzzy, c-format
+#, c-format
 msgid "unknown"
-msgstr "כותרת בלתי ידועה"
+msgstr "לא ידוע"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:155
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
@@ -132,7 +133,7 @@ msgstr "מוזיקה"
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
 #: ../plugins/magnatune/magnatune-treeview.vala:260
 msgid "Collapse all"
-msgstr "כווץ הכל"
+msgstr "כיווץ הכל"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:408
 msgid "Sort Mode"
@@ -147,15 +148,14 @@ msgid "GENRE-ARTIST-ALBUM"
 msgstr "ז'אנר-אומן-אלבום"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:432
-#, fuzzy
 msgid "ALBUM-ARTIST-TITLE"
-msgstr "אומן-אלבום-כותרת"
+msgstr "אלבום-אומן-כותרת"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:600
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
-msgstr "טוען ..."
+msgstr "בטעינה ..."
 
 #: ../libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala:41
 msgid "Most Played"
@@ -167,11 +167,11 @@ msgstr "תזרימים"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
-msgstr "וידאו"
+msgstr "סרטוני וידאו"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
 msgid "Add to Android Device"
-msgstr "הוסף למכשיר Android"
+msgstr "הוספה למכשיר Android"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
@@ -184,15 +184,15 @@ msgstr "נגן המכשיר של Android"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:103
 msgid "Do you want to delete the selected file from the device?"
-msgstr "האם ברצונך למחוק את הקובץ הנבחר מהמכשיר?"
+msgstr "האם למחוק את הקובץ הנבחר מהמכשיר?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:126
 msgid "Do you want to delete the selected album from the device?"
-msgstr "האם ברצונך למחוק את האלבום הנבחר מהמכשיר?"
+msgstr "האם למחוק את האלבום הנבחר מהמכשיר?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:157
 msgid "Do you want to delete the selected artist from the device?"
-msgstr "האם ברצונך למחוק את האומן הנבחר מהמכשיר?"
+msgstr "האם למחוק את האומן הנבחר מהמכשיר?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:238
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:112
@@ -204,7 +204,7 @@ msgstr "אנא המתן בזמן העברת המדיה למכשיר."
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:260
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:383
 msgid "Not enough space on device! Aborting..."
-msgstr "אין מספיק שטח במכשיר! מבטל..."
+msgstr "אין די שטח פנוי במכשיר! הפעולה מבוטלת..."
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:117
 msgid "Free space: "
@@ -220,7 +220,7 @@ msgstr "נגן"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
 msgid "Add to Player Device"
-msgstr "הוסף לנגן המכשיר"
+msgstr "הוספה לנגן המכשיר"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
 msgid "External Player Device"
@@ -248,7 +248,7 @@ msgstr "הסרה"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
 msgid "Do full rescan"
-msgstr "בצע סקירה חוזרת מלאה"
+msgstr "ביצוע סקירה חוזרת מלאה"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:180
 msgid ""
@@ -295,25 +295,24 @@ msgid "Grid lines in media browser"
 msgstr "שורות הרשת בדפדפן המדיה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
-msgstr ""
+msgid "Showing lines in the media browser might show hierarchies more clear"
+msgstr "הצגת שורות בדפדפן המדיה יכולה להציג את המדרג בצורה מובנת יותר"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Use systray icon"
-msgstr ""
+msgstr "שימוש בסמל במגש המערכת"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
-msgid ""
-"Use a status icon on your panel for showing, hiding and controlling xnoise"
-msgstr ""
+msgid "Use a status icon on your panel for showing, hiding and controlling xnoise"
+msgstr "שימוש בסמל מצב בלוח שולחן עבודה בשביל הצגה, הסתרה ושליטה ב Xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:341
 msgid "Use menu button"
-msgstr ""
+msgstr "שימוש בכפתור תפריט"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use an application menu button integrated into the main window"
-msgstr ""
+msgstr "שימוש במקש תפריט ראשי משולב בחלון הראשי"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
 msgid "Show Stop button"
@@ -321,39 +320,35 @@ msgstr "שימוש בכפתור עצירה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show a stop button along with the other playback control buttons"
-msgstr ""
+msgstr "הצגת מקש עצירה יחד עם מקשי שליטת ניגון אחרים"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:351
 msgid "Quit on window close"
-msgstr "צא מהתכנה בסגירת חלון"
+msgstr "יציאה מהתכנית בסגירת חלון"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
-#, fuzzy
 msgid "Quit xnoise if the main window is closed"
-msgstr "צא מהתכנה בסגירת חלון"
+msgstr "יציאה מהתכנית בסגירת חלון"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
 msgid "Use desktop notifications"
 msgstr "שימוש בהתראות לשולחן העבודה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
-msgid ""
-"Use desktop notifications that inform about played media while the main "
-"window of xnoise is not visible"
-msgstr ""
+msgid "Use desktop notifications that inform about played media while the main window of xnoise is not visible"
+msgstr "שימוש בהתראות לשולחן העבודה עבור הודעת פרטי המדיה הנוכחית כשהחלון הראשי לא מוצג"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
-#, fuzzy
 msgid "Use combo box selector for media types"
-msgstr "בחירה מרוכזת להוספת מקורות מדיה"
+msgstr "שימוש בתיבת בחירה עבור סוגי מדיה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use a combo box for selecting media types like music, video or streams"
-msgstr ""
+msgstr "שימוש בתיבה עבור בחירת  סוגי מדיה כמו: מוזיקה, סרטונים או תזרימים"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:374
 msgid "Go Back"
-msgstr "לך אחורה"
+msgstr "אחורה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:390
 msgid "Media browser fontsize"
@@ -394,7 +389,7 @@ msgstr "מסך מלא"
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2049
 msgid "Search..."
-msgstr "חפש..."
+msgstr "חיפוש..."
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:149
 msgid "Media Collections"
@@ -410,11 +405,11 @@ msgstr "עוצמה"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
 msgid "Add Media"
-msgstr "הוסף מדיה"
+msgstr "הוספת מדיה"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
 msgid "Skip"
-msgstr "דלג"
+msgstr "דילוג"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:123
 msgid "Done"
@@ -422,20 +417,20 @@ msgstr "סיים"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:131
 msgid "Please wait while media is added to your library!"
-msgstr "אנא המתן בעוד המדיה מתווספת לספריה שלך!"
+msgstr "נא להמתין בעוד המדיה מתווספת לספריה שלך!"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr "אתה יכול להתחיל להאזין למוזיקה שלך ע\"י בחירת '%s'"
+msgstr "אפשר להתחיל להאזין למוזיקה שלך ע\"י בחירת '%s'"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
 msgid "Add more media folders"
-msgstr "הוסף תיקיות מדיה נוספות"
+msgstr "הוספת תיקיות מדיה נוספות"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:161
 msgid "Media Folders:"
-msgstr "תיקיות המדיה:"
+msgstr "תיקיות מדיה:"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
 msgid "Welcome to Xnoise!\n"
@@ -443,11 +438,11 @@ msgstr "ברוכים הבאים ל-Xnoise!\n"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
 msgid "This is the first time you start xnoise."
-msgstr "זוהי הפעם הראשונה שאתה מפעיל את Xnoise."
+msgstr "זוהי הפעם הראשונה שהנגן Xnoise מופעל."
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:203
 msgid "Do you want to import media into your library?"
-msgstr "האם ברצונך לייבא מדיה לספריה שלך?"
+msgstr "האם לייבא מדיה לספריה שלך?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -467,17 +462,19 @@ msgid ""
 "With this dialog you can change the metatags in the according files. \n"
 "Handle with care!"
 msgstr ""
+"בעזרת דיאלוג זה ניתן לשנות תגי מטא עבור הקבצים הבאים. \n"
+"להשתמש בזהירות!"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:130
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:139
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:197
 msgid "xnoise - Edit metadata"
-msgstr "xnoise - ערוך מטה-דטה(metadata)"
+msgstr "xnoise - עריכת מטה-דטה(metadata)"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:133
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:142
 msgid "Type new artist name."
-msgstr "שנה את שם האמן."
+msgstr "שינוי את שם האמן."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:134
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:143
@@ -488,22 +485,19 @@ msgstr "אמן:"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:204
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:213
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "נא להמתין בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:171
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:208
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:217
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "נא להמתין בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:146
 msgid "Type new album name."
-msgstr "שנה את שם האלבום."
+msgstr "שינוי את שם האלבום."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:147
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:182
@@ -516,12 +510,11 @@ msgstr "פרטי האלבום"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
 msgid "Please enter new album data."
-msgstr "נא הכנס את פרטי האלבום החדשים."
+msgstr "נא להכניס את פרטי האלבום החדשים."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:181
-#, fuzzy
 msgid "Album Artist:"
-msgstr "אלבום אמן"
+msgstr "אלבום אמן:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
 msgid "Year:"
@@ -532,9 +525,8 @@ msgid "Genre:"
 msgstr "ז'אנר:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Title Artist"
-msgstr "אלבום אמן"
+msgstr "כותרת אמן"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
 msgid "Album Artist"
@@ -559,11 +551,11 @@ msgstr "כותרת"
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1330
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1441
 msgid "Genre"
-msgstr "ז'אנר"
+msgstr "סגנון"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:164
 msgid "Uri"
-msgstr "כתובת URI"
+msgstr "URI"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
@@ -575,49 +567,49 @@ msgstr "שנה"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:170
 msgid "Track No."
-msgstr ""
+msgstr "מספר רצועה"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:173
 msgid "Disk No."
-msgstr ""
+msgstr "מספר דיסק"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
 msgid "Edit data for track"
-msgstr "ערוך את מידע הרצועה"
+msgstr "עריכת מידע הרצועה"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
 msgid "Change album data"
-msgstr "שנה את מידע האלבום"
+msgstr "שינוי מידע האלבום"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
 msgid "Change artist data"
-msgstr "שנה את מידע האמן"
+msgstr "שינוי מידע האמן"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:53
 msgid "Change genre name"
-msgstr "שנה שם ז'אנר"
+msgstr "שינוי סגנון"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:55
 msgid "Add to tracklist"
-msgstr "הוסף לרשימת הרצועות"
+msgstr "הוספה לרשימת הרצועות"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
-msgstr "העבר אל האשפה"
+msgstr "העברה אל האשפה"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:87
 msgid "Do you want to move the selected file to trash?"
-msgstr "האם ברצונך להעביר את הקובץ הנבחר אל האשפה?"
+msgstr "האם להעביר את הקובץ הנבחר אל האשפה?"
 
 #: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
 msgid "Remove Cover Image"
-msgstr ""
+msgstr "הסרת תמונת אלבום"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
-msgstr "נגן"
+msgstr "ניגון"
 
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
@@ -626,21 +618,21 @@ msgstr "הסרת הרצועות הנבחרות"
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
 msgid "Show in parent folder"
-msgstr "הצג בתיקיית המקור"
+msgstr "הצגה בתיקיית המקור"
 
 #: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:40
 msgid "Filter for artist"
-msgstr ""
+msgstr "מסנן עבור אמן"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
 msgid "Insufficient track information. Not searching for lyrics."
-msgstr "רצועת המידע אינה מספיקה. לא מחפש אחר מילות השיר."
+msgstr "רצועת המידע אינה מספיקה. חיפוש אחר מילות השיר בוטל."
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:127
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:143
 msgid "Player stopped. Not searching for lyrics."
-msgstr "הנגן הפסיק. לא מחפש אחר מילות השיר."
+msgstr "הנגן הופסק. חיפוש אחר מילות השיר בוטל."
 
 #. Gtk.TextIter start_iter;
 #. Gtk.TextIter end_iter;
@@ -657,9 +649,9 @@ msgid ""
 "Using %s ..."
 msgstr ""
 "\n"
-"מנסה לחפש את מילות השיר \"%s\" ע\"י \"%s\"\n"
+"ניסיון לחפש את מילות השיר \"%s\" ע\"י \"%s\"\n"
 "\n"
-"משתמש ב- %s ..."
+"שימוש ב- %s ..."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:222
 msgid "_File"
@@ -675,7 +667,7 @@ msgstr "_תזרימים פתוחים"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "open remote location"
-msgstr "פתח מיקום מרוחק"
+msgstr "פתיחת מיקום מרוחק"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "_Add or Remove media"
@@ -700,27 +692,27 @@ msgstr "פינוי רשימת הרצועות"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_Rescan collection"
-msgstr "_סרוק אוסף שוב"
+msgstr "_סריקת האוסף שוב"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "Rescan collection"
-msgstr "סרוק אוסף שוב"
+msgstr "סריקת האוסף שוב"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "_Increase volume"
-msgstr "ה_גבר עוצמה"
+msgstr "ה_גברת עוצמה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "Increase playback volume"
-msgstr "הגבר עוצמת Playback"
+msgstr "הגברת עוצמת Playback"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "_Decrease volume"
-msgstr "ה_נמך עוצמה"
+msgstr "ה_נמכת עצמה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "Decrease playback volume"
-msgstr "הנמך עוצמת Playback"
+msgstr "הנמכת עוצמת Playback"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "_Previous track"
@@ -728,15 +720,15 @@ msgstr "רצועה _קודמת"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "Go to previous track"
-msgstr "חזור לרצועה הקודמת"
+msgstr "חזרה לרצועה הקודמת"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "_Toggle play"
-msgstr "נגן/ה_פסק"
+msgstr "ניגון/ה_פסקה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "Toggle playback status"
-msgstr "החל/בטל מצב Playback"
+msgstr "החלה/ביטל מצב Playback"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "_Next track"
@@ -744,18 +736,16 @@ msgstr "רצועה ה_באה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "Go to next track"
-msgstr "קפוץ לרצועה הבאה"
+msgstr "מעבר לרצועה הבאה"
 
 #. icon
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "E_qualizer"
-msgstr "אקולייזר"
+msgstr "א_קולייזר"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "Open equalizer window"
-msgstr "פתח באקולייזר"
+msgstr "פתיחת חלון אקולייזר"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 msgid "_View"
@@ -779,11 +769,11 @@ msgstr "מעבר לתצוגת מילות השיר."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:240
 msgid "_Now Playing"
-msgstr "מנגן _עכשיו"
+msgstr "בניגון _עכשיו"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:241
 msgid "Go to the 'Now Playing' screen in the main window."
-msgstr "עבור אל מסך \"מנגן עכשיו\" בחלון הראשי."
+msgstr "מעבר אל מסך \"מנגן עכשיו\" בחלון הראשי."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:242
 msgid "_Help"
@@ -811,24 +801,20 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:304
 msgid "_Show Media Browser"
-msgstr "ה_צג את דפדפן המדיה"
+msgstr "ה_צגת דפדפן המדיה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:313
 msgid "Show _Video Fullscreen"
-msgstr "הצג את מסך ה_וידאו"
+msgstr "הצגת מסך ה_וידאו"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:322
 msgid "Show _Album Art view"
-msgstr "הצג תצוגת תמונת _אלבום"
+msgstr "הצגת תצוגת תמונת _אלבום"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:514
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
-"xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "שיחזור %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:718
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:730
@@ -855,7 +841,7 @@ msgstr "השמעה אקראית של רשימת הרצועות"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1344
 msgid "Enter the URL for playing"
-msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
+msgstr "נא להכניס את כתובת ה-URL של הקובץ שברצונך לנגן"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1369
 msgid "Equalizer"
@@ -866,33 +852,31 @@ msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1735
-#, fuzzy
 msgid "Repeat Mode"
-msgstr "חזרה על הכול"
+msgstr "מצב חזרה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1757
-#, fuzzy
 msgid "Remove selected tracks"
 msgstr "הסרת הרצועות הנבחרות"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
 msgid "Jump to current position"
-msgstr "קפוץ למיקום הנוכחי"
+msgstr "מעבר למיקום הנוכחי"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1945
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2045
 msgid "Select search with <Ctrl-F>"
-msgstr "בחר מסנן חיפוש בעזרת <Ctrl-F>"
+msgstr "בחירת מסנן חיפוש בעזרת <Ctrl-F>"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1947
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2047
 msgid "Remove search filter with <Ctrl-D>"
-msgstr "מחק מסנן חיפוש בעזרת <Ctrl-D>"
+msgstr "מחיקת מסנן חיפוש בעזרת <Ctrl-D>"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1969
 msgid "Show application main menu"
-msgstr "הצג את התפריט הראשי"
+msgstr "הצגת התפריט הראשי"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2059
@@ -954,9 +938,8 @@ msgid "Default"
 msgstr "ברירת המחדל"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:229
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "שם הכתוביות אינו מתאים לשם הוידאו! התעלמות מקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:690
 #, c-format
@@ -966,7 +949,7 @@ msgstr "הצלחה בעת התקנת פלאגין חסר של GStreamer"
 #: ../libxnoise/Player/xnoise-gst-player.vala:694
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "המשתמש ביטל את ההתקנה של הפלאגין החסר של GStreamer"
+msgstr "ההתקנת הפלאגין החסר של GStreamer בוטלה על ידי המשתמש/ת"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:698
 #, c-format
@@ -991,11 +974,11 @@ msgstr "התקנת מקודד חסר באופן אוטומטי אינה נתמכ
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:762
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "נכשל להתחיל אוטומטית את התקנת פלאגין חסר של GStreamer."
+msgstr "כישלון בהתחלה אוטומטית של התקנת פלאגין חסר של GStreamer."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:775
 msgid "Trying to install missing gstreamer plugin"
-msgstr "מנסה להתקין פלאגין חסר של GStreamer"
+msgstr "ניסיון להתקין פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:875
 msgid "Subtitle #"
@@ -1023,7 +1006,7 @@ msgstr "אלבום בלתי ידוע"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:71
 msgid "Now Playing"
-msgstr "מנגן עכשיו"
+msgstr "בניגון עכשיו"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:72
 msgid "Tracklist"
@@ -1034,18 +1017,16 @@ msgid "Lyrics"
 msgstr "מילות השיר"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:74
-#, fuzzy
 msgid "Hide Media Library"
-msgstr "החבא ספרייה"
+msgstr "החבאת ספריית המדיה"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:75
-#, fuzzy
 msgid "Show Media Library"
-msgstr "הצג ספרייה "
+msgstr "הצגת ספריית המדיה"
 
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1211
 msgid "Disk"
-msgstr ""
+msgstr "דיסק"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1306
@@ -1055,15 +1036,13 @@ msgstr "אורך"
 
 #. TRACKNUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1405
-#, fuzzy
 msgid "Track number"
 msgstr "מספר הרצועה"
 
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1414
-#, fuzzy
 msgid "Disk number"
-msgstr "מספר הרצועה"
+msgstr "מספר הדיסק"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:121
@@ -1091,7 +1070,7 @@ msgstr "מנגן"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
 msgid "paused"
-msgstr "השהה"
+msgstr "השהיה"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:189
 #, c-format
@@ -1101,7 +1080,7 @@ msgstr "ready to rock"
 #: ../libxnoise/Utils/xnoise-media-importer.vala:358
 #, c-format
 msgid "Found %u tracks. Updating library ..."
-msgstr "מצא %u רצועות. מעדכן ספרייה ..."
+msgstr "נמצאו %u רצועות. עדכון ספרייה ..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:576
 #, c-format
@@ -1109,23 +1088,22 @@ msgid "%u new tracks found"
 msgstr "נמצאו %u רצועות חדשות"
 
 #: ../src/xnoise.vala:169
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "נא להריץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
-msgstr "אצור את מילות השיר בבסיס הנתונים"
+msgstr "אחסון מילות השיר בבסיס הנתונים"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
-msgstr "אצור כתוביות בבסיס הנתונים"
+msgstr "אחסון כתוביות בבסיס הנתונים"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:412
 #: ../plugins/lastfm/xnoise-lastfm.vala:534
 #, c-format
 msgid "User logged in!"
-msgstr "משתמש מחובר!"
+msgstr "משתמש/ת מחובר/ת!"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
@@ -1133,22 +1111,22 @@ msgstr "משתמש מחובר!"
 #: ../plugins/lastfm/xnoise-lastfm.vala:537
 #, c-format
 msgid "User not logged in!"
-msgstr "משתמש אינו מחובר!"
+msgstr "משתמש/ת מנותק/ת!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:477
 msgid "Visit LastFm for an account."
-msgstr "מבקר באתר LastFm עבור חשבון."
+msgstr "ביקור באתר LastFm עבור חשבון."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:486
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr "אנה הכנס את שם המשתמש והססמה של חשבון ה-Last.fm שלך."
+msgstr "נא להכניס את שם המשתמש/ת והססמה של חשבון ה-Last.fm שלך."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:495
 #: ../plugins/magnatune/magnatune.vala:257
 #, c-format
 msgid "Username:"
-msgstr "שם משתמש:"
+msgstr "שם משתמש/ת:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:504
 #: ../plugins/magnatune/magnatune.vala:266
@@ -1158,7 +1136,7 @@ msgstr "ססמה:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:521
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "שלח מידע אודות רצועות מנוגנות לאתר Last.fm(שלח סטטיסטיקה)"
+msgstr "שליחת מידע על רצועות מנוגנות לאתר Last.fm(שליחת מידע השיר בשביל סטטיסטיקה)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
@@ -1174,7 +1152,7 @@ msgstr "Chartlyrics"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
-msgstr "טען את מילות השיר מהאתר chartlyrics.com"
+msgstr "טעינת מילות השיר מהאתר chartlyrics.com"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "LastFm web service integration"
@@ -1182,7 +1160,7 @@ msgstr "קישור עם שירות האינטרנט של LastFm"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
-msgstr "השתמש בשירותי האינטרנט של Last.fm"
+msgstr "שימוש בשירותי האינטרנט של Last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Lyricwiki"
@@ -1190,7 +1168,7 @@ msgstr "Lyricwiki"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
-msgstr "טען כתוביות "
+msgstr "טעינת כתוביות "
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
 msgid "Azlyrics"
@@ -1198,19 +1176,19 @@ msgstr "Azlyrics"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
-msgstr "טען את מילות השיר מהאתר azlyrics.com"
+msgstr "טעינת מילות השיר מהאתר azlyrics.com"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:1
 msgid "AppIndicator plugin"
-msgstr ""
+msgstr "פלאגין AppIndicator"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
-msgstr ""
+msgstr "פלאגין Ubuntu Application Indicator עבור Xnoise"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:154
 msgid "Show xnoise"
-msgstr ""
+msgstr "הצגת Xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"
@@ -1218,7 +1196,7 @@ msgstr "מקשי המדיה"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
-msgstr "שלוט על xnoise באמצעות מקשי המדיה"
+msgstr "שליטה על xnoise באמצעות מקשי המדיה"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
 msgid "Magnatune Music Subscription"
@@ -1235,11 +1213,11 @@ msgstr "Magnatune"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:269
 msgid "Download whole album to disk"
-msgstr "הורד את האלבום כולו אל הדיסק"
+msgstr "הורדת האלבום כולו אל הדיסק"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:319
 msgid "Downloading album "
-msgstr "מוריד אלבום"
+msgstr "אלבום בהורדה"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:321
 msgid "This may take some time..."
@@ -1255,7 +1233,7 @@ msgstr "הורדה הושלמה..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:238
 msgid "decompressing..."
-msgstr "מחלץ..."
+msgstr "חילוץ..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:292
 msgid "decompressing finished..."
@@ -1266,7 +1244,7 @@ msgid ""
 "Please wait while\n"
 "converting database."
 msgstr ""
-"אנא המתן בזמן\n"
+"נא להמתין בזמן\n"
 "המרת בסיס הנתונים."
 
 #: ../plugins/magnatune/magnatune-widget.vala:360
@@ -1276,30 +1254,30 @@ msgid ""
 "converting database.\n"
 "Done for %d tracks."
 msgstr ""
-"אנא המתן בזמן\n"
+"נא להמתין בזמן\n"
 "המרת בסיס הנתונים.\n"
 "סיים עבור %d רצועות."
 
 #: ../plugins/magnatune/magnatune-widget.vala:380
 msgid "loading..."
-msgstr "טוען..."
+msgstr "בטעינה..."
 
 #: ../plugins/magnatune/magnatune.vala:173
 msgid "Username and Password available"
-msgstr "שם משתמש וססמה זמינים"
+msgstr "שם משתמש/ת וססמה זמינים"
 
 #: ../plugins/magnatune/magnatune.vala:174
 msgid "Username or Password not available"
-msgstr "שם משתמש או ססמה אינם זמינים"
+msgstr "שם משתמש/ת או ססמה אינם זמינים"
 
 #: ../plugins/magnatune/magnatune.vala:236
 msgid "Visit Magnatune for an account."
-msgstr "מבקר באתר LastFm עבור חשבון."
+msgstr "ביקור באתר LastFm עבור חשבון."
 
 #: ../plugins/magnatune/magnatune.vala:247
 #, c-format
 msgid "Please enter your Magnatune username and password."
-msgstr "אנה הכנס את שם המשתמש והססמה של חשבון ה-Magnatune שלך."
+msgstr "נא להכניס את שם המשתמש/ת והססמה של חשבון ה-Magnatune שלך."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Mpris v2 Dbus Service"
@@ -1307,7 +1285,7 @@ msgstr "שרותי MPRIS v2 של DBus"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v2"
+msgstr "שליטה על xnoise עם ממשק ה-dbus של MPRIS v2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Mpris v1 Dbus Service"
@@ -1315,7 +1293,7 @@ msgstr "שרותי MPRIS v1 של DBus"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v1"
+msgstr "שליטה על xnoise עם ממשק ה-dbus של MPRIS v1"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Ubuntu Soundmenu Integration"
@@ -1323,19 +1301,18 @@ msgstr "קישור עם Ubuntu Soundmenu"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "Use ubuntu/ayatana soundmenu integration"
-msgstr "השתמש ב-soundmenu של Ubuntu/Ayatana"
+msgstr "שימוש ב-soundmenu של Ubuntu/Ayatana"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Show song title in window bar"
-msgstr "הצג כותרת השיר בפס החלון"
+msgstr "הצגת כותרת השיר בפס החלון"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
-msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
+msgstr "קביעת שם החלון לשם הכותרת הנוכחית"
 
-#, fuzzy
 #~ msgid "Media Source"
-#~ msgstr "תיקיות המדיה:"
+#~ msgstr "מקור מדיה"
 
 #~ msgid "Show picture on hover album image"
 #~ msgstr "הצג תמונה כשהסמן מרחף על תמונת האלבום"
