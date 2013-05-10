@@ -61,11 +61,11 @@ public class Xnoise.AppIndicator : GLib.Object, IPlugin {
     public bool init() {
         print("init AppIndicator plugin\n");
         if(indicator == null) {
-            indicator = new Indicator(  "xnoise",
-                                        "xnoise-symbolic",
-                                        IndicatorCategory.APPLICATION_STATUS);
+            indicator = new Indicator("xnoise",
+                                      "xnoise-panel",
+                                      IndicatorCategory.APPLICATION_STATUS);
         }
-        indicator.set_icon("xnoise-symbolic");
+        indicator.set_icon_full("xnoise-panel", "XN");
         indicator.set_status(IndicatorStatus.ACTIVE);
         menu = construct_traymenu();
         indicator.set_menu(menu);

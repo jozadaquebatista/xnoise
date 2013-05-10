@@ -29,8 +29,8 @@ status_DATA = \
     xn-shuffle-symbolic.svg \
     $(NULL)
 
-paneldir = $(datadir)/icons/hicolor/scalable/apps
-panel_DATA = xnoise-symbolic.svg
+#paneldir = $(datadir)/icons/hicolor/scalable/apps
+#panel_DATA = xnoise-symbolic.svg
 
 greydir = $(datadir)/icons/hicolor/scalable/apps
 grey_DATA = xnoise-grey.svg
@@ -43,9 +43,10 @@ app_DATA = \
     xn-current-position.svg \
     $(NULL)
 
+#    $(panel_DATA)
+
 EXTRA_DIST = \
     $(icon_DATA) \
-    $(panel_DATA) \
     $(status_DATA) \
     $(grey_DATA) \
     $(app_DATA) \

@@ -42,7 +42,7 @@ public class Xnoise.TrayIcon : StatusIcon {
     
     public TrayIcon() {
         this.visible = false;
-        this.icon_name = "xnoise";
+        this.icon_name = "xnoise-panel";
         this.has_tooltip = true;
         xn = Main.instance;
         construct_traymenu();
