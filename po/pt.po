@@ -443,7 +443,7 @@ msgstr "Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
-msgstr "Adicionar todas as faixas à lista de faixas"
+msgstr "Adicionar todas as faixas à lista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:62
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:66
@@ -685,12 +685,12 @@ msgstr "_Editar"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 msgid "C_lear tracklist"
-msgstr "Apagar li_sta de faixas"
+msgstr "_Limpar lista de faixas"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1783
 msgid "Clear the tracklist"
-msgstr "Apagar lista de faixas"
+msgstr "Limpar lista de faixas"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_Rescan collection"
@@ -1050,7 +1050,7 @@ msgstr "Número da faixa"
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1414
 msgid "Disk number"
-msgstr "Número da faixa"
+msgstr "Número do disco"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:121
@@ -1088,7 +1088,7 @@ msgstr "pronto"
 #: ../libxnoise/Utils/xnoise-media-importer.vala:358
 #, c-format
 msgid "Found %u tracks. Updating library ..."
-msgstr "Encontradas %u faixas. Atualizar coleção..."
+msgstr "Encontradas %u faixas. Atualização da coleção..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:576
 #, c-format
