@@ -271,7 +271,6 @@ public class Xnoise.TrackList : TreeView, IParams {
     }
 
     private Gtk.Menu create_rightclick_menu() {
-        // TODO: ui_manager
         TreeIter iter;
         var rightmenu = new Gtk.Menu();
         GLib.List<TreePath> list;
@@ -285,11 +284,13 @@ public class Xnoise.TrackList : TreeView, IParams {
             itsel = ItemSelectionType.SINGLE;
         Item? item = null;
         Array<unowned Action?> array = null;
-//        foreach(unowned Gtk.TreePath path in list) { //TODO
-//        }
         TreePath path = (TreePath)list.data;
         tracklistmodel.get_iter(out iter, path);
-        tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+        string? artist_name = null;
+        tracklistmodel.get(iter, 
+                           TrackListModel.Column.ITEM, out item,
+                           TrackListModel.Column.ARTIST, out artist_name);
+        item.text = artist_name;
         array = itemhandler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY, itsel);
         //print("array.length:::%u\n", array.length);
         for(int i =0; i < array.length; i++) {

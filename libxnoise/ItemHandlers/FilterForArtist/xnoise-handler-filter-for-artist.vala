@@ -37,6 +37,7 @@ using Xnoise.Resources;
 
 internal class Xnoise.HandlerFilterForArtist : ItemHandler {
     private Action a; 
+    private Action b; 
     private static const string ainfo = _("Filter for artist");
     private static const string aname = "A HandlerFilterForArtist";
     
@@ -49,6 +50,13 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
         a.name = aname;
         a.stock_item = Gtk.Stock.INFO;
         a.context = ActionContext.NONE;
+        
+        b = new Action();
+        b.action = set_filter_tl_track;
+        b.info = ainfo;
+        b.name = aname;
+        b.stock_item = Gtk.Stock.INFO;
+        b.context = ActionContext.NONE;
     }
 
     public override ItemHandlerType handler_type() {
@@ -64,10 +72,20 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
                                                ItemSelectionType selection = ItemSelectionType.NOT_SET) {
         if(selection != ItemSelectionType.SINGLE)
             return null;
-        if(type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST ||
-           type == ItemType.COLLECTION_CONTAINER_ALBUM ||
-           type == ItemType.LOCAL_AUDIO_TRACK) {
-            return a;
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
+            if(type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST ||
+               type == ItemType.COLLECTION_CONTAINER_ALBUM ||
+               type == ItemType.COLLECTION_CONTAINER_ARTIST ||
+               type == ItemType.LOCAL_AUDIO_TRACK) {
+                if(type == ItemType.COLLECTION_CONTAINER_ALBUM && 
+                   global.collection_sort_mode != CollectionSortMode.ARTIST_ALBUM_TITLE &&
+                   global.collection_sort_mode != CollectionSortMode.GENRE_ARTIST_ALBUM)
+                    return null;
+                return a;
+            }
+        }
+        else if(context == ActionContext.TRACKLIST_MENU_QUERY) {
+            return b;
         }
         
         return null;
@@ -75,24 +93,72 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
     
     private string? uri = null;
     
+    private void set_filter_tl_track(Item item, GLib.Value? data, GLib.Value? data2) { 
+        string? artist = item.text;
+        if(artist != null) {
+            Idle.add(() => {
+                main_window.album_art_view.icons_model.immediate_search(artist);
+                main_window.album_art_view_visible = true;
+                main_window.search_entry.text = artist;
+                return false;
+            });
+        }
+    }
+    
     private void set_filter(Item item, GLib.Value? data, GLib.Value? data2) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
            item.type != ItemType.COLLECTION_CONTAINER_ALBUM &&
-           item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST) 
+           item.type != ItemType.COLLECTION_CONTAINER_ALBUMARTIST &&
+           item.type != ItemType.COLLECTION_CONTAINER_ARTIST) 
             return;
         
+        if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST ||
+           item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+            string? artist = item.text;
+            if(artist != null) {
+                Idle.add(() => {
+                    main_window.album_art_view.icons_model.immediate_search(artist);
+                    main_window.album_art_view_visible = true;
+                    main_window.search_entry.text = artist;
+                    return false;
+                });
+            }
+            return;
+        }
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_artist_name_job);
-        job.item = item;
+        Item[] tmp = {};
+        tmp += item;
+        if(data2 != null) {
+            Item? i = (Item)data2;
+            tmp += i;
+        }
+        else {
+            tmp[1] = Item(ItemType.UNKNOWN);
+        }
+        job.items = tmp;
         db_worker.push_job(job);
     }
     
     private bool get_artist_name_job(Worker.Job job) {
-        TrackData[]? tda = item_converter.to_trackdata(job.item, EMPTYSTRING, null);
+        HashTable<ItemType,Item?>? extra_items = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
+        if(job.items[1].type != ItemType.UNKNOWN)
+            extra_items.insert(job.items[1].type, job.items[1]);
+        
+        
+        TrackData[]? tda = null;
+        if(extra_items.get_keys().length() > 0)
+            tda = item_converter.to_trackdata(job.items[0], EMPTYSTRING, extra_items);
+        else
+            tda = item_converter.to_trackdata(job.items[0], EMPTYSTRING, null);
         
         if(tda == null || tda.length == 0)
             return false;
         
         string artist = tda[0].artist;
+        if(job.items[0].type == ItemType.COLLECTION_CONTAINER_ALBUM &&
+           global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE &&
+           tda[0].albumartist == VARIOUS_ARTISTS)
+            artist = VARIOUS_ARTISTS;
         if(artist != null) {
             Idle.add(() => {
                 main_window.album_art_view.icons_model.immediate_search(artist);

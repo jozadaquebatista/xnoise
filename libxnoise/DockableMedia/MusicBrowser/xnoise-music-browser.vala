@@ -351,17 +351,17 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out parent_item);
             //print("parent_item type : %s\n", parent_item.type.to_string());
         }
-        else if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE && 
-                item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-            TreePath treepath = path.copy();
-            treepath.up();
-            Item? ar_item = null;
-            music_browser_model.get_iter(out iter, treepath);
-            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
-            if(ar_item.text == VARIOUS_ARTISTS)
-                is_va_album = true;
-        }
-        else if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE && 
+//        else if(global.collection_sort_mode == CollectionSortMode.ARTIST_ALBUM_TITLE && 
+//                item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+//            TreePath treepath = path.copy();
+//            treepath.up();
+//            Item? ar_item = null;
+//            music_browser_model.get_iter(out iter, treepath);
+//            music_browser_model.get(iter, MusicBrowserModel.Column.ITEM, out ar_item);
+//            if(ar_item.text == VARIOUS_ARTISTS)
+//                is_va_album = true;
+//        }
+        if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE && 
                 item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
             TreePath treepath = path.copy();
             while(treepath.get_depth() > 1) {
