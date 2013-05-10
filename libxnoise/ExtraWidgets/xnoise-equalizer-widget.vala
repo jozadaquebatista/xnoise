@@ -250,9 +250,14 @@ private class Xnoise.EqualizerWidget : Gtk.Box {
         });
         
         Idle.add(() => {
-            preamp.set_value(
-                Params.get_double_value("preamp") < 0.05 ? 1.0 : Params.get_double_value("preamp")
-            );
+            if(eq_active) {
+                preamp.set_value(
+                    Params.get_double_value("preamp") < 0.05 ? 1.0 : Params.get_double_value("preamp")
+                );
+            }
+            else {
+                preamp.set_value(1.0);
+            }
             return false;
         });
         for(int i = 0; i < 10; i++) {
