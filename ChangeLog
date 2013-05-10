@@ -1,3 +1,439 @@
+commit fd39aa931437707c51c9a56c55f788d863c74a01
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Fri May 10 15:15:25 2013 +0200
+
+    update po/pt.po
+
+commit 771798d4b7c5b9cb9192f8c8f649b868ab7ce0e3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 10 15:02:06 2013 +0200
+
+    panel icon adjustment
+
+commit fb0372c8511357cf3c502b18ff674c1046023c6a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 10 14:38:10 2013 +0200
+
+    fix typo
+
+commit 14b9b429fe61eea66b14e626a515ce71d9fd1abd
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Fri May 10 14:37:18 2013 +0200
+
+    update po/he.po
+
+commit 4c8e94f3370c05aa6e7a57b8706c96e7505ede2c
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Fri May 10 14:36:30 2013 +0200
+
+    update po/pt.po
+
+commit e3b3fee63f31af5ac146bcf922da96e7ac867548
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 10 14:30:29 2013 +0200
+
+    change panel icon
+
+commit 2aac1b7ebaed40048823fcaf996ffe24e085853b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 10 13:42:21 2013 +0200
+
+    fix equalizer initialization issue
+
+commit b67cc2ff7ad66417b8f1f87bc079675ec53c40a9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 23:47:59 2013 +0200
+
+    cleanup
+
+commit a835cb1d5aab5970b878be27f39a4c8c703555d7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 23:34:02 2013 +0200
+
+    use spin button for year tag editing in albums
+
+commit 1f25ec6d2751b32abc526ff626605b3d37a3124a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 16:08:06 2013 +0200
+
+    show items on media import in ALBUM_ARTIST_TITLE sort mode
+
+commit a4ac2c906ec7b36d45ec421a93f3107f75de93a4
+Merge: a63abe9 ba1c81c
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Thu May 9 14:22:07 2013 +0200
+
+    Merged in Lasall/xnoise/manpage (pull request #10)
+    
+    Update manual page and fix spelling.
+
+commit a63abe959b1c0edd0bc27aa51538c7dbec92645a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 09:10:28 2013 +0200
+
+    update strings
+
+commit 4506e953df16d3c9fa9e7fb29391a08df3c1a9c1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 09:10:11 2013 +0200
+
+    add Dominique Lasserre to AUTHORS
+
+commit 78ee1efafdde683f57ec33ac7b69b3c7dc797241
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 08:29:25 2013 +0200
+
+    fix #45: Automake fails due to missing file in POTFILES.in
+
+commit ba1c81c13b85f9e6f1d0fb92f3e9a16cf771c3ba
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Thu May 9 02:35:47 2013 +0200
+
+    Update manual page and fix spelling.
+
+commit 25b76e9a9d01a79bf3431b8922a090bb7cdae603
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 9 01:00:34 2013 +0200
+
+    fix tag editing for COLLECTION_CONTAINER_ARTIST
+
+commit 0db15c64ce0df88b8b145486234f5281ca946a5e
+Merge: 882e062 ecdce24
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 8 23:24:24 2013 +0200
+
+    Merge branch 'album-artist-title-sorting'
+
+commit ecdce2464b24f95e099e221e8d81b600507e187e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 8 23:21:31 2013 +0200
+
+    introduce COLLECION_CONTAINER_ARTIST/COLLECTION_CONTAINER_ALBUMARTIST
+
+commit 882e062686805d5d42a957cdbd01a5a517d9be1a
+Merge: be8b7ea e172694
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Wed May 8 09:25:11 2013 +0200
+
+    Merged in Lasall/xnoise/hardening (pull request #7)
+    
+    Fix build failures with -Werror=format-security enabled.
+
+commit be8b7ead9c17697082e3f8c8c9d042aeb2b505f3
+Merge: f6d690a eae3a46
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Wed May 8 09:22:47 2013 +0200
+
+    Merged in Lasall/xnoise/spelling (pull request #8)
+    
+    Spell fix: daemon <-> deamon
+
+commit f6d690a96da19c1454d7e73055e4a07a1502d49d
+Merge: e49c4e2 f968b0b
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Wed May 8 09:22:09 2013 +0200
+
+    Merged in Lasall/xnoise/desktopkeyword (pull request #9)
+    
+    Add keywords to .desktop file.
+
+commit f968b0b4cb09a43a2233a042d9024a153921fbae
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Wed May 8 00:18:20 2013 +0200
+
+    Add keywords to .desktop file.
+
+commit eae3a46bcf5f5193d1d216d965bcbafcac244e78
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Wed May 8 00:15:14 2013 +0200
+
+    Spell fix: daemon <-> deamon
+
+commit e17269499742fc9f480c59f551ddf0263037019b
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Wed May 8 00:04:50 2013 +0200
+
+    Fix build failures with -Werror=format-security enabled.
+
+commit 4c17c926c484e34f9e584d5b93210bae9aaa9f89
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 1 19:26:12 2013 +0200
+
+    fixes
+
+commit 6f072ca9d67508d3eb331eed4798728f89acb7ea
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 1 16:35:04 2013 +0200
+
+    fixes for dnd
+
+commit 1589800bf368be6f0b893af3fd27d98715ede297
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 1 15:02:34 2013 +0200
+
+    more work for correct display of media
+
+commit 4d448e69381c7511553c5d65ec33d88272814d31
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 1 13:38:01 2013 +0200
+
+    some cleanup
+
+commit f641b256360818dcac2931c7cff8e8c1ad8f8594
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 1 13:15:12 2013 +0200
+
+    initial support for album-artist-title sorting
+
+commit e49c4e236808be2375653758b2422ba9fb3a0fdf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Apr 26 16:23:53 2013 +0200
+
+    add null checks
+
+commit 23226070604d9816cd0d62f2607a3d42cfa0d2fc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Apr 26 16:12:23 2013 +0200
+
+    start compilation remove functionality
+
+commit 5d2914306d844efdedf2d50627371a810db892d2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 25 16:41:36 2013 +0200
+
+    fix placing of first start widget
+
+commit f7991b3dd9d77328687ac1c5c4dfa9e311cfef99
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 25 16:29:22 2013 +0200
+
+    fix warnings for events used to prevent backlight dimming
+
+commit 03caf2f24e5d23f00920eaf62e8aee16dcb5ad48
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 25 15:32:20 2013 +0200
+
+    fixes for VA handling
+
+commit d3cd627ce617952b291cfce776e45fcff552e35e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Apr 21 17:33:29 2013 +0200
+
+    update packaging data
+
+commit 13ce68c6b5db21719f34700a87e823d4c791cfe2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Apr 21 17:32:22 2013 +0200
+
+    work around memory leak
+
+commit 3f85f8ec6cb40539cbfea9da0462e7f69850d90a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Apr 21 17:31:17 2013 +0200
+
+    require libtaginfo-0.1.6
+
+commit 0a7f6626e5e9dbe5fc507918920b32d3b147a20c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Apr 16 11:02:37 2013 +0200
+
+    fix for possible build with clang
+
+commit 5c88e9af3bb49cdc177f7a0d2baf4eaa3c82461b
+Merge: 7d9b78d 29be546
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Mon Apr 15 19:33:41 2013 +0200
+
+    Merged in Avinash-Bhat/xnoise/bug/41/notify-osd-closing (pull request #6)
+    
+    removed the hardcoded timeout value
+
+commit 29be546cecdd4edc3111ebec3415ea1b4f2d9892
+Author: Avinash <nashpapa@gmail.com>
+Date:   Sun Apr 14 19:17:04 2013 +0530
+
+    removed the hardcoded timeout value
+
+commit 7d9b78dcdc2c9d1ba5a350d03c80538dfc33133b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 11 10:47:46 2013 +0200
+
+    update translatable strings
+
+commit 355c9774f2b2eaf006adc45c3e1a95ebe5e46a37
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 11 10:02:29 2013 +0200
+
+    automatically remove notifications after a few seconds, fixes #41
+
+commit 35e48adfc11995bad7981517e490714b7656b755
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Apr 4 09:29:56 2013 +0200
+
+    unify sorting of various/various artists
+
+commit 4a5bb74c3c137cb17a6ed73c03b73fd530110dd4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Apr 2 16:31:20 2013 +0200
+
+    update targeted glib version; do not write vala version into generated files
+
+commit 696590f0ecba726c6195ee94d889bf3fb2210f42
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 28 17:02:15 2013 +0100
+
+    fixes for album art discovery
+
+commit 020e234fb55f1a5917b0d0582ff4d600baeb5812
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 28 14:51:42 2013 +0100
+
+    change caching strategy
+
+commit 8b3d0daebe403eb01b42c8c3cac51a57becf78e7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 28 11:56:15 2013 +0100
+
+    initial fill fix
+
+commit 8ca06f0e9a3a87d046b29ac9ad94756bc71566fd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 28 11:04:37 2013 +0100
+
+    test dynamic cache fill/empty
+
+commit d94ae533c7d5adde893bfdccb10c0fc419c3bc21
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 27 17:12:11 2013 +0100
+
+    fix loading empty image source lib
+
+commit 72810ced2f9ee92589838273f73bf18247472465
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 26 18:13:58 2013 +0100
+
+    fix image path loading in mpris2 plugin
+
+commit 926e4d6bf3f40dbba129cd785fc9a58d1f12a02e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 26 17:29:08 2013 +0100
+
+    do not switch main view if device is plugged in
+
+commit 8974f72603dfa8fb6ca1e3da447adc1c4f4b1a1c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 26 17:24:54 2013 +0100
+
+    fix sizegroup
+
+commit 827d22a7d5739deeb083d7f398ebeb5ec0015e1c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 26 16:21:06 2013 +0100
+
+    use different notebook for first_start_widget
+
+commit 42d3a7669ed1bc65248d2fc34d66da4e83f78ddc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Mar 26 14:43:27 2013 +0100
+
+    make toolbar class primary if 'Ambiance' or 'Radiance' themes are used
+
+commit 18595d460c1c93c26005019a048e0f48ab4d3d54
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 25 17:17:29 2013 +0100
+
+    clean up
+
+commit fb31b298c39b8eb583475bda96794d8caa834a44
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 25 16:48:56 2013 +0100
+
+    redo album image loading
+
+commit 43f7d40fac19094821ae1fd0b2580bb627fafb5b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Mar 22 17:49:38 2013 +0100
+
+    update NEWS file
+
+commit cc2f35a88f4d46aa07b397a503c3e79067e219ea
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Mar 22 17:40:56 2013 +0100
+
+    use disk number tag
+
+commit 5b848be4a51a4595a484611870d42ab93896db20
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Mar 22 15:10:35 2013 +0100
+
+    fixes for AlbumArtist handling
+
+commit a6f6e18c7345645f7e92a523f2bd532d9f6cf16f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Mar 21 19:07:46 2013 +0100
+
+    fix infinit loop issue
+
+commit 96c8a88748a5af4e8875b66baddb00d7e3c96ced
+Author: Reda Lazri <the.red.shortcut@gmail.com>
+Date:   Thu Mar 21 17:57:43 2013 +0100
+
+    update albumart
+
+commit e18d455ba75e54e6db2ec0ceddd9b13c2f5d0c32
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 20 17:55:02 2013 +0100
+
+    fix keyboard selection in treemediaselector
+
+commit 1b802075daff77a6fdd2fb8354fb930093e076ad
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 20 12:08:08 2013 +0100
+
+    change button sizes, fixes #32
+
+commit 3604bd77f60ef0e98736ae1ca871d0657444c80a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 20 10:19:20 2013 +0100
+
+    cleanups
+
+commit 183a30fe4e27fd0c704ec6d6a92da4845b2d4602
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 20 09:28:01 2013 +0100
+
+    reompile without reference tracking
+
+commit 06026d87d9e45409e1ab3fcd19a0fd4e1b3cc68a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 20 01:02:25 2013 +0100
+
+    add possibility for reference tracking
+
+commit c0b0afb70d32e7e3408f1d684452925a972d75ab
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 18 17:40:35 2013 +0100
+
+    use int64
+
+commit dd360702aa3bfb356da83d83e8f667fdd01c4bfa
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Mar 18 15:01:13 2013 +0100
+
+    clear some referenes
+
+commit 2068fb86c898a0cb810e0af3d2db77507b1b35d4
+Author: Alexander Wauck <AWauck@intradyn.com>
+Date:   Thu Mar 14 09:29:06 2013 +0100
+
+    add some parameter defaults
+
+commit 1769133af0769089ed335a7e67503ec0f639fc2f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Mar 13 22:21:29 2013 +0100
+
+    post release version update
+
 commit 0afcbbc18a668a513b40dc1f01653b02c9889c70
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Mar 13 21:54:08 2013 +0100
