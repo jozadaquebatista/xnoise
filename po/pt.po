@@ -136,9 +136,8 @@ msgid "GENRE-ARTIST-ALBUM"
 msgstr "Género-Artista-Álbum"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:432
-#, fuzzy
 msgid "ALBUM-ARTIST-TITLE"
-msgstr "Artista-Álbum-Título"
+msgstr "Álbum-Artista-Título"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:600
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
@@ -284,7 +283,7 @@ msgid "Grid lines in media browser"
 msgstr "Linhas de grelha no explorador"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
-msgid "Showing lines in the media browser might show hierachies more clear"
+msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr "A exibição das linhas no explorador simplifica a hierarquia"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
@@ -516,9 +515,8 @@ msgid "Please enter new album data."
 msgstr "Por favor indique os dados do álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:181
-#, fuzzy
 msgid "Album Artist:"
-msgstr "Artista do álbum"
+msgstr "Artista do álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
 msgid "Year:"
@@ -529,9 +527,8 @@ msgid "Genre:"
 msgstr "Género:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Title Artist"
-msgstr "Artista do álbum"
+msgstr "Intérprete"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
 msgid "Album Artist"
@@ -572,11 +569,11 @@ msgstr "Ano"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:170
 msgid "Track No."
-msgstr ""
+msgstr "Faixa n.º"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:173
 msgid "Disk No."
-msgstr ""
+msgstr "Diso n.º"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
@@ -1037,7 +1034,7 @@ msgstr "Mostrar coleção multimédia"
 
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1211
 msgid "Disk"
-msgstr ""
+msgstr "Disco"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1306
@@ -1047,13 +1044,11 @@ msgstr "Duração"
 
 #. TRACKNUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1405
-#, fuzzy
 msgid "Track number"
 msgstr "Número da faixa"
 
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1414
-#, fuzzy
 msgid "Disk number"
 msgstr "Número da faixa"
 
