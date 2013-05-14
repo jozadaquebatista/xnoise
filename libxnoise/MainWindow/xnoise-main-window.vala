@@ -506,12 +506,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         uint lastused_cnt = 0;
         var job = new Worker.Job(Worker.ExecutionType.REPEATED, this.add_lastused_titles_to_tracklist_job);
         job.set_arg("msg_id", (uint)0);
-        if((lastused_cnt = db_reader.count_lastused_items()) > 1500) {
+        if((lastused_cnt = db_reader.count_lastused_items()) > 2000) {
             Timeout.add(200, () => {
                 var button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
                 uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
                                         UserInfo.ContentClass.INFO,
-                                        _("Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower.".printf(lastused_cnt)),
+                                        _("Restoring %u tracks in the tracklist. This is quite a lot and can slow down the startup of xnoise.").printf(lastused_cnt),
                                         false,
                                         4,
                                         button);

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-09 08:26+0200\n"
+"POT-Creation-Date: 2013-05-11 14:06+0200\n"
 "PO-Revision-Date: 2012-03-12 08:36:57+0000\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "no lyrics found..."
 msgstr ""
 
-#: ../libxnoise/Database/xnoise-db-writer.vala:629
+#: ../libxnoise/Database/xnoise-db-writer.vala:633
 #, c-format
 msgid "unknown"
 msgstr ""
@@ -115,29 +115,29 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:403
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:401
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
 #: ../plugins/magnatune/magnatune-treeview.vala:260
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:408
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:406
 msgid "Sort Mode"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:418
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:416
 msgid "ARTIST-ALBUM-TITLE"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:425
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:423
 msgid "GENRE-ARTIST-ALBUM"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:432
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:430
 msgid "ALBUM-ARTIST-TITLE"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:600
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:723
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
@@ -375,7 +375,7 @@ msgid "Fullscreen"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2049
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1986
 msgid "Search..."
 msgstr ""
 
@@ -444,7 +444,7 @@ msgstr ""
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:131
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:73
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:77
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:167
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:174
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
 msgid ""
 "With this dialog you can change the metatags in the according files. \n"
@@ -469,7 +469,7 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:158
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:167
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:204
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:211
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:213
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
@@ -478,7 +478,7 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:171
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:208
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:215
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:217
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
@@ -489,27 +489,27 @@ msgid "Type new album name."
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:147
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:182
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:189
 msgid "Album:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
 msgid "Album data"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:187
 msgid "Please enter new album data."
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:181
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:188
 msgid "Album Artist:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:190
 msgid "Year:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:191
 msgid "Genre:"
 msgstr ""
 
@@ -523,22 +523,22 @@ msgstr ""
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2060
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1260
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1432
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1997
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1433
 msgid "Album"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1236
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1237
 msgid "Title"
 msgstr ""
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2061
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1330
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1441
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1998
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1331
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1442
 msgid "Genre"
 msgstr ""
 
@@ -549,9 +549,9 @@ msgstr "pe"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2062
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1354
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1450
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1999
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1355
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1451
 msgid "Year"
 msgstr ""
 
@@ -610,7 +610,7 @@ msgstr ""
 msgid "Show in parent folder"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:40
+#: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:41
 msgid "Filter for artist"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgid "C_lear tracklist"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:228
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1783
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1754
 msgid "Clear the tracklist"
 msgstr ""
 
@@ -800,8 +800,8 @@ msgstr ""
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:514
 #, c-format
 msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
+"Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
+"the startup of xnoise."
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:718
@@ -839,45 +839,45 @@ msgstr ""
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1735
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1706
 msgid "Repeat Mode"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1757
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1728
 msgid "Remove selected tracks"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1808
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1779
 msgid "Jump to current position"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1945
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2045
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1982
 msgid "Select search with <Ctrl-F>"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1947
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2047
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1885
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1984
 msgid "Remove search filter with <Ctrl-D>"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1969
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1907
 msgid "Show application main menu"
 msgstr ""
 
 #. ARTIST
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2059
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1284
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1423
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1996
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1424
 msgid "Artist"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2068
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2005
 msgid "Ascending"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2070
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2007
 msgid "Descending"
 msgstr ""
 
@@ -1014,23 +1014,23 @@ msgstr ""
 msgid "Show Media Library"
 msgstr ""
 
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1211
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1212
 msgid "Disk"
 msgstr ""
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1306
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1459
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1307
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1460
 msgid "Length"
 msgstr ""
 
 #. TRACKNUMBER
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1405
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1406
 msgid "Track number"
 msgstr ""
 
 #. DISK_NUMBER
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1414
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1415
 msgid "Disk number"
 msgstr ""
 
