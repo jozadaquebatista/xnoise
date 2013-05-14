@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-11 14:06+0200\n"
+"POT-Creation-Date: 2013-05-14 18:16+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -34,26 +34,30 @@ msgid "Organize and play your music and video collections"
 msgstr "Rendszerezze és játssza le a zene és videó gyűjteményét"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
+msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
+msgstr ""
+
+#: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr "Play/Pause"
 
-#: ../data/misc/xnoise.desktop.in.in.h:5
+#: ../data/misc/xnoise.desktop.in.in.h:6
 msgid "Stop"
 msgstr ""
 
-#: ../data/misc/xnoise.desktop.in.in.h:6
+#: ../data/misc/xnoise.desktop.in.in.h:7
 #, fuzzy
 msgid "Goto next track"
 msgstr "Track listára ugrás."
 
-#: ../data/misc/xnoise.desktop.in.in.h:7
+#: ../data/misc/xnoise.desktop.in.in.h:8
 #, fuzzy
 msgid "Goto previous track"
 msgstr "Track listára ugrás."
 
-#: ../data/misc/xnoise.desktop.in.in.h:8
+#: ../data/misc/xnoise.desktop.in.in.h:9
 msgid "Quit application"
 msgstr ""
 

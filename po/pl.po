@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-11 14:06+0200\n"
+"POT-Creation-Date: 2013-05-14 18:16+0200\n"
 "PO-Revision-Date: 2012-09-01 13:00+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -32,26 +32,30 @@ msgid "Organize and play your music and video collections"
 msgstr "Organizuj i odtwarzaj swoją kolekcję muzyki i filmów"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
+msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
+msgstr ""
+
+#: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
 msgstr "Odtwórz/wstrzymaj"
 
-#: ../data/misc/xnoise.desktop.in.in.h:5
+#: ../data/misc/xnoise.desktop.in.in.h:6
 msgid "Stop"
 msgstr ""
 
-#: ../data/misc/xnoise.desktop.in.in.h:6
+#: ../data/misc/xnoise.desktop.in.in.h:7
 #, fuzzy
 msgid "Goto next track"
 msgstr "Idź do następnego utworu"
 
-#: ../data/misc/xnoise.desktop.in.in.h:7
+#: ../data/misc/xnoise.desktop.in.in.h:8
 #, fuzzy
 msgid "Goto previous track"
 msgstr "Idź do poprzedniego utworu"
 
-#: ../data/misc/xnoise.desktop.in.in.h:8
+#: ../data/misc/xnoise.desktop.in.in.h:9
 msgid "Quit application"
 msgstr ""
 
