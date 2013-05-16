@@ -57,6 +57,7 @@
 			<menuitem action="AddRemoveAction"/>
 			<menuitem action="SettingsAction"/>
 			<separator />
+			<menuitem action="ShowMediaBrowserAction"/>
 			<menuitem action="ShowAlbumArtViewAction"/>
 			<separator />
 			<menuitem action="AboutAction"/>
