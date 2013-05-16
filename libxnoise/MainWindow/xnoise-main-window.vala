@@ -41,7 +41,6 @@ private extern bool ensure_native(Gdk.Window window);
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
-//    private const int HIDE_BUTTON_SIZE     = 20;
     private Box content_top_box;
     private VolumeSliderButton volume_slider;
     private Notebook paned2notebook;
@@ -84,8 +83,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal SerialButton album_view_sorting;
     internal SerialButton album_view_direction;
     internal AlbumArtView album_art_view;
-//    internal ToggleButton album_view_toggle;
-//    internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
     internal Gtk.ActionGroup action_group;
@@ -143,7 +140,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void set_sensitive_toggle_action_state(string name, bool state) {
-//        in_update_toggle_action = true;
         Idle.add( () => {
             unowned Gtk.ToggleAction? tax = null;
             foreach(Gtk.Action a in action_group.list_actions()) {
@@ -154,10 +150,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     break;
                 }
             }
-//            Idle.add( () => {
-//                in_update_toggle_action = false;
-//                return false;
-//            });
             return false;
         });
     }
@@ -347,7 +339,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             if(!this.fullscreenwindowvisible) {
                 Idle.add( () => {
                     mainview_page_buffer = VIDEOVIEW_NAME;
-//                    buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
                     Params.set_string_value("MainViewName", VIDEOVIEW_NAME);
                     if(aimage_timeout != 0) {
                         Source.remove(aimage_timeout);
@@ -568,7 +559,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal void ask_for_initial_media_import() {
         Idle.add(() => {
             album_art_view_visible = false;
-//            album_view_toggle.set_active(false);
             media_browser_visible = false;
             return false;
         });
@@ -1435,11 +1425,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void on_settings_edit() {
-//        album_view_toggle.set_active(false);
         album_art_view_visible = false;
         settings_widget.select_general_tab();
         paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
-//        mainview_box.select_main_view(settings_widget.get_view_name());
     }
 
     internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
@@ -2091,7 +2079,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     internal void set_bottom_view(int tab) {
         album_art_view_visible = (tab == 0 ? false : true);
-//        album_view_toggle.set_active(tab == 0 ? false : true);
     }
     
     internal void show_status_info(Xnoise.InfoBar? bar) {
