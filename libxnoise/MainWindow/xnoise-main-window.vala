@@ -500,7 +500,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if((lastused_cnt = db_reader.count_lastused_items()) > 2000) {
             Timeout.add(200, () => {
                 var button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
-                uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+                uint msg_id = userinfo.popup(UserInfo.RemovalType.TIMER,
                                         UserInfo.ContentClass.INFO,
                                         _("Restoring %u tracks in the tracklist. This is quite a lot and can slow down the startup of xnoise.").printf(lastused_cnt),
                                         false,
