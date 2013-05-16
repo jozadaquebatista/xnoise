@@ -125,7 +125,13 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         scolor = context.get_background_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
         color = context.get_background_color(StateFlags.NORMAL);
-        this.override_background_color(StateFlags.NORMAL, color);
+        Timeout.add_seconds(1, () => {
+            StyleContext ctx = main_window.media_browser_box.get_style_context();
+            ctx.add_class(STYLE_CLASS_SIDEBAR);
+            Gdk.RGBA col = ctx.get_background_color(StateFlags.NORMAL);
+            this.override_background_color(StateFlags.NORMAL, col);
+            return false;
+        });
         this.override_background_color(StateFlags.SELECTED, scolor);
         context.restore();
     }
@@ -701,6 +707,14 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             
+            StyleContext ctx = main_window.media_browser_box.get_style_context();
+            ctx.add_class(STYLE_CLASS_SIDEBAR);
+            if((flags & CellRendererState.SELECTED) == 0) {
+                Gdk.cairo_rectangle(cr, background_area);
+                Gdk.RGBA col = ctx.get_background_color(StateFlags.NORMAL);
+                Gdk.cairo_set_source_rgba(cr, col);
+                cr.fill();
+            }
             
             Gdk.Pixbuf p = null;
             if((flags & CellRendererState.SELECTED) == 0) {

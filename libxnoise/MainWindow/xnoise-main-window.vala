@@ -69,7 +69,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private ulong active_notifier = 0;
     private ScreenSaverManager ssm = null;
     private List<Gtk.Action> actions_list = null;
-    internal Box media_browser_box;
+    public Box media_browser_box;
     private Xnoise.AppMenuButton app_menu_button;
     private string temporary_mainview_name;
     private bool window_maximized;

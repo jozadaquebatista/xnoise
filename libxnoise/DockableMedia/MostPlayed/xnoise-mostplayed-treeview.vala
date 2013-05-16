@@ -172,7 +172,13 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         scolor = context.get_background_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
         color = context.get_background_color(StateFlags.NORMAL);
-        this.override_background_color(StateFlags.NORMAL, color);
+        Timeout.add_seconds(1, () => {
+            StyleContext ctx = main_window.media_browser_box.get_style_context();
+            ctx.add_class(STYLE_CLASS_SIDEBAR);
+            Gdk.RGBA col = ctx.get_background_color(StateFlags.NORMAL);
+            this.override_background_color(StateFlags.NORMAL, col);
+            return false;
+        });
         this.override_background_color(StateFlags.SELECTED, scolor);
         context.restore();
     }

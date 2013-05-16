@@ -887,6 +887,7 @@ namespace Xnoise {
 		}
 		public bool is_fullscreen;
 		public Xnoise.SerialButton main_view_sbutton;
+		public Gtk.Box media_browser_box;
 		public Xnoise.MediaSoureWidget msw;
 		public MainWindow ();
 		public void reset_mainview_to_tracklist ();
