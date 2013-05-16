@@ -58,10 +58,22 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
 //    public bool in_loading { get; private set; }
     public bool in_import  { get; private set; }
     
+    private Gdk.RGBA black_color;
     private bool black = true;
     
     public AlbumArtView(CellArea area) {
         GLib.Object(cell_area:area);
+        
+        black_color = Gdk.RGBA();
+        black_color.red   = 0.0;
+        black_color.green = 0.0;
+        black_color.blue  = 0.0;
+        black_color.alpha  = 1.0;
+        
+        Gdk.RGBA selc = base.get_style_context().get_background_color(Gtk.StateFlags.PRELIGHT);
+        this.override_background_color(StateFlags.NORMAL, black_color);
+        this.override_background_color(StateFlags.SELECTED, selc);
+        
         this.area = area;
         var font_description = new Pango.FontDescription();
         font_description.set_family("Sans");
@@ -70,21 +82,8 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_padding(0);
         this.set_row_spacing(0);
         this.set_spacing(0);
-//        Gdk.Pixbuf? a_art_pixb = null;
-//        try {
-//            if(IconTheme.get_default().has_icon("xn-albumart"))
-//                a_art_pixb = IconTheme.get_default().load_icon("xn-albumart",
-//                                                           ICON_LARGE_PIXELSIZE,
-//                                                           IconLookupFlags.FORCE_SIZE);
-//        }
-//        catch(Error e) {
-//            print("albumart icon missing. %s\n", e.message);
-//        }
         if(icon_cache == null) {
             icon_cache = global.icon_cache;
-//            File album_image_dir =
-//                File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
-//            icon_cache = new IconCache(album_image_dir, ICON_LARGE_PIXELSIZE, a_art_pixb);
         }
         icons_model = new IconsModel(this);
         this.set_item_width(ICON_LARGE_PIXELSIZE);
@@ -124,12 +123,6 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             }
         });
         
-        //        this.set_events(this.events | Gdk.EventMask.LEAVE_NOTIFY_MASK);
-        //        this.leave_notify_event.connect( () => { 
-        //            print("queue draw\n");
-        //            this.queue_draw(); 
-        //            return false; 
-        //        });
         Idle.add(() => {
             icons_model.populate_model();
             return false;
@@ -206,7 +199,8 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
             cr.fill();
         }
-        return base.draw(cr);
+        base.draw(cr);
+        return true;
     }
     
     public void update_visible_icons() {
