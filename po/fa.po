@@ -1,87 +1,92 @@
+# This file is distributed under the same licence as the glib package.
+# Adam Weinberger <adamw@gnome.org>, 2004, 2005.
+#
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: xnoise\n"
+"Project-Id-Version: xnoise V1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-14 18:16+0200\n"
-"PO-Revision-Date: 2012-02-25 01:05+0330\n"
-"Last-Translator: \n"
-"Language-Team: Persian \n"
-"Language: \n"
+"PO-Revision-Date: 2013-05-17 22:30+0330\n"
+"Last-Translator: Hapoofesgeli <Hapoofesgeli@live.com>\n"
+"Language-Team: \n"
+"Language: Persian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
 msgid "Xnoise"
-msgstr ""
+msgstr "Xnoise"
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Media Player"
-msgstr ""
+msgstr "پخش کننده ی رسانه"
 
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Organize and play your music and video collections"
-msgstr ""
+msgstr "سازماندهی و پخش مجموعه های موسیقی و ویدوی شما"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
-msgstr ""
+msgstr "رسانه;صوت;ویدیو;پخش کننده;پخش کننده رسانه;فیلم;MP3;"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:105
 msgid "Play/Pause"
-msgstr ""
+msgstr "پخش/وقفه"
 
 #: ../data/misc/xnoise.desktop.in.in.h:6
 msgid "Stop"
-msgstr ""
+msgstr "توقف"
 
 #: ../data/misc/xnoise.desktop.in.in.h:7
 msgid "Goto next track"
-msgstr ""
+msgstr "رفتن به آهنگ بعدی"
 
 #: ../data/misc/xnoise.desktop.in.in.h:8
 msgid "Goto previous track"
-msgstr ""
+msgstr "رفتن به آهنگ قبلی"
 
 #: ../data/misc/xnoise.desktop.in.in.h:9
 msgid "Quit application"
-msgstr ""
+msgstr "ترک کردن برنامه"
 
 #: ../libxnoise/AlbumImages/xnoise-album-image.vala:81
 msgid "Toggle visibility of album art view"
-msgstr ""
+msgstr "تغییر وضعیت دید نمای آلبوم آرت"
 
 #: ../libxnoise/AlbumImages/xnoise-album-image.vala:83
 msgid "<Ctrl+B>"
-msgstr ""
+msgstr "<Ctrl+B>"
 
 #: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
-msgstr ""
+msgstr "برنامه ی Xnoise یک پخش کننده ی رسانه برای +GTK  است."
 
 #: ../libxnoise/Application/xnoise-application.vala:245 ../src/xnoise.vala:159
 msgid "It uses the gstreamer framework."
-msgstr ""
+msgstr "از فریم ورک gstreamer استفاده می کند."
 
 #: ../libxnoise/Application/xnoise-application.vala:246 ../src/xnoise.vala:160
 msgid "More information on the project website:"
-msgstr ""
+msgstr "اطلاعات بیشتر بر روی وبسایت پروژه"
 
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Database/xnoise-db-reader.vala:171
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:177
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
-msgstr ""
+msgstr "متن موسیقی یافت نشد"
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:633
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "ناشناخته"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:155
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
@@ -94,7 +99,7 @@ msgstr ""
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
 msgid "by"
-msgstr ""
+msgstr "توسط"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:158
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
@@ -105,338 +110,344 @@ msgstr ""
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
-#, fuzzy, c-format
+#, c-format
 msgid "on"
-msgstr "دوشنبه"
+msgstr "بر روی"
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
-msgstr ""
+msgstr "آخرین پخش شده"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
-msgstr ""
+msgstr "موسیقی"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:401
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
 #: ../plugins/magnatune/magnatune-treeview.vala:260
 msgid "Collapse all"
-msgstr ""
+msgstr "جمع کردن همه"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:406
 msgid "Sort Mode"
-msgstr ""
+msgstr "مرتب کردن رسانه"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:416
 msgid "ARTIST-ALBUM-TITLE"
-msgstr ""
+msgstr "هنرمند-آلبوم-عنوان"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:423
 msgid "GENRE-ARTIST-ALBUM"
-msgstr ""
+msgstr "سبک-هنرمند-آلبوم"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:430
 msgid "ALBUM-ARTIST-TITLE"
-msgstr ""
+msgstr "آلبوم-هنرمند-عنوان"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:723
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
-msgstr ""
+msgstr "بارگیری..."
 
 #: ../libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala:41
 msgid "Most Played"
-msgstr ""
+msgstr "بیشترین پخش شده"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr ""
+msgstr "Streams"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
-msgstr ""
+msgstr "ویدیو ها"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
 msgid "Add to Android Device"
-msgstr ""
+msgstr "افزودن به دستگاه اندرویدی"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
 msgid "Delete from device"
-msgstr ""
+msgstr "پاک کردن از روی دستگاه"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-player-main-view.vala:45
 msgid "Android Player Device"
-msgstr ""
+msgstr "دستگاه پخش کننده ی اندرویدی"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:103
 msgid "Do you want to delete the selected file from the device?"
-msgstr ""
+msgstr "می خواهید که پرونده های انتخابی از روی دستگاه پاک شوند؟"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:126
 msgid "Do you want to delete the selected album from the device?"
-msgstr ""
+msgstr "می خواهید که آلبوم های انتخابی از روی دستگاه پاک شوند؟"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:157
 msgid "Do you want to delete the selected artist from the device?"
-msgstr ""
+msgstr "می خواهید هنرمند انتخابی را از دستگاه پاک کنید؟"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:238
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:112
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:341
 msgid "Please wait while moving media to the device."
-msgstr ""
+msgstr "لطفا در هنگام انتقال رسانه به دستگاه صبر کنید."
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:329
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:260
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:383
 msgid "Not enough space on device! Aborting..."
-msgstr ""
+msgstr "فضای کافی بر روی دستگاه موجود نیست! سر باز زدن..."
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:117
 msgid "Free space: "
-msgstr ""
+msgstr "فضای خالی:"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-main-view.vala:120
 msgid "Total space: "
-msgstr ""
+msgstr "فضای کلی:"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-device.vala:97
 msgid "Player"
-msgstr ""
+msgstr "پخش کننده"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
 msgid "Add to Player Device"
-msgstr ""
+msgstr "افزودن به دستگاه پخش کننده"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
 msgid "External Player Device"
-msgstr ""
+msgstr "دستگاه پخش کننده ی خارجی"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 msgid "Add or Remove media"
-msgstr ""
+msgstr "افزودن یا پاک کردن رسانه"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
 msgstr ""
+"اگر انتخاب شده باشد، تمام پوشه های رسانه دوباره بصورت کامل بررسی خواهند شد"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
-msgstr ""
+msgstr "افزودن پوشه محلی"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
-msgstr ""
+msgstr "افزودن جریان رسانه"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
-msgstr ""
+msgstr "پاک کردن"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
 msgid "Do full rescan"
-msgstr ""
+msgstr "انجام بررسی دوباره ی کامل"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:180
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
 msgstr ""
+"پوشه های محلی رسانه یا جریان های اینترنتی رسانه را انتخاب کنید. \n"
+"تمام منابع رسانه از طریق کتاب خانه ی xnoise در دسترس خواهند بود."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:219
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:189
 msgid "Location"
-msgstr ""
+msgstr "موقعیت"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
 #: ../libxnoise/Utils/xnoise-media-importer.vala:237
 msgid "Importing media data. This may take some time..."
-msgstr ""
+msgstr "وارد کردن اطلاعات رسانه. ممکن است مقداری زمان ببرد..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:275
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
-msgstr ""
+msgstr "انتخاب پرونده رسانه"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:351
 msgid "Add internet radio link"
-msgstr ""
+msgstr "افزودن ارتباط رادیوی اینترنتی"
 
 #: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:259
 msgid "Leave fullscreen"
-msgstr ""
+msgstr "ترک کردن  حالت تمام صفحه"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Settings"
-msgstr ""
+msgstr "تنظیمات"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:324
 msgid "Media"
-msgstr ""
+msgstr "رسانه"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:331
 msgid "Grid lines in media browser"
-msgstr ""
+msgstr "خطوط راهنما در مرورگر رسانه"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
 msgid "Showing lines in the media browser might show hierarchies more clear"
-msgstr ""
+msgstr "نمایش خط ها در مرورگر رسانه ممکن است سلسله مراتب را واضح تر نمایش دهد"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Use systray icon"
-msgstr ""
+msgstr "استفاده از systray icon"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid ""
 "Use a status icon on your panel for showing, hiding and controlling xnoise"
 msgstr ""
+"استفاده از یک آیکن وضعیت بر روی پنل شما برای نمایش، پنهان کردن و کنترل xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:341
 msgid "Use menu button"
-msgstr ""
+msgstr "استفاده از دکمه منو"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use an application menu button integrated into the main window"
-msgstr ""
+msgstr "استفاده از دکمه ی منوی یک برنامه بصورت یکپارچه شده درون پنجره ی اصلی"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
 msgid "Show Stop button"
-msgstr ""
+msgstr "نمایش دکمه توقف"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
 msgid "Show a stop button along with the other playback control buttons"
-msgstr ""
+msgstr "نمایش یک دکمه ی توقف همراه دیگر دکمه های کنترل بازپخش"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:351
 msgid "Quit on window close"
-msgstr ""
+msgstr "ترک کردن، هنگام بسته شدن پنجره"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
 msgid "Quit xnoise if the main window is closed"
-msgstr ""
+msgstr "ترک  کردن xnoise اگر پنجره اصلی بسته شود"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
 msgid "Use desktop notifications"
-msgstr ""
+msgstr "استفاده از اطلاعیه های دسکتاپ"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
 msgid ""
 "Use desktop notifications that inform about played media while the main "
 "window of xnoise is not visible"
 msgstr ""
+"استفاده از اطلاعیه های دسکتاپی که در مورد رسانه های پخش شده در هنگامی که "
+"پنجره ی اصلی xnoise نمایان نیست، اطلاع می دهند."
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
 msgid "Use combo box selector for media types"
-msgstr ""
+msgstr "استفاده از یک انتخاب کننده ی combo box برای نوع رسانه"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
 msgid "Use a combo box for selecting media types like music, video or streams"
 msgstr ""
+"استفاده از یک combo box برای انتخاب نوع رسانه مانند موسیقی، ویدیو یا Streams"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:374
 msgid "Go Back"
-msgstr ""
+msgstr "برگشتن"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:390
 msgid "Media browser fontsize"
-msgstr ""
+msgstr "اندازه ی فونت مرورگر رسانه"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:407
-#, fuzzy
 msgid "User Interface:"
-msgstr "بدون‌نام"
+msgstr "رابط کاربری:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:411
 msgid "Lyrics:"
-msgstr ""
+msgstr "متن موسیقی:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:415
 msgid "Additional:"
-msgstr ""
+msgstr "اضافات:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:419
 msgid "Music Stores:"
-msgstr ""
+msgstr "فروشگاه های موسیقی:"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:65
 msgid "Select external subtitle file"
-msgstr ""
+msgstr "انتخاب پرونده زیرنویس خارجی"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:156
 msgid "No Subtitle"
-msgstr ""
+msgstr "بدون زیرنویس"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:214
 msgid "Leave Fullscreen"
-msgstr ""
+msgstr "ترک کردن حالت تمام صفحه"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:214
 msgid "Fullscreen"
-msgstr ""
+msgstr "تمام صفحه"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1986
 msgid "Search..."
-msgstr ""
+msgstr "جستجو..."
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:149
 msgid "Media Collections"
-msgstr ""
+msgstr "مجموعه های رسانه"
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:214
 msgid "Preset:"
-msgstr ""
+msgstr "از پیش نشاندن:"
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:233
 msgid "Volume"
-msgstr ""
+msgstr "درجه ی صدا"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
 msgid "Add Media"
-msgstr ""
+msgstr "افزودن رسانه"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
 msgid "Skip"
-msgstr ""
+msgstr "رد کردن"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:123
 msgid "Done"
-msgstr ""
+msgstr "انجام شده"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:131
 msgid "Please wait while media is added to your library!"
-msgstr ""
+msgstr "لطفا هنگامی که رسانه به کتاب خانه تان افزوده می شود صبر کنید!"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
-msgstr ""
+msgstr "شما می توانیدگوش کردن به موسیقیتان را با انتخاب '%s' آغاز کنید."
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
 msgid "Add more media folders"
-msgstr ""
+msgstr "افزودن پوشه های رسانه ی بیشتر"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:161
 msgid "Media Folders:"
-msgstr ""
+msgstr "پوشه های رسانه:"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
 msgid "Welcome to Xnoise!\n"
-msgstr ""
+msgstr "به Xnoise خوش آمدید!\n"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
 msgid "This is the first time you start xnoise."
-msgstr ""
+msgstr "این نخستین باری است که شما xnoise را آغاز می کنید."
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:203
 msgid "Do you want to import media into your library?"
-msgstr ""
+msgstr "آیا می خواهید رسانه به کتابخانه ی شما وارد شود؟"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
-msgstr ""
+msgstr "افزودن تمام آهنگ ها به لیست آهنگ"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:62
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:66
@@ -452,22 +463,24 @@ msgid ""
 "With this dialog you can change the metatags in the according files. \n"
 "Handle with care!"
 msgstr ""
+"با این دیالوگ شما می توانید متاتگ ها را در پرونده های مطابق تغییر دهید. \n"
+"با احتیاط به کار برده شود!"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:130
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:139
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:197
 msgid "xnoise - Edit metadata"
-msgstr ""
+msgstr "xnoise - ویرایش متا دیتا"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:133
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:142
 msgid "Type new artist name."
-msgstr ""
+msgstr "اسم هنرمند جدید را بنویسید."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:134
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:143
 msgid "Artist:"
-msgstr ""
+msgstr "هنرمند:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:158
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:167
@@ -477,6 +490,8 @@ msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
 msgstr ""
+"لطفا هنگام پر کردن مرورگر رسانه صبر کنید. یا لغو کنید، اگر نمیخواهید که صبر "
+"کنید."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:171
@@ -485,43 +500,44 @@ msgstr ""
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
+"لطفا هنگام وارد کردن رسانه صبر کنید. یالغو کنید، اگر نمی خواهید صبر کنید."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:146
 msgid "Type new album name."
-msgstr ""
+msgstr "نام آلبوم جدید را بنویسید."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:147
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:189
 msgid "Album:"
-msgstr ""
+msgstr "آلبوم:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
 msgid "Album data"
-msgstr ""
+msgstr "اطلاعات آلبوم"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:187
 msgid "Please enter new album data."
-msgstr ""
+msgstr "لطفا اطلاعات آلبوم جدید را وارد کنید."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:188
 msgid "Album Artist:"
-msgstr ""
+msgstr "هنرمند آلبوم:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:190
 msgid "Year:"
-msgstr ""
+msgstr "سال:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:191
 msgid "Genre:"
-msgstr ""
+msgstr "سبک:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
 msgid "Title Artist"
-msgstr ""
+msgstr "عنوان هنرمند"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
 msgid "Album Artist"
-msgstr ""
+msgstr "هنرمند آلبوم"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
@@ -529,12 +545,12 @@ msgstr ""
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1433
 msgid "Album"
-msgstr ""
+msgstr "آلبوم"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1237
 msgid "Title"
-msgstr ""
+msgstr "عنوان"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
@@ -542,12 +558,11 @@ msgstr ""
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1331
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1442
 msgid "Genre"
-msgstr ""
+msgstr "سبک"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:164
-#, fuzzy
 msgid "Uri"
-msgstr "جمعه"
+msgstr "Uri"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
@@ -555,76 +570,76 @@ msgstr "جمعه"
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1355
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1451
 msgid "Year"
-msgstr ""
+msgstr "سال"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:170
 msgid "Track No."
-msgstr ""
+msgstr "شماره ی آهنگ."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:173
 msgid "Disk No."
-msgstr ""
+msgstr "شماره ی دیسک"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
 msgid "Edit data for track"
-msgstr ""
+msgstr "ویرایش اطلاعات برای آهنگ"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
 msgid "Change album data"
-msgstr ""
+msgstr "تغییر اطلاعات آلبوم"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
 msgid "Change artist data"
-msgstr ""
+msgstr "تغییر اطلاعات هنرمند"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:53
 msgid "Change genre name"
-msgstr ""
+msgstr "تغییر اطلاعات سبک"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:55
 msgid "Add to tracklist"
-msgstr ""
+msgstr "افزودن به لیست آهنگ"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
-msgstr ""
+msgstr "انتقال به زباله دان"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:87
 msgid "Do you want to move the selected file to trash?"
-msgstr ""
+msgstr "می خواهید پرونده انتخابی را به زباله دان منتقل کنید؟"
 
 #: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
 msgid "Remove Cover Image"
-msgstr ""
+msgstr "حذف تصویر پوشش"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
-msgstr ""
+msgstr "پخش"
 
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
-msgstr ""
+msgstr "پاک کردن آهنگ انتخابی"
 
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
 msgid "Show in parent folder"
-msgstr ""
+msgstr "نمایش در پرونده منبع"
 
 #: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:41
 msgid "Filter for artist"
-msgstr ""
+msgstr "فیلتر برای هنرمند"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
 msgid "Insufficient track information. Not searching for lyrics."
-msgstr ""
+msgstr "اطلاعات نامناسب آهنگ. جستجو برای متن ترانه انجام نمی گیرد."
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:127
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:143
 msgid "Player stopped. Not searching for lyrics."
-msgstr ""
+msgstr "پخش کننده متوقف شد. جستجو برای متن ترانه انجام نمی گیرد."
 
 #. Gtk.TextIter start_iter;
 #. Gtk.TextIter end_iter;
@@ -640,164 +655,168 @@ msgid ""
 "\n"
 "Using %s ..."
 msgstr ""
+"\n"
+"در حال تلاش برای یافتن متن موسیقی برای \"%s\" by \"%s\"\n"
+"\n"
+"با استفاده از %s ..."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:222
 msgid "_File"
-msgstr ""
+msgstr "_پرونده"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:223
 msgid "open file"
-msgstr ""
+msgstr "باز کردن پرونده"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "Open _Stream"
-msgstr ""
+msgstr "Open _Stream"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "open remote location"
-msgstr ""
+msgstr "باز کردن موقعیت از راه دور"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "_Add or Remove media"
-msgstr ""
+msgstr "_افزودن یا پاک کردن رسانه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "manage the content of the xnoise media library"
-msgstr ""
+msgstr "مدیریت محتوای کتابخانه ی رسانه ی xnoise"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:227
 msgid "_Edit"
-msgstr ""
+msgstr "_ویرایش"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 msgid "C_lear tracklist"
-msgstr ""
+msgstr "C_lear tracklist"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:228
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1754
 msgid "Clear the tracklist"
-msgstr ""
+msgstr "پاکسازی لیست آهنگ"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_Rescan collection"
-msgstr ""
+msgstr "_بررسی دوباره ی مجموعه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "Rescan collection"
-msgstr ""
+msgstr "بررسی دوباره ی مجموعه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "_Increase volume"
-msgstr ""
+msgstr "_افزایش صدا"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "Increase playback volume"
-msgstr ""
+msgstr "افزایش صدای بازنواخت"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "_Decrease volume"
-msgstr ""
+msgstr "_کاهش صدا"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "Decrease playback volume"
-msgstr ""
+msgstr "کاهش صدای بازنواخت"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "_Previous track"
-msgstr ""
+msgstr "_آهنگ قبلی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "Go to previous track"
-msgstr ""
+msgstr "برو به آهنگ قبلی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "_Toggle play"
-msgstr ""
+msgstr "_تغییر وضعیت پخش"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "Toggle playback status"
-msgstr ""
+msgstr "تغییر وضعیت حالت پخش"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "_Next track"
-msgstr ""
+msgstr "_آهنگ بعدی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "Go to next track"
-msgstr ""
+msgstr "رفتن به آهنگ بعدی"
 
 #. icon
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
 msgid "E_qualizer"
-msgstr ""
+msgstr "E_qualizer"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
 msgid "Open equalizer window"
-msgstr ""
+msgstr "باز کردن پنجره ی هم تراز کننده"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 msgid "_View"
-msgstr ""
+msgstr "_نما"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "_Tracklist"
-msgstr ""
+msgstr "_لیست آهنگ"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "Go to the tracklist."
-msgstr ""
+msgstr "رفتن به لیست آهنگ ها."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "_Lyrics"
-msgstr ""
+msgstr "_متن موسیقی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:239
 msgid "Go to the lyrics view."
-msgstr ""
+msgstr "رفتن به نمای متن موسیقی."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:240
 msgid "_Now Playing"
-msgstr ""
+msgstr "_درحال پخش"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:241
 msgid "Go to the 'Now Playing' screen in the main window."
-msgstr ""
+msgstr "برو به صفحه ی در حال پخش صفحه ی اصلی."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:242
 msgid "_Help"
-msgstr ""
+msgstr "_راهنما"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Frequently Asked Questions"
-msgstr ""
+msgstr "_سوالات متداول"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:244
 msgid "_Open Frequently Asked Questions in web browser"
-msgstr ""
+msgstr "_باز کردن سوالات متداول در مرورگر اینترنت"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "_میانبر های صفحه کلید"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:245
 msgid "_Open Keyboard Shortcuts in web browser"
-msgstr ""
+msgstr "_بازکردن میانبر های صفحه کلید در مرورگر اینترنت"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:246
 msgid "_Config"
-msgstr ""
+msgstr "_پیکربندی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:304
 msgid "_Show Media Browser"
-msgstr ""
+msgstr "_نمایش دادن مرورگر رسانه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:313
 msgid "Show _Video Fullscreen"
-msgstr ""
+msgstr "نمایش _ویدیو تمام صفحه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:322
 msgid "Show _Album Art view"
-msgstr ""
+msgstr "نمایش _نمای آلبوم آرت"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:514
 #, c-format
@@ -805,298 +824,301 @@ msgid ""
 "Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
 "the startup of xnoise."
 msgstr ""
+"بازیابی %u آهنگ در لیست آهنگ. این مقدار خیلی زیادیست و ممکن است راه اندازی "
+"xnoise را کند کند."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:718
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:730
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:742
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:754
 msgid "Playback mode: "
-msgstr ""
+msgstr "حالت بازنواخت:"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:718
 msgid "No repeat, one after another"
-msgstr ""
+msgstr "تکرار نکردن، یکی بعد از دیگری"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:730
 msgid "Repeat single track"
-msgstr ""
+msgstr "تکرار یک آهنگ"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:742
 msgid "Repeat all"
-msgstr ""
+msgstr "تکرار همه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:754
 msgid "Random playlist track playing"
-msgstr ""
+msgstr "پخش تصادفی آهنگ لیست پخش"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1344
 msgid "Enter the URL for playing"
-msgstr ""
+msgstr "آدرس را برای پخش وارد کنید"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1369
 msgid "Equalizer"
-msgstr ""
+msgstr "هم تراز کننده"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1393
 msgid "Select media file"
-msgstr ""
+msgstr "انتخاب پرونده ی رسانه"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1706
 msgid "Repeat Mode"
-msgstr ""
+msgstr "حالت تکرار"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1728
 msgid "Remove selected tracks"
-msgstr ""
+msgstr "پاک کردن آهنگ های انتخابی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1779
 msgid "Jump to current position"
-msgstr ""
+msgstr "پرش به موقعیت کنونی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1982
 msgid "Select search with <Ctrl-F>"
-msgstr ""
+msgstr "جستجو را با <Ctrl-F> انتخاب کن"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1885
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1984
 msgid "Remove search filter with <Ctrl-D>"
-msgstr ""
+msgstr "پاک کردن فیلتر جستجو با <Ctrl-D>"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1907
 msgid "Show application main menu"
-msgstr ""
+msgstr "نمایش منوی اصلی برنامه"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1996
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1424
 msgid "Artist"
-msgstr ""
+msgstr "هنرمند"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2005
 msgid "Ascending"
-msgstr ""
+msgstr "صعودی"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2007
 msgid "Descending"
-msgstr ""
+msgstr "نزولی"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:165
 msgid "Dance"
-msgstr ""
+msgstr "رقص"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:170
 msgid "Pop"
-msgstr ""
+msgstr "پاپ"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
 msgid "Techno"
-msgstr ""
+msgstr "تکنو"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:180
 msgid "Club"
-msgstr ""
+msgstr "کلاب"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:185
 msgid "Jazz"
-msgstr ""
+msgstr "جاز"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:190
 msgid "Rock"
-msgstr ""
+msgstr "راک"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:195
 msgid "Maximum Treble"
-msgstr ""
+msgstr "حداکثر صدای زیر"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:200
 msgid "Maximum Bass"
-msgstr ""
+msgstr "حداکثر باس"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:205
 msgid "Classic"
-msgstr ""
+msgstr "کلاسیک"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:211
 msgid "Custom"
-msgstr ""
+msgstr "سفارشی"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:217
 msgid "Default"
-msgstr ""
+msgstr "پیش فرض"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:229
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
+"نام زیرنویس با نام ویدیو همخوانی ندارد! پرونده ی زیرنویس استفاده نمی شود."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:690
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
-msgstr ""
+msgstr "موفقیت در نصب افزونه ی ناپیدای gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:694
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
+msgstr "کاربر از نصب افزونه ی ناپیدای gstreamer سر باز زد"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:698
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
-msgstr ""
+msgstr "افزونه ی gstreamer در مخازن یافت نشد"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:704
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr ""
+msgstr "خطایی بحرانی هنگام نصب افزونه ی ناپیدای gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:749
 #: ../libxnoise/Player/xnoise-gst-player.vala:760
 #: ../libxnoise/Player/xnoise-gst-player.vala:773
 #, c-format
 msgid "Missing gstreamer plugin"
-msgstr ""
+msgstr "افزونه ی ناپیدای gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:751
-#, fuzzy
 msgid "Automatic missing codec installation not supported"
-msgstr "مقداردهی‌های اولیه‌ی قابل لغو پشتیبانی نمی‌شود"
+msgstr "نصب خودکار کدک های ناپیدا پشتیبانی نمی شود"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:762
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
+msgstr "شروع خودکار نصب افزونه ی gstreamer با شکست مواجه شد."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:775
 msgid "Trying to install missing gstreamer plugin"
-msgstr ""
+msgstr "تلاش برای نصب افزونه ی ناپیدای gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:875
 msgid "Subtitle #"
-msgstr ""
+msgstr "زیرنویس #"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:887
 msgid "Audio Track #"
-msgstr ""
+msgstr "آهنگ صوتی #"
 
 #: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
 msgid "(Plugin)"
-msgstr ""
+msgstr "(افزونه)"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:67
 msgid "unknown artist"
-msgstr ""
+msgstr "هنرمند ناشناخته"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:68
 msgid "unknown title"
-msgstr ""
+msgstr "عنوان ناشناخته"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:69
 msgid "unknown album"
-msgstr ""
+msgstr "آلبوم ناشناخته"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:71
 msgid "Now Playing"
-msgstr ""
+msgstr "در حال پخش"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:72
 msgid "Tracklist"
-msgstr ""
+msgstr "لیست آهنگ"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:73
 msgid "Lyrics"
-msgstr ""
+msgstr "متن موسیقی"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:74
 msgid "Hide Media Library"
-msgstr ""
+msgstr "پنهان کردن کتابخانه ی رسانه"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:75
 msgid "Show Media Library"
-msgstr ""
+msgstr "نشان دادن کتابخانه ی رسانه"
 
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1212
 msgid "Disk"
-msgstr ""
+msgstr "دیسک"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1307
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1460
 msgid "Length"
-msgstr ""
+msgstr "مدت زمان"
 
 #. TRACKNUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1406
 msgid "Track number"
-msgstr ""
+msgstr "شماره ی آهنگ"
 
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1415
 msgid "Disk number"
-msgstr ""
+msgstr "شماری ه دیسک"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:121
 msgid "Previous"
-msgstr ""
+msgstr "قبلی"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:102
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:136
 msgid "Next"
-msgstr ""
+msgstr "بعدی"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:120
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:172
 msgid "Exit"
-msgstr ""
+msgstr "خروج"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:181
 msgid "stopped"
-msgstr ""
+msgstr "متوقف شده"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
 msgid "playing"
-msgstr ""
+msgstr "در حال پخش"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
 msgid "paused"
-msgstr ""
+msgstr "در حال وقفه"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:189
 #, c-format
 msgid "ready to rock"
-msgstr ""
+msgstr "آماده برای اجرای راک"
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:358
 #, c-format
 msgid "Found %u tracks. Updating library ..."
-msgstr ""
+msgstr "تعداد %u آهنگ یافت شد. در حال بروزرسانی کتابخانه..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:576
 #, c-format
 msgid "%u new tracks found"
-msgstr ""
+msgstr "%u آهنگ های جدید یافت شد"
 
 #: ../src/xnoise.vala:169
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr ""
+"برای دیدن لیستی کامل از انتخاب های خط فرمان 'xnoise --help' را اجرا کنید. \n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
-msgstr ""
+msgstr "بافر پایگاه داده برای متن موسیقی"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
-msgstr ""
+msgstr "بافر متن ترانه ها در پایگاه داده"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:412
 #: ../plugins/lastfm/xnoise-lastfm.vala:534
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "کاربر وارده شده است!"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
@@ -1104,140 +1126,143 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:537
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "کاربر وارد نشده است!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:477
 msgid "Visit LastFm for an account."
-msgstr ""
+msgstr "بازدید lastfm برای یک اکانت."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:486
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "لطفا نام کاربری و کلمه ی عبور lastfm تان را وارد کنید."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:495
 #: ../plugins/magnatune/magnatune.vala:257
-#, fuzzy, c-format
+#, c-format
 msgid "Username:"
-msgstr "بدون‌نام"
+msgstr "نام کاربری:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:504
 #: ../plugins/magnatune/magnatune.vala:266
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "کلمه ی عبور:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:521
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
 msgstr ""
+"ا Scrobble آهنگ ها را بر وری lastfm پخش کرد (ارسال اطلاعات آهنگ برای تهیه ی "
+"آمار)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Basic Demo Plugin for Developers"
-msgstr ""
+msgstr "افزونه ی نایشی ساده برای توسعه دهندگان"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
-msgstr ""
+msgstr "افزونه ی Demo برای xnoise"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
 msgid "Chartlyrics"
-msgstr ""
+msgstr "Chartlyrics"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
-msgstr ""
+msgstr "بارگیری متن های موسیقی از chartlyrics.com"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "LastFm web service integration"
-msgstr ""
+msgstr "یکپارچه سازی سرویس اینترنتی LastFm"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "استفاده از سرویس های وب lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Lyricwiki"
-msgstr ""
+msgstr "Lyricwiki"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
-msgstr ""
+msgstr "بارگیری متن های موسیقی از http://www.lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
 msgid "Azlyrics"
-msgstr ""
+msgstr "Azlyrics"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
-msgstr ""
+msgstr "بارگیری متن موسیقی از azlyrics.com"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:1
 msgid "AppIndicator plugin"
-msgstr ""
+msgstr "افزونه ی AppIndicator"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
-msgstr ""
+msgstr "افزونه ی شاخص برنامه ی Ubuntu برای xnoise"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:154
 msgid "Show xnoise"
-msgstr ""
+msgstr "نمایش دادن xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"
-msgstr ""
+msgstr "کلید های کنترل رسانه"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
-msgstr ""
+msgstr "کنترل xnoise توسط کلید های رسانه"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
 msgid "Magnatune Music Subscription"
-msgstr ""
+msgstr "اشتراک موسیقی Magnatune"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
-msgstr ""
+msgstr "فروشگاه موسیقی Magnatune"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
 #: ../plugins/magnatune/magnatune.vala:216
 msgid "Magnatune"
-msgstr ""
+msgstr "Magnatune"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:269
 msgid "Download whole album to disk"
-msgstr ""
+msgstr "دریافت تمام آلبوم بر روی دیسک"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:319
 msgid "Downloading album "
-msgstr ""
+msgstr "دریافت آلبوم"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:321
 msgid "This may take some time..."
-msgstr ""
+msgstr "این ممکن است مقداری زمان ببرد..."
 
 #: ../plugins/magnatune/magnatune-treeview.vala:435
 msgid "Download finished for \""
-msgstr ""
+msgstr "دریافت برای \" به اتمام رسید"
 
 #: ../plugins/magnatune/magnatune-widget.vala:234
 msgid "download finished..."
-msgstr ""
+msgstr "دریافت به اتمام رسید..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:238
 msgid "decompressing..."
-msgstr ""
+msgstr "خارج کردن از حالت فشرده..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:292
-#, fuzzy
 msgid "decompressing finished..."
-msgstr "خطا در هنگام فشرده‌سازی پرونده %s"
+msgstr "خارج کردن از حالت فشرده به اتمام رسید..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:313
 msgid ""
 "Please wait while\n"
 "converting database."
 msgstr ""
+"لطفا صبر کنید هنگامی که\n"
+"پایگاه داده را تبدیل می کند."
 
 #: ../plugins/magnatune/magnatune-widget.vala:360
 #, c-format
@@ -1246,60 +1271,59 @@ msgid ""
 "converting database.\n"
 "Done for %d tracks."
 msgstr ""
+"لطفا صبر کنید هنگامی که\n"
+"پایگاه داده را تبدیل می کند.\n"
+"انجام شده برای %d آهنگ."
 
 #: ../plugins/magnatune/magnatune-widget.vala:380
 msgid "loading..."
-msgstr ""
+msgstr "بارگیری..."
 
 #: ../plugins/magnatune/magnatune.vala:173
 msgid "Username and Password available"
-msgstr ""
+msgstr "نام کاربری یا کلمه ی عبور در دسترس است"
 
 #: ../plugins/magnatune/magnatune.vala:174
 msgid "Username or Password not available"
-msgstr ""
+msgstr "نام کاربری یا کلمه ی عبور در دسترس نیست"
 
 #: ../plugins/magnatune/magnatune.vala:236
 msgid "Visit Magnatune for an account."
-msgstr ""
+msgstr "بازدید Magnatune برای یک حساب کاربری."
 
 #: ../plugins/magnatune/magnatune.vala:247
 #, c-format
 msgid "Please enter your Magnatune username and password."
-msgstr ""
+msgstr "لطفا نام کاربری و کلمه ی عبور Magnatune خود را وارد کنید."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Mpris v2 Dbus Service"
-msgstr ""
+msgstr "سرویس Mpris v2 Dbus"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr ""
+msgstr "کنترل xnoise توسط یک رابط MPRIS v2 dbus"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Mpris v1 Dbus Service"
-msgstr ""
+msgstr "سرویس Mpris v1 Dbus"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr ""
+msgstr "کنترل xnoise توسط یک رابط MPRIS v1 dbus"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Ubuntu Soundmenu Integration"
-msgstr ""
+msgstr "یکپارچگی Ubuntu Soundmenu"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "Use ubuntu/ayatana soundmenu integration"
-msgstr ""
+msgstr "استفاده از یکپارچگی ubuntu/ayatana soundmenu"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Show song title in window bar"
-msgstr ""
+msgstr "نشان دادن عنوان آهنگ در نوار پنجره"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
-msgstr ""
-
-#, fuzzy
-#~ msgid "no repeat"
-#~ msgstr "چیزی برای تکرار نیست"
+msgstr "قرار دادن نام پنجره بر روی عنوان کنونی"
