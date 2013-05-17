@@ -262,23 +262,23 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
                 Widget? w = p.settingwidget();
                 
                 if(w!=null) {
-                    var b = new Gtk.Box(Orientation.VERTICAL, 0);
-                    Gtk.Image i;
-                    if(IconTheme.get_default().has_icon(p.info.icon))
-                        i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
-                    else
-                        i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
+//                    var b = new Gtk.Box(Orientation.VERTICAL, 0);
+//                    Gtk.Image i;
+//                    if(IconTheme.get_default().has_icon(p.info.icon))
+//                        i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
+//                    else
+//                        i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
                     string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
                     var l = new Gtk.Label(n);
                     l.max_width_chars = 10;
                     sg_tab.add_widget(l);
-                    b.pack_start(i, true, true, 0);
-                    b.pack_start(l, false, false, 0);
+//                    b.pack_start(i, true, true, 0);
+//                    b.pack_start(l, false, false, 0);
                     var scw = new ScrolledWindow(null, null);
                     scw.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
                     scw.add_with_viewport(w);
-                    b.show_all();
-                    notebook.append_page(scw, b);
+//                    b.show_all();
+                    notebook.append_page(scw, l);
                     scw.show_all();
                 }
                 
