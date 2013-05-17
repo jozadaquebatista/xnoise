@@ -225,17 +225,6 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
         }
     }
     
-//    private void on_checkbutton_mediabr_hoverimage_clicked() {
-//        if(!this.switch_hoverimage.active) {
-//            Params.set_bool_value("not_show_art_on_hover_image", true);
-//            main_window.not_show_art_on_hover_image = true;
-//        }
-//        else {
-//            Params.set_bool_value("not_show_art_on_hover_image", false);
-//            main_window.not_show_art_on_hover_image = false;
-//        }
-//    }
-    
     private void on_switch_compact_media_selector_clicked() {
         if(!this.switch_compact_media_selector.active) {
             Params.set_string_value("media_source_selector_type", "tree");
@@ -262,22 +251,13 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
                 Widget? w = p.settingwidget();
                 
                 if(w!=null) {
-//                    var b = new Gtk.Box(Orientation.VERTICAL, 0);
-//                    Gtk.Image i;
-//                    if(IconTheme.get_default().has_icon(p.info.icon))
-//                        i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
-//                    else
-//                        i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
                     string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
                     var l = new Gtk.Label(n);
                     l.max_width_chars = 10;
                     sg_tab.add_widget(l);
-//                    b.pack_start(i, true, true, 0);
-//                    b.pack_start(l, false, false, 0);
                     var scw = new ScrolledWindow(null, null);
                     scw.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
                     scw.add_with_viewport(w);
-//                    b.show_all();
                     notebook.append_page(scw, l);
                     scw.show_all();
                 }
@@ -369,9 +349,9 @@ private class Xnoise.SettingsWidget : Gtk.Overlay {
                 back_image = new Gtk.Image.from_icon_name("go-previous-symbolic", IconSize.LARGE_TOOLBAR);
             else
                 back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.LARGE_TOOLBAR);
-            var back_button = new Button();
-            back_button.add(back_image);
-            back_button.tooltip_markup = Markup.printf_escaped(_("Go Back"));
+            var back_button = new Button.with_label(_("Return to tracklist"));
+            back_button.image = back_image;
+            back_button.image_position = PositionType.LEFT;
             back_button.clicked.connect(on_back_button_clicked);
             back_button.halign = 
             back_button.halign = Align.END;
