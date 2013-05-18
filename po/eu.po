@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-14 18:16+0200\n"
+"POT-Creation-Date: 2013-05-18 09:49+0200\n"
 "PO-Revision-Date: 2013-02-05 20:21+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
@@ -86,10 +86,10 @@ msgstr "ezezaguna"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:155
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1477
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1505
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1547
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1577
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1493
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1535
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1565
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -99,10 +99,10 @@ msgstr "Artista:"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:158
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1479
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1507
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1549
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1579
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1467
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1495
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1537
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -118,25 +118,25 @@ msgstr "Azkena erreproduzituak"
 msgid "Music"
 msgstr "Musika"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:401
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:407
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:522
-#: ../plugins/magnatune/magnatune-treeview.vala:260
+#: ../plugins/magnatune/magnatune-treeview.vala:266
 msgid "Collapse all"
 msgstr "Tolestu dena"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:406
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:412
 msgid "Sort Mode"
 msgstr "Ordenatze-modua"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:416
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:422
 msgid "ARTIST-ALBUM-TITLE"
 msgstr "ARTISTA-ALBUMA-TITULUA"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:423
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:429
 msgid "GENRE-ARTIST-ALBUM"
 msgstr "GENEROA-ARTISTA-ALBUMA"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:430
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:436
 #, fuzzy
 msgid "ALBUM-ARTIST-TITLE"
 msgstr "ARTISTA-ALBUMA-TITULUA"
@@ -273,63 +273,63 @@ msgstr "Gehitu Interneteko irratiaren lotura"
 msgid "Leave fullscreen"
 msgstr "Irten pantaila osotik"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 msgid "Settings"
 msgstr "Ezarpenak"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:324
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 msgid "Media"
 msgstr "Multimedia"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:331
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
 msgid "Grid lines in media browser"
 msgstr "Sareta-lerroak multimedia-arakatzailean"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:312
 msgid "Showing lines in the media browser might show hierarchies more clear"
 msgstr ""
 "Multimedia-arakatzailean lerroak erakutsiz hierarkiak garbiago ikus daitezke"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Use systray icon"
 msgstr "Erabili sistemaren erretiluko ikonoa"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
 msgid ""
 "Use a status icon on your panel for showing, hiding and controlling xnoise"
 msgstr ""
 "Erabili paneleko egoera-ikonoa xnoise erakutsi, ezkutatu eta kontrolatzeko"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:341
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 msgid "Use menu button"
 msgstr "Erabili menu-botoia"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 msgid "Use an application menu button integrated into the main window"
 msgstr "Erabili aplikazio-menuarentzako botoia, leiho nagusian integraturik"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:326
 msgid "Show Stop button"
 msgstr "Erakutsi Gelditu botoia"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Show a stop button along with the other playback control buttons"
 msgstr ""
 "Erakutsi Gelditu botoia erreprodukziorako beste kontrol-botoiekin batera"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:351
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:331
 msgid "Quit on window close"
 msgstr "Irten leihoa ixtean"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:332
 msgid "Quit xnoise if the main window is closed"
 msgstr "Irten xnoise-tik leiho nagusia itxita badago"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Use desktop notifications"
 msgstr "Erabili mahaigaineko jakinarazpenak"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:357
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:337
 msgid ""
 "Use desktop notifications that inform about played media while the main "
 "window of xnoise is not visible"
@@ -337,37 +337,38 @@ msgstr ""
 "Erabili mahaigaineko jakinarazpenak erreproduzitzen ari denari buruzko "
 "informazioa bistaratzeko xnoise-ren leiho nagusia ikusgai ez dagoenean"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:341
 msgid "Use combo box selector for media types"
 msgstr "Erabili zerrenda bidezko hautatzailea multimedia mota aukeratzeko"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:362
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:342
 msgid "Use a combo box for selecting media types like music, video or streams"
 msgstr ""
 "Erabili zerrenda bidezko hautatzaile bat multimedia mota aukeratzeko: "
 "musika, bideoa edo korrontea"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:374
-msgid "Go Back"
-msgstr "Joan atzera"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
+#, fuzzy
+msgid "Return to tracklist"
+msgstr "Gehitu pista-zerrendara"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:390
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:370
 msgid "Media browser fontsize"
 msgstr "Multimedia-arakatzaileko letra-tamaina"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:407
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:387
 msgid "User Interface:"
 msgstr "Erabiltzaile-interfazea:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:411
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:391
 msgid "Lyrics:"
 msgstr "Hitzak:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:415
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:395
 msgid "Additional:"
 msgstr "Gehigarria:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:419
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:399
 msgid "Music Stores:"
 msgstr "Musika-dendak:"
 
@@ -388,7 +389,7 @@ msgid "Fullscreen"
 msgstr "Pantaila osoan"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1986
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1974
 msgid "Search..."
 msgstr "Bilatu..."
 
@@ -543,7 +544,7 @@ msgstr "Albumaren artista"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1997
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1985
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1433
 msgid "Album"
@@ -556,7 +557,7 @@ msgstr "Titulua"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1998
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1986
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1331
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1442
 msgid "Genre"
@@ -568,7 +569,7 @@ msgstr "URIa"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1999
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1987
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1355
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1451
 msgid "Year"
@@ -662,167 +663,167 @@ msgstr ""
 "\n"
 "%s erabiltzen ..."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:214
 msgid "_File"
 msgstr "_Fitxategia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:215
 msgid "open file"
 msgstr "ireki fitxategia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:216
 msgid "Open _Stream"
 msgstr "Ireki _korrontea"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:216
 msgid "open remote location"
 msgstr "ireki urruneko kokalekua"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:217
 msgid "_Add or Remove media"
 msgstr "_Gehitu edo ezabatu multimedia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:217
 msgid "manage the content of the xnoise media library"
 msgstr "kudeatu xnoise multimedia-liburutegiko edukia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:219
 msgid "_Edit"
 msgstr "_Editatu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:220
 msgid "C_lear tracklist"
 msgstr "_Hustu pista-zerrenda"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:228
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1754
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1742
 msgid "Clear the tracklist"
 msgstr "Hustu pista-zerrenda"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:221
 msgid "_Rescan collection"
 msgstr "_Berreskaneatu bilduma"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:221
 msgid "Rescan collection"
 msgstr "Berreskaneatu bilduma"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
 msgid "_Increase volume"
 msgstr "_Igo bolumena"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:222
 msgid "Increase playback volume"
 msgstr "Igo erreprodukzio-bolumena"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
 msgid "_Decrease volume"
 msgstr "_Jaitsi bolumena"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:223
 msgid "Decrease playback volume"
 msgstr "Jaitsi erreprodukzio-bolumena"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "_Previous track"
 msgstr "_Aurreko pista"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:224
 msgid "Go to previous track"
 msgstr "Joan aurreko pistara"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "_Toggle play"
 msgstr "_Pausatu/Erreproduzitu"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:225
 msgid "Toggle playback status"
 msgstr "Aldatu erreprodukzioaren egoera"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
 msgid "_Next track"
 msgstr "_Hurrengo pista"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:226
 msgid "Go to next track"
 msgstr "Joan hurrengo pistara"
 
 #. icon
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
 #, fuzzy
 msgid "E_qualizer"
 msgstr "Ekualizadorea"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:235
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:227
 #, fuzzy
 msgid "Open equalizer window"
 msgstr "Ireki ekualizadorea"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_View"
 msgstr "_Ikusi"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "_Tracklist"
 msgstr "_Pista-zerrenda"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:230
 msgid "Go to the tracklist."
 msgstr "Joan pista-zerrendara."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "_Lyrics"
 msgstr "_Hitzak"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:239
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:231
 msgid "Go to the lyrics view."
 msgstr "Joan hitzen ikuspegira."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:240
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:232
 msgid "_Now Playing"
 msgstr "_Orain erreproduzitzen"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:233
 msgid "Go to the 'Now Playing' screen in the main window."
 msgstr "Joan 'Orain erreproduzitzen' pantailara leiho nagusian."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:242
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:234
 msgid "_Help"
 msgstr "_Laguntza"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
 msgid "_Frequently Asked Questions"
 msgstr "_Ohiko galderak"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:244
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:236
 msgid "_Open Frequently Asked Questions in web browser"
 msgstr "_Ireki ohiko galderak web-nabigatzailean"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 msgid "_Keyboard Shortcuts"
 msgstr "_Laster-teklak"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:245
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:237
 msgid "_Open Keyboard Shortcuts in web browser"
 msgstr "_Ireki laster-teklak web-nabigatzailean"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:246
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:238
 msgid "_Config"
 msgstr "_Konfigurazioa"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:304
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:296
 msgid "_Show Media Browser"
 msgstr "_Erakutsi multimedia-arakatzailea"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:313
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:305
 msgid "Show _Video Fullscreen"
 msgstr "Erakutsi _bideoa pantaila-osoan"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:322
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:314
 msgid "Show _Album Art view"
 msgstr "Erakutsi _album-irudien ikuspegia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:514
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:505
 #, fuzzy, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
@@ -831,82 +832,82 @@ msgstr ""
 "Pista-zerrendako %u pista berreskuratzen. Kopuru hau handia da, eta xnoise-"
 "ren abioa moteldu dezake."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:718
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:730
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:742
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:754
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:708
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:720
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Playback mode: "
 msgstr "Erreprodukzio-modua:"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:718
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:708
 msgid "No repeat, one after another"
 msgstr "Ez errepikatu, erreproduzitu jarraian"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:730
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:720
 msgid "Repeat single track"
 msgstr "Errepikatu pista bakarra"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:742
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 msgid "Repeat all"
 msgstr "Errepikatu guztia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:754
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Random playlist track playing"
 msgstr "Pisten ausazko erreprodukzioa"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1344
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1334
 msgid "Enter the URL for playing"
 msgstr "Sartu erreproduzitzeko URLa"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1369
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
 msgid "Equalizer"
 msgstr "Ekualizadorea"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1393
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1383
 msgid "Select media file"
 msgstr "Hautatu multimedia-fitxategia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1706
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1694
 #, fuzzy
 msgid "Repeat Mode"
 msgstr "Errepikatu guztia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1728
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1716
 #, fuzzy
 msgid "Remove selected tracks"
 msgstr "Kendu hautaturiko pista"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1779
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1767
 msgid "Jump to current position"
 msgstr "Saltatu uneko posiziora"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1883
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1982
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1871
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1970
 msgid "Select search with <Ctrl-F>"
 msgstr "Hautatu bilaketa <Ktrl-F> sakatuz"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1885
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1984
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1873
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1972
 msgid "Remove search filter with <Ctrl-D>"
 msgstr "Ezabatu bilaketa-iragazkia <Ktrl-D> sakatuz"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1907
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1895
 msgid "Show application main menu"
 msgstr "Erakutsi aplikazioaren menu nagusia"
 
 #. ARTIST
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1996
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1984
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1424
 msgid "Artist"
 msgstr "Artista"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2005
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1993
 msgid "Ascending"
 msgstr "Gorantz"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2007
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1995
 msgid "Descending"
 msgstr "Beherantz"
 
@@ -1238,19 +1239,19 @@ msgstr "Magnatune musika-denda"
 msgid "Magnatune"
 msgstr "Magnatune"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:269
+#: ../plugins/magnatune/magnatune-treeview.vala:275
 msgid "Download whole album to disk"
 msgstr "Deskargatu album osoa diskora"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:319
+#: ../plugins/magnatune/magnatune-treeview.vala:325
 msgid "Downloading album "
 msgstr "Albuma deskargatzen"
 
-#: ../plugins/magnatune/magnatune-treeview.vala:321
+#: ../plugins/magnatune/magnatune-treeview.vala:327
 msgid "This may take some time..."
 msgstr "Honek bere denbora beharko du..."
 
-#: ../plugins/magnatune/magnatune-treeview.vala:435
+#: ../plugins/magnatune/magnatune-treeview.vala:441
 msgid "Download finished for \""
 msgstr "Deskarga burutu da: \""
 
@@ -1337,6 +1338,9 @@ msgstr "Erakutsi abestiaren titulua leihoaren barran"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "Ezarri uneko abestiaren titulua leihoaren izen gisa"
+
+#~ msgid "Go Back"
+#~ msgstr "Joan atzera"
 
 #, fuzzy
 #~ msgid "Media Source"
