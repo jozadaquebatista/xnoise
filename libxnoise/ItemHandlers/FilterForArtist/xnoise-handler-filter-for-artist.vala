@@ -126,14 +126,14 @@ internal class Xnoise.HandlerFilterForArtist : ItemHandler {
             return;
         }
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_artist_name_job);
-        Item[] tmp = {};
-        tmp += item;
+        Item[] tmp = new Item[2];
+        tmp[0] = item;
         if(data2 != null) {
             Item? i = (Item)data2;
-            tmp += i;
+            tmp[1] = i;
         }
         else {
-            tmp[1] = Item(ItemType.UNKNOWN);
+            tmp += Item(ItemType.UNKNOWN);
         }
         job.items = tmp;
         db_worker.push_job(job);
