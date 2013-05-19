@@ -111,13 +111,6 @@ namespace Lastfm {
             a = _web.reply_received.connect(this.web_reply_received);
         }
         
-        ~Session() {
-            if(_web != null) {
-                _web.disconnect(a);
-                _web = null;
-            }
-        }
-        
         private ulong a =0;
         
         public void abort() {

@@ -104,8 +104,10 @@ public class Xnoise.Lfm :
     private void clean_up() {
         if(session != null) {
             session.abort();
-            session.disconnect(c);
-            session.disconnect(d);
+            if(c > 0)
+                session.disconnect(c);
+            if(d > 0)
+                session.disconnect(d);
             session = null;
         }
         scrobble_track = null;
@@ -202,8 +204,8 @@ public class Xnoise.Lfm :
         }
     }
     
-    public Xnoise.IAlbumCoverImage from_tags(string artist, string album) {
-        return new LastFmCovers(artist, album, this.session);
+    public Xnoise.IAlbumCoverImage from_tags(AlbumImageLoader loader, string artist, string album) {
+        return new LastFmCovers(loader, artist, album, this.session);
     }
 }
 
@@ -237,16 +239,14 @@ public class Xnoise.LastFmCovers :
     private unowned Lastfm.Session session;
     private Lastfm.Album alb;
     private ulong sign_no;
+    private unowned AlbumImageLoader loader;
     
-    public LastFmCovers(string _artist, string _album, Lastfm.Session session) {
+    public LastFmCovers(AlbumImageLoader loader, string _artist, string _album, Lastfm.Session session) {
+        this.loader = loader;
         this.artist = _artist;
         this.album  = _album;
         this.session = session;
         
-//        image_path = GLib.Path.build_filename(data_folder(),
-//                                              "album_images",
-//                                              null
-//                                              );
         image_sources = {};
         sizes = {"medium", "extralarge"}; //Two are enough
         timeout = 0;
@@ -254,6 +254,8 @@ public class Xnoise.LastFmCovers :
         alb = this.session.factory_make_album(artist, album);
         sign_no = alb.received_info.connect( (sender, al) => {
             print("got album info: %s , %s\n", sender.artist_name, al);
+            alb.disconnect(sign_no);
+            sign_no = 0;
             //print("image extralarge: %s\n", sender.image_uris.lookup("extralarge"));
             string default_size = "medium";
             string uri_image;
@@ -295,7 +297,8 @@ public class Xnoise.LastFmCovers :
     ~LastFmCovers() {
         if(timeout != 0)
             Source.remove(timeout);
-        alb.disconnect(sign_no);
+        if(sign_no != 0)
+            alb.disconnect(sign_no);
         alb = null;
     }
 
@@ -308,8 +311,12 @@ public class Xnoise.LastFmCovers :
         //print("find_lastfm_image to %s - %s\n", artist, album);
         if((artist==UNKNOWN_ARTIST)||
            (album==UNKNOWN_ALBUM)) {
-            sign_image_fetched(artist, album, EMPTYSTRING);
-            this.unref();
+            Idle.add(() => {
+                if(loader != null)
+                    loader.on_image_fetched(artist, album, EMPTYSTRING);
+                this.unref();
+                return false;
+            });
             return;
         }
         
@@ -363,7 +370,8 @@ public class Xnoise.LastFmCovers :
         }
         Idle.add( () => {
             // signal finish with artist, album in order to identify the sent image
-            sign_image_fetched(artist, album, default_path);
+            if(loader != null)
+                loader.on_image_fetched(artist, album, default_path);
             remove_timeout();
             
             if(!this.timeout_done) {

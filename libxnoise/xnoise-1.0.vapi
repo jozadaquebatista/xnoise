@@ -631,6 +631,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AlbumImageLoader : GLib.Object {
 		public AlbumImageLoader ();
+		public void on_image_fetched (string _artist, string _album, string _image_path);
 		public Gdk.Pixbuf? image_embedded { get; set; }
 		public Gdk.Pixbuf? image_large { get; set; }
 		public string? image_path_embedded { get; set; }
@@ -1144,11 +1145,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface IAlbumCoverImage : GLib.Object {
 		public abstract void find_image ();
-		public signal void sign_image_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface IAlbumCoverImageProvider : GLib.Object {
-		public abstract Xnoise.IAlbumCoverImage from_tags (string artist, string album);
+		public abstract Xnoise.IAlbumCoverImage from_tags (Xnoise.AlbumImageLoader loader, string artist, string album);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface ILyrics : GLib.Object {

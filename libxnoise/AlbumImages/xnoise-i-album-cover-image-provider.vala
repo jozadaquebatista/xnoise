@@ -31,5 +31,5 @@
 using Xnoise;
 
 public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
-    public abstract IAlbumCoverImage from_tags(string artist, string album);
+    public abstract IAlbumCoverImage from_tags(AlbumImageLoader loader, string artist, string album);
 }

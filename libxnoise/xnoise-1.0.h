@@ -960,7 +960,7 @@ struct _XnoiseIAlbumCoverImageIface {
 
 struct _XnoiseIAlbumCoverImageProviderIface {
 	GTypeInterface parent_iface;
-	XnoiseIAlbumCoverImage* (*from_tags) (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
+	XnoiseIAlbumCoverImage* (*from_tags) (XnoiseIAlbumCoverImageProvider* self, XnoiseAlbumImageLoader* loader, const gchar* artist, const gchar* album);
 };
 
 struct _XnoiseApplication {
@@ -2049,6 +2049,7 @@ gchar* xnoise_check_album_name (const gchar* artistname, const gchar* albumname)
 GType xnoise_album_image_loader_get_type (void) G_GNUC_CONST;
 XnoiseAlbumImageLoader* xnoise_album_image_loader_new (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type);
+void xnoise_album_image_loader_on_image_fetched (XnoiseAlbumImageLoader* self, const gchar* _artist, const gchar* _album, const gchar* _image_path);
 GdkPixbuf* xnoise_album_image_loader_get_image_small (XnoiseAlbumImageLoader* self);
 void xnoise_album_image_loader_set_image_small (XnoiseAlbumImageLoader* self, GdkPixbuf* value);
 GdkPixbuf* xnoise_album_image_loader_get_image_large (XnoiseAlbumImageLoader* self);
@@ -2064,7 +2065,7 @@ void xnoise_album_image_loader_set_image_path_embedded (XnoiseAlbumImageLoader* 
 GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
 void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
 GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;
-XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
+XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, XnoiseAlbumImageLoader* loader, const gchar* artist, const gchar* album);
 GType xnoise_application_get_type (void) G_GNUC_CONST;
 GType xnoise_main_get_type (void) G_GNUC_CONST;
 extern XnoiseMain* xnoise_application_xn;

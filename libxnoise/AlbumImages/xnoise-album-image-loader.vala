@@ -300,16 +300,24 @@ namespace Xnoise {
         
         private int backend_iter = 0;
         
-        private IAlbumCoverImage? create_provider() {
+        private IAlbumCoverImage? get_provider() {
             string? artist = global.current_albumartist != null ? 
                                 global.current_albumartist : 
                                 global.current_artist;
             string? album = global.current_album;
-            IAlbumCoverImage? prov =
-                providers.nth_data(backend_iter).from_tags(artist, check_album_name(artist, album));
+            
+            if(providers == null || providers.length() == 0)
+                return null;
+            
+            IAlbumCoverImageProvider? be = providers.nth_data(backend_iter);
+            if(be == null)
+                return null;
+            
+            IAlbumCoverImage? prov = be.from_tags(this, artist, check_album_name(artist, album));
             if(prov == null)
                 return null;
-            prov.sign_image_fetched.connect(on_image_fetched);
+            
+//            prov.sign_image_fetched.connect(on_image_fetched);
             prov.ref(); //prevent destruction before ready
             prov.find_image();
             return prov;
@@ -335,7 +343,7 @@ namespace Xnoise {
                     remote_source = 0;
                 }
                 remote_source = Timeout.add_seconds(1, () => {
-                    var provider = create_provider();
+                    var provider = get_provider();
                     remote_source = 0;
                     return false;
                 });
@@ -419,7 +427,7 @@ namespace Xnoise {
             providers.remove(provider);
         }
         
-        private void on_image_fetched(string _artist, string _album, string _image_path) {
+        public void on_image_fetched(string _artist, string _album, string _image_path) {
             //print("called on_image_fetched %s - %s : %s\n", _artist, _album, _image_path);
             if(_image_path == EMPTYSTRING) 
                 return;
@@ -432,7 +440,7 @@ namespace Xnoise {
             File f = File.new_for_path(_image_path);
             if(f == null || f.get_path() == null)
                 return;
-            AlbumArtView.icon_cache.handle_image(f.get_path());
+            global.icon_cache.handle_image(f.get_path());
         }
     }
 }
