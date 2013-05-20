@@ -212,7 +212,7 @@ public class Xnoise.Main : GLib.Object {
                                  media_importer.write_lastused_job, 
                                  Worker.Priority.HIGH,
                                  () => {
-                                    //print("finished db saving\n");
+                                     //print("finished db saving\n");
                                      preparing_quit = false;
                                  });
         job.track_dat = tlm.get_all_tracks();

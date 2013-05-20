@@ -989,7 +989,7 @@ typedef enum  {
 } XnoiseWorkerPriority;
 
 typedef enum  {
-	XNOISE_WORKER_EXECUTION_TYPE_ONCE,
+	XNOISE_WORKER_EXECUTION_TYPE_ONCE = 0,
 	XNOISE_WORKER_EXECUTION_TYPE_REPEATED
 } XnoiseWorkerExecutionType;
 
