@@ -160,7 +160,7 @@ private class MagnatuneWidget : Gtk.Box {
                 add_tree();
                 return false;
             });
-            return true;
+            return false;
         }
         else {
             if(MagnatunePlugin.cancel.is_cancelled())

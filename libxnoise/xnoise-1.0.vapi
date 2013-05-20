@@ -1121,7 +1121,6 @@ namespace Xnoise {
 			UNKNOWN,
 			ONCE,
 			ONCE_HIGH_PRIORITY,
-			TIMED,
 			REPEATED
 		}
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);

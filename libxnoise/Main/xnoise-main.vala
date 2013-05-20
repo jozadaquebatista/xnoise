@@ -258,8 +258,11 @@ public class Xnoise.Main : GLib.Object {
         preparing_quit = true;
         var jobx = new Worker.Job(Worker.ExecutionType.ONCE, remove_temp_files_job, 0);
         io_worker.push_job(jobx);
-        var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
-        io_worker.push_job(jx);
+        var jx = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, quit_job, 4);
+        Timeout.add_seconds(4, () => {
+            io_worker.push_job(jx);
+            return false;
+        });
         jx.finished.connect( () => {
             app.release();
             preparing_quit = false;

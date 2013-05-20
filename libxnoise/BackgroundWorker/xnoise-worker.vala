@@ -33,7 +33,7 @@
 
 public class Xnoise.Worker : Object {
     
-    private AsyncQueue<Job> async_job_queue          = new AsyncQueue<Job>();
+//    private AsyncQueue<Job> async_job_queue          = new AsyncQueue<Job>();
     private AsyncQueue<Job> sync_job_queue           = new AsyncQueue<Job>();
     private AsyncQueue<Job> sync_high_prio_job_queue = new AsyncQueue<Job>();
     
@@ -73,7 +73,6 @@ public class Xnoise.Worker : Object {
         UNKNOWN = 0,
         ONCE,
         ONCE_HIGH_PRIORITY,     // not used,yet
-        TIMED,                  // queue timed job if working function returns true -> queue again
         REPEATED                // repeat until worker function returns false
     }
     
@@ -142,33 +141,33 @@ public class Xnoise.Worker : Object {
     }
     
     // Execution of async jobs
-    private async void async_func() {
-        Job current_job = async_job_queue.try_pop();
-        if(current_job == null) {
-            print("no async job\n");
-            return;
-        }
-        bool repeat = true;
-        while(repeat) {
-            //message( "thread %d ; job %d", (int)Linux.gettid(), current_job.id);
-            repeat = current_job.func(current_job);
-            var source = new IdleSource();
-            source.set_callback(async_func.callback);
-            //execute async function in local context
-            source.attach(local_context);
-            yield;
-        }
-        Source s2 = new IdleSource(); 
-        s2.set_callback(() => {
-            //send Job's finished signal in main context
-            current_job.finished();
-            return false;
-        });
-        s2.attach(main_context);
-    }
+//    private async void async_func() {
+//        Job current_job = async_job_queue.try_pop();
+//        if(current_job == null) {
+//            print("no async job\n");
+//            return;
+//        }
+//        bool repeat = true;
+//        while(repeat) {
+//            //message( "thread %d ; job %d", (int)Linux.gettid(), current_job.id);
+//            repeat = current_job.func(current_job);
+//            var source = new IdleSource();
+//            source.set_callback(async_func.callback);
+//            //execute async function in local context
+//            source.attach(local_context);
+//            yield;
+//        }
+//        Source s2 = new IdleSource(); 
+//        s2.set_callback(() => {
+//            //send Job's finished signal in main context
+//            current_job.finished();
+//            return false;
+//        });
+//        s2.attach(main_context);
+//    }
     
     // Execution of sync jobs
-    private void sync_func() {
+    private async void sync_func() {
         Job current_job = null;
         if((current_job = sync_high_prio_job_queue.try_pop()) == null)
             current_job = sync_job_queue.try_pop();
@@ -177,7 +176,17 @@ public class Xnoise.Worker : Object {
             return;
         }
         //message( "thread %d ; sync job %d", (int)Linux.gettid(), current_job.id);
-        current_job.func(current_job);
+//        bool repeat = true;
+        while(current_job.func(current_job)) {
+            //message( "thread %d ; job %d", (int)Linux.gettid(), current_job.id);
+//            repeat = current_job.func(current_job);
+            var source = new IdleSource();
+            source.set_callback(sync_func.callback);
+            //execute async function in local context
+            source.attach(local_context);
+            yield;
+        }
+//        current_job.func(current_job);
         Source s2 = new IdleSource(); 
         s2.set_callback(() => {
             current_job.finished();
@@ -220,30 +229,30 @@ public class Xnoise.Worker : Object {
                     print("Error: There must be a WorkFunc in a job.\n");
                     break;
                 }
-                async_job_queue.push(j);
+                sync_job_queue.push(j);
                 Source source = new IdleSource(); 
                 source.set_callback(() => {
-                    async_func(); 
+                    sync_func(); 
                     return false;
                 });
                 source.attach(local_context);
                 break;
-            case ExecutionType.TIMED:
-                if(j.func == null) {
-                    print("Error: There must be a WorkFunc in a job.\n");
-                    break;
-                }
-                if(j.timer_seconds == 0) {
-                    print("Error: There must be a time in a timed job.\n");
-                    break;
-                }
-                Source source = new TimeoutSource.seconds(j.timer_seconds);
-                source.set_callback( () => {
-                    unowned WorkFunc wf = j.func;
-                    return wf(j);
-                });
-                source.attach(local_context);
-                break;
+//            case ExecutionType.TIMED:
+//                if(j.func == null) {
+//                    print("Error: There must be a WorkFunc in a job.\n");
+//                    break;
+//                }
+//                if(j.timer_seconds == 0) {
+//                    print("Error: There must be a time in a timed job.\n");
+//                    break;
+//                }
+//                Source source = new TimeoutSource.seconds(j.timer_seconds);
+//                source.set_callback( () => {
+//                    unowned WorkFunc wf = j.func;
+//                    return wf(j);
+//                });
+//                source.attach(local_context);
+//                break;
             default:
                 print("Not a valid execution type or the type was not yet implemented. Doing nothing\n");
                 break;

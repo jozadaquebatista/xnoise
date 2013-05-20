@@ -196,7 +196,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             TrackData[]? tda = {};
             tda += td;
             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-            db_job.track_dat = (owned)tda;
+            db_job.track_dat = tda;
             string[] uris = {};
             uris += f.get_uri();
             dbus_image_extractor.queue_uris(uris);
@@ -226,7 +226,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         foreach(Item? i in strms) //append
             tmp += i;
             
-        job.items = (owned)tmp;
+        job.items = tmp;
         
         Timeout.add(200, () => {
             var prg_bar = new Gtk.ProgressBar();
@@ -299,7 +299,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             foreach(Item? i in media_items)
                 if(i.type == ItemType.STREAM || i.type == ItemType.PLAYLIST)
                     tmp += i;
-            job.items = (owned)tmp;
+            job.items = tmp;
             
             job.set_arg("full_rescan", full_rescan);
             db_worker.push_job(job);
@@ -313,7 +313,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         foreach(Item? i in media_items)
             if(i.type == ItemType.LOCAL_FOLDER)
                 tmpx += i;
-        job.items = (owned)tmpx;
+        job.items = tmpx;
         
         job.set_arg("msg_id", msg_id);
 //        current_import_msg_id = msg_id;
@@ -344,9 +344,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         //print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
         if(job.counter[1] != job.counter[2])
             return;
-        
-        //Look for potentiol various artists albums
-//        db_postprocessor.find_compilations();
         
         Idle.add( () => {
             // update user info in idle in main thread
@@ -580,7 +577,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                         }
                         if(tda.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-                            db_job.track_dat = (owned)tda;
+                            db_job.track_dat = tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
                             tda = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
@@ -598,7 +595,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         if(job.counter[0] == 0) {
             if(tda.length > 0) {
                 var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-                db_job.track_dat = (owned)tda;
+                db_job.track_dat = tda;
                 tda = {};
                 dbus_image_extractor.queue_uris(uris_for_image_extraction);
                 uris_for_image_extraction = {};
