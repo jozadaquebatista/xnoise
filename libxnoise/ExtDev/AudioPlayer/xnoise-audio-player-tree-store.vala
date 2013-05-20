@@ -114,15 +114,15 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                 }
             }
         }
-        var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+        var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job, Worker.Priority.NORMAL, on_track_import_finished);
         db_job.track_dat = (owned)tdal;
         tdal = {};
-        db_job.finished.connect(on_track_import_finished);
+//        db_job.finished.connect(on_track_import_finished);
         db_worker.push_job(db_job);
     }
     
-    private void on_track_import_finished(Worker.Job job) {
-        job.finished.disconnect(on_track_import_finished);
+    private void on_track_import_finished() {
+//        job.finished.disconnect(on_track_import_finished);
         if(update_source != 0)
             Source.remove(update_source);
         update_source = Timeout.add(200, () => {
@@ -322,7 +322,7 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             return;
         TreeRowReference treerowref = new TreeRowReference(this, path);
         if(path.get_depth() == 1) {
-            job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
+            job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_album_and_tracks_job, Worker.Priority.HIGH);
             job.set_arg("treerowref", treerowref);
             job.item = item;
             db_worker.push_job(job);
@@ -397,8 +397,8 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                 );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
-                var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                               this.populate_title_job);
+                var job_title = new Worker.Job(Worker.ExecutionType.ONCE,
+                                               this.populate_title_job, Worker.Priority.HIGH);
                 job_title.set_arg("treerowref", treerowref);
                 job_title.item = album;
                 db_worker.push_job(job_title);
@@ -449,7 +449,7 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             return false;
         view.model = null;
         this.clear();
-        var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
+        var a_job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_artists_job, Worker.Priority.HIGH);
         db_worker.push_job(a_job);
         return false;
     }

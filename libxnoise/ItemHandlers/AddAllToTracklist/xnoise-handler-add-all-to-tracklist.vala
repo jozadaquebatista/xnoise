@@ -108,8 +108,8 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         DataSource? ds = pq.get_data_source();
         if(ds == null)
             return;
-        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                             this.menu_add_from_extern_job);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                             this.menu_add_from_extern_job, Worker.Priority.HIGH);
         job.item = item;
         job.set_arg("datasource", ds.get_source_id());
         db_worker.push_job(job);
@@ -146,14 +146,14 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         Worker.Job job;
         switch(pq.get_dynamic_playlist_type()) {
             case DynPlaylistType.MOSTPLAYED: {
-                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                                     this.menu_add_from_mostplayed_job);
+                job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                     this.menu_add_from_mostplayed_job, Worker.Priority.HIGH);
                 job.item = item;
                 break;
             }
             case DynPlaylistType.LASTPLAYED: {
-                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                                     this.menu_add_from_lastplayed_job);
+                job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                     this.menu_add_from_lastplayed_job, Worker.Priority.HIGH);
                 job.item = item;
                 break;
             }
@@ -170,7 +170,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
             return;
         if(!(tq is TreeQueryable))
             return;
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.menu_add_job, Worker.Priority.HIGH);
         job.item = item;
         db_worker.push_job(job);
     }

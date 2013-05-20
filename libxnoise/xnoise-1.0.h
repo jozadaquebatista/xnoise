@@ -77,6 +77,8 @@ typedef struct _XnoiseWorker XnoiseWorker;
 typedef struct _XnoiseWorkerClass XnoiseWorkerClass;
 typedef struct _XnoiseWorkerPrivate XnoiseWorkerPrivate;
 
+#define XNOISE_WORKER_TYPE_PRIORITY (xnoise_worker_priority_get_type ())
+
 #define XNOISE_WORKER_TYPE_EXECUTION_TYPE (xnoise_worker_execution_type_get_type ())
 
 #define XNOISE_WORKER_TYPE_JOB (xnoise_worker_job_get_type ())
@@ -982,9 +984,12 @@ struct _XnoiseWorkerClass {
 };
 
 typedef enum  {
-	XNOISE_WORKER_EXECUTION_TYPE_UNKNOWN = 0,
+	XNOISE_WORKER_PRIORITY_NORMAL = 0,
+	XNOISE_WORKER_PRIORITY_HIGH
+} XnoiseWorkerPriority;
+
+typedef enum  {
 	XNOISE_WORKER_EXECUTION_TYPE_ONCE,
-	XNOISE_WORKER_EXECUTION_TYPE_ONCE_HIGH_PRIORITY,
 	XNOISE_WORKER_EXECUTION_TYPE_REPEATED
 } XnoiseWorkerExecutionType;
 
@@ -1025,10 +1030,12 @@ struct _XnoiseDndData {
 };
 
 typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
+typedef void (*XnoiseWorkerFinishFunc) (void* user_data);
 struct _XnoiseWorkerJob {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
 	XnoiseWorkerJobPrivate * priv;
+	XnoiseWorkerPriority priority;
 	XnoiseItem* item;
 	XnoiseItem* items;
 	gint items_length1;
@@ -1040,8 +1047,11 @@ struct _XnoiseWorkerJob {
 	gint treerowrefs_length1;
 	gint counter[4];
 	gint32 big_counter[4];
+	XnoiseWorkerExecutionType execution_type;
 	XnoiseWorkerWorkFunc func;
 	gpointer func_target;
+	XnoiseWorkerFinishFunc finish_func;
+	gpointer finish_func_target;
 	GCancellable* cancellable;
 };
 
@@ -2075,6 +2085,7 @@ void xnoise_application_on_startup (XnoiseApplication* self);
 gint xnoise_application_on_command_line (XnoiseApplication* self, GApplicationCommandLine* command_line);
 gboolean xnoise_application_get_hidden_window (void);
 GType xnoise_worker_get_type (void) G_GNUC_CONST;
+GType xnoise_worker_priority_get_type (void) G_GNUC_CONST;
 GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);
 XnoiseWorker* xnoise_worker_construct (GType object_type, GMainContext* mc);
@@ -2106,12 +2117,10 @@ XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
 void xnoise_dnd_data_copy (const XnoiseDndData* self, XnoiseDndData* dest);
 void xnoise_dnd_data_destroy (XnoiseDndData* self);
-XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
-XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
+XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, XnoiseWorkerPriority priority, XnoiseWorkerFinishFunc finish_func, void* finish_func_target);
+XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, XnoiseWorkerPriority priority, XnoiseWorkerFinishFunc finish_func, void* finish_func_target);
 void xnoise_worker_job_set_arg (XnoiseWorkerJob* self, const gchar* name, GValue* val);
 GValue* xnoise_worker_job_get_arg (XnoiseWorkerJob* self, const gchar* name);
-guint xnoise_worker_job_get_timer_seconds (XnoiseWorkerJob* self);
-XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob* self);
 GQuark xnoise_database_db_error_quark (void);
 GType xnoise_data_source_get_type (void) G_GNUC_CONST;
 GType xnoise_collection_sort_mode_get_type (void) G_GNUC_CONST;

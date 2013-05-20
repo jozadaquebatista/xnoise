@@ -165,8 +165,8 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
         Item[] items = {};
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                                 this.menu_add_from_extern_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                 this.menu_add_from_extern_job, Worker.Priority.HIGH);
         foreach(TreePath path in list) {
             mod.get_iter(out iter, path);
             mod.get(iter, pq.get_model_item_column(), out ix);
@@ -195,7 +195,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
         Item[] items = {};
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.menu_add_from_playlist_job, Worker.Priority.HIGH);
         foreach(TreePath path in list) {
             mod.get_iter(out iter, path);
             mod.get(iter, tq.get_model_item_column(), out ix);
@@ -225,7 +225,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
         Item[] items = {};
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.menu_add_from_playlist_job, Worker.Priority.HIGH);
         foreach(TreePath path in list) {
             mod.get_iter(out iter, path);
             mod.get(iter, tq.get_model_item_column(), out ix);
@@ -255,7 +255,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
         Item[] items = {};
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.menu_add_job, Worker.Priority.HIGH);
         foreach(TreePath path in list) {
             mod.get_iter(out iter, path);
             mod.get(iter, tq.get_model_item_column(), out ix);
@@ -345,14 +345,14 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
     
     private void on_request_multi(Item item, GLib.Value? data, GLib.Value? data2) {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_multi_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_requested_multi_job, Worker.Priority.HIGH);
         Worker.Job j = (Worker.Job)data2;
         job.items = j.items;
         db_worker.push_job(job);
     }
 
     private void on_request(Item item, GLib.Value? data, GLib.Value? data2) {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_requested_job, Worker.Priority.HIGH);
         job.item = item;
         db_worker.push_job(job);
     }
@@ -394,7 +394,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         if(data != null) {
             i = (Item)data;
         }
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_item_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_item_job, Worker.Priority.HIGH);
         job.item = item;
         if(i != null) {
             job.items = new Item[1];

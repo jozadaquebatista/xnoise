@@ -208,12 +208,14 @@ public class Xnoise.Main : GLib.Object {
     }
 
     private void save_tracklist() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_lastused_job);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                 media_importer.write_lastused_job, 
+                                 Worker.Priority.HIGH,
+                                 () => {
+                                    //print("finished db saving\n");
+                                     preparing_quit = false;
+                                 });
         job.track_dat = tlm.get_all_tracks();
-        job.finished.connect( () => {
-            //print("finished db saving\n");
-            preparing_quit = false;
-        });
         db_worker.push_job(job);
     }
     
@@ -256,16 +258,15 @@ public class Xnoise.Main : GLib.Object {
         global.player_state = PlayerState.STOPPED;
         Source.remove(cyclic_save_source);
         preparing_quit = true;
-        var jobx = new Worker.Job(Worker.ExecutionType.ONCE, remove_temp_files_job, 0);
+        var jobx = new Worker.Job(Worker.ExecutionType.ONCE, remove_temp_files_job, Worker.Priority.NORMAL);
         io_worker.push_job(jobx);
-        var jx = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, quit_job, 4);
+        var jx = new Worker.Job(Worker.ExecutionType.ONCE, quit_job, Worker.Priority.HIGH, () => {
+            app.release();
+            preparing_quit = false;
+        });
         Timeout.add_seconds(4, () => {
             io_worker.push_job(jx);
             return false;
-        });
-        jx.finished.connect( () => {
-            app.release();
-            preparing_quit = false;
         });
         print ("closing...\n");
         if(main_window.is_fullscreen) 

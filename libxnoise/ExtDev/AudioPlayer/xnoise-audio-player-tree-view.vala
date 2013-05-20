@@ -92,8 +92,8 @@ public abstract class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
                 if(path != null)
                     row_ref = new TreeRowReference(model, path);
                 
-                var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                                         insert_dnd_data_job
+                var job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                         insert_dnd_data_job, Worker.Priority.HIGH
                 );
                 job.dnd_data = ids;
                 //print("dnd data get %d  %s\n", ids[0].db_id, ids[0].items[0].type.to_string());

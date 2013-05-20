@@ -290,7 +290,7 @@ namespace Xnoise {
                 if(local_source != 0)
                     Source.remove(local_source);
                 local_source = Timeout.add(100, () => {
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, setup_images_job);
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE, setup_images_job, Worker.Priority.HIGH);
                     io_worker.push_job(job);
                     local_source = 0;
                     return false;

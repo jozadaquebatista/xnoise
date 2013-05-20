@@ -547,8 +547,8 @@ public class Xnoise.TrackList : TreeView, IParams {
                     if(path != null)
                         row_ref = new TreeRowReference(this.model, path);
                     
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
-                                             this.insert_dnd_data_job
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE, 
+                                             this.insert_dnd_data_job, Worker.Priority.HIGH
                     );
                     job.set_arg("row_ref", row_ref);
                     job.set_arg("drop_pos", drop_pos);

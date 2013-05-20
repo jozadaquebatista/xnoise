@@ -185,9 +185,9 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
             return;
         //print("populate model\n");
         populating_model = true;
-        var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_job);
+        var a_job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_job, Worker.Priority.HIGH, on_populate_finished);
         db_worker.push_job(a_job);
-        a_job.finished.connect(on_populate_finished);
+//        a_job.finished.connect(on_populate_finished);
         return;
     }
     
@@ -314,9 +314,9 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         return false;
     }
     
-    private void on_populate_finished(Worker.Job sender) {
+    private void on_populate_finished() {
         return_if_fail(Main.instance.is_same_thread());
-        sender.finished.disconnect(on_populate_finished);
+//        sender.finished.disconnect(on_populate_finished);
         view.set_model(this);
         populating_model = false;
     }

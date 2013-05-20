@@ -293,7 +293,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
         timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
         
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.get_lyrics_from_db);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_lyrics_from_db, Worker.Priority.HIGH);
         job.set_arg("artist", this.artist);
         job.set_arg("title", this.title);
         db_worker.push_job(job);

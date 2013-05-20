@@ -73,7 +73,7 @@ private class Xnoise.TagArtistEditor : GLib.Object {
     
     private void fill_entries() {
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.query_trackdata_job);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job, Worker.Priority.HIGH);
         job.item = item;
         db_worker.push_job(job);
     }

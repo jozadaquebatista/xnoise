@@ -105,8 +105,8 @@ internal class Xnoise.HandlerMoveToTrash : ItemHandler {
     }
     
     private void delete_from_database() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
-        job.finished.connect(on_delete_finished);
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb, Worker.Priority.NORMAL, on_delete_finished);
+//        job.finished.connect(on_delete_finished);
         db_worker.push_job(job);
     }
     
@@ -115,8 +115,8 @@ internal class Xnoise.HandlerMoveToTrash : ItemHandler {
         return false;
     }
     
-    private void on_delete_finished(Worker.Job sender) {
-        sender.finished.disconnect(on_delete_finished);
+    private void on_delete_finished() {
+//        sender.finished.disconnect(on_delete_finished);
         string buf = global.searchtext;
         global.searchtext = Random.next_int().to_string();
         global.searchtext = buf;

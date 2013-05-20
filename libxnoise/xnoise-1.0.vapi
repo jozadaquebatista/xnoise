@@ -1105,24 +1105,27 @@ namespace Xnoise {
 			public GLib.Cancellable? cancellable;
 			public int counter[4];
 			public Xnoise.DndData[] dnd_data;
+			public Xnoise.Worker.ExecutionType execution_type;
+			public weak Xnoise.Worker.FinishFunc? finish_func;
 			public weak Xnoise.Worker.WorkFunc? func;
 			public Xnoise.Item? item;
 			public Xnoise.Item[] items;
+			public Xnoise.Worker.Priority priority;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
-			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.WorkFunc? func = null, uint _timer_seconds = 0);
+			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.ONCE, Xnoise.Worker.WorkFunc? func = null, Xnoise.Worker.Priority priority = Priority.NORMAL, Xnoise.Worker.FinishFunc? finish_func = null);
 			public unowned GLib.Value? get_arg (string name);
 			public void set_arg (string? name, owned GLib.Value? val);
-			public Xnoise.Worker.ExecutionType execution_type { get; }
-			public uint timer_seconds { get; }
-			public signal void finished ();
 		}
 		public enum ExecutionType {
-			UNKNOWN,
 			ONCE,
-			ONCE_HIGH_PRIORITY,
 			REPEATED
 		}
+		public enum Priority {
+			NORMAL,
+			HIGH
+		}
+		public delegate void FinishFunc ();
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
 		public bool is_same_thread ();

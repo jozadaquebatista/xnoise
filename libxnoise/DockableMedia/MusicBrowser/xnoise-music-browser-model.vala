@@ -125,8 +125,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         print("ADD_ARTIST:GOT -1\n");
                         return;
                     }
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.add_imported_artist_job
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.add_imported_artist_job,
+                                             Worker.Priority.HIGH
                     );
                     job.item = item;
                     db_worker.push_job(job);
@@ -141,8 +142,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         print("ADD_ALBUM:GOT -1\n");
                         return;
                     }
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.add_imported_album_job
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.add_imported_album_job, Worker.Priority.HIGH
                     );
                     job.item = item;
                     db_worker.push_job(job);
@@ -152,8 +153,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
                     if(item.type != ItemType.COLLECTION_CONTAINER_GENRE)
                         break;
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.add_imported_genre_job
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.add_imported_genre_job, Worker.Priority.HIGH
                     );
                     job.item = item;
                     db_worker.push_job(job);
@@ -528,35 +529,36 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 //print("GENRE_ARTIST_ALBUM\n");
-                var g_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                           this.populate_genres_job);
+                var g_job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                           this.populate_genres_job, 
+                                           Worker.Priority.HIGH, 
+                                           on_populate_finished);
                 g_job.cancellable = populate_model_cancellable;
                 db_worker.push_job(g_job);
-                g_job.finished.connect(on_populate_finished);
                 break;
             case CollectionSortMode.ALBUM_ARTIST_TITLE:
-                var al_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                           this.populate_albums_job);
+                var al_job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                           this.populate_albums_job, 
+                                           Worker.Priority.HIGH, 
+                                           on_populate_finished);
                 al_job.cancellable = populate_model_cancellable;
                 db_worker.push_job(al_job);
-                al_job.finished.connect(on_populate_finished);
                 break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
             default:
-                var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                           this.populate_artists_job);
+                var a_job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                           this.populate_artists_job, 
+                                           Worker.Priority.HIGH, 
+                                           on_populate_finished);
                 a_job.cancellable = populate_model_cancellable;
                 db_worker.push_job(a_job);
-                a_job.finished.connect(on_populate_finished);
                 break;
         }
         return false;
     }
 
-    private void on_populate_finished(Worker.Job sender) {
+    private void on_populate_finished() {
         return_if_fail(Main.instance.is_same_thread());
-        //return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
-        sender.finished.disconnect(on_populate_finished);
         main_window.musicBr.set_model(this);
         populating_model = false;
     }
@@ -769,8 +771,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         switch(global.collection_sort_mode) {
             case CollectionSortMode.GENRE_ARTIST_ALBUM:
                 if(item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.load_genres_content_job);
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.load_genres_content_job, Worker.Priority.HIGH);
                     job.set_arg("treerowref", treerowref);
                     job.item = item;
                     db_worker.push_job(job);
@@ -778,8 +780,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 break;
             case CollectionSortMode.ARTIST_ALBUM_TITLE:
                 if(item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST) {
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.load_artist_content_job);
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.load_artist_content_job, Worker.Priority.HIGH);
                     job.set_arg("treerowref", treerowref);
                     job.item = item;
                     db_worker.push_job(job);
@@ -787,8 +789,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 break;
             case CollectionSortMode.ALBUM_ARTIST_TITLE:
                 if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-                    var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                             this.load_album_content_job);
+                    var job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                             this.load_album_content_job, Worker.Priority.HIGH);
                     job.set_arg("treerowref", treerowref);
                     job.item = item;
                     db_worker.push_job(job);
@@ -835,8 +837,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                  );
                         Gtk.TreePath p1 = this.get_path(iter_artist);
                         TreeRowReference treerowref = new TreeRowReference(this, p1);
-                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                                       this.load_albums_job);
+                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE,
+                                                       this.load_albums_job, Worker.Priority.HIGH);
                         job_album.set_arg("treerowref", treerowref);
                         Item[] temp_items = new Item[2];
                         temp_items[0] = artist;
@@ -913,8 +915,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                  );
                         Gtk.TreePath p1 = this.get_path(iter_album);
                         TreeRowReference treerowref = new TreeRowReference(this, p1);
-                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                                       this.load_titles_job);
+                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE,
+                                                       this.load_titles_job, Worker.Priority.HIGH);
                         job_title.set_arg("treerowref", treerowref);
                         job_title.item = album;
                         db_worker.push_job(job_title);
@@ -961,13 +963,13 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                                  );
                         Gtk.TreePath p1 = this.get_path(iter_artist);
                         TreeRowReference treerowref = new TreeRowReference(this, p1);
-//                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-//                                                       this.load_titles_job);
+//                        var job_title = new Worker.Job(Worker.ExecutionType.ONCE,
+//                                                       this.load_titles_job, Worker.Priority.HIGH);
 //                        job_title.set_arg("treerowref", treerowref);
 //                        job_title.item = artist;
 //                        db_worker.push_job(job_title);
-                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                                       this.load_titles_job);
+                        var job_album = new Worker.Job(Worker.ExecutionType.ONCE,
+                                                       this.load_titles_job, Worker.Priority.HIGH);
                         job_album.set_arg("treerowref", treerowref);
                         Item[] temp_items = new Item[2];
                         temp_items[0] = artist;
@@ -1139,7 +1141,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 TreePath p = row_ref.get_path();
                 TreeIter iter_title, iter_album;
                 this.get_iter(out iter_album, p);
-                foreach(unowned TrackData td in job.track_dat) {
+                foreach(TrackData td in job.track_dat) {
                     this.append(out iter_title, iter_album);
                     if(!td.is_compilation) {
                         this.set(iter_title,
@@ -1176,7 +1178,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 TreePath p = row_ref.get_path();
                 TreeIter iter_title, iter_artist;
                 this.get_iter(out iter_artist, p);
-                foreach(unowned TrackData td in job.track_dat) {
+                foreach(TrackData td in job.track_dat) {
                     this.append(out iter_title, iter_artist);
                     this.set(iter_title,
                              Column.ICON, null,

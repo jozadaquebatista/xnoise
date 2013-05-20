@@ -84,7 +84,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     
     private void fill_entries() {
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.query_trackdata_job);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job, Worker.Priority.HIGH);
         job.item = item;
         db_worker.push_job(job);
     }
@@ -257,7 +257,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;
-            foreach(unowned TrackData td in job.track_dat) {
+            foreach(TrackData td in job.track_dat) {
                 td.albumartist    = new_artist_name;//(string)tag_job.get_arg("new_content_name");//
                 td.album          = new_content_name;//(string)tag_job.get_arg("new_content_name");//
                 td.year           = (uint)new_year;//(uint)  tag_job.get_arg("new_year");//

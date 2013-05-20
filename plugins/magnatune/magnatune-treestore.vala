@@ -297,7 +297,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             return;
         TreeRowReference treerowref = new TreeRowReference(this, path);
         if(path.get_depth() == 1) {
-            job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
+            job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_album_and_tracks_job, Worker.Priority.HIGH);
             job.set_arg("treerowref", treerowref);
             job.item = item;
             db_worker.push_job(job);
@@ -372,8 +372,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
-                var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                               this.populate_title_job);
+                var job_title = new Worker.Job(Worker.ExecutionType.ONCE,
+                                               this.populate_title_job, Worker.Priority.HIGH);
                 job_title.set_arg("treerowref", treerowref);
                 job_title.item = album;
                 db_worker.push_job(job_title);
@@ -426,19 +426,20 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
 //        switch(global.collection_sort_mode) {
 //            case CollectionSortMode.GENRE_ARTIST_ALBUM:
 //                print("magnatune GENRE_ARTIST_ALBUM\n");
-//                var g_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-//                                           this.populate_genres_job);
+//                var g_job = new Worker.Job(Worker.ExecutionType.ONCE,
+//                                           this.populate_genres_job, Worker.Priority.HIGH);
 //                g_job.cancellable = this.cancel;
 //                db_worker.push_job(g_job);
 //                g_job.finished.connect(on_populate_finished);
 //                break;
 //            case CollectionSortMode.ARTIST_ALBUM_TITLE:
 //            default:
-                var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
-                                           this.populate_artists_job);
+                var a_job = new Worker.Job(Worker.ExecutionType.ONCE,
+                                           this.populate_artists_job, Worker.Priority.HIGH,
+                                           on_populate_finished);
                 a_job.cancellable = this.cancel;
                 db_worker.push_job(a_job);
-                a_job.finished.connect(on_populate_finished);
+//                a_job.finished.connect(on_populate_finished);
 //                break;
 //        }
         return false;
@@ -484,10 +485,10 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         return false;
     }
 
-    private void on_populate_finished(Worker.Job sender) {
+    private void on_populate_finished() {
         return_if_fail(Main.instance.is_same_thread());
         //return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
-        sender.finished.disconnect(on_populate_finished);
+//        sender.finished.disconnect(on_populate_finished);
         view.set_model(this);
 //        populating_model = false;
     }

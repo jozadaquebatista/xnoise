@@ -194,7 +194,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     return;
                 }
                 Worker.Job job;
-                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_imported_job);
+                job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_imported_job, Worker.Priority.HIGH);
                 job.item = item;
                 db_worker.push_job(job);
                 break;

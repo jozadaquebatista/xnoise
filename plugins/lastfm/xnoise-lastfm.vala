@@ -287,7 +287,7 @@ public class Xnoise.LastFmCovers :
                     continue; //Local file exists
                 }
             }
-            var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, copy_covers_job);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, copy_covers_job, Worker.Priority.HIGH);
             job.set_arg("reply_artist", sender.reply_artist.down());
             job.set_arg("reply_album",  sender.reply_album.down());
             io_worker.push_job(job);

@@ -419,10 +419,10 @@ public class Xnoise.MediaImporter : GLib.Object {
         if(((bool)job.get_arg("full_rescan"))) {
             db_writer.del_all_folders();
             
-            foreach(unowned Item? folder in job.items)
+            foreach(Item? folder in job.items)
                 mfolders_ht.insert(folder.uri, folder); // this removes double entries
             
-            foreach(unowned Item? folder in mfolders_ht.get_values())
+            foreach(Item? folder in mfolders_ht.get_values())
                 db_writer.add_single_folder_to_collection(folder);
             
             if(mfolders_ht.get_keys().length() == 0) {
@@ -437,7 +437,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             //}
             //print("count: %d\n", (int)(job.big_counter[0]));            
             int cnt = 1;
-            foreach(unowned Item? folder in mfolders_ht.get_values()) {
+            foreach(Item? folder in mfolders_ht.get_values()) {
                 File dir = File.new_for_uri(folder.uri);
                 assert(dir != null);
                 // import all the files
@@ -456,16 +456,16 @@ public class Xnoise.MediaImporter : GLib.Object {
             
             string[] dbfolders = db_writer.get_media_folders();
             
-            foreach(unowned Item? folder in job.items)
+            foreach(Item? folder in job.items)
                 mfolders_ht.insert(folder.uri, folder); // this removes double entries
             
             db_writer.del_all_folders();
             
-            foreach(unowned Item? folder in mfolders_ht.get_values())
+            foreach(Item? folder in mfolders_ht.get_values())
                 db_writer.add_single_folder_to_collection(folder);
             
             var new_mfolders_ht = new HashTable<string,Item?>(str_hash, str_equal);
-            foreach(unowned Item? folder in mfolders_ht.get_values()) {
+            foreach(Item? folder in mfolders_ht.get_values()) {
                 File f = File.new_for_uri(folder.uri);
                 if(f == null)
                     continue;
@@ -485,7 +485,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                 return false;
             }
             int cnt = 1;
-            foreach(unowned Item? folder in new_mfolders_ht.get_values()) {
+            foreach(Item? folder in new_mfolders_ht.get_values()) {
                 File? dir = File.new_for_uri(folder.uri);
                 print("++%s\n", folder.uri);
                 assert(dir != null);
@@ -577,7 +577,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                         }
                         if(tda.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-                            db_job.track_dat = tda;
+                            db_job.track_dat = (owned)tda;
                             db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
                             tda = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
@@ -595,7 +595,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         if(job.counter[0] == 0) {
             if(tda.length > 0) {
                 var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-                db_job.track_dat = tda;
+                db_job.track_dat = (owned)tda;
                 tda = {};
                 dbus_image_extractor.queue_uris(uris_for_image_extraction);
                 uris_for_image_extraction = {};

@@ -70,7 +70,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
     private void fill_entries() {
         // read tags and put them to the entries; store current tags to be able to realize changes
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.query_trackdata_job);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job, Worker.Priority.HIGH);
         job.item = item;
         db_worker.push_job(job);
     }
