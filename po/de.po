@@ -217,7 +217,7 @@ msgstr "Externes Abspielgerät"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 msgid "Add or Remove media"
-msgstr "Hinzufügen oder Enfernen von Medien"
+msgstr "Verwalte Medien"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"

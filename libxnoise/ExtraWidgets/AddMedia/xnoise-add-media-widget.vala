@@ -1,6 +1,6 @@
 /* xnoise-add-media-widget.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -163,21 +163,24 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             bok                    = builder.get_object("okbutton") as Button;
             bok.sensitive          = !global.media_import_in_progress;
             
-            var fullrescan_switch  = builder.get_object("fullrescan_switch") as Gtk.Switch;
-            fullrescan_switch.tooltip_markup = 
-                Markup.printf_escaped(_("If selected, all media folders will be fully rescanned"));
-            fullrescan_switch.notify["active"].connect( (s,p) => {
+            var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
+            fullrescan_check.label = _("Do full rescan");
+            fullrescan_check.tooltip_text = _("If selected, all media folders will be fully rescanned");
+            fullrescan_check.active = true;
+            fullrescan_check.toggled.connect( () => {
                 //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
-                this.fullrescan = ((Switch)s).active;
+                this.fullrescan = fullrescan_check.active;
             });
             
-            baddfolder.tooltip_markup = Markup.printf_escaped(_("Add local folder"));
-            baddradio.tooltip_markup  = Markup.printf_escaped(_("Add media stream"));
-            brem.tooltip_markup       = Markup.printf_escaped(_("Remove"));
+            baddfolder.tooltip_text = _("Add local folder");
+            baddradio.tooltip_text  = _("Add media stream");
+            brem.tooltip_text       = _("Remove");
             
-            var fullrescan_label   = builder.get_object("fullrescan_label") as Label; 
-            fullrescan_label.label = _("Do full rescan");
+            descriptionlabel.set_line_wrap(true);
+            descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
             descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
+            descriptionlabel.set_line_wrap(true);
+            descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
             this.pack_start(mainvbox, true, true, 0);
             
             bok.clicked.connect(on_ok_button_clicked);

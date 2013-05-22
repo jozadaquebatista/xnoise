@@ -470,11 +470,11 @@ public class Xnoise.LfmWidget: Gtk.Box {
         unowned IconTheme theme = IconTheme.get_default();
         try {
             if(theme.has_icon("xn-lastfm")) {
-                image = theme.load_icon("xn-lastfm", 80, IconLookupFlags.FORCE_SIZE);
+                image = theme.load_icon("xn-lastfm", 42, IconLookupFlags.FORCE_SIZE);
                 var b = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
                 b.pack_start(new Gtk.Image.from_pixbuf(image), false, false, 0);
                 b.pack_start(new Gtk.Label(""), true, true, 0);
-                this.pack_start(b, false, false, 5);
+                this.pack_start(b, false, false, 2);
             }
         }
         catch(Error e) {
@@ -483,13 +483,13 @@ public class Xnoise.LfmWidget: Gtk.Box {
         }
         
         var lb = new LinkButton.with_label("http://www.lastfm.com", _("Visit LastFm for an account."));
-        lb.margin_top    = 5;
-        lb.margin_bottom = 5;
+        lb.margin_top    = 1;
+        lb.margin_bottom = 1;
         lb.set_alignment(0.0f, 0.5f);
         var bx2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         bx2.pack_start(lb, false, false, 0);
         bx2.pack_start(new Gtk.Label(""), true, true, 0);
-        this.pack_start(bx2, false, false, 5);
+        this.pack_start(bx2, false, false, 2);
 
         var title_label = new Label("<b>%s</b>".printf(_("Please enter your lastfm username and password.")));
         title_label.set_use_markup(true);
@@ -523,10 +523,10 @@ public class Xnoise.LfmWidget: Gtk.Box {
         sizegroup.add_widget(user_label);
         sizegroup.add_widget(pass_label);
         
-        this.pack_start(hbox1, false, false, 4);
-        this.pack_start(hbox2, false, false, 4);
+        this.pack_start(hbox1, false, false, 2);
+        this.pack_start(hbox2, false, false, 2);
         
-        use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm (Send song data to create statistis)"));
+        use_scrobble_check = new CheckButton.with_label(_("'Scrobble' played tracks on lastfm"));
         this.pack_start(use_scrobble_check, false, false, 0);
         
         var hbox3 = new Box(Orientation.HORIZONTAL, 2);
@@ -547,7 +547,7 @@ public class Xnoise.LfmWidget: Gtk.Box {
         feedback_label.set_use_markup(true);
         feedback_label.set_single_line_mode(true);
         feedback_label.set_alignment(0.1f, 0.5f);
-        feedback_label.ypad = 20;
+        feedback_label.ypad = 8;
         this.pack_start(feedback_label, false, false, 0);
     }
 }

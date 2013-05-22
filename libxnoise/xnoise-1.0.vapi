@@ -1361,7 +1361,7 @@ public enum PluginCategory {
 	ALBUM_ART_PROVIDER,
 	LYRICS_PROVIDER,
 	GUI,
-	MUSIC_STORE,
+	WEB_SERVICE,
 	ADDITIONAL
 }
 [CCode (cheader_filename = "xnoise-1.0.h")]

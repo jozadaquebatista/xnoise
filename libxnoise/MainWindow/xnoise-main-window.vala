@@ -72,7 +72,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Xnoise.AppMenuButton app_menu_button;
     private string temporary_mainview_name;
     private bool window_maximized;
-    private SettingsWidget settings_widget;
+//    private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
     private Gtk.Notebook bottom_notebook;
     private Gtk.Notebook content_notebook;
@@ -1269,11 +1269,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         dialog.destroy();
     }
 
+    
     private void on_menu_add() {
-        album_art_view_visible = false;
+//        album_art_view_visible = false;
 //        album_view_toggle.set_active(false);
-        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
+//        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
+        var settings_widget = new SettingsWidget();
+        var dialog = new Gtk.Dialog.with_buttons(_("Settings"),
+                                                 this,
+                                                 Gtk.DialogFlags.MODAL |
+                                                 Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                                                 Gtk.Stock.CLOSE,
+                                                 null);
+        dialog.set_modal(true);
+        dialog.set_skip_taskbar_hint(true);
+        dialog.get_content_area().add(settings_widget);
         settings_widget.select_media_tab();
+        if(dialog.run() == Gtk.ResponseType.CLOSE) {
+            print("close dialog\n");
+        }
+        dialog.destroy();
     }
     
     internal void show_content() {
@@ -1425,9 +1440,31 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void on_settings_edit() {
-        album_art_view_visible = false;
+        var settings_widget = new SettingsWidget();
+        var dialog = new Gtk.Dialog.with_buttons(_("Settings"),
+                                                 this,
+                                                 Gtk.DialogFlags.MODAL | 
+                                                 Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                                                 _("Close"),
+                                                 Gtk.ResponseType.CLOSE,
+                                                 null);
+        dialog.set_modal(true);
+        dialog.set_transient_for(this);
+        dialog.set_skip_taskbar_hint(true);
+        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
+        dialog.get_content_area().add(settings_widget);
+        dialog.set_resizable(false);
+        settings_widget.set_size_request(-1, 450);
+        settings_widget.show_all();
         settings_widget.select_general_tab();
-        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
+        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
+        dialog.set_modal(true);
+        dialog.run();
+        dialog.destroy();
+        Params.write_all_parameters_to_file();
+
+//        album_art_view_visible = false;
+//        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
     }
 
     internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
@@ -1820,8 +1857,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.lyricsView = lyricsview_widget.lyricsView;
             mainview_box.add_main_view(lyricsview_widget);
             
-            settings_widget = new SettingsWidget();
-            paned2notebook.append_page(settings_widget, null);
+//            settings_widget = new SettingsWidget();
+//            paned2notebook.append_page(settings_widget, null);
             
             mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
             

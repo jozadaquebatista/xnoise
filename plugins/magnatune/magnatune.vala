@@ -221,11 +221,11 @@ public class MagnatuneSettings : Gtk.Box {
         unowned IconTheme theme = IconTheme.get_default();
         try {
             if(theme.has_icon("xn-magnatune")) {
-                image = theme.load_icon("xn-magnatune", 80, IconLookupFlags.FORCE_SIZE);
+                image = theme.load_icon("xn-magnatune", 42, IconLookupFlags.FORCE_SIZE);
                 var bx1 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
                 bx1.pack_start(new Gtk.Image.from_pixbuf(image), false, false, 0);
                 bx1.pack_start(new Gtk.Label(""), true, true, 0);
-                this.pack_start(bx1, false, false, 5);
+                this.pack_start(bx1, false, false, 2);
             }
         }
         catch(Error e) {
@@ -235,13 +235,13 @@ public class MagnatuneSettings : Gtk.Box {
             "http://magnatune.com", 
             _("Visit Magnatune for an account.")
         );
-        lb.margin_top    = 5;
-        lb.margin_bottom = 5;
+        lb.margin_top    = 1;
+        lb.margin_bottom = 1;
         lb.set_alignment(0.0f, 0.5f);
         var bx2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         bx2.pack_start(lb, false, false, 0);
         bx2.pack_start(new Gtk.Label(""), true, true, 0);
-        this.pack_start(bx2, false, false, 5);
+        this.pack_start(bx2, false, false, 2);
         
         var title_label = new Label("<b>%s</b>".printf(
            _("Please enter your Magnatune username and password."))
@@ -277,8 +277,8 @@ public class MagnatuneSettings : Gtk.Box {
         sizegroup.add_widget(user_label);
         sizegroup.add_widget(pass_label);
         
-        this.pack_start(hbox1, false, false, 4);
-        this.pack_start(hbox2, false, false, 4);
+        this.pack_start(hbox1, false, false, 2);
+        this.pack_start(hbox2, false, false, 2);
         
         var hbox3 = new Box(Orientation.HORIZONTAL, 2);
         b = new Button.from_stock(Gtk.Stock.APPLY);
@@ -298,7 +298,7 @@ public class MagnatuneSettings : Gtk.Box {
         feedback_label.set_use_markup(true);
         feedback_label.set_single_line_mode(true);
         feedback_label.set_alignment(0.1f, 0.5f);
-        feedback_label.ypad = 20;
+        feedback_label.ypad = 8;
         this.pack_start(feedback_label, false, false, 0);
     }
 }

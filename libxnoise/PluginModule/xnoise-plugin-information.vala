@@ -35,7 +35,7 @@ public enum PluginCategory {
     ALBUM_ART_PROVIDER,
     LYRICS_PROVIDER,
     GUI,
-    MUSIC_STORE,
+    WEB_SERVICE,
     ADDITIONAL
 }
 
@@ -94,11 +94,11 @@ public class Xnoise.PluginModule.Information : GLib.Object {
             if(kf.has_key(group, "category"))
                 cat = kf.get_string(group, "category");
             switch(cat.down()) {
-                case "music_store":
-                case "music-store":
-                case "musicstore":
-                case "music store":
-                    _category = PluginCategory.MUSIC_STORE;
+                case "web_service":
+                case "web-service":
+                case "webservice":
+                case "web service":
+                    _category = PluginCategory.WEB_SERVICE;
                     break;
                 case "album_art":
                 case "album_art_provider":
