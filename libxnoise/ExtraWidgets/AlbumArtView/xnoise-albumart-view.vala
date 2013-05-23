@@ -77,11 +77,8 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         grey_color.blue  = 0.9;
         grey_color.alpha  = 1.0;
         
-        //Gdk.RGBA selc = base.get_style_context().get_background_color(Gtk.StateFlags.PRELIGHT);
         this.override_background_color(StateFlags.NORMAL, black_color);
         this.override_background_color(StateFlags.SELECTED, grey_color);
-        this.override_background_color(StateFlags.FOCUSED, grey_color);
-        this.override_background_color(StateFlags.ACTIVE, grey_color);
         
         this.area = area;
         var font_description = new Pango.FontDescription();
@@ -114,10 +111,14 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 return;
             if(this.in_import) {
                 black = false;
+                this.override_background_color(StateFlags.NORMAL, null);
+                this.override_background_color(StateFlags.SELECTED, null);
                 queue_draw();
             }
             else {
                 black = true;
+                this.override_background_color(StateFlags.NORMAL, black_color);
+                this.override_background_color(StateFlags.SELECTED, grey_color);
                 queue_draw();
             }
         });
