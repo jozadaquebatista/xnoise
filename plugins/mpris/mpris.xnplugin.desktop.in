@@ -6,6 +6,7 @@ _description=Control xnoise with a MPRIS v2 dbus interface
 website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 category=additional
+user_activatable=no
 copyright=Copyright © 2010 Andreas Obergrusber
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Andreas Obergrusberger <softshaker@googlemail.com>, Jörn Magens <shuerhaaken@googlemail.com>

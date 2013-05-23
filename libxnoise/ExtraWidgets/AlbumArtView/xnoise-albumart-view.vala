@@ -59,6 +59,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     public bool in_import  { get; private set; }
     
     private Gdk.RGBA black_color;
+    private Gdk.RGBA grey_color;
     private bool black = true;
     
     public AlbumArtView(CellArea area) {
@@ -70,9 +71,17 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         black_color.blue  = 0.0;
         black_color.alpha  = 1.0;
         
-        Gdk.RGBA selc = base.get_style_context().get_background_color(Gtk.StateFlags.PRELIGHT);
+        grey_color = Gdk.RGBA();
+        grey_color.red   = 0.9;
+        grey_color.green = 0.9;
+        grey_color.blue  = 0.9;
+        grey_color.alpha  = 1.0;
+        
+        //Gdk.RGBA selc = base.get_style_context().get_background_color(Gtk.StateFlags.PRELIGHT);
         this.override_background_color(StateFlags.NORMAL, black_color);
-        this.override_background_color(StateFlags.SELECTED, selc);
+        this.override_background_color(StateFlags.SELECTED, grey_color);
+        this.override_background_color(StateFlags.FOCUSED, grey_color);
+        this.override_background_color(StateFlags.ACTIVE, grey_color);
         
         this.area = area;
         var font_description = new Pango.FontDescription();

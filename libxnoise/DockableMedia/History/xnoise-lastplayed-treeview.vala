@@ -44,8 +44,6 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
-//    private int fontsizeMB = 10;
-    private Pango.FontDescription font_description;
     private int last_width;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
@@ -64,14 +62,11 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
        
         var column = new TreeViewColumn();
         
-//        fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
-        font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
-        var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
+        var renderer = new ListFlowingTextRenderer(column, hsepar);
         
 //        var rendererPb = new CellRendererItemPixbuf();
         
@@ -149,19 +144,6 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
                     });
                 return false;
             });
-        });
-        global.notify["fontsize-dockable"].connect( () => {
-            if(global.fontsize_dockable == 0) { //default
-                font_description.set_size((int)(10 * Pango.SCALE));
-            }
-            else {
-                font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
-                Idle.add(()  => {
-                    this.set_model(null);
-                    this.set_model(tvm);
-                    return false;
-                });
-            }
         });
         context.save();
         Gdk.RGBA color, scolor;
@@ -369,7 +351,6 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
 private class Xnoise.ListFlowingTextRenderer : CellRendererText {
     private int maxiconwidth;
     private const int INDENT = 2;
-    private unowned Pango.FontDescription font_description;
     private unowned TreeViewColumn col;
     private int hsepar;
     
@@ -377,13 +358,11 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
     public unowned Gdk.Pixbuf pix   { get; set; }
     public ItemType itype { get; set; default = ItemType.UNKNOWN; }
     
-    public ListFlowingTextRenderer(Pango.FontDescription font_description,
-                                   TreeViewColumn col,
+    public ListFlowingTextRenderer(TreeViewColumn col,
                                    int hsepar) {
         GLib.Object();
         this.col = col;
         this.hsepar = hsepar;
-        this.font_description = font_description;
         maxiconwidth = 0;
     }
     
@@ -398,7 +377,6 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
         int iconheight = (pix == null) ? 18 : pix.get_height();
         sum = hsepar + (2 * (int)xpad) + iconwidth + INDENT;
         var pango_layout = widget.create_pango_layout(text);
-        pango_layout.set_font_description(this.font_description);
         pango_layout.set_alignment(Pango.Alignment.LEFT);
         pango_layout.set_width( (int)((column_width - sum - 4) * Pango.SCALE));
         pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
@@ -427,7 +405,6 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
                                 CellRendererState flags) {
         StyleContext context;
         var pango_layout = widget.create_pango_layout(text);
-        pango_layout.set_font_description(this.font_description);
         pango_layout.set_alignment(Pango.Alignment.LEFT);
         int iconwidth = (pix == null) ? 18 : pix.get_width();
         int sum = hsepar + (2 * (int)xpad) + iconwidth;

@@ -45,8 +45,6 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
-//    private int fontsizeMB = 10;
-    private Pango.FontDescription font_description;
     private int last_width;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
@@ -64,14 +62,11 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         
         var column = new TreeViewColumn();
         
-//        fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
-        font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
-        var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
+        var renderer = new ListFlowingTextRenderer(column, hsepar);
         
 
         column.pack_start(renderer, true);
@@ -154,19 +149,6 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
                 return false;
             });
         });
-        global.notify["fontsize-dockable"].connect( () => {
-            if(global.fontsize_dockable == 0) { //default
-                font_description.set_size((int)(10 * Pango.SCALE));
-            }
-            else {
-                font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
-                Idle.add(()  => {
-                    this.set_model(null);
-                    this.set_model(tvm);
-                    return false;
-                });
-            }
-        });
         context.save();
         Gdk.RGBA color, scolor;
         scolor = context.get_background_color(StateFlags.SELECTED);
@@ -238,74 +220,6 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         return DynPlaylistType.MOSTPLAYED;
     }
 
-//    private class ListFlowingTextRenderer : CellRendererText {
-//        private int maxiconwidth;
-//        private unowned Pango.FontDescription font_description;
-//        private unowned TreeViewColumn col;
-//        private int hsepar;
-//        
-//        public int level                { get; set; }
-//        public unowned Gdk.Pixbuf pix   { get; set; }
-//        
-//        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
-//            GLib.Object();
-//            this.col = col;
-//            this.hsepar = hsepar;
-//            this.font_description = font_description;
-//            maxiconwidth = 0;
-//        }
-//        
-//        public override void get_preferred_height_for_width(Gtk.Widget widget,
-//                                                            int width,
-//                                                            out int minimum_height,
-//                                                            out int natural_height) {
-//            int column_width = widget.get_allocated_width();//col.get_width();
-//            //print("cw: %d   cwo: %d\n", column_width, col.get_width());
-//            int sum = 0;
-//            int iconwidth = (pix == null) ? 16 : pix.get_width();
-//            if(maxiconwidth < iconwidth)
-//                maxiconwidth = iconwidth;
-//            sum = hsepar + (2 * (int)xpad) + maxiconwidth;
-//            var pango_layout = widget.create_pango_layout(text);
-//            pango_layout.set_font_description(this.font_description);
-//            pango_layout.set_alignment(Pango.Alignment.LEFT);
-//            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
-//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-//            int wi, he = 0;
-//            pango_layout.get_pixel_size(out wi, out he);
-//            natural_height = minimum_height = he + 2;
-//        }
-//    
-//        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
-//                                      out int x_offset, out int y_offset,
-//                                      out int width, out int height) {
-//            // function not used for gtk+-3.0 !
-//            x_offset = 0;
-//            y_offset = 0;
-//            width = 0;
-//            height = 0;
-//        }
-//    
-//        public override void render(Cairo.Context cr, Widget widget,
-//                                    Gdk.Rectangle background_area,
-//                                    Gdk.Rectangle cell_area,
-//                                    CellRendererState flags) {
-//            StyleContext context;
-//            var pango_layout = widget.create_pango_layout(text);
-//            pango_layout.set_font_description(this.font_description);
-//            pango_layout.set_alignment(Pango.Alignment.LEFT);
-//            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
-//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-//            context = widget.get_style_context();
-//            int wi = 0, he = 0;
-//            pango_layout.get_pixel_size(out wi, out he);
-//            if(cell_area.height > he)
-//                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
-//            else
-//                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
-//        }
-//    }
-//    
     private void on_drag_begin(Gtk.Widget sender, DragContext context) {
         this.dragging = true;
         List<unowned TreePath> treepaths;

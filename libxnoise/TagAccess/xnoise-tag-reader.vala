@@ -118,7 +118,7 @@ public class Xnoise.TagAccess.TagReader {
         if(td.title  == UNKNOWN_TITLE)
             td.title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
         
-        return (owned)td;
+        return td;
     }
 }
 

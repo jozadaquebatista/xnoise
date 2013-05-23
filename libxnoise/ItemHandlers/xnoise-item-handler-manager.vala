@@ -113,9 +113,9 @@ namespace Xnoise {
         public static Item? create_item(string? uri) {
             if(uri == null)
                 return Item(ItemType.UNKNOWN);
-            Item? item = Item(ItemType.UNKNOWN, uri);
-            item.stamp = get_current_stamp(0); // dummy
             File f = File.new_for_uri(uri);
+            Item? item = Item(ItemType.UNKNOWN, f.get_uri());
+            item.stamp = get_current_stamp(0); // dummy
             string scheme = f.get_uri_scheme();
             if(scheme in get_remote_schemes()) {
                 // no general check for media extension because often streams are lacking these

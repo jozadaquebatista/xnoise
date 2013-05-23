@@ -507,7 +507,6 @@ AC_CONFIG_FILES([
     plugins/azlyrics/Makefile
     plugins/chartlyrics/Makefile
     plugins/databaseLyrics/Makefile
-    plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
     plugins/lastfm/Makefile
     plugins/lastfm/icons/Makefile

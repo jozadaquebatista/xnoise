@@ -544,7 +544,11 @@ public class Xnoise.MediaImporter : GLib.Object {
                 }
                 else {
                     string uri_lc = filename.down();
-                    if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
+                    string suffix = get_suffix_from_filename(uri_lc);
+                    if(!Playlist.is_playlist_extension(suffix)) {
+                        suffix = suffix.down();
+                        if(suffix == "jpg" || suffix == "png" || suffix == "txt")
+                            continue;
                         //print("filepath: %s\n", filepath);
                         var tr = new TagReader();
                         td = tr.read_tag(filepath, false);
@@ -558,7 +562,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                                 current_import_track_count++;
                             }
                         }
-                        if(job.big_counter[1] % 50 == 0) {
+                        if(job.big_counter[1] % 200 == 0) {
                             Idle.add( () => {  // Update progress bar
                                 uint xcnt = 0;
                                 lock(current_import_track_count) {

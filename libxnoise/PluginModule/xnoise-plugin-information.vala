@@ -52,19 +52,21 @@ public class Xnoise.PluginModule.Information : GLib.Object {
     private string _pretty_name;
     private string _website;
     private string _xplug_file;
+    private bool   _user_activatable;
     private PluginCategory _category = PluginCategory.UNSPECIFIED;
     
-    public string xplug_file        { get { return _xplug_file;     } }
-    public string name              { get { return _name;           } }
-    public string pretty_name       { get { return _pretty_name;    } }
-    public string icon              { get { return _icon;           } }
-    public string module            { get { return _module;         } }
-    public string description       { get { return _description;    } }
-    public string website           { get { return _website;        } }
-    public string license           { get { return _license;        } }
-    public string copyright         { get { return _copyright;      } }
-    public string author            { get { return _author;         } }
-    public PluginCategory category  { get { return _category;       } }
+    public string xplug_file        { get { return _xplug_file;       } }
+    public string name              { get { return _name;             } }
+    public string pretty_name       { get { return _pretty_name;      } }
+    public string icon              { get { return _icon;             } }
+    public string module            { get { return _module;           } }
+    public string description       { get { return _description;      } }
+    public string website           { get { return _website;          } }
+    public string license           { get { return _license;          } }
+    public string copyright         { get { return _copyright;        } }
+    public string author            { get { return _author;           } }
+    public bool user_activatable    { get { return _user_activatable; } }
+    public PluginCategory category  { get { return _category;         } }
 
 
     public Information(string xplug_file) {
@@ -90,6 +92,7 @@ public class Xnoise.PluginModule.Information : GLib.Object {
             _website     = kf.get_string(group, "website");
             _license     = kf.get_string(group, "license");
             _copyright   = kf.get_string(group, "copyright");
+            _user_activatable = kf.get_string(group, "user_activatable").strip().down() == "yes";
             string cat = "";
             if(kf.has_key(group, "category"))
                 cat = kf.get_string(group, "category");

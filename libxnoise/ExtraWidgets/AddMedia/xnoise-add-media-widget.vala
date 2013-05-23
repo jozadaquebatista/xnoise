@@ -166,7 +166,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
             fullrescan_check.label = _("Do full rescan");
             fullrescan_check.tooltip_text = _("If selected, all media folders will be fully rescanned");
-            fullrescan_check.active = true;
+            this.fullrescan = fullrescan_check.active = true;
             fullrescan_check.toggled.connect( () => {
                 //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
                 this.fullrescan = fullrescan_check.active;

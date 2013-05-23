@@ -64,7 +64,6 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
     };
 
     private Gdk.Pixbuf? logo = null;
-//    public const int ICONSIZE = 180;
     private unowned AlbumArtView view;
     
     public IconsModel(AlbumArtView view) {
@@ -73,8 +72,6 @@ private class Xnoise.IconsModel : Gtk.ListStore, Gtk.TreeModel {
         logo = AlbumArtView.icon_cache.album_art;
         
         global.sign_searchtext_changed.connect( (s,t) => {
-//            if(!cache_ready)
-//                return;
             if(main_window.album_art_view_visible) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);

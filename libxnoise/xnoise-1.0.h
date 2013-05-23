@@ -1745,6 +1745,7 @@ struct _XnoisePluginModuleLoader {
 	GHashTable* plugin_htable;
 	GHashTable* lyrics_plugins_htable;
 	GHashTable* image_provider_htable;
+	GList* auto_actives;
 };
 
 struct _XnoisePluginModuleLoaderClass {
@@ -2349,8 +2350,6 @@ const gchar* xnoise_global_access_get_searchtext (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_searchtext (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_active_dockable_media_name (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_active_dockable_media_name (XnoiseGlobalAccess* self, const gchar* value);
-gint xnoise_global_access_get_fontsize_dockable (XnoiseGlobalAccess* self);
-void xnoise_global_access_set_fontsize_dockable (XnoiseGlobalAccess* self, gint value);
 XnoiseCollectionSortMode xnoise_global_access_get_collection_sort_mode (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_collection_sort_mode (XnoiseGlobalAccess* self, XnoiseCollectionSortMode value);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;
@@ -2711,6 +2710,7 @@ const gchar* xnoise_plugin_module_information_get_website (XnoisePluginModuleInf
 const gchar* xnoise_plugin_module_information_get_license (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_copyright (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_author (XnoisePluginModuleInformation* self);
+gboolean xnoise_plugin_module_information_get_user_activatable (XnoisePluginModuleInformation* self);
 PluginCategory xnoise_plugin_module_information_get_category (XnoisePluginModuleInformation* self);
 gboolean xnoise_plugin_module_iplugin_init (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_uninit (XnoisePluginModuleIPlugin* self);

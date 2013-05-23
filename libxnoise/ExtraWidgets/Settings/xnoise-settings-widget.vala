@@ -124,22 +124,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_compact_media_selector.active = true;
         else
             switch_compact_media_selector.active = false;
-        
-//        // SpinButton
-//        if((Params.get_int_value("fontsizeMB") >= 7)&&
-//            (Params.get_int_value("fontsizeMB") <= 14))
-//            sb.set_value((double)Params.get_int_value("fontsizeMB"));
-//        else
-//            sb.set_value(9.0);
     }
-
-//    private void on_mb_font_changed(Gtk.Editable sender) {
-//        if((int)(((Gtk.SpinButton)sender).value) < 7 ) ((Gtk.SpinButton)sender).value = 7;
-//        if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
-//        fontsizeMB = (int)((Gtk.SpinButton)sender).value;
-//        global.fontsize_dockable = fontsizeMB;
-//        Params.set_int_value("fontsizeMB", fontsizeMB);
-//    }
 
     private void on_checkbutton_usetray_clicked() {
         if(this.switch_usetray.active) {
@@ -331,9 +316,13 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             add_media_widget = new AddMediaWidget();
             mediabox.pack_start(add_media_widget, true, true, 0);
             var web_service_box = this.builder.get_object("web_service_box") as Gtk.Box;
+            var web_service_parent_box = this.builder.get_object("box20") as Gtk.Box;
             var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
-            var additionals_box = this.builder.get_object("additionals_box") as Gtk.Box;
+            var lyric_parent_box = this.builder.get_object("box19") as Gtk.Box;
+            var additionals_box = this.builder.get_object("box21") as Gtk.Box;
+            var additionals_parent_box = this.builder.get_object("additionals_box") as Gtk.Box;
             var gui_box = this.builder.get_object("box6") as Gtk.Box;
+            var gui_parent_box = this.builder.get_object("box5") as Gtk.Box;
             
             //Category headlines
             var gui_label = this.builder.get_object("label2") as Gtk.Label;
@@ -351,12 +340,12 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             var web_service_label = this.builder.get_object("web_service_label") as Gtk.Label;
             web_service_label.use_markup = true;
             web_service_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Web Services:").strip()));
-            insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER);
-            insert_plugin_switches(web_service_box, PluginCategory.WEB_SERVICE);
-            insert_plugin_switches(gui_box, PluginCategory.GUI);
-            insert_plugin_switches(additionals_box, PluginCategory.ADDITIONAL);
-            insert_plugin_switches(additionals_box, PluginCategory.UNSPECIFIED);
-            insert_plugin_switches(additionals_box, PluginCategory.ALBUM_ART_PROVIDER);
+            insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER, lyric_parent_box);
+            insert_plugin_switches(web_service_box, PluginCategory.WEB_SERVICE, web_service_parent_box);
+            insert_plugin_switches(gui_box, PluginCategory.GUI, gui_parent_box);
+            insert_plugin_switches(additionals_box, PluginCategory.ADDITIONAL, additionals_parent_box);
+            insert_plugin_switches(additionals_box, PluginCategory.UNSPECIFIED, additionals_parent_box);
+            insert_plugin_switches(additionals_box, PluginCategory.ALBUM_ART_PROVIDER, additionals_parent_box);
             
             add_plugin_tabs();
             this.set_size_request(450, -1);
@@ -369,11 +358,13 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         return true;
     }
     
-    private void insert_plugin_switches(Box box, PluginCategory cat) {
+    private void insert_plugin_switches(Box box, PluginCategory cat, Box parent_category) {
         List<unowned string> list = plugin_loader.plugin_htable.get_keys();
         list.sort(strcmp);
         list.reverse();
         foreach(string plugin_name in list) {
+            if(plugin_loader.plugin_htable.lookup(plugin_name).info.user_activatable == false)
+                continue;
             if(plugin_loader.plugin_htable.lookup(plugin_name).info.category != cat)
                 continue;
             var plugin_switch = new PluginSwitch(plugin_name, this.plugin_label_sizegroup);
@@ -386,12 +377,12 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             plugin_switch.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
         }
         if(box.get_children().length() > 0) {
-            box.set_no_show_all(false);
-            box.show_all();
+            parent_category.set_no_show_all(false);
+            parent_category.show_all();
         }
         else {
-            box.hide();
-            box.set_no_show_all(true);
+            parent_category.hide();
+            parent_category.set_no_show_all(true);
         }
     }
 }

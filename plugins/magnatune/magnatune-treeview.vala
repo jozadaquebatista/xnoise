@@ -52,34 +52,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
     
-    private int _fontsize = 0;
-    internal int fontsize {
-        get {
-            return _fontsize;
-        }
-        set {
-            if (_fontsize == 0) { //intialization
-                if((value < 7)||(value > 14)) _fontsize = 7;
-                else _fontsize = value;
-                Idle.add( () => {
-                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-                    renderer.size_points = fontsize;
-                    return false;
-                });
-            }
-            else {
-                if((value < 7)||(value > 14)) _fontsize = 7;
-                else _fontsize = value;
-                Idle.add( () => {
-                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-                    renderer.size_points = fontsize;
-                    return false;
-                });
-                Idle.add(update_view);
-            }
-        }
-    }
-
     public MagnatuneTreeView(DockableMedia dock, 
                              MagnatuneWidget widg, 
                              Widget ow, 
@@ -611,7 +583,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         
         private int maxiconwidth;
         private unowned Widget ow;
-        private unowned Pango.FontDescription font_description;
         private unowned TreeViewColumn col;
         private int expander;
         private int hsepar;
@@ -628,7 +599,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         
         
         public FlowingTextRenderer(Widget ow, 
-                                   Pango.FontDescription font_description,
                                    TreeViewColumn col,
                                    int expander,
                                    int hsepar) {
@@ -637,7 +607,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             this.col = col;
             this.expander = expander;
             this.hsepar = hsepar;
-            this.font_description = font_description;
             maxiconwidth = 0;
             calculated_widh[0] = 0;
             calculated_widh[1] = 0;
@@ -669,7 +638,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( (int)((column_width - sum + WRAP_BUF) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
@@ -698,7 +666,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             
             StyleContext context;
             var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( 
                 (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
@@ -868,124 +835,8 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                       cell_area.y, 
                                       pango_layout);
         }
-    }//    private class FlowingTextRenderer : CellRendererText {
-//        private int maxiconwidth;
-//        private unowned Widget ow;
-//        private unowned Pango.FontDescription font_description;
-//        private unowned TreeViewColumn col;
-//        private int expander;
-//        private int hsepar;
-//        private int calculated_widh[3];
-//        
-//        public int level    { get; set; }
-//        public unowned Gdk.Pixbuf pix { get; set; }
-//        
-//        public FlowingTextRenderer(Widget ow, Pango.FontDescription font_description, TreeViewColumn col, int expander, int hsepar) {
-//            GLib.Object();
-//            this.ow = ow;
-//            this.col = col;
-//            this.expander = expander;
-//            this.hsepar = hsepar;
-//            this.font_description = font_description;
-//            maxiconwidth = 0;
-//            calculated_widh[0] = 0;
-//            calculated_widh[1] = 0;
-//            calculated_widh[2] = 0;
-//        }
-//        
-//        public override void get_preferred_height_for_width(Gtk.Widget widget,
-//                                                            int width,
-//                                                            out int minimum_height,
-//                                                            out int natural_height) {
-//            Gdk.Window? w = ow.get_window();
-//            if(w == null) {
-//                //print("no window (magnatune)\n");
-//                natural_height = minimum_height = 30;
-//                return;
-//            }
-//            int column_width = ow.get_allocated_width() - 2; //col.get_width();
-////            int column_width = col.get_width();
-//            int sum = 0;
-//            int iconwidth = 30;//(pix == null) ? 16 : pix.get_width();
-////            int iconwidth = (pix == null) ? 16 : pix.get_width();
-//            if(maxiconwidth < iconwidth)
-//                maxiconwidth = iconwidth;
-//            calculated_widh[level] = maxiconwidth;
-//            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2; 
-//            //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
-//            var pango_layout = widget.create_pango_layout(text);
-//            pango_layout.set_font_description(this.font_description);
-//            pango_layout.set_alignment(Pango.Alignment.LEFT);
-//            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
-//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-//            int wi, he = 0;
-//            pango_layout.get_pixel_size(out wi, out he);
-//            natural_height = minimum_height = he;
-//        }
-//    
-//        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
-//                                      out int x_offset, out int y_offset,
-//                                      out int width, out int height) {
-//            // function not used for gtk+-3.0 !
-//            x_offset = 0;
-//            y_offset = 0;
-//            width = 0;
-//            height = 0;
-//        }
-//    
-//        public override void render(Cairo.Context cr, Widget widget,
-//                                    Gdk.Rectangle background_area,
-//                                    Gdk.Rectangle cell_area,
-//                                    CellRendererState flags) {
-//            StyleContext context;
-//            //print("cell_area.width: %d level: %d\n", cell_area.width, level);
-//            var pango_layout = widget.create_pango_layout(text);
-//            pango_layout.set_font_description(this.font_description);
-//            pango_layout.set_alignment(Pango.Alignment.LEFT);
-//            pango_layout.set_width( (int)((calculated_widh[level] > cell_area.width ? calculated_widh[level] : cell_area.width) * Pango.SCALE));
-//            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-//            context = widget.get_style_context();
-//            int wi = 0, he = 0;
-//            pango_layout.get_pixel_size(out wi, out he);
-//            if(cell_area.height > he)
-//                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
-//            else
-//                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
-//        }
-//    }
+    }
 
-//    private CellRendererText renderer = null;
-//    private Pango.FontDescription font_description;
-//    private int last_width;
-//    
-//    private int _fontsize = 0;
-//    internal int fontsize {
-//        get {
-//            return _fontsize;
-//        }
-//        set {
-//            if (_fontsize == 0) { //intialization
-//                if((value < 7)||(value > 14)) _fontsize = 7;
-//                else _fontsize = value;
-//                Idle.add( () => {
-//                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-//                    renderer.size_points = fontsize;
-//                    return false;
-//                });
-//            }
-//            else {
-//                if((value < 7)||(value > 14)) _fontsize = 7;
-//                else _fontsize = value;
-//                Idle.add( () => {
-//                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-//                    renderer.size_points = fontsize;
-//                    return false;
-//                });
-//                Idle.add(update_view);
-//            }
-//        }
-//    }
-    private Pango.FontDescription font_description;
     private int last_width;
 
 
@@ -996,10 +847,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         
         this.set_size_request(300, 500);
         
-//        fontsize = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
-        font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         var column = new TreeViewColumn();
         
@@ -1007,7 +855,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         this.style_get("expander-size", out expander);
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
-        renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
+        renderer = new FlowingTextRenderer(this.ow, column, expander, hsepar);
         
         global.notify["active-dockable-media-name"].connect(on_active_dockable_media_changed);
         
@@ -1030,13 +878,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                 });
         });
         
-//        var pixbufRenderer = new CellRendererPixbuf();
-//        pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
-//        pixbufRenderer.set_fixed_size(30, -1);
-        
         column.pack_start(renderer, false);
-//        column.pack_start(pixbufRenderer, false);
-//        column.add_attribute(pixbufRenderer, "pixbuf", MagnatuneTreeStore.Column.ICON);
         column.add_attribute(renderer, "text", MagnatuneTreeStore.Column.VIS_TEXT); // no markup!!
         column.add_attribute(renderer, "level", MagnatuneTreeStore.Column.LEVEL);
         column.add_attribute(renderer, "pix", MagnatuneTreeStore.Column.ICON);
@@ -1044,10 +886,6 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         
         this.headers_visible = false;
         this.enable_search = false;
-        
-        global.notify["fontsize-dockable"].connect( () => {
-            this.fontsize = global.fontsize_dockable;
-        });
     }
     
     private void on_active_dockable_media_changed() {

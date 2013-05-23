@@ -32,6 +32,7 @@ public class Xnoise.PluginModule.Loader : Object {
     public HashTable<string, Container> plugin_htable;
     public HashTable<string, unowned Container> lyrics_plugins_htable;
     public HashTable<string, unowned Container> image_provider_htable;
+    public List<unowned string> auto_actives;
     private Main xn;
     private Information info;
     private GLib.List<string> info_files;
@@ -54,6 +55,7 @@ public class Xnoise.PluginModule.Loader : Object {
         plugin_htable = new HashTable<string, Container>(str_hash, str_equal);
         lyrics_plugins_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
         image_provider_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
+        auto_actives = new List<unowned string>();
     }
 
     private bool is_banned(string name) {
@@ -85,6 +87,9 @@ public class Xnoise.PluginModule.Loader : Object {
                 if(plugin.is_album_image_plugin) {
                     image_provider_htable.insert(info.module, plugin);
                 }
+                if(info.user_activatable == false) {
+                    auto_actives.append(info.module);
+                }
             }
             else {
                 print("Failed to load %s.\n", pluginInfoFile);
@@ -94,6 +99,9 @@ public class Xnoise.PluginModule.Loader : Object {
         if(info_files.length()==0) print("No plugin inforamtion found\n");
         //foreach(string s in lyrics_plugins_htable.get_keys()) print("%s in plugin ht\n", s);
         loaded = true;
+        foreach(unowned string nme in auto_actives) {
+            activate_single_plugin(nme);
+        }
         return true;
     }
 

@@ -146,7 +146,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
         this.media_source_selector_box = new Box(Orientation.VERTICAL, 0);
         
-        this.pack_start(new SideBarHeadline(_("Media Collections")), false, false, 0);
+        var coll_headline = new SideBarHeadline(_("Media Collections"));
+        coll_headline.can_focus = false;
+        this.pack_start(coll_headline, false, false, 0);
         this.pack_start(media_source_selector_box, false, false, 0);
         
         // initialize the proper type of media source selector
@@ -159,6 +161,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         
 //        notebook.margin_top = 2;
         current_selected_media = new SideBarHeadline("");//_("Media Source"));
+        current_selected_media.can_focus = false;
         this.pack_start(current_selected_media, false, false, 0);
         this.pack_start(notebook, true, true, 0);
         

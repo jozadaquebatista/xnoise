@@ -15,7 +15,6 @@ DIST_SUBDIRS =  \
     mpris \
     mpris_one \
     soundmenu2 \
-    testplugin \
     titleToDecoration \
     $(NULL)
 
@@ -58,7 +57,6 @@ if ENABLE_SOUNDMENU
     SUBDIRS += soundmenu2
 endif
 
-SUBDIRS += testplugin
 SUBDIRS += titleToDecoration
 
 DISTCLEANFILES = \

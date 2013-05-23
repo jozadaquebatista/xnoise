@@ -168,6 +168,8 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     if(thumbnailer_src != 0)
                         Source.remove(thumbnailer_src);
                     thumbnailer_src = Timeout.add_seconds(1, () => {
+                        if(global.media_import_in_progress)
+                            return true;
                         print("queue uris for thumbnailing\n");
                         string[] uri_array = {};
                         foreach(string s in uri_list)
@@ -235,6 +237,8 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                 if(thumbnailer_src != 0)
                     Source.remove(thumbnailer_src);
                 thumbnailer_src = Timeout.add_seconds(1, () => {
+                    if(global.media_import_in_progress)
+                        return true;
                     print("queue uris for thumbnailing\n");
                     string[] uri_array = {};
                     foreach(string s in uri_list)

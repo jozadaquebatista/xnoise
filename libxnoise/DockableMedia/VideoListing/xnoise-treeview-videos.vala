@@ -46,8 +46,6 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
     
-//    private int fontsizeMB = 10;
-    private Pango.FontDescription font_description;
     private int last_width;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
@@ -65,14 +63,11 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         
         var column = new TreeViewColumn();
         
-//        fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
-        font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
-        renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
+        renderer = new ListFlowingTextRenderer(column, hsepar);
         
         column.pack_start(renderer, true);
         column.add_attribute(renderer, "itype", TreeViewVideosModel.Column.ITEMTYPE);
@@ -145,19 +140,6 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
                     });
                 return false;
             });
-        });
-        global.notify["fontsize-dockable"].connect( () => {
-            if(global.fontsize_dockable == 0) { //default
-                font_description.set_size((int)(10 * Pango.SCALE));
-            }
-            else {
-                font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
-                Idle.add(()  => {
-                    this.set_model(null);
-                    this.set_model(tvm);
-                    return false;
-                });
-            }
         });
         context.save();
         Gdk.RGBA color, scolor;

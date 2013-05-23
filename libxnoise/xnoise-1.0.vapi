@@ -397,11 +397,13 @@ namespace Xnoise {
 			public string module { get; }
 			public string name { get; }
 			public string pretty_name { get; }
+			public bool user_activatable { get; }
 			public string website { get; }
 			public string xplug_file { get; }
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class Loader : GLib.Object {
+			public GLib.List<weak string> auto_actives;
 			public GLib.HashTable<string,weak Xnoise.PluginModule.Container> image_provider_htable;
 			public GLib.HashTable<string,weak Xnoise.PluginModule.Container> lyrics_plugins_htable;
 			public GLib.HashTable<string,Xnoise.PluginModule.Container> plugin_htable;
@@ -735,7 +737,6 @@ namespace Xnoise {
 		public string current_organization { get; set; }
 		public string current_title { get; set; }
 		public string? current_uri { get; set; }
-		public int fontsize_dockable { get; set; }
 		public bool in_preview { get; set; }
 		public bool media_import_in_progress { get; set; }
 		public Xnoise.PlayerState player_state { get; set; }

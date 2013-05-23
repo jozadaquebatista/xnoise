@@ -6,6 +6,7 @@ _description=Load lyrics from http://www.lyricwiki.com
 website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 category=lyrics_provider
+user_activatable=no
 copyright=Copyright © 2010 softshaker 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=softshaker <softshaker@googlemail.com>

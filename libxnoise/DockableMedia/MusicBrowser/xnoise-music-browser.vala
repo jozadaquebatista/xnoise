@@ -41,6 +41,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     private bool _use_treelines = false;
     private MusicBrowserCellRenderer renderer = null;
     private Gtk.Menu menu;
+    private bool album_artist_title_sorting_inited = false;
     
     public MusicBrowserModel music_browser_model;
     
@@ -54,34 +55,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         }
     }
     
-    private int _fontsize = 0;
-    internal int fontsize {
-        get {
-            return _fontsize;
-        }
-        set {
-            if (_fontsize == 0) { //intialization
-                if((value < 7)||(value > 14)) _fontsize = 7;
-                else _fontsize = value;
-                Idle.add( () => {
-                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-                    renderer.size_points = fontsize;
-                    return false;
-                });
-            }
-            else {
-                if((value < 7)||(value > 14)) _fontsize = 7;
-                else _fontsize = value;
-                Idle.add( () => {
-                    font_description.set_size((int)(_fontsize * Pango.SCALE));
-                    renderer.size_points = fontsize;
-                    return false;
-                });
-                Idle.add(update_view);
-            }
-        }
-    }
-        
 //    public signal void sign_activated();
     // targets used with this as a source
     private const TargetEntry[] src_target_entries = {
@@ -140,7 +113,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         scolor = context.get_background_color(StateFlags.SELECTED);
         context.add_class(STYLE_CLASS_PANE_SEPARATOR);
         color = context.get_background_color(StateFlags.NORMAL);
-        Timeout.add_seconds(1, () => {
+        Timeout.add(100, () => {
             StyleContext ctx = main_window.media_browser_box.get_style_context();
             ctx.add_class(STYLE_CLASS_SIDEBAR);
             Gdk.RGBA col = ctx.get_background_color(StateFlags.NORMAL);
@@ -152,6 +125,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         if(global.collection_sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
             Timeout.add_seconds(5, () => {
                 music_browser_model.filter();
+                album_artist_title_sorting_inited = true;
                 return false;
             });
         }
@@ -163,19 +137,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         print("drag receive\n");
     }
 
-//    public override bool draw(Cairo.Context cr) {
-//        Gdk.cairo_rectangle(cr, cell_area);
-//        cr.save();
-//        var context = ow.get_style_context();
-//        Gdk.RGBA col = context.get_background_color(StateFlags.NORMAL); //TODO // where is the right color?
-//        col.alpha = 1.0;
-//        Gdk.cairo_set_source_rgba(cr, col);
-//        cr.fill();
-//        cr.restore();
-//        base.draw(cr);
-//        return false;
-//    }
-    
     // This function is intended for the usage
     // with GLib.Idle
     private bool populate_model() {
@@ -196,8 +157,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             Params.set_int_value("use_treelines", 1);
         else
             Params.set_int_value("use_treelines", 0);
-            
-//        Params.set_int_value("fontsize", fontsize);
     }
     // end IParams functions
 
@@ -395,14 +354,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             var sptr_item = new SeparatorMenuItem();
             rightmenu.append(sptr_item);
         }
-//        if(is_va_album) {
-//            var not_compilation_item = new ImageMenuItem.from_stock(Gtk.Stock.REMOVE, null);
-//            not_compilation_item.set_label(_("Do not treat this album as various artists album"));
-//            not_compilation_item.activate.connect( () => {
-//                // TODO
-//            });
-//            rightmenu.append(not_compilation_item);
-//        }
         var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
         collapse_item.set_label(_("Collapse all"));
         collapse_item.activate.connect( () => {
@@ -437,6 +388,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         item.activate.connect( () => {
             global.collection_sort_mode = CollectionSortMode.ALBUM_ARTIST_TITLE;
             Params.set_int_value("collection_sort_mode", (int)global.collection_sort_mode);
+            if(!album_artist_title_sorting_inited) {
+                Timeout.add_seconds(5, () => {
+                    music_browser_model.filter();
+                    album_artist_title_sorting_inited = true;
+                    return false;
+                });
+            }
         });
         m.append(item);
         return m;
@@ -576,7 +534,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         
         private int maxiconwidth;
         private unowned Widget ow;
-        private unowned Pango.FontDescription font_description;
         private unowned TreeViewColumn col;
         private int expander;
         private int hsepar;
@@ -593,7 +550,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         
         
         public MusicBrowserCellRenderer(Widget ow, 
-                                        Pango.FontDescription font_description,
                                         TreeViewColumn col,
                                         int expander,
                                         int hsepar) {
@@ -602,7 +558,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             this.col = col;
             this.expander = expander;
             this.hsepar = hsepar;
-            this.font_description = font_description;
             maxiconwidth = 0;
             calculated_widh[0] = 0;
             calculated_widh[1] = 0;
@@ -636,7 +591,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             //print("column_width: %d  sum: %d\n", column_width, sum);
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( (int)((column_width - sum + WRAP_BUF) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
@@ -820,7 +774,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             StyleContext context = widget.get_style_context();
             
             var pango_layout = widget.create_pango_layout(text);
-            pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( 
                 (int) ((cell_area.width - calculated_widh[level] - PIXPAD) * Pango.SCALE)
@@ -892,17 +845,13 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     }
     
     
-    private Pango.FontDescription font_description;
     private int last_width;
     
     private void setup_view() {
         this.row_collapsed.connect(on_row_collapsed);
         this.row_expanded.connect(on_row_expanded);
         
-        fontsize = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
-        font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         var column = new TreeViewColumn();
         
@@ -910,7 +859,7 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.style_get("expander-size", out expander);
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
-        renderer = new MusicBrowserCellRenderer(this.ow, font_description, column, expander, hsepar);
+        renderer = new MusicBrowserCellRenderer(this.ow, column, expander, hsepar);
         
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
@@ -938,9 +887,6 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         
         this.headers_visible = false;
         this.enable_search = false;
-        global.notify["fontsize-dockable"].connect( () => {
-            this.fontsize = global.fontsize_dockable;
-        });
     }
 }
 
