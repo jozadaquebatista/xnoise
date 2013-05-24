@@ -145,7 +145,8 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     }
 
     private void setup_widgets() {
-        ScrolledWindow tvscrolledwindow = null;
+//        ScrolledWindow tvscrolledwindow = null;
+        Gtk.Box devbox;
         try {
             builder.add_from_file(Config.XN_UIDIR + "add_media.ui");
             
@@ -154,8 +155,9 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             headline.use_markup= true;
             headline.set_markup("<span size=\"xx-large\"><b> %s </b></span>".printf(Markup.escape_text(_("Add or Remove media"))));
 
-            var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
-            tvscrolledwindow       = builder.get_object("tvscrolledwindow") as ScrolledWindow;
+            var scrolledwindow1           = builder.get_object("scrolledwindow1") as Gtk.ScrolledWindow;
+            devbox             = builder.get_object("box_devices") as Gtk.Box;
+//            tvscrolledwindow       = builder.get_object("tvscrolledwindow") as ScrolledWindow;
             var baddfolder         = builder.get_object("addfolderbutton") as ToolButton;
             var baddradio          = builder.get_object("streambutton") as ToolButton;
             var brem               = builder.get_object("removebutton") as ToolButton;
@@ -181,7 +183,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
             descriptionlabel.set_line_wrap(true);
             descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
-            this.pack_start(mainvbox, true, true, 0);
+            this.pack_start(scrolledwindow1, true, true, 0);
             
             bok.clicked.connect(on_ok_button_clicked);
             
@@ -222,7 +224,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         column.title = _("Location");
         tv.insert_column(column, -1);
         
-        tvscrolledwindow.add(tv);
+        devbox.pack_start(tv, true, true, 0);
         
         tv.set_model(listmodel);
         tv.show();

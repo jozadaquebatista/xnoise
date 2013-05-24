@@ -348,7 +348,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             insert_plugin_switches(additionals_box, PluginCategory.ALBUM_ART_PROVIDER, additionals_parent_box);
             
             add_plugin_tabs();
-            this.set_size_request(450, -1);
+            this.set_size_request(400, -1);
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
