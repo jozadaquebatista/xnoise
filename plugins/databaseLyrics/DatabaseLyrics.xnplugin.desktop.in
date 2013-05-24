@@ -1,12 +1,12 @@
 [XnoisePlugin]
 name=DatabaseLyrics
-_pretty-name=Database buffer for lyrics
+_pretty-name=Lyrics downloading from internet
 module=DatabaseLyrics
 _description=Buffer lyrics in database
 website=https://github.com/shuerhaaken/xnoise
 icon=/path/to/icon
-user_activatable=no
-category=lyrics_provider
+user_activatable=yes
+category=web_service
 copyright=Copyright © 2011 Jörn Magens
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Jörn Magens

@@ -50,8 +50,6 @@ private interface ImageExtractor : GLib.Object {
 private class Xnoise.DbusImageExtractor : Object {
     private uint watch = 0;
     
-    private ImageExtractor extractor_proxy = null;
-    
     public signal void sign_found_album_image(string uri);
     
     private ImageExtractor iextr;

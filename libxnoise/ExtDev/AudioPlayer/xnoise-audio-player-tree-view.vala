@@ -77,7 +77,6 @@ public abstract class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
         audio_player_device.in_data_transfer = true;
         Gtk.TreeViewDropPosition drop_pos;
         Gtk.TreePath path;
-        TreeRowReference drop_rowref;
         FileType filetype;
         File file;
         string[] uris;
@@ -102,7 +101,6 @@ public abstract class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
             case 1: // uri list from outside
                 uris = selection.get_uris();
                 print("receive get_uris\n");
-                bool is_first = true;
                 string attr = FileAttribute.STANDARD_TYPE + "," +
                               FileAttribute.STANDARD_CONTENT_TYPE;
                 Array<Item?> items = new Array<Item?>();
@@ -147,7 +145,6 @@ public abstract class Xnoise.ExtDev.PlayerTreeView : Gtk.TreeView {
             default:
                 audio_player_device.in_data_transfer = false;
                 assert_not_reached();
-                break;
         }
     }
 

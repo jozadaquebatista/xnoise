@@ -67,6 +67,14 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
     
     public bool init() {
         priority = -1; // highest prio
+        foreach(var p in plugin_loader.lyrics_plugins_htable.get_values()) {
+            if(!p.activated)
+                Idle.add(() => {
+                    plugin_loader.activate_single_plugin(p.info.name);
+                    return false;
+                });
+        }
+        
         lyrics_writer = new DatabaseLyricsWriter(main_window.lyricsView.get_loader());
         if(lyrics_writer != null)
             return true;

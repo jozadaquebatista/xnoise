@@ -193,6 +193,26 @@ dnl ================================================================
 
 
 dnl ================================================================
+dnl dependency check for optional build of lyric plugins 
+
+AC_ARG_ENABLE([lyrics],
+    AS_HELP_STRING([--disable-lyrics],
+    [Disable lyrics (default: enabled)]),
+    [enable_lyrics=$enableval],
+    [enable_lyrics=yes])
+
+if test "x$enable_lyrics" = "xyes"; then
+    enable_lyrics=yes
+else
+    enable_lyrics=no
+    AC_MSG_NOTICE([lyrics plugins will not be included in the build.])
+fi
+AM_CONDITIONAL(ENABLE_LYRICS, test x"$enable_lyrics" = "xyes")
+dnl ================================================================
+
+
+
+dnl ================================================================
 dnl dependency check for optional build of app indicator plugin 
 
 AC_ARG_ENABLE([appindicator],
@@ -229,7 +249,7 @@ AC_ARG_ENABLE([lyricwiki],
     [enable_lyricwiki=yes])
 
 if test "x$enable_lyricwiki" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes" && test "x$enable_lyrics" = "xyes"; then
         enable_lyricwiki=yes
     else
         enable_lyricwiki=no
@@ -349,7 +369,7 @@ AC_ARG_ENABLE([chartlyrics],
     [enable_chartlyrics=yes])
 
 if test "x$enable_chartlyrics" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes" && test "x$enable_lyrics" = "xyes"; then
         enable_chartlyrics=yes
     else
         enable_chartlyrics=no
@@ -372,7 +392,7 @@ AC_ARG_ENABLE([azlyrics],
     [enable_azlyrics=yes])
 
 if test "x$enable_azlyrics" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes" && test "x$enable_lyrics" = "xyes"; then
         enable_azlyrics=yes
     else
         enable_azlyrics=no
@@ -492,7 +512,6 @@ AC_CONFIG_FILES([
     data/misc/xnoise-1.0.pc
     data/ui/Makefile
     data/icons/Makefile
-    data/icons/24x24/Makefile
     data/icons/32x32/Makefile
     data/icons/48x48/Makefile
     data/icons/256x256/Makefile
@@ -546,11 +565,10 @@ echo "
   ${bold}PLUGINS included in this build${normal}
   
     ${bold}General Plugins${normal}
-    Lastfm (Album images 
+    Lastfm (Album image fetching 
             and 'scrobbling')      ${enable_lastfm}
     Keyboard Media Key control     ${enable_mediakeys}
     Mpris v1/v2 dbus interfaces    ${enable_mpris}
-    Test plugin (Demo Plugin)      yes (always)
     Title-To-Decoration            yes (always)
     Ubuntu soundmenu               ${enable_soundmenu2}
     AppIndicator                   ${enable_appindicator}
@@ -559,7 +577,6 @@ echo "
     Magnatune Music Store          ${enable_magnatune}
     
     ${bold}Lyrics Provider Plugins:${normal}
-    DatabaseLyrics (Buffer)        yes (always)
     Chartlyrics                    ${enable_chartlyrics}
     Azlyrics                       ${enable_azlyrics}
     Lyricwiki                      ${enable_lyricwiki}

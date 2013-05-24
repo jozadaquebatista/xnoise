@@ -358,7 +358,6 @@ private class Xnoise.CustomCellRendererPixbuf : Gtk.CellRendererPixbuf {
                                 Gdk.Rectangle cell_area,
                                 CellRendererState flags) {
         StyleContext context;
-        StateFlags state = widget.get_state_flags();
         context = main_window.media_browser_box.get_style_context();
         context.add_class(STYLE_CLASS_SIDEBAR);
         if((flags & CellRendererState.SELECTED) == 0) {

@@ -64,6 +64,12 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
         CONVERTED_DB = GLib.Path.build_filename(data_folder(), "magnatune.sqlite", null);
         this.music_store = new MagMusicStore(this);
         owner.sign_deactivated.connect(clean_up);
+        
+        username = Xnoise.Params.get_string_value("magnatune_user");
+        password = Xnoise.Params.get_string_value("magnatune_pass");
+        
+        this.login(username, password);
+        
         return true;
     }
     

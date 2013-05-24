@@ -1,4 +1,4 @@
-SUBDIRS = 256x256 32x32 48x48 24x24 scalable ubuntu-mono-dark ubuntu-mono-light
+SUBDIRS = 256x256 32x32 48x48 scalable ubuntu-mono-dark ubuntu-mono-light
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
 install-data-hook: update-icon-cache

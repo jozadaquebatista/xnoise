@@ -30,7 +30,9 @@ if ENABLE_CHARTLYRICS
     SUBDIRS += chartlyrics
 endif
 
-SUBDIRS += databaseLyrics
+if ENABLE_LYRICS
+    SUBDIRS += databaseLyrics
+endif
 
 if ENABLE_LASTFM
     SUBDIRS += lastfm
@@ -62,5 +64,4 @@ SUBDIRS += titleToDecoration
 DISTCLEANFILES = \
     Makefile.in \
     $(NULL)
-
 

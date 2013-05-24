@@ -35,13 +35,12 @@ using Xnoise.Resources;
 
 
 private abstract class Xnoise.HandlerCddaDevice : ItemHandler {
-    private Action a;
-    private Action c;
+//    private Action a;
+//    private Action c;
     
     protected unowned CddaDevice device;
     protected unowned Cancellable cancellable;
     private string name;
-    private uint finish_source = 0;
     
     
     public HandlerCddaDevice(CddaDevice device,

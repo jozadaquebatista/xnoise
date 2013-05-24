@@ -41,7 +41,6 @@ private abstract class Xnoise.HandlerPlayerDevice : ItemHandler {
     protected unowned PlayerDevice audio_player_device;
     protected unowned Cancellable cancellable;
     private string name;
-    private uint finish_source = 0;
     
     public HandlerPlayerDevice(PlayerDevice audio_player_device,
                                Cancellable cancellable) {

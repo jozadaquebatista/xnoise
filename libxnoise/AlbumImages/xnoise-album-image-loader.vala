@@ -343,7 +343,7 @@ namespace Xnoise {
                     remote_source = 0;
                 }
                 remote_source = Timeout.add_seconds(1, () => {
-                    var provider = get_provider();
+                    get_provider();
                     remote_source = 0;
                     return false;
                 });

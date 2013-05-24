@@ -1051,7 +1051,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         Statement stmt;
         Item? artist = null;
         Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
-        Item? album = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
         if(genre != null && sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             artist = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
             if(artist == null || 
@@ -1160,8 +1159,6 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
                                                           HashTable<ItemType,Item?>? items) {
         TrackData[] val = {};
         Statement stmt;
-        Item? artist = null;
-        Item? genre = items.lookup(ItemType.COLLECTION_CONTAINER_GENRE);
         Item? album = items.lookup(ItemType.COLLECTION_CONTAINER_ALBUM);
         if(album != null && sort_mode == CollectionSortMode.ALBUM_ARTIST_TITLE) {
             Item? arti = items.lookup(ItemType.COLLECTION_CONTAINER_ARTIST);
