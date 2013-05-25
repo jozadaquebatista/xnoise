@@ -101,9 +101,7 @@ plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mpris/xnoise-mpris.vala
 plugins/soundmenu2/xnoise-sound-menu-2.vala
-plugins/testplugin/xnoise-testplugin.vala
 plugins/titleToDecoration/xnoise-title-to-decoration.vala
-plugins/testplugin/xnoisetest.xnplugin.desktop.in
 plugins/chartlyrics/chartlyrics.xnplugin.desktop.in
 plugins/lastfm/lastfm.xnplugin.desktop.in
 plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
