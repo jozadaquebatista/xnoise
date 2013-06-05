@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-18 09:49+0200\n"
-"PO-Revision-Date: 2013-02-05 20:21+0100\n"
+"PO-Revision-Date: 2013-06-04 23:23+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
 "Language: eu\n"
@@ -28,6 +28,7 @@ msgstr "Kudeatu eta erreproduzitu zure musika eta bideo bildumak"
 #: ../data/misc/xnoise.desktop.in.in.h:4
 msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
 msgstr ""
+"Multimedia;Audioa;Bideoa;Erreproduzitzailea;Erreproduzigailua;Filma;MP3;"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
@@ -126,7 +127,7 @@ msgstr "Tolestu dena"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:412
 msgid "Sort Mode"
-msgstr "Ordenatze-modua"
+msgstr "Ordenatze modua"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:422
 msgid "ARTIST-ALBUM-TITLE"
@@ -137,9 +138,8 @@ msgid "GENRE-ARTIST-ALBUM"
 msgstr "GENEROA-ARTISTA-ALBUMA"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:436
-#, fuzzy
 msgid "ALBUM-ARTIST-TITLE"
-msgstr "ARTISTA-ALBUMA-TITULUA"
+msgstr "ALBUMA-ARTISTA-TITULUA"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:723
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
@@ -161,7 +161,7 @@ msgstr "Bideoak"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:37
 msgid "Add to Android Device"
-msgstr "Gehitu Android gailura"
+msgstr "Gehitu Android gailuan"
 
 #: ../libxnoise/ExtDev/AndroidPlayer/xnoise-android-item-handler.vala:39
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:40
@@ -210,7 +210,7 @@ msgstr "Erreproduzigailua"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-item-handler.vala:38
 msgid "Add to Player Device"
-msgstr "Gehitu erreprodukzio-gailura"
+msgstr "Gehitu erreprodukzio-gailuan"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-main-view.vala:45
 msgid "External Player Device"
@@ -348,9 +348,8 @@ msgstr ""
 "musika, bideoa edo korrontea"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
-#, fuzzy
 msgid "Return to tracklist"
-msgstr "Gehitu pista-zerrendara"
+msgstr "Itzuli pista-zerrendara"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:370
 msgid "Media browser fontsize"
@@ -419,7 +418,7 @@ msgstr "Eginda"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:131
 msgid "Please wait while media is added to your library!"
-msgstr "Itxaron multimedia liburutegira gehitu artean."
+msgstr "Itxaron multimedia liburutegian gehitu artean."
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
 #, c-format
@@ -448,7 +447,7 @@ msgstr "Multimedia liburutegira inportatu nahi duzu?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
-msgstr "Gehitu pista guztiak pista-zerrendara"
+msgstr "Gehitu pista guztiak pista-zerrendan"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:62
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:66
@@ -521,9 +520,8 @@ msgid "Please enter new album data."
 msgstr "Sartu albumaren datu berriak."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:188
-#, fuzzy
 msgid "Album Artist:"
-msgstr "Albumaren artista"
+msgstr "Albumaren artista:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:190
 msgid "Year:"
@@ -534,9 +532,8 @@ msgid "Genre:"
 msgstr "Generoa:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Title Artist"
-msgstr "Albumaren artista"
+msgstr "Abestiaren artista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
 msgid "Album Artist"
@@ -577,11 +574,11 @@ msgstr "Urtea"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:170
 msgid "Track No."
-msgstr ""
+msgstr "Pista zk."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:173
 msgid "Disk No."
-msgstr ""
+msgstr "Disko zk."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
@@ -603,7 +600,7 @@ msgstr "Aldatu generoaren izena"
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:50
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:55
 msgid "Add to tracklist"
-msgstr "Gehitu pista-zerrendara"
+msgstr "Gehitu pista-zerrendan"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
@@ -615,7 +612,7 @@ msgstr "Hautaturiko elementua zakarrontzira bota nahi duzu?"
 
 #: ../libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.vala:40
 msgid "Remove Cover Image"
-msgstr ""
+msgstr "Ezabatu azalaren irudia"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
@@ -632,7 +629,7 @@ msgstr "Erakutsi dagoen karpeta"
 
 #: ../libxnoise/ItemHandlers/FilterForArtist/xnoise-handler-filter-for-artist.vala:41
 msgid "Filter for artist"
-msgstr ""
+msgstr "Iragazi artistaren arabera"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:99
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
@@ -750,14 +747,12 @@ msgstr "Joan hurrengo pistara"
 
 #. icon
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:227
-#, fuzzy
 msgid "E_qualizer"
-msgstr "Ekualizadorea"
+msgstr "E_kualizadorea"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:227
-#, fuzzy
 msgid "Open equalizer window"
-msgstr "Ireki ekualizadorea"
+msgstr "Ireki ekualizadorearen leihoa"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:229
 msgid "_View"
@@ -824,7 +819,7 @@ msgid "Show _Album Art view"
 msgstr "Erakutsi _album-irudien ikuspegia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:505
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
 "the startup of xnoise."
@@ -837,7 +832,7 @@ msgstr ""
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:732
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:744
 msgid "Playback mode: "
-msgstr "Erreprodukzio-modua:"
+msgstr "Erreprodukzio modua:"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:708
 msgid "No repeat, one after another"
@@ -868,14 +863,12 @@ msgid "Select media file"
 msgstr "Hautatu multimedia-fitxategia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1694
-#, fuzzy
 msgid "Repeat Mode"
-msgstr "Errepikatu guztia"
+msgstr "Errepikatze modua"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1716
-#, fuzzy
 msgid "Remove selected tracks"
-msgstr "Kendu hautaturiko pista"
+msgstr "Kendu hautaturiko pistak"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1767
 msgid "Jump to current position"
@@ -1038,18 +1031,16 @@ msgid "Lyrics"
 msgstr "Hitzak"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:74
-#, fuzzy
 msgid "Hide Media Library"
-msgstr "Ezkutatu liburutegia"
+msgstr "Ezkutatu multimedia-liburutegia"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:75
-#, fuzzy
 msgid "Show Media Library"
-msgstr "Erakutsi liburutegia"
+msgstr "Erakutsi multimedia-liburutegia"
 
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1212
 msgid "Disk"
-msgstr ""
+msgstr "Diskoa"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1307
@@ -1059,15 +1050,13 @@ msgstr "Iraupena"
 
 #. TRACKNUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1406
-#, fuzzy
 msgid "Track number"
 msgstr "Pista-zenbakia"
 
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1415
-#, fuzzy
 msgid "Disk number"
-msgstr "Pista-zenbakia"
+msgstr "Disko-zenbakia"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:87
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:121
@@ -1208,15 +1197,15 @@ msgstr "Kargatu hitzak azlyrics.com-etik"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:1
 msgid "AppIndicator plugin"
-msgstr ""
+msgstr "AppIndicator plugina"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in.h:2
 msgid "Ubuntu Application Indicator plugin for xnoise"
-msgstr ""
+msgstr "Ubunturako aplikazio-adierazle plugina xnoise-rentzat"
 
 #: ../plugins/app_indicator/xnoise-app-indicator.vala:154
 msgid "Show xnoise"
-msgstr ""
+msgstr "Erakutsi xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Media Control Keys"
