@@ -67,23 +67,25 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         
         unowned IconTheme theme = IconTheme.get_default();
         
+        bool rtl = get_direction() == Gtk.TextDirection.RTL;
+        
         // use standard icon theme or local fallback
         switch(function) {
             case Function.NEXT: {
                 if(theme.has_icon("media-skip-forward-symbolic"))
-                    image = IconRepo.get_themed_image_icon("media-skip-forward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-backward-symbolic" : "media-skip-forward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
-                    image = IconRepo.get_themed_image_icon("xn-media-skip-forward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-backward-symbolic": "xn-media-skip-forward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             case Function.PREVIOUS: {
                 if(theme.has_icon("media-skip-backward-symbolic"))
-                    image = IconRepo.get_themed_image_icon("media-skip-backward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-forward-symbolic" : "media-skip-backward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
-                    image = IconRepo.get_themed_image_icon("xn-media-skip-backward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-forward-symbolic" : "xn-media-skip-backward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
