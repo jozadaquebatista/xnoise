@@ -69,12 +69,14 @@ private class Xnoise.PlayPauseButton: Gtk.ToolItem {
         
         unowned IconTheme theme = IconTheme.get_default();
         
+        bool rtl = get_direction() == Gtk.TextDirection.RTL;
+        
         // use standard icon theme or local fallback
         if(theme.has_icon("media-playback-start-symbolic"))
-            play = IconRepo.get_themed_image_icon("media-playback-start-symbolic",
+            play = IconRepo.get_themed_image_icon(rtl ? "media-playback-start-rtl-symbolic" : "media-playback-start-symbolic",
                                                   IconSize.LARGE_TOOLBAR, PIXELSIZE);
         else
-            play = IconRepo.get_themed_image_icon("xn-media-playback-start-symbolic",
+            play = IconRepo.get_themed_image_icon(rtl ? "xn-media-playback-start-rtl-symbolic" : "xn-media-playback-start-symbolic",
                                                   IconSize.LARGE_TOOLBAR, PIXELSIZE);
         play.show();
         

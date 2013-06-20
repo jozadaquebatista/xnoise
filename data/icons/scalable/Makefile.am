@@ -19,6 +19,7 @@ status_DATA = \
     xn-list-remove-symbolic.svg \
     xn-media-playback-pause-symbolic.svg \
     xn-media-playback-start-symbolic.svg \
+    xn-media-playback-start-rtl-symbolic.svg \
     xn-media-playback-stop-symbolic.svg \
     xn-media-skip-backward-symbolic.svg \
     xn-media-skip-forward-symbolic.svg \
