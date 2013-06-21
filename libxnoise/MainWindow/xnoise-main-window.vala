@@ -202,6 +202,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public bool fullscreenwindowvisible { get; set; }
 
     private signal void sign_drag_over_content_area();
+    
+    public enum SettingsDialog {
+            EDIT_SETTINGS = 0,
+            ADD_OR_REMOVE_MEDIA
+    }
 
     public enum PlayerRepeatMode {
         NOT_AT_ALL = 0,
@@ -1268,27 +1273,44 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         dialog.run();
         dialog.destroy();
     }
-
     
-    private void on_menu_add() {
-//        album_art_view_visible = false;
-//        album_view_toggle.set_active(false);
-//        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
+    private void settings_edit_or_menu_add(SettingsDialog tab)
+    {
         var settings_widget = new SettingsWidget();
         var dialog = new Gtk.Dialog.with_buttons(_("Settings"),
                                                  this,
-                                                 Gtk.DialogFlags.MODAL |
+                                                 Gtk.DialogFlags.MODAL | 
                                                  Gtk.DialogFlags.DESTROY_WITH_PARENT,
                                                  Gtk.Stock.CLOSE,
+                                                 Gtk.ResponseType.CLOSE,
                                                  null);
         dialog.set_modal(true);
+        dialog.set_transient_for(this);
         dialog.set_skip_taskbar_hint(true);
         dialog.get_content_area().add(settings_widget);
-        settings_widget.select_media_tab();
-        if(dialog.run() == Gtk.ResponseType.CLOSE) {
-            print("close dialog\n");
+        dialog.set_resizable(false);
+        settings_widget.set_size_request(-1, 450);
+        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
+        
+        if(tab == SettingsDialog.EDIT_SETTINGS) {
+                settings_widget.select_general_tab();
         }
+        else {
+                settings_widget.select_media_tab();
+        }
+        
+        settings_widget.show_all();
+        dialog.set_modal(true);
+        dialog.run();
         dialog.destroy();
+        
+        if(tab == SettingsDialog.EDIT_SETTINGS) {
+                Params.write_all_parameters_to_file();
+        }
+    }
+    
+    private void on_menu_add() {
+            settings_edit_or_menu_add(SettingsDialog.ADD_OR_REMOVE_MEDIA);
     }
     
     internal void show_content() {
@@ -1440,31 +1462,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void on_settings_edit() {
-        var settings_widget = new SettingsWidget();
-        var dialog = new Gtk.Dialog.with_buttons(_("Settings"),
-                                                 this,
-                                                 Gtk.DialogFlags.MODAL | 
-                                                 Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                                 _("Close"),
-                                                 Gtk.ResponseType.CLOSE,
-                                                 null);
-        dialog.set_modal(true);
-        dialog.set_transient_for(this);
-        dialog.set_skip_taskbar_hint(true);
-        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
-        dialog.get_content_area().add(settings_widget);
-        dialog.set_resizable(false);
-        settings_widget.set_size_request(-1, 450);
-        settings_widget.show_all();
-        settings_widget.select_general_tab();
-        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
-        dialog.set_modal(true);
-        dialog.run();
-        dialog.destroy();
-        Params.write_all_parameters_to_file();
-
-//        album_art_view_visible = false;
-//        paned2notebook.set_current_page(paned2notebook.page_num(settings_widget));
+        settings_edit_or_menu_add(SettingsDialog.EDIT_SETTINGS);
     }
 
     internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
