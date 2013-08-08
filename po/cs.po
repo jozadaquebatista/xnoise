@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-18 09:49+0200\n"
-"PO-Revision-Date: 2013-05-12 21:03+0200\n"
+"PO-Revision-Date: 2013-06-27 20:53+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -29,7 +29,7 @@ msgstr "Spravovat a přehrávat hudební a filmové sbírky"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
-msgstr ""
+msgstr "Multimédia;Zvuk;Obraz;Přehrávač;Přehrávač multimédií;Film;MP3;"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
@@ -348,9 +348,8 @@ msgstr ""
 "obrazový záznam nebo datové proudy"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:352
-#, fuzzy
 msgid "Return to tracklist"
-msgstr "Přidat do seznamu skladeb"
+msgstr "Vrátit do seznamu skladeb"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:370
 msgid "Media browser fontsize"
@@ -821,13 +820,13 @@ msgid "Show _Album Art view"
 msgstr "Zobrazit _obal alba"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:505
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
 "the startup of xnoise."
 msgstr ""
-"Obnovuje se %u položek v seznamu skladeb. To je poměrně velký počet, který "
-"může zpomalit spuštění Xnoise."
+"Obnovuje se %u položek v seznamu skladeb. Tolik skladeb už "
+"může spuštění Xnoise zpomalit."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:708
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:720
