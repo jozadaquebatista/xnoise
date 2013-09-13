@@ -1,4 +1,4 @@
-xnoise (0.2.18-1ppa1~raring) raring; urgency=low
+xnoise (0.2.18-1ppa1~saucy) saucy; urgency=low
   * Improvements for 'various artists' albums
   * Make use of disk number tag
   * Change caching strategy for album art
@@ -23,14 +23,14 @@ xnoise (0.2.18-1ppa1~raring) raring; urgency=low
 
 
 
-xnoise (0.2.17-1ppa1~raring) raring; urgency=low
+xnoise (0.2.17-1ppa1~saucy) saucy; urgency=low
   * Bug fixes
   * Translation updates
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 13 Mar 2013 21:37:24 +0100
 
 
-xnoise (0.2.16-1ppa1~raring) raring; urgency=low
+xnoise (0.2.16-1ppa1~saucy) saucy; urgency=low
   * Port to Gstreamer-1.0
   * New dbus album art collector service
   * New round Icon Button for Album Art view
@@ -51,7 +51,7 @@ xnoise (0.2.16-1ppa1~raring) raring; urgency=low
 
 
 
-xnoise (0.2.15-1ppa1~raring) raring; urgency=low
+xnoise (0.2.15-1ppa1~saucy) saucy; urgency=low
   * Handle 'Various artists' albums and compilations
   * Add CD Rom device type (preview listening, only)
   * Change button style in toolbar
@@ -74,7 +74,7 @@ xnoise (0.2.15-1ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 06 Feb 2013 16:54:59 +0100
 
 
-xnoise (0.2.14-1ppa1~raring) raring; urgency=low
+xnoise (0.2.14-1ppa1~saucy) saucy; urgency=low
   * Add support for Android and some other player devices
   * Use themed symbolic icons
   * Add optional GENRE-ARTIST-ALBUM sort mode in music browser
@@ -90,7 +90,7 @@ xnoise (0.2.14-1ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 21 Dec 2012 22:04:51 +0100
 
 
-xnoise (0.2.13-1ppa1~raring) raring; urgency=low
+xnoise (0.2.13-1ppa1~saucy) saucy; urgency=low
   * Add new Album Art view with search
   * New Xnoise Icon (icon by Reda Lazri)
   * Recreated 'Now Playing' image rendering with reflections
@@ -106,7 +106,7 @@ xnoise (0.2.13-1ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 29 Oct 2012 17:10:15 +0100
 
 
-xnoise (0.2.12-1ppa1~raring) raring; urgency=low
+xnoise (0.2.12-1ppa1~saucy) saucy; urgency=low
   * Integrate Unity quicklists
   * Add new application icon
   * Add new first-start-widget for initial media import
@@ -129,7 +129,7 @@ xnoise (0.2.12-1ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 02 Oct 2012 14:15:46 +0200
 
 
-xnoise (0.2.11-2ppa1~raring) raring; urgency=low
+xnoise (0.2.11-2ppa1~saucy) saucy; urgency=low
   * Avoid opening of more than one eq window
   * Magnatune: fix initialization issue 
   * Magnatune: workaround db update issue
@@ -138,7 +138,7 @@ xnoise (0.2.11-2ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 16 Sep 2012 20:05:54 +0200
 
 
-xnoise (0.2.10-1ppa1~raring) raring; urgency=low
+xnoise (0.2.10-1ppa1~saucy) saucy; urgency=low
   * Add equalizer
   * Add eq presets and store/restore eq setups
   * Settings: option to de/activate equalizer
@@ -157,7 +157,7 @@ xnoise (0.2.10-1ppa1~raring) raring; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 14 Sep 2012 11:18:55 +0200
 
 
-xnoise (0.2.9-1ppa1~raring) raring; urgency=low
+xnoise (0.2.9-1ppa1~saucy) saucy; urgency=low
   * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
   * use strip function on artist and album imports
   * Extend media import API
@@ -187,7 +187,7 @@ xnoise (0.2.9-1ppa1~raring) raring; urgency=low
 
 
 
-xnoise (0.2.8-1ppa1~raring1) raring; urgency=low
+xnoise (0.2.8-1ppa1~saucy1) saucy; urgency=low
   * Add Magnatune plugin
   * Put the UbuntuOne plugin into a seperate deb, so that dependeny to 
     libubuntuoneui is avoided
@@ -207,7 +207,7 @@ xnoise (0.2.8-1ppa1~raring1) raring; urgency=low
 
 
 
-xnoise (0.2.5.6-raring) raring; urgency=low
+xnoise (0.2.5.6-saucy) saucy; urgency=low
   * add ubuntuone music store plugin
   * code cleanup
   * preview mode for stores
@@ -219,7 +219,7 @@ xnoise (0.2.5.6-raring) raring; urgency=low
   * create new media-source-widget for dockable media
   * azlyrics plugin: replace invalid linebreak char
   * notifications plugin: do not show notifications on insufficient song info
-  * add packaging data for raring
+  * add packaging data for saucy
   * add main menu entry for media browser visibility
   * small fixes and improvements
 
@@ -228,7 +228,7 @@ xnoise (0.2.5.6-raring) raring; urgency=low
 
 
 
-xnoise (0.2.4.1-1ubuntu1) raring; urgency=low
+xnoise (0.2.4.1-1ubuntu1) saucy; urgency=low
   * update translations
   * extend db for future unity support
   * various bug fixes
