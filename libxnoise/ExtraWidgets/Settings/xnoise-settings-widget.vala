@@ -48,6 +48,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private CheckButton switch_quitifclosed;
     private CheckButton switch_use_notifications;
     private CheckButton switch_compact_media_selector;
+    private CheckButton switch_continue_last_song;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
     
@@ -99,6 +100,9 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         assert(switch_compact_media_selector != null);
         switch_compact_media_selector.clicked.connect(this.on_switch_compact_media_selector_clicked);
         
+        assert(switch_continue_last_song != null);
+        switch_continue_last_song.clicked.connect(this.on_switch_continue_last_song_clicked);
+        
 //        sb.changed.connect(this.on_mb_font_changed);
     }
 
@@ -124,6 +128,8 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_compact_media_selector.active = true;
         else
             switch_compact_media_selector.active = false;
+        
+        switch_continue_last_song.active = Params.get_bool_value("continue_last_song");
     }
 
     private void on_checkbutton_usetray_clicked() {
@@ -198,6 +204,15 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         else {
             Params.set_string_value("media_source_selector_type", "combobox");
             main_window.msw.media_source_selector_type = "combobox";
+        }
+    }
+
+    private void on_switch_continue_last_song_clicked() {
+        if(this.switch_continue_last_song.active) {
+            Params.set_bool_value("continue_last_song", true);
+        }
+        else {
+            Params.set_bool_value("continue_last_song", false);
         }
     }
 
@@ -300,6 +315,11 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_compact_media_selector.set_label(_("Use combo box selector for media types"));
             switch_compact_media_selector.tooltip_text = _("Use a combo box for selecting media types like music, video or streams");
             
+            switch_continue_last_song = this.builder.get_object("cb_continue_last_song") as CheckButton;
+            switch_continue_last_song.can_focus = true;
+            switch_continue_last_song.set_label(_("Continue with last played song"));
+            switch_continue_last_song.tooltip_text = _("After restart continue with last played song");
+            
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             notebook.scrollable = false;
             notebook.show_border = false;
@@ -316,10 +336,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             add_media_widget = new AddMediaWidget();
             mediabox.pack_start(add_media_widget, true, true, 0);
             var web_service_box = this.builder.get_object("web_service_box") as Gtk.Box;
-            var web_service_parent_box = this.builder.get_object("box20") as Gtk.Box;
+            var web_service_parent_box = this.builder.get_object("box21") as Gtk.Box;
             var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
-            var lyric_parent_box = this.builder.get_object("box19") as Gtk.Box;
-            var additionals_box = this.builder.get_object("box21") as Gtk.Box;
+            var lyric_parent_box = this.builder.get_object("box20") as Gtk.Box;
+            var additionals_box = this.builder.get_object("box22") as Gtk.Box;
             var additionals_parent_box = this.builder.get_object("additionals_box") as Gtk.Box;
             var gui_box = this.builder.get_object("box6") as Gtk.Box;
             var gui_parent_box = this.builder.get_object("box5") as Gtk.Box;

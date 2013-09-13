@@ -1084,6 +1084,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
+        
+        if(Params.get_bool_value("continue_last_song")) {
+            string current_uri = Params.get_string_value("current_uri");
+            if(current_uri != null && current_uri != "") {
+                global.current_uri = current_uri;
+                gst_player.play();
+                global.player_state = PlayerState.PLAYING;
+            }
+            // global.player_state();
+        }
     }
 
     public void write_params_data() {
