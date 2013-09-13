@@ -887,6 +887,10 @@ namespace Xnoise {
 			ALL,
 			RANDOM
 		}
+		public enum SettingsDialog {
+			EDIT_SETTINGS,
+			ADD_OR_REMOVE_MEDIA
+		}
 		public bool is_fullscreen;
 		public Xnoise.SerialButton main_view_sbutton;
 		public Gtk.Box media_browser_box;

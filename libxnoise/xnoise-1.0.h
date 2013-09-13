@@ -604,6 +604,8 @@ typedef struct _XnoiseTrackInfobarClass XnoiseTrackInfobarClass;
 typedef struct _XnoiseMusicBrowser XnoiseMusicBrowser;
 typedef struct _XnoiseMusicBrowserClass XnoiseMusicBrowserClass;
 
+#define XNOISE_MAIN_WINDOW_TYPE_SETTINGS_DIALOG (xnoise_main_window_settings_dialog_get_type ())
+
 #define XNOISE_MAIN_WINDOW_TYPE_PLAYER_REPEAT_MODE (xnoise_main_window_player_repeat_mode_get_type ())
 
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
@@ -1599,6 +1601,11 @@ struct _XnoiseMainWindowClass {
 };
 
 typedef enum  {
+	XNOISE_MAIN_WINDOW_SETTINGS_DIALOG_EDIT_SETTINGS = 0,
+	XNOISE_MAIN_WINDOW_SETTINGS_DIALOG_ADD_OR_REMOVE_MEDIA
+} XnoiseMainWindowSettingsDialog;
+
+typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_NOT_AT_ALL = 0,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_SINGLE,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_ALL,
@@ -2466,6 +2473,7 @@ GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 GType xnoise_music_browser_get_type (void) G_GNUC_CONST;
+GType xnoise_main_window_settings_dialog_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);

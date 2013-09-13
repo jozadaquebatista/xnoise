@@ -92,6 +92,7 @@ PKG_CHECK_MODULES(XNOISE, \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     libtaginfo_c >= $TAGINFO_REQUIRED \
+    libtaginfo_c < 0.2 \
     cairo)
 
 
