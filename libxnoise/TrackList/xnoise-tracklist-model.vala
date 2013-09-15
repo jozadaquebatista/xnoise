@@ -216,7 +216,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         }
         //RANDOM FUNCTION
         var rand = new Rand();
-        uint32 rand_val = rand.int_range((int32)0, (int32)(n_children - 1));
+        uint32 rand_val = rand.int_range((int32)0, (int32)n_children);
 
         treepath = new TreePath.from_indices((int)rand_val);
 
