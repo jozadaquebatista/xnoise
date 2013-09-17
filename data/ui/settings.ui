@@ -34,7 +34,7 @@
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box5">
@@ -216,13 +216,13 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box18">
+                                  <object class="GtkBox" id="box19">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">5</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="cb_use_notifications">
-                                        <property name="label" translatable="yes">Use desktop notifications</property>
+                                      <object class="GtkCheckButton" id="cb_continue_last_song">
+                                        <property name="label" translatable="yes">Continue last played song</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="receives_default">False</property>
@@ -243,13 +243,13 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box19">
+                                  <object class="GtkBox" id="box18">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">5</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="cb_continue_last_song">
-                                        <property name="label" translatable="yes">Continue last played song</property>
+                                      <object class="GtkCheckButton" id="cb_use_notifications">
+                                        <property name="label" translatable="yes">Use desktop notifications</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="receives_default">False</property>
@@ -295,7 +295,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box21">
@@ -352,7 +352,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box20">
@@ -409,7 +409,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="additionals_box">
