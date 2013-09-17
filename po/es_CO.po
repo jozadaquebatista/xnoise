@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-13 17:44+0200\n"
-"PO-Revision-Date: 2013-05-11 15:49-0500\n"
+"PO-Revision-Date: 2013-09-16 22:15-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
 "Language: es_CO\n"
@@ -31,7 +31,7 @@ msgstr "Organice y reproduzca su colección de música y videos"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
-msgstr ""
+msgstr "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
@@ -376,11 +376,11 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
 msgid "Continue with last played song"
-msgstr ""
+msgstr "Continuar con la última canción reproducida"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 msgid "After restart continue with last played song"
-msgstr ""
+msgstr "Al iniciar continuar con la última canción reproducida"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:350
 #, fuzzy
@@ -1198,7 +1198,7 @@ msgstr ""
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Lyrics downloading from internet"
-msgstr ""
+msgstr "Descargar letras  desde internet"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
@@ -1411,7 +1411,7 @@ msgstr "Integrar xnoise en el menú del sonido del sistema"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Show song title in window bar"
-msgstr "Show song title in window bar"
+msgstr "Mostrar título de la canción en el título de la ventana"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
