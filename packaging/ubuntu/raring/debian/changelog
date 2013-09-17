@@ -1,4 +1,4 @@
-xnoise (0.2.19-1ppa1~raring) raring; urgency=low
+xnoise (0.2.19-2ppa1~raring) raring; urgency=low
   * Don't ignore last song in random mode.
   * GUI updates
   * Allow compilation with valac 0.22

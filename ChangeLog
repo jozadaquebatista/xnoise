@@ -1,3 +1,380 @@
+commit 727d4a4221f21a4e1d12e77ff1532b17b731ecc4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 12:07:17 2013 +0200
+
+    update packaging data
+
+commit 4f730576f97b2311aadd80033cf5cfa529909710
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Tue Sep 17 11:59:04 2013 +0200
+
+    update po/pt.po
+
+commit 61d84e4921f397def438579156c8ad557a0202c8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 11:56:52 2013 +0200
+
+    adjustments for settings dialog
+
+commit db7915b60b0816f00eba6d5967e05c860175a54f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 10:50:49 2013 +0200
+
+    update packaging data
+
+commit 48bc6f712d8386b68724863500885f9babd18be1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 10:50:25 2013 +0200
+
+    check current_uri string before trying to save it
+
+commit 4f5aefc13a6cc0eedc300fbca761c2fece48be55
+Author: Francisco Pérez Cuadrado <fsistemas@gmail.com>
+Date:   Tue Sep 17 08:19:46 2013 +0200
+
+    update po/es.po and po/es_CO.po
+
+commit 9d9820b17350388a1cf7517f279e7b7dc4c823d2
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Mon Sep 16 11:30:38 2013 +0200
+
+    update po/eu.po
+
+commit 0f6132c11336e7cf73e483874ad219af91510077
+Merge: df78b48 fca6d1b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 15 20:01:50 2013 +0200
+
+    Merge branch 'master' of bitbucket.org:shuerhaaken/xnoise
+
+commit df78b487d5b6959474eee7ae6c324dc73b46fa8a
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sun Sep 15 20:00:56 2013 +0200
+
+    update po/he.po
+
+commit fca6d1b7f5ce666af611204d311dcba41cd97536
+Merge: 47bbb9b 4489dbf
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Sep 13 23:42:31 2013 +0200
+
+    Merged in Lasall/xnoise/lastsongrandom (pull request #16)
+    
+    Don't ignore last song in random mode. fixes #60
+
+commit 4489dbf9d959abb72b98e97663a4415dc65fa43c
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Fri Sep 13 20:25:45 2013 +0200
+
+    Don't ignore last song in random mode. fixes #60
+
+commit 47bbb9bfe40ec9f1f13772b24b20b12dbeb081af
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 13 17:48:48 2013 +0200
+
+    update translatable strings
+
+commit 1c26df35b76942c7398f1b22a3ae170ae8796f37
+Author: Francisco Pérez Cuadrado <fsistemas@gmail.com>
+Date:   Fri Sep 13 17:29:09 2013 +0200
+
+    fix #38
+
+commit 314f9f5112a578bd06928c3dc6ad68effcfa9040
+Merge: 10ca8d2 f17b4bf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 13 16:57:21 2013 +0200
+
+    Merge branch 'master' of bitbucket.org:shuerhaaken/xnoise
+
+commit 10ca8d2973295669e809cd6bfc3baabcbd5650f2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 13 16:56:30 2013 +0200
+
+    updates
+
+commit f17b4bfab4fe8951861a9fa31cb32835c5edc19b
+Merge: d76ecff 2f1ca69
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Sep 13 10:13:47 2013 +0200
+
+    Merged in Lasall/xnoise/unownedgststructure (pull request #15)
+    
+    Fix compilation error with valac 0.22
+
+commit 2f1ca693ce137b2457041ced64b683129395b851
+Author: Dominique Lasserre <lasserre.d@gmail.com>
+Date:   Tue Sep 3 21:43:26 2013 +0200
+
+    Fix valac-0.22 compilation error (missing unowned keyword)
+
+commit d76ecffc38bbdf35846191747dc2167768c94b10
+Merge: 391f159 2756cd9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 8 13:05:35 2013 +0200
+
+    Merge branch 'master' of bitbucket.org:shuerhaaken/xnoise
+
+commit 391f15904785ce562a36c07f552bd8b39446f9dd
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Thu Aug 8 13:04:52 2013 +0200
+
+    update po/cs.po
+
+commit 2756cd94cd291e41c904e1b995f7d785861ca7dd
+Merge: 9eac35d 63f2f68
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Jun 21 07:51:11 2013 +0200
+
+    Merged in yosefor/xnoise (pull request #14)
+    
+    Fix showing tab Media in settings dialog and simplify the code
+
+commit 63f2f68f4d62f6bf3fdaeedbf37392f29d50ff25
+Author: Yosef Or Boczko <yosefor3@walla.com>
+Date:   Fri Jun 21 00:28:15 2013 +0300
+
+    Fix showing tab Media in settings dialog and simplify the code
+
+commit 9eac35d51f4ea8b0083fd934632c2ba304cb87af
+Merge: 6718a6f 58ee1b4
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Thu Jun 20 09:10:02 2013 +0200
+
+    Merged in yosefor/xnoise (pull request #13)
+    
+    Set button Play icon according to locale's text direction
+
+commit 58ee1b4ca574dd22a61ff9ed86749773aa9cae8f
+Author: Yosef Or Boczko <yosefor3@walla.com>
+Date:   Thu Jun 20 01:02:54 2013 +0300
+
+    Set button Play icon according to locale's text direction
+
+commit 2e289e1eaa83a063fdd13368c7ea9c150bace97e
+Merge: c4ff797 6718a6f
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Jun 20 00:20:25 2013 +0300
+
+    Merged shuerhaaken/xnoise into master
+
+commit 6718a6ff3b5603cafb3f1efc6cf5561d795d9f4c
+Merge: 6bb6d96 c4ff797
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Wed Jun 19 10:10:41 2013 +0200
+
+    Merged in yosefor/xnoise (pull request #12)
+    
+    Set button arrow icons according to locale's text direction
+
+commit c4ff79766cafb79a0dd48d5e1071676dcba57f9a
+Author: Yosef Or Boczko <yosefor3@walla.com>
+Date:   Wed Jun 19 11:01:48 2013 +0300
+
+    Set button arrow icons according to locale's text direction
+
+commit 6bb6d96b099e3104371ead070be03ba7a94f4078
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Wed Jun 5 10:01:08 2013 +0200
+
+    update po/eu.po
+
+commit 87bc2f0e777ca0ee66bc80820cfa29aba71f1d7d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jun 4 12:03:41 2013 +0200
+
+    fix shadow of add media dialog
+
+commit 43dc2bc4a0868828a51817b122b3d1d5ebe00f72
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Jun 4 11:59:41 2013 +0200
+
+    add ubuntu saucy packaging data
+
+commit 41a29ec72ab7335dc628fc5a71118e22d30e7af2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat May 25 09:09:31 2013 +0200
+
+    fix po file
+
+commit c61daf085d669a448e1f9720f71e1f26aacbccc3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 24 20:40:23 2013 +0200
+
+    fixes for various warnings
+
+commit 856c1d3194729f5687d600d981e397aae83676df
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 24 08:26:12 2013 +0200
+
+    settings dialog changes
+
+commit 72055fcc4eafafbc814c50d4b6da8379b00744ac
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 23 13:43:49 2013 +0200
+
+    theming fix
+
+commit 14953c7a249fdcafda94b5846a6fa555524d25b1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 23 12:18:18 2013 +0200
+
+    settings changes, etc.
+
+commit ae34c3c12d70e36fa47b5b2802d313fec8b8480a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed May 22 15:05:23 2013 +0200
+
+    move settings to separate window
+
+commit bd27b4b0b661ef445d8af3884dfff499ae245cd6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon May 20 20:24:33 2013 +0200
+
+    cleanups
+
+commit 93c2dcd9d0e37140899cd8a851d7f1d915200954
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon May 20 20:17:16 2013 +0200
+
+    merge async worker queues
+
+commit 950f49ae9cb22bd464b601cc4895579acfb841eb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon May 20 11:06:00 2013 +0200
+
+    remove obsolete TIMED worker
+
+commit 0067fc1359ff9c05a6f9839b73388eea3dc9a946
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun May 19 18:03:08 2013 +0200
+
+    fix warnings
+
+commit 61d1bee59830b9a9e98b9e2beefea5896dc392c3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat May 18 10:21:52 2013 +0200
+
+    fix crasher with filtering for artist + searchterm in albumartist view
+
+commit 8e9a084b2a7f3cdb37a859eef9c73b753007f9d3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat May 18 09:49:59 2013 +0200
+
+    update strings
+
+commit 2764538916d05ad9202016bb1b1e4ba16b49ee4e
+Author: Armin Sarhangzadeh <hapoofesgeli@gmail.com>
+Date:   Fri May 17 20:29:13 2013 +0200
+
+    update po/fa.po
+
+commit 291c229cff959daf4f8b89c38773b8b847b83d67
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 17 14:10:30 2013 +0200
+
+    change 'return from settings' button
+
+commit e7874a206ed5ffe757c15c4e1c1bb232195a8540
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 17 13:53:03 2013 +0200
+
+    remove icons from settings tabs
+
+commit 667187e9b54ad254b69fe650733c05d72093452f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri May 17 13:37:43 2013 +0200
+
+    add png image for default album art
+
+commit 90848a20833b44f8c988d22dda5f926d340b12e2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 16 18:24:40 2013 +0200
+
+    use TIMER type user info on tracklist fill. fixes #47
+
+commit 73f974ff85ffdd29d18503490f0a84cc0a73aa8a
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Thu May 16 18:16:35 2013 +0200
+
+    update po/cs.po
+
+commit d84559722e9f19b9e3f96e59985cf5b994d3b6c4
+Author: Francisco Pérez Cuadrado <fsistemas@gmail.com>
+Date:   Thu May 16 18:13:55 2013 +0200
+
+    update spanish translations
+
+commit 5953366dde5d82ae76906e7f92e065d1ca3c060c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 16 14:16:37 2013 +0200
+
+    remove some old code
+
+commit 55776cf3cb16b487fc68a7e3334505a22f7cf4d9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 16 14:10:15 2013 +0200
+
+    add media browser visibility option to app menu button
+
+commit c15ef151b4c765184b02d448eadfb070288d6f30
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 16 14:02:35 2013 +0200
+
+    media browser rendering fixes for Adwaita
+
+commit 920f9fa441726aaeb32c7bccf48c58b0dd14f59d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu May 16 13:38:52 2013 +0200
+
+    fix rendering of background on Manjaro linux and Adwaita themes
+
+commit 75328d23cdcf16cf8bb860ae37e0c8976095d072
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue May 14 18:20:05 2013 +0200
+
+    post release version inc
+
+commit 3f5578fd5ac4bae64c23c39798f4777a54fd8978
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue May 14 18:18:52 2013 +0200
+
+    add keywords string for localizations
+
+commit 18704c7dded268aae0f5dd5396c11e0c0d07edf3
+Merge: d880f09 5a68f3d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue May 14 18:12:01 2013 +0200
+
+    Merge branch 'master' of bitbucket.org:shuerhaaken/xnoise
+
+commit d880f09740ac7cc69b6a2e43a402ec3c777d0caa
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue May 14 18:11:34 2013 +0200
+
+    update text
+
+commit 5a68f3dd2f1f0d20b62312a155bba6e698a50cf8
+Merge: 42b37e6 6096108
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Tue May 14 08:13:00 2013 +0200
+
+    Merged in hircus/xnoise/fix-#50-desktop-file-validation (pull request #11)
+    
+    Desktop file fixes
+
+commit 6096108fdb64c6fdffd22dac2a39d6ea019ffcc2
+Author: Michel Alexandre Salim <salimma@fedoraproject.org>
+Date:   Tue May 14 10:17:32 2013 +0700
+
+    Remove warning caused by listing application/ogg twice in MimeTypes
+
+commit df3f18a554bda0f9a473c14cc78e5a193d469271
+Author: Michel Alexandre Salim <salimma@fedoraproject.org>
+Date:   Tue May 14 10:16:45 2013 +0700
+
+    Add missing trailing ; to list of desktop file keywords
+
 commit 42b37e6d839d96097bcc7e04c29bfe6c930c53e6
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri May 10 23:28:32 2013 +0200

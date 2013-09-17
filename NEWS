@@ -1,3 +1,22 @@
+xnoise (0.2.19)
+
+Changes
+======================
+  * Don't ignore last song in random mode.
+  * GUI updates
+  * Allow compilation with valac 0.22
+  * Changes for Settings dialog
+  * AsyncQueues for background worker threads
+  * Add media browser visibility option to app menu
+  * Media browser rendering fixes for Adwaita
+  * Fix rendering of background on Manjaro + Adwaita
+  * Desktop file fixes
+  * Localization fixes
+  * More bug fixes
+  * update translations
+
+
+
 xnoise (0.2.18)
 
 Changes
