@@ -253,7 +253,8 @@ public class Xnoise.Main : GLib.Object {
     }
     
     public void quit() {
-        Params.set_string_value("current_uri", global.current_uri);
+        if(global.current_uri != null && global.current_uri != "")
+            Params.set_string_value("current_uri", global.current_uri);
         GlobalAccess.main_cancellable.cancel();
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;

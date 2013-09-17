@@ -1092,7 +1092,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 gst_player.play();
                 global.player_state = PlayerState.PLAYING;
             }
-            // global.player_state();
         }
     }
 
