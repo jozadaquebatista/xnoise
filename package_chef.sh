@@ -134,7 +134,7 @@ fi
 
 # Define convinient varibles.
 define_convinient_varibles () {
-	formatted_version=$(echo "$version" | sed 's/-/./g')
+	formatted_version=$(echo "$version" | cut -d'-' --complement -f2-)
 	std_version=$(echo "$version" | cut -d'-' -f1)
 	name_version=$name-$std_version
 	package_dir=$output_dir/$name_version
