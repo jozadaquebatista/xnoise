@@ -109,7 +109,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             queue_draw();
             return false;
         });
+        Gtk.StyleContext context = this.get_style_context();
+        context.add_class(STYLE_CLASS_SEPARATOR);
     }
+    
     
     private void on_image_changed() {
         if(global.image_loader.image_embedded != null) {
@@ -124,17 +127,19 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
     }
     
     public override bool draw(Cairo.Context cr) {
-        Allocation allocation;
+        Gtk.StyleContext context = this.get_style_context();
+        Gdk.RGBA col = context.get_color(StateFlags.NORMAL);
         assert(icon_repo.album_art_default_icon != null);
-        this.get_allocation(out allocation);
-        cr.set_source_rgb(0.0, 0.0, 0.0);
-        cr.set_line_width(0);
-        cr.arc(SIZE / 2.0, 
-               SIZE / 2.0,
-               radius + 1, 
-               0.0, 
-               2.0 * Math.PI);
-        cr.fill();
+        if(this.pixbuf != null) {
+            cr.set_source_rgb(col.red, col.green, col.blue);
+            cr.set_line_width(0);
+            cr.arc(SIZE / 2.0, 
+                   SIZE / 2.0,
+                   radius + 1, 
+                   0.0, 
+                   2.0 * Math.PI);
+            cr.fill();
+        }
         cr.arc(SIZE / 2.0, 
                SIZE / 2.0,
                radius, 
@@ -151,7 +156,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         StateFlags flags = this.get_state_flags();
         if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && !_selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
+            cr.set_source_rgba(col.red, col.green, col.blue, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
             cr.set_line_width(0);
             cr.arc(SIZE / 2.0, 
                    SIZE / 2.0,
@@ -173,7 +178,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         }
         else if((flags & StateFlags.PRELIGHT) != StateFlags.PRELIGHT && _selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
             cr.arc(SIZE / 2.0, 
                    SIZE / 2.0,
@@ -195,7 +200,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         }
         else if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && _selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
             cr.arc(SIZE / 2.0, 
                    SIZE / 2.0,

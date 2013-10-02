@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-28 15:37+0100\n"
-"PO-Revision-Date: 2013-09-24 21:47+0200\n"
-"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
+"PO-Revision-Date: 2013-10-01 10:57+0100\n"
+"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Language: cs_CZ\n"
 
@@ -490,7 +490,6 @@ msgid ""
 "Using %s ..."
 msgstr ""
 "\n"
-"Používá se %s ...\n"
 "Pokus o nalezení textu písně pro \"%s\" od \"%s\"\n"
 "\n"
 "Používá se %s ..."
@@ -1096,7 +1095,7 @@ msgstr "Uživatelské jméno a heslo jsou k dispozici"
 
 #: ../plugins/magnatune/magnatune.vala:174
 msgid "Username or Password not available"
-msgstr "Uživatelské jméno a heslo není k dispozici"
+msgstr "Uživatelské jméno a heslo není k dispozici "
 
 #: ../plugins/magnatune/magnatune.vala:236
 msgid "Visit Magnatune for an account."
@@ -1113,7 +1112,7 @@ msgstr "Služba Mpris v2 Dbus"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr "Ovládat Xnoise přes rozhraní MPRIS v2"
+msgstr "Ovládat Xnoise přes rozhraní MPRIS v2 "
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Mpris v1 Dbus Service"
