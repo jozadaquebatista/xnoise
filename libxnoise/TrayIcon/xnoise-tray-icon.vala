@@ -142,14 +142,33 @@ public class Xnoise.TrayIcon : StatusIcon {
         }
         return false;
     }
-
+    
+    private uint scroll_source = 0;
+    
     private bool on_scrolled(Gtk.StatusIcon sender, Gdk.EventScroll event) {
+        if(scroll_source != 0) {
+            return false;
+        }
         if(global.player_state != PlayerState.STOPPED) {
             if(event.direction == Gdk.ScrollDirection.DOWN) {
-                main_window.change_track(ControlButton.Function.PREVIOUS, true);
+                scroll_source = Timeout.add(100, () => {
+                    main_window.change_track(ControlButton.Function.PREVIOUS, true);
+                    Timeout.add(400, () => {
+                        scroll_source = 0;
+                        return false;
+                    });
+                    return false;
+                });
             }
             else if(event.direction == Gdk.ScrollDirection.UP) {
-                main_window.change_track(ControlButton.Function.NEXT, true);
+                scroll_source = Timeout.add(100, () => {
+                    main_window.change_track(ControlButton.Function.NEXT, true);
+                    Timeout.add(400, () => {
+                        scroll_source = 0;
+                        return false;
+                    });
+                    return false;
+                });
             }
         }
         return false;
