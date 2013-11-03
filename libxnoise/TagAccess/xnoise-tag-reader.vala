@@ -50,9 +50,9 @@ public class Xnoise.TagAccess.TagReader {
             return null;
         if(f.get_path() == null)
             return null;
-        info = Info.factory_make(f.get_path());
+        info = Info.create(f.get_path());
         if(info != null) {
-            if(info.read()) {
+            if(info.load()) {
                 td.artist         = info.artist != null && info.artist != EMPTYSTRING ?
                                         info.artist : UNKNOWN_ARTIST;
                 td.albumartist    = info.albumartist != null ?
@@ -64,19 +64,19 @@ public class Xnoise.TagAccess.TagReader {
                 td.genre          = info.genre != null && info.genre != EMPTYSTRING ?
                                         info.genre : UNKNOWN_GENRE;
                 td.year           = info.year;
-                td.tracknumber    = info.tracknumber;
+                td.tracknumber    = info.track_number;
                 td.length         = info.length;
                 td.is_compilation = info.is_compilation;
                 td.has_embedded_image = info.has_image;
-                td.disk_number    = (info.disk_number < 1 ? 1 : info.disk_number);
+                td.disk_number    = (info.volume_number < 1 ? 1 : info.volume_number);
                 if(try_read_image_data) {
-                    uint8[] data = null;
-                    TagInfo.ImageType image_type;
-                    if(info.get_image(out data, out image_type)) {
-                        if(data != null && data.length > 0) {
+//                    uint8[] data = null;
+                    TagInfo.Image[] images;
+                    if((images = info.get_images())!=null && images.length > 0) {
+//                        if(data != null && data.length > 0) {
                             var pbloader = new Gdk.PixbufLoader();
                             try {
-                                pbloader.write(data);
+                                pbloader.write(images[0].get_data());
                             }
                             catch(Error e) {
                                 print("Error 1: %s\n", e.message);
@@ -89,7 +89,7 @@ public class Xnoise.TagAccess.TagReader {
                             catch(Error e) { 
                                 print("Error 3 for %s :\n\t %s\n", f.get_path(), e.message);
                             }
-                        }
+//                        }
                     }
                 }
             } 

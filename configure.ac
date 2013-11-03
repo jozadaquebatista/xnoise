@@ -41,7 +41,7 @@ GSTREAMER_REQUIRED=1.0.1
 LIBXML_REQUIRED=2.6.32
 GTK_REQUIRED=3.2.0
 SQLITE_REQUIRED=3.6
-TAGINFO_REQUIRED=0.1.6
+TAGINFO_REQUIRED=0.2.0
 
 dnl required versions for plugins
 LIBXML_REQUIRED=2.6.32
@@ -92,7 +92,6 @@ PKG_CHECK_MODULES(XNOISE, \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     libtaginfo_c >= $TAGINFO_REQUIRED \
-    libtaginfo_c < 0.2 \
     cairo)
 
 
