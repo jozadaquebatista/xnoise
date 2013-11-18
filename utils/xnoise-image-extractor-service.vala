@@ -75,7 +75,7 @@ public class ImageExtractorDbus : GLib.Object {
         }
         
 //        uint8[] data;
-        ImageFileType image_type = ImageFileType.JPEG;
+        Image.FileType image_type = Image.FileType.JPEG;
         Gdk.Pixbuf? pixbuf = null;
         
         if(info.has_image) {
@@ -126,7 +126,7 @@ public class ImageExtractorDbus : GLib.Object {
     private void save_pixbuf_to_file(string artist,
                                      string album,
                                      Gdk.Pixbuf pixbuf,
-                                     ImageFileType image_type) {
+                                     Image.FileType image_type) {
         if(pixbuf != null) {
             File? pf2 = null;
             File? pf = get_albumimage_for_artistalbum(artist, album, "embedded");
@@ -135,10 +135,16 @@ public class ImageExtractorDbus : GLib.Object {
             }
             string itype;
             switch(image_type) {
-                case ImageFileType.PNG:
+                case Image.FileType.BMP:
+                    itype = "bmp";
+                    break;
+                case Image.FileType.GIF:
+                    itype = "gif";
+                    break;
+                case Image.FileType.PNG:
                     itype = "png";
                     break;
-                case ImageFileType.JPEG:
+                case Image.FileType.JPEG:
                 default:
                     itype = "jpeg";
                     break;

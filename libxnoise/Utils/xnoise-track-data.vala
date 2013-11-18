@@ -48,6 +48,7 @@ namespace Xnoise {
         public string? title = null;
         public string? genre = null;
         public string? name = null;
+        public string? media_folder = null;
         public string? mimetype = null;
         public int disk_number = 1;
         public uint year = 0;
@@ -72,6 +73,8 @@ namespace Xnoise {
         td_new.album       = td.album;
         td_new.title       = td.title;
         td_new.genre       = td.genre;
+        td_new.name        = td.name;
+        td_new.media_folder= td.media_folder;
         td_new.mimetype    = td.mimetype;
         td_new.disk_number = td.disk_number;
         td_new.year        = td.year;

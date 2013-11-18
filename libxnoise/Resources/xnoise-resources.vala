@@ -61,7 +61,7 @@ namespace Xnoise.Resources {
     internal static const int ICON_SMALL_PIXELSIZE      = 30;
     
     public static const int VIDEOTHUMBNAILSIZE   = 40; //TODO
-    internal static const int DB_VERSION_MAJOR   = 19;
+    internal static const int DB_VERSION_MAJOR   = 20;
     internal static const int DB_VERSION_MINOR   = 0;
 
     public static const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");

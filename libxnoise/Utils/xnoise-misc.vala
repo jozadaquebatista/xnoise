@@ -112,9 +112,6 @@ namespace Xnoise {
         itemhandler_manager = new ItemHandlerManager();
         item_converter = new ItemConverter();
         
-        // MEDIA IMPORTER
-        media_importer = new MediaImporter();
-        
         // WORKERS
         db_worker     = new Worker(MainContext.default());
         io_worker     = new Worker(MainContext.default());
@@ -163,6 +160,9 @@ namespace Xnoise {
         }
         register_data_source(db_reader);
         //print("source id: %d\n", dbid);
+        
+        // MEDIA IMPORTER
+        media_importer = new MediaImporter();
         
         statistics = new Statistics();
         

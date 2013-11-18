@@ -65,6 +65,7 @@ namespace Xnoise {
 			}
 			public delegate void ChangeNotificationCallback (Xnoise.Database.Writer.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
+			public const string STMT_REMOVE_MEDIA_FOLDER_ITEMS;
 			public Writer () throws Xnoise.Database.DbError;
 			public bool add_single_folder_to_collection (Xnoise.Item? mfolder);
 			public bool add_single_stream_to_collection (Xnoise.Item? i);
@@ -77,6 +78,7 @@ namespace Xnoise {
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
+			public bool remove_single_media_folder (Xnoise.Item? mfolder);
 			public void remove_uri (string uri);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public void update_stream_name (Xnoise.Item? item);
@@ -811,6 +813,13 @@ namespace Xnoise {
 		public static Gdk.Pixbuf? get_themed_pixbuf_icon (string name, int pixel_size, Gtk.StyleContext? style_context = null);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class ImportTarget : GLib.Object {
+		public GLib.Cancellable cancellable;
+		public Xnoise.Item item;
+		public ImportTarget ();
+		public bool in_progress { get; set; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class InfoBar : Gtk.InfoBar {
 		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds = 5, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);
@@ -926,10 +935,13 @@ namespace Xnoise {
 		}
 		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
+		public GLib.List<Xnoise.Item?> get_media_folder_list ();
 		public void import_media_file (string file_path);
 		public void import_media_folder (string folder_path, bool create_user_info = false, bool add_folder_to_media_folders = false);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 		public void reimport_media_files (string[] file_paths);
+		public void remove_media_folder (string path);
+		public signal void folder_list_changed ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
@@ -1022,6 +1034,7 @@ namespace Xnoise {
 		public bool is_compilation;
 		public Xnoise.Item? item;
 		public int32 length;
+		public string? media_folder;
 		public string? mimetype;
 		public string? name;
 		public Gdk.Pixbuf? pixbuf;
@@ -1113,6 +1126,7 @@ namespace Xnoise {
 			public Xnoise.Worker.ExecutionType execution_type;
 			public weak Xnoise.Worker.FinishFunc? finish_func;
 			public weak Xnoise.Worker.WorkFunc? func;
+			public Xnoise.ImportTarget? import_target;
 			public Xnoise.Item? item;
 			public Xnoise.Item[] items;
 			public Xnoise.Worker.Priority priority;

@@ -41,7 +41,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement add_stream_statement;
     private Statement begin_statement;
     private Statement commit_statement;
-    private Statement write_media_folder_statement;
+//    private Statement write_media_folder_statement;
     private Statement get_media_folder_statement;
     private Statement del_media_folder_statement;
     private Statement del_streams_statement;
@@ -114,10 +114,10 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
     }
     //SQLITE CONFIG STATEMENTS
-    private static const string STMT_PRAGMA_SET_FOREIGN_KEYS_ON =
-        "PRAGMA foreign_keys = ON;";
-    private static const string STMT_PRAGMA_GET_FOREIGN_KEYS_ON =
-        "PRAGMA foreign_keys;";
+//    private static const string STMT_PRAGMA_SET_FOREIGN_KEYS_ON =
+//        "PRAGMA foreign_keys = ON;";
+//    private static const string STMT_PRAGMA_GET_FOREIGN_KEYS_ON =
+//        "PRAGMA foreign_keys;";
 
     // DBWRITER STATEMENTS
     private static const string STMT_BEGIN =
@@ -125,13 +125,13 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_COMMIT =
         "COMMIT";
     private static const string STMT_DEL_MEDIA_FOLDERS =
-        "DELETE FROM media_folders";
+        "DELETE FROM paths";
     private static const string STMT_DEL_RADIO_STREAM =
         "DELETE FROM streams;";
     private static const string STMT_ADD_STREAM =
         "INSERT INTO streams (name, uri) VALUES (?, ?)";
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT * FROM media_folders";
+        "SELECT * FROM paths";
     private static const string STMT_GET_TITLE_ID =
         "SELECT id FROM items WHERE artist = ? AND album = ? AND utf8_lower(title) = ?";
     private static const string STMT_DEL_ARTISTS =
@@ -193,12 +193,12 @@ public class Xnoise.Database.Writer : GLib.Object {
         
         this.prepare_statements();
         
-        setup_db();
+//        setup_db();
     }
     
-    private void setup_db() {
-        setup_pragmas();
-    }
+//    private void setup_db() {
+//        setup_pragmas();
+//    }
     
     private static Sqlite.Database? get_db () {
         // there was more luck on creating the db on first start, if using a static function
@@ -241,7 +241,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         db.prepare_v2(STMT_BEGIN, -1, out begin_statement);
         db.prepare_v2(STMT_COMMIT, -1, out commit_statement);
         db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out get_media_folder_statement);
-        db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out write_media_folder_statement);
+//        db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out write_media_folder_statement);
         db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1, out del_media_folder_statement);
         db.prepare_v2(STMT_ADD_STREAM, -1, out add_stream_statement);
         db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, out del_streams_statement);
@@ -296,13 +296,13 @@ public class Xnoise.Database.Writer : GLib.Object {
         change_callbacks.prepend(cbd);
     }
     
-    private void setup_pragmas() {
-        string errormsg;
-        if(db.exec(STMT_PRAGMA_SET_FOREIGN_KEYS_ON, null, out errormsg)!= Sqlite.OK) {
-            stderr.printf("exec_stmnt_string error: %s", errormsg);
-            return;
-        }
-    }
+//    private void setup_pragmas() {
+//        string errormsg;
+//        if(db.exec(STMT_PRAGMA_SET_FOREIGN_KEYS_ON, null, out errormsg)!= Sqlite.OK) {
+//            stderr.printf("exec_stmnt_string error: %s", errormsg);
+//            return;
+//        }
+//    }
     
     private static const string STMT_GET_URI_FOR_ITEM_ID =
         "SELECT u.name FROM uris u, items it WHERE it.uri = u.id AND it.id = ?";
@@ -808,7 +808,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(get_path_id_statement.step() == Sqlite.ROW) {
             path_id = get_path_id_statement.column_int(0);
         }
-        if(path_id == -1) { // genre not in table, yet 
+        if(path_id == -1) { // not in table, yet 
             insert_path_statement.reset();
             if(insert_path_statement.bind_text(1, stripped_path) != Sqlite.OK ||
                insert_path_statement.bind_text(2, caseless_path) != Sqlite.OK) {
@@ -835,11 +835,18 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_GET_URI_ID =
         "SELECT id FROM uris WHERE name = ?";
     private static const string STMT_INSERT_URI =
-        "INSERT INTO uris (name) VALUES (?)";
+        "INSERT INTO uris (name, path) VALUES (?,?)";
 
-    private int handle_uri(string uri) {
+    private int handle_uri(string uri, int path_id = -1) {
+        this.get_uri_id_statement.reset();
+        if(this.get_uri_id_statement.bind_text(1, uri)!= Sqlite.OK )
+            return -1;
+        if(this.get_uri_id_statement.step() == Sqlite.ROW)
+            return -2;
+
         insert_uri_statement.reset();
-        if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+        if(insert_uri_statement.bind_text(1, uri)     != Sqlite.OK ||
+           insert_uri_statement.bind_int (2, path_id) != Sqlite.OK) {
             this.db_error();
             return -1;
         }
@@ -1317,6 +1324,35 @@ public class Xnoise.Database.Writer : GLib.Object {
         // make entries in other tables and get references from there
 //        t.reset();
 //        t.start();
+        File f = File.new_for_uri(td.item.uri);
+        int path_id = handle_path(td.media_folder);// f.get_parent().get_path());
+        if(path_id == -1) {
+            return false;
+        }
+//        if(path_id == -2) {
+//            print("path exists\n");
+//            return false;
+//        }
+//        t.stop();
+//        t.elapsed(out usec);
+//        path_usec = (FACTOR * path_usec + usec) / (FACTOR + 1 );
+
+//        t.reset();
+//        t.start();
+        int uri_id = handle_uri(f.get_uri(), path_id);
+        if(uri_id == -1) {
+            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
+            return false;
+        }
+        if(uri_id == -2) {
+            print("uri exists\n");
+            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
+            return false;
+        }
+//        t.stop();
+//        t.elapsed(out usec);
+//        uri_usec = (FACTOR * uri_usec + usec) / (FACTOR + 1 );
+
         if(td.albumartist != null && (td.albumartist.strip().down() == "various artists" ||
                                       td.albumartist.strip().down() == "various")) {
             td.is_compilation = true;
@@ -1379,25 +1415,6 @@ public class Xnoise.Database.Writer : GLib.Object {
 
 //        t.reset();
 //        t.start();
-        File f = File.new_for_uri(td.item.uri);
-        int path_id = handle_path(f.get_parent().get_path());
-        if(path_id == -1) {
-            return false;
-        }
-//        t.stop();
-//        t.elapsed(out usec);
-//        path_usec = (FACTOR * path_usec + usec) / (FACTOR + 1 );
-
-//        t.reset();
-//        t.start();
-        int uri_id = handle_uri(f.get_uri());
-        if(uri_id == -1) {
-            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
-            return false;
-        }
-//        t.stop();
-//        t.elapsed(out usec);
-//        uri_usec = (FACTOR * uri_usec + usec) / (FACTOR + 1 );
 
 //        t.reset();
 //        t.start();
@@ -1537,21 +1554,77 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
     }
     
-    private static const string STMT_WRITE_MEDIA_FOLDERS =
-        "INSERT INTO media_folders (name) VALUES (?)";
+//    private static const string STMT_WRITE_MEDIA_FOLDERS =
+//        "INSERT INTO paths (name) VALUES (?)";
 
+    //add media folder
     public bool add_single_folder_to_collection(Item? mfolder) {
         if(mfolder == null)
             return false;
-        // TODO add check for existance
-        this.write_media_folder_statement.reset();
         File f = File.new_for_uri(mfolder.uri);
-        this.write_media_folder_statement.bind_text(1, f.get_path());
-        if(write_media_folder_statement.step() != Sqlite.DONE) {
-            this.db_error();
+        return_val_if_fail(f.get_path() != null, false);
+        int id = handle_path(f.get_path());
+        if(id == -1)
             return false;
-        }
         return true;
+    }
+    
+    private static const string STMT_GET_MEDIA_FOLDER_ID =
+        "SELECT id FROM paths WHERE name = ?";
+    
+    public static const string STMT_REMOVE_MEDIA_FOLDER_ITEMS =
+        "DELETE FROM items WHERE path=?";
+    
+    private static const string STMT_REMOVE_MEDIA_FOLDER_ID =
+        "DELETE FROM paths WHERE id=?";
+    
+    private static const string STMT_REMOVE_URI_ITEMS =
+        "DELETE FROM uris WHERE path=?";
+    
+    private static const string STMT_GET_URI_IDS_FOR_PATH =
+        "SELECT uri FROM items WHERE path=?";
+    //remove media folder and all items referencing to this media folder
+    public bool remove_single_media_folder(Item? mfolder) {
+        if(mfolder == null)
+            return false;
+        File f = File.new_for_uri(mfolder.uri);
+        return_val_if_fail(f.get_path() != null && f.get_path() != "", false);
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_MEDIA_FOLDER_ID, -1, out stmt);
+        stmt.bind_text(1, f.get_path());
+        print("ää path: %s\n", f.get_path());
+        if(stmt.step() == Sqlite.ROW) {
+            int id = stmt.column_int(0);
+//            Statement st;
+print("++++1 id=%d\n", id);
+            this.db.prepare_v2("DELETE FROM uris WHERE path=?", -1, out stmt);
+print("++++2\n");
+            stmt.bind_int(1, id);
+print("++++3\n");
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
+print("++++4\n");
+                return false;
+            }
+print("++++5\n");
+            this.db.prepare_v2(STMT_REMOVE_MEDIA_FOLDER_ITEMS, -1, out stmt);
+            stmt.bind_int(1, id);
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
+                return false;
+            }
+            this.db.prepare_v2(STMT_REMOVE_MEDIA_FOLDER_ID, -1, out stmt);
+            stmt.bind_int(1, id);
+            if(stmt.step() != Sqlite.DONE) {
+                this.db_error();
+                return false;
+            }
+            return true;
+        }
+        else {
+            print("FOLDER was not in DB!\n");
+            return true;
+        }
     }
 
     public delegate void WriterCallback(Sqlite.Database database);
@@ -1570,10 +1643,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
             throw new DbError.FAILED("Error while removing old music folders");
         }
-        this.begin_transaction();
         foreach(TrackData? td in tda)
             this.insert_lastused_track(ref td);
-        this.commit_transaction();
     }
     
     private static const string STMT_INSERT_LASTUSED =

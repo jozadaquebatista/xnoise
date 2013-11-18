@@ -111,6 +111,7 @@ public class Xnoise.Worker : Object {
         public Priority priority;
         // payload
         public Item? item;
+        public ImportTarget? import_target;
         public Item[] items;
         public TrackData[] track_dat; 
         public DndData[] dnd_data;

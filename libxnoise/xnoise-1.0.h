@@ -97,6 +97,16 @@ typedef struct _XnoiseWorkerJobPrivate XnoiseWorkerJobPrivate;
 #define XNOISE_TYPE_ITEM_TYPE (xnoise_item_type_get_type ())
 typedef struct _XnoiseItem XnoiseItem;
 
+#define XNOISE_TYPE_IMPORT_TARGET (xnoise_import_target_get_type ())
+#define XNOISE_IMPORT_TARGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMPORT_TARGET, XnoiseImportTarget))
+#define XNOISE_IMPORT_TARGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_IMPORT_TARGET, XnoiseImportTargetClass))
+#define XNOISE_IS_IMPORT_TARGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMPORT_TARGET))
+#define XNOISE_IS_IMPORT_TARGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_IMPORT_TARGET))
+#define XNOISE_IMPORT_TARGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_IMPORT_TARGET, XnoiseImportTargetClass))
+
+typedef struct _XnoiseImportTarget XnoiseImportTarget;
+typedef struct _XnoiseImportTargetClass XnoiseImportTargetClass;
+
 #define XNOISE_TYPE_TRACK_DATA (xnoise_track_data_get_type ())
 #define XNOISE_TRACK_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_DATA, XnoiseTrackData))
 #define XNOISE_TRACK_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_DATA, XnoiseTrackDataClass))
@@ -900,6 +910,7 @@ typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 typedef struct _XnoiseMediaExtensions XnoiseMediaExtensions;
 typedef struct _XnoiseMediaExtensionsClass XnoiseMediaExtensionsClass;
 typedef struct _XnoiseMediaExtensionsPrivate XnoiseMediaExtensionsPrivate;
+typedef struct _XnoiseImportTargetPrivate XnoiseImportTargetPrivate;
 
 #define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
 #define XNOISE_MEDIA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporter))
@@ -1039,6 +1050,7 @@ struct _XnoiseWorkerJob {
 	XnoiseWorkerJobPrivate * priv;
 	XnoiseWorkerPriority priority;
 	XnoiseItem* item;
+	XnoiseImportTarget* import_target;
 	XnoiseItem* items;
 	gint items_length1;
 	XnoiseTrackData** track_dat;
@@ -1985,6 +1997,17 @@ struct _XnoiseMediaExtensionsClass {
 	void (*finalize) (XnoiseMediaExtensions *self);
 };
 
+struct _XnoiseImportTarget {
+	GObject parent_instance;
+	XnoiseImportTargetPrivate * priv;
+	XnoiseItem item;
+	GCancellable* cancellable;
+};
+
+struct _XnoiseImportTargetClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseMediaImporter {
 	GObject parent_instance;
 	XnoiseMediaImporterPrivate * priv;
@@ -2038,6 +2061,7 @@ struct _XnoiseTrackData {
 	gchar* title;
 	gchar* genre;
 	gchar* name;
+	gchar* media_folder;
 	gchar* mimetype;
 	gint disk_number;
 	guint year;
@@ -2113,6 +2137,7 @@ XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
 void xnoise_item_free (XnoiseItem* self);
 void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
 void xnoise_item_destroy (XnoiseItem* self);
+GType xnoise_import_target_get_type (void) G_GNUC_CONST;
 gpointer xnoise_track_data_ref (gpointer instance);
 void xnoise_track_data_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_track_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2163,6 +2188,7 @@ GType xnoise_album_data_get_type (void) G_GNUC_CONST;
 XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, const gchar* sorting, const gchar* direction, int* result_length1);
 GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
+#define XNOISE_DATABASE_WRITER_STMT_REMOVE_MEDIA_FOLDER_ITEMS "DELETE FROM items WHERE path=?"
 XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);
 XnoiseDatabaseWriter* xnoise_database_writer_construct (GType object_type, GError** error);
 GType xnoise_database_writer_notification_data_get_type (void) G_GNUC_CONST;
@@ -2180,6 +2206,7 @@ gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, Xnoise
 gboolean xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* i);
 void xnoise_database_writer_update_stream_name (XnoiseDatabaseWriter* self, XnoiseItem* item);
 gboolean xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* mfolder);
+gboolean xnoise_database_writer_remove_single_media_folder (XnoiseDatabaseWriter* self, XnoiseItem* mfolder);
 void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterWriterCallback cb, void* cb_target);
 void xnoise_database_writer_begin_transaction (XnoiseDatabaseWriter* self);
 void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
@@ -2948,7 +2975,13 @@ gboolean xnoise_media_extensions_contains (XnoiseMediaExtensions* self, const gc
 XnoiseMediaExtensions* xnoise_media_extensions_new (void);
 XnoiseMediaExtensions* xnoise_media_extensions_construct (GType object_type);
 gchar** xnoise_media_extensions_get_list (XnoiseMediaExtensions* self, int* result_length1);
+XnoiseImportTarget* xnoise_import_target_new (void);
+XnoiseImportTarget* xnoise_import_target_construct (GType object_type);
+gboolean xnoise_import_target_get_in_progress (XnoiseImportTarget* self);
+void xnoise_import_target_set_in_progress (XnoiseImportTarget* self, gboolean value);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
+XnoiseMediaImporter* xnoise_media_importer_new (void);
+XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_media_importer_reset_notification_data_get_type (void) G_GNUC_CONST;
 XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notification_data_dup (const XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
@@ -2956,8 +2989,8 @@ void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, X
 void xnoise_media_importer_import_media_folder (XnoiseMediaImporter* self, const gchar* folder_path, gboolean create_user_info, gboolean add_folder_to_media_folders);
 void xnoise_media_importer_reimport_media_files (XnoiseMediaImporter* self, gchar** file_paths, int file_paths_length1);
 void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, const gchar* file_path);
-XnoiseMediaImporter* xnoise_media_importer_new (void);
-XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
+GList* xnoise_media_importer_get_media_folder_list (XnoiseMediaImporter* self);
+void xnoise_media_importer_remove_media_folder (XnoiseMediaImporter* self, const gchar* path);
 gpointer xnoise_media_stream_schemes_ref (gpointer instance);
 void xnoise_media_stream_schemes_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_media_stream_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);

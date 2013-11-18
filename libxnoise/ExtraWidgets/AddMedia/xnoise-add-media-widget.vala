@@ -59,90 +59,90 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         builder = new Gtk.Builder();
         setup_widgets();
         
-        fill_media_list();
+//        fill_media_list();
         
         this.show_all();
     }
 
     internal void update() {
-        fill_media_list();
+//        fill_media_list();
     }
     
-    private void fill_media_list() {
-        return_if_fail(listmodel != null);
-        listmodel.clear();
-        Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, fill_media_list_job);
-        db_worker.push_job(job);
-    }
-    
-    private bool fill_media_list_job(Worker.Job job) {
+//    private void fill_media_list() {
+//        return_if_fail(listmodel != null);
+//        listmodel.clear();
+//        Worker.Job job;
+//        job = new Worker.Job(Worker.ExecutionType.ONCE, fill_media_list_job);
+//        db_worker.push_job(job);
+//    }
+//    
+//    private bool fill_media_list_job(Worker.Job job) {
         //add folders
-        Item[] mfolders = db_reader.get_media_folders();
-        
-        //add streams to list
-        Item[] tmp = db_reader.get_stream_items("");
-        Item[] streams = {};
-        
-        for(int j = tmp.length -1; j >= 0; j--) // reverse
-            streams += tmp[j];
-        
-        Gtk.Invisible w = new Gtk.Invisible();
-        Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
-        
-        Idle.add( () => {
-            foreach(Item? i in mfolders) {
-                File f = File.new_for_uri(i.uri);
-                TreeIter iter;
-                listmodel.append(out iter);
-                listmodel.set(iter,
-                              Column.ICON,      folder_icon,
-                              Column.LOCATION,  f.get_path(),
-                              Column.ITEMTYPE,  i.type
-                );
-            }
-            foreach(Item? i in streams) {
-                TreeIter iter;
-                listmodel.append(out iter);
-                listmodel.set(iter,
-                              Column.ICON,      icon_repo.radios_icon_menu,
-                              Column.LOCATION,  i.uri,
-                              Column.ITEMTYPE,  i.type
-                );
-            }
-            return false;
-        });
-        return false;
-    }
+//        GLib.List<Item?> mfolders = media_importer.get_media_folder_list();
+//        
+//        //add streams to list
+//        Item[] tmp = db_reader.get_stream_items("");
+//        Item[] streams = {};
+//        
+//        for(int j = tmp.length -1; j >= 0; j--) // reverse
+//            streams += tmp[j];
+//        
+//        
+//        Idle.add( () => {
+//            Gtk.Invisible w = new Gtk.Invisible();
+//            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
+//            foreach(Item? i in media_importer.get_media_folder_list()) {
+//                File f = File.new_for_uri(i.uri);
+//                TreeIter iter;
+//                listmodel.append(out iter);
+//                listmodel.set(iter,
+//                              Column.ICON,      folder_icon,
+//                              Column.LOCATION,  f.get_path(),
+//                              Column.ITEMTYPE,  i.type
+//                );
+//            }
+//            foreach(Item? i in streams) {
+//                TreeIter iter;
+//                listmodel.append(out iter);
+//                listmodel.set(iter,
+//                              Column.ICON,      icon_repo.radios_icon_menu,
+//                              Column.LOCATION,  i.uri,
+//                              Column.ITEMTYPE,  i.type
+//                );
+//            }
+//            return false;
+//        });
+//        return false;
+//    }
 
-    private Item[] harvest_media_locations() {
-        Item[] media_items = {};
-        listmodel.foreach( (sender, mypath, myiter) => {
-            string d_uri;
-            ItemType tp;
-            sender.get(myiter,
-                       Column.LOCATION, out d_uri,
-                       Column.ITEMTYPE, out tp//,
-            );
-            switch(tp) {
-                case ItemType.LOCAL_FOLDER:
-                    File f = File.new_for_path(d_uri);
-                    Item? item = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
-                    media_items += item;
-                    break;
-                case ItemType.STREAM:
-                case ItemType.PLAYLIST:
-                    Item? item = Item(tp, d_uri, -1);
-                    media_items += item;
-                    break;
-                default:
-                    print("Error: unhandled media storage type: %s\n", ((int)tp).to_string());
-                    break;
-            }
-            return false;
-        });
-        return media_items;
-    }
+//    private Item[] harvest_media_locations() {
+//        Item[] media_items = {};
+//        listmodel.foreach( (sender, mypath, myiter) => {
+//            string d_uri;
+//            ItemType tp;
+//            sender.get(myiter,
+//                       Column.LOCATION, out d_uri,
+//                       Column.ITEMTYPE, out tp//,
+//            );
+//            switch(tp) {
+//                case ItemType.LOCAL_FOLDER:
+//                    File f = File.new_for_path(d_uri);
+//                    Item? item = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
+//                    media_items += item;
+//                    break;
+//                case ItemType.STREAM:
+//                case ItemType.PLAYLIST:
+//                    Item? item = Item(tp, d_uri, -1);
+//                    media_items += item;
+//                    break;
+//                default:
+//                    print("Error: unhandled media storage type: %s\n", ((int)tp).to_string());
+//                    break;
+//            }
+//            return false;
+//        });
+//        return media_items;
+//    }
 
     private void setup_widgets() {
 //        ScrolledWindow tvscrolledwindow = null;
@@ -229,6 +229,13 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         tv.set_model(listmodel);
         tv.show();
         
+        media_importer.folder_list_changed.connect( () => {
+            update_item_list();
+        });
+        Idle.add(() => {
+            update_item_list();
+            return false;
+        });
         global.notify["media-import-in-progress"].connect( () => {
             if(!global.media_import_in_progress) {
                 this.update();
@@ -239,40 +246,56 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             }
         });
     }
+    
+    private void update_item_list() {
+        Gtk.Invisible w = new Gtk.Invisible();
+        Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
+        listmodel.clear();
+        GLib.List<Item?> list = media_importer.get_media_folder_list();
+        foreach(Item? i in list) {
+            File f = File.new_for_uri(i.uri);
+            TreeIter iter;
+            listmodel.append(out iter);
+            listmodel.set(iter,
+                          Column.ICON,      folder_icon,
+                          Column.LOCATION,  f.get_path(),
+                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
+            );
+        }
+    }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
         main_window.show_content();
-//        main_window.dialognotebook.set_current_page(0);
-        bool interrupted_populate_model = false;
-        if(main_window.musicBr.music_browser_model.populating_model) {
-            interrupted_populate_model = true; 
-            // that means we have to complete filling of the model after import
-            //print("was still populating model\n");
-        }
-        var prg_bar = new Gtk.ProgressBar();
-        prg_bar.set_fraction(0.0);
-        prg_bar.set_text("0 / 0");
-        
-        Idle.add(() => {
-            main_window.show_content();
-            return false;
-        });
-        
-        Timeout.add(200, () => {
-            uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
-                                UserInfo.ContentClass.WAIT,
-                                _("Importing media data. This may take some time..."),
-                                true,
-                                5,
-                                prg_bar);
-            Item[] media_items = harvest_media_locations();
-            global.media_import_in_progress = true;
-            media_importer.import_media_groups(media_items,
-                                               msg_id,
-                                               fullrescan,
-                                               interrupted_populate_model);
-            return false;
-        });
+//        bool interrupted_populate_model = false;
+//        if(main_window.musicBr.music_browser_model.populating_model) {
+//            interrupted_populate_model = true; 
+//            // that means we have to complete filling of the model after import
+//            //print("was still populating model\n");
+//        }
+//        var prg_bar = new Gtk.ProgressBar();
+//        prg_bar.set_fraction(0.0);
+//        prg_bar.set_text("0 / 0");
+//        
+//        Idle.add(() => {
+//            main_window.show_content();
+//            return false;
+//        });
+//        
+//        Timeout.add(200, () => {
+//            uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+//                                UserInfo.ContentClass.WAIT,
+//                                _("Importing media data. This may take some time..."),
+//                                true,
+//                                5,
+//                                prg_bar);
+//            Item[] media_items = harvest_media_locations();
+//            global.media_import_in_progress = true;
+//            media_importer.import_media_groups(media_items,
+//                                               msg_id,
+//                                               fullrescan,
+//                                               interrupted_populate_model);
+//            return false;
+//        });
     }
 
     private void on_add_folder_button_clicked() {
@@ -291,18 +314,23 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         if(music != null && music != "")
             fcdialog.select_filename(music);
         if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
-            Gtk.Invisible w = new Gtk.Invisible();
-            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
-            foreach(string fn in fcdialog.get_filenames()) {
-                File f = File.new_for_path(fn);
-                TreeIter iter;
-                listmodel.append(out iter);
-                listmodel.set(iter,
-                              Column.ICON,      folder_icon,
-                              Column.LOCATION,  f.get_path(),
-                              Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
-                );
-            }
+//            Gtk.Invisible w = new Gtk.Invisible();
+//            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
+//            foreach(string fn in fcdialog.get_filenames()) {
+//                File f = File.new_for_path(fn);
+//                TreeIter iter;
+//                listmodel.append(out iter);
+//                listmodel.set(iter,
+//                              Column.ICON,      folder_icon,
+//                              Column.LOCATION,  f.get_path(),
+//                              Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
+//                );
+                File f = File.new_for_uri(fcdialog.get_uri());
+                Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
+                var import_target = new ImportTarget();
+                import_target.item = item;
+                media_importer.add_import_target_folder(import_target);
+//            }
         }
         fcdialog.destroy();
         fcdialog = null;
@@ -364,7 +392,15 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         if(selection.count_selected_rows() > 0) {
             TreeIter iter;
             selection.get_selected(null, out iter);
-            listmodel.remove(iter);
+            string? p = null;
+            ItemType t;
+            listmodel.get(iter, 
+                          Column.LOCATION, out p,
+                          Column.ITEMTYPE,  out t);
+                          
+            if(t != ItemType.LOCAL_FOLDER || p == null)
+                return;
+            media_importer.remove_media_folder(p);
         }
     }
 }

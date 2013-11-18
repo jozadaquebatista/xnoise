@@ -557,7 +557,8 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     }
 
     private MagnatuneTreeStore? create_model() {
-        return new MagnatuneTreeStore(this.dock, this, MagnatunePlugin.cancel);
+        var x = new MagnatuneTreeStore(this.dock, this, MagnatunePlugin.cancel);
+        return (owned) x;
     }
 
     private bool in_update_view = false;

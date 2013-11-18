@@ -395,7 +395,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT name FROM media_folders GROUP BY utf8_lower(name)";
+        "SELECT name FROM paths GROUP BY utf8_lower(name)";
 
     public Item[] get_media_folders() {
         Statement stmt;
