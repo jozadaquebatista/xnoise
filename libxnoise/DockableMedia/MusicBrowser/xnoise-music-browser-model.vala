@@ -107,6 +107,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         global.notify["collection-sort-mode"].connect( () => {
             filter();
         });
+        global.notify["media-import-in-progress"].connect( () => {
+            filter();
+        });
     }
     
     private void reset_change_cb() {

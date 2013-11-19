@@ -39,8 +39,10 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 
     private enum Column {
         ICON,
-        ITEMTYPE,
-        LOCATION,
+        VIZ_TEXT,
+        ITEM,
+        STATUS,
+        ACTIVITY,
         COL_COUNT
     }
     
@@ -97,7 +99,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 //                listmodel.append(out iter);
 //                listmodel.set(iter,
 //                              Column.ICON,      folder_icon,
-//                              Column.LOCATION,  f.get_path(),
+//                              Column.VIZ_TEXT,  f.get_path(),
 //                              Column.ITEMTYPE,  i.type
 //                );
 //            }
@@ -106,7 +108,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 //                listmodel.append(out iter);
 //                listmodel.set(iter,
 //                              Column.ICON,      icon_repo.radios_icon_menu,
-//                              Column.LOCATION,  i.uri,
+//                              Column.VIZ_TEXT,  i.uri,
 //                              Column.ITEMTYPE,  i.type
 //                );
 //            }
@@ -121,7 +123,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 //            string d_uri;
 //            ItemType tp;
 //            sender.get(myiter,
-//                       Column.LOCATION, out d_uri,
+//                       Column.VIZ_TEXT, out d_uri,
 //                       Column.ITEMTYPE, out tp//,
 //            );
 //            switch(tp) {
@@ -162,8 +164,8 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             var baddradio          = builder.get_object("streambutton") as ToolButton;
             var brem               = builder.get_object("removebutton") as ToolButton;
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
-            bok                    = builder.get_object("okbutton") as Button;
-            bok.sensitive          = !global.media_import_in_progress;
+//            bok                    = builder.get_object("okbutton") as Button;
+//            bok.sensitive          = !global.media_import_in_progress;
             
             var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
             fullrescan_check.label = _("Do full rescan");
@@ -206,28 +208,39 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         tv.headers_visible = false;
         listmodel = new ListStore(Column.COL_COUNT, 
                                   typeof(Gdk.Pixbuf), 
-                                  typeof(ItemType), 
-                                  typeof(string));
+                                  typeof(string), 
+                                  typeof(Item?), 
+                                  typeof(int),
+                                  typeof(int));
         
-        //NAME
+        //ICON
         var column = new TreeViewColumn();
         var rendererpb = new CellRendererPixbuf();
         column.pack_start(rendererpb, false);
         column.add_attribute(rendererpb, "pixbuf", Column.ICON);
         tv.insert_column(column, -1);
         
-        // LOCATION
+        // STATUS
+        column = new TreeViewColumn();
+        var rendererspinner = new CellRendererSpinner();
+        column.pack_start(rendererspinner, true);
+        column.add_attribute(rendererspinner, "active", Column.STATUS);
+        column.add_attribute(rendererspinner, "pulse", Column.ACTIVITY);
+//        column.title = "";
+        tv.insert_column(column, -1);
+        
+        // VIZ_TEXT
         column = new TreeViewColumn();
         var renderer = new CellRendererText();
         column.pack_start(renderer, false);
-        column.add_attribute(renderer, "text", Column.LOCATION);
+        column.add_attribute(renderer, "text", Column.VIZ_TEXT);
         column.title = _("Location");
         tv.insert_column(column, -1);
         
         devbox.pack_start(tv, true, true, 0);
         
         tv.set_model(listmodel);
-        tv.show();
+        tv.show_all();
         
         media_importer.folder_list_changed.connect( () => {
             update_item_list();
@@ -236,16 +249,67 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             update_item_list();
             return false;
         });
-        global.notify["media-import-in-progress"].connect( () => {
-            if(!global.media_import_in_progress) {
-                this.update();
-                bok.sensitive = true;
-            }
-            else {
-                bok.sensitive = false;
-            }
+        media_importer.completed_import_target.connect( (s,i) => {
+            print("complete\n");
+            listmodel.foreach( (sender, mypath, myiter) => {
+                Item? item;
+                listmodel.get(myiter, Column.ITEM, out item);
+                if(i.uri == item.uri) {
+                    print("found item cpl\n");
+                    listmodel.set(myiter, Column.STATUS, 0);
+                    uint xx = ht_activities.lookup(i.uri);
+                    print("Lookup act: %u\n", xx);
+//                    if(xx != 0)
+                    Source.remove(xx);
+                    ht_activities.remove(i.uri);
+                    return true;
+                }
+                return false;
+            });
         });
+        media_importer.processing_import_target.connect( (s,i) => {
+            print("started\n");
+            listmodel.foreach( (sender, mypath, myiter) => {
+                Item? item;
+                int activity;
+                listmodel.get(myiter, Column.ITEM, out item);
+                if(i.uri == item.uri) {
+                    listmodel.set(myiter, Column.STATUS, 1);
+                    uint xx = Timeout.add(250, () => {
+                        listmodel.foreach( (sx, px, itx) => {
+                            Item? itemx;
+                            listmodel.get(itx, Column.ITEM, out itemx);
+                            if(i.uri == itemx.uri) {
+                                int act;
+                                listmodel.get(itx, Column.ACTIVITY, out act);
+                                act++;
+                                listmodel.set(itx, Column.ACTIVITY, act);
+                                return true;
+                            }
+                            return false;
+                        });
+                        return true;
+                    });
+                    print("insert -- %s - %u\n", i.uri, xx);
+                    ht_activities.insert(i.uri, xx);
+                    print("found item proc\n");
+                    return true;
+                }
+                return false;
+            });
+        });
+//        global.notify["media-import-in-progress"].connect( () => {
+//            if(!global.media_import_in_progress) {
+//                this.update();
+//                bok.sensitive = true;
+//            }
+//            else {
+//                bok.sensitive = false;
+//            }
+//        });
     }
+    
+    HashTable<string, uint> ht_activities = new HashTable<string, uint>(str_hash, str_equal);
     
     private void update_item_list() {
         Gtk.Invisible w = new Gtk.Invisible();
@@ -258,10 +322,11 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             listmodel.append(out iter);
             listmodel.set(iter,
                           Column.ICON,      folder_icon,
-                          Column.LOCATION,  f.get_path(),
-                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
+                          Column.VIZ_TEXT,  f.get_path(),
+                          Column.ITEM, i
             );
         }
+        print("updated list\n");
     }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
@@ -322,14 +387,14 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 //                listmodel.append(out iter);
 //                listmodel.set(iter,
 //                              Column.ICON,      folder_icon,
-//                              Column.LOCATION,  f.get_path(),
+//                              Column.VIZ_TEXT,  f.get_path(),
 //                              Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
 //                );
                 File f = File.new_for_uri(fcdialog.get_uri());
                 Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
-                var import_target = new ImportTarget();
-                import_target.item = item;
-                media_importer.add_import_target_folder(import_target);
+//                var import_target = new ImportTarget();
+//                import_target.item = item;
+                media_importer.add_import_target_folder(item);
 //            }
         }
         fcdialog.destroy();
@@ -366,10 +431,12 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
                (radioentry.text.strip() != EMPTYSTRING)) {
                 TreeIter iter;
                 listmodel.append(out iter);
+                Item? i = Item(ItemType.STREAM, radioentry.text.strip());
                 listmodel.set(iter,
                               Column.ICON,      icon_repo.radios_icon_menu,
-                              Column.LOCATION,  radioentry.text.strip(),
-                              Column.ITEMTYPE,  ItemType.STREAM//,
+                              Column.VIZ_TEXT,  radioentry.text.strip(),
+                              Column.ITEM,  i,
+                              Column.STATUS, false
                               );
             }
             radiodialog.close();
@@ -393,14 +460,14 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             TreeIter iter;
             selection.get_selected(null, out iter);
             string? p = null;
-            ItemType t;
+            Item? i;
             listmodel.get(iter, 
-                          Column.LOCATION, out p,
-                          Column.ITEMTYPE,  out t);
+                          Column.VIZ_TEXT, out p,
+                          Column.ITEM,  out i);
                           
-            if(t != ItemType.LOCAL_FOLDER || p == null)
-                return;
-            media_importer.remove_media_folder(p);
+            if(i.type == ItemType.LOCAL_FOLDER && p != null) {
+                media_importer.remove_media_folder(i);
+            }
         }
     }
 }

@@ -1203,9 +1203,9 @@ public class Xnoise.Database.Writer : GLib.Object {
        "SELECT id,artist,album FROM items WHERE uri=?";
     
     private static const string STMT_GET_TRACK_CNT_FOR_ALBUMARTIST =
-        "SELECT COUNT(id) FROM items WHERE album_artist =(SELECT album_artist FROM items WHERE items.id=?)";
+        "SELECT COUNT(*) FROM items WHERE album_artist =(SELECT album_artist FROM items WHERE items.id=?)";
     private static const string STMT_GET_TRACK_CNT_FOR_ARTIST = 
-       "SELECT COUNT(id) FROM items WHERE artist=(SELECT artist FROM items WHERE items.id=?)";
+       "SELECT COUNT(*) FROM items WHERE artist=(SELECT artist FROM items WHERE items.id=?)";
 
     private static const string STMT_GET_TRACK_CNT_FOR_ALBUM = 
        "SELECT COUNT(id) FROM items WHERE album=(SELECT album FROM items WHERE items.id=?)";
@@ -1592,21 +1592,15 @@ public class Xnoise.Database.Writer : GLib.Object {
         Statement stmt;
         this.db.prepare_v2(STMT_GET_MEDIA_FOLDER_ID, -1, out stmt);
         stmt.bind_text(1, f.get_path());
-        print("ää path: %s\n", f.get_path());
+        //print("ää path: %s\n", f.get_path());
         if(stmt.step() == Sqlite.ROW) {
             int id = stmt.column_int(0);
-//            Statement st;
-print("++++1 id=%d\n", id);
-            this.db.prepare_v2("DELETE FROM uris WHERE path=?", -1, out stmt);
-print("++++2\n");
+            this.db.prepare_v2(STMT_REMOVE_URI_ITEMS, -1, out stmt);
             stmt.bind_int(1, id);
-print("++++3\n");
             if(stmt.step() != Sqlite.DONE) {
                 this.db_error();
-print("++++4\n");
                 return false;
             }
-print("++++5\n");
             this.db.prepare_v2(STMT_REMOVE_MEDIA_FOLDER_ITEMS, -1, out stmt);
             stmt.bind_int(1, id);
             if(stmt.step() != Sqlite.DONE) {
@@ -1625,6 +1619,52 @@ print("++++5\n");
             print("FOLDER was not in DB!\n");
             return true;
         }
+    }
+
+    private static const string STMT_REMOVE_OLD_ARTISTS =
+        "DELETE FROM artists WHERE id != ? AND id NOT IN (SELECT i.artist FROM items i GROUP BY i.artist) AND id NOT IN (SELECT i.album_artist FROM items i GROUP BY i.artist)";
+    
+    private static const string STMT_REMOVE_OLD_GENRES =
+        "DELETE FROM genres WHERE id NOT IN (SELECT i.genre FROM items i GROUP BY i.genre)";
+    
+    private static const string STMT_REMOVE_OLD_ALBUMS =
+        "DELETE FROM albums WHERE id NOT IN (SELECT DISTINCT i.album FROM items i GROUP BY i.album)";
+
+    public void cleanup_database() {
+        Statement stmt;
+print("---1\n");
+        // cleanup artists
+print("---2\n");
+        this.db.prepare_v2(STMT_REMOVE_OLD_ARTISTS, -1, out stmt);
+print("---3\n");
+        if(stmt.bind_int (1, VA_ID) != Sqlite.OK) {
+            this.db_error();
+            return;
+        }
+print("---4\n");
+        if(stmt.step() != Sqlite.DONE) {
+            this.db_error();
+            return;
+        }
+print("---5\n");
+        
+        // cleanup genres
+print("---6\n");
+        this.db.prepare_v2(STMT_REMOVE_OLD_GENRES, -1, out stmt);
+        if(stmt.step() != Sqlite.DONE) {
+            this.db_error();
+            return;
+        }
+print("---7\n");
+        
+        // cleanup albums
+        this.db.prepare_v2(STMT_REMOVE_OLD_ALBUMS, -1, out stmt);
+print("---8\n");
+        if(stmt.step() != Sqlite.DONE) {
+            this.db_error();
+            return;
+        }
+print("---9\n");
     }
 
     public delegate void WriterCallback(Sqlite.Database database);

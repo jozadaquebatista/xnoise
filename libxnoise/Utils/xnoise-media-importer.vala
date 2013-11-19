@@ -36,13 +36,6 @@ using Xnoise.Database;
 using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
-public class Xnoise.ImportTarget : GLib.Object {
-    public Item item;
-    public Cancellable cancellable = new Cancellable();
-    
-    public bool in_progress { get; set; }
-}
-
 
 public class Xnoise.MediaImporter : GLib.Object {
     
@@ -275,7 +268,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 //    private uint current_import_track_count = 0;
     
     // Imports in progress
-    private GLib.HashTable <string, ImportTarget> import_targets = new GLib.HashTable <string, ImportTarget>(str_hash, str_equal);
+    private GLib.HashTable <string, Item?> import_targets = new GLib.HashTable <string, Item?>(str_hash, str_equal);
     
     // Media folders
     private GLib.List<Item?> media_folders = new GLib.List<Item?>();
@@ -312,49 +305,78 @@ public class Xnoise.MediaImporter : GLib.Object {
         return (owned)list;
     }
     
-    internal void add_import_target_folder(ImportTarget target) {
-        if(target.item.type != ItemType.LOCAL_FOLDER)
+    internal void add_import_target_folder(Item? target) {
+        if(target.type != ItemType.LOCAL_FOLDER)
             return;
         lock(import_targets) {
             bool parent_in_list = false;
             foreach(unowned string u in import_targets.get_keys()) {
-                if(u.has_prefix(target.item.uri))
+                if(u.has_prefix(target.uri))
                     parent_in_list = true;
             }
             if(!parent_in_list) {
-                import_targets.insert(target.item.uri, target);
+                import_targets.insert(target.uri, target);
+                //Reset subscribed Dockable Media
+                foreach(ResetNotificationData? cxd in reset_callbacks) {
+                    if(cxd.cb != null) {
+                        cxd.cb();
+                    }
+                }
             }
             else {
                 print("parent folder is in list\n");
             }
         }
         var job = new Worker.Job(Worker.ExecutionType.ONCE, imp_folder_target_job, Worker.Priority.HIGH);
-        job.import_target = target;
+        job.item = target;
         db_worker.push_job(job);
     }
     
-    internal void remove_import_target(string uri) {
+    private void finished_import_target(Item? item) {
         lock(import_targets) {
-            if(import_targets.contains(uri)) {
-                ImportTarget target = import_targets.lookup(uri);
-                target.cancellable.cancel();
-                import_targets.remove(uri);
+            if(item != null && import_targets.contains(item.uri)) {
+                import_targets.remove(item.uri);
+                print("removed target: %s\n", item.uri);
+                Item? i = item;
+                Idle.add(() => {
+                    completed_import_target(i);
+                    return false;
+                });
+                if(import_targets.get_keys().length() == 0) {
+                    Timeout.add_seconds(1, () => {
+                        global.media_import_in_progress = false;
+                        return false;
+                    });
+                }
             }
         }
     }
     
-    public void remove_media_folder(string path) {
+    internal void remove_media_folder(Item item) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, remove_mediafolder_job);
-        File mf = File.new_for_path(path);
-        job.item = Item(ItemType.LOCAL_FOLDER, mf.get_uri());
+//        File mf = File.new_for_uri(item.uri);
+        job.item = item;//Item(ItemType.LOCAL_FOLDER, mf.get_uri());
         db_worker.push_job(job);
     }
     
     private bool remove_mediafolder_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
         assert(job.item.type == ItemType.LOCAL_FOLDER);
+        lock(import_targets) {
+            if(import_targets.get_keys().length() == 0) {
+                Timeout.add_seconds(1, () => {
+                    global.media_import_in_progress = true;
+                    global.media_import_in_progress = false;
+                    return false;
+                });
+            }
+        }
         db_writer.begin_transaction();
         db_writer.remove_single_media_folder(job.item);
+        db_writer.commit_transaction();
+        
+        db_writer.begin_transaction();
+        db_writer.cleanup_database();
         db_writer.commit_transaction();
         update_media_folder_list();
         return false;
@@ -364,7 +386,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         return_val_if_fail(db_worker.is_same_thread(), false);
         lock(import_targets) {
             foreach(string folder in import_targets.get_keys()) {
-                if(import_targets.lookup(folder).item.type == ItemType.LOCAL_FOLDER) {
+                if(import_targets.lookup(folder).type == ItemType.LOCAL_FOLDER) {
                     var fjob = new Worker.Job(Worker.ExecutionType.ONCE, append_folder_to_mediafolders_job, Worker.Priority.HIGH);
                     File mf = File.new_for_uri(folder);
                     fjob.item = Item(ItemType.LOCAL_FOLDER, mf.get_uri());
@@ -376,20 +398,22 @@ public class Xnoise.MediaImporter : GLib.Object {
         update_media_folder_list();
     }
     
+    public signal void processing_import_target(Item? item);
+    public signal void completed_import_target(Item? item);
+    
     private bool imp_folder_target_job(Worker.Job job){
         return_val_if_fail(db_worker.is_same_thread(), false);
         
         sync_media_folders_to_db();
         
 //        int cnt = 1;
-        File? dir = File.new_for_uri(job.import_target.item.uri);
+        File? dir = File.new_for_uri(job.item.uri);
         print("++%s\n", dir.get_uri());
         assert(dir != null);
         var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
-        reader_job.set_arg("dir", dir);
+//        reader_job.set_arg("dir", dir);
         reader_job.set_arg("media_folder", dir.get_path());
-        reader_job.import_target = job.target; // TODO: Remove after finish
-//        reader_job.set_arg("full_rescan", (bool)job.get_arg("full_rescan"));
+        reader_job.item = job.item;
 //        reader_job.counter[1] = cnt;
 //        reader_job.counter[2] = 1;//(int)new_mfolders_ht.get_keys().length();
         io_worker.push_job(reader_job);
@@ -478,7 +502,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     private string[] uris_for_image_extraction  = {};
 
     // running in io thread
-    private void end_import(Worker.Job job) {
+//    private void end_import(Worker.Job job) {
         //print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
 //        if(job.counter[1] != job.counter[2])
 //            return;
@@ -499,10 +523,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 //        var finisher_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_import_job);
 //        finisher_job.set_arg("msg_id", job.get_arg("msg_id"));
 //        db_worker.push_job(finisher_job);
-    }
+//    }
     
     // running in db thread
-    private bool finish_import_job(Worker.Job job) {
+//    private bool finish_import_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
 //        return_val_if_fail(db_worker.is_same_thread(), false);
 //        Idle.add(() => {
@@ -529,8 +553,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 ////            }
 //            return false;
 //        });
-        return false;
-    }
+//        return false;
+//    }
 
     // running in db thread
 //    private bool reset_local_data_library_job(Worker.Job job) {
@@ -649,7 +673,18 @@ public class Xnoise.MediaImporter : GLib.Object {
         //this function shall run in the io thread
         return_val_if_fail(io_worker.is_same_thread(), false);
         //count_media_files((File)job.get_arg("dir"), job);
-        read_recoursive((File)job.get_arg("dir"), job);
+        File d = File.new_for_uri(job.item.uri); //(File)job.get_arg("dir");
+        Item? i = job.item;
+        uint xx = 0;
+        xx = Timeout.add(500, () => {
+            processing_import_target(i);
+            xx = 0;
+            return false;
+        });
+        read_recoursive(d, job);
+        if(xx != 0)
+            Source.remove(xx);
+        finished_import_target(job.item);
         return false;
     }
     
@@ -670,8 +705,8 @@ public class Xnoise.MediaImporter : GLib.Object {
         catch(Error e) {
             print("Error importing directory %s. %s\n", dir.get_path(), e.message);
             job.counter[0]--;
-            if(job.counter[0] == 0)
-                end_import(job);
+//            if(job.counter[0] == 0)
+//                end_import(job);
             return;
         }
         GLib.FileInfo info;
@@ -749,7 +784,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                 uris_for_image_extraction = {};
                 db_worker.push_job(db_job);
             }
-            end_import(job);
+//            end_import(job);
         }
         return;
     }
