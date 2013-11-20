@@ -1632,39 +1632,30 @@ public class Xnoise.Database.Writer : GLib.Object {
 
     public void cleanup_database() {
         Statement stmt;
-print("---1\n");
         // cleanup artists
-print("---2\n");
         this.db.prepare_v2(STMT_REMOVE_OLD_ARTISTS, -1, out stmt);
-print("---3\n");
         if(stmt.bind_int (1, VA_ID) != Sqlite.OK) {
             this.db_error();
             return;
         }
-print("---4\n");
         if(stmt.step() != Sqlite.DONE) {
             this.db_error();
             return;
         }
-print("---5\n");
         
         // cleanup genres
-print("---6\n");
         this.db.prepare_v2(STMT_REMOVE_OLD_GENRES, -1, out stmt);
         if(stmt.step() != Sqlite.DONE) {
             this.db_error();
             return;
         }
-print("---7\n");
         
         // cleanup albums
         this.db.prepare_v2(STMT_REMOVE_OLD_ALBUMS, -1, out stmt);
-print("---8\n");
         if(stmt.step() != Sqlite.DONE) {
             this.db_error();
             return;
         }
-print("---9\n");
     }
 
     public delegate void WriterCallback(Sqlite.Database database);

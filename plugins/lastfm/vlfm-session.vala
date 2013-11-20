@@ -118,7 +118,7 @@ namespace Lastfm {
         }
         
         public void login(string user, string pass) {
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return;
             this.logged_in = false;
             string pass_hash = Checksum.compute_for_string(ChecksumType.MD5, pass);
@@ -157,7 +157,7 @@ namespace Lastfm {
         
         private void login_token_cb(int id, string response) {
             //print("finish login response a: \n%s\n", response);
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return;
             var r = new SimpleMarkup.Reader.from_string(response);
             r.read();
@@ -189,8 +189,6 @@ namespace Lastfm {
             //This uri has to be called in a browser and the user has to verify access
             //before the authorization process can be finished
             print("user authentication: %s\n", buffer);
-            //char* warten;
-            //stdin.scanf("%c", &warten);
             
             //Build an api_sig
             buffer = "api_key%smethod%stoken%s%s".printf(
@@ -215,7 +213,7 @@ namespace Lastfm {
         }
         
         private void login_cb(int id, string response) {
-            if(global.main_cancellable.is_cancelled())
+            if(GlobalAccess.main_cancellable.is_cancelled())
                 return;
             //print("finish login response b: \n%s\n", response);
             var r = new SimpleMarkup.Reader.from_string(response);

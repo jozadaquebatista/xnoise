@@ -128,7 +128,7 @@ public class Xnoise.Lfm :
     
     public void login(string username, string password) {
         Idle.add( () => {
-            if(!global.main_cancellable.is_cancelled())
+            if(!GlobalAccess.main_cancellable.is_cancelled())
                 session.login(username, password);
             return false;
         });
@@ -339,8 +339,8 @@ public class Xnoise.LastFmCovers :
         bool buf = false;
         string default_path = EMPTYSTRING;
         int i = 0;
-        string reply_artist = _reply_artist;
-        string reply_album = _reply_album;
+        //string reply_artist = _reply_artist;
+        //string reply_album = _reply_album;
 
         if((prepare_for_comparison(artist) != prepare_for_comparison(_reply_artist))||
            (prepare_for_comparison(check_album_name(artist, album))  != 

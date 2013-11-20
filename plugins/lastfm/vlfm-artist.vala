@@ -66,7 +66,7 @@ namespace Lastfm {
             });
         }
         
-        private string? current_city = null;
+        //private string? current_city = null;
         
         public void get_events(string? city = null) {
             var ub = new Lastfm.UrlBuilder();

@@ -305,8 +305,8 @@ public class Xnoise.MediaImporter : GLib.Object {
         return (owned)list;
     }
     
-    internal void add_import_target_folder(Item? target) {
-        if(target.type != ItemType.LOCAL_FOLDER)
+    public void add_import_target_folder(Item? target) {
+        if(target.type != ItemType.LOCAL_FOLDER || target.uri == null)
             return;
         lock(import_targets) {
             bool parent_in_list = false;
