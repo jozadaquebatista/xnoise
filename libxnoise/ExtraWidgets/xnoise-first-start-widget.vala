@@ -90,7 +90,9 @@ private class Xnoise.FirstStartWidget : Box {
                                   Column.ICON, icon_repo.folder_symbolic_icon,
                                   Column.LOCATION,  f.get_path()
                                   );
-                    media_importer.import_media_folder(f.get_path(), true, true);
+                    Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
+                    media_importer.add_import_target_folder(item);
+//                    media_importer.import_media_folder(f.get_path(), true, true);
                     nb.set_current_page(1);
                 }
             }
@@ -121,6 +123,7 @@ private class Xnoise.FirstStartWidget : Box {
             bigbox = gb.get_object("box7") as Gtk.Box;
             finish_button = gb.get_object("finish_button") as Gtk.Button;
             finish_button.label = _("Done");
+            finish_button.clicked.connect( () => { nb.set_current_page(1); });
             waitbox = new Gtk.Box(Orientation.VERTICAL, 5);
             spinner = new Gtk.Spinner();
             import_label = new Gtk.Label("");
@@ -137,7 +140,7 @@ private class Xnoise.FirstStartWidget : Box {
             addmore_button = gb.get_object("addmore_button") as Gtk.Button;
             addmore_button.label = _("Add more media folders");
             global.notify["media-import-in-progress"].connect( () => {
-                addmore_button.sensitive = !global.media_import_in_progress;
+//                addmore_button.sensitive = !global.media_import_in_progress;
                 spinner.active = global.media_import_in_progress;
                 if(!global.media_import_in_progress) {
                     if(waitbox.parent == bigbox)

@@ -931,7 +931,6 @@ namespace Xnoise {
 		public MediaImporter ();
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
 		public void import_media_file (string file_path);
-		public void import_media_folder (string folder_path, bool create_user_info = false, bool add_folder_to_media_folders = false);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 		public void reimport_media_files (string[] file_paths);
 		public signal void completed_import_target (Xnoise.Item? item);

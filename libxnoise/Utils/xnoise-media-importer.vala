@@ -65,9 +65,9 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_worker.push_job(job);
     }
     
-    public void import_media_folder(string folder_path,
-                                   bool create_user_info = false,
-                                   bool add_folder_to_media_folders = false) {
+//    public void import_media_folder(string folder_path,
+//                                   bool create_user_info = false,
+//                                   bool add_folder_to_media_folders = false) {
 //        var dir = File.new_for_path(folder_path);
 //        if(dir.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.DIRECTORY)
 //            return;
@@ -85,7 +85,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 //        job.set_arg("path", dir.get_path());
 //        job.set_arg("create_user_info", create_user_info);
 //        io_worker.push_job(job);
-    }
+//    }
     
     private bool append_folder_to_mediafolders_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);

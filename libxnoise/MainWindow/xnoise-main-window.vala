@@ -596,6 +596,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     }
                 }
                 media_browser_visible = true;
+                album_art_view_visible = false;
                 return false;
             });
         });
@@ -621,6 +622,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     }
                 }
                 media_browser_visible = true;
+                album_art_view_visible = false;
                 return false;
             });
         });

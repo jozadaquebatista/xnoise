@@ -49,7 +49,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     private const string XNOISEICON = "xnoise";
     private ListStore listmodel;
     private TreeView tv;
-    private Button bok;
     private bool fullrescan;
     private unowned Main xn;
     
@@ -164,8 +163,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             var baddradio          = builder.get_object("streambutton") as ToolButton;
             var brem               = builder.get_object("removebutton") as ToolButton;
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
-//            bok                    = builder.get_object("okbutton") as Button;
-//            bok.sensitive          = !global.media_import_in_progress;
             
             var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
             fullrescan_check.label = _("Do full rescan");
@@ -186,8 +183,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             descriptionlabel.set_line_wrap(true);
             descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
             this.pack_start(scrolledwindow1, true, true, 0);
-            
-            bok.clicked.connect(on_ok_button_clicked);
             
             baddfolder.clicked.connect(on_add_folder_button_clicked);
             baddradio.clicked.connect(on_add_radio_button_clicked);
@@ -258,9 +253,9 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
                     print("found item cpl\n");
                     listmodel.set(myiter, Column.STATUS, 0);
                     uint xx = ht_activities.lookup(i.uri);
-                    print("Lookup act: %u\n", xx);
-//                    if(xx != 0)
-                    Source.remove(xx);
+//                    print("Lookup act: %u\n", xx);
+                    if(xx != 0)
+                        Source.remove(xx);
                     ht_activities.remove(i.uri);
                     return true;
                 }
@@ -313,7 +308,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     
     private void update_item_list() {
         Gtk.Invisible w = new Gtk.Invisible();
-        Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
+        Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.STOCK_DIRECTORY, IconSize.MENU);
         listmodel.clear();
         GLib.List<Item?> list = media_importer.get_media_folder_list();
         foreach(Item? i in list) {
@@ -327,40 +322,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             );
         }
         print("updated list\n");
-    }
-
-    private void on_ok_button_clicked(Gtk.Button sender) {
-        main_window.show_content();
-//        bool interrupted_populate_model = false;
-//        if(main_window.musicBr.music_browser_model.populating_model) {
-//            interrupted_populate_model = true; 
-//            // that means we have to complete filling of the model after import
-//            //print("was still populating model\n");
-//        }
-//        var prg_bar = new Gtk.ProgressBar();
-//        prg_bar.set_fraction(0.0);
-//        prg_bar.set_text("0 / 0");
-//        
-//        Idle.add(() => {
-//            main_window.show_content();
-//            return false;
-//        });
-//        
-//        Timeout.add(200, () => {
-//            uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
-//                                UserInfo.ContentClass.WAIT,
-//                                _("Importing media data. This may take some time..."),
-//                                true,
-//                                5,
-//                                prg_bar);
-//            Item[] media_items = harvest_media_locations();
-//            global.media_import_in_progress = true;
-//            media_importer.import_media_groups(media_items,
-//                                               msg_id,
-//                                               fullrescan,
-//                                               interrupted_populate_model);
-//            return false;
-//        });
     }
 
     private void on_add_folder_button_clicked() {
@@ -379,23 +340,11 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         if(music != null && music != "")
             fcdialog.select_filename(music);
         if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
-//            Gtk.Invisible w = new Gtk.Invisible();
-//            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
-//            foreach(string fn in fcdialog.get_filenames()) {
-//                File f = File.new_for_path(fn);
-//                TreeIter iter;
-//                listmodel.append(out iter);
-//                listmodel.set(iter,
-//                              Column.ICON,      folder_icon,
-//                              Column.VIZ_TEXT,  f.get_path(),
-//                              Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
-//                );
-                File f = File.new_for_uri(fcdialog.get_uri());
+            foreach(string fn in fcdialog.get_filenames()) {
+                File f = File.new_for_path(fn);
                 Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
-//                var import_target = new ImportTarget();
-//                import_target.item = item;
                 media_importer.add_import_target_folder(item);
-//            }
+            }
         }
         fcdialog.destroy();
         fcdialog = null;
