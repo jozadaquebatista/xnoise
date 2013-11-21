@@ -608,6 +608,17 @@ typedef struct _XnoiseMusicBrowserClass XnoiseMusicBrowserClass;
 
 #define XNOISE_MAIN_WINDOW_TYPE_PLAYER_REPEAT_MODE (xnoise_main_window_player_repeat_mode_get_type ())
 
+#define XNOISE_TYPE_MEDIA_MONITOR (xnoise_media_monitor_get_type ())
+#define XNOISE_MEDIA_MONITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_MONITOR, XnoiseMediaMonitor))
+#define XNOISE_MEDIA_MONITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_MONITOR, XnoiseMediaMonitorClass))
+#define XNOISE_IS_MEDIA_MONITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_MONITOR))
+#define XNOISE_IS_MEDIA_MONITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_MONITOR))
+#define XNOISE_MEDIA_MONITOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_MONITOR, XnoiseMediaMonitorClass))
+
+typedef struct _XnoiseMediaMonitor XnoiseMediaMonitor;
+typedef struct _XnoiseMediaMonitorClass XnoiseMediaMonitorClass;
+typedef struct _XnoiseMediaMonitorPrivate XnoiseMediaMonitorPrivate;
+
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
 #define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
 #define XNOISE_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
@@ -1612,6 +1623,15 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
 
+struct _XnoiseMediaMonitor {
+	GObject parent_instance;
+	XnoiseMediaMonitorPrivate * priv;
+};
+
+struct _XnoiseMediaMonitorClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseParams {
 	GObject parent_instance;
 	XnoiseParamsPrivate * priv;
@@ -2506,6 +2526,9 @@ void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean val
 gboolean xnoise_main_window_get_window_in_foreground (XnoiseMainWindow* self);
 gboolean xnoise_main_window_get_album_art_view_visible (XnoiseMainWindow* self);
 void xnoise_main_window_set_album_art_view_visible (XnoiseMainWindow* self, gboolean value);
+GType xnoise_media_monitor_get_type (void) G_GNUC_CONST;
+XnoiseMediaMonitor* xnoise_media_monitor_new (void);
+XnoiseMediaMonitor* xnoise_media_monitor_construct (GType object_type);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;
@@ -2983,6 +3006,7 @@ extern XnoiseWorker* xnoise_cache_worker;
 extern XnoiseWorker* xnoise_device_worker;
 extern XnoiseWorker* xnoise_plugin_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
+extern XnoiseMediaMonitor* xnoise_media_monitor;
 extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern XnoiseDockableMediaManager* xnoise_dockable_media_sources;

@@ -49,7 +49,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     private const string XNOISEICON = "xnoise";
     private ListStore listmodel;
     private TreeView tv;
-    private bool fullrescan;
+//    private bool fullrescan;
     private unowned Main xn;
     
     public Gtk.Builder builder;
@@ -164,14 +164,14 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             var brem               = builder.get_object("removebutton") as ToolButton;
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
             
-            var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
-            fullrescan_check.label = _("Do full rescan");
-            fullrescan_check.tooltip_text = _("If selected, all media folders will be fully rescanned");
-            this.fullrescan = fullrescan_check.active = true;
-            fullrescan_check.toggled.connect( () => {
-                //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
-                this.fullrescan = fullrescan_check.active;
-            });
+//            var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
+//            fullrescan_check.label = _("Do full rescan");
+//            fullrescan_check.tooltip_text = _("If selected, all media folders will be fully rescanned");
+//            this.fullrescan = fullrescan_check.active = true;
+//            fullrescan_check.toggled.connect( () => {
+//                //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
+//                this.fullrescan = fullrescan_check.active;
+//            });
             
             baddfolder.tooltip_text = _("Add local folder");
             baddradio.tooltip_text  = _("Add media stream");
@@ -201,13 +201,15 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         
         tv = new TreeView();
         tv.headers_visible = false;
+        tv.get_selection().set_mode(SelectionMode.MULTIPLE);
+        
         listmodel = new ListStore(Column.COL_COUNT, 
                                   typeof(Gdk.Pixbuf), 
                                   typeof(string), 
                                   typeof(Item?), 
                                   typeof(int),
                                   typeof(int));
-        
+
         //ICON
         var column = new TreeViewColumn();
         var rendererpb = new CellRendererPixbuf();
@@ -215,21 +217,21 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         column.add_attribute(rendererpb, "pixbuf", Column.ICON);
         tv.insert_column(column, -1);
         
-        // STATUS
-        column = new TreeViewColumn();
-        var rendererspinner = new CellRendererSpinner();
-        column.pack_start(rendererspinner, true);
-        column.add_attribute(rendererspinner, "active", Column.STATUS);
-        column.add_attribute(rendererspinner, "pulse", Column.ACTIVITY);
-//        column.title = "";
-        tv.insert_column(column, -1);
-        
         // VIZ_TEXT
         column = new TreeViewColumn();
         var renderer = new CellRendererText();
-        column.pack_start(renderer, false);
+        column.pack_start(renderer, true);
         column.add_attribute(renderer, "text", Column.VIZ_TEXT);
         column.title = _("Location");
+        tv.insert_column(column, -1);
+        
+        // STATUS
+        column = new TreeViewColumn();
+        var rendererspinner = new CellRendererSpinner();
+        column.pack_start(rendererspinner, false);
+        column.add_attribute(rendererspinner, "active", Column.STATUS);
+        column.add_attribute(rendererspinner, "pulse", Column.ACTIVITY);
+//        column.title = "";
         tv.insert_column(column, -1);
         
         devbox.pack_start(tv, true, true, 0);
@@ -293,15 +295,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
                 return false;
             });
         });
-//        global.notify["media-import-in-progress"].connect( () => {
-//            if(!global.media_import_in_progress) {
-//                this.update();
-//                bok.sensitive = true;
-//            }
-//            else {
-//                bok.sensitive = false;
-//            }
-//        });
     }
     
     HashTable<string, uint> ht_activities = new HashTable<string, uint>(str_hash, str_equal);
@@ -406,16 +399,19 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     private void on_remove_button_clicked() {
         Gtk.TreeSelection selection = tv.get_selection ();
         if(selection.count_selected_rows() > 0) {
-            TreeIter iter;
-            selection.get_selected(null, out iter);
-            string? p = null;
-            Item? i;
-            listmodel.get(iter, 
-                          Column.VIZ_TEXT, out p,
-                          Column.ITEM,  out i);
-                          
-            if(i.type == ItemType.LOCAL_FOLDER && p != null) {
-                media_importer.remove_media_folder(i);
+            Gtk.TreeModel m;
+            GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
+            foreach(TreePath tp in selected_rows) {
+                TreeIter iter;
+                listmodel.get_iter(out iter, tp);
+                string? p = null;
+                Item? i;
+                listmodel.get(iter, 
+                              Column.VIZ_TEXT, out p,
+                              Column.ITEM,  out i);
+                              
+                if(i.type == ItemType.LOCAL_FOLDER && p != null)
+                    media_importer.remove_media_folder(i);
             }
         }
     }

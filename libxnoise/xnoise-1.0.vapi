@@ -939,6 +939,10 @@ namespace Xnoise {
 		public signal void processing_import_target (Xnoise.Item? item);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaMonitor : GLib.Object {
+		public MediaMonitor ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
 		public MediaSoureWidget (Xnoise.MainWindow mwindow);
 		public void select_dockable_by_name (string name, bool emmit_signal = false);
@@ -1319,6 +1323,8 @@ namespace Xnoise {
 	public static Xnoise.MainWindow main_window;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.MediaImporter media_importer;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.MediaMonitor media_monitor;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

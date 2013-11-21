@@ -50,6 +50,7 @@ namespace Xnoise {
     private static DbusImageExtractor dbus_image_extractor = null;
     
     public static MediaImporter media_importer = null;
+    public static MediaMonitor media_monitor = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
     public static DockableMediaManager dockable_media_sources;
@@ -163,6 +164,9 @@ namespace Xnoise {
         
         // MEDIA IMPORTER
         media_importer = new MediaImporter();
+        
+        // MEDIA MONITOR
+        media_monitor = new MediaMonitor();
         
         statistics = new Statistics();
         

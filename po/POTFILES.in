@@ -68,6 +68,7 @@ libxnoise/Lyrics/xnoise-lyrics-loader.vala
 libxnoise/Lyrics/xnoise-lyrics-view.vala
 libxnoise/Main/xnoise-main.vala
 libxnoise/MainWindow/xnoise-main-window.vala
+libxnoise/MediaMonitor/xnoise-media-monitor.vala
 libxnoise/Parameter/xnoise-parameter.vala
 libxnoise/Player/xnoise-gst-equalizer.vala
 libxnoise/Player/xnoise-gst-player.vala

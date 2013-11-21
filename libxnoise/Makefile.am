@@ -154,6 +154,7 @@ libxnoise_la_SOURCES = \
     Lyrics/xnoise-lyrics-view.vala \
     Main/xnoise-main.vala \
     MainWindow/xnoise-main-window.vala \
+    MediaMonitor/xnoise-media-monitor.vala \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-equalizer.vala \
@@ -289,6 +290,7 @@ DISTCLEANFILES = \
     Lyrics/*.c \
     Main/*.c \
     MainWindow/*.c \
+    MediaMonitor/*.c \
     Parameter/*.c \
     Player/*.c \
     PlaylistReader/*.c \
