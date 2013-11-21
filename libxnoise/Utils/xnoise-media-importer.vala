@@ -65,28 +65,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_worker.push_job(job);
     }
     
-//    public void import_media_folder(string folder_path,
-//                                   bool create_user_info = false,
-//                                   bool add_folder_to_media_folders = false) {
-//        var dir = File.new_for_path(folder_path);
-//        if(dir.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.DIRECTORY)
-//            return;
-//        if(global.media_import_in_progress == true)
-//            return;
-//        if(add_folder_to_media_folders) {
-//            Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, append_folder_to_mediafolders_job);
-//            fjob.item = Item(ItemType.LOCAL_FOLDER);
-//            File mf = File.new_for_path(folder_path);
-//            fjob.item.uri = mf.get_uri();
-//            db_worker.push_job(fjob);
-//        }
-//        Worker.Job job;
-//        job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_folder_job);
-//        job.set_arg("path", dir.get_path());
-//        job.set_arg("create_user_info", create_user_info);
-//        io_worker.push_job(job);
-//    }
-    
     private bool append_folder_to_mediafolders_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
         assert(job.item.type == ItemType.LOCAL_FOLDER);
@@ -94,38 +72,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 //        update_media_folder_list();
         return false;
     }
-
-//    private bool import_media_folder_job(Worker.Job job) {
-//        return_val_if_fail(io_worker.is_same_thread(), false);
-//        uint msg_id = 0;
-//        Idle.add( () => {
-//            if((bool)job.get_arg("create_user_info") == true) {
-//                var prg_bar = new Gtk.ProgressBar();
-//                prg_bar.set_fraction(0.0);
-//                prg_bar.set_text("0 / 0");
-//                msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
-//                                        UserInfo.ContentClass.WAIT,
-//                                        _("Importing media data. This may take some time..."),
-//                                        true,
-//                                        5,
-//                                        prg_bar);
-//            }
-//            File dir = File.new_for_path((string)job.get_arg("path"));
-//            
-//            global.media_import_in_progress = true;
-//            
-//            //print("++%s\n", dir.get_path());
-//            assert(dir != null);
-//            var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
-//            reader_job.set_arg("dir", dir);
-//            reader_job.set_arg("msg_id", msg_id);
-//            reader_job.set_arg("full_rescan", true);
-//            io_worker.push_job(reader_job);
-//            
-//            return false;
-//        });
-//        return false;
-//    }
 
     public void reimport_media_files(string[] file_paths) {
         if(global.media_import_in_progress == true)
@@ -305,7 +251,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         return (owned)list;
     }
     
-    public void add_import_target_folder(Item? target) {
+    public void add_import_target_folder(Item? target, bool add_folder_to_media_folders = true) {
         if(target.type != ItemType.LOCAL_FOLDER || target.uri == null)
             return;
         lock(import_targets) {
@@ -329,6 +275,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         }
         var job = new Worker.Job(Worker.ExecutionType.ONCE, imp_folder_target_job, Worker.Priority.HIGH);
         job.item = target;
+        job.set_arg("add_folder_to_media_folders", add_folder_to_media_folders);
         db_worker.push_job(job);
     }
     
@@ -404,7 +351,10 @@ public class Xnoise.MediaImporter : GLib.Object {
     private bool imp_folder_target_job(Worker.Job job){
         return_val_if_fail(db_worker.is_same_thread(), false);
         
-        sync_media_folders_to_db();
+        bool add_folder_to_media_folders = (bool)job.get_arg("add_folder_to_media_folders");
+        
+        if(add_folder_to_media_folders)
+            sync_media_folders_to_db();
         
 //        int cnt = 1;
         File? dir = File.new_for_uri(job.item.uri);

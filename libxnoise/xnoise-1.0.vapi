@@ -929,7 +929,7 @@ namespace Xnoise {
 		}
 		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
-		public void add_import_target_folder (Xnoise.Item? target);
+		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = true);
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
 		public void import_media_file (string file_path);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);

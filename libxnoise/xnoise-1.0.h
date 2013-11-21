@@ -2985,7 +2985,7 @@ void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, X
 void xnoise_media_importer_reimport_media_files (XnoiseMediaImporter* self, gchar** file_paths, int file_paths_length1);
 void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, const gchar* file_path);
 GList* xnoise_media_importer_get_media_folder_list (XnoiseMediaImporter* self);
-void xnoise_media_importer_add_import_target_folder (XnoiseMediaImporter* self, XnoiseItem* target);
+void xnoise_media_importer_add_import_target_folder (XnoiseMediaImporter* self, XnoiseItem* target, gboolean add_folder_to_media_folders);
 gpointer xnoise_media_stream_schemes_ref (gpointer instance);
 void xnoise_media_stream_schemes_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_media_stream_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
