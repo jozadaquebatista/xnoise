@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-13 17:44+0200\n"
+"POT-Creation-Date: 2013-11-21 16:28+0100\n"
 "PO-Revision-Date: 2013-09-20 14:06+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -87,11 +87,11 @@ msgstr "未知"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:155
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1510
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1538
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1580
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1610
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:231
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1511
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1539
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1581
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1611
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:250
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
@@ -100,11 +100,11 @@ msgstr "由"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:158
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1512
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1540
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1582
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1612
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:233
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1513
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1541
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1583
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1613
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:252
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
 #, c-format
@@ -141,7 +141,7 @@ msgstr "曲風-演出者-專輯"
 msgid "ALBUM-ARTIST-TITLE"
 msgstr "專輯-演出者-標題"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:725
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:728
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-store.vala:412
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
@@ -216,31 +216,31 @@ msgstr "加入到播放器裝置"
 msgid "External Player Device"
 msgstr "外部播放器裝置"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:157
 msgid "Add or Remove media"
 msgstr "加入或移除媒體"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:169
-msgid "Do full rescan"
-msgstr "執行完整的重新掃描"
-
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:170
-msgid "If selected, all media folders will be fully rescanned"
-msgstr "如果選中，將全面重新掃描所有的媒體資料夾"
-
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
+#. var fullrescan_check  = builder.get_object("fullrescan_check") as Gtk.CheckButton;
+#. fullrescan_check.label = _("Do full rescan");
+#. fullrescan_check.tooltip_text = _("If selected, all media folders will be fully rescanned");
+#. this.fullrescan = fullrescan_check.active = true;
+#. fullrescan_check.toggled.connect( () => {
+#. //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
+#. this.fullrescan = fullrescan_check.active;
+#. });
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Add local folder"
 msgstr "加入本機資料夾"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:178
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 msgid "Add media stream"
 msgstr "加入媒體串流"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:178
 msgid "Remove"
 msgstr "移除"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:183
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:182
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -248,23 +248,17 @@ msgstr ""
 "選取本機媒體資料夾或網路媒體串流。\n"
 "所有媒體來源都可以通過 xnoise 的收藏庫來使用。"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:224
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:189
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:225
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:192
 msgid "Location"
 msgstr "位置"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:264
-#: ../libxnoise/Utils/xnoise-media-importer.vala:101
-#: ../libxnoise/Utils/xnoise-media-importer.vala:237
-msgid "Importing media data. This may take some time..."
-msgstr "匯入媒體資料。這也許會花一點時間…"
-
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:280
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:322
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
 msgstr "選取媒體資料夾"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:356
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:393
 msgid "Add internet radio link"
 msgstr "加入網路電臺連結"
 
@@ -380,7 +374,7 @@ msgid "Fullscreen"
 msgstr "全螢幕"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2019
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2020
 msgid "Search..."
 msgstr "搜尋..."
 
@@ -396,44 +390,44 @@ msgstr "預置："
 msgid "Volume"
 msgstr "音量"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:116
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
 msgid "Add Media"
 msgstr "加入媒體"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:120
 msgid "Skip"
 msgstr "跳過"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:123
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:125
 msgid "Done"
 msgstr "完成"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:131
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:134
 msgid "Please wait while media is added to your library!"
 msgstr "請等待，當媒體被加入到您的收藏庫！"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:132
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:135
 #, c-format
 msgid "You can start listening to your music by selecting '%s'"
 msgstr "您可以開始聽您的音樂，通過選擇「%s」"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:138
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:141
 msgid "Add more media folders"
 msgstr "加入更多媒體資料夾"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:161
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:164
 msgid "Media Folders:"
 msgstr "媒體資料夾："
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:199
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:202
 msgid "Welcome to Xnoise!\n"
 msgstr "歡迎使用 Xnoise！\n"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:201
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:204
 msgid "This is the first time you start xnoise."
 msgstr "這是第一次啟動 Xnoise。"
 
-#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:203
+#: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:206
 msgid "Do you want to import media into your library?"
 msgstr "您是否要匯入媒體到您的收藏庫？"
 
@@ -528,7 +522,7 @@ msgstr "專輯演出者"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:155
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2030
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2031
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1433
 msgid "Album"
@@ -541,7 +535,7 @@ msgstr "標題"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2031
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2032
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1331
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1442
 msgid "Genre"
@@ -553,7 +547,7 @@ msgstr "網址"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:167
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2032
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2033
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1355
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1451
 msgid "Year"
@@ -680,7 +674,7 @@ msgid "C_lear tracklist"
 msgstr "清空曲目清單(_L)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:225
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1787
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1788
 msgid "Clear the tracklist"
 msgstr "清空曲目清單"
 
@@ -813,84 +807,84 @@ msgid ""
 msgstr ""
 "正在復原 %u 個曲目在曲目清單。 這是很大的數量，可能會使 xnoise 啟動較慢。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:713
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:725
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:737
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:749
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:715
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:727
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:739
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:751
 msgid "Playback mode: "
 msgstr "播放模式："
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:713
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:715
 msgid "No repeat, one after another"
 msgstr "沒有重複，一個接一個"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:725
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:727
 msgid "Repeat single track"
 msgstr "重複單曲"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:737
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:739
 msgid "Repeat all"
 msgstr "重複所有"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:749
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:751
 msgid "Random playlist track playing"
 msgstr "隨機播放清單播放曲目"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1290
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1291
 msgid "Settings"
 msgstr "設定"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1381
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1382
 msgid "Enter the URL for playing"
 msgstr "輸入用於播放的網址"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1407
 msgid "Equalizer"
 msgstr "等化器"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1430
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1739
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1740
 msgid "Repeat Mode"
 msgstr "重複模式"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1761
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1762
 msgid "Remove selected tracks"
 msgstr "移除選取的曲目"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1812
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1813
 msgid "Jump to current position"
 msgstr "跳轉到目前的位置"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1916
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2015
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1917
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2016
 msgid "Select search with <Ctrl-F>"
 msgstr "選擇搜尋用 <Ctrl-F>"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1918
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2017
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1919
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2018
 msgid "Remove search filter with <Ctrl-D>"
 msgstr "移除搜尋過濾器用 <Ctrl-D>"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1940
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1941
 msgid "Show application main menu"
 msgstr "顯示應用程式的主選單"
 
 #. ARTIST
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2029
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2030
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1424
 msgid "Artist"
 msgstr "演出者"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2038
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2039
 msgid "Ascending"
 msgstr "遞增"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:2040
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:2041
 msgid "Descending"
 msgstr "遞減"
 
@@ -990,10 +984,6 @@ msgstr "字幕 #"
 msgid "Audio Track #"
 msgstr "音軌＃"
 
-#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:98
-msgid "(Plugin)"
-msgstr "(外掛程式)"
-
 #: ../libxnoise/Resources/xnoise-resources.vala:67
 msgid "unknown artist"
 msgstr "未知的演出者"
@@ -1061,33 +1051,27 @@ msgstr "下一個"
 msgid "Exit"
 msgstr "離開"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:181
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:188
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:200
 msgid "stopped"
 msgstr "已停止"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:192
 msgid "playing"
 msgstr "播放中"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:196
 msgid "paused"
 msgstr "已暫停"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:189
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:208
 #, c-format
 msgid "ready to rock"
 msgstr "準備好搖滾"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:355
-#, c-format
-msgid "Found %u tracks. Updating library ..."
-msgstr "找到 %u 個曲目。正在更新收藏庫..."
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:577
-#, c-format
-msgid "%u new tracks found"
-msgstr "%u 個新曲目找到"
+#: ../libxnoise/Utils/xnoise-media-importer.vala:244
+msgid "Importing media data. This may take some time..."
+msgstr "匯入媒體資料。這也許會花一點時間…"
 
 #: ../src/xnoise.vala:169
 msgid ""
@@ -1305,6 +1289,21 @@ msgstr "顯示歌曲名稱在視窗標題列"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "針對目前的標題，設定視窗的名稱"
+
+#~ msgid "Do full rescan"
+#~ msgstr "執行完整的重新掃描"
+
+#~ msgid "If selected, all media folders will be fully rescanned"
+#~ msgstr "如果選中，將全面重新掃描所有的媒體資料夾"
+
+#~ msgid "(Plugin)"
+#~ msgstr "(外掛程式)"
+
+#~ msgid "Found %u tracks. Updating library ..."
+#~ msgstr "找到 %u 個曲目。正在更新收藏庫..."
+
+#~ msgid "%u new tracks found"
+#~ msgstr "%u 個新曲目找到"
 
 #, fuzzy
 #~ msgid "Return to tracklist"
