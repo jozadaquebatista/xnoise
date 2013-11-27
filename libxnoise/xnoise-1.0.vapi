@@ -925,16 +925,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaImporter : GLib.Object {
-		public struct ResetNotificationData {
-			public weak Xnoise.MediaImporter.DatabaseResetCallback cb;
-		}
-		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
 		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = true);
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
-		public void import_media_file (Xnoise.Item item);
 		public void import_uris (string[] uris);
-		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 		public void remove_uris (string[] file_uris);
 		public signal void changed_library ();
 		public signal void completed_import_target (Xnoise.Item? item);

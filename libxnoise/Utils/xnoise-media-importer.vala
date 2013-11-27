@@ -45,19 +45,19 @@ public class Xnoise.MediaImporter : GLib.Object {
     
     private static const int FILE_COUNT = 500;
     
-    public delegate void DatabaseResetCallback();
+//    public delegate void DatabaseResetCallback();
     
-    public struct ResetNotificationData {
-        public unowned DatabaseResetCallback cb;
-    }
+//    public struct ResetNotificationData {
+//        public unowned DatabaseResetCallback cb;
+//    }
     
-    private List<ResetNotificationData?> reset_callbacks = new List<ResetNotificationData?>();
-    
-    public void register_reset_callback(ResetNotificationData? cbd) {
-        if(cbd == null)
-            return;
-        reset_callbacks.prepend(cbd);
-    }
+//    private List<ResetNotificationData?> reset_callbacks = new List<ResetNotificationData?>();
+//    
+//    public void register_reset_callback(ResetNotificationData? cbd) {
+//        if(cbd == null)
+//            return;
+//        reset_callbacks.prepend(cbd);
+//    }
     
     internal void reimport_media_groups() {
         Worker.Job job;
@@ -250,51 +250,49 @@ public class Xnoise.MediaImporter : GLib.Object {
         return false;
     }
 
-    public void import_media_file(Item item) {
-//        if(global.media_import_in_progress == true)
-//            return;
-        lock(import_targets) {
-            if(!import_targets.contains(item.uri))
-                import_targets.insert(item.uri, item);
-        }
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_file_job);
-        job.item = item;
-        io_worker.push_job(job);
-    }
+//    public void import_media_file(Item item) {
+////        if(global.media_import_in_progress == true)
+////            return;
+//        lock(import_targets) {
+//            if(!import_targets.contains(item.uri))
+//                import_targets.insert(item.uri, item);
+//        }
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_file_job);
+//        job.item = item;
+//        io_worker.push_job(job);
+//    }
 
-    private bool import_media_file_job(Worker.Job job) {
-        return_val_if_fail(io_worker.is_same_thread(), false);
-        var tr = new TagReader();
-        File f = File.new_for_uri(job.item.uri);
-        if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
-            return false;
-        TrackData? td = tr.read_tag(f.get_path(), false);
-        if(td != null) {
-            FileInfo info = f.query_info(FileAttribute.STANDARD_TYPE + "," + 
-                                         FileAttribute.STANDARD_CONTENT_TYPE,
-                                         FileQueryInfoFlags.NONE ,
-                                         null);
-            td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
-            TrackData[]? tda = {};
-            tda += td;
-            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-            db_job.set_arg("remove_import_targets", true);
-            db_job.track_dat = tda;
-            string[] uris = {};
-            uris += f.get_uri();
-            dbus_image_extractor.queue_uris(uris);
-            db_worker.push_job(db_job);
-        }
-        return false;
-    }
+//    private bool import_media_file_job(Worker.Job job) {
+//        return_val_if_fail(io_worker.is_same_thread(), false);
+//        var tr = new TagReader();
+//        File f = File.new_for_uri(job.item.uri);
+//        if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
+//            return false;
+//        TrackData? td = tr.read_tag(f.get_path(), false);
+//        if(td != null) {
+//            FileInfo info = f.query_info(FileAttribute.STANDARD_TYPE + "," + 
+//                                         FileAttribute.STANDARD_CONTENT_TYPE,
+//                                         FileQueryInfoFlags.NONE ,
+//                                         null);
+//            td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+//            TrackData[]? tda = {};
+//            tda += td;
+//            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+//            db_job.set_arg("remove_import_targets", true);
+//            db_job.track_dat = tda;
+//            string[] uris = {};
+//            uris += f.get_uri();
+//            dbus_image_extractor.queue_uris(uris);
+//            db_worker.push_job(db_job);
+//        }
+//        return false;
+//    }
 
-    private Timer t;
+//    private Timer t;
     
     private bool reimport_media_groups_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
-        
-//        main_window.musicBr.music_browser_model.cancel_fill_model(); // TODO
         
         Item[] tmp = {};
         //add folders
@@ -309,37 +307,17 @@ public class Xnoise.MediaImporter : GLib.Object {
             
         job.items = tmp;
         
-//        Timeout.add(200, () => {
-//            var prg_bar = new Gtk.ProgressBar();
-//            prg_bar.set_fraction(0.0);
-//            prg_bar.set_text("0 / 0");
-//            uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
-//                                         UserInfo.ContentClass.WAIT,
-//                                         _("Importing media data. This may take some time..."),
-//                                         true,
-//                                         5,
-//                                         prg_bar);
-//            global.media_import_in_progress = true;
-//            
-//            import_media_groups(job.items, msg_id, true, false);
-//            
-//            return false;
-//        });
         return false;
     }
 
-    internal void update_item_tag(ref Item? item, ref TrackData td) {
-        
-        //this function uses the database so use it in the database thread
-        return_if_fail(db_worker.is_same_thread());
-        
-        if(global.media_import_in_progress == true)
-            return;
-        db_writer.update_title(ref item, ref td);
-    }
-    
-//    private uint current_import_msg_id = 0;
-//    private uint current_import_track_count = 0;
+//    internal void update_item_tag(ref Item? item, ref TrackData td) {
+//        //this function uses the database so use it in the database thread
+//        return_if_fail(db_worker.is_same_thread());
+//        
+//        if(global.media_import_in_progress == true)
+//            return;
+//        db_writer.update_title(ref item, ref td);
+//    }
     
     // Imports in progress
     private GLib.HashTable <string, Item?> import_targets  = new GLib.HashTable <string, Item?>(str_hash, str_equal);
@@ -385,24 +363,9 @@ public class Xnoise.MediaImporter : GLib.Object {
             return;
         
         lock(import_targets) {
-//            bool parent_in_list = false;
-//            foreach(unowned string u in import_targets.get_keys()) {
-//                if(u.has_prefix(target.uri))
-//                    parent_in_list = true;
-//            }
-//            if(!parent_in_list) {
             if(!import_targets.contains(target.uri))
                 import_targets.insert(target.uri, target);
-                //Reset subscribed Dockable Media
-//                foreach(ResetNotificationData? cxd in reset_callbacks) {
-//                    if(cxd.cb != null) {
-//                        cxd.cb();
-//                    }
-//                }
-//            }
-//            else {
-//                print("parent folder is in list\n");
-//            }
+            global.media_import_in_progress = true;
         }
         var job = new Worker.Job(Worker.ExecutionType.ONCE, imp_folder_target_job, Worker.Priority.HIGH);
         job.item = target;
@@ -420,12 +383,6 @@ public class Xnoise.MediaImporter : GLib.Object {
                     completed_import_target(i);
                     return false;
                 });
-//                if(import_targets.get_keys().length() == 0) {
-//                    Timeout.add_seconds(1, () => {
-//                        global.media_import_in_progress = false;
-//                        return false;
-//                    });
-//                }
             }
         }
         check_target_processing_queues();
@@ -433,24 +390,13 @@ public class Xnoise.MediaImporter : GLib.Object {
     
     internal void remove_media_folder(Item item) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, remove_media_folder_job);
-//        File mf = File.new_for_uri(item.uri);
-        job.item = item;//Item(ItemType.LOCAL_FOLDER, mf.get_uri());
+        job.item = item;
         db_worker.push_job(job);
     }
     
     private bool remove_media_folder_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
         assert(job.item.type == ItemType.LOCAL_FOLDER);
-        lock(import_targets) {
-            if(import_targets.get_keys().length() == 0) {
-//                Timeout.add_seconds(1, () => {
-//                    bool buffer = global.media_import_in_progress;
-//                    global.media_import_in_progress = true;
-//                    global.media_import_in_progress = buffer;
-//                    return false;
-//                });
-            }
-        }
         db_writer.begin_transaction();
         db_writer.remove_single_media_folder(job.item);
         db_writer.commit_transaction();
@@ -459,6 +405,9 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_writer.cleanup_database();
         db_writer.commit_transaction();
         update_media_folder_list();
+        
+        check_target_processing_queues();
+        
         return false;
     }
     
@@ -481,11 +430,11 @@ public class Xnoise.MediaImporter : GLib.Object {
     public signal void processing_import_target(Item? item);
     public signal void completed_import_target(Item? item);
     
-    
     internal void remove_folder_item(Item folder) {
         return_val_if_fail(folder.type == ItemType.LOCAL_FOLDER, false);
         bool already_in_process = false;
         lock(removal_targets) {
+            global.media_import_in_progress = true;
             if(removal_targets.contains(folder.uri)) {
                 already_in_process = true;
             }
@@ -520,7 +469,8 @@ public class Xnoise.MediaImporter : GLib.Object {
                 Idle.add(() => {
                     changed_library();
                     return false;
-                });;
+                });
+                global.media_import_in_progress = false;
         }
     }
     
@@ -576,16 +526,14 @@ public class Xnoise.MediaImporter : GLib.Object {
         
         reader_job.set_arg("media_folder", pth);
         reader_job.item = job.item;
-//        reader_job.counter[1] = cnt;
-//        reader_job.counter[2] = 1;//(int)new_mfolders_ht.get_keys().length();
         io_worker.push_job(reader_job);
         return false;
     }
     
-    internal void import_media_groups(Item[] media_items,
-                                      uint msg_id,
-                                      bool full_rescan = true,
-                                      bool interrupted_populate_model = false) {
+//    internal void import_media_groups(Item[] media_items,
+//                                      uint msg_id,
+//                                      bool full_rescan = true,
+//                                      bool interrupted_populate_model = false) {
 //        return_if_fail(Main.instance.is_same_thread());
 //        t = new Timer(); // timer for measuring import time
 //        t.start();
@@ -642,9 +590,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 //        job.set_arg("interrupted_populate_model", interrupted_populate_model);
 //        job.set_arg("full_rescan", full_rescan);
 //        db_worker.push_job(job);
-    }
+//    }
     
-    private bool io_import_job_running = false;
+//    private bool io_import_job_running = false;
 
     internal bool write_lastused_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
@@ -924,7 +872,6 @@ public class Xnoise.MediaImporter : GLib.Object {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.set_arg("remove_import_targets", false);
                             db_job.track_dat = (owned)tda;
-//                            db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
                             tda = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
                             uris_for_image_extraction = {};
@@ -948,7 +895,6 @@ public class Xnoise.MediaImporter : GLib.Object {
                 uris_for_image_extraction = {};
                 db_worker.push_job(db_job);
             }
-//            end_import(job);
         }
         return;
     }
@@ -973,49 +919,49 @@ public class Xnoise.MediaImporter : GLib.Object {
                     import_targets.remove(s);
                 }
             }
+            check_target_processing_queues();
         }
-        check_target_processing_queues();
         return false;
     }
 
     // add streams to the media path and store them in the db
-    private bool store_streams_job(Worker.Job job) {
-        //this function uses the database so use it in the database thread
-        return_val_if_fail(db_worker.is_same_thread(), false);
-        var streams_ht = new HashTable<string,Item?>(str_hash, str_equal);
-        db_writer.begin_transaction();
-        
-        db_writer.del_all_streams();
-        
-        foreach(Item? strm in job.items)
-            streams_ht.insert(strm.uri, strm); // remove duplicates
-        
-        foreach(unowned Item? strm in streams_ht.get_values()) {
-            string streamuri = "%s".printf(strm.uri.strip());
-            Item? item = ItemHandlerManager.create_item(streamuri);
-            item.text = strm.text;
-            
-            if(item.type == ItemType.UNKNOWN)
-                continue;
-            
-            TrackData[]? track_dat = item_converter.to_trackdata(item, EMPTYSTRING);
-            
-            if(track_dat != null) {
-                foreach(TrackData td in track_dat) {
-                    if(td.item.uri == null) {
-                        print("red alert!!!\n");
-                        continue;
-                    }
-                    td.item.text = (item.text != null ? item.text : EMPTYSTRING);
-                    db_writer.add_single_stream_to_collection(td.item);
-//                    lock(current_import_track_count) {
-//                        current_import_track_count++;
+//    private bool store_streams_job(Worker.Job job) {
+//        //this function uses the database so use it in the database thread
+//        return_val_if_fail(db_worker.is_same_thread(), false);
+//        var streams_ht = new HashTable<string,Item?>(str_hash, str_equal);
+//        db_writer.begin_transaction();
+//        
+//        db_writer.del_all_streams();
+//        
+//        foreach(Item? strm in job.items)
+//            streams_ht.insert(strm.uri, strm); // remove duplicates
+//        
+//        foreach(unowned Item? strm in streams_ht.get_values()) {
+//            string streamuri = "%s".printf(strm.uri.strip());
+//            Item? item = ItemHandlerManager.create_item(streamuri);
+//            item.text = strm.text;
+//            
+//            if(item.type == ItemType.UNKNOWN)
+//                continue;
+//            
+//            TrackData[]? track_dat = item_converter.to_trackdata(item, EMPTYSTRING);
+//            
+//            if(track_dat != null) {
+//                foreach(TrackData td in track_dat) {
+//                    if(td.item.uri == null) {
+//                        print("red alert!!!\n");
+//                        continue;
 //                    }
-                }
-            }
-        }
-        db_writer.commit_transaction();
-        return false;
-    }
+//                    td.item.text = (item.text != null ? item.text : EMPTYSTRING);
+//                    db_writer.add_single_stream_to_collection(td.item);
+////                    lock(current_import_track_count) {
+////                        current_import_track_count++;
+////                    }
+//                }
+//            }
+//        }
+//        db_writer.commit_transaction();
+//        return false;
+//    }
 }
 
