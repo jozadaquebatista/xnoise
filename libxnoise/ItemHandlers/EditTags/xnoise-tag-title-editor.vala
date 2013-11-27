@@ -32,12 +32,10 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Resources;
-
 using Xnoise.TagAccess;
 
 
 private class Xnoise.TagTitleEditor : GLib.Object {
-    private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
     private unowned MusicBrowserModel mbm = null;
@@ -58,7 +56,6 @@ private class Xnoise.TagTitleEditor : GLib.Object {
 
     public TagTitleEditor(Item _item) {
         item = _item;
-        xn = Main.instance;
         builder = new Gtk.Builder();
         setup_widgets();
         mbm = main_window.musicBr.music_browser_model;
@@ -268,43 +265,24 @@ private class Xnoise.TagTitleEditor : GLib.Object {
         tda[0] = td_old;
         tda[1] = td_new;
         job.track_dat = tda;
-        global.in_tag_rename = true;
         io_worker.push_job(job);
     }
     
     // job to update tag in files
     private bool update_tag_job(Worker.Job tag_job) {
+        return_val_if_fail(io_worker.is_same_thread(), false);
+        global.in_tag_rename = true;
         if(tag_job.track_dat[0].item.type == ItemType.LOCAL_AUDIO_TRACK ||
            tag_job.track_dat[0].item.type == ItemType.LOCAL_VIDEO_TRACK) {
             File f = File.new_for_uri(tag_job.track_dat[1].item.uri);
             if(!f.query_exists(null))
                 return false;
             var tw = new TagWriter();
-            bool ret = false;
-            string[] uris = {};
-            
-            ret = tw.write_tag(f, tag_job.track_dat[1]);
-            
-            if(ret) {
-                uris += f.get_uri();
-            }
+            tw.write_tag(f, tag_job.track_dat[1]);
             // TODO handle is_compilation for containing album
-            media_importer.reimport_media_files(uris);
-            
-            var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-            io_worker.push_job(fin_job);
         }
-        return false;
-    }
-
-    private bool finish_job(Worker.Job job) {
-        Timeout.add(200, () => {
-            main_window.musicBr.music_browser_model.filter();
-            main_window.album_art_view.icons_model.filter();
-            global.in_tag_rename = false;
-            return false;
-        });
         Timeout.add(300, () => {
+            global.in_tag_rename = false;
             this.sign_finish();
             return false;
         });

@@ -1,6 +1,6 @@
 /* xnoise-handler-edit-tags.vala
  *
- * Copyright (C) 2011 - 2012 Jörn Magens
+ * Copyright (C) 2011 - 2013 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,7 +100,6 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
         edit_title_tracklist.stock_item = Gtk.Stock.EDIT;
         edit_title_tracklist.context = ActionContext.TRACKLIST_MENU_QUERY;
 
-        //print("constructed %s\n", this.name);
     }
 
     public override ItemHandlerType handler_type() {
@@ -112,9 +111,6 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection) {
-        //print("media_import_in_progress: %s   in_tag_rename: %s\n", 
-        //        global.media_import_in_progress.to_string(), 
-        //        global.in_tag_rename.to_string());
         if(global.media_import_in_progress || global.in_tag_rename)
             return null;
         if(selection != ItemSelectionType.SINGLE)
@@ -174,11 +170,6 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
 
     private void on_edit_genre_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         Item? i = null;
-//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
-//            if(data2 != null) {
-//                i = (Item)data2;
-//            }
-//        }
         HashTable<ItemType,Item?>? item_ht = null;
         if(i != null) {
             item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
@@ -190,11 +181,9 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     
     private void on_edit_albumartist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         Item? i = Item(ItemType.UNKNOWN);
-//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             if(data2 != null) {
                 i = (Item)data2;
             }
-//        }
         HashTable<ItemType,Item?>? item_ht = null;
         if(i != null && i.type != ItemType.UNKNOWN) {
             item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
@@ -206,14 +195,11 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     
     private void on_edit_artist_mediabrowser(Item item, GLib.Value? data, GLib.Value? data2) {
         Item? i = Item(ItemType.UNKNOWN);
-//        if(global.collection_sort_mode == CollectionSortMode.GENRE_ARTIST_ALBUM) {
             if(data2 != null) {
                 i = (Item)data2;
             }
-//        }
         HashTable<ItemType,Item?>? item_ht = null;
         if(i != null && i.type != ItemType.UNKNOWN) {
-print("ää1 : %s\n", i.type.to_string());
             item_ht = new HashTable<ItemType,Item?>(direct_hash, direct_equal);
             item_ht.insert(i.type, i);
         }
@@ -227,26 +213,6 @@ print("ää1 : %s\n", i.type.to_string());
         if(item.type == ItemType.LOCAL_AUDIO_TRACK)
             this.open_tagtitle_changer(item); //TODO: Add routine to update in tracklist
     }
-
-//    private Menu create_edit_artist_tag_menu() {
-//        var rightmenu = new Menu();
-//        var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//        menu_item.set_label(_("Change artist name"));
-//        menu_item.activate.connect(this.open_tagalbumartist_changer);
-//        rightmenu.append(menu_item);
-//        rightmenu.show_all();
-//        return rightmenu;
-//    }
-
-//    private Menu create_edit_album_tag_menu() {
-//        var rightmenu = new Menu();
-//        var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//        menu_item.set_label(_("Change album name"));
-//        menu_item.activate.connect(this.open_tagalbum_changer);
-//        rightmenu.append(menu_item);
-//        rightmenu.show_all();
-//        return rightmenu;
-//    }
 
     private TagTitleEditor tte;
     private void open_tagtitle_changer(Item item) {

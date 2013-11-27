@@ -170,9 +170,6 @@ private class Xnoise.TagArtistEditor : GLib.Object {
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 do_artist_rename();
                 break;
-//            case ItemType.COLLECTION_CONTAINER_ALBUM:
-//                do_album_rename();
-//                break;
             default:
                 break;    
         }
@@ -186,68 +183,30 @@ private class Xnoise.TagArtistEditor : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
         job.set_arg("new_content_name", new_content_name);
         job.item = this.item;
-        db_worker.push_job(job);
-    }
-
-//    private void do_album_rename() {
-//        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-//        job.set_arg("new_content_name", new_content_name);
-//        job.item = this.item;
-//        io_worker.push_job(job);
-//    }
-
-
-    private bool update_tags_job(Worker.Job tag_job) {
-        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-        //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-        job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);
+        job.track_dat = td_old;
         if(job.track_dat == null)
-            return false;
-        job.item = tag_job.item;
+            return;
         foreach(TrackData td in job.track_dat) {
             td.artist = new_content_name;
         }
-        print("push filetags job\n");
-        global.in_tag_rename = true;
         io_worker.push_job(job);
-        return false;
     }
 
-    private bool update_filetags_job(Worker.Job job) {
-        string[] uris = {};
+    private bool update_tags_job(Worker.Job job) {
+        return_val_if_fail(io_worker.is_same_thread(), false);
+        assert(job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST);
+        global.in_tag_rename = true;
         for(int i = 0; i < job.track_dat.length; i++) {
             File f = File.new_for_uri(job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
-            bool ret = false;
             var tw = new TagWriter();
-            ret = tw.write_tag(f, job.track_dat[i], false);
-            
-            if(ret) {
-                uris += f.get_uri();
-            }
-            else {
+            if(!tw.write_tag(f, job.track_dat[i], false)) {
                 print("No success for path : %s !!!\n", f.get_path());
             }
         }
-        media_importer.reimport_media_files(uris);
-        
-        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-        
-        db_worker.push_job(fin_job);
-        return false;
-    }
-    
-    private bool finish_job(Worker.Job job) {
-//        db_writer.commit_transaction();
-        Timeout.add(200, () => {
-            main_window.musicBr.music_browser_model.filter();
-            main_window.album_art_view.icons_model.filter();
+        Timeout.add_seconds(1, () => {
             global.in_tag_rename = false;
-            return false;
-        });
-        Timeout.add(300, () => {
             this.sign_finish();
             return false;
         });

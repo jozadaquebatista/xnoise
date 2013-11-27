@@ -38,7 +38,6 @@ using Xnoise.TagAccess;
 
 
 private class Xnoise.TagAlbumEditor : GLib.Object {
-    private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
     private string new_content_name = "";
@@ -63,7 +62,6 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     public TagAlbumEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
         this.item = _item;
         this.restrictions = restrictions;
-        xn = Main.instance;
         td_old = {};
         builder = new Gtk.Builder();
         setup_widgets();
@@ -128,16 +126,6 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     spinbutton_year.set_value(td.year);
                     genre_entry.text   = (td.genre != null ? td.genre : "");
 
-//                    checkb_comp.notify["active"].connect( () => {
-//                        if(checkb_comp.active) {
-//                            artist_entry.text = VARIOUS_ARTISTS;
-//                            artist_entry.set_sensitive(false);
-//                        }
-//                        else {
-//                            artist_entry.text = td_old[0].artist;
-//                            artist_entry.set_sensitive(true);
-//                        }
-//                    });
                     checkb_comp.active = td.is_compilation;
                     return false;
                 });
@@ -247,66 +235,86 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
         new_genre = genre_entry.text.strip();
         new_is_compilation = checkb_comp.active;
         job.item = this.item;
+        job.track_dat = td_old;
+        if(job.track_dat == null)
+            return;
+        foreach(TrackData td in job.track_dat) {
+            td.albumartist    = new_artist_name;
+            td.album          = new_content_name;
+            td.year           = (uint)new_year;
+            td.genre          = new_genre; 
+            td.is_compilation = new_is_compilation; // TODO
+        }
         io_worker.push_job(job);
     }
 
     private bool update_tags_job(Worker.Job tag_job) {
-        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            job.track_dat = td_old;//item_converter.to_trackdata(tag_job.item, global.searchtext);
-            if(job.track_dat == null)
-                return false;
-            job.item = tag_job.item;
-            foreach(TrackData td in job.track_dat) {
-                td.albumartist    = new_artist_name;//(string)tag_job.get_arg("new_content_name");//
-                td.album          = new_content_name;//(string)tag_job.get_arg("new_content_name");//
-                td.year           = (uint)new_year;//(uint)  tag_job.get_arg("new_year");//
-                td.genre          = new_genre; //(string)tag_job.get_arg("new_genre");//
-                td.is_compilation = new_is_compilation;// (bool)  tag_job.get_arg("new_is_compilation");
-            }
-            global.in_tag_rename = true;
-            io_worker.push_job(job);
-        }
-        return false;
-    }
-
-    private bool update_filetags_job(Worker.Job tag_job) {
-        string[] uris = {};
+        return_val_if_fail(io_worker.is_same_thread(), false);
+        global.in_tag_rename = true;
         for(int i = 0; i < tag_job.track_dat.length; i++) {
             File f = File.new_for_uri(tag_job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
-            bool ret = false;
+//            bool ret = false;
             var tw = new TagWriter();
-            ret = tw.write_tag(f, tag_job.track_dat[i], false);
+//            ret = tw.write_tag(f, tag_job.track_dat[i], false);
             
-            if(ret) {
-                uris += f.get_uri();
-            }
-            else {
+            if(!tw.write_tag(f, tag_job.track_dat[i], false)) {
                 print("No success for path : %s !!!\n", f.get_path());
             }
         }
-        media_importer.reimport_media_files(uris);
-        
-        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-        db_worker.push_job(fin_job);
-        return false;
-    }
-    
-    private bool finish_job(Worker.Job job) {
-        Timeout.add(200, () => {
-            main_window.musicBr.music_browser_model.filter();
-            main_window.album_art_view.icons_model.filter();
+        Timeout.add_seconds(1, () => {
             global.in_tag_rename = false;
-            return false;
-        });
-        Timeout.add(300, () => {
             this.sign_finish();
             return false;
         });
         return false;
+
+
+//        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+//            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
+//            io_worker.push_job(job);
+//        }
+//        return false;
     }
+
+//    private bool update_filetags_job(Worker.Job tag_job) {
+//        string[] uris = {};
+//        for(int i = 0; i < tag_job.track_dat.length; i++) {
+//            File f = File.new_for_uri(tag_job.track_dat[i].item.uri);
+//            if(!f.query_exists(null))
+//                continue;
+//            bool ret = false;
+//            var tw = new TagWriter();
+//            ret = tw.write_tag(f, tag_job.track_dat[i], false);
+//            
+//            if(ret) {
+//                uris += f.get_uri();
+//            }
+//            else {
+//                print("No success for path : %s !!!\n", f.get_path());
+//            }
+//        }
+//        media_importer.reimport_media_files(uris);
+//        
+//        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+//        db_worker.push_job(fin_job);
+//        return false;
+//    }
+    
+//    private bool finish_job(Worker.Job job) {
+//        Timeout.add(200, () => {
+//            main_window.musicBr.music_browser_model.filter();
+//            main_window.album_art_view.icons_model.filter();
+//            return false;
+//        });
+//        Timeout.add_seconds(1, () => {
+//            global.in_tag_rename = false;
+//            this.sign_finish();
+//            return false;
+//        });
+//        return false;
+//    }
 
     private void on_cancel_button_clicked(Gtk.Button sender) {
         Idle.add( () => {
