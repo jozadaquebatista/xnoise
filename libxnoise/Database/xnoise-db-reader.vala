@@ -416,6 +416,27 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)mfolders;
     }
 
+    private static const string STMT_GET_PATHS =
+        "SELECT name FROM paths GROUP BY utf8_lower(name)";
+
+    internal string get_fitting_parent_path(string pth) {
+        Statement stmt;
+        
+        this.db.prepare_v2(STMT_GET_PATHS, -1, out stmt);
+        string result = "";
+        string nme = "";
+        while(stmt.step() == Sqlite.ROW) {
+            nme = stmt.column_text(0);
+            if(pth.has_prefix(nme)) {
+                if(result.length < nme.length) {
+                    result = nme;
+                }
+            }
+        }
+        //print("result : %s\n", result);
+        return result;
+    }
+    
     private static const string STMT_GET_STREAM_ITEMS_WITH_SEARCH =
         "SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY utf8_lower(s.name) COLLATE CUSTOM01 DESC";
 

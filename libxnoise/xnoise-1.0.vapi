@@ -79,6 +79,7 @@ namespace Xnoise {
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
+			public void remove_folder (string uri, bool check_media_folders = false);
 			public bool remove_single_media_folder (Xnoise.Item? mfolder);
 			public void remove_uri (string uri);
 			public void update_lastplay_time (string uri, int64 playtime);
@@ -931,9 +932,11 @@ namespace Xnoise {
 		public MediaImporter ();
 		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = true);
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
-		public void import_media_file (string file_path);
+		public void import_media_file (Xnoise.Item item);
+		public void import_uris (string[] uris);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
-		public void reimport_media_files (string[] file_paths);
+		public void remove_uris (string[] file_uris);
+		public signal void changed_library ();
 		public signal void completed_import_target (Xnoise.Item? item);
 		public signal void folder_list_changed ();
 		public signal void processing_import_target (Xnoise.Item? item);
@@ -1130,6 +1133,7 @@ namespace Xnoise {
 			public Xnoise.Worker.Priority priority;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
+			public string[] uris;
 			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.ONCE, Xnoise.Worker.WorkFunc? func = null, Xnoise.Worker.Priority priority = Priority.NORMAL, Xnoise.Worker.FinishFunc? finish_func = null);
 			public unowned GLib.Value? get_arg (string name);
 			public void set_arg (string? name, owned GLib.Value? val);

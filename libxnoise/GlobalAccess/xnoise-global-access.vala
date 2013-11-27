@@ -246,10 +246,16 @@ public class Xnoise.GlobalAccess : GLib.Object {
     private bool _media_import_in_progress;
     public bool media_import_in_progress {
         get {
-            return _media_import_in_progress;
+            bool val = false;
+            lock(_media_import_in_progress) {
+                val = _media_import_in_progress;
+            }
+            return val;
         }
         set {
-            _media_import_in_progress = value;
+            lock(_media_import_in_progress) {
+                _media_import_in_progress = value;
+            }
         }
     }
 

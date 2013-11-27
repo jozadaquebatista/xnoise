@@ -199,23 +199,17 @@ private class Xnoise.TagGenreEditor : GLib.Object {
     }
 
     private bool update_filetags_job(Worker.Job job) {
-        string[] paths = {};
-        //print("job.track_dat len : %d\n", job.track_dat.length);
-//        if(job.track_dat.length > 0) {
-//            var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
-//            db_worker.push_job(bjob);
-//        }
+        string[] uris = {};
         for(int i = 0; i<job.track_dat.length; i++) {
             File f = File.new_for_uri(job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
-//            var tw = new TagWriter();
             bool ret = false;
             var tw = new TagWriter();
             ret = tw.write_tag(f, job.track_dat[i], false);
             
             if(ret) {
-                paths += f.get_path();
+                uris += f.get_uri();
             }
             else {
                 print("No success for path : %s !!!\n", f.get_path());
@@ -231,7 +225,7 @@ private class Xnoise.TagGenreEditor : GLib.Object {
 //                db_worker.push_job(dbjob);
 //            }
         }
-        media_importer.reimport_media_files(paths);
+        media_importer.reimport_media_files(uris);
         var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
         
         db_worker.push_job(fin_job);

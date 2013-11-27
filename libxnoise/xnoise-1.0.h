@@ -1052,6 +1052,8 @@ struct _XnoiseWorkerJob {
 	XnoiseItem* item;
 	XnoiseItem* items;
 	gint items_length1;
+	gchar** uris;
+	gint uris_length1;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
@@ -2198,6 +2200,7 @@ gchar** xnoise_database_writer_get_media_folders (XnoiseDatabaseWriter* self, in
 gboolean xnoise_database_writer_get_trackdata_for_stream (XnoiseDatabaseWriter* self, const gchar* uri, XnoiseTrackData** val);
 gboolean xnoise_database_writer_update_title (XnoiseDatabaseWriter* self, XnoiseItem** item, XnoiseTrackData** td);
 void xnoise_database_writer_remove_uri (XnoiseDatabaseWriter* self, const gchar* uri);
+void xnoise_database_writer_remove_folder (XnoiseDatabaseWriter* self, const gchar* uri, gboolean check_media_folders);
 gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, XnoiseTrackData** td);
 gboolean xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* i);
 void xnoise_database_writer_update_stream_name (XnoiseDatabaseWriter* self, XnoiseItem* item);
@@ -2982,8 +2985,9 @@ GType xnoise_media_importer_reset_notification_data_get_type (void) G_GNUC_CONST
 XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notification_data_dup (const XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, XnoiseMediaImporterResetNotificationData* cbd);
-void xnoise_media_importer_reimport_media_files (XnoiseMediaImporter* self, gchar** file_paths, int file_paths_length1);
-void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, const gchar* file_path);
+void xnoise_media_importer_remove_uris (XnoiseMediaImporter* self, gchar** file_uris, int file_uris_length1);
+void xnoise_media_importer_import_uris (XnoiseMediaImporter* self, gchar** uris, int uris_length1);
+void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, XnoiseItem* item);
 GList* xnoise_media_importer_get_media_folder_list (XnoiseMediaImporter* self);
 void xnoise_media_importer_add_import_target_folder (XnoiseMediaImporter* self, XnoiseItem* target, gboolean add_folder_to_media_folders);
 gpointer xnoise_media_stream_schemes_ref (gpointer instance);

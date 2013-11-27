@@ -281,15 +281,15 @@ private class Xnoise.TagTitleEditor : GLib.Object {
                 return false;
             var tw = new TagWriter();
             bool ret = false;
-            string[] paths = {};
+            string[] uris = {};
             
             ret = tw.write_tag(f, tag_job.track_dat[1]);
             
             if(ret) {
-                paths += f.get_path();
+                uris += f.get_uri();
             }
             // TODO handle is_compilation for containing album
-            media_importer.reimport_media_files(paths);
+            media_importer.reimport_media_files(uris);
             
             var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
             io_worker.push_job(fin_job);

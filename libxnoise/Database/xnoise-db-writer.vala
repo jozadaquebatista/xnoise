@@ -131,7 +131,7 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_ADD_STREAM =
         "INSERT INTO streams (name, uri) VALUES (?, ?)";
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT * FROM paths";
+        "SELECT name FROM paths";
     private static const string STMT_GET_TITLE_ID =
         "SELECT id FROM items WHERE artist = ? AND album = ? AND utf8_lower(title) = ?";
     private static const string STMT_DEL_ARTISTS =
@@ -1300,6 +1300,38 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
     }
 
+     private static const string STMT_DEL_ITEMS_FOR_FOLDER =
+        "DELETE FROM items WHERE uri IN (SELECT id FROM uris WHERE name LIKE ?)";
+        
+     private static const string STMT_DEL_URIS_FOR_FOLDER =
+        "DELETE FROM uris WHERE name LIKE ?";
+   
+    public void remove_folder(string uri, bool check_media_folders = false) {
+        Statement stmt;
+        
+        string uri_text = "%s%%".printf(uri);
+        
+        db.prepare_v2(STMT_DEL_ITEMS_FOR_FOLDER, -1, out stmt);
+        if(stmt.bind_text(1, uri_text)!= Sqlite.OK ) {
+            db_error();
+            return;
+        }
+        if(stmt.step() != Sqlite.DONE) {
+            db_error();
+            return;
+        }
+        
+        db.prepare_v2(STMT_DEL_URIS_FOR_FOLDER, -1, out stmt);
+        if(stmt.bind_text(1, uri_text)!= Sqlite.OK ) {
+            db_error();
+            return;
+        }
+        if(stmt.step() != Sqlite.DONE) {
+            db_error();
+            return;
+        }
+    }
+
     private static const string STMT_GET_GET_ITEM_ID = 
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
@@ -1320,11 +1352,32 @@ public class Xnoise.Database.Writer : GLib.Object {
 //    ulong title_usec = 0;
 
 //    ulong FACTOR = 20;
+
+    private string get_fitting_parent_path(string pth) {
+        Statement stmt;
+        
+        this.db.prepare_v2("SELECT name FROM paths GROUP BY utf8_lower(name)", -1, out stmt);
+        string result = "";
+        string nme = "";
+        while(stmt.step() == Sqlite.ROW) {
+            nme = stmt.column_text(0);
+            if(pth.has_prefix(nme)) {
+                if(result.length < nme.length) {
+                    result = nme;
+                }
+            }
+        }
+        //print("result : %s\n", result);
+        return result;
+    }
+    
     public bool insert_title(ref TrackData td) { // , string uri
         // make entries in other tables and get references from there
 //        t.reset();
 //        t.start();
         File f = File.new_for_uri(td.item.uri);
+        if(td.media_folder == null)
+            td.media_folder = get_fitting_parent_path(f.get_parent().get_path());
         int path_id = handle_path(td.media_folder);// f.get_parent().get_path());
         if(path_id == -1) {
             return false;

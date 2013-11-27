@@ -103,8 +103,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
                 if(!monitors.contains(file.get_path())) {
                     if(!event_table.contains(file.get_path()))
                         event_table.insert(file.get_path(), 
-                                           new Event(Event.ChangeType.CHANGED_FILE, 
-                                                                 file.get_path()));
+                                           new Event(Event.ChangeType.CHANGED_FILE, file.get_path()));
                     event_table_changed();
                 }
                 break;
@@ -121,13 +120,20 @@ public class Xnoise.MediaMonitor : GLib.Object {
                 event_table_changed();
                 break;
             case FileMonitorEvent.DELETED:
-                if(monitors.contains(file.get_path())) {
+                if(monitors.contains(file.get_path())) { // DIRS
                     monitors.remove(file.get_path());
                     if(event_table.contains(file.get_path()))
                         event_table.remove(file.get_path());
                     
                     event_table.insert(file.get_path(), 
                                        new Event(Event.ChangeType.DELETED_DIR, file.get_path()));
+                }
+                else { // FILES
+                    if(event_table.contains(file.get_path()))
+                        event_table.remove(file.get_path());
+                    
+                    event_table.insert(file.get_path(), 
+                                       new Event(Event.ChangeType.DELETED_FILE, file.get_path()));
                 }
                 event_table_changed();
                 break;
@@ -183,7 +189,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
             s.destroy();
         }
         Source source = new TimeoutSource(1000); 
-        source.set_callback(() => {
+        source.set_callback( () => {
             if(MainContext.current_source().is_destroyed()) {
                 //print("current source removed\n");
                 return false;
@@ -191,19 +197,50 @@ public class Xnoise.MediaMonitor : GLib.Object {
             HashTable<string, Event> local_event_table = event_table;
             event_table = new HashTable<string, Event>(str_hash, str_equal);
             List<Event> list = local_event_table.get_values();
+            
+            string[] add_uris = {};
+            string[] remove_uris = {};
+            string[] reimport_uris = {};
+            
             foreach(Event e in list) {
+                assert(e.path != null);
                 print("EVHT: %s  ::  %s\n", e.path, e.type.to_string());
                 switch(e.type) {
                     case Event.ChangeType.ADDED_DIR:
                         File folder = File.new_for_path(e.path);
                         Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
                         media_importer.add_import_target_folder(item, false);
-                        // DELETE file Add file
+                        break;
+                    case Event.ChangeType.DELETED_DIR:
+                        File folder = File.new_for_path(e.path);
+                        Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
+                        media_importer.remove_folder_item(item);
+                        break;
+                    case Event.ChangeType.CHANGED_FILE:
+                        File file = File.new_for_path(e.path);
+                        reimport_uris += file.get_uri();
+                        break;
+                    case Event.ChangeType.ADDED_FILE:
+                        File file = File.new_for_path(e.path);
+                        add_uris += file.get_uri();
+                        break;
+                    case Event.ChangeType.DELETED_FILE:
+                        File file = File.new_for_path(e.path);
+                        remove_uris += file.get_uri();
                         break;
                     default: break;
                 }
             }
-            print("---------------------------------\n\n");
+            
+            if(remove_uris.length != 0)
+                media_importer.remove_uris(remove_uris);
+            
+            if(add_uris.length != 0)
+                media_importer.import_uris(add_uris);
+            
+            if(reimport_uris.length != 0)
+                media_importer.reimport_media_files(reimport_uris);
+            
             handler_id = 0;
             return false;
         });
@@ -225,8 +262,9 @@ public class Xnoise.MediaMonitor : GLib.Object {
     
     private void setup_monitors() {
         File dir = File.new_for_path(Environment.get_user_special_dir(UserDirectory.MUSIC));
-        monitors = new HashTable<string, FileMonitor>(str_hash, str_equal); //List<FileMonitor>();
+        monitors = new HashTable<string, FileMonitor>(str_hash, str_equal);
         setup_monitor_recoursive(dir);
+        print("Finished setting up file monitors.\n");
     }
 
     private string attr = FileAttribute.STANDARD_NAME + "," +

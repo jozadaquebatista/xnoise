@@ -271,7 +271,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
     }
 
     private bool update_filetags_job(Worker.Job tag_job) {
-        string[] paths = {};
+        string[] uris = {};
         for(int i = 0; i < tag_job.track_dat.length; i++) {
             File f = File.new_for_uri(tag_job.track_dat[i].item.uri);
             if(!f.query_exists(null))
@@ -281,13 +281,13 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             ret = tw.write_tag(f, tag_job.track_dat[i], false);
             
             if(ret) {
-                paths += f.get_path();
+                uris += f.get_uri();
             }
             else {
                 print("No success for path : %s !!!\n", f.get_path());
             }
         }
-        media_importer.reimport_media_files(paths);
+        media_importer.reimport_media_files(uris);
         
         var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
         db_worker.push_job(fin_job);
