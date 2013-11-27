@@ -36,14 +36,12 @@ using Xnoise.TagAccess;
 
 
 private class Xnoise.TagAlbumArtistEditor : GLib.Object {
-    private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
     private string new_content_name = null;
     private unowned MusicBrowserModel mbm = null;
     
     private Entry entry;
-    
     
     private Item? item;
     private HashTable<ItemType,Item?>? restrictions;
@@ -52,8 +50,9 @@ private class Xnoise.TagAlbumArtistEditor : GLib.Object {
     public TagAlbumArtistEditor(Item _item, HashTable<ItemType,Item?>? restrictions = null) {
         this.item = _item;
         this.restrictions = restrictions;
-        xn = Main.instance;
-        td_old = {};
+        lock(td_old) {
+            td_old = {};
+        }
         builder = new Gtk.Builder();
         setup_widgets();
         mbm = main_window.musicBr.music_browser_model;
@@ -81,13 +80,12 @@ private class Xnoise.TagAlbumArtistEditor : GLib.Object {
     private TrackData[] td_old;
     
     private bool query_trackdata_job(Worker.Job job) {
-        // callback for query in other thread
-print("##1\n");
-foreach(ItemType it in restrictions.get_keys())
-    print("## %s\n", it.to_string());
-        td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
-print("td_old.length : %d\n", td_old.length);
-        TrackData td = td_old[0];
+        return_val_if_fail(db_worker.is_same_thread(), false);
+        TrackData td;
+        lock(td_old) {
+            td_old = item_converter.to_trackdata(this.item, global.searchtext, restrictions);
+            td = td_old[0];
+        }
         switch(item.type) {
             case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 Idle.add( () => {
@@ -96,13 +94,6 @@ print("td_old.length : %d\n", td_old.length);
                     return false;
                 });
                 break;
-            case ItemType.COLLECTION_CONTAINER_ALBUM:
-//                Idle.add( () => {
-//                    // put data to entry
-////                    entry.text  = td.album;
-//                    return false;
-//                });
-//                break;
             default:
                 Idle.add( () => {
                     sign_finish();
@@ -179,9 +170,6 @@ print("td_old.length : %d\n", td_old.length);
             case ItemType.COLLECTION_CONTAINER_ALBUMARTIST:
                 do_artist_rename();
                 break;
-//            case ItemType.COLLECTION_CONTAINER_ALBUM:
-//                do_album_rename();
-//                break;
             default:
                 break;    
         }
@@ -192,28 +180,14 @@ print("td_old.length : %d\n", td_old.length);
     }
     
     private void do_artist_rename() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-        job.set_arg("new_content_name", new_content_name);
-        job.item = this.item;
-        db_worker.push_job(job);
-    }
-
-    private void do_album_rename() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
-        job.set_arg("new_content_name", new_content_name);
-        job.item = this.item;
-        io_worker.push_job(job);
-    }
-
-
-    private bool update_tags_job(Worker.Job tag_job) {
-        assert(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
+        assert(this.item.type == ItemType.COLLECTION_CONTAINER_ALBUMARTIST);
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-        //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-        job.track_dat = td_old; //item_converter.to_trackdata(tag_job.item, global.searchtext);
+        lock(td_old) {
+            job.track_dat = td_old;
+        }
         if(job.track_dat == null)
-            return false;
-        job.item = tag_job.item;
+            return;
+        job.item = this.item;//tag_job.item;
         foreach(TrackData td in job.track_dat) {
             td.albumartist = new_content_name;
             if(td.artist == VARIOUS_ARTISTS)
@@ -222,12 +196,13 @@ print("td_old.length : %d\n", td_old.length);
         print("push filetags job\n");
         global.in_tag_rename = true;
         io_worker.push_job(job);
-        return false;
     }
 
     private bool update_filetags_job(Worker.Job job) {
+        return_val_if_fail(io_worker.is_same_thread(), false);
         string[] uris = {};
         for(int i = 0; i < job.track_dat.length; i++) {
+            //print("update_filetags_job for %s\n", job.track_dat[i].item.uri);
             File f = File.new_for_uri(job.track_dat[i].item.uri);
             if(!f.query_exists(null))
                 continue;
@@ -242,23 +217,10 @@ print("td_old.length : %d\n", td_old.length);
                 print("No success for path : %s !!!\n", f.get_path());
             }
         }
-        media_importer.reimport_media_files(uris);
+        // now imported via file monitors
         
-        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-        
-        db_worker.push_job(fin_job);
-        return false;
-    }
-    
-    private bool finish_job(Worker.Job job) {
-//        db_writer.commit_transaction();
-        Timeout.add(200, () => {
-            main_window.musicBr.music_browser_model.filter();
-            main_window.album_art_view.icons_model.filter();
+        Timeout.add_seconds(1, () => {
             global.in_tag_rename = false;
-            return false;
-        });
-        Timeout.add(300, () => {
             this.sign_finish();
             return false;
         });

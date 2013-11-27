@@ -94,6 +94,14 @@ public class Xnoise.MediaImporter : GLib.Object {
                 }
             }
         }
+        lock(import_targets) { // enter here also to avoid double refresh
+            foreach(string s in file_uris) {
+                if(!import_targets.contains(s)) {
+                    Item? it = Item(ItemType.UNKNOWN, s); // just for the balance
+                    import_targets.insert(s, it);
+                }
+            }
+        }
         db_worker.push_job(job);
         
         //import files
@@ -106,7 +114,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         //via db thread so that it is handled inthe right order
         return_val_if_fail(db_worker.is_same_thread(), false);
         
-//        List<Item?> item_list = ((List<Item?>)xjob.get_arg("item_list")).copy_deep();
         lock(import_targets) {
             foreach(string s in xjob.uris) {
                 if(!import_targets.contains(s)) {

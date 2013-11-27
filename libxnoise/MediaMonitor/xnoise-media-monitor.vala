@@ -204,7 +204,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
             
             foreach(Event e in list) {
                 assert(e.path != null);
-                print("EVHT: %s  ::  %s\n", e.path, e.type.to_string());
+                //print("EVHT: %s  ::  %s\n", e.path, e.type.to_string());
                 switch(e.type) {
                     case Event.ChangeType.ADDED_DIR:
                         File folder = File.new_for_path(e.path);

@@ -1979,13 +1979,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 if(p.name != "in-import")
                     return;
                 if(album_art_view.in_import) {
-                print("in import\n");
+                    //print("in import\n");
                     spinner.start();
                     spinner.set_no_show_all(false);
                     spinner.show_all();
                 }
                 else {
-                print("not in import\n");
+                    //print("not in import\n");
                     spinner.stop();
                     spinner.hide();
                     spinner.set_no_show_all(true);

@@ -95,7 +95,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_width(ICON_LARGE_PIXELSIZE);
         this.set_model(icons_model);
         icon_cache.sign_new_album_art_loaded.connect( (p) => {
-            print("queue_draw\n");
+            //print("queue_draw\n");
             queue_draw();
         });
         this.item_activated.connect(this.on_row_activated);

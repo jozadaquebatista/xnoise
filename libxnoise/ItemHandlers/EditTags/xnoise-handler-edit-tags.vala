@@ -112,6 +112,9 @@ internal class Xnoise.HandlerEditTags : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection) {
+        //print("media_import_in_progress: %s   in_tag_rename: %s\n", 
+        //        global.media_import_in_progress.to_string(), 
+        //        global.in_tag_rename.to_string());
         if(global.media_import_in_progress || global.in_tag_rename)
             return null;
         if(selection != ItemSelectionType.SINGLE)
