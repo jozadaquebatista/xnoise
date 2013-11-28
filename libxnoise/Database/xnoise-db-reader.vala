@@ -129,6 +129,25 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             cb(db);
     }
 
+    private static const string STMT_GET_URIS_WITH_LIMIT_AND_OFFSET =
+        "SELECT name, change_time FROM uris LIMIT ? OFFSET ?";
+    
+    public FileData[] get_uris(int32 offset, int32 limit = 100) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_URIS_WITH_LIMIT_AND_OFFSET, -1, out stmt);
+        
+        FileData[] fd = {};
+        if(stmt.bind_int (1, limit) != Sqlite.OK ||
+           stmt.bind_int (2, offset) != Sqlite.OK) {
+            this.db_error();
+            return fd;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            fd += new FileData(stmt.column_text(0), stmt.column_int(1));
+        }
+        return fd;
+    }
+    
     private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND (utf8_lower(t.title) LIKE ?)";
     public int32 count_videos(string searchtext) {
         Statement stmt;

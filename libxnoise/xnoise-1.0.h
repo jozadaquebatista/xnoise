@@ -97,6 +97,16 @@ typedef struct _XnoiseWorkerJobPrivate XnoiseWorkerJobPrivate;
 #define XNOISE_TYPE_ITEM_TYPE (xnoise_item_type_get_type ())
 typedef struct _XnoiseItem XnoiseItem;
 
+#define XNOISE_TYPE_FILE_DATA (xnoise_file_data_get_type ())
+#define XNOISE_FILE_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_FILE_DATA, XnoiseFileData))
+#define XNOISE_FILE_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_FILE_DATA, XnoiseFileDataClass))
+#define XNOISE_IS_FILE_DATA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_FILE_DATA))
+#define XNOISE_IS_FILE_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_FILE_DATA))
+#define XNOISE_FILE_DATA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_FILE_DATA, XnoiseFileDataClass))
+
+typedef struct _XnoiseFileData XnoiseFileData;
+typedef struct _XnoiseFileDataClass XnoiseFileDataClass;
+
 #define XNOISE_TYPE_TRACK_DATA (xnoise_track_data_get_type ())
 #define XNOISE_TRACK_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_DATA, XnoiseTrackData))
 #define XNOISE_TRACK_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_DATA, XnoiseTrackDataClass))
@@ -954,6 +964,7 @@ typedef struct _XnoiseGnomeMediaKeysIface XnoiseGnomeMediaKeysIface;
 typedef struct _XnoiseRemoteSchemes XnoiseRemoteSchemes;
 typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
 typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
+typedef struct _XnoiseFileDataPrivate XnoiseFileDataPrivate;
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 
 struct _XnoiseAlbumImageLoader {
@@ -1049,6 +1060,8 @@ struct _XnoiseWorkerJob {
 	XnoiseItem* item;
 	XnoiseItem* items;
 	gint items_length1;
+	XnoiseFileData** file_data;
+	gint file_data_length1;
 	gchar** uris;
 	gint uris_length1;
 	XnoiseTrackData** track_dat;
@@ -2005,12 +2018,14 @@ struct _XnoiseMediaExtensionsClass {
 };
 
 struct _XnoiseMediaImporter {
-	GObject parent_instance;
+	GTypeInstance parent_instance;
+	volatile int ref_count;
 	XnoiseMediaImporterPrivate * priv;
 };
 
 struct _XnoiseMediaImporterClass {
-	GObjectClass parent_class;
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseMediaImporter *self);
 };
 
 struct _XnoiseMediaStreamSchemes {
@@ -2041,6 +2056,19 @@ struct _XnoiseRemoteSchemesClass {
 	void (*finalize) (XnoiseRemoteSchemes *self);
 };
 
+struct _XnoiseFileData {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseFileDataPrivate * priv;
+	gchar* uri;
+	gint32 change_time;
+};
+
+struct _XnoiseFileDataClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseFileData *self);
+};
+
 struct _XnoiseTrackData {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -2062,6 +2090,7 @@ struct _XnoiseTrackData {
 	gboolean has_embedded_image;
 	XnoiseItem* item;
 	GdkPixbuf* pixbuf;
+	gint32 change_time;
 	gint32 dat1;
 	gint32 dat2;
 	gint32 dat3;
@@ -2127,6 +2156,13 @@ XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
 void xnoise_item_free (XnoiseItem* self);
 void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
 void xnoise_item_destroy (XnoiseItem* self);
+gpointer xnoise_file_data_ref (gpointer instance);
+void xnoise_file_data_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_file_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_file_data (GValue* value, gpointer v_object);
+void xnoise_value_take_file_data (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_file_data (const GValue* value);
+GType xnoise_file_data_get_type (void) G_GNUC_CONST;
 gpointer xnoise_track_data_ref (gpointer instance);
 void xnoise_track_data_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_track_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2151,6 +2187,7 @@ XnoiseDatabaseReader* xnoise_database_reader_new (GError** error);
 XnoiseDatabaseReader* xnoise_database_reader_construct (GType object_type, GError** error);
 void xnoise_database_reader_cancel (XnoiseDatabaseReader* self);
 void xnoise_database_reader_do_callback_transaction (XnoiseDatabaseReader* self, XnoiseDatabaseReaderReaderCallback cb, void* cb_target);
+XnoiseFileData** xnoise_database_reader_get_uris (XnoiseDatabaseReader* self, gint32 offset, gint32 limit, int* result_length1);
 gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, const gchar* searchtext);
 gboolean xnoise_database_reader_get_lyrics (XnoiseDatabaseReader* self, const gchar* artist, const gchar* title, gchar** txt, gchar** cred, gchar** ident);
 XnoiseItem* xnoise_database_reader_get_last_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
@@ -2969,6 +3006,12 @@ gboolean xnoise_media_extensions_contains (XnoiseMediaExtensions* self, const gc
 XnoiseMediaExtensions* xnoise_media_extensions_new (void);
 XnoiseMediaExtensions* xnoise_media_extensions_construct (GType object_type);
 gchar** xnoise_media_extensions_get_list (XnoiseMediaExtensions* self, int* result_length1);
+gpointer xnoise_media_importer_ref (gpointer instance);
+void xnoise_media_importer_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_media_importer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_media_importer (GValue* value, gpointer v_object);
+void xnoise_value_take_media_importer (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_media_importer (const GValue* value);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
@@ -3037,6 +3080,8 @@ gboolean xnoise_remote_schemes_contains (XnoiseRemoteSchemes* self, const gchar*
 XnoiseRemoteSchemes* xnoise_remote_schemes_new (void);
 XnoiseRemoteSchemes* xnoise_remote_schemes_construct (GType object_type);
 gchar** xnoise_remote_schemes_get_list (XnoiseRemoteSchemes* self, int* result_length1);
+XnoiseFileData* xnoise_file_data_new (const gchar* uri, gint32 change_time);
+XnoiseFileData* xnoise_file_data_construct (GType object_type, const gchar* uri, gint32 change_time);
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
 XnoiseTrackData* xnoise_copy_trackdata (XnoiseTrackData* td);

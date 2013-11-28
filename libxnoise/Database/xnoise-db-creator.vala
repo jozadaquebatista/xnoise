@@ -58,7 +58,7 @@ private class Xnoise.Database.DbCreator {
     private static const string STMT_CREATE_ALBUMS =
         "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, year INTEGER, is_compilation INTEGER, caseless_name TEXT);";
     private static const string STMT_CREATE_URIS =
-        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT UNIQUE, type INTEGER, path INTEGER);";
+        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT UNIQUE, path INTEGER, change_time INTEGER);";
     private static const string STMT_CREATE_PATHS =
         "CREATE TABLE paths (id INTEGER PRIMARY KEY, name TEXT, caseless_name TEXT UNIQUE);";
     private static const string STMT_CREATE_STATISTICS =

@@ -113,6 +113,7 @@ public class Xnoise.Worker : Object {
         public Item? item;
 //        public ImportTarget? import_target;
         public Item[] items;
+        public FileData[] file_data;
         public string[] uris;
         public TrackData[] track_dat; 
         public DndData[] dnd_data;

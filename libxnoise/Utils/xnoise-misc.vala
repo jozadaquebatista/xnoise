@@ -48,6 +48,7 @@ namespace Xnoise {
     public static Worker plugin_worker = null;
     
     private static DbusImageExtractor dbus_image_extractor = null;
+    private static MediaChangeDetector media_change_detector = null;
     
     public static MediaImporter media_importer = null;
     public static MediaMonitor media_monitor = null;
@@ -167,6 +168,9 @@ namespace Xnoise {
         
         // MEDIA MONITOR
         media_monitor = new MediaMonitor();
+        
+        //check for offline file changes
+        media_change_detector = new MediaChangeDetector();
         
         statistics = new Statistics();
         

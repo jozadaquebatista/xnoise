@@ -835,9 +835,9 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_GET_URI_ID =
         "SELECT id FROM uris WHERE name = ?";
     private static const string STMT_INSERT_URI =
-        "INSERT INTO uris (name, path) VALUES (?,?)";
+        "INSERT INTO uris (name, path, change_time) VALUES (?,?,?)";
 
-    private int handle_uri(string uri, int path_id = -1) {
+    private int handle_uri(string uri, int path_id = -1, int32 change_time = 0) {
         this.get_uri_id_statement.reset();
         if(this.get_uri_id_statement.bind_text(1, uri)!= Sqlite.OK )
             return -1;
@@ -846,7 +846,8 @@ public class Xnoise.Database.Writer : GLib.Object {
 
         insert_uri_statement.reset();
         if(insert_uri_statement.bind_text(1, uri)     != Sqlite.OK ||
-           insert_uri_statement.bind_int (2, path_id) != Sqlite.OK) {
+           insert_uri_statement.bind_int (2, path_id) != Sqlite.OK ||
+           insert_uri_statement.bind_int (3, change_time) != Sqlite.OK) {
             this.db_error();
             return -1;
         }
@@ -1392,7 +1393,7 @@ public class Xnoise.Database.Writer : GLib.Object {
 
 //        t.reset();
 //        t.start();
-        int uri_id = handle_uri(f.get_uri(), path_id);
+        int uri_id = handle_uri(f.get_uri(), path_id, (int32)td.change_time);
         if(uri_id == -1) {
             //print("Error importing uri for %s : '%s' ! \n", uri, uri);
             return false;

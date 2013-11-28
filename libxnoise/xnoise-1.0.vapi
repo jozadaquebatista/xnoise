@@ -39,6 +39,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
+			public Xnoise.FileData[] get_uris (int32 offset, int32 limit = 100);
 			public Xnoise.Item[]? get_video_items (string searchtext);
 			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
@@ -716,6 +717,12 @@ namespace Xnoise {
 		public signal void media_removed (string key);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class FileData {
+		public int32 change_time;
+		public string uri;
+		public FileData (string uri = null, int32 change_time = 0);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
 		public bool cellrenderer_in_edit;
 		public Xnoise.AlbumImageLoader image_loader;
@@ -924,7 +931,7 @@ namespace Xnoise {
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaImporter : GLib.Object {
+	public class MediaImporter {
 		public MediaImporter ();
 		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = true);
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
@@ -1021,6 +1028,7 @@ namespace Xnoise {
 		public string? albumartist;
 		public string? artist;
 		public int bitrate;
+		public int32 change_time;
 		public int32 dat1;
 		public int32 dat2;
 		public int32 dat3;
@@ -1120,6 +1128,7 @@ namespace Xnoise {
 			public int counter[4];
 			public Xnoise.DndData[] dnd_data;
 			public Xnoise.Worker.ExecutionType execution_type;
+			public Xnoise.FileData[] file_data;
 			public weak Xnoise.Worker.FinishFunc? finish_func;
 			public weak Xnoise.Worker.WorkFunc? func;
 			public Xnoise.Item? item;

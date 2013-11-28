@@ -36,6 +36,16 @@
  */
 namespace Xnoise {
     
+    public class FileData {
+        public string uri;
+        public int32 change_time;
+        
+        public FileData(string uri = null, int32 change_time = 0) {
+            this.uri = uri;
+            this.change_time = change_time;
+        }
+    }
+    
     public class TrackData 
 #if REF_TRACKING_ENABLED
     : BaseObject {
@@ -59,6 +69,7 @@ namespace Xnoise {
         public bool has_embedded_image = false;
         public Item? item = Item(ItemType.UNKNOWN);
         public Gdk.Pixbuf? pixbuf = null;
+        public int32 change_time = 0;
         public int32 dat1 = -1;
         public int32 dat2 = -1;
         public int32 dat3 = -1;
@@ -85,6 +96,7 @@ namespace Xnoise {
         td_new.is_compilation     = td.is_compilation;
         td_new.has_embedded_image = td.has_embedded_image;
         td_new.pixbuf      = td.pixbuf;
+        td_new.change_time = td.change_time;
         td_new.dat1        = td.dat1;
         td_new.dat2        = td.dat2;
         td_new.dat3        = td.dat3;
