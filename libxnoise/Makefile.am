@@ -155,6 +155,7 @@ libxnoise_la_SOURCES = \
     Main/xnoise-main.vala \
     MainWindow/xnoise-main-window.vala \
     MediaMonitor/xnoise-media-monitor.vala \
+    MediaChangeDetector/xnoise-media-change-detector.vala \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-equalizer.vala \
@@ -291,6 +292,7 @@ DISTCLEANFILES = \
     Main/*.c \
     MainWindow/*.c \
     MediaMonitor/*.c \
+    MediaChangeDetector/*.c \
     Parameter/*.c \
     Player/*.c \
     PlaylistReader/*.c \

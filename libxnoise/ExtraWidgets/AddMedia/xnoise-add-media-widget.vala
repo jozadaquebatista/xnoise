@@ -336,7 +336,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             foreach(string fn in fcdialog.get_filenames()) {
                 File f = File.new_for_path(fn);
                 Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
-                media_importer.add_import_target_folder(item);
+                media_importer.add_import_target_folder(item, true);
             }
         }
         fcdialog.destroy();
