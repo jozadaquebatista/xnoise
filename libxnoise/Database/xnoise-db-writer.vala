@@ -1646,7 +1646,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         Statement stmt;
         this.db.prepare_v2(STMT_GET_MEDIA_FOLDER_ID, -1, out stmt);
         stmt.bind_text(1, f.get_path());
-        //print("ää path: %s\n", f.get_path());
+        //print(" path: %s\n", f.get_path());
         if(stmt.step() == Sqlite.ROW) {
             int id = stmt.column_int(0);
             this.db.prepare_v2(STMT_REMOVE_URI_ITEMS, -1, out stmt);

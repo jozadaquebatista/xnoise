@@ -2188,6 +2188,7 @@ XnoiseDatabaseReader* xnoise_database_reader_construct (GType object_type, GErro
 void xnoise_database_reader_cancel (XnoiseDatabaseReader* self);
 void xnoise_database_reader_do_callback_transaction (XnoiseDatabaseReader* self, XnoiseDatabaseReaderReaderCallback cb, void* cb_target);
 XnoiseFileData* xnoise_database_reader_get_file_data (XnoiseDatabaseReader* self, const gchar* uri);
+gboolean xnoise_database_reader_get_file_in_db (XnoiseDatabaseReader* self, const gchar* uri);
 XnoiseFileData** xnoise_database_reader_get_uris (XnoiseDatabaseReader* self, gint32 offset, gint32 limit, int* result_length1);
 gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, const gchar* searchtext);
 gboolean xnoise_database_reader_get_lyrics (XnoiseDatabaseReader* self, const gchar* artist, const gchar* title, gchar** txt, gchar** cred, gchar** ident);

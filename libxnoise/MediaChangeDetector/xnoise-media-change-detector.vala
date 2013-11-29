@@ -49,7 +49,9 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     private string[] changed_uris = {};
     private string[] removed_uris = {};
     
-    private TrackData[] tda = {}; 
+//    private TrackData[] tda = {}; 
+//    private FileData[] fda = {}; 
+    private string[] found_uris = {}; 
     private string[] uris_for_image_extraction  = {};
     
     // FINISH SIGNAL
@@ -150,18 +152,21 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         }
         else {
             finished_new_file_check = true;
-            Idle.add(() => {
-                finished();
+            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
+                Idle.add(() => {
+                    print("done offline check!\n");
+                    finished();
+                    return false;
+                });
                 return false;
             });
+            db_worker.push_job(db_job);
         }
         return false;
     }
     
     private const string attr = FileAttribute.STANDARD_NAME + "," +
-                                FileAttribute.STANDARD_TYPE + "," +
-                                FileAttribute.TIME_CHANGED + "," +
-                                FileAttribute.STANDARD_CONTENT_TYPE;
+                                FileAttribute.STANDARD_TYPE;
     
     private void read_recoursive(File dir, Worker.Job job) {
         //this function shall run in the io thread
@@ -182,37 +187,32 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         GLib.FileInfo info;
         try {
             while((info = enumerator.next_file()) != null) {
-                TrackData td = null;
+//                TrackData td = null;
+                FileData fd = null;
                 string filename = info.get_name();
                 string filepath = Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
                 FileType filetype = info.get_file_type();
-                if(filetype == FileType.DIRECTORY && !filename.has_prefix(".")) {
-                    read_recoursive(file, job);
+                if(filetype == FileType.DIRECTORY) {
+                    if(!filename.has_prefix("."))
+                        read_recoursive(file, job);
                 }
                 else {
                     string uri_lc = filename.down();
                     string suffix = get_suffix_from_filename(uri_lc);
                     if(!Playlist.is_playlist_extension(suffix)) {
                         suffix = suffix.down();
-                        if(suffix == "jpg" || suffix == "png" || suffix == "txt")
+                        if(suffix == "jpg"  || 
+                           suffix == "jpeg" || 
+                           suffix == "png"  || 
+                           suffix == "txt")
                             continue;
-                        //print("filepath: %s\n", filepath);
-                        var tr = new TagReader();
-                        td = tr.read_tag(filepath, false);
-                        //print("2filepath: %s\n", filepath);
-                        if(td != null) {
-                            td.media_folder = (string?)job.get_arg("media_folder");
-                            td.mimetype     = GLib.ContentType.get_mime_type(info.get_content_type());
-                            td.change_time  = (int32)info.get_attribute_uint64(FileAttribute.TIME_CHANGED);
-                            uris_for_image_extraction += file.get_uri();
-                            tda += td;
-                            job.big_counter[1]++;
-                        }
-                        if(tda.length > FILE_COUNT) {
+                        uris_for_image_extraction += file.get_uri();
+                        found_uris += file.get_uri();
+                        if(found_uris.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_trackdata_job);
-                            db_job.track_dat = (owned)tda;
-                            tda = {};
+                            db_job.uris = (owned)found_uris;
+                            found_uris = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
                             uris_for_image_extraction = {};
                             db_worker.push_job(db_job);
@@ -226,10 +226,10 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         }
         job.counter[0]--;
         if(job.counter[0] == 0) {
-            if(tda.length > 0) {
+            if(found_uris.length > 0) {
                 var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_trackdata_job);
-                db_job.track_dat = (owned)tda;
-                tda = {};
+                db_job.uris = (owned)found_uris;
+                found_uris = {};
                 dbus_image_extractor.queue_uris(uris_for_image_extraction);
                 uris_for_image_extraction = {};
                 db_worker.push_job(db_job);
@@ -241,14 +241,10 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     private bool handle_trackdata_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
-        string[] add_uris     = {};
-        foreach(TrackData td in job.track_dat) {
-            FileData? fd = 
-                db_reader.get_file_data(td.item.uri);
-            if(fd == null) {
-                add_uris += td.item.uri;
-                continue;
-            }
+        string[] add_uris = {};
+        foreach(string u in job.uris) {
+            if(!db_reader.get_file_in_db(u))
+                add_uris += u;
         }
         if(add_uris.length != 0)
             media_importer.import_uris(add_uris);
@@ -301,7 +297,6 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                     media_importer.remove_uris(removed_uris);
                 Idle.add(() => {
                     finished_old_file_check = true;
-                    print("done offline check!\n");
                     do_check();
                     return false;
                 });

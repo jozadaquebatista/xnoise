@@ -60,11 +60,11 @@ public class Xnoise.MediaImporter {
     }
     
     
-    internal void reimport_media_groups() {
-        Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, reimport_media_groups_job);
-        db_worker.push_job(job);
-    }
+//    internal void reimport_media_groups() {
+//        Worker.Job job;
+//        job = new Worker.Job(Worker.ExecutionType.ONCE, reimport_media_groups_job);
+//        db_worker.push_job(job);
+//    }
     
     private bool append_folder_to_mediafolders_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
@@ -215,31 +215,38 @@ public class Xnoise.MediaImporter {
             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
             db_job.set_arg("remove_import_targets", true);
             db_job.track_dat = tda;
+            db_job.uris = (owned)job.uris;
             dbus_image_extractor.queue_uris(uris);
             db_worker.push_job(db_job);
+        }
+        else {
+            lock(import_targets) {
+                foreach(string s in job.uris)
+                    import_targets.remove(s);
+            }
         }
         return false;
     }
     
-    private bool reimport_media_groups_job(Worker.Job job) {
-        //this function uses the database so use it in the database thread
-        return_val_if_fail(db_worker.is_same_thread(), false);
-        
-        Item[] tmp = {};
-        //add folders
-         Item[] fldrs = db_reader.get_media_folders();
-        foreach(Item? i in fldrs) //append
-            tmp += i;
-        
-        //add streams to list
-        Item[] strms = db_reader.get_stream_items("");
-        foreach(Item? i in strms) //append
-            tmp += i;
-            
-        job.items = tmp;
-        
-        return false;
-    }
+//    private bool reimport_media_groups_job(Worker.Job job) {
+//        //this function uses the database so use it in the database thread
+//        return_val_if_fail(db_worker.is_same_thread(), false);
+//        
+//        Item[] tmp = {};
+//        //add folders
+//         Item[] fldrs = db_reader.get_media_folders();
+//        foreach(Item? i in fldrs) //append
+//            tmp += i;
+//        
+//        //add streams to list
+//        Item[] strms = db_reader.get_stream_items("");
+//        foreach(Item? i in strms) //append
+//            tmp += i;
+//            
+//        job.items = tmp;
+//        
+//        return false;
+//    }
 
 //    internal void update_item_tag(ref Item? item, ref TrackData td) {
 //        //this function uses the database so use it in the database thread
@@ -404,18 +411,26 @@ public class Xnoise.MediaImporter {
     private void check_target_processing_queues() {
         bool no_remove_left = false;
         lock(removal_targets) {
-            if(removal_targets.get_keys().length() == 0)
+            if(removal_targets.get_keys().length() == 0) {
                 no_remove_left = true;
+            }
+            else {
+                print("removal_targets.get_keys().length(): %u\n", removal_targets.get_keys().length());
+            }
         }
         if(no_remove_left == false)
             return;
         lock(import_targets) {
-            if(import_targets.get_keys().length() == 0 && no_remove_left)
+            if(import_targets.get_keys().length() == 0 && no_remove_left) {
                 Idle.add(() => {
                     changed_library();
                     return false;
                 });
                 global.media_import_in_progress = false;
+            }
+            else {
+                print("import_targets.get_keys().length(): %u\n", import_targets.get_keys().length());
+            }
         }
     }
     
@@ -773,8 +788,9 @@ public class Xnoise.MediaImporter {
                 string filepath = Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
                 FileType filetype = info.get_file_type();
-                if(filetype == FileType.DIRECTORY && !filename.has_prefix(".")) {
-                    read_recoursive(file, job);
+                if(filetype == FileType.DIRECTORY) {
+                    if(!filename.has_prefix("."))
+                        read_recoursive(file, job);
                 }
                 else {
                     string uri_lc = filename.down();
@@ -851,18 +867,21 @@ public class Xnoise.MediaImporter {
         return_val_if_fail(db_worker.is_same_thread(), false);
         bool remove_import_targets = false;
         remove_import_targets = (bool)job.get_arg("remove_import_targets");
-        string[] uris = {};
+        if(remove_import_targets)
+            print("insjob %d\n", job.uris.length);
+//        string[] uris = {};
         db_writer.begin_transaction();
         foreach(TrackData td in job.track_dat) {
             db_writer.insert_title(ref td);
-            if(remove_import_targets && td.item != null && td.item.uri != null) {
-                uris += td.item.uri;
-            }
+//            if(remove_import_targets && td.item != null && td.item.uri != null) {
+//                uris += td.item.uri;
+//            }
         }
         db_writer.commit_transaction();
         if(remove_import_targets) {
             lock(import_targets) {
-                foreach(string s in uris) {
+                foreach(string s in job.uris) {
+                    print("REMOVE URI from i_t %s\n", s);
                     import_targets.remove(s);
                 }
             }

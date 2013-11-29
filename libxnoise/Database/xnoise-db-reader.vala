@@ -147,6 +147,22 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
     }
     
+    private static const string STMT_GET_FILE_IN_DB =
+        "SELECT * FROM uris WHERE name=?";
+    
+    public bool get_file_in_db(string uri) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_FILE_IN_DB, -1, out stmt);
+        if(stmt.bind_text (1, uri) != Sqlite.OK) {
+            this.db_error();
+            return false;
+        }
+        if(stmt.step() == Sqlite.ROW)
+            return true;
+        else
+            return false;
+    }
+    
     private static const string STMT_GET_URIS_WITH_LIMIT_AND_OFFSET =
         "SELECT name, change_time FROM uris LIMIT ? OFFSET ?";
     

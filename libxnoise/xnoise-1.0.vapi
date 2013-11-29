@@ -22,6 +22,7 @@ namespace Xnoise {
 			public override Xnoise.Item[] get_artists (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
 			public Xnoise.FileData? get_file_data (string uri);
+			public bool get_file_in_db (string uri);
 			public Xnoise.Item? get_genreitem_by_genreid (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.Item[] get_genres_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);

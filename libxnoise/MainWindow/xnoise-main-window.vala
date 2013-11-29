@@ -223,7 +223,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
         { "EditMenuAction", null, N_("_Edit") },
             { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), "<Alt>c", N_("Clear the tracklist"), on_remove_all_button_clicked },
-            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("Rescan collection"), on_reload_collection_button_clicked },
+//            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("Rescan collection"), on_reload_collection_button_clicked },
             { "IncreaseVolumeAction", null, N_("_Increase volume"), "<Control>plus", N_("Increase playback volume"), increase_volume },
             { "DecreaseVolumeAction", null, N_("_Decrease volume"), "<Control>minus", N_("Decrease playback volume"), decrease_volume },
             { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), "<Control>p", N_("Go to previous track"), menu_prev },
@@ -1218,11 +1218,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
 
-    private void on_reload_collection_button_clicked() {
-        album_art_view_visible = false;
-//        album_view_toggle.set_active(false);
-        media_importer.reimport_media_groups();
-    }
+//    private void on_reload_collection_button_clicked() {
+//        album_art_view_visible = false;
+////        album_view_toggle.set_active(false);
+//        media_importer.reimport_media_groups();
+//    }
 
     private void on_remove_all_button_clicked() {
         global.position_reference = null;
