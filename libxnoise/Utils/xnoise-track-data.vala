@@ -36,16 +36,6 @@
  */
 namespace Xnoise {
     
-    public class FileData {
-        public string uri;
-        public int32 change_time;
-        
-        public FileData(string uri = null, int32 change_time = 0) {
-            this.uri = uri;
-            this.change_time = change_time;
-        }
-    }
-    
     public class TrackData 
 #if REF_TRACKING_ENABLED
     : BaseObject {

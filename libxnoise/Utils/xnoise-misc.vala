@@ -171,6 +171,13 @@ namespace Xnoise {
         
         //check for offline file changes
         media_change_detector = new MediaChangeDetector();
+        media_change_detector.finished.connect( () => {
+            Timeout.add_seconds(3, () => {
+                //remove after usage
+                media_change_detector = null;
+                return false;
+            });
+        });
         
         statistics = new Statistics();
         
@@ -335,6 +342,16 @@ public enum Xnoise.CollectionSortMode {
     ARTIST_ALBUM_TITLE = 0,
     GENRE_ARTIST_ALBUM,
     ALBUM_ARTIST_TITLE
+}
+
+public class Xnoise.FileData {
+    public string uri;
+    public int32 change_time;
+    
+    public FileData(string uri = null, int32 change_time = 0) {
+        this.uri = uri;
+        this.change_time = change_time;
+    }
 }
 
 //public enum Xnoise.SortDirection {

@@ -129,6 +129,24 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             cb(db);
     }
 
+    private static const string STMT_GET_FILE_DATA =
+        "SELECT name, change_time FROM uris WHERE name=?";
+    
+    public FileData? get_file_data(string uri) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_FILE_DATA, -1, out stmt);
+        if(stmt.bind_text (1, uri) != Sqlite.OK) {
+            this.db_error();
+            return null;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            return new FileData(stmt.column_text(0), stmt.column_int(1));
+        }
+        else {
+            return null;
+        }
+    }
+    
     private static const string STMT_GET_URIS_WITH_LIMIT_AND_OFFSET =
         "SELECT name, change_time FROM uris LIMIT ? OFFSET ?";
     

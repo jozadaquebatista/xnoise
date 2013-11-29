@@ -304,6 +304,25 @@ public class Xnoise.MediaImporter {
         db_worker.push_job(job);
     }
     
+//    internal void rescan_media_folders(Worker w) {
+//        foreach(Item it in get_media_folder_list()) {
+//            File f = File.new_for_uri(it.uri);
+//            lock(import_targets) {
+//                if(!import_targets.contains(target.uri))
+//                    import_targets.insert(target.uri, target);
+////                global.media_import_in_progress = true;
+//            }
+//            var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
+//            job.set_arg("media_folder", f.get_path());
+//            job.item = it;
+//            w.push_job(reader_job);
+////            var job = new Worker.Job(Worker.ExecutionType.ONCE, imp_folder_target_job);
+////            job.item = target;
+////            job.set_arg("add_folder_to_media_folders", false);
+////            db_worker.push_job(job);
+//        }
+//    }
+    
     private void finished_import_target(Item? item) {
         lock(import_targets) {
             if(item != null && import_targets.contains(item.uri)) {
