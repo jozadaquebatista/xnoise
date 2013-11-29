@@ -196,8 +196,7 @@ public class Xnoise.MediaImporter {
             if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
                 return false;
             
-            var tr = new TagReader();
-            TrackData? td = tr.read_tag(f.get_path(), false);
+            TrackData? td = TagReader.read_tag(f.get_path(), false);
             if(td != null) {
                 got_data = true;
                 FileInfo info = f.query_info(attr,
@@ -802,8 +801,7 @@ public class Xnoise.MediaImporter {
                            suffix == "txt")
                             continue;
                         //print("filepath: %s\n", filepath);
-                        var tr = new TagReader();
-                        td = tr.read_tag(filepath, false);
+                        td = TagReader.read_tag(filepath, false);
                         //print("2filepath: %s\n", filepath);
                         if(td != null) {
                             td.media_folder = (string?)job.get_arg("media_folder");

@@ -60,8 +60,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         builder = new Gtk.Builder();
         setup_widgets();
         
-//        fill_media_list();
-        
         this.show_all();
     }
 
@@ -69,82 +67,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
 //        fill_media_list();
     }
     
-//    private void fill_media_list() {
-//        return_if_fail(listmodel != null);
-//        listmodel.clear();
-//        Worker.Job job;
-//        job = new Worker.Job(Worker.ExecutionType.ONCE, fill_media_list_job);
-//        db_worker.push_job(job);
-//    }
-//    
-//    private bool fill_media_list_job(Worker.Job job) {
-        //add folders
-//        GLib.List<Item?> mfolders = media_importer.get_media_folder_list();
-//        
-//        //add streams to list
-//        Item[] tmp = db_reader.get_stream_items("");
-//        Item[] streams = {};
-//        
-//        for(int j = tmp.length -1; j >= 0; j--) // reverse
-//            streams += tmp[j];
-//        
-//        
-//        Idle.add( () => {
-//            Gtk.Invisible w = new Gtk.Invisible();
-//            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
-//            foreach(Item? i in media_importer.get_media_folder_list()) {
-//                File f = File.new_for_uri(i.uri);
-//                TreeIter iter;
-//                listmodel.append(out iter);
-//                listmodel.set(iter,
-//                              Column.ICON,      folder_icon,
-//                              Column.VIZ_TEXT,  f.get_path(),
-//                              Column.ITEMTYPE,  i.type
-//                );
-//            }
-//            foreach(Item? i in streams) {
-//                TreeIter iter;
-//                listmodel.append(out iter);
-//                listmodel.set(iter,
-//                              Column.ICON,      icon_repo.radios_icon_menu,
-//                              Column.VIZ_TEXT,  i.uri,
-//                              Column.ITEMTYPE,  i.type
-//                );
-//            }
-//            return false;
-//        });
-//        return false;
-//    }
-
-//    private Item[] harvest_media_locations() {
-//        Item[] media_items = {};
-//        listmodel.foreach( (sender, mypath, myiter) => {
-//            string d_uri;
-//            ItemType tp;
-//            sender.get(myiter,
-//                       Column.VIZ_TEXT, out d_uri,
-//                       Column.ITEMTYPE, out tp//,
-//            );
-//            switch(tp) {
-//                case ItemType.LOCAL_FOLDER:
-//                    File f = File.new_for_path(d_uri);
-//                    Item? item = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
-//                    media_items += item;
-//                    break;
-//                case ItemType.STREAM:
-//                case ItemType.PLAYLIST:
-//                    Item? item = Item(tp, d_uri, -1);
-//                    media_items += item;
-//                    break;
-//                default:
-//                    print("Error: unhandled media storage type: %s\n", ((int)tp).to_string());
-//                    break;
-//            }
-//            return false;
-//        });
-//        return media_items;
-//    }
-
     private void setup_widgets() {
 //        ScrolledWindow tvscrolledwindow = null;
         Gtk.Box devbox;
@@ -371,15 +293,15 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         radiookbutton.clicked.connect( () => {
             if((radioentry.text!=null)&&
                (radioentry.text.strip() != EMPTYSTRING)) {
-                TreeIter iter;
-                listmodel.append(out iter);
+//                TreeIter iter;
+//                listmodel.append(out iter);
                 Item? i = Item(ItemType.STREAM, radioentry.text.strip());
-                listmodel.set(iter,
-                              Column.ICON,      icon_repo.radios_icon_menu,
-                              Column.VIZ_TEXT,  radioentry.text.strip(),
-                              Column.ITEM,  i,
-                              Column.STATUS, false
-                              );
+//                listmodel.set(iter,
+//                              Column.ICON,      icon_repo.radios_icon_menu,
+//                              Column.VIZ_TEXT,  radioentry.text.strip(),
+//                              Column.ITEM,  i,
+//                              Column.STATUS, false
+//                              );
             }
             radiodialog.close();
             radiodialog = null;

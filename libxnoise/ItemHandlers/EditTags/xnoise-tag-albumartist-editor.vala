@@ -207,8 +207,7 @@ private class Xnoise.TagAlbumArtistEditor : GLib.Object {
             if(!f.query_exists(null))
                 continue;
             bool ret = false;
-            var tw = new TagWriter();
-            ret = tw.write_tag(f, job.track_dat[i], false);
+            ret = TagWriter.write_tag(f, job.track_dat[i], false);
             
             if(ret) {
                 uris += f.get_uri();

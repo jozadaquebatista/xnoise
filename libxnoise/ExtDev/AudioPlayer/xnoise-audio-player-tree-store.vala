@@ -105,8 +105,7 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
             else {
                 string uri_lc = filename.down();
                 if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
-                    var tr = new TagReader();
-                    td = tr.read_tag(file.get_path());
+                    td = TagReader.read_tag(file.get_path());
                     if(td != null) {
                         td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                         tdal += td;
@@ -196,9 +195,8 @@ public class Xnoise.ExtDev.PlayerTreeStore : Gtk.TreeStore {
                 else {
                     string uri_lc = filename.down();
                     if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
-                        var tr = new TagReader();
                         //print("read file %s\n", filepath);
-                        td = tr.read_tag(filepath);
+                        td = TagReader.read_tag(filepath);
                         if(td != null) {
                             td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             tda += td;

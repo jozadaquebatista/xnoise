@@ -1284,8 +1284,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         dialog.destroy();
     }
     
-    private void settings_edit_or_menu_add(SettingsDialog tab)
-    {
+    private void settings_edit_or_menu_add(SettingsDialog tab) {
         var settings_widget = new SettingsWidget();
         var dialog = new Gtk.Dialog.with_buttons(_("Settings"),
                                                  this,
@@ -1299,6 +1298,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         dialog.set_skip_taskbar_hint(true);
         dialog.get_content_area().add(settings_widget);
         dialog.set_resizable(false);
+        dialog.key_press_event.connect( (s,e) => {
+            switch(e.keyval) {
+                case Gdk.Key.q: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                        return false;
+                    dialog.destroy();
+                    main_window.quit_now();
+                    break;
+                }
+                default:
+                    break;
+            }
+            return false;
+        });
+        global.player_in_shutdown.connect( () => {
+            dialog.destroy();
+        });
         settings_widget.set_size_request(-1, 450);
         dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
         

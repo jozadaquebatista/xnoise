@@ -256,10 +256,9 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
             if(!f.query_exists(null))
                 continue;
 //            bool ret = false;
-            var tw = new TagWriter();
 //            ret = tw.write_tag(f, tag_job.track_dat[i], false);
             
-            if(!tw.write_tag(f, tag_job.track_dat[i], false)) {
+            if(!TagWriter.write_tag(f, tag_job.track_dat[i], false)) {
                 print("No success for path : %s !!!\n", f.get_path());
             }
         }
@@ -285,8 +284,7 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
 //            if(!f.query_exists(null))
 //                continue;
 //            bool ret = false;
-//            var tw = new TagWriter();
-//            ret = tw.write_tag(f, tag_job.track_dat[i], false);
+//            ret = TagWriter.write_tag(f, tag_job.track_dat[i], false);
 //            
 //            if(ret) {
 //                uris += f.get_uri();

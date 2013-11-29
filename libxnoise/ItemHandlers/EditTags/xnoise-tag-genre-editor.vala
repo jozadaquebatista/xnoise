@@ -194,8 +194,7 @@ private class Xnoise.TagGenreEditor : GLib.Object {
                 File f = File.new_for_uri(job.track_dat[i].item.uri);
                 if(!f.query_exists(null))
                     continue;
-                var tw = new TagWriter();
-                if(!tw.write_tag(f, job.track_dat[i], false)) {
+                if(!TagWriter.write_tag(f, job.track_dat[i], false)) {
                     print("No success for path : %s !!!\n", f.get_path());
                 }
             }

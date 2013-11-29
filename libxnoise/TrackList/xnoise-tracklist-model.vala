@@ -589,8 +589,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                 item.type = Xnoise.ItemType.STREAM;
         
         // TODO: maybe a check for remote schemes is necessary to avoid blocking
-        TagReader tr = new TagReader();
-        td = tr.read_tag(file.get_path()); // move to worker thread
+        td = TagReader.read_tag(file.get_path()); // move to worker thread
         
         if(td == null) { //This is a possible URL
             td = new TrackData();

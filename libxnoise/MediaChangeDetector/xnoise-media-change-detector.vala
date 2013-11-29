@@ -49,8 +49,6 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     private string[] changed_uris = {};
     private string[] removed_uris = {};
     
-//    private TrackData[] tda = {}; 
-//    private FileData[] fda = {}; 
     private string[] found_uris = {}; 
     private string[] uris_for_image_extraction  = {};
     
@@ -104,6 +102,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     }
     
     private void do_check() {
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return;
         if(!finished_database_read && permission) {
             process_existing_library_content();
         }
@@ -116,6 +116,9 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     }
     
     private void process_media_folder_content() {
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return;
+        
         foreach(Item? item in media_importer.get_media_folder_list()) {
             if(item == null) {
                 print("no media folder in offline change queue\n");
@@ -123,6 +126,9 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             }
             print("start folder scan for %s\n", item.uri);
             File f = File.new_for_uri(item.uri);
+            if(GlobalAccess.main_cancellable.is_cancelled()) {
+                return;
+            }
             var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
             job.set_arg("media_folder", f.get_path());
             job.item = item;
@@ -147,6 +153,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     
     private bool read_media_folder_job(Worker.Job job) {
         //this function shall run in the io thread
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return false;
         return_val_if_fail(worker.is_same_thread(), false);
         File d = File.new_for_uri(job.item.uri);
         Item? i = job.item;
@@ -170,7 +178,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         return false;
     }
     
-    private bool uri_in_media_folders(string u) {
+    private static bool uri_in_media_folders(string u) {
         foreach(Item? i in media_importer.get_media_folder_list())
             if(u == i.uri) return true;
         return false;
@@ -180,6 +188,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     
     private void read_recoursive(File dir, Worker.Job job) {
         //this function shall run in the io thread
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return;
         return_if_fail(this.worker.is_same_thread());
         if(global.media_import_in_progress)
             return;
@@ -200,6 +210,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         GLib.FileInfo info;
         try {
             while((info = enumerator.next_file()) != null) {
+                if(GlobalAccess.main_cancellable.is_cancelled())
+                    return;
                 string filename = info.get_name();
                 string filepath = Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
@@ -253,13 +265,19 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         return;
     }
     
-    private bool handle_uris_job(Worker.Job job) {
+    private static bool handle_uris_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return false;
         return_val_if_fail(db_worker.is_same_thread(), false);
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return false;
         if(!uri_in_media_folders((string)job.get_arg("media_folder")))
             return false; // do nothing if the according media folder was removed in the meantime
         string[] add_uris = {};
         foreach(string u in job.uris) {
+            if(GlobalAccess.main_cancellable.is_cancelled())
+                return false;
             if(!db_reader.get_file_in_db(u))
                 add_uris += u;
         }
@@ -269,6 +287,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     }
     
     private void process_existing_library_content() {
+        if(GlobalAccess.main_cancellable.is_cancelled())
+            return;
         print("start offline file change check\n");
         var job = new Worker.Job(Worker.ExecutionType.ONCE, get_library_uris_job);
         lock(offset_buffer) {

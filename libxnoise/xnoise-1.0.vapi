@@ -568,13 +568,13 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagReader {
 			public TagReader ();
-			public Xnoise.TrackData? read_tag (string? filename, bool try_read_image_data = false);
+			public static Xnoise.TrackData? read_tag (string? filename, bool try_read_image_data = false);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {
 			public TagWriter ();
-			public bool remove_compilation_flag (GLib.File? file);
-			public bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
+			public static bool remove_compilation_flag (GLib.File? file);
+			public static bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
 		}
 	}
 	namespace Utilities {

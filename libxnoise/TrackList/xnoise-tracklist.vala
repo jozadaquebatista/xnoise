@@ -827,8 +827,7 @@ public class Xnoise.TrackList : TreeView, IParams {
             lengthString = make_time_display_from_seconds(td.length);
         }
         else {
-            var tr = new TagReader();
-            var tags = tr.read_tag(file.get_path());
+            var tags = TagReader.read_tag(file.get_path());
             if(tags == null) {
                 title          = prepare_name_from_filename(file.get_basename());
             }

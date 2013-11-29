@@ -35,7 +35,7 @@ using TagInfo;
 
 
 public class Xnoise.TagAccess.TagWriter {
-    public bool write_tag(File? file, TrackData? td, bool read_before_write = false) {
+    public static bool write_tag(File? file, TrackData? td, bool read_before_write = false) {
         // does writes for values that are different from default values
         if(file == null)
             return false;
@@ -80,7 +80,7 @@ public class Xnoise.TagAccess.TagWriter {
         return retval;
     }
 
-    public bool remove_compilation_flag(File? file) {
+    public static bool remove_compilation_flag(File? file) {
         if(file == null)
             return false;
         

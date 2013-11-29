@@ -277,8 +277,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             File f = File.new_for_uri(tag_job.track_dat[1].item.uri);
             if(!f.query_exists(null))
                 return false;
-            var tw = new TagWriter();
-            tw.write_tag(f, tag_job.track_dat[1]);
+            TagWriter.write_tag(f, tag_job.track_dat[1]);
             // TODO handle is_compilation for containing album
         }
         Timeout.add(300, () => {
