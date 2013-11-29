@@ -7,7 +7,7 @@ SUBDIRS = \
 
 bin_PROGRAMS = xnoise
 
-INCLUDES = \
+AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
     -I$(top_srcdir)/libxnoise \
     $(XNOISE_CFLAGS) \

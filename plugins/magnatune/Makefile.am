@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = icons \
     $(NULL)
 
-INCLUDES = \
+AM_CPPFLAGS = \
     $(XNOISE_CFLAGS) \
     -DXN_PACKAGE_DATADIR=\""$(pkgdatadir)"\" \
     -DXN_DATADIR='"$(datadir)"' \

@@ -23,7 +23,7 @@ $(service_DATA): $(service_in_files) Makefile
 
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
     $(XNOISE_CFLAGS) \
     -DXN_DATADIR=\"$(datadir)/xnoise/\" \

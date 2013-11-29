@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
     $(NULL)
 
-INCLUDES = \
+AM_CPPFLAGS = \
     $(XNOISE_CFLAGS) \
     -DXN_UIDIR=\"$(datadir)/xnoise/ui/\" \
     -DXN_PACKAGE_DATADIR=\""$(pkgdatadir)"\" \
