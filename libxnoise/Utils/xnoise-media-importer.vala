@@ -192,12 +192,12 @@ public class Xnoise.MediaImporter {
         bool got_data = false;
         
         foreach(string s in job.uris) {
-            var tr = new TagReader();
             File f = File.new_for_uri(s);
             
             if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
                 return false;
             
+            var tr = new TagReader();
             TrackData? td = tr.read_tag(f.get_path(), false);
             if(td != null) {
                 got_data = true;
@@ -788,16 +788,21 @@ public class Xnoise.MediaImporter {
                 string filepath = Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
                 FileType filetype = info.get_file_type();
+                if(filename.has_prefix("."))
+                    continue;
                 if(filetype == FileType.DIRECTORY) {
-                    if(!filename.has_prefix("."))
-                        read_recoursive(file, job);
+                    read_recoursive(file, job);
                 }
                 else {
                     string uri_lc = filename.down();
                     string suffix = get_suffix_from_filename(uri_lc);
                     if(!Playlist.is_playlist_extension(suffix)) {
                         suffix = suffix.down();
-                        if(suffix == "jpg" || suffix == "png" || suffix == "txt")
+                        if(suffix == "jpg"  || 
+                           suffix == "jpeg" || 
+                           suffix == "png"  || 
+                           suffix == "nfo"  || 
+                           suffix == "txt")
                             continue;
                         //print("filepath: %s\n", filepath);
                         var tr = new TagReader();
@@ -809,28 +814,7 @@ public class Xnoise.MediaImporter {
                             td.change_time = (int32)info.get_attribute_uint64(FileAttribute.TIME_CHANGED);
                             uris_for_image_extraction += file.get_uri();
                             tda += td;
-                            job.big_counter[1]++;
-//                            lock(current_import_track_count) {
-//                                current_import_track_count++;
-//                            }
                         }
-//                        if(job.big_counter[1] % 200 == 0) {
-//                            Idle.add( () => {  // Update progress bar
-//                                uint xcnt = 0;
-////                                lock(current_import_track_count) {
-////                                    xcnt = current_import_track_count;
-////                                }
-//                                unowned Gtk.ProgressBar pb = 
-//                                    (Gtk.ProgressBar) userinfo.get_extra_widget_by_id(
-//                                                                    (uint)job.get_arg("msg_id")
-//                                );
-//                                if(pb != null) {
-//                                    pb.pulse();
-//                                    pb.set_text(_("%u new tracks found").printf(xcnt));
-//                                }
-//                                return false;
-//                            });
-//                        }
                         if(tda.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
                             db_job.set_arg("remove_import_targets", false);
@@ -869,19 +853,15 @@ public class Xnoise.MediaImporter {
         remove_import_targets = (bool)job.get_arg("remove_import_targets");
         if(remove_import_targets)
             print("insjob %d\n", job.uris.length);
-//        string[] uris = {};
         db_writer.begin_transaction();
         foreach(TrackData td in job.track_dat) {
             db_writer.insert_title(ref td);
-//            if(remove_import_targets && td.item != null && td.item.uri != null) {
-//                uris += td.item.uri;
-//            }
         }
         db_writer.commit_transaction();
         if(remove_import_targets) {
             lock(import_targets) {
                 foreach(string s in job.uris) {
-                    print("REMOVE URI from i_t %s\n", s);
+                    //print("REMOVE URI from i_t %s\n", s);
                     import_targets.remove(s);
                 }
             }

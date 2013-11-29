@@ -187,15 +187,14 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         GLib.FileInfo info;
         try {
             while((info = enumerator.next_file()) != null) {
-//                TrackData td = null;
-                FileData fd = null;
                 string filename = info.get_name();
                 string filepath = Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
                 FileType filetype = info.get_file_type();
+                if(filename.has_prefix("."))
+                    continue;
                 if(filetype == FileType.DIRECTORY) {
-                    if(!filename.has_prefix("."))
-                        read_recoursive(file, job);
+                    read_recoursive(file, job);
                 }
                 else {
                     string uri_lc = filename.down();
@@ -205,12 +204,13 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                         if(suffix == "jpg"  || 
                            suffix == "jpeg" || 
                            suffix == "png"  || 
+                           suffix == "nfo"  || 
                            suffix == "txt")
                             continue;
                         uris_for_image_extraction += file.get_uri();
                         found_uris += file.get_uri();
                         if(found_uris.length > FILE_COUNT) {
-                            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_trackdata_job);
+                            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_uris_job);
                             db_job.uris = (owned)found_uris;
                             found_uris = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
@@ -227,7 +227,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         job.counter[0]--;
         if(job.counter[0] == 0) {
             if(found_uris.length > 0) {
-                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_trackdata_job);
+                var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_uris_job);
                 db_job.uris = (owned)found_uris;
                 found_uris = {};
                 dbus_image_extractor.queue_uris(uris_for_image_extraction);
@@ -238,7 +238,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         return;
     }
     
-    private bool handle_trackdata_job(Worker.Job job) {
+    private bool handle_uris_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
         string[] add_uris = {};
