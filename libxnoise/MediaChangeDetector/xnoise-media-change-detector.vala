@@ -61,10 +61,6 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     public MediaChangeDetector() {
         assert(media_importer != null);
         worker = new Worker(MainContext.default());
-        foreach(Item? it in media_importer.get_media_folder_list()) {
-            Item? item = it;
-            folder_queue.push(item);
-        }
         global.notify["media-import-in-progress"].connect( () => {
             if(!finished_database_read)
                 check_start_conditions();
@@ -87,7 +83,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 Source.remove(start_source);
                 start_source = 0;
             }
-            start_source = Timeout.add_seconds(4, () => {
+            start_source = Timeout.add_seconds(3, () => {
                 permission = true;
                 start_source = 0;
                 do_check();
@@ -100,10 +96,10 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 start_source = 0;
             }
             permission = false;
-            Idle.add(() => {
-                do_check();
-                return false;
-            });
+//            Idle.add(() => {
+//                do_check();
+//                return false;
+//            });
         }
     }
     
@@ -112,27 +108,41 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             process_existing_library_content();
         }
         if(!finished_new_file_check && finished_old_file_check && permission) {
-            Timeout.add_seconds(3, () => {
+            Timeout.add_seconds(1, () => {
                 process_media_folder_content();
                 return false;
             });
         }
     }
     
-    private AsyncQueue<Item?> folder_queue = new AsyncQueue<Item?>();
-    
     private void process_media_folder_content() {
-        Item? item = null;
-        item = folder_queue.try_pop();
-        if(item == null) {
-            print("media folder in queue\n");
-            return;
+        foreach(Item? item in media_importer.get_media_folder_list()) {
+            if(item == null) {
+                print("no media folder in offline change queue\n");
+                return;
+            }
+            print("start folder scan for %s\n", item.uri);
+            File f = File.new_for_uri(item.uri);
+            var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
+            job.set_arg("media_folder", f.get_path());
+            job.item = item;
+            this.worker.push_job(job);
         }
-        File f = File.new_for_uri(item.uri);
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
-        job.set_arg("media_folder", f.get_path());
-        job.item = item;
-        this.worker.push_job(job);
+        var f_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_mfc);
+        this.worker.push_job(f_job);
+    }
+    
+    private bool finish_mfc(Worker.Job job) {
+        var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
+            Timeout.add_seconds(2, () => {
+                print("done offline check!\n");
+                finished();
+                return false;
+            });
+            return false;
+        });
+        db_worker.push_job(dbjob);
+        return false;
     }
     
     private bool read_media_folder_job(Worker.Job job) {
@@ -143,28 +153,28 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         read_recoursive(d, job);
         if(global.media_import_in_progress) {
             Timeout.add_seconds(2, () => {
-                if(!global.media_import_in_progress)
+                if(!uri_in_media_folders((string)job.get_arg("media_folder")))
+                    return false; // do nothing if the according media folder was removed in the meantime
+                if(!global.media_import_in_progress) {
                     this.worker.push_job(job);
-                else
+                }
+                else {
                     return true;
+                }
                 return false;
             });
         }
         else {
             finished_new_file_check = true;
-            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
-                Idle.add(() => {
-                    print("done offline check!\n");
-                    finished();
-                    return false;
-                });
-                return false;
-            });
-            db_worker.push_job(db_job);
         }
         return false;
     }
     
+    private bool uri_in_media_folders(string u) {
+        foreach(Item? i in media_importer.get_media_folder_list())
+            if(u == i.uri) return true;
+        return false;
+    }
     private const string attr = FileAttribute.STANDARD_NAME + "," +
                                 FileAttribute.STANDARD_TYPE;
     
@@ -173,6 +183,9 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         return_if_fail(this.worker.is_same_thread());
         if(global.media_import_in_progress)
             return;
+        
+        if(!uri_in_media_folders((string)job.get_arg("media_folder")))
+            return; // do nothing if the according media folder was removed in the meantime
         
         job.counter[0]++;
         FileEnumerator enumerator;
@@ -215,6 +228,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                             found_uris = {};
                             dbus_image_extractor.queue_uris(uris_for_image_extraction);
                             uris_for_image_extraction = {};
+                            db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                             db_worker.push_job(db_job);
                         }
                     }
@@ -232,6 +246,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 found_uris = {};
                 dbus_image_extractor.queue_uris(uris_for_image_extraction);
                 uris_for_image_extraction = {};
+                db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                 db_worker.push_job(db_job);
             }
         }
@@ -241,6 +256,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     private bool handle_uris_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail(db_worker.is_same_thread(), false);
+        if(!uri_in_media_folders((string)job.get_arg("media_folder")))
+            return false; // do nothing if the according media folder was removed in the meantime
         string[] add_uris = {};
         foreach(string u in job.uris) {
             if(!db_reader.get_file_in_db(u))
@@ -305,7 +322,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             this.worker.push_job(finish_job);
             return false;
         }
-        Timeout.add(100, () => {
+        Idle.add( () => {
             db_worker.push_job(job);
             return false;
         });

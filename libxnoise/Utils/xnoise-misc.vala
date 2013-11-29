@@ -172,7 +172,7 @@ namespace Xnoise {
         //check for offline file changes
         media_change_detector = new MediaChangeDetector();
         media_change_detector.finished.connect( () => {
-            Timeout.add_seconds(1, () => {
+            Timeout.add_seconds(5, () => {
                 //remove after usage
                 media_change_detector = null;
                 return false;

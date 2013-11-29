@@ -6,7 +6,6 @@
 			<menuitem action="OpenLocationAction"/>
 			<separator/>
 			<menuitem action="AddRemoveAction"/>
-			<menuitem action="RescanLibraryAction"/>
 			<separator/>
 			<menuitem action="QuitAction" />
 		</menu>

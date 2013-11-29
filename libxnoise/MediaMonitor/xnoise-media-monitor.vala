@@ -52,7 +52,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
         }
     }
     
-    private HashTable<string, FileMonitor> monitors;
+    private HashTable<string, FileMonitor> monitors = null;
 
     private MainContext local_context;
     private MainLoop local_loop;
@@ -77,6 +77,10 @@ public class Xnoise.MediaMonitor : GLib.Object {
             setup_monitors();
             return false;
         });
+        media_importer.folder_list_changed.connect( () => {
+            setup_monitors();
+        });
+        
         source.attach(local_context);
     }
     
@@ -261,9 +265,15 @@ public class Xnoise.MediaMonitor : GLib.Object {
     }
     
     private void setup_monitors() {
-        File dir = File.new_for_path(Environment.get_user_special_dir(UserDirectory.MUSIC));
-        monitors = new HashTable<string, FileMonitor>(str_hash, str_equal);
-        setup_monitor_recoursive(dir);
+        if(monitors != null)
+            monitors.remove_all();
+        else
+            monitors = new HashTable<string, FileMonitor>(str_hash, str_equal);
+        
+        foreach(Item? folder in media_importer.get_media_folder_list()) {
+            File dir = File.new_for_uri(folder.uri);//Environment.get_user_special_dir(UserDirectory.MUSIC));
+            setup_monitor_recoursive(dir);
+        }
         print("Finished setting up file monitors.\n");
     }
 

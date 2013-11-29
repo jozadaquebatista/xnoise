@@ -53,6 +53,7 @@ public class Xnoise.MediaImporter {
     public signal void completed_import_target(Item? item);
     
     public signal void changed_library();
+    public signal void folder_list_changed();
     
     
     public MediaImporter() {
@@ -149,7 +150,6 @@ public class Xnoise.MediaImporter {
         return_val_if_fail(db_worker.is_same_thread(), false);
         
         db_writer.begin_transaction();
-        
         foreach(string u in job.uris) {
             db_writer.remove_uri(u);
             lock(removal_targets) {
@@ -163,7 +163,6 @@ public class Xnoise.MediaImporter {
         db_writer.commit_transaction();
         
         check_target_processing_queues();
-        
         return false;
     }
     
@@ -276,8 +275,6 @@ public class Xnoise.MediaImporter {
         });
         return false;
     }
-    
-    public signal void folder_list_changed();
     
     public GLib.List<Item?> get_media_folder_list() {
         GLib.List<Item?> list = new GLib.List<Item?>();
@@ -414,9 +411,9 @@ public class Xnoise.MediaImporter {
             if(removal_targets.get_keys().length() == 0) {
                 no_remove_left = true;
             }
-            else {
-                print("removal_targets.get_keys().length(): %u\n", removal_targets.get_keys().length());
-            }
+            //else {
+            //    print("removal_targets.get_keys().length(): %u\n", removal_targets.get_keys().length());
+            //}
         }
         if(no_remove_left == false)
             return;
@@ -428,9 +425,9 @@ public class Xnoise.MediaImporter {
                 });
                 global.media_import_in_progress = false;
             }
-            else {
-                print("import_targets.get_keys().length(): %u\n", import_targets.get_keys().length());
-            }
+            //else {
+            //    print("import_targets.get_keys().length(): %u\n", import_targets.get_keys().length());
+            //}
         }
     }
     

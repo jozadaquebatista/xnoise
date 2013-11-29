@@ -287,7 +287,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
                         });
                         return true;
                     });
-                    print("insert -- %s - %u\n", i.uri, xx);
+                    //print("insert -- %s - %u\n", i.uri, xx);
                     ht_activities.insert(i.uri, xx);
                     print("found item proc\n");
                     return true;
