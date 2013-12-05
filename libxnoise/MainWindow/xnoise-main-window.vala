@@ -1708,8 +1708,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             paned_overlay.add(hpaned);
             bottom_notebook.append_page(paned_overlay, null);
             
-            ///BOX FOR MAIN MENU
-//            menuvbox = gb.get_object("menuvbox") as Gtk.Box;
             //UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
             action_group = new Gtk.ActionGroup("XnoiseActions");
             action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -1723,9 +1721,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             catch(GLib.Error e) {
                 print("%s\n", e.message);
             }
-        
-//            menubar = (MenuBar)_ui_manager.get_widget("/MainMenu");
-//            menuvbox.pack_start(menubar, false, false, 0);
         
             config_button_menu_root = (ImageMenuItem)_ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
             config_button_menu = (Gtk.Menu)config_button_menu_root.get_submenu();
@@ -1840,15 +1835,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 store.get_iter(out iter, path);
                 tl.set_focus_on_iter(ref iter);
             });
-            main_view_sbutton = new SerialButton();
-            main_view_sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
-            main_view_sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
-            main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
             content_overlay.add_overlay(tbx);
             content_overlay.get_child_position.connect(on_content_overlay_child_pos);
             tbx.halign = Align.END;
             tbx.valign = Align.CENTER;
-            content_top_box.pack_start(main_view_sbutton, false, false, 0);
+//            content_top_box.pack_start(main_view_sbutton, false, false, 0);
             
             mainview_box.notify["current-name"].connect( () => {
                 if(mainview_box.current_name == TRACKLIST_VIEW_NAME) {
@@ -1880,9 +1871,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.lyricsView = lyricsview_widget.lyricsView;
             mainview_box.add_main_view(lyricsview_widget);
             
-//            settings_widget = new SettingsWidget();
-//            paned2notebook.append_page(settings_widget, null);
-            
             mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
             
             //--------------------
@@ -1911,8 +1899,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             //-----------------
             
-            main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
-            //---------------------
             
             //REPEAT MODE SELECTOR
             Gtk.Box box;
@@ -1935,18 +1921,32 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             media_browser_box.pack_start(msw, true, true, 0);
             //----------------
+
+            main_view_sbutton = new SerialButton(SerialButton.Presentation.IMAGE);
+            main_view_sbutton.insert(TRACKLIST_VIEW_NAME, 
+                                     SHOWTRACKLIST, 
+                                     icon_repo.get_themed_image_icon("view-list-symbolic", 
+                                                                     IconSize.SMALL_TOOLBAR)
+            );
+            main_view_sbutton.insert(VIDEOVIEW_NAME, 
+                                     SHOWVIDEO, 
+                                     icon_repo.get_themed_image_icon("video-display-symbolic", 
+                                                                     IconSize.SMALL_TOOLBAR)
+            );
+            main_view_sbutton.insert(LYRICS_VIEW_NAME, 
+                                     SHOWLYRICS, 
+                                     icon_repo.get_themed_image_icon("insert-text-symbolic", 
+                                                                     IconSize.SMALL_TOOLBAR)
+            );
             
-            //PLAYBACK CONTROLS
-//            var playback_control_bar = new PlayBackControlBar();
-//            this.previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
-//            this.previousButton.sign_clicked.connect(handle_control_button_click);
-//            this.previousButton.set_can_focus(false);
-//            this.playPauseButton = new PlayPauseButton();
-//            this.stopButton = new ControlButton(ControlButton.Function.STOP);
-//            this.stopButton.set_no_show_all(true);
-//            this.stopButton.sign_clicked.connect(handle_control_button_click);
-//            this.nextButton = new ControlButton(ControlButton.Function.NEXT);
-//            this.nextButton.sign_clicked.connect(handle_control_button_click);
+            main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
+            
+            var serialTI = new ToolItem();
+            var mvsb_box = new Gtk.Box(Orientation.VERTICAL, 0);
+            mvsb_box.pack_start(new DrawingArea(), true, true, 0);
+            mvsb_box.pack_start(main_view_sbutton, true, true, 0);
+            mvsb_box.pack_start(new DrawingArea(), true, true, 0);
+            serialTI.add(mvsb_box);
             
             //PROGRESS BAR
             this.track_infobar = new TrackInfobar(gst_player);
@@ -1958,10 +1958,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             //---------------------
             main_toolbar.insert(new PlayBackControlBar(), -1);
-            main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(albumimageTI, -1);
             main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(this.track_infobar, -1);
+            main_toolbar.insert(new SeparatorToolItem(), -1);
+            main_toolbar.insert(serialTI, -1);
+            main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(volume_slider, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
@@ -2352,7 +2354,7 @@ private class BackgroundBox : Gtk.Box {
 
 private class PlayBackControlBar : Gtk.ToolItem {
     public PlayBackControlBar() {
-        var box = new Box(Orientation.HORIZONTAL,0);
+        var box = new Box(Orientation.HORIZONTAL, 3);
         box.set_homogeneous(true);
         var previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
         previousButton.set_can_focus(false);
@@ -2363,6 +2365,8 @@ private class PlayBackControlBar : Gtk.ToolItem {
         box.pack_start(nextButton, true, true, 0);
         this.set_can_focus(false);
         this.add(box);
+        this.set_margin_left (15);
+        this.set_margin_right(15);
         Idle.add(() => {
             previousButton.sign_clicked.connect(main_window.handle_control_button_click);
             nextButton.sign_clicked.connect(main_window.handle_control_button_click);

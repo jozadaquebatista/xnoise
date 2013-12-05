@@ -52,9 +52,9 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         public CustomLabel(string txt) {
             GLib.Object(label:txt);
             this.set_single_line_mode(true);
-            this.set_alignment(0.0f, 1.0f);
+            this.xalign = 0.0f;
             this.set_ellipsize(Pango.EllipsizeMode.END);
-            this.xpad = 15;
+            this.xpad = 5;
         }
         
         public override void get_preferred_height(out int minimum_height, out int natural_height) {
@@ -133,7 +133,7 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
             return true;
         if(press_was_valid == false)
             return true;
-        double mouse_x = e.x - topbox.get_spacing();
+        double mouse_x = e.x;// - topbox.get_spacing();
         Allocation allocation;
         this.progress.get_allocation(out allocation);
         uint progress_width = allocation.width;
@@ -175,10 +175,10 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
         uint progress_width = allocation.width;
         if(is_rtl()) {
             this.time_label.get_allocation(out allocation);
-            thisFraction = 1 - (e.x - (allocation.width + topbox.get_spacing() +  VBOX_BORDER_WIDTH)) / progress_width;
+            thisFraction = 1 - (e.x - (allocation.width)) / progress_width;
         }
         else
-            thisFraction = (e.x - topbox.get_spacing()) / progress_width;
+            thisFraction = e.x / progress_width;// (e.x - topbox.get_spacing()) / progress_width;
         
         if(thisFraction < 0.0)
             thisFraction = 0.0;
@@ -211,10 +211,7 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
 
     // Checks weather the TrackInfoBar is threated in RTL direction by Gtk.
     private static bool is_rtl() {
-        if(Widget.get_default_direction() == TextDirection.RTL)
-            return true;
-        // TextDirection.NONE isn't allowed for Gtk default direction
-        return false;
+        return Widget.get_default_direction() == TextDirection.RTL;
     }
     
     private void on_eos() {
@@ -255,11 +252,13 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
             this.progress.set_sensitive(false);
         }
     }
+    
     private static const int VBOX_BORDER_WIDTH = 4;
     private void setup_widgets() {
-        title_label = new CustomLabel("<b>XNOISE</b> - ready to rock! ;-)");
+        title_label = new CustomLabel("<b>XNOISE Media Player</b>");
         title_label.set_use_markup(true);
-        
+        title_label.yalign = 0.9f;
+
         ebox = new EventBox(); 
         ebox.set_events(Gdk.EventMask.SCROLL_MASK |
                         Gdk.EventMask.BUTTON1_MOTION_MASK |
@@ -267,23 +266,29 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
                         Gdk.EventMask.BUTTON_RELEASE_MASK
                         );
         ebox.set_visible_window(false);
-        topbox = new Gtk.Box(Orientation.VERTICAL, 2);
-        topbox.pack_start(title_label, false, true, 0);
+        topbox = new Gtk.Box(Orientation.VERTICAL, 0);
         
-        var hbox = new Gtk.Box(Orientation.HORIZONTAL, 0);
-        var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
-        vbox.set_border_width(VBOX_BORDER_WIDTH);
-        progress = new CustomProgress();
-        vbox.pack_start(progress, false, true, 0);
-        
-        hbox.pack_start(vbox, true, true, 0);
         
         time_label = new Label("00:00 / 00:00");
-        time_label.set_alignment(0.02f, 0.4f);
+        time_label.set_alignment(1.0f, 0.9f);
         time_label.set_single_line_mode(true);
         time_label.width_chars = 12;
-        hbox.pack_start(time_label, false, false, 0);
-        topbox.pack_start(hbox, false, false, 0);
+        time_label.xpad = 5;
+
+        var title_time_hbox = new Gtk.Box(Orientation.HORIZONTAL, 0);
+        
+        title_time_hbox.pack_start(title_label, true, true, 0);
+        title_time_hbox.pack_start(time_label, false, false, 0);
+        
+        topbox.pack_start(title_time_hbox, true, true, 0);
+        
+        var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+        vbox.set_margin_bottom(VBOX_BORDER_WIDTH);
+        vbox.set_margin_top(VBOX_BORDER_WIDTH);
+        progress = new CustomProgress();
+        vbox.pack_start(progress, false, false, 0);
+        topbox.pack_start(vbox, false, false, 0);
+        
         ebox.add(topbox);
         this.add(ebox);
     }
