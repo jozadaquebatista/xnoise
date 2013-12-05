@@ -846,8 +846,8 @@ public class Xnoise.MediaImporter {
         return_val_if_fail(db_worker.is_same_thread(), false);
         bool remove_import_targets = false;
         remove_import_targets = (bool)job.get_arg("remove_import_targets");
-        if(remove_import_targets)
-            print("insjob %d\n", job.uris.length);
+        //if(remove_import_targets)
+        //    print("insjob %d\n", job.uris.length);
         db_writer.begin_transaction();
         foreach(TrackData td in job.track_dat) {
             db_writer.insert_title(ref td);

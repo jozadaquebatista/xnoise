@@ -65,30 +65,35 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         assert(Params.is_inited());
         
         get_dbus_proxy.begin();
-        
-        Main.instance.notify["use-notifications"].connect( () => {
-            Idle.add(() => {
-                if(Main.instance.use_notifications) {
-                    global.tag_changed.connect(on_tag_changed);
-                    global.image_loader.image_path_small_changed.connect(on_image_changed);
-                    global.image_loader.image_path_embedded_changed.connect(on_image_changed);
-                }
-                else {
-                    global.tag_changed.disconnect(on_tag_changed);
-                    global.image_loader.image_path_small_changed.disconnect(on_image_changed);
-                    global.image_loader.image_path_embedded_changed.disconnect(on_image_changed);
-                }
-                return false;
-            });
+        Idle.add(() => {
+            global.tag_changed.connect(on_tag_changed);
+            global.image_loader.image_path_small_changed.connect(on_image_changed);
+            global.image_loader.image_path_embedded_changed.connect(on_image_changed);
+            return false;
         });
-        Main.instance.use_notifications = !Params.get_bool_value("not_use_notifications");
+//        Main.instance.notify["use-notifications"].connect( () => {
+//            Idle.add(() => {
+////                if(Main.instance.use_notifications) {
+//                    global.tag_changed.connect(on_tag_changed);
+//                    global.image_loader.image_path_small_changed.connect(on_image_changed);
+//                    global.image_loader.image_path_embedded_changed.connect(on_image_changed);
+////                }
+////                else {
+////                    global.tag_changed.disconnect(on_tag_changed);
+////                    global.image_loader.image_path_small_changed.disconnect(on_image_changed);
+////                    global.image_loader.image_path_embedded_changed.disconnect(on_image_changed);
+////                }
+//                return false;
+//            });
+//        });
+//        Main.instance.use_notifications = !Params.get_bool_value("not_use_notifications");
     }
     
     private uint data_changed_source = 0;
     
     private void on_image_changed() {
-        if(!Main.instance.use_notifications)
-            return;
+//        if(!Main.instance.use_notifications)
+//            return;
         if(global.current_uri == null)
             return;
         if(data_changed_source != 0)
@@ -102,8 +107,8 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     
     private void on_tag_changed() {
         //print("use_notifications : %s\n", Main.instance.use_notifications.to_string());
-        if(!Main.instance.use_notifications)
-            return;
+//        if(!Main.instance.use_notifications)
+//            return;
         if(data_changed_source != 0)
             Source.remove(data_changed_source);
         data_changed_source = Timeout.add(200, () => {
@@ -221,8 +226,8 @@ private class Xnoise.DesktopNotifications : GLib.Object {
                 return false;
             });
         }
-        if(!Main.instance.use_notifications)
-            return;
+//        if(!Main.instance.use_notifications)
+//            return;
         string[] actions = {};
         var hints = new HashTable<string,Variant>(str_hash, str_equal);
         uint32 i = 0;

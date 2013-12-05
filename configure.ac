@@ -526,7 +526,6 @@ AC_CONFIG_FILES([
     plugins/azlyrics/Makefile
     plugins/chartlyrics/Makefile
     plugins/databaseLyrics/Makefile
-    plugins/titleToDecoration/Makefile
     plugins/lastfm/Makefile
     plugins/lastfm/icons/Makefile
     plugins/lastfm/icons/scalable/Makefile
@@ -569,7 +568,6 @@ echo "
             and 'scrobbling')      ${enable_lastfm}
     Keyboard Media Key control     ${enable_mediakeys}
     Mpris v1/v2 dbus interfaces    ${enable_mpris}
-    Title-To-Decoration            yes (always)
     Ubuntu soundmenu               ${enable_soundmenu2}
     AppIndicator                   ${enable_appindicator}
     

@@ -40,7 +40,7 @@ private interface Xnoise.MediaSelector : Gtk.Widget {
 }
 
 
-public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
+public class Xnoise.MediaSoureWidget : Gtk.Box {
     private SideBarHeadline current_selected_media;
     private Gtk.Notebook notebook;
     private unowned Xnoise.MainWindow mwindow;
@@ -53,7 +53,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
     
     public MediaSoureWidget(Xnoise.MainWindow mwindow) {
         Object(orientation:Orientation.VERTICAL, spacing:0);
-        Params.iparams_register(this);
+//        Params.iparams_register(this);
         this.mwindow = mwindow;
         
         this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
@@ -152,7 +152,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         this.pack_start(media_source_selector_box, false, false, 0);
         
         // initialize the proper type of media source selector
-        read_params_data();
+//        read_params_data();
         build_media_selector();
         
         global.notify["active-dockable-media-name"].connect(() => {
@@ -191,18 +191,18 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
 //        this.margin_left = 1;
     }
     
-    private string _media_source_selector_type = "tree";
-    public string media_source_selector_type {
-        get {
-            return _media_source_selector_type;
-        }
-        set {
-            if(value == _media_source_selector_type)
-                return;
-            _media_source_selector_type = value;
-            build_media_selector();
-        }
-    }
+//    private string _media_source_selector_type = "tree";
+//    public string media_source_selector_type {
+//        get {
+//            return _media_source_selector_type;
+//        }
+//        set {
+//            if(value == _media_source_selector_type)
+//                return;
+//            _media_source_selector_type = value;
+//            build_media_selector();
+//        }
+//    }
     
     private void build_media_selector() {
         // clear the box and remove all references
@@ -213,12 +213,12 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
             media_source_selector = null;
             media_source_selector_window = null;
         }
-        switch(media_source_selector_type) {
-            case "combobox":
-                media_source_selector = new ComboMediaSelector();
-                media_source_selector_box.add(media_source_selector);
-                break;
-            default:
+//        switch(media_source_selector_type) {
+//            case "combobox":
+//                media_source_selector = new ComboMediaSelector();
+//                media_source_selector_box.add(media_source_selector);
+//                break;
+//            default:
                 media_source_selector = new TreeMediaSelector(this);
                 var mss_sw = new ScrolledWindow(null, null);
                 mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
@@ -231,8 +231,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
 //                sep.show();
 //                media_source_selector_box.pack_start(sep, false, false, 0);
                 media_source_selector_window = mss_sw;
-                break;
-        }
+//                break;
+//        }
         media_source_selector.selected_dockable_media = global.active_dockable_media_name;
         media_source_selector.expand_all();
         this.show_all();
@@ -242,13 +242,13 @@ public class Xnoise.MediaSoureWidget : Gtk.Box, Xnoise.IParams {
         remove_page(name);
     }
     
-    public void read_params_data() {
-        _media_source_selector_type = Params.get_string_value("media_source_selector_type");
-    }
+//    public void read_params_data() {
+////        _media_source_selector_type = Params.get_string_value("media_source_selector_type");
+//    }
 
-    public void write_params_data() {
-        Params.set_string_value("media_source_selector_type", media_source_selector_type);
-    }
+//    public void write_params_data() {
+////        Params.set_string_value("media_source_selector_type", media_source_selector_type);
+//    }
 }
 
 

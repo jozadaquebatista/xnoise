@@ -44,7 +44,7 @@ public class Xnoise.Main : GLib.Object {
     internal static unowned Xnoise.Application app;
     
 
-    internal bool use_notifications { get; set; }
+//    internal bool use_notifications { get; set; }
 
     public Main() {
         _instance = this;

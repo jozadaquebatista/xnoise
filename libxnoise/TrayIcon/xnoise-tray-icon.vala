@@ -79,7 +79,8 @@ public class Xnoise.TrayIcon : StatusIcon {
         playHbox.pack_start(playpause_popup_image, false, true, 0);
         playHbox.pack_start(playLabel, true, true, 0);
         playpauseItem.add(playHbox);
-        playpauseItem.activate.connect(main_window.playPauseButton.on_menu_clicked);
+        playpauseItem.activate.connect(main_window.handle_playpause_action);
+//        playpauseItem.activate.connect(main_window.playPauseButton.on_menu_clicked);
         traymenu.append(playpauseItem);
 
         var previousImage = new Image();
@@ -93,7 +94,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         previousHbox.pack_start(previousLabel, true, true, 0);
         previousItem.add(previousHbox);
         previousItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.previousButton, ControlButton.Function.PREVIOUS);
+            main_window.handle_control_button_click(ControlButton.Function.PREVIOUS);
         });
         traymenu.append(previousItem);
 
@@ -108,7 +109,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         nextHbox.pack_start(nextLabel, true, true, 0);
         nextItem.add(nextHbox);
         nextItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.nextButton, ControlButton.Function.NEXT);
+            main_window.handle_control_button_click(ControlButton.Function.NEXT);
         });
         traymenu.append(nextItem);
 
@@ -135,7 +136,8 @@ public class Xnoise.TrayIcon : StatusIcon {
         switch(e.button) {
             case 2:
                 //ugly, we should move play/resume code out of there.
-                main_window.playPauseButton.on_clicked(new Gtk.Button());
+                main_window.handle_playpause_action();
+                //main_window.playPauseButton.on_clicked(new Gtk.Button());
                 break;
             default:
                 break;

@@ -372,14 +372,6 @@ typedef struct _XnoiseMainViewNotebook XnoiseMainViewNotebook;
 typedef struct _XnoiseMainViewNotebookClass XnoiseMainViewNotebookClass;
 typedef struct _XnoiseMainViewNotebookPrivate XnoiseMainViewNotebookPrivate;
 
-#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
-#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
-#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
-#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
-
-typedef struct _XnoiseIParams XnoiseIParams;
-typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
-
 #define XNOISE_TYPE_MEDIA_SOURE_WIDGET (xnoise_media_soure_widget_get_type ())
 #define XNOISE_MEDIA_SOURE_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_SOURE_WIDGET, XnoiseMediaSoureWidget))
 #define XNOISE_MEDIA_SOURE_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_SOURE_WIDGET, XnoiseMediaSoureWidgetClass))
@@ -542,6 +534,14 @@ typedef struct _XnoiseLyricsView XnoiseLyricsView;
 typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
+
+#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
+#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
+#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
+#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
+
+typedef struct _XnoiseIParams XnoiseIParams;
+typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 #define XNOISE_TYPE_ALBUM_ART_VIEW (xnoise_album_art_view_get_type ())
@@ -573,26 +573,6 @@ typedef struct _XnoiseFullscreenToolbarClass XnoiseFullscreenToolbarClass;
 
 typedef struct _XnoiseThinPaned XnoiseThinPaned;
 typedef struct _XnoiseThinPanedClass XnoiseThinPanedClass;
-
-#define XNOISE_TYPE_PLAY_PAUSE_BUTTON (xnoise_play_pause_button_get_type ())
-#define XNOISE_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButton))
-#define XNOISE_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButtonClass))
-#define XNOISE_IS_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON))
-#define XNOISE_IS_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLAY_PAUSE_BUTTON))
-#define XNOISE_PLAY_PAUSE_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButtonClass))
-
-typedef struct _XnoisePlayPauseButton XnoisePlayPauseButton;
-typedef struct _XnoisePlayPauseButtonClass XnoisePlayPauseButtonClass;
-
-#define XNOISE_TYPE_CONTROL_BUTTON (xnoise_control_button_get_type ())
-#define XNOISE_CONTROL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButton))
-#define XNOISE_CONTROL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButtonClass))
-#define XNOISE_IS_CONTROL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_CONTROL_BUTTON))
-#define XNOISE_IS_CONTROL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_CONTROL_BUTTON))
-#define XNOISE_CONTROL_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButtonClass))
-
-typedef struct _XnoiseControlButton XnoiseControlButton;
-typedef struct _XnoiseControlButtonClass XnoiseControlButtonClass;
 
 #define XNOISE_TYPE_TRACK_INFOBAR (xnoise_track_infobar_get_type ())
 #define XNOISE_TRACK_INFOBAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobar))
@@ -1372,12 +1352,6 @@ struct _XnoiseMainViewNotebookClass {
 	GtkNotebookClass parent_class;
 };
 
-struct _XnoiseIParamsIface {
-	GTypeInterface parent_iface;
-	void (*read_params_data) (XnoiseIParams* self);
-	void (*write_params_data) (XnoiseIParams* self);
-};
-
 struct _XnoiseMediaSoureWidget {
 	GtkBox parent_instance;
 	XnoiseMediaSoureWidgetPrivate * priv;
@@ -1592,6 +1566,12 @@ struct _XnoiseMainClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseIParamsIface {
+	GTypeInterface parent_iface;
+	void (*read_params_data) (XnoiseIParams* self);
+	void (*write_params_data) (XnoiseIParams* self);
+};
+
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
@@ -1607,10 +1587,6 @@ struct _XnoiseMainWindow {
 	XnoiseVideoScreen* videoscreen;
 	XnoiseThinPaned* hpaned;
 	GtkEntry* search_entry;
-	XnoisePlayPauseButton* playPauseButton;
-	XnoiseControlButton* previousButton;
-	XnoiseControlButton* nextButton;
-	XnoiseControlButton* stopButton;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
 	GtkWindow* fullscreenwindow;
@@ -2376,15 +2352,12 @@ gboolean xnoise_main_view_notebook_select_main_view (XnoiseMainViewNotebook* sel
 gchar* xnoise_main_view_notebook_get_current_main_view_name (XnoiseMainViewNotebook* self);
 const gchar* xnoise_main_view_notebook_get_current_name (XnoiseMainViewNotebook* self);
 void xnoise_main_view_notebook_set_current_name (XnoiseMainViewNotebook* self, const gchar* value);
-GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_media_soure_widget_get_type (void) G_GNUC_CONST;
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow);
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow);
 void xnoise_media_soure_widget_set_focus_on_selector (XnoiseMediaSoureWidget* self);
 void xnoise_media_soure_widget_select_dockable_by_name (XnoiseMediaSoureWidget* self, const gchar* name, gboolean emmit_signal);
 GtkEntry* xnoise_media_soure_widget_get_search_entry (XnoiseMediaSoureWidget* self);
-const gchar* xnoise_media_soure_widget_get_media_source_selector_type (XnoiseMediaSoureWidget* self);
-void xnoise_media_soure_widget_set_media_source_selector_type (XnoiseMediaSoureWidget* self, const gchar* value);
 GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
 GType xnoise_serial_button_presentation_get_type (void) G_GNUC_CONST;
 XnoiseSerialButton* xnoise_serial_button_new (XnoiseSerialButtonPresentation presentation);
@@ -2517,6 +2490,7 @@ void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
 gboolean xnoise_main_is_same_thread (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
+GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_album_art_view_get_type (void) G_GNUC_CONST;
 gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
 void xnoise_fullscreen_toolbar_unref (gpointer instance);
@@ -2526,8 +2500,6 @@ void xnoise_value_take_fullscreen_toolbar (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_fullscreen_toolbar (const GValue* value);
 GType xnoise_fullscreen_toolbar_get_type (void) G_GNUC_CONST;
 GType xnoise_thin_paned_get_type (void) G_GNUC_CONST;
-GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
-GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 GType xnoise_music_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_settings_dialog_get_type (void) G_GNUC_CONST;
@@ -2552,10 +2524,6 @@ XnoiseMainWindowPlayerRepeatMode xnoise_main_window_get_repeatState (XnoiseMainW
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, XnoiseMainWindowPlayerRepeatMode value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
-gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
-void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
-gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
-void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_window_in_foreground (XnoiseMainWindow* self);
 gboolean xnoise_main_window_get_album_art_view_visible (XnoiseMainWindow* self);
 void xnoise_main_window_set_album_art_view_visible (XnoiseMainWindow* self, gboolean value);

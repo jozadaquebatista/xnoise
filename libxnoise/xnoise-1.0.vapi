@@ -915,7 +915,6 @@ namespace Xnoise {
 		public void toggle_window_visbility ();
 		public bool active_lyrics { get; set; }
 		public bool album_art_view_visible { get; set; }
-		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public Xnoise.LyricsView lyricsView { get; private set; }
 		public Xnoise.MainViewNotebook mainview_box { get; private set; }
@@ -923,7 +922,6 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public Gtk.UIManager ui_manager { get; set; }
-		public bool usestop { get; set; }
 		public bool window_in_foreground { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -949,11 +947,10 @@ namespace Xnoise {
 		public MediaMonitor ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
+	public class MediaSoureWidget : Gtk.Box {
 		public MediaSoureWidget (Xnoise.MainWindow mwindow);
 		public void select_dockable_by_name (string name, bool emmit_signal = false);
 		public void set_focus_on_selector ();
-		public string media_source_selector_type { get; set; }
 		public Gtk.Entry search_entry { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

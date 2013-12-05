@@ -36,7 +36,7 @@ using Gdk;
 /**
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
-private class Xnoise.ControlButton : Gtk.ToolItem {
+private class Xnoise.ControlButton : Gtk.Box {
     private const int PIXELSIZE = 24;
     private Image image;
     private Function function;
@@ -53,17 +53,8 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
     public ControlButton(Function _function) {
         this.function = _function;
         
-//        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         var button = new Gtk.Button();
         button.set_relief(ReliefStyle.NONE);
-//        button.set_size_request(48, -1);
-//        var eb = new Gtk.EventBox();
-//        eb.visible_window = false;
-//        box.pack_start(eb, true, true, 0);
-//        box.pack_start(button, false, false, 0);
-//        eb = new Gtk.EventBox();
-//        eb.visible_window = false;
-//        box.pack_start(eb, true, true, 0);
         
         unowned IconTheme theme = IconTheme.get_default();
         
@@ -72,29 +63,29 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
         // use standard icon theme or local fallback
         switch(function) {
             case Function.NEXT: {
-                if(theme.has_icon("media-skip-forward-symbolic"))
-                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-backward-symbolic" : "media-skip-forward-symbolic",
+                if(theme.has_icon("xn-media-skip-forward-symbolic"))
+                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-backward-symbolic" : "xn-media-skip-forward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
-                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-backward-symbolic": "xn-media-skip-forward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-backward-symbolic": "media-skip-forward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             case Function.PREVIOUS: {
-                if(theme.has_icon("media-skip-backward-symbolic"))
-                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-forward-symbolic" : "media-skip-backward-symbolic",
+                if(theme.has_icon("xn-media-skip-backward-symbolic"))
+                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-forward-symbolic" : "xn-media-skip-backward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
-                    image = IconRepo.get_themed_image_icon(rtl ? "xn-media-skip-forward-symbolic" : "xn-media-skip-backward-symbolic",
+                    image = IconRepo.get_themed_image_icon(rtl ? "media-skip-forward-symbolic" : "media-skip-backward-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
             case Function.STOP: {
-                if(theme.has_icon("media-playback-stop-symbolic"))
-                    image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic",
+                if(theme.has_icon("xn-media-playback-stop-symbolic"))
+                    image = IconRepo.get_themed_image_icon("xn-media-playback-stop-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 else
-                    image = IconRepo.get_themed_image_icon("xn-media-playback-stop-symbolic",
+                    image = IconRepo.get_themed_image_icon("media-playback-stop-symbolic",
                                                            IconSize.LARGE_TOOLBAR, PIXELSIZE);
                 break;
             }
@@ -103,7 +94,7 @@ private class Xnoise.ControlButton : Gtk.ToolItem {
                 break;
         }
         button.add(image);
-        this.add(button);
+        this.pack_start(button, true, true, 0);
         button.can_focus = false;
         this.can_focus = false;
         button.clicked.connect(this.on_clicked);

@@ -110,7 +110,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             return false;
         });
         Gtk.StyleContext context = this.get_style_context();
-        context.add_class(STYLE_CLASS_SEPARATOR);
+        context.add_class(STYLE_CLASS_BUTTON);
     }
     
     

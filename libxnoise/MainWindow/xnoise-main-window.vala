@@ -58,10 +58,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private LyricsViewWidget lyricsview_widget;
     private string mainview_page_buffer;
     private Image repeatimage; 
-    private Box menuvbox;
+//    private Box menuvbox;
     private Box mainvbox;
     private Box infobox;
-    private MenuBar menubar;
+//    private MenuBar menubar;
     private ImageMenuItem config_button_menu_root;
     private Gtk.Menu config_button_menu;
     private bool _media_browser_visible;
@@ -91,10 +91,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal unowned VideoScreen videoscreen;
     internal ThinPaned hpaned;
     internal Entry search_entry;
-    internal PlayPauseButton playPauseButton;
-    internal ControlButton previousButton;
-    internal ControlButton nextButton;
-    internal ControlButton stopButton;
     internal TrackInfobar track_infobar;
     internal MusicBrowser musicBr = null;
     internal Gtk.Window fullscreenwindow;
@@ -249,46 +245,46 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         {"text/uri-list", TargetFlags.OTHER_APP, 0}
     };
 
-    private bool _usestop;
-    public bool usestop {
-        get {
-            return _usestop;
-        }
-        set {
-            if(value == true) {
-                stopButton.set_no_show_all(false);
-                stopButton.show_all();
-            }
-            else {
-                stopButton.set_no_show_all(true);
-                stopButton.hide();
-            }
-            _usestop = value;
-        }
-    }
+//    private bool _usestop;
+//    public bool usestop { //TODO
+//        get {
+//            return _usestop;
+//        }
+//        set {
+//            if(value == true) {
+////                stopButton.set_no_show_all(false);
+////                stopButton.show_all();
+//            }
+//            else {
+////                stopButton.set_no_show_all(true);
+////                stopButton.hide();
+//            }
+//            _usestop = value;
+//        }
+//    }
     
-    private bool _compact_layout;
-    public bool compact_layout {
-        get {
-            return _compact_layout;
-        }
-        set {
-            if(value) {
-                if(menubar.get_parent() != null)
-                    menuvbox.remove(menubar);
-                
-                app_menu_button.show();
-            }
-            else {
-                if(menubar.get_parent() == null) {
-                    menuvbox.add(menubar);
-                    menubar.show();
-                }
-                app_menu_button.hide();
-            }
-            _compact_layout = value;
-        }
-    }
+//    private bool _compact_layout;
+//    private bool compact_layout {
+//        get {
+//            return _compact_layout;
+//        }
+//        set {
+//            if(value) {
+//                if(menubar.get_parent() != null)
+//                    menuvbox.remove(menubar);
+//                
+//                app_menu_button.show();
+//            }
+//            else {
+//                if(menubar.get_parent() == null) {
+//                    menuvbox.add(menubar);
+//                    menubar.show();
+//                }
+//                app_menu_button.hide();
+//            }
+//            _compact_layout = value;
+//        }
+//    }
 
     public MainWindow() {
         Params.iparams_register(this);
@@ -780,7 +776,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void menutoggle_playpause() {
-        playPauseButton.on_clicked(playPauseButton);
+        handle_playpause_action();
+//        playPauseButton.on_clicked(playPauseButton);
     }
 
     private void menu_next() {
@@ -837,7 +834,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case Gdk.Key.space: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                     return false;
-                playPauseButton.on_clicked(playPauseButton);
+                //playPauseButton.on_clicked(playPauseButton);
+                handle_playpause_action();
                 return true;
             }
             case Gdk.Key.plus: {
@@ -1083,8 +1081,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return false;
         });
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
-        usestop                     = Params.get_bool_value("usestop");
-        compact_layout              = Params.get_bool_value("compact_layout");
+//        usestop                     = Params.get_bool_value("usestop");
+//        compact_layout              = Params.get_bool_value("compact_layout");
+//        compact_layout = true;
         
         if(Params.get_bool_value("continue_last_song")) {
             string current_uri = Params.get_string_value("current_uri");
@@ -1109,8 +1108,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         Params.set_int_value("hp_position", this.hpaned.get_position());
         
         Params.set_int_value("repeatstate", repeatState);
-        Params.set_bool_value("usestop", this.usestop);
-        Params.set_bool_value("compact_layout", this.compact_layout);
+//        Params.set_bool_value("usestop", this.usestop);
+//        Params.set_bool_value("compact_layout", this.compact_layout);
         Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
     }
 
@@ -1635,7 +1634,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
 
-    internal void handle_control_button_click(ControlButton sender, ControlButton.Function dir) {
+    internal void handle_control_button_click(ControlButton.Function dir) {
         if(dir == ControlButton.Function.NEXT || dir == ControlButton.Function.PREVIOUS) {
             if(global.in_preview)
                 return;
@@ -1710,7 +1709,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             bottom_notebook.append_page(paned_overlay, null);
             
             ///BOX FOR MAIN MENU
-            menuvbox = gb.get_object("menuvbox") as Gtk.Box;
+//            menuvbox = gb.get_object("menuvbox") as Gtk.Box;
             //UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
             action_group = new Gtk.ActionGroup("XnoiseActions");
             action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -1725,8 +1724,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 print("%s\n", e.message);
             }
         
-            menubar = (MenuBar)_ui_manager.get_widget("/MainMenu");
-            menuvbox.pack_start(menubar, false, false, 0);
+//            menubar = (MenuBar)_ui_manager.get_widget("/MainMenu");
+//            menuvbox.pack_start(menubar, false, false, 0);
         
             config_button_menu_root = (ImageMenuItem)_ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
             config_button_menu = (Gtk.Menu)config_button_menu_root.get_submenu();
@@ -1937,16 +1936,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_browser_box.pack_start(msw, true, true, 0);
             //----------------
             
-            //PLAYBACK CONTROLLS
-            this.previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
-            this.previousButton.sign_clicked.connect(handle_control_button_click);
-            this.previousButton.set_can_focus(false);
-            this.playPauseButton = new PlayPauseButton();
-            this.stopButton = new ControlButton(ControlButton.Function.STOP);
-            this.stopButton.set_no_show_all(true);
-            this.stopButton.sign_clicked.connect(handle_control_button_click);
-            this.nextButton = new ControlButton(ControlButton.Function.NEXT);
-            this.nextButton.sign_clicked.connect(handle_control_button_click);
+            //PLAYBACK CONTROLS
+//            var playback_control_bar = new PlayBackControlBar();
+//            this.previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
+//            this.previousButton.sign_clicked.connect(handle_control_button_click);
+//            this.previousButton.set_can_focus(false);
+//            this.playPauseButton = new PlayPauseButton();
+//            this.stopButton = new ControlButton(ControlButton.Function.STOP);
+//            this.stopButton.set_no_show_all(true);
+//            this.stopButton.sign_clicked.connect(handle_control_button_click);
+//            this.nextButton = new ControlButton(ControlButton.Function.NEXT);
+//            this.nextButton.sign_clicked.connect(handle_control_button_click);
             
             //PROGRESS BAR
             this.track_infobar = new TrackInfobar(gst_player);
@@ -1954,17 +1954,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
            //AppMenuButton for compact layout
             app_menu_button = new AppMenuButton(config_button_menu, _("Show application main menu"));
-            app_menu_button.set_no_show_all(true);
             
             
             //---------------------
-//            main_toolbar.insert(albumart_toggleb, -1);
-            main_toolbar.insert(albumimageTI, -1);
+            main_toolbar.insert(new PlayBackControlBar(), -1);
             main_toolbar.insert(new SeparatorToolItem(), -1);
-            main_toolbar.insert(previousButton, -1);
-            main_toolbar.insert(playPauseButton, -1);
-            main_toolbar.insert(stopButton, -1);
-            main_toolbar.insert(nextButton, -1);
+            main_toolbar.insert(albumimageTI, -1);
             main_toolbar.insert(new SeparatorToolItem(), -1);
             main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(volume_slider, -1);
@@ -2197,6 +2192,36 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         });
         return false;
     }
+    
+    internal void handle_playpause_action() {
+        if(global.current_uri == null) {
+            string uri = tl.tracklistmodel.get_uri_for_current_position();
+            
+            if((uri != null) && (uri != EMPTYSTRING)) {
+                global.in_preview = false;
+                global.current_uri = uri;
+            }
+            else {
+                return;
+            }
+        }
+        if(global.in_preview) {
+            if(gst_player.playing) {
+                gst_player.pause();
+            }
+            else {
+                gst_player.play();
+            }
+            return;
+        }
+        if(global.player_state == PlayerState.PLAYING) {
+            global.player_state = PlayerState.PAUSED;
+        }
+        else {
+            global.player_state = PlayerState.PLAYING;
+        }
+        return;
+    }
 }
 
 private class Xnoise.SideBarHeadline : Gtk.TreeView {
@@ -2323,3 +2348,26 @@ private class BackgroundBox : Gtk.Box {
         return false;
     }
 }
+
+
+private class PlayBackControlBar : Gtk.ToolItem {
+    public PlayBackControlBar() {
+        var box = new Box(Orientation.HORIZONTAL,0);
+        box.set_homogeneous(true);
+        var previousButton = new ControlButton(ControlButton.Function.PREVIOUS);
+        previousButton.set_can_focus(false);
+        box.pack_start(previousButton, true, true, 0);
+        var playPauseButton = new PlayPauseButton();
+        box.pack_start(playPauseButton, false, false, 0);
+        var nextButton = new ControlButton(ControlButton.Function.NEXT);
+        box.pack_start(nextButton, true, true, 0);
+        this.set_can_focus(false);
+        this.add(box);
+        Idle.add(() => {
+            previousButton.sign_clicked.connect(main_window.handle_control_button_click);
+            nextButton.sign_clicked.connect(main_window.handle_control_button_click);
+            return false;
+        });
+    }
+}
+
