@@ -82,20 +82,28 @@ public class Xnoise.MediaImporter {
         
         //remove from db
         var job = new Worker.Job(Worker.ExecutionType.ONCE, remove_uris_job);
+        assert(file_uris != null);
         job.uris = file_uris;
         
         lock(removal_targets) {
             int i = 0;
-            foreach(string s in file_uris) {
-                file_uris_loc[i] = s; i++;
-                if(!removal_targets.contains(s)) {
-                    Item? it = Item(ItemType.UNKNOWN, s); // just for the balance
-                    removal_targets.insert(s, it);
+            foreach(string? s in file_uris) {
+                if(s != null) {
+                    file_uris_loc[i] = s; i++;
+                    if(!removal_targets.contains(s)) {
+                        Item? it = Item(ItemType.UNKNOWN, s); // just for the balance
+                        removal_targets.insert(s, it);
+                    }
+                }
+                else {
+                    file_uris_loc[i] = ""; i++;
                 }
             }
         }
         lock(import_targets) { // enter here also to avoid double refresh
-            foreach(string s in file_uris) {
+            foreach(string? s in file_uris) {
+                if(s == null)
+                    continue;
                 if(!import_targets.contains(s)) {
                     Item? it = Item(ItemType.UNKNOWN, s); // just for the balance
                     import_targets.insert(s, it);
@@ -115,7 +123,9 @@ public class Xnoise.MediaImporter {
         return_val_if_fail(db_worker.is_same_thread(), false);
         
         lock(import_targets) {
-            foreach(string s in xjob.uris) {
+            foreach(string? s in xjob.uris) {
+                if(s == null)
+                    continue;
                 if(!import_targets.contains(s)) {
                     Item? it = Item(ItemType.UNKNOWN, s); // just for the balance
                     import_targets.insert(s, it);
@@ -135,7 +145,9 @@ public class Xnoise.MediaImporter {
         job.uris = file_uris;
         
         lock(removal_targets) {
-            foreach(string s in file_uris) {
+            foreach(string? s in file_uris) {
+                if(s == null)
+                    continue;
                 if(!removal_targets.contains(s)) {
                     Item? i = Item(ItemType.UNKNOWN, s); // just for the balance
                     removal_targets.insert(s, i);
@@ -190,8 +202,13 @@ public class Xnoise.MediaImporter {
         string[] uris = {};
         bool got_data = false;
         
-        foreach(string s in job.uris) {
+        foreach(string? s in job.uris) {
+            if(s == null)
+                continue;
             File f = File.new_for_uri(s);
+            
+            if(f == null)
+                continue;
             
             if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
                 return false;
@@ -327,6 +344,8 @@ public class Xnoise.MediaImporter {
 //    }
     
     private void finished_import_target(Item? item) {
+        if(item == null || item.uri == null)
+            return;
         lock(import_targets) {
             if(item != null && import_targets.contains(item.uri)) {
                 import_targets.remove(item.uri);
@@ -380,7 +399,9 @@ public class Xnoise.MediaImporter {
         update_media_folder_list();
     }
     
-    internal void remove_folder_item(Item folder) {
+    internal void remove_folder_item(Item? folder) {
+        return_val_if_fail(folder != null, false);
+        return_val_if_fail(folder.uri != null, false);
         return_val_if_fail(folder.type == ItemType.LOCAL_FOLDER, false);
         bool already_in_process = false;
         lock(removal_targets) {
@@ -465,6 +486,8 @@ public class Xnoise.MediaImporter {
         return_val_if_fail(db_worker.is_same_thread(), false);
         
         bool add_folder_to_media_folders = (bool)job.get_arg("add_folder_to_media_folders");
+        assert(job.item != null);
+        assert(job.item.uri != null);
         File? dir = File.new_for_uri(job.item.uri);
         assert(dir != null);
         
@@ -739,6 +762,8 @@ public class Xnoise.MediaImporter {
         //this function shall run in the io thread
         return_val_if_fail(io_worker.is_same_thread(), false);
         //count_media_files((File)job.get_arg("dir"), job);
+        assert(job.item != null);
+        assert(job.item.uri != null);
         File d = File.new_for_uri(job.item.uri); //(File)job.get_arg("dir");
         Item? i = job.item;
         uint xx = 0;
@@ -855,7 +880,9 @@ public class Xnoise.MediaImporter {
         db_writer.commit_transaction();
         if(remove_import_targets) {
             lock(import_targets) {
-                foreach(string s in job.uris) {
+                foreach(string? s in job.uris) {
+                    if(s == null)
+                        continue;
                     //print("REMOVE URI from i_t %s\n", s);
                     import_targets.remove(s);
                 }

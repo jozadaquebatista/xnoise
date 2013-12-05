@@ -59,12 +59,12 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     public MediaChangeDetector() {
         assert(media_importer != null);
         worker = new Worker(MainContext.default());
-        global.notify["media-import-in-progress"].connect( () => {
-            if(!finished_database_read)
-                check_start_conditions();
-        });
         permission = false;
         Timeout.add_seconds(4, () => {
+            global.notify["media-import-in-progress"].connect( () => {
+                if(!finished_database_read)
+                    check_start_conditions();
+            });
             check_start_conditions();
             return false;
         });
@@ -94,15 +94,11 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 start_source = 0;
             }
             permission = false;
-//            Idle.add(() => {
-//                do_check();
-//                return false;
-//            });
         }
     }
     
     private void do_check() {
-        if(GlobalAccess.main_cancellable.is_cancelled())
+        if(GlobalAccess.main_cancellable == null || GlobalAccess.main_cancellable.is_cancelled())
             return;
         if(!finished_database_read && permission) {
             process_existing_library_content();
@@ -120,9 +116,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             return;
         
         foreach(Item? item in media_importer.get_media_folder_list()) {
-            if(item == null) {
-                print("no media folder in offline change queue\n");
-                return;
+            if(item == null || item.uri == null) {
+                continue;
             }
             print("start folder scan for %s\n", item.uri);
             File f = File.new_for_uri(item.uri);
@@ -156,6 +151,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
         return_val_if_fail(worker.is_same_thread(), false);
+        return_val_if_fail(job.item != null, false);
+        return_val_if_fail(job.item.uri != null, false);
         File d = File.new_for_uri(job.item.uri);
         Item? i = job.item;
         read_recoursive(d, job);
@@ -327,11 +324,17 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         
         if(end) {
             finished_database_read = true;
-            var finish_job = new Worker.Job(Worker.ExecutionType.ONCE, (job) => {
-                if(changed_uris.length != 0)
-                    media_importer.reimport_media_files(changed_uris);
-                if(removed_uris.length != 0)
-                    media_importer.remove_uris(removed_uris);
+            var finish_job = new Worker.Job(Worker.ExecutionType.ONCE, (xxjob) => {
+                if(changed_uris.length != 0) {
+                    string[] changed_uris_loc = changed_uris;
+                    changed_uris = {};
+                    media_importer.reimport_media_files(changed_uris_loc);
+                }
+                if(removed_uris.length != 0) {
+                    string[] removed_uris_loc = removed_uris;
+                    removed_uris = {};
+                    media_importer.remove_uris(removed_uris_loc);
+                }
                 Idle.add(() => {
                     finished_old_file_check = true;
                     do_check();
@@ -357,7 +360,11 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             }
         }
         foreach(FileData fd in job.file_data) {
-            File f = File.new_for_uri(fd.uri);
+            if(fd.uri == null)
+                continue;
+            File? f = File.new_for_uri(fd.uri);
+            if(f == null)
+                continue;
             int32 change_time = 0;
             try {
                 FileInfo info = f.query_info(FileAttribute.TIME_CHANGED,
@@ -380,12 +387,14 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             }
         }
         if(changed_uris.length != 0) {
-            media_importer.reimport_media_files(changed_uris);
+            string[] changed_uris_loc = changed_uris;
             changed_uris = {};
+            media_importer.reimport_media_files(changed_uris_loc);
         }
         if(removed_uris.length != 0) {
-            media_importer.remove_uris(removed_uris);
+            string[] removed_uris_loc = removed_uris;
             removed_uris = {};
+            media_importer.remove_uris(removed_uris_loc);
         }
         return false;
     }

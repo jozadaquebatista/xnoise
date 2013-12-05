@@ -146,7 +146,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         
         this.media_source_selector_box = new Box(Orientation.VERTICAL, 0);
         
-        var coll_headline = new SideBarHeadline(_("Media Collections"));
+        var coll_headline = new SideBarHeadline(""); // _("Media Collections")
         coll_headline.can_focus = false;
         this.pack_start(coll_headline, false, false, 0);
         this.pack_start(media_source_selector_box, false, false, 0);
