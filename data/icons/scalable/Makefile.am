@@ -6,6 +6,7 @@ icon_DATA = xnoise.svg
 statusdir = $(datadir)/icons/hicolor/scalable/status
 status_DATA = \
     xn-albumart.svg \
+    xnoise-no-border.svg \
     xn-circle-icon.svg \
     xn-emblem-system-symbolic.svg \
     xn-equalizer-symbolic.svg \

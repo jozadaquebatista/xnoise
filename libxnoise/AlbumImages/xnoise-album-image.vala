@@ -39,7 +39,7 @@ using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
     internal static const int SIZE = 48;
-    private const double radius = SIZE / 2.4;
+//    private const double radius = SIZE / 2.4;
     private const double SELECTED_BACKGROUND_ALPHA = 0.4;
     private Gdk.Pixbuf? prelit_image = null;
     private Gdk.Pixbuf? seleted_image = null;
@@ -126,6 +126,13 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         queue_draw();
     }
     
+    private double x = 0.0;
+    private double y = 0.0;
+    private double radius = 5.0;
+    private double width  = SIZE * 1.0;
+    private double height = SIZE * 1.0;
+    private double degrees = Math.PI / 180.0;
+    
     public override bool draw(Cairo.Context cr) {
         Gtk.StyleContext context = this.get_style_context();
         Gdk.RGBA col = context.get_color(StateFlags.NORMAL);
@@ -133,18 +140,18 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         if(this.pixbuf != null) {
             cr.set_source_rgb(col.red, col.green, col.blue);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            cr.arc(x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
         }
-        cr.arc(SIZE / 2.0, 
-               SIZE / 2.0,
-               radius, 
-               0.0, 
-               2.0 * Math.PI);
+        cr.arc(x + width - radius - 1, y + radius + 1, radius, -90 * degrees, 0 * degrees);
+        cr.arc(x + width - radius -1, y + height - radius -1, radius, 0 * degrees, 90 * degrees);
+        cr.arc(x + radius +1, y + height - radius -1, radius, 90 * degrees, 180 * degrees);
+        cr.arc(x + radius +1, y + radius +1, radius, 180 * degrees, 270 * degrees);
+        cr.close_path ();
         cr.clip ();
         cr.new_path();
         if(this.pixbuf == null) {
@@ -158,11 +165,12 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.paint();
             cr.set_source_rgba(col.red, col.green, col.blue, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 1, y + radius + 1, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -1, y + height - radius -1, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +1, y + height - radius -1, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +1, y + radius +1, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(prelit_image == null)
@@ -180,11 +188,12 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.paint();
             cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 1, y + radius + 1, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -1, y + height - radius -1, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +1, y + height - radius -1, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +1, y + radius +1, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(seleted_image == null)
@@ -202,11 +211,12 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.paint();
             cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 1, y + radius + 1, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -1, y + height - radius -1, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +1, y + height - radius -1, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +1, y + radius +1, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(prelitseleted_image == null)
