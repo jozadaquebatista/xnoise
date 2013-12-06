@@ -123,11 +123,19 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
             }
         });
         
+        global.notify["media-import-in-progress"].connect( () => {
+            if(global.media_import_in_progress) {
+                this.in_import = true;
+            }
+            else {
+                this.in_import = false;
+            }
+        });
         media_importer.changed_library.connect( () => {
 //        global.notify["media-import-in-progress"].connect( () => {
 //            if(!global.media_import_in_progress) {
             Idle.add(() => {
-                this.in_import = false;
+//                this.in_import = false;
                 this.icons_model.filter();
                 return false;
             });

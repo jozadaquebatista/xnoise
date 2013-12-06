@@ -1633,7 +1633,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         track_infobar.title_text = text; //song_title_label.set_text(text);
     }
 
-
+    private static bool is_rtl() {
+        return Widget.get_default_direction() == TextDirection.RTL;
+    }
+    
     internal void handle_control_button_click(ControlButton.Function dir) {
         if(dir == ControlButton.Function.NEXT || dir == ControlButton.Function.PREVIOUS) {
             if(global.in_preview)
@@ -1986,18 +1989,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             spinner.halign = Align.CENTER;
             spinner.valign = Align.CENTER;
             spinner.set_no_show_all(true);
+            var album_art_back_button = new Button();
+            album_art_back_button.add(icon_repo.get_themed_image_icon(
+                                                (is_rtl() ? "edit-undo-rtl-symbolic" : "edit-undo-symbolic"), 
+                                                IconSize.LARGE_TOOLBAR)
+            );
+            album_art_back_button.clicked.connect( () => { album_art_view_visible = false; });
+            album_art_back_button.tooltip_text = _("Return to normal view");
+            album_art_overlay.add_overlay(album_art_back_button);
+//            album_art_overlay.get_child_position.connect(on_album_art_overlay_child_pos);
+            album_art_back_button.halign = Align.END;
+            album_art_back_button.valign = Align.END;
             album_art_view.show();
             album_art_view.notify.connect( (s,p) => {
                 if(p.name != "in-import")
                     return;
                 if(album_art_view.in_import) {
-                    //print("in import\n");
+                    //print("## in import\n");
                     spinner.start();
                     spinner.set_no_show_all(false);
                     spinner.show_all();
                 }
                 else {
-                    //print("not in import\n");
+                    //print("## not in import\n");
                     spinner.stop();
                     spinner.hide();
                     spinner.set_no_show_all(true);
@@ -2106,6 +2120,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.delete_event.connect(this.on_close); //only send to tray
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
+    }
+    
+    private bool on_album_art_overlay_child_pos(Overlay sender,
+                                                Widget widget,
+                                                Gdk.Rectangle allocation) {
+        if(!(widget is Gtk.Button))
+            return false;
+        Gtk.Requisition min, nat;
+        allocation = Gdk.Rectangle();
+        widget.get_preferred_size(out min, out nat);
+//        int slider_width = 0;
+//        tracklist_scrollbar.style_get("slider-width", out slider_width);
+        allocation.x      = sender.get_allocated_width() - min.width;// - 10;
+        allocation.y      = int.max(0, sender.get_allocated_height() - 50);
+        allocation.width  = min.width;
+        allocation.height = min.height;
+        return true;
     }
     
     private bool on_content_overlay_child_pos(Overlay sender,
