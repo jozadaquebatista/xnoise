@@ -955,7 +955,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         main_view_sbutton.select(VIDEOVIEW_NAME, true);
     }
 
-    private void on_show_tracklist_menu_clicked() {
+    internal void on_show_tracklist_menu_clicked() {
         Idle.add( () => {
             album_art_view_visible = false;
 //            album_view_toggle.set_active(false);

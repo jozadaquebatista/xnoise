@@ -1,6 +1,6 @@
 /* xnoise-videoscreen.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -217,6 +217,19 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             main_window.toggle_fullscreen();
         });
         rightmenu.append(fullscreenmenuitem);
+        if(!main_window.fullscreenwindowvisible) {
+            var tracklistmenuitem = new ImageMenuItem.from_stock(
+               Gtk.Stock.JUSTIFY_FILL,
+               null
+            );
+            tracklistmenuitem.set_label(
+               (_("Show Tracklist"))
+            );
+            tracklistmenuitem.activate.connect( () => { 
+                main_window.on_show_tracklist_menu_clicked();
+            });
+            rightmenu.append(tracklistmenuitem);
+        }
         if(rightmenu != null)
             rightmenu.show_all();
         return rightmenu;
