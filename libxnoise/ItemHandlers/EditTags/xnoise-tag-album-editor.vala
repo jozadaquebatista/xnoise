@@ -111,9 +111,17 @@ private class Xnoise.TagAlbumEditor : GLib.Object {
                     }
                     else {
                         unowned Gtk.IconTheme theme = IconTheme.get_default();
-                        if(theme.has_icon("xnoise")) 
-                            xicon = theme.load_icon("xnoise", 64, IconLookupFlags.USE_BUILTIN);
-                        albumimage.pixbuf = xicon;
+                        Gdk.Pixbuf? a_art_pixb = null;
+                        try {
+                            if(theme.has_icon("xn-albumart"))
+                                a_art_pixb = theme.load_icon("xn-albumart",
+                                                             ICON_LARGE_PIXELSIZE,
+                                                             Gtk.IconLookupFlags.FORCE_SIZE);
+                        }
+                        catch(Error e) {
+                            print("albumart icon missing. %s\n", e.message);
+                        }
+                        albumimage.pixbuf = a_art_pixb;
                     }
                     entry.text         = td.album;
                     artist_entry.text  = td.albumartist;//(td.is_compilation ? VARIOUS_ARTISTS : td.artist);
