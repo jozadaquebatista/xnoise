@@ -76,8 +76,6 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     private uint data_changed_source = 0;
     
     private void on_image_changed() {
-//        if(!Main.instance.use_notifications)
-//            return;
         if(global.current_uri == null)
             return;
         if(data_changed_source != 0)

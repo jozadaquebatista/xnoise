@@ -41,7 +41,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private Notebook notebook;
 //    private SpinButton sb;
 //    private int fontsizeMB;
-//    private CheckButton switch_showL;
+    private CheckButton switch_useLyrics;
     private CheckButton switch_usetray;
 //    private CheckButton switch_compact;
 //    private CheckButton switch_usestop;
@@ -82,8 +82,8 @@ private class Xnoise.SettingsWidget : Gtk.Box {
 //        assert(switch_usestop != null);
 //        switch_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
         
-//        assert(switch_showL != null);
-//        switch_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+        assert(switch_useLyrics != null);
+        switch_useLyrics.clicked.connect(this.on_checkbutton_use_lyrics_clicked);
         
         assert(switch_usetray != null);
         switch_usetray.clicked.connect(this.on_checkbutton_usetray_clicked);
@@ -110,7 +110,7 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         //Visible Cols
         
         //Treelines
-//        switch_showL.active = Params.get_bool_value("use_treelines");
+        switch_useLyrics.active = Params.get_bool_value("use_lyrics");
         
         switch_usetray.active = !Params.get_bool_value("not_use_systray");
         
@@ -143,16 +143,16 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         }
     }
     
-//    private void on_checkbutton_show_lines_clicked() {
-//        if(this.switch_showL.active) {
-//            Params.set_bool_value("use_treelines", true);
-//            main_window.musicBr.use_treelines = true;
-//        }
-//        else {
-//            Params.set_bool_value("use_treelines", false);
-//            main_window.musicBr.use_treelines = false;
-//        }
-//    }
+    private void on_checkbutton_use_lyrics_clicked() {
+        if(this.switch_useLyrics.active) {
+            Params.set_bool_value("use_lyrics", true);
+            main_window.active_lyrics = true;
+        }
+        else {
+            Params.set_bool_value("use_lyrics", false);
+            main_window.active_lyrics = false;
+        }
+    }
 //    
 //    private void on_checkbutton_compact_clicked() {
 //        if(this.switch_compact.active) {
@@ -280,10 +280,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             
             plugin_label_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             
-//            switch_showL = this.builder.get_object("cb_showlines") as Gtk.CheckButton;
-//            switch_showL.can_focus = false;
-//            switch_showL.set_label(_("Grid lines in media browser"));
-//            switch_showL.tooltip_text = _("Showing lines in the media browser might show hierarchies more clear");
+            switch_useLyrics = this.builder.get_object("cb_uselyrics") as Gtk.CheckButton;
+            switch_useLyrics.can_focus = false;
+            switch_useLyrics.set_label(_("Download lyrics"));
+            switch_useLyrics.tooltip_text = _("Automatic lyrics fetching from the internet");
 //            
             switch_usetray = this.builder.get_object("cb_usetray") as Gtk.CheckButton;
             switch_usetray.can_focus = false;

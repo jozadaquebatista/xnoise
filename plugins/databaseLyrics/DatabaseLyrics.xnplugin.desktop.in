@@ -2,10 +2,10 @@
 name=DatabaseLyrics
 _pretty-name=Lyrics downloading from internet
 module=DatabaseLyrics
-_description=Buffer lyrics in database
+_description=Download lyrics from the internet and save them locally
 website=https://github.com/shuerhaaken/xnoise
 icon=/path/to/icon
-user_activatable=yes
+user_activatable=no
 category=web_service
 copyright=Copyright © 2011 Jörn Magens
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

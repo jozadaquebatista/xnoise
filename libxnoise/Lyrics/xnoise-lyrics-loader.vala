@@ -112,7 +112,6 @@ public class Xnoise.LyricsLoader : GLib.Object {
     private void on_plugin_activated(Loader sender, Container p) {
         if(!p.is_lyrics_plugin)
             return;
-        main_window.active_lyrics = true;
         unowned ILyricsProvider prov = p.loaded_plugin as ILyricsProvider;
         if(prov == null) 
             return;
@@ -121,18 +120,6 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
     internal void remove_lyrics_provider(ILyricsProvider lp) {
         providers.remove(lp);
-        Idle.add( () => {
-            bool tmp = false;
-            foreach(string name in plugin_loader.lyrics_plugins_htable.get_keys()) {
-                if(plugin_loader.lyrics_plugins_htable.lookup(name).activated == true) {
-                    tmp = true;
-                    break;
-                }
-                tmp = false;
-            }
-            main_window.active_lyrics = tmp;
-            return false;
-        });
     }
 
     internal bool fetch(string _artist, string _title) {

@@ -94,15 +94,6 @@ public class Xnoise.Main : GLib.Object {
                 if(show_plugin_state) 
                     print("\n");
             }
-            bool tmp = false;
-            foreach(string name in plugin_loader.lyrics_plugins_htable.get_keys()) {
-                if(plugin_loader.lyrics_plugins_htable.lookup(name).activated == true) {
-                    tmp = true;
-                    break;
-                }
-                tmp = false;
-            }
-            main_window.active_lyrics = tmp;
         }
         
         // POSIX SIGNALS

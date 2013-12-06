@@ -118,9 +118,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return _active_lyrics;
         }
         set {
-            if(value == true) {
+            bool tmp = false;
+            foreach(string name in plugin_loader.lyrics_plugins_htable.get_keys()) {
+                if(plugin_loader.lyrics_plugins_htable.lookup(name).activated == true) {
+                    tmp = true;
+                    break;
+                }
+            }
+            if(value == true && tmp == true) {
                 if(!main_view_sbutton.has_item(LYRICS_VIEW_NAME)) {
-                    main_view_sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+                    main_view_sbutton.insert(LYRICS_VIEW_NAME, 
+                                             SHOWLYRICS, 
+                                             icon_repo.get_themed_image_icon("insert-text-symbolic", 
+                                                                             IconSize.SMALL_TOOLBAR)
+                    );
                 }
             }
             else {
@@ -1047,6 +1058,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if (hp_position > 0)
             this.hpaned.set_position(hp_position);
         
+        active_lyrics = Params.get_bool_value("use_lyrics");
+        
+        print("USE LYRICS = %s\n", active_lyrics.to_string());
         Idle.add( () => {
             string x = Params.get_string_value("MainViewName"); //TODO
             switch(x) {
@@ -1936,11 +1950,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                                      icon_repo.get_themed_image_icon("video-display-symbolic", 
                                                                      IconSize.SMALL_TOOLBAR)
             );
-            main_view_sbutton.insert(LYRICS_VIEW_NAME, 
-                                     SHOWLYRICS, 
-                                     icon_repo.get_themed_image_icon("insert-text-symbolic", 
-                                                                     IconSize.SMALL_TOOLBAR)
-            );
+            if(Params.get_bool_value("use_lyrics")) {
+                main_view_sbutton.insert(LYRICS_VIEW_NAME, 
+                                         SHOWLYRICS, 
+                                         icon_repo.get_themed_image_icon("insert-text-symbolic", 
+                                                                         IconSize.SMALL_TOOLBAR)
+                );
+            }
             
             main_view_sbutton.sign_selected.connect(on_serial_button_clicked);
             
@@ -1960,13 +1976,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             //---------------------
+            SeparatorToolItem separ = new SeparatorToolItem();
+            separ.draw = false;
             main_toolbar.insert(new PlayBackControlBar(), -1);
             main_toolbar.insert(albumimageTI, -1);
-            main_toolbar.insert(new SeparatorToolItem(), -1);
+            main_toolbar.insert(separ, -1);
             main_toolbar.insert(this.track_infobar, -1);
-            main_toolbar.insert(new SeparatorToolItem(), -1);
+            separ = new SeparatorToolItem();
+            separ.draw = false;
+            main_toolbar.insert(separ, -1);
             main_toolbar.insert(serialTI, -1);
-            main_toolbar.insert(new SeparatorToolItem(), -1);
+            separ = new SeparatorToolItem();
+            separ.draw = false;
+            main_toolbar.insert(separ, -1);
             main_toolbar.insert(volume_slider, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;

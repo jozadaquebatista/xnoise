@@ -55,17 +55,8 @@ private class Xnoise.PlayPauseButton: Gtk.Box {
     public PlayPauseButton() {
         xn = Main.instance;
         this.can_focus = false;
-//        var box = new Gtk.Box(Orientation.VERTICAL, 0);
         button = new Gtk.Button();
         button.set_relief(ReliefStyle.NONE);
-//        button.set_size_request(48, -1);
-//        var eb = new Gtk.EventBox();
-//        eb.visible_window = false;
-//        box.pack_start(eb, true, true, 0);
-//        box.pack_start(button, false, false, 0);
-//        eb = new Gtk.EventBox();
-//        eb.visible_window = false;
-//        box.pack_start(eb, true, true, 0);
         
         unowned IconTheme theme = IconTheme.get_default();
         
@@ -99,52 +90,13 @@ private class Xnoise.PlayPauseButton: Gtk.Box {
         gst_player.sign_playing.connect(this.update_picture);
     }
 
-//    public void on_menu_clicked(Gtk.MenuItem sender) {
-//        handle_click();
-//    }
-
     private void on_clicked(Gtk.Widget sender) {
-//        handle_click();
         Idle.add(handle_click_async);
     }
 
-    /**
-     * This method is used to handle play/pause commands from different signal handler sources
-     */
-//    private void handle_click() {
-//        this.clicked();
-//    }
-    
     private bool handle_click_async() {
         main_window.handle_playpause_action();
         return false;
-//        if(global.current_uri == null) {
-//            string uri = tl.tracklistmodel.get_uri_for_current_position();
-//            
-//            if((uri != null) && (uri != EMPTYSTRING)) {
-//                global.in_preview = false;
-//                global.current_uri = uri;
-//            }
-//            else {
-//                return false;
-//            }
-//        }
-//        if(global.in_preview) {
-//            if(gst_player.playing) {
-//                gst_player.pause();
-//            }
-//            else {
-//                gst_player.play();
-//            }
-//            return false;
-//        }
-//        if(global.player_state == PlayerState.PLAYING) {
-//            global.player_state = PlayerState.PAUSED;
-//        }
-//        else {
-//            global.player_state = PlayerState.PLAYING;
-//        }
-//        return false;
     }
 
     public void update_picture() {

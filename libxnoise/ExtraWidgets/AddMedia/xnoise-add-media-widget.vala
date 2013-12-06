@@ -49,7 +49,6 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     private const string XNOISEICON = "xnoise";
     private ListStore listmodel;
     private TreeView tv;
-//    private bool fullrescan;
     private unowned Main xn;
     
     public Gtk.Builder builder;
@@ -101,7 +100,8 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             
             descriptionlabel.set_line_wrap(true);
             descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
-            descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
+            descriptionlabel.label = 
+                _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
             descriptionlabel.set_line_wrap(true);
             descriptionlabel.set_line_wrap_mode(Pango.WrapMode.WORD);
             this.pack_start(scrolledwindow1, true, true, 0);
