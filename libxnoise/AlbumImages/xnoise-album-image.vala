@@ -148,10 +148,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         cr.fill();
         //---------
         
-        cr.arc(x + width - radius - 0.8, y + radius + 0.8, radius, -90 * degrees, 0 * degrees);
-        cr.arc(x + width - radius -0.8, y + height - radius -0.8, radius, 0 * degrees, 90 * degrees);
-        cr.arc(x + radius +0.8, y + height - radius -0.8, radius, 90 * degrees, 180 * degrees);
-        cr.arc(x + radius +0.8, y + radius +0.8, radius, 180 * degrees, 270 * degrees);
+        cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+        cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+        cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+        cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
         cr.close_path ();
         cr.clip ();
         cr.new_path();
@@ -167,10 +167,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.set_source_rgba(col.red, col.green, col.blue, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
             cr.set_line_width(0);
             
-            cr.arc(x + width - radius - 0.8, y + radius + 0.8, radius, -90 * degrees, 0 * degrees);
-            cr.arc(x + width - radius -0.8, y + height - radius -0.8, radius, 0 * degrees, 90 * degrees);
-            cr.arc(x + radius +0.8, y + height - radius -0.8, radius, 90 * degrees, 180 * degrees);
-            cr.arc(x + radius +0.8, y + radius +0.8, radius, 180 * degrees, 270 * degrees);
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
             cr.close_path ();
             cr.fill();
             cr.paint();
@@ -190,10 +190,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
             
-            cr.arc(x + width - radius - 0.8, y + radius + 0.8, radius, -90 * degrees, 0 * degrees);
-            cr.arc(x + width - radius -0.8, y + height - radius -0.8, radius, 0 * degrees, 90 * degrees);
-            cr.arc(x + radius +0.8, y + height - radius -0.8, radius, 90 * degrees, 180 * degrees);
-            cr.arc(x + radius +0.8, y + radius +0.8, radius, 180 * degrees, 270 * degrees);
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
             cr.close_path ();
             cr.fill();
             cr.paint();
@@ -213,10 +213,10 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
             
-            cr.arc(x + width - radius - 0.8, y + radius + 0.8, radius, -90 * degrees, 0 * degrees);
-            cr.arc(x + width - radius -0.8, y + height - radius -0.8, radius, 0 * degrees, 90 * degrees);
-            cr.arc(x + radius +0.8, y + height - radius -0.8, radius, 90 * degrees, 180 * degrees);
-            cr.arc(x + radius +0.8, y + radius +0.8, radius, 180 * degrees, 270 * degrees);
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
             cr.close_path ();
             cr.fill();
             cr.paint();
