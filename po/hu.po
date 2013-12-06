@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-06 15:53+0100\n"
+"POT-Creation-Date: 2013-12-06 16:34+0100\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -95,7 +95,7 @@ msgid "unknown"
 msgstr "ismeretlen cím"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:140
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:453
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1540
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1568
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1610
@@ -106,7 +106,7 @@ msgid "by"
 msgstr "by"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:143
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:455
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1542
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1570
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1612
@@ -341,6 +341,11 @@ msgstr "Teljesképernyős mód elhagyása"
 msgid "Fullscreen"
 msgstr "Teljesképernyős mód elhagyása"
 
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
+#, fuzzy
+msgid "Show Tracklist"
+msgstr "Track lista"
+
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
 msgid "Search..."
@@ -414,7 +419,7 @@ msgstr "Extra oszlop mutatása a track listában:"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:122
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:71
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:75
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
 msgid ""
 "With this dialog you can change the metatags in the according files. \n"
@@ -441,7 +446,7 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:158
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:158
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:199
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:207
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:210
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
@@ -450,7 +455,7 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:162
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:203
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:211
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:214
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
@@ -462,30 +467,30 @@ msgid "Type new album name."
 msgstr "Change album name"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:138
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:185
 msgid "Album:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:172
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
 #, fuzzy
 msgid "Album data"
 msgstr "Change album name"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:175
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
 #, fuzzy
 msgid "Please enter new album data."
 msgstr "Change album name"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:176
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
 #, fuzzy
 msgid "Album Artist:"
 msgstr "Change album name"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:178
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:186
 msgid "Year:"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:179
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:187
 msgid "Genre:"
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-06 15:53+0100\n"
+"POT-Creation-Date: 2013-12-06 16:34+0100\n"
 "PO-Revision-Date: 2013-09-20 14:06+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -86,7 +86,7 @@ msgid "unknown"
 msgstr "未知"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:140
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:440
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:453
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1540
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1568
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1610
@@ -97,7 +97,7 @@ msgid "by"
 msgstr "由"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:143
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:442
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:455
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1542
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1570
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1612
@@ -324,6 +324,11 @@ msgstr "離開全螢幕"
 msgid "Fullscreen"
 msgstr "全螢幕"
 
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
+#, fuzzy
+msgid "Show Tracklist"
+msgstr "曲目清單"
+
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
 msgid "Search..."
@@ -390,7 +395,7 @@ msgstr "加入所有歌曲到曲目清單"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:122
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:71
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:75
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:162
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
 msgid ""
 "With this dialog you can change the metatags in the according files. \n"
@@ -415,7 +420,7 @@ msgstr "演出者："
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:158
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:158
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:199
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:207
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:210
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
@@ -424,7 +429,7 @@ msgstr "請稍候，在填補媒體瀏覽器。或取消，如果您不想等待
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artist-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:162
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:203
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:211
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:214
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
@@ -435,27 +440,27 @@ msgid "Type new album name."
 msgstr "輸入新專輯名稱。"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-albumartist-editor.vala:138
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:177
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:185
 msgid "Album:"
 msgstr "專輯："
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:172
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
 msgid "Album data"
 msgstr "專輯資料"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:175
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
 msgid "Please enter new album data."
 msgstr "請輸入新專輯的資料。"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:176
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
 msgid "Album Artist:"
 msgstr "專輯演出者："
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:178
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:186
 msgid "Year:"
 msgstr "年度："
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:179
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:187
 msgid "Genre:"
 msgstr "類型："
 
