@@ -34,7 +34,7 @@ using Xnoise;
 
 public class Xnoise.MediaMonitor : GLib.Object {
     
-    private class Event {
+    private class Event : GLib.Object {
         public enum ChangeType {
             CHANGED_FILE,
             DELETED_FILE,
@@ -47,6 +47,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
         public ChangeType type;
         
         public Event(ChangeType type, string path) {
+            assert(path != null && path != "");
             this.type  = type;
             this.path  = path;
         }
@@ -105,39 +106,49 @@ public class Xnoise.MediaMonitor : GLib.Object {
                 if(global.media_import_in_progress)
                     return;
                 if(!monitors.contains(file.get_path())) {
-                    if(!event_table.contains(file.get_path()))
-                        event_table.insert(file.get_path(), 
-                                           new Event(Event.ChangeType.CHANGED_FILE, file.get_path()));
+                    lock(event_table) {
+                        if(!event_table.contains(file.get_path()))
+                            event_table.insert(file.get_path(), 
+                                               new Event(Event.ChangeType.CHANGED_FILE, file.get_path()));
+                    }
                     event_table_changed();
                 }
                 break;
             case FileMonitorEvent.CREATED:
                 if(file.query_file_type(FileQueryInfoFlags.NONE, null) == FileType.DIRECTORY) {
-                    add_monitor_for_directory(file);
-                    event_table.insert(file.get_path(), 
-                                       new Event(Event.ChangeType.ADDED_DIR, file.get_path()));
+                    lock(event_table) {
+                        add_monitor_for_directory(file);
+                        event_table.insert(file.get_path(), 
+                                           new Event(Event.ChangeType.ADDED_DIR, file.get_path()));
+                    }
                 }
                 else {
-                    event_table.insert(file.get_path(), 
-                                       new Event(Event.ChangeType.ADDED_FILE, file.get_path()));
+                    lock(event_table) {
+                        event_table.insert(file.get_path(), 
+                                           new Event(Event.ChangeType.ADDED_FILE, file.get_path()));
+                    }
                 }
                 event_table_changed();
                 break;
             case FileMonitorEvent.DELETED:
                 if(monitors.contains(file.get_path())) { // DIRS
                     monitors.remove(file.get_path());
-                    if(event_table.contains(file.get_path()))
-                        event_table.remove(file.get_path());
+                    lock(event_table) {
+                        if(event_table.contains(file.get_path()))
+                            event_table.remove(file.get_path());
                     
-                    event_table.insert(file.get_path(), 
-                                       new Event(Event.ChangeType.DELETED_DIR, file.get_path()));
+                        event_table.insert(file.get_path(), 
+                                           new Event(Event.ChangeType.DELETED_DIR, file.get_path()));
+                    }
                 }
                 else { // FILES
-                    if(event_table.contains(file.get_path()))
-                        event_table.remove(file.get_path());
-                    
-                    event_table.insert(file.get_path(), 
-                                       new Event(Event.ChangeType.DELETED_FILE, file.get_path()));
+                    lock(event_table) {
+                        if(event_table.contains(file.get_path()))
+                            event_table.remove(file.get_path());
+                        
+                        event_table.insert(file.get_path(), 
+                                           new Event(Event.ChangeType.DELETED_FILE, file.get_path()));
+                    }
                 }
                 event_table_changed();
                 break;
@@ -146,37 +157,41 @@ public class Xnoise.MediaMonitor : GLib.Object {
                     monitors.remove(file.get_path());
                     add_monitor_for_directory(other_file);
                     
-                    if(event_table.contains(file.get_path()))
-                        event_table.remove(file.get_path());
-                    
-                    event_table.insert(file.get_path(), 
-                                       new Event(Event.ChangeType.DELETED_DIR, 
-                                                             file.get_path()));
-                    
-                    event_table.insert(other_file.get_path(), 
-                                       new Event(Event.ChangeType.ADDED_DIR, 
-                                                             other_file.get_path()));
+                    lock(event_table) {
+                        if(event_table.contains(file.get_path()))
+                            event_table.remove(file.get_path());
+                        
+                        event_table.insert(file.get_path(), 
+                                           new Event(Event.ChangeType.DELETED_DIR, 
+                                                                 file.get_path()));
+                        
+                        event_table.insert(other_file.get_path(), 
+                                           new Event(Event.ChangeType.ADDED_DIR, 
+                                                                 other_file.get_path()));
+                    }
                 }
                 else {
                     bool temp_file = false;
-                    if(event_table.contains(file.get_path())) {
-                        if(event_table.lookup(file.get_path()).type == Event.ChangeType.ADDED_FILE) {
-                            temp_file = true;
+                    lock(event_table) {
+                        if(event_table.contains(file.get_path())) {
+                            if(event_table.lookup(file.get_path()).type == Event.ChangeType.ADDED_FILE) {
+                                temp_file = true;
+                            }
+                            event_table.remove(file.get_path());
                         }
-                        event_table.remove(file.get_path());
-                    }
-                    if(temp_file) {
-                        event_table.insert(other_file.get_path(), 
-                                           new Event(Event.ChangeType.CHANGED_FILE, 
-                                                                 other_file.get_path()));
-                    }
-                    else {
-                        event_table.insert(file.get_path(), 
-                                           new Event(Event.ChangeType.DELETED_FILE, 
-                                                                 file.get_path()));
-                        event_table.insert(other_file.get_path(), 
-                                           new Event(Event.ChangeType.ADDED_FILE, 
-                                                                 other_file.get_path()));
+                        if(temp_file) {
+                            event_table.insert(other_file.get_path(), 
+                                               new Event(Event.ChangeType.CHANGED_FILE, 
+                                                                     other_file.get_path()));
+                        }
+                        else {
+                            event_table.insert(file.get_path(), 
+                                               new Event(Event.ChangeType.DELETED_FILE, 
+                                                                     file.get_path()));
+                            event_table.insert(other_file.get_path(), 
+                                               new Event(Event.ChangeType.ADDED_FILE, 
+                                                                     other_file.get_path()));
+                        }
                     }
                 }
                 event_table_changed();
@@ -198,42 +213,47 @@ public class Xnoise.MediaMonitor : GLib.Object {
                 //print("current source removed\n");
                 return false;
             }
-            HashTable<string, Event> local_event_table = event_table;
-            event_table = new HashTable<string, Event>(str_hash, str_equal);
-            List<Event> list = local_event_table.get_values();
-            
             string[] add_uris = {};
             string[] remove_uris = {};
             string[] reimport_uris = {};
             
-            foreach(Event e in list) {
-                assert(e.path != null);
-                //print("EVHT: %s  ::  %s\n", e.path, e.type.to_string());
-                switch(e.type) {
-                    case Event.ChangeType.ADDED_DIR:
-                        File folder = File.new_for_path(e.path);
-                        Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
-                        media_importer.add_import_target_folder(item, false);
-                        break;
-                    case Event.ChangeType.DELETED_DIR:
-                        File folder = File.new_for_path(e.path);
-                        Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
-                        media_importer.remove_folder_item(item);
-                        break;
-                    case Event.ChangeType.CHANGED_FILE:
-                        File file = File.new_for_path(e.path);
-                        reimport_uris += file.get_uri();
-                        break;
-                    case Event.ChangeType.ADDED_FILE:
-                        File file = File.new_for_path(e.path);
-                        add_uris += file.get_uri();
-                        break;
-                    case Event.ChangeType.DELETED_FILE:
-                        File file = File.new_for_path(e.path);
-                        remove_uris += file.get_uri();
-                        break;
-                    default: break;
+            lock(event_table) {
+                
+                foreach(Event e in event_table.get_values()) {
+                    assert(e != null);
+                    if(e == null) {
+                        print("FileMon error. this should not happen!\n");
+                        continue;
+                    }
+                    assert(e.path != null);
+                    //print("EVHT: %s  ::  %s\n", e.path, e.type.to_string());
+                    switch(e.type) {
+                        case Event.ChangeType.ADDED_DIR:
+                            File folder = File.new_for_path(e.path);
+                            Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
+                            media_importer.add_import_target_folder(item, false);
+                            break;
+                        case Event.ChangeType.DELETED_DIR:
+                            File folder = File.new_for_path(e.path);
+                            Item item = Item(ItemType.LOCAL_FOLDER, folder.get_uri());
+                            media_importer.remove_folder_item(item);
+                            break;
+                        case Event.ChangeType.CHANGED_FILE:
+                            File file = File.new_for_path(e.path);
+                            reimport_uris += file.get_uri();
+                            break;
+                        case Event.ChangeType.ADDED_FILE:
+                            File file = File.new_for_path(e.path);
+                            add_uris += file.get_uri();
+                            break;
+                        case Event.ChangeType.DELETED_FILE:
+                            File file = File.new_for_path(e.path);
+                            remove_uris += file.get_uri();
+                            break;
+                        default: break;
+                    }
                 }
+                event_table = new HashTable<string, Event>(str_hash, str_equal);
             }
             
             if(remove_uris.length != 0)
@@ -251,7 +271,9 @@ public class Xnoise.MediaMonitor : GLib.Object {
         handler_id = source.attach(local_context);
     }
 
-    private void add_monitor_for_directory(File dir){
+    private void add_monitor_for_directory(File? dir){
+        if(dir == null)
+            return;
         try {
             FileMonitor monitor = dir.monitor_directory(FileMonitorFlags.SEND_MOVED);
             monitor.changed.connect(on_changed);
@@ -271,7 +293,11 @@ public class Xnoise.MediaMonitor : GLib.Object {
             monitors = new HashTable<string, FileMonitor>(str_hash, str_equal);
         
         foreach(Item? folder in media_importer.get_media_folder_list()) {
-            File dir = File.new_for_uri(folder.uri);//Environment.get_user_special_dir(UserDirectory.MUSIC));
+            if(folder == null || folder.uri == null)
+                continue;
+            File? dir = File.new_for_uri(folder.uri);//Environment.get_user_special_dir(UserDirectory.MUSIC));
+            if(dir == null)
+                continue;
             setup_monitor_recoursive(dir);
         }
         print("Finished setting up file monitors.\n");

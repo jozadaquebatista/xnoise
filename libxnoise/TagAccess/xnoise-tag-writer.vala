@@ -50,7 +50,7 @@ public class Xnoise.TagAccess.TagWriter {
             return false;
         
         Info info = null;
-        info = Info.create(path);
+        info = TagInfo.Info.create(path);
         
         if(info != null) {
             if(read_before_write)

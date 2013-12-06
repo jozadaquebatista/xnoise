@@ -191,10 +191,14 @@ private class Xnoise.TagGenreEditor : GLib.Object {
         if(job.item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
             global.in_tag_rename = true;
             for(int i = 0; i < job.track_dat.length; i++) {
-                File f = File.new_for_uri(job.track_dat[i].item.uri);
-                if(!f.query_exists(null))
+                if(job.track_dat[i] == null ||
+                   job.track_dat[i].item == null ||
+                   job.track_dat[i].item.uri == null)
                     continue;
-                if(!TagWriter.write_tag(f, job.track_dat[i], false)) {
+                File? f = File.new_for_uri(job.track_dat[i].item.uri);
+                if(f == null || !f.query_exists(null))
+                    continue;
+                if(!TagWriter.write_tag(f, job.track_dat[i], true)) {
                     print("No success for path : %s !!!\n", f.get_path());
                 }
             }
