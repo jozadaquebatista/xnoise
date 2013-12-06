@@ -39,15 +39,9 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     private Builder builder;
     private const string SETTINGS_UI_FILE = Config.XN_UIDIR + "settings.ui";
     private Notebook notebook;
-//    private SpinButton sb;
-//    private int fontsizeMB;
     private CheckButton switch_useLyrics;
     private CheckButton switch_usetray;
-//    private CheckButton switch_compact;
-//    private CheckButton switch_usestop;
     private CheckButton switch_quitifclosed;
-//    private CheckButton switch_use_notifications;
-//    private CheckButton switch_compact_media_selector;
     private CheckButton switch_continue_last_song;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
@@ -79,8 +73,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
     }
     
     private void connect_signals() {
-//        assert(switch_usestop != null);
-//        switch_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
         
         assert(switch_useLyrics != null);
         switch_useLyrics.clicked.connect(this.on_checkbutton_use_lyrics_clicked);
@@ -88,22 +80,11 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         assert(switch_usetray != null);
         switch_usetray.clicked.connect(this.on_checkbutton_usetray_clicked);
         
-//        assert(switch_compact != null);
-//        switch_compact.clicked.connect(this.on_checkbutton_compact_clicked);
-        
         assert(switch_quitifclosed != null);
         switch_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
         
-//        assert(switch_use_notifications != null);
-//        switch_use_notifications.clicked.connect(this.on_switch_use_notifications_clicked);
-        
-//        assert(switch_compact_media_selector != null);
-//        switch_compact_media_selector.clicked.connect(this.on_switch_compact_media_selector_clicked);
-        
         assert(switch_continue_last_song != null);
         switch_continue_last_song.clicked.connect(this.on_switch_continue_last_song_clicked);
-        
-//        sb.changed.connect(this.on_mb_font_changed);
     }
 
     private void initialize_members() {
@@ -111,23 +92,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         
         //Treelines
         switch_useLyrics.active = Params.get_bool_value("use_lyrics");
-        
+        //Tray
         switch_usetray.active = !Params.get_bool_value("not_use_systray");
-        
-        //compact layout / Application menu
-//        switch_compact.active = Params.get_bool_value("compact_layout");
-        
         //use stop button
         switch_quitifclosed.active = Params.get_bool_value("quit_if_closed");
-        
-//        switch_usestop.active = Params.get_bool_value("usestop");
-        
-//        switch_use_notifications.active = !Params.get_bool_value("not_use_notifications");
-        
-//        if(Params.get_string_value("media_source_selector_type") == "combobox")
-//            switch_compact_media_selector.active = true;
-//        else
-//            switch_compact_media_selector.active = false;
         
         switch_continue_last_song.active = Params.get_bool_value("continue_last_song");
     }
@@ -153,28 +121,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             main_window.active_lyrics = false;
         }
     }
-//    
-//    private void on_checkbutton_compact_clicked() {
-//        if(this.switch_compact.active) {
-//            Params.set_bool_value("compact_layout", true);
-//            main_window.compact_layout = true;
-//        }
-//        else {
-//            Params.set_bool_value("compact_layout", false);
-//            main_window.compact_layout = false;
-//        }
-//    }
-    
-//    private void on_switch_use_notifications_clicked() {
-//        if(this.switch_use_notifications.active) {
-//            Params.set_bool_value("not_use_notifications", false);
-//            Main.instance.use_notifications = true;
-//        }
-//        else {
-//            Params.set_bool_value("not_use_notifications", true);
-//            Main.instance.use_notifications = false;
-//        }
-//    }
     
     private void on_checkbutton_quitifclosed_clicked() {
         if(this.switch_quitifclosed.active) {
@@ -185,28 +131,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
         }
     }
     
-//    private void on_checkbutton_usestop_clicked() {
-//        if(this.switch_usestop.active) {
-//            Params.set_bool_value("usestop", true);
-//            main_window.usestop = true;
-//        }
-//        else {
-//            Params.set_bool_value("usestop", false);
-//            main_window.usestop = false;
-//        }
-//    }
-//    
-//    private void on_switch_compact_media_selector_clicked() {
-//        if(!this.switch_compact_media_selector.active) {
-//            Params.set_string_value("media_source_selector_type", "tree");
-//            main_window.msw.media_source_selector_type = "tree";
-//        }
-//        else {
-//            Params.set_string_value("media_source_selector_type", "combobox");
-//            main_window.msw.media_source_selector_type = "combobox";
-//        }
-//    }
-
     private void on_switch_continue_last_song_clicked() {
         if(this.switch_continue_last_song.active) {
             Params.set_bool_value("continue_last_song", true);
@@ -290,30 +214,10 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             switch_usetray.set_label(_("Use systray icon"));
             switch_usetray.tooltip_text = _("Use a status icon on your panel for showing, hiding and controlling xnoise");
             
-//            switch_compact = this.builder.get_object("cb_compact") as CheckButton;
-//            switch_compact.can_focus = false;
-//            switch_compact.set_label(_("Use menu button"));
-//            switch_compact.tooltip_text = _("Use an application menu button integrated into the main window");
-            
-//            switch_usestop = this.builder.get_object("cb_usestop") as CheckButton;
-//            switch_usestop.can_focus = false;
-//            switch_usestop.set_label(_("Show Stop button"));
-//            switch_usestop.tooltip_text = _("Show a stop button along with the other playback control buttons");
-//            
             switch_quitifclosed = this.builder.get_object("cb_quitifclosed") as CheckButton;
             switch_quitifclosed.can_focus = false;
             switch_quitifclosed.set_label(_("Quit on window close"));
             switch_quitifclosed.tooltip_text = _("Quit xnoise if the main window is closed");
-
-//            switch_use_notifications = this.builder.get_object("cb_use_notifications") as CheckButton;
-//            switch_use_notifications.can_focus = false;
-//            switch_use_notifications.set_label(_("Use desktop notifications"));
-//            switch_use_notifications.tooltip_text = _("Use desktop notifications that inform about played media while the main window of xnoise is not visible");
-            
-//            switch_compact_media_selector = this.builder.get_object("cb_compact_media_selector") as CheckButton;
-//            switch_compact_media_selector.can_focus = true;
-//            switch_compact_media_selector.set_label(_("Use combo box selector for media types"));
-//            switch_compact_media_selector.tooltip_text = _("Use a combo box for selecting media types like music, video or streams");
             
             switch_continue_last_song = this.builder.get_object("cb_continue_last_song") as CheckButton;
             switch_continue_last_song.can_focus = true;
@@ -324,13 +228,6 @@ private class Xnoise.SettingsWidget : Gtk.Box {
             notebook.scrollable = false;
             notebook.show_border = false;
             this.add(notebook);
-
-//            var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;
-//            fontsize_label.label = _("Media browser fontsize");
-            
-//            sb = this.builder.get_object("spinbutton1") as Gtk.SpinButton;
-//            sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
-//            sb.set_numeric(true);
             
             var mediabox = this.builder.get_object("mediabox") as Gtk.Box;
             add_media_widget = new AddMediaWidget();

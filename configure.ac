@@ -3,7 +3,7 @@ AC_PREREQ([2.68])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 2)
-m4_define(xnoise_micro_version, 19)
+m4_define(xnoise_micro_version, 20)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 m4_define([xnoise_name], [xnoise])
 
@@ -426,21 +426,6 @@ AM_CONDITIONAL(ENABLE_MAGNATUNE_MUSICSTORE, test x"$enable_magnatune" = "xyes")
 dnl ================================================================
 
 
-dnl ================================================================
-AC_ARG_ENABLE([reftrack],
-    AS_HELP_STRING([--enable-reftrack],
-    [Enable Object debug (default: disabled)]),
-    [enable_reftrack=$enableval],
-    [enable_reftrack=no])
-
-if test "x$enable_reftrack" = "xyes"; then
-    AC_MSG_NOTICE([Ref tracking enabled.])
-else
-    AC_MSG_NOTICE([Ref tracking not enabled.])
-fi
-AM_CONDITIONAL(REF_TRACKING_ENABLED, test x"$enable_reftrack" = "xyes")
-dnl ================================================================
-
 
 dnl ================================================================
 dnl check for gtk version > 3.4
@@ -559,7 +544,6 @@ echo "
     CFLAGS:                        ${CFLAGS}
     Vala compiler (if applicable): ${VALAC}
     Vala's glib target version:    ${TARGET_GLIB_VERSION}
-    Debug references:              ${enable_reftrack}
   
   ${bold}PLUGINS included in this build${normal}
   

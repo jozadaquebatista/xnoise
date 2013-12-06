@@ -269,10 +269,6 @@ namespace Xnoise {
             }
         }
         int re = app.run(sa_args);
-#if REF_TRACKING_ENABLED
-        print("dumping\n");
-        BaseObject.print_object_dump();
-#endif
         return re;
     }
 }

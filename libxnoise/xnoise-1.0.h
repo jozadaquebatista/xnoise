@@ -869,17 +869,6 @@ typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
 typedef struct _XnoiseAlbumDataPrivate XnoiseAlbumDataPrivate;
 
-#define XNOISE_TYPE_BASE_OBJECT (xnoise_base_object_get_type ())
-#define XNOISE_BASE_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_BASE_OBJECT, XnoiseBaseObject))
-#define XNOISE_BASE_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_BASE_OBJECT, XnoiseBaseObjectClass))
-#define XNOISE_IS_BASE_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_BASE_OBJECT))
-#define XNOISE_IS_BASE_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_BASE_OBJECT))
-#define XNOISE_BASE_OBJECT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_BASE_OBJECT, XnoiseBaseObjectClass))
-
-typedef struct _XnoiseBaseObject XnoiseBaseObject;
-typedef struct _XnoiseBaseObjectClass XnoiseBaseObjectClass;
-typedef struct _XnoiseBaseObjectPrivate XnoiseBaseObjectPrivate;
-
 #define XNOISE_TYPE_LOCAL_SCHEMES (xnoise_local_schemes_get_type ())
 #define XNOISE_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemes))
 #define XNOISE_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
@@ -1962,15 +1951,6 @@ struct _XnoiseAlbumDataClass {
 	void (*finalize) (XnoiseAlbumData *self);
 };
 
-struct _XnoiseBaseObject {
-	GObject parent_instance;
-	XnoiseBaseObjectPrivate * priv;
-};
-
-struct _XnoiseBaseObjectClass {
-	GObjectClass parent_class;
-};
-
 struct _XnoiseLocalSchemes {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -2525,6 +2505,7 @@ void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, XnoiseMainWindo
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_window_in_foreground (XnoiseMainWindow* self);
+void xnoise_main_window_set_window_in_foreground (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_album_art_view_visible (XnoiseMainWindow* self);
 void xnoise_main_window_set_album_art_view_visible (XnoiseMainWindow* self, gboolean value);
 GType xnoise_media_monitor_get_type (void) G_GNUC_CONST;
@@ -2952,8 +2933,6 @@ guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType re
 XnoiseAlbumData* xnoise_album_data_new (void);
 XnoiseAlbumData* xnoise_album_data_construct (GType object_type);
 XnoiseAlbumData* xnoise_copy_albumdata (XnoiseAlbumData* ad);
-GType xnoise_base_object_get_type (void) G_GNUC_CONST;
-XnoiseBaseObject* xnoise_base_object_construct (GType object_type);
 gpointer xnoise_local_schemes_ref (gpointer instance);
 void xnoise_local_schemes_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_local_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);

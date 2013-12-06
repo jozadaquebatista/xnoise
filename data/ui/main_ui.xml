@@ -53,8 +53,9 @@
 			<menuitem action="OpenLocationAction"/>
 			<separator />
 			<menuitem action="EqAction"/>
-			<menuitem action="AddRemoveAction"/>
+			<separator />
 			<menuitem action="SettingsAction"/>
+			<menuitem action="AddRemoveAction"/>
 			<separator />
 			<menuitem action="ShowMediaBrowserAction"/>
 			<menuitem action="ShowAlbumArtViewAction"/>

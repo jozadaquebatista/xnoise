@@ -41,12 +41,7 @@ public enum Xnoise.ExtDev.DeviceType {
     CDROM
 }
 
-public abstract class Xnoise.ExtDev.Device : 
-#if REF_TRACKING_ENABLED
-    BaseObject {
-#else
-    GLib.Object {
-#endif
+public abstract class Xnoise.ExtDev.Device : GLib.Object {
     public unowned Mount mount;
     private string? identifier = null;
     protected ItemHandler? handler = null;

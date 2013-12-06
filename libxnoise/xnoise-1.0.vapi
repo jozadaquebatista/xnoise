@@ -661,10 +661,6 @@ namespace Xnoise {
 		public static bool hidden_window { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public abstract class BaseObject : GLib.Object {
-		protected BaseObject ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
@@ -922,7 +918,7 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public Gtk.UIManager ui_manager { get; set; }
-		public bool window_in_foreground { get; private set; }
+		public bool window_in_foreground { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaExtensions {

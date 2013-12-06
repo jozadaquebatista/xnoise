@@ -29,10 +29,6 @@ VALAFLAGS = \
     @XNOISE_PACKAGES@ \
     $(NULL)
 
-if REF_TRACKING_ENABLED
-    VALAFLAGS+= -D REF_TRACKING_ENABLED
-endif
-
 
 xnoise_LDADD = \
     $(XNOISE_LIBS) \

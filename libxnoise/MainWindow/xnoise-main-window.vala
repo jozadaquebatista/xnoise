@@ -58,10 +58,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private LyricsViewWidget lyricsview_widget;
     private string mainview_page_buffer;
     private Image repeatimage; 
-//    private Box menuvbox;
     private Box mainvbox;
     private Box infobox;
-//    private MenuBar menubar;
     private ImageMenuItem config_button_menu_root;
     private Gtk.Menu config_button_menu;
     private bool _media_browser_visible;
@@ -72,7 +70,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Xnoise.AppMenuButton app_menu_button;
     private string temporary_mainview_name;
     private bool window_maximized;
-//    private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
     private Gtk.Notebook bottom_notebook;
     private Gtk.Notebook content_notebook;
@@ -365,13 +362,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             return false;
         });
         this.window_state_event.connect(on_window_state_event);
-        Idle.add(() => {
-            window_in_foreground = true;
-            return false;
+        this.notify["has-toplevel-focus"].connect( () => {
+            if(this.has_toplevel_focus) {
+                window_in_foreground = true;
+            }
+            else {
+                window_in_foreground = false;
+            }
         });
     }
     
-    public bool window_in_foreground { get; private set; default = true; }
+    public bool window_in_foreground { get; set; default = true; }
     
     private bool on_window_state_event(Gdk.EventWindowState e) {
         if((e.new_window_state & Gdk.WindowState.MAXIMIZED) == Gdk.WindowState.MAXIMIZED) {

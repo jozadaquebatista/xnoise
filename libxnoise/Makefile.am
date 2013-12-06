@@ -47,10 +47,10 @@ libxnoisedir = $(libdir)/xnoise
 lib_LTLIBRARIES = libxnoise.la
 
 libxnoise_la_SOURCES = \
-    AlbumImages/xnoise-album-image.vala \
-    AlbumImages/xnoise-album-image-loader.vala \
-    AlbumImages/xnoise-i-album-cover-image.vala \
-    AlbumImages/xnoise-i-album-cover-image-provider.vala \
+    AlbumImage/xnoise-album-image.vala \
+    AlbumImage/xnoise-album-image-loader.vala \
+    AlbumImage/xnoise-i-album-cover-image.vala \
+    AlbumImage/xnoise-i-album-cover-image-provider.vala \
     Application/xnoise-application.vala \
     BackgroundWorker/xnoise-worker.vala \
     Database/xnoise-db-reader.vala \
@@ -191,7 +191,6 @@ libxnoise_la_SOURCES = \
     UserInfoSystem/xnoise-info-bar.vala \
     UserInfoSystem/xnoise-user-info.vala \
     Utils/xnoise-album-data.vala \
-    Utils/xnoise-base-object.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
@@ -216,10 +215,6 @@ libxnoise_la_VALAFLAGS = \
 
 if HAVE_MIN_GTK_34
     libxnoise_la_VALAFLAGS+= -D HAVE_MIN_GTK_34
-endif
-
-if REF_TRACKING_ENABLED
-    libxnoise_la_VALAFLAGS+= -D REF_TRACKING_ENABLED
 endif
 
 libxnoise_la_LDFLAGS = \
@@ -255,7 +250,7 @@ DISTCLEANFILES = \
     *.c \
     libxnoise_la_vala.stamp \
     Makefile.in \
-    AlbumImages/*.c \
+    AlbumImage/*.c \
     Application/*.c \
     BackgroundWorker/*.c \
     Database/*.c \

@@ -43,10 +43,6 @@ liblastfm_la_VALAFLAGS = \
     @XNOISE_PACKAGES@ \
     $(NULL)
 
-if REF_TRACKING_ENABLED
-    liblastfm_la_VALAFLAGS+= -D REF_TRACKING_ENABLED
-endif
-
 
 liblastfm_la_LDFLAGS = \
     $(PLUGIN_LIBTOOL_FLAGS) \
