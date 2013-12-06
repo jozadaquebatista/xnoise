@@ -127,28 +127,6 @@ All library media will be available in the media browser.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="streambutton">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="tooltip_markup" translatable="yes">okokok</property>
-                                        <property name="label" translatable="yes">Add Stream</property>
-                                        <property name="icon_name">network-transmit-symbolic</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparatorToolItem" id="toolbutton1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkToolButton" id="removebutton">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>

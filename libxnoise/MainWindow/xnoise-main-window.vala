@@ -1509,7 +1509,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         string text, album, artist, title, organization, location, genre;
         string basename = null;
         if((newuri == EMPTYSTRING)|(newuri == null)) {
-            text = "<b>XNOISE</b> - ready to rock! ;-)";
+            text = "<b>XNOISE Media Player</b>";
             track_infobar.title_text = text;
             return;
         }
@@ -1560,7 +1560,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             else {
                 if((!gst_player.playing)&&
                     (!gst_player.paused)) {
-                    text = "<b>XNOISE</b>\nready to rock! ;-)";
+                    text = "<b>XNOISE Media Player</b>";
                 }
                 else {
                     text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
@@ -1621,7 +1621,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     else if(location!=UNKNOWN_LOCATION)
                         text = Markup.printf_escaped("<b>%s</b>", _(UNKNOWN_LOCATION));
                     else
-                        text = "<b>XNOISE</b> - ready to rock! ;-)";
+                        text = "<b>XNOISE Media Player</b>";
                 }
                 else if(album==UNKNOWN_ALBUM &&
                         artist==UNKNOWN_ARTIST) {
@@ -1632,7 +1632,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             else {
                 if((!gst_player.playing) &&
                    (!gst_player.paused)) {
-                    text = "<b>XNOISE</b> - ready to rock! ;-)";
+                    text = "<b>XNOISE Media Player</b>";
                 }
                 else {
                     text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(

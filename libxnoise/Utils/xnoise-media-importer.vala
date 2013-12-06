@@ -48,24 +48,23 @@ public class Xnoise.MediaImporter {
     // Media folders
     private GLib.List<Item?> media_folders = new GLib.List<Item?>();
     
+//    // Media folders
+//    private GLib.List<Item?> media_streams = new GLib.List<Item?>();
+    
     //Signals
     public signal void processing_import_target(Item? item);
     public signal void completed_import_target(Item? item);
     
     public signal void changed_library();
     public signal void folder_list_changed();
+//    public signal void stream_list_changed();
     
     
     public MediaImporter() {
         update_media_folder_list();
+//        update_media_stream_list();
     }
     
-    
-//    internal void reimport_media_groups() {
-//        Worker.Job job;
-//        job = new Worker.Job(Worker.ExecutionType.ONCE, reimport_media_groups_job);
-//        db_worker.push_job(job);
-//    }
     
     private bool append_folder_to_mediafolders_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
@@ -277,6 +276,11 @@ public class Xnoise.MediaImporter {
         db_worker.push_job(job);
     }
 
+//    private void update_media_stream_list() {
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, update_media_stream_list_job, Worker.Priority.HIGH);
+//        db_worker.push_job(job);
+//    }
+    
     private bool update_media_folder_list_job(Worker.Job job) {
         return_val_if_fail(db_worker.is_same_thread(), false);
         lock(media_folders) {
@@ -291,6 +295,32 @@ public class Xnoise.MediaImporter {
         });
         return false;
     }
+    
+//    private bool update_media_stream_list_job(Worker.Job job) {
+//        return_val_if_fail(db_worker.is_same_thread(), false);
+//        lock(media_streams) {
+//            media_streams = new GLib.List<Item?>();
+//            foreach(Item? i in db_reader.get_stream_items("")) {
+//                media_streams.prepend(i);
+//            }
+//        }
+//        Idle.add(() => {
+//            stream_list_changed();
+//            return false;
+//        });
+//        return false;
+//    }
+//    
+//    public GLib.List<Item?> get_media_streams_list() {
+//        GLib.List<Item?> list = new GLib.List<Item?>();
+//        lock(media_streams) {
+//            foreach(Item i in media_streams) {
+//                Item? it = i;
+//                list.prepend(it);
+//            }
+//        }
+//        return (owned)list;
+//    }
     
     public GLib.List<Item?> get_media_folder_list() {
         GLib.List<Item?> list = new GLib.List<Item?>();
@@ -509,6 +539,18 @@ public class Xnoise.MediaImporter {
         return false;
     }
     
+//    public void add_stream(Item? item) {
+//        return_if_fail(item.type == ItemType.STREAM || item.type == ItemType.PLAYLIST);
+//        foreach(Item? i in get_media_streams_list()) {
+//            if(item.uri == i.uri) {
+//                print("Stream %s is already in the list of media folders! \n", item.uri);
+//                return;
+//            }
+//        }
+//        var job = new Worker.Job(Worker.ExecutionType.ONCE, store_stream_job);
+//        job.item = item;
+//        db_worker.push_job(job);
+//    }
 //    internal void import_media_groups(Item[] media_items,
 //                                      uint msg_id,
 //                                      bool full_rescan = true,
@@ -892,43 +934,22 @@ public class Xnoise.MediaImporter {
         return false;
     }
 
-    // add streams to the media path and store them in the db
-//    private bool store_streams_job(Worker.Job job) {
-//        //this function uses the database so use it in the database thread
+//    private bool store_stream_job(Worker.Job job) {
 //        return_val_if_fail(db_worker.is_same_thread(), false);
-//        var streams_ht = new HashTable<string,Item?>(str_hash, str_equal);
-//        db_writer.begin_transaction();
 //        
-//        db_writer.del_all_streams();
+//        TrackData[]? track_dat = item_converter.to_trackdata(job.item, EMPTYSTRING);
 //        
-//        foreach(Item? strm in job.items)
-//            streams_ht.insert(strm.uri, strm); // remove duplicates
-//        
-//        foreach(unowned Item? strm in streams_ht.get_values()) {
-//            string streamuri = "%s".printf(strm.uri.strip());
-//            Item? item = ItemHandlerManager.create_item(streamuri);
-//            item.text = strm.text;
-//            
-//            if(item.type == ItemType.UNKNOWN)
-//                continue;
-//            
-//            TrackData[]? track_dat = item_converter.to_trackdata(item, EMPTYSTRING);
-//            
-//            if(track_dat != null) {
-//                foreach(TrackData td in track_dat) {
-//                    if(td.item.uri == null) {
-//                        print("red alert!!!\n");
-//                        continue;
-//                    }
-//                    td.item.text = (item.text != null ? item.text : EMPTYSTRING);
-//                    db_writer.add_single_stream_to_collection(td.item);
-////                    lock(current_import_track_count) {
-////                        current_import_track_count++;
-////                    }
+//        if(track_dat != null) {
+//            foreach(TrackData td in track_dat) {
+//                if(td.item.uri == null) {
+//                    print("red alert!!!\n");
+//                    continue;
 //                }
+//                td.item.text = (td.item.text != null ? td.item.text : EMPTYSTRING);
+//                db_writer.add_single_stream_to_collection(td.item);
 //            }
 //        }
-//        db_writer.commit_transaction();
+//        update_media_stream_list();
 //        return false;
 //    }
 }

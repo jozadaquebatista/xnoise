@@ -1,8 +1,8 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
 data/misc/xnoise.desktop.in.in
-libxnoise/AlbumImages/xnoise-album-image.vala
-libxnoise/AlbumImages/xnoise-album-image-loader.vala
+libxnoise/AlbumImage/xnoise-album-image.vala
+libxnoise/AlbumImage/xnoise-album-image-loader.vala
 libxnoise/Application/xnoise-application.vala
 libxnoise/Database/xnoise-db-reader.vala
 libxnoise/Database/xnoise-db-creator.vala
@@ -102,7 +102,6 @@ plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mpris/xnoise-mpris.vala
 plugins/soundmenu2/xnoise-sound-menu-2.vala
-plugins/titleToDecoration/xnoise-title-to-decoration.vala
 plugins/chartlyrics/chartlyrics.xnplugin.desktop.in
 plugins/lastfm/lastfm.xnplugin.desktop.in
 plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
@@ -119,4 +118,3 @@ plugins/magnatune/magnatune.vala
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/soundmenu2/soundmenu2.xnplugin.desktop.in
-plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in

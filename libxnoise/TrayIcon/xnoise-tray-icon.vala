@@ -206,8 +206,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         state = Markup.escape_text(state);
     
         if(global.player_state == PlayerState.STOPPED || uri == null || uri == EMPTYSTRING) {
-            tp.set_markup(" xnoise media player \n" +
-                          "<span rise=\"6000\" style =\"italic\"> %s ;)</span>".printf(_("ready to rock")));
+            tp.set_markup(" xnoise media player ");
             return true;
         }
     
