@@ -60,10 +60,14 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         assert(media_importer != null);
         worker = new Worker(MainContext.default());
         permission = false;
-        Timeout.add_seconds(2, () => {
+        Timeout.add_seconds(1, () => {
             global.notify["media-import-in-progress"].connect( () => {
-                if(!finished_database_read)
-                    check_start_conditions();
+                if(!finished_database_read) {
+                    Idle.add(() => {
+                        check_start_conditions();
+                        return false;
+                    });
+                }
             });
             check_start_conditions();
             return false;
@@ -157,10 +161,11 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         Item? i = job.item;
         read_recoursive(d, job);
         if(global.media_import_in_progress) {
-            Timeout.add_seconds(2, () => {
+            Timeout.add_seconds(1, () => {
                 if(!uri_in_media_folders((string)job.get_arg("media_folder")))
                     return false; // do nothing if the according media folder was removed in the meantime
                 if(!global.media_import_in_progress) {
+                    print("Requeuing offline file check job.\n");
                     this.worker.push_job(job);
                 }
                 else {
@@ -182,6 +187,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         }
         return false;
     }
+    
     private const string attr = FileAttribute.STANDARD_NAME + "," +
                                 FileAttribute.STANDARD_TYPE;
     
