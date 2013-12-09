@@ -62,6 +62,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
 
     private unowned Thread<int> thread;
     
+    
     public MediaMonitor() {
         if (!Thread.supported ()) {
             error("Cannot work without multithreading support.");
@@ -84,6 +85,7 @@ public class Xnoise.MediaMonitor : GLib.Object {
         
         source.attach(local_context);
     }
+    
     
     private int thread_func() {
         local_context = new MainContext();
