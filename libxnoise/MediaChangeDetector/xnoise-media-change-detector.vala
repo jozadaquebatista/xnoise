@@ -50,7 +50,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     private string[] removed_uris = {};
     
     private string[] found_uris = {}; 
-    private string[] uris_for_image_extraction  = {};
+//    private string[] uris_for_image_extraction  = {};
     
     // FINISH SIGNAL
     public signal void finished();
@@ -231,14 +231,11 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                            suffix == "nfo"  || 
                            suffix == "txt")
                             continue;
-                        uris_for_image_extraction += file.get_uri();
                         found_uris += file.get_uri();
                         if(found_uris.length > FILE_COUNT) {
                             var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_uris_job);
                             db_job.uris = (owned)found_uris;
                             found_uris = {};
-                            dbus_image_extractor.queue_uris(uris_for_image_extraction);
-                            uris_for_image_extraction = {};
                             db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                             db_worker.push_job(db_job);
                         }
@@ -255,8 +252,8 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 var db_job = new Worker.Job(Worker.ExecutionType.ONCE, handle_uris_job);
                 db_job.uris = (owned)found_uris;
                 found_uris = {};
-                dbus_image_extractor.queue_uris(uris_for_image_extraction);
-                uris_for_image_extraction = {};
+//                dbus_image_extractor.queue_uris(uris_for_image_extraction);
+//                uris_for_image_extraction = {};
                 db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                 db_worker.push_job(db_job);
             }
@@ -266,6 +263,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     
     //private static int cntx = 0;
     private static bool handle_uris_job(Worker.Job job) {
+        string[] uris_for_image_extraction  = {};
         //this function uses the database so use it in the database thread
         if(GlobalAccess.main_cancellable.is_cancelled())
             return false;
@@ -280,10 +278,16 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 return false;
             if(!db_reader.get_file_in_db(u)) {
                 add_uris += u;
+                uris_for_image_extraction += u;
             }
         }
-        if(add_uris.length != 0)
+        if(add_uris.length != 0) {
             media_importer.import_uris(add_uris);
+        }
+        if(uris_for_image_extraction.length != 0) {
+            dbus_image_extractor.queue_uris(uris_for_image_extraction);
+            uris_for_image_extraction = {};
+        }
         return false;
     }
     
@@ -333,6 +337,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                     string[] changed_uris_loc = changed_uris;
                     changed_uris = {};
                     media_importer.reimport_media_files(changed_uris_loc);
+                    dbus_image_extractor.queue_uris(changed_uris_loc);
                 }
                 if(removed_uris.length != 0) {
                     string[] removed_uris_loc = removed_uris;
@@ -397,6 +402,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             string[] changed_uris_loc = changed_uris;
             changed_uris = {};
             media_importer.reimport_media_files(changed_uris_loc);
+            dbus_image_extractor.queue_uris(changed_uris_loc);
         }
         if(removed_uris.length != 0) {
             string[] removed_uris_loc = removed_uris;
