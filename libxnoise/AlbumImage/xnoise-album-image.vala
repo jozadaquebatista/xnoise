@@ -81,7 +81,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
                               "\n" +
                               _("<Ctrl+B>")
         );
-        global.image_loader.notify["image-small"].connect(on_image_changed);
+        global.image_loader.notify["image-small"   ].connect(on_image_changed);
         global.image_loader.notify["image-embedded"].connect(on_image_changed);
         this.set_visible_window(false);
         
@@ -112,17 +112,24 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         context.add_class(STYLE_CLASS_BUTTON);
     }
     
+    private uint image_change_src = 0;
     
     private void on_image_changed() {
-        if(global.image_loader.image_embedded != null) {
-            this.pixbuf = global.image_loader.image_embedded.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-        }
-        else if(global.image_loader.image_small != null) {
-            this.pixbuf = global.image_loader.image_small.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-        }
-        else
-            this.pixbuf = null;
-        queue_draw();
+        if(image_change_src != 0)
+            Source.remove(image_change_src);
+        image_change_src = Timeout.add(100, () => {
+            if(global.image_loader.image_embedded != null) {
+                this.pixbuf = global.image_loader.image_embedded.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+            }
+            else if(global.image_loader.image_small != null) {
+                this.pixbuf = global.image_loader.image_small.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+            }
+            else
+                this.pixbuf = null;
+            queue_draw();
+            image_change_src = 0;
+            return false;
+        });
     }
     
     private double x = 0.0;

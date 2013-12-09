@@ -96,7 +96,10 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_model(icons_model);
         icon_cache.sign_new_album_art_loaded.connect( (p) => {
             //print("queue_draw\n");
-            queue_draw();
+            Idle.add(() => {
+                queue_draw();
+                return false;
+            });
         });
         this.item_activated.connect(this.on_row_activated);
         this.button_press_event.connect(this.on_button_press);
@@ -109,13 +112,19 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 black = false;
                 this.override_background_color(StateFlags.NORMAL, null);
                 this.override_background_color(StateFlags.SELECTED, null);
-                queue_draw();
+                Idle.add(() => {
+                    queue_draw();
+                    return false;
+                });
             }
             else {
                 black = true;
                 this.override_background_color(StateFlags.NORMAL, black_color);
                 this.override_background_color(StateFlags.SELECTED, grey_color);
-                queue_draw();
+                Idle.add(() => {
+                    queue_draw();
+                    return false;
+                });
             }
         });
         

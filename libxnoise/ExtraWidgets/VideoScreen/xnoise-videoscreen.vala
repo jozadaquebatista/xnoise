@@ -465,7 +465,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private int layout_width     = 100;
 
     public void trigger_expose() {
-        this.queue_draw();
+        Idle.add(() => {
+            this.queue_draw();
+            return false;
+        });
     }
 }
 
