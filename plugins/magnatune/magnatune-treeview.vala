@@ -424,7 +424,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                             (string)job.get_arg("album"));
                     File f = File.new_for_path(folder_path);
                     Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
-                    media_importer.add_import_target_folder(item);
+                    media_importer.add_import_target_folder(item, false);
                     return false;
                 });
             }

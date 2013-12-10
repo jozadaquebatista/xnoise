@@ -929,7 +929,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaImporter {
 		public MediaImporter ();
-		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = true);
+		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = false);
 		public GLib.List<Xnoise.Item?> get_media_folder_list ();
 		public void import_uris (string[] uris);
 		public void remove_uris (string[] file_uris);
@@ -1147,6 +1147,7 @@ namespace Xnoise {
 		public delegate void FinishFunc ();
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
+		public int get_queue_length ();
 		public bool is_same_thread ();
 		public void push_job (Xnoise.Worker.Job j);
 		public GLib.Thread<int> thread { get; }

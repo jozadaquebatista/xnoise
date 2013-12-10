@@ -177,7 +177,7 @@ public class Xnoise.MediaImporter {
         return false;
     }
     
-    public void import_uris(string[] uris) { // TODO rename
+    public void import_uris(string[] uris) {
         lock(import_targets) {
             foreach(string s in uris) {
                 if(!import_targets.contains(s)) {
@@ -220,7 +220,7 @@ public class Xnoise.MediaImporter {
                                              null);
                 td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                 td.change_time = (int32)info.get_attribute_uint64(FileAttribute.TIME_CHANGED);
-                td.media_folder = null; // not db thread!
+                td.media_folder = null; // we are not in db thread!
                 tda += td;
                 uris += f.get_uri();
             }
@@ -333,7 +333,7 @@ public class Xnoise.MediaImporter {
         return (owned)list;
     }
     
-    public void add_import_target_folder(Item? target, bool add_folder_to_media_folders = true) {
+    public void add_import_target_folder(Item? target, bool add_folder_to_media_folders = false) {
         if(target == null || target.type != ItemType.LOCAL_FOLDER || target.uri == null)
             return;
         
@@ -931,6 +931,7 @@ public class Xnoise.MediaImporter {
             }
             check_target_processing_queues();
         }
+        print("current jobs in db_worker: %d\n", db_worker.get_queue_length());
         return false;
     }
 

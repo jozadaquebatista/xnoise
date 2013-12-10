@@ -171,5 +171,9 @@ public class Xnoise.Worker : Object {
         }
         job_queue.push_sorted(j, compare_func);
     }
+    
+    public int get_queue_length() {
+        return job_queue.length();
+    }
 }
 

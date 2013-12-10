@@ -2105,6 +2105,7 @@ void xnoise_worker_value_take_job (GValue* value, gpointer v_object);
 gpointer xnoise_worker_value_get_job (const GValue* value);
 GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
 void xnoise_worker_push_job (XnoiseWorker* self, XnoiseWorkerJob* j);
+gint xnoise_worker_get_queue_length (XnoiseWorker* self);
 GThread* xnoise_worker_get_thread (XnoiseWorker* self);
 GType xnoise_item_get_type (void) G_GNUC_CONST;
 GType xnoise_item_type_get_type (void) G_GNUC_CONST;

@@ -91,7 +91,7 @@ private class Xnoise.FirstStartWidget : Box {
                                   Column.LOCATION,  f.get_path()
                                   );
                     Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
-                    media_importer.add_import_target_folder(item);
+                    media_importer.add_import_target_folder(item, true);
 //                    media_importer.import_media_folder(f.get_path(), true, true);
                     nb.set_current_page(1);
                 }
