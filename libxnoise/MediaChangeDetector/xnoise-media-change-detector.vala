@@ -153,15 +153,15 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
         else {
             var iojob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
                 var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (jj) => {
-                    Idle.add( () => {
-                        userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-                                          UserInfo.ContentClass.INFO,
-                                          _("Finished media folder scan and queued files for import into xnoise library."),
-                                          false,
-                                          5,
-                                          null);
-                        return false;
-                    });
+//                    Idle.add( () => {
+//                        userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+//                                          UserInfo.ContentClass.INFO,
+//                                          _("Finished media folder scan and queued files for import into xnoise library."),
+//                                          false,
+//                                          5,
+//                                          null);
+//                        return false;
+//                    });
                     print("done offline check!\n");
                     Timeout.add_seconds(1, () => {
                         finished();

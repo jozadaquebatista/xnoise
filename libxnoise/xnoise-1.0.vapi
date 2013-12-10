@@ -934,9 +934,8 @@ namespace Xnoise {
 		public void import_uris (string[] uris);
 		public void remove_uris (string[] file_uris);
 		public signal void changed_library ();
-		public signal void completed_import_target (Xnoise.Item? item);
 		public signal void folder_list_changed ();
-		public signal void processing_import_target (Xnoise.Item? item);
+		public signal void media_folder_state_change ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaMonitor : GLib.Object {

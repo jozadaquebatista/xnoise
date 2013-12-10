@@ -41,8 +41,8 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         ICON,
         VIZ_TEXT,
         ITEM,
-        STATUS,
-        ACTIVITY,
+//        STATUS,
+//        ACTIVITY,
         COL_COUNT
     }
     
@@ -130,13 +130,13 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
         column.title = _("Location");
         tv.insert_column(column, -1);
         
-        // STATUS
-        column = new TreeViewColumn();
-        var rendererspinner = new CellRendererSpinner();
-        column.pack_start(rendererspinner, false);
-        column.add_attribute(rendererspinner, "active", Column.STATUS);
-        column.add_attribute(rendererspinner, "pulse", Column.ACTIVITY);
-        tv.insert_column(column, -1);
+//        // STATUS
+//        column = new TreeViewColumn();
+//        var rendererspinner = new CellRendererSpinner();
+//        column.pack_start(rendererspinner, false);
+//        column.add_attribute(rendererspinner, "active", Column.STATUS);
+//        column.add_attribute(rendererspinner, "pulse", Column.ACTIVITY);
+//        tv.insert_column(column, -1);
         
         devbox.pack_start(tv, true, true, 0);
         
@@ -153,58 +153,50 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
             update_item_list();
             return false;
         });
-        media_importer.completed_import_target.connect( (s,i) => {
-            print("complete\n");
-            listmodel.foreach( (sender, mypath, myiter) => {
-                Item? item;
-                listmodel.get(myiter, Column.ITEM, out item);
-                if(i.uri == item.uri) {
-                    print("found item cpl\n");
-                    listmodel.set(myiter, Column.STATUS, 0);
-                    uint xx = ht_activities.lookup(i.uri);
-//                    print("Lookup act: %u\n", xx);
-                    if(xx != 0)
-                        Source.remove(xx);
-                    ht_activities.remove(i.uri);
-                    return true;
-                }
-                return false;
-            });
+        media_importer.media_folder_state_change.connect( (s) => {
+            update_item_list();
         });
-        media_importer.processing_import_target.connect( (s,i) => {
-            print("started\n");
-            listmodel.foreach( (sender, mypath, myiter) => {
-                Item? item;
-                int activity;
-                listmodel.get(myiter, Column.ITEM, out item);
-                if(i.uri == item.uri) {
-                    listmodel.set(myiter, Column.STATUS, 1);
-                    uint xx = Timeout.add(250, () => {
-                        listmodel.foreach( (sx, px, itx) => {
-                            Item? itemx;
-                            listmodel.get(itx, Column.ITEM, out itemx);
-                            if(i.uri == itemx.uri) {
-                                int act;
-                                listmodel.get(itx, Column.ACTIVITY, out act);
-                                act++;
-                                listmodel.set(itx, Column.ACTIVITY, act);
-                                return true;
-                            }
-                            return false;
-                        });
-                        return true;
-                    });
-                    //print("insert -- %s - %u\n", i.uri, xx);
-                    ht_activities.insert(i.uri, xx);
-                    print("found item proc\n");
-                    return true;
-                }
-                return false;
-            });
-        });
+//        media_importer.processing_import_target.connect( (s,i) => {
+//            listmodel.foreach( (sender, mypath, myiter) => {
+//                Item? item;
+//                int activity;
+//                listmodel.get(myiter, Column.ITEM, out item);
+//                if(i.uri == item.uri) {
+//                    
+//                    uint xx = Timeout.add(250, () => {
+//                        bool stopped = false;
+//                        bool found = false;
+//                        listmodel.foreach( (sx, px, itx) => {
+//                            Item? itemx;
+//                            listmodel.get(itx, Column.ITEM, out itemx);
+//                            if(i.uri == itemx.uri) {
+//                                found = true;
+//                                int stat = 0;
+//                                int act;
+//                                listmodel.get(itx, 
+//                                              Column.ACTIVITY, out act,
+//                                              Column.STATUS,   out stat);
+//                                if(act > 0) {
+//                                    act++;
+//                                    listmodel.set(itx, Column.ACTIVITY, act);
+//                                }
+//                                else {
+//                                    stopped = true;
+//                                }
+//                                return true;
+//                            }
+//                            return false;
+//                        });
+//                        if(stopped || !found)
+//                            return false;
+//                        return true;
+//                    });
+//                    return true;
+//                }
+//                return false;
+//            });
+//        });
     }
-    
-    private HashTable<string, uint> ht_activities = new HashTable<string, uint>(str_hash, str_equal);
     
     private void update_item_list() {
         Gtk.Invisible w = new Gtk.Invisible();

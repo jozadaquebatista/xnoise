@@ -37,6 +37,13 @@ using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
 
+
+//public struct Xnoise.MediaFolder {
+//    public Item folder;
+//    public bool in_import;
+//}
+
+
 public class Xnoise.MediaImporter {
     
     private static const int FILE_COUNT = 500;
@@ -52,10 +59,12 @@ public class Xnoise.MediaImporter {
 //    private GLib.List<Item?> media_streams = new GLib.List<Item?>();
     
     //Signals
-    public signal void processing_import_target(Item? item);
-    public signal void completed_import_target(Item? item);
+//    public signal void completed_import_target(Item? item);
+//    public signal void processing_import_target(Item? item);
+    public signal void media_folder_state_change();
     
     public signal void changed_library();
+    
     public signal void folder_list_changed();
 //    public signal void stream_list_changed();
     
@@ -297,8 +306,8 @@ public class Xnoise.MediaImporter {
         GLib.List<Item?> list = new GLib.List<Item?>();
         lock(media_folders) {
             foreach(Item i in media_folders) {
-                Item? it = i;
-                list.prepend(it);
+                Item? item = i;
+                list.prepend(item);
             }
         }
         return (owned)list;
@@ -308,7 +317,7 @@ public class Xnoise.MediaImporter {
         if(target == null || target.type != ItemType.LOCAL_FOLDER || target.uri == null)
             return;
         
-        foreach(Item i in get_media_folder_list()) {
+        foreach(Item? i in get_media_folder_list()) {
             if(target.uri == i.uri) {
                 print("folder %s is already in the list of media folders! \n", target.uri);
                 return;
@@ -353,7 +362,8 @@ public class Xnoise.MediaImporter {
                 //print("removed target: %s\n", item.uri);
                 Item? i = item;
                 Idle.add(() => {
-                    completed_import_target(i);
+                    media_folder_state_change();
+//                    completed_import_target(i);
                     return false;
                 });
             }
@@ -775,7 +785,8 @@ public class Xnoise.MediaImporter {
         Item? i = job.item;
         uint xx = 0;
         xx = Timeout.add(500, () => {
-            processing_import_target(i);
+//            processing_import_target(i);
+            media_folder_state_change();
             xx = 0;
             return false;
         });

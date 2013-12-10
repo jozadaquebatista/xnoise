@@ -336,7 +336,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         active_notifier = this.notify["is-active"].connect(buffer_position);
         this.notify["repeatState"].connect(on_repeatState_changed);
         this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
-        global.notify["media-import-in-progress"].connect(on_media_import_notify);
+//        global.notify["media-import-in-progress"].connect(on_media_import_notify);
         
         mainview_page_buffer = TRACKLIST_VIEW_NAME;
         
@@ -1670,17 +1670,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     /* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
        music is (not anymore) being imported */ 
-    private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
-        if(first_start_widget != null)
-            return;
-        if(actions_list == null)
-            actions_list = action_group.list_actions();
-        foreach(Gtk.Action a in actions_list) {
-            if(a.name == "AddRemoveAction" || a.name == "RescanLibraryAction") {
-                a.sensitive = !global.media_import_in_progress;
-            }
-        }
-    }
+//    private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
+//        if(first_start_widget != null)
+//            return;
+//        if(actions_list == null)
+//            actions_list = action_group.list_actions();
+//        foreach(Gtk.Action a in actions_list) {
+//            if(a.name == "AddRemoveAction" || a.name == "RescanLibraryAction") {
+//                a.sensitive = !global.media_import_in_progress;
+//            }
+//        }
+//    }
     
     private void on_serial_button_clicked(SerialButton sender, string name) {
         this.mainview_box.select_main_view(name);
