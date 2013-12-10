@@ -242,35 +242,6 @@ public class Xnoise.MediaImporter {
         return false;
     }
     
-//    private bool reimport_media_groups_job(Worker.Job job) {
-//        //this function uses the database so use it in the database thread
-//        return_val_if_fail(db_worker.is_same_thread(), false);
-//        
-//        Item[] tmp = {};
-//        //add folders
-//         Item[] fldrs = db_reader.get_media_folders();
-//        foreach(Item? i in fldrs) //append
-//            tmp += i;
-//        
-//        //add streams to list
-//        Item[] strms = db_reader.get_stream_items("");
-//        foreach(Item? i in strms) //append
-//            tmp += i;
-//            
-//        job.items = tmp;
-//        
-//        return false;
-//    }
-
-//    internal void update_item_tag(ref Item? item, ref TrackData td) {
-//        //this function uses the database so use it in the database thread
-//        return_if_fail(db_worker.is_same_thread());
-//        
-//        if(global.media_import_in_progress == true)
-//            return;
-//        db_writer.update_title(ref item, ref td);
-//    }
-    
     private void update_media_folder_list() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, update_media_folder_list_job, Worker.Priority.HIGH);
         db_worker.push_job(job);
@@ -413,19 +384,13 @@ public class Xnoise.MediaImporter {
         return false;
     }
     
-    private void sync_media_folders_to_db() {
-        print("sync_media_folders_to_db\n");
+    private void sync_media_folder_to_db(string dir_uri) {
+        print("sync_media_folder_to_db\n");
         return_val_if_fail(db_worker.is_same_thread(), false);
-        lock(import_targets) {
-            foreach(string folder in import_targets.get_keys()) {
-                if(import_targets.lookup(folder).type == ItemType.LOCAL_FOLDER) {
-                    var fjob = new Worker.Job(Worker.ExecutionType.ONCE, append_folder_to_mediafolders_job, Worker.Priority.HIGH);
-                    File mf = File.new_for_uri(folder);
-                    fjob.item = Item(ItemType.LOCAL_FOLDER, mf.get_uri());
-                    db_worker.push_job(fjob);
-                }
-            }
-        }
+        var fjob = new Worker.Job(Worker.ExecutionType.ONCE, append_folder_to_mediafolders_job, Worker.Priority.HIGH);
+        File mf = File.new_for_uri(dir_uri);
+        fjob.item = Item(ItemType.LOCAL_FOLDER, mf.get_uri());
+        db_worker.push_job(fjob);
         update_media_folder_list();
     }
     
@@ -526,7 +491,7 @@ public class Xnoise.MediaImporter {
         string pth = dir.get_path();
         
         if(add_folder_to_media_folders) {
-            sync_media_folders_to_db();
+            sync_media_folder_to_db(job.item.uri);
         }
         else {
             //parent path must be available

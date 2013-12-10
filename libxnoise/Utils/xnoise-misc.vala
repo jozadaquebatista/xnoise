@@ -166,12 +166,12 @@ namespace Xnoise {
         // MEDIA IMPORTER
         media_importer = new MediaImporter();
         
+        // MEDIA MONITOR
+        media_monitor = new MediaMonitor();
+        
         //check for offline file changes
         media_change_detector = new MediaChangeDetector();
         media_change_detector.finished.connect( () => {
-            
-            // MEDIA MONITOR
-            media_monitor = new MediaMonitor();
             
             Timeout.add_seconds(5, () => {
                 //remove after usage
