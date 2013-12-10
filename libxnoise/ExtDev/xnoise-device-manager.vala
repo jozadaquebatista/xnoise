@@ -119,7 +119,7 @@ public class Xnoise.ExtDev.DeviceManager : GLib.Object {
                 }
                 Idle.add(() => {
                     main_window.mainview_box.add_main_view(d.get_main_view_widget());
-                    main_window.main_view_sbutton.insert(d.get_identifier(), d.get_presentable_name());
+                    main_window.main_view_sbutton.insert(d.get_identifier(), d.get_presentable_name(), d.get_icon());
                     ItemHandler? handler = null;
                     if((handler = d.get_item_handler()) != null)
                         itemhandler_manager.add_handler(handler);

@@ -1204,6 +1204,7 @@ struct _XnoiseExtDevDeviceClass {
 	XnoiseItemHandler* (*get_item_handler) (XnoiseExtDevDevice* self);
 	gchar* (*get_presentable_name) (XnoiseExtDevDevice* self);
 	gchar* (*get_identifier) (XnoiseExtDevDevice* self);
+	GtkImage* (*get_icon) (XnoiseExtDevDevice* self);
 };
 
 struct _XnoiseExtDevPlayerDevice {
@@ -2290,6 +2291,7 @@ void xnoise_ext_dev_device_cancel (XnoiseExtDevDevice* self);
 XnoiseItemHandler* xnoise_ext_dev_device_get_item_handler (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_presentable_name (XnoiseExtDevDevice* self);
 gchar* xnoise_ext_dev_device_get_identifier (XnoiseExtDevDevice* self);
+GtkImage* xnoise_ext_dev_device_get_icon (XnoiseExtDevDevice* self);
 XnoiseExtDevDevice* xnoise_ext_dev_device_construct (GType object_type);
 XnoiseExtDevDeviceType xnoise_ext_dev_device_get_device_type (XnoiseExtDevDevice* self);
 void xnoise_ext_dev_device_set_device_type (XnoiseExtDevDevice* self, XnoiseExtDevDeviceType value);

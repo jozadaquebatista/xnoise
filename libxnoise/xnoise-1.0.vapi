@@ -123,6 +123,7 @@ namespace Xnoise {
 			public weak GLib.Mount mount;
 			public Device ();
 			public abstract void cancel ();
+			public virtual Gtk.Image? get_icon ();
 			public virtual string get_identifier ();
 			public abstract Xnoise.ItemHandler? get_item_handler ();
 			public abstract DeviceMainView? get_main_view_widget ();

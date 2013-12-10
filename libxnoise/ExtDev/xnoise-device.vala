@@ -78,5 +78,9 @@ public abstract class Xnoise.ExtDev.Device : GLib.Object {
         identifier = ret;
         return ret;
     }
+    
+    public virtual Gtk.Image? get_icon() {
+        return icon_repo.get_themed_image_icon("multimedia-player-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+    }
 }
 
