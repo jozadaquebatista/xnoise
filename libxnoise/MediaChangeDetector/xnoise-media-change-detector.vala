@@ -138,28 +138,42 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     }
     
     private bool finish_mfc(Worker.Job job) {
-        var iojob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
-            var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (jj) => {
-                Idle.add( () => {
-                    userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-                                      UserInfo.ContentClass.INFO,
-                                      _("Finished media folder scan and updated xnoise library."),
-                                      false,
-                                      5,
-                                      null);
+        if(global.media_import_in_progress) {
+            Timeout.add_seconds(1, () => {
+                if(!global.media_import_in_progress) {
+                    print("Requeuing finish job.\n");
+                    this.worker.push_job(job);
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+        }
+        else {
+            var iojob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
+                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (jj) => {
+                    Idle.add( () => {
+                        userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+                                          UserInfo.ContentClass.INFO,
+                                          _("Finished media folder scan and updated xnoise library."),
+                                          false,
+                                          5,
+                                          null);
+                        return false;
+                    });
+                    print("done offline check!\n");
+                    Timeout.add_seconds(1, () => {
+                        finished();
+                        return false;
+                    });
                     return false;
                 });
-                print("done offline check!\n");
-                Timeout.add_seconds(1, () => {
-                    finished();
-                    return false;
-                });
+                db_worker.push_job(dbjob);
                 return false;
             });
-            db_worker.push_job(dbjob);
-            return false;
-        });
-        io_worker.push_job(iojob); // media importer is using io_worker
+            io_worker.push_job(iojob); // media importer is using io_worker
+        }
         return false;
     }
     
