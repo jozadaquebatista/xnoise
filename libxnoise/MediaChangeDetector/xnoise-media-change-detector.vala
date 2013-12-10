@@ -273,29 +273,12 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 found_uris = {};
                 db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                 db_worker.push_job(db_job);
-                
-//                var last_job = new Worker.Job(Worker.ExecutionType.ONCE, report_end_job);
-//                db_worker.push_job(last_job);
             }
         }
         return;
     }
     
-//    private static bool report_end_job(Worker.Job job) {
-//        print("report_end_job\n");
-////        Idle.add(() => {
-////            userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-////                              UserInfo.ContentClass.INFO,
-////                              _("Finished media folder scan and updated xnoise library."),
-////                              false,
-////                              5,
-////                              null);
-////            return false;
-////        });
-//        return false;
-//    }
-    
-    private static uint cntx = 0;
+    //private static uint cntx = 0;
     
     private static bool handle_uris_job(Worker.Job job) {
         return_if_fail(db_worker.is_same_thread());
@@ -316,7 +299,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
             }
         }
         if(add_uris.length != 0) {
-            cntx += add_uris.length;
+            //cntx += add_uris.length;
             media_importer.import_uris(add_uris);
         }
         if(uris_for_image_extraction.length != 0) {
