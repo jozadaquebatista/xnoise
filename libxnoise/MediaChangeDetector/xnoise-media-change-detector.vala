@@ -138,15 +138,28 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
     }
     
     private bool finish_mfc(Worker.Job job) {
-        var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
-            print("done offline check!\n");
-            Timeout.add_seconds(2, () => {
-                finished();
+        var iojob = new Worker.Job(Worker.ExecutionType.ONCE, (j) => {
+            var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, (jj) => {
+                Idle.add( () => {
+                    userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+                                      UserInfo.ContentClass.INFO,
+                                      _("Finished media folder scan and updated xnoise library."),
+                                      false,
+                                      5,
+                                      null);
+                    return false;
+                });
+                print("done offline check!\n");
+                Timeout.add_seconds(1, () => {
+                    finished();
+                    return false;
+                });
                 return false;
             });
+            db_worker.push_job(dbjob);
             return false;
         });
-        db_worker.push_job(dbjob);
+        io_worker.push_job(iojob); // media importer is using io_worker
         return false;
     }
     
@@ -261,26 +274,26 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                 db_job.set_arg("media_folder", (string)job.get_arg("media_folder"));
                 db_worker.push_job(db_job);
                 
-                var last_job = new Worker.Job(Worker.ExecutionType.ONCE, report_end_job);
-                db_worker.push_job(last_job);
+//                var last_job = new Worker.Job(Worker.ExecutionType.ONCE, report_end_job);
+//                db_worker.push_job(last_job);
             }
         }
         return;
     }
     
-    private static bool report_end_job(Worker.Job job) {
-        print("report_end_job\n");
-        Idle.add(() => {
-            userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-                              UserInfo.ContentClass.INFO,
-                              _("Finished media folder scan and updated xnoise library."),
-                              false,
-                              5,
-                              null);
-            return false;
-        });
-        return false;
-    }
+//    private static bool report_end_job(Worker.Job job) {
+//        print("report_end_job\n");
+////        Idle.add(() => {
+////            userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+////                              UserInfo.ContentClass.INFO,
+////                              _("Finished media folder scan and updated xnoise library."),
+////                              false,
+////                              5,
+////                              null);
+////            return false;
+////        });
+//        return false;
+//    }
     
     private static uint cntx = 0;
     
