@@ -156,7 +156,7 @@ private class Xnoise.MediaChangeDetector : GLib.Object {
                     Idle.add( () => {
                         userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
                                           UserInfo.ContentClass.INFO,
-                                          _("Finished media folder scan and updated xnoise library."),
+                                          _("Finished media folder scan and queued files for import into xnoise library."),
                                           false,
                                           5,
                                           null);
