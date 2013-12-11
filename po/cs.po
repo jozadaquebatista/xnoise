@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-11 10:26+0100\n"
-"PO-Revision-Date: 2013-11-27 19:04+0100\n"
+"PO-Revision-Date: 2013-12-11 11:36+0100\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -214,9 +214,8 @@ msgid "External Player Device"
 msgstr "Zařízení přehrávače Android"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:70
-#, fuzzy
 msgid "Manage media folders"
-msgstr "Vybrat složku se skladbami"
+msgstr "Spravovat složky se soubory"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:80
 msgid "Add local folder"
@@ -228,13 +227,12 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:87
-#, fuzzy
 msgid ""
 "Select local media folders. \n"
 "All found media files will be available via xnoise's library."
 msgstr ""
-"Vyberte místní složky se skladbami nebo proudy internetových médií. \n"
-"Vše bude dostupné v knihovně Xnoise."
+"Vyberte místní složky se soubory hudebních a obrazových záznamů. \n"
+"Všechny nalezené soubory budou dostupné v knihovně Xnoise."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:130
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:192
@@ -256,17 +254,15 @@ msgstr "Obecné"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:202
 msgid "Media"
-msgstr "Media"
+msgstr "Soubory"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:209
-#, fuzzy
 msgid "Download lyrics"
-msgstr "Stahuje se album"
+msgstr "Stáhnout texty písní"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:210
-#, fuzzy
 msgid "Automatic lyrics fetching from the internet"
-msgstr "Texty písní stažené z internetu"
+msgstr "Automatické natažení textů písní z internetu"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:214
 msgid "Use systray icon"
@@ -328,9 +324,8 @@ msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
-#, fuzzy
 msgid "Show Tracklist"
-msgstr "Seznam skladeb"
+msgstr "Ukázat seznam skladeb"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
@@ -829,7 +824,7 @@ msgstr "Ukázat hlavní nabídku programu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
 msgid "Return to normal view"
-msgstr ""
+msgstr "Vrátit se do normálního pohledu"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2079
@@ -1040,7 +1035,7 @@ msgstr "Texty písní stažené z internetu"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Download lyrics from the internet and save them locally"
-msgstr ""
+msgstr "Stáhnout texty písní obalu z internetu a uložit je místně"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:410
 #: ../plugins/lastfm/xnoise-lastfm.vala:532
@@ -1489,3 +1484,4 @@ msgstr "Používat začlenění do zvukové nabídky Ubuntu/Ayatana"
 #~ "  \n"
 #~ "Lyrics provider %s cannot find lyrics for \n"
 #~ "\"%s\" by \"%s\".\n"
+
