@@ -1,3 +1,33 @@
+commit af463f840c04fc5c3ea083b6672be52f4f28be8f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 11 11:44:08 2013 +0100
+
+    update strings
+
+commit b4f1413d77c7a1661aafcb388605bbe3b0bef1d4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 11 11:16:44 2013 +0100
+
+    update strings for po/cs.po
+
+commit de32076e828596459678b0a25c4cffb5536e7400
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Wed Dec 11 11:15:46 2013 +0100
+
+    update po/cs.po
+
+commit fcaf4371a3eea5a825d5c1540bf7726a45b3bd8c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 11 11:12:47 2013 +0100
+
+    edit defaults
+
+commit bdf6fd15f16e091d84df0f2d45014c702fc099de
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 11 10:54:41 2013 +0100
+
+    update strings
+
 commit c31f2483b8d2a574500040fdcae9013931c089ee
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Tue Dec 10 18:20:37 2013 +0100
