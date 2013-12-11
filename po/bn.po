@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-06 16:34+0100\n"
+"POT-Creation-Date: 2013-12-11 10:26+0100\n"
 "PO-Revision-Date: 2010-03-07 01:38+0600\n"
 "Last-Translator: \n"
 "Language-Team: Bengali\n"
@@ -238,7 +238,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:240
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:232
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
 msgstr ""

@@ -1,3 +1,339 @@
+commit c31f2483b8d2a574500040fdcae9013931c089ee
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 18:20:37 2013 +0100
+
+    fix external device insertion
+
+commit 3760d1b9b7a76d1eea09e4da79f2ff0aaf9a740d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 16:49:38 2013 +0100
+
+    leave magnatune import to MediaMonitor
+
+commit 12e699b2712b4a85c2925e745431090a1160738f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 16:19:42 2013 +0100
+
+    do not handle import stat of folders
+
+commit 85772e617f16ce097c20fae3f46bbe39fe24bd93
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 15:05:07 2013 +0100
+
+    try a new fix for media folder sync
+
+commit ccb1c647d517b149981664c488b41fc615352ecd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 14:22:11 2013 +0100
+
+    revert
+
+commit 4c1b2e55c96fff1de7bbe0e4663c2e79e4d3397b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 12:17:19 2013 +0100
+
+    requeue finish job
+
+commit 19a775c9ebb2c7b3e621f2728329eab464ce3293
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 11:20:16 2013 +0100
+
+    remove unused code
+
+commit f475ffcc33e80c8cf37f90b095cfe07095666946
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 11:19:11 2013 +0100
+
+    better user feedback for offline folder scan 2
+
+commit b55e5540b2423e415b8b5925773daeef76472832
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 10:59:27 2013 +0100
+
+    better user feedback for offline folder scan
+
+commit 2608a6f886ffea163790b815d210967fc2efd33c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 00:46:17 2013 +0100
+
+    lower waiting time before offline file change scan
+
+commit 5bf5f8906a66260229072eb99dd00c05a10bb4a1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Dec 10 00:36:27 2013 +0100
+
+    fix CPU eating bug
+
+commit 1c9971555f32152fe4d787be7c81c4f029941cde
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 9 13:37:24 2013 +0100
+
+    MediaChangeDetector: do not queue every uri for image exxtraction
+
+commit cd4fafaf489df3ed8c7cd12f137598c3eba8528a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Dec 9 13:22:23 2013 +0100
+
+    MediaChangeDetector: fix bug
+
+commit 9b28350bd36690c8b47b9fc85d6e42202d658f71
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 17:49:20 2013 +0100
+
+    MediaMonitor: add checks and make event table access multi-threading save
+
+commit 1f7c7a6deff9092eb2645e5fe3117da69435bf05
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 16:35:15 2013 +0100
+
+    update strings
+
+commit 0e2d6f0d246b4128d18a99dd33fd1cd62174080a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 16:32:59 2013 +0100
+
+    add menu entry for return to tracklist
+
+commit e527e8a5b5d04a5a73ad8afd2d2656107798fefc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 16:17:30 2013 +0100
+
+    use xn-albumart as default album image
+
+commit ba8b6a8d4f6096e54f7281c6c6403037fd7765f3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 15:56:02 2013 +0100
+
+    cleanup; update strings
+
+commit 4e4124c2c84d5c35b05cd7f1ba3af51daf4cdac5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 14:49:58 2013 +0100
+
+    add forgotten files
+
+commit 305f6e11384da497a167ec5db600edbe82e59876
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 14:49:22 2013 +0100
+
+    more fixes
+
+commit 76a3c3a9b55447faf3be173470c5a96ac3885e55
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 13:59:22 2013 +0100
+
+    fixes
+
+commit c50285a8a946da98a41149f259ad6d5c629a9a43
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 11:25:55 2013 +0100
+
+    adjust line
+
+commit bca65a200d5c32da3921b1fc19551cb305a8f79d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 6 11:20:23 2013 +0100
+
+    add return button to album art view
+
+commit df46ae8f8f9ad304df7c320d4cd20dfede02a402
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 5 17:52:22 2013 +0100
+
+    add more checks
+
+commit b90fc7b98828b63b0a30a051eecf28ac5da3efe6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 5 16:34:39 2013 +0100
+
+    use a rounded rectangle for album image
+
+commit 33d6eea752c77fb5e8ce137ccf8741f7d2ee28db
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 5 15:25:57 2013 +0100
+
+    move serial button of tracklist to main toolbar
+
+commit 87fa16026af4a837e0f0c55ca85c6e2887cd824e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 5 14:06:40 2013 +0100
+
+    visual changes; plugin removal; settings dialog option trim
+
+commit 4e6f2c1939e72b88afeed929db0bd365ea32279b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 20:09:50 2013 +0100
+
+    cleanups
+
+commit 06d93420e507636ab32016d04cfa4ce53ecb66bf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 18:57:08 2013 +0100
+
+    avoid some race conditions when media folder is removed while change detection is running
+
+commit a7d402e1a6e48dcd02f7a6fd5af273123fcd0ef8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 14:02:02 2013 +0100
+
+    autotools fixes
+
+commit 2aa6dbe018d55ed3c1ed6b798507126624fdd785
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 13:46:28 2013 +0100
+
+    adjustments
+
+commit 4fcdcee17635b74240cb96f34f8186cc8837d161
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 11:50:35 2013 +0100
+
+    fixes for change monitoring / media import
+
+commit b18788f7088f5f57193fb44dffa3bd74d1dd0c01
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Nov 29 01:01:25 2013 +0100
+
+    extend offline changed file change checking
+
+commit bfd31eb04f29f5a4060d823183edfff3d309a0df
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 28 10:03:33 2013 +0100
+
+    restructure file check for offline changes
+
+commit 2144e7d58af328c82f5382498870828d4c7eec25
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 28 01:16:18 2013 +0100
+
+    check for offline file changes
+
+commit de0185b2ce04767b31356d9edc97262ac0053882
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 27 19:31:53 2013 +0100
+
+    improvements for tag editing
+
+commit b99982360bdf49066d05b7b4cb02ea5dc18955d3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 27 17:27:16 2013 +0100
+
+    some updates
+
+commit 91d087d617b5b0e644facdb0aa225e40cec972d8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 27 15:16:20 2013 +0100
+
+    add refresh for dockable media after library change
+
+commit b6008cec01532a89117e825e8c6a85fdfeb883b8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 27 13:33:11 2013 +0100
+
+    more work on real-time media folder monitoring/database updating
+
+commit 8dc160766e88d0791bbdbab37408f19167429a3d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 21 17:18:46 2013 +0100
+
+    more work on real-time media folder monitoring/updating
+
+commit 55fbf1a802de3d33dbded4c11cee75620a9c1d90
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 21 16:29:36 2013 +0100
+
+    update strings
+
+commit 671f6a227bb85e6c06451be884e976c62dd2460c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Nov 21 16:28:39 2013 +0100
+
+    start work on real-time media folder monitoring
+
+commit c944edf9cbf1290317c25def4680607bf60072a4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 20 14:27:59 2013 +0100
+
+    use import for magnatune
+
+commit bb81f25326fd2df380224081c6f130e97eca5d58
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Nov 20 10:50:13 2013 +0100
+
+    even more work on new import mechanism
+
+commit 1e0a6e3de267eb923201b915171fde3752d6750e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Nov 19 15:44:26 2013 +0100
+
+    more work on new import mechanism
+
+commit aaa9f5c62056a5051f08c09e190b30a318a11456
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Nov 18 17:58:03 2013 +0100
+
+    start work on new import mechanism
+
+commit 745e9093c123406a62a74ce406ea01629e13fa8f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Nov 3 01:52:49 2013 +0100
+
+    use new libtaginfo_c api
+
+commit db19f159c9b8bb620957395325d44aeb6079bf08
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 31 12:05:29 2013 +0100
+
+    try to make status icon less blurry
+
+commit f2d22acf592371606e66a44136e32d00ec4b7970
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Oct 31 11:46:52 2013 +0100
+
+    slow down reaction on trayicon for track changes
+
+commit 661c227538f78ebfaeb40a527e60f6acc21c63a4
+Author: Registre <registrewebos@gmail.com>
+Date:   Mon Oct 28 09:47:13 2013 +0100
+
+    update Catalan translation (po/ca.po)
+
+commit 5426ce0724ef17f324cd5f6ae0c6bea04758cbce
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Oct 2 11:43:22 2013 +0200
+
+    change drawing of stroke around album art / xnoise icon
+
+commit 44e7b7f5c055f23e51503e07d5d16868e930fa94
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Tue Oct 1 09:28:01 2013 +0200
+
+    update package_chef.sh
+
+commit 3b8150d7337752a7c6f7f731eea8eb3fd56a2cf0
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Mon Sep 30 09:14:48 2013 +0200
+
+    update po/cs.po
+
+commit 82593e2180392e411bd852b58fd8fe81cef788a8
+Author: Taijuin Lee <taijuin@gmail.com>
+Date:   Fri Sep 20 10:51:56 2013 +0200
+
+    update po/zh_TW.po
+
+commit 185d7ea764f7ca8e4c5fa7fafc9e67d7b62bd013
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 14:42:51 2013 +0200
+
+    update packaging data, again
+
+commit 42a1e78bbab866137ee0f55a186bf989b9a227d7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 17 12:47:39 2013 +0200
+
+    update packaging data
+
 commit 727d4a4221f21a4e1d12e77ff1532b17b731ecc4
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Tue Sep 17 12:07:17 2013 +0200

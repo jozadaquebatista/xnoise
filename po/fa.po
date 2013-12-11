@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise V1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-06 16:34+0100\n"
+"POT-Creation-Date: 2013-12-11 10:26+0100\n"
 "PO-Revision-Date: 2013-05-17 22:30+0330\n"
 "Last-Translator: Hapoofesgeli <Hapoofesgeli@live.com>\n"
 "Language-Team: \n"
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Location"
 msgstr "موقعیت"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:240
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:232
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
 msgstr "انتخاب پرونده رسانه"

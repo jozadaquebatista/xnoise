@@ -1061,7 +1061,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
         active_lyrics = Params.get_bool_value("use_lyrics");
         
-        print("USE LYRICS = %s\n", active_lyrics.to_string());
+        //print("USE LYRICS = %s\n", active_lyrics.to_string());
         Idle.add( () => {
             string x = Params.get_string_value("MainViewName"); //TODO
             switch(x) {

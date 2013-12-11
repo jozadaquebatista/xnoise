@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-06 16:34+0100\n"
+"POT-Creation-Date: 2013-12-11 10:26+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -247,7 +247,7 @@ msgstr ""
 msgid "Location"
 msgstr "位置"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:240
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:232
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:70
 msgid "Select media folder"
 msgstr "选择媒体文件夹"
