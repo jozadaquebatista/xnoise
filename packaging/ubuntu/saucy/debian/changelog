@@ -1,3 +1,23 @@
+xnoise (0.2.20-1ppa1~saucy) saucy; urgency=low
+  * Redo the import dialog
+  * Real-Time Monitor media folders for changes
+  * Check media folders for changes that happened
+    during the time xnoise wasn't running
+  * GUI improvements/changes
+  * Change drawing of album art
+  * Trim Settings dialog
+  * Use application menu, only
+  * Remove title-to-decoration plugin
+  * Automatically activate some of the plugins
+  * Use new libtaginfo API for tag reading/writing
+  * Udate tag editing mechanism
+  * Many Bug fixes
+  * update translations
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 11 Dec 2013 22:41:27 +0100
+
+
+
 xnoise (0.2.19-3ppa1~saucy) saucy; urgency=low
   * Don't ignore last song in random mode.
   * GUI updates

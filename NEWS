@@ -1,3 +1,24 @@
+xnoise (0.2.20)
+
+Changes
+======================
+  * Redo the import dialog
+  * Real-Time Monitor media folders for changes
+  * Check media folders for changes that happened
+    during the time xnoise wasn't running
+  * GUI improvements/changes
+  * Change drawing of album art
+  * Trim Settings dialog
+  * Use application menu, only
+  * Remove title-to-decoration plugin
+  * Automatically activate some of the plugins
+  * Use new libtaginfo API for tag reading/writing
+  * Udate tag editing mechanism
+  * Many Bug fixes
+  * update translations
+
+
+
 xnoise (0.2.19)
 
 Changes
