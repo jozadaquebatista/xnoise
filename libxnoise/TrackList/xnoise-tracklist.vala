@@ -1504,7 +1504,8 @@ private class PlayerStatePixbuf : Gtk.CellRendererPixbuf {
                                                     ICONSIZE, widget.get_style_context());
                 break;
             case PlayerState.PLAYING:
-                p = IconRepo.get_themed_pixbuf_icon("media-playback-start-symbolic", 
+                p = IconRepo.get_themed_pixbuf_icon(Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL ?
+                                                        "media-playback-start-rtl-symbolic" : "media-playback-start-symbolic",
                                                     ICONSIZE, widget.get_style_context());
                 break;
             case PlayerState.STOPPED:
