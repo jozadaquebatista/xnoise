@@ -6,7 +6,6 @@
 			<menuitem action="OpenLocationAction"/>
 			<separator/>
 			<menuitem action="AddRemoveAction"/>
-			<menuitem action="RescanLibraryAction"/>
 			<separator/>
 			<menuitem action="QuitAction" />
 		</menu>
@@ -54,8 +53,9 @@
 			<menuitem action="OpenLocationAction"/>
 			<separator />
 			<menuitem action="EqAction"/>
-			<menuitem action="AddRemoveAction"/>
+			<separator />
 			<menuitem action="SettingsAction"/>
+			<menuitem action="AddRemoveAction"/>
 			<separator />
 			<menuitem action="ShowMediaBrowserAction"/>
 			<menuitem action="ShowAlbumArtViewAction"/>

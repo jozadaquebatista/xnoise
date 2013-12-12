@@ -108,7 +108,7 @@ namespace Xnoise {
         }
         
         
-        private static string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
+        private static const string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
         
         public static Item? create_item(string? uri) {
             if(uri == null)
@@ -144,11 +144,15 @@ namespace Xnoise {
                 else
                     return item;
             }
-            if(!f.query_exists(null))
+            if(!f.query_exists(null)) {
+                print("ItemhandlerManager: file does not exist\n");
                 return Item(ItemType.UNKNOWN);
+            }
             FileInfo info = null;
             try {
-                info = f.query_info(attr, FileQueryInfoFlags.NONE , null);
+                assert(f != null);
+                assert(f.get_uri() != null);
+                info = f.query_info(attr, FileQueryInfoFlags.NONE);
             }
             catch(Error e) {
                 print("Error creating item from uri %s: %s", uri, e.message);

@@ -35,7 +35,7 @@ using TagInfo;
 
 
 public class Xnoise.TagAccess.TagWriter {
-    public bool write_tag(File? file, TrackData? td, bool read_before_write = false) {
+    public static bool write_tag(File? file, TrackData? td, bool read_before_write = false) {
         // does writes for values that are different from default values
         if(file == null)
             return false;
@@ -50,11 +50,11 @@ public class Xnoise.TagAccess.TagWriter {
             return false;
         
         Info info = null;
-        info = Info.factory_make(path);
+        info = TagInfo.Info.create(path);
         
         if(info != null) {
             if(read_before_write)
-                info.read();
+                info.load();
             
             info.artist       = td.artist      != null ? td.artist      : EMPTYSTRING;
             info.title        = td.title       != null ? td.title       : EMPTYSTRING;
@@ -67,20 +67,20 @@ public class Xnoise.TagAccess.TagWriter {
             
             if(td.tracknumber < 0)
                 td.tracknumber = 0;
-            info.tracknumber = (int)td.tracknumber;
+            info.track_number = (int)td.tracknumber;
             
             if(td.disk_number < 1)
                 td.disk_number = 1;
-            info.disk_number = (int)td.disk_number;
+            info.volume_number = (int)td.disk_number;
             
             info.is_compilation  = td.is_compilation;
             
-            retval = info.write();
+            retval = info.save();
         }
         return retval;
     }
 
-    public bool remove_compilation_flag(File? file) {
+    public static bool remove_compilation_flag(File? file) {
         if(file == null)
             return false;
         
@@ -92,11 +92,11 @@ public class Xnoise.TagAccess.TagWriter {
             return false;
         
         Info info = null;
-        info = Info.factory_make(path);
+        info = Info.create(path);
         
         if(info != null) {
             info.is_compilation  = false;
-            retval = info.write();
+            retval = info.save();
         }
         return retval;
     }

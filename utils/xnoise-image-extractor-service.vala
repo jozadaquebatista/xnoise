@@ -58,10 +58,10 @@ public class ImageExtractorDbus : GLib.Object {
     }
     
     private void handle_single_file(File f) {
-        Info? info = Info.factory_make(f.get_path());
+        Info? info = Info.create(f.get_path());
         if(info == null)
             return;
-        if(!info.read())
+        if(!info.load())
             return;
         string artist = ((info.albumartist != null && info.albumartist != "") ? 
                             info.albumartist : 
@@ -74,8 +74,8 @@ public class ImageExtractorDbus : GLib.Object {
             return;
         }
         
-        uint8[] data;
-        ImageType image_type;
+//        uint8[] data;
+        Image.FileType image_type = Image.FileType.JPEG;
         Gdk.Pixbuf? pixbuf = null;
         
         if(info.has_image) {
@@ -88,11 +88,11 @@ public class ImageExtractorDbus : GLib.Object {
             if(pf.query_exists(null) && pf2.query_exists(null))
                 return;
             
-            info.get_image(out data, out image_type);
-            if(data != null && data.length > 0) {
+            Image[] images = info.get_images();
+            if(images != null && images.length > 0) {
                 var pbloader = new Gdk.PixbufLoader();
                 try {
-                    pbloader.write(data);
+                    pbloader.write(images[0].get_data());
                 }
                 catch(Error e) {
                     print("Error 1: %s\n", e.message);
@@ -126,7 +126,7 @@ public class ImageExtractorDbus : GLib.Object {
     private void save_pixbuf_to_file(string artist,
                                      string album,
                                      Gdk.Pixbuf pixbuf,
-                                     ImageType image_type) {
+                                     Image.FileType image_type) {
         if(pixbuf != null) {
             File? pf2 = null;
             File? pf = get_albumimage_for_artistalbum(artist, album, "embedded");
@@ -135,10 +135,16 @@ public class ImageExtractorDbus : GLib.Object {
             }
             string itype;
             switch(image_type) {
-                case ImageType.PNG:
+                case Image.FileType.BMP:
+                    itype = "bmp";
+                    break;
+                case Image.FileType.GIF:
+                    itype = "gif";
+                    break;
+                case Image.FileType.PNG:
                     itype = "png";
                     break;
-                case ImageType.JPEG:
+                case Image.FileType.JPEG:
                 default:
                     itype = "jpeg";
                     break;

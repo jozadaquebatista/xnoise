@@ -95,7 +95,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     }
     
     private void setup_widgets() {
-        cb = new Gtk.CheckButton.with_label(pc.info.pretty_name + " " + _("(Plugin)"));
+        cb = new Gtk.CheckButton.with_label(pc.info.pretty_name);
         this.pack_start(cb, false, false, 0);
         label_sizegroup.add_widget(cb);
         cb.clicked.connect( () => {

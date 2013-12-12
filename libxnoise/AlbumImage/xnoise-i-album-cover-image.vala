@@ -1,6 +1,6 @@
-/* xnoise-leoslyrics-registration.vala
+/* xnoise-i-album-cover-image.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,8 +27,18 @@
  * Author:
  *     Jörn Magens
  */
- 
-[ModuleInit]
-public Type init_module(TypeModule module) { 
-    return typeof(Xnoise.MediawatcherPlugin);
+
+using Xnoise;
+
+/**
+ * IAlbumCoverImage implementors should be asynchronously look for images
+ * The reply is checked for matching artist/album
+ */
+public interface Xnoise.IAlbumCoverImage : GLib.Object {
+
+    //delivers local image path on success, EMPTYSTRING otherwise
+    //start image search
+    public abstract void find_image();
 }
+
+

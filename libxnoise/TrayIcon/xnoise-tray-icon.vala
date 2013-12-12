@@ -79,7 +79,8 @@ public class Xnoise.TrayIcon : StatusIcon {
         playHbox.pack_start(playpause_popup_image, false, true, 0);
         playHbox.pack_start(playLabel, true, true, 0);
         playpauseItem.add(playHbox);
-        playpauseItem.activate.connect(main_window.playPauseButton.on_menu_clicked);
+        playpauseItem.activate.connect(main_window.handle_playpause_action);
+//        playpauseItem.activate.connect(main_window.playPauseButton.on_menu_clicked);
         traymenu.append(playpauseItem);
 
         var previousImage = new Image();
@@ -93,7 +94,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         previousHbox.pack_start(previousLabel, true, true, 0);
         previousItem.add(previousHbox);
         previousItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.previousButton, ControlButton.Function.PREVIOUS);
+            main_window.handle_control_button_click(ControlButton.Function.PREVIOUS);
         });
         traymenu.append(previousItem);
 
@@ -108,7 +109,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         nextHbox.pack_start(nextLabel, true, true, 0);
         nextItem.add(nextHbox);
         nextItem.activate.connect( () => {
-            main_window.handle_control_button_click(main_window.nextButton, ControlButton.Function.NEXT);
+            main_window.handle_control_button_click(ControlButton.Function.NEXT);
         });
         traymenu.append(nextItem);
 
@@ -135,21 +136,41 @@ public class Xnoise.TrayIcon : StatusIcon {
         switch(e.button) {
             case 2:
                 //ugly, we should move play/resume code out of there.
-                main_window.playPauseButton.on_clicked(new Gtk.Button());
+                main_window.handle_playpause_action();
+                //main_window.playPauseButton.on_clicked(new Gtk.Button());
                 break;
             default:
                 break;
         }
         return false;
     }
-
+    
+    private uint scroll_source = 0;
+    
     private bool on_scrolled(Gtk.StatusIcon sender, Gdk.EventScroll event) {
+        if(scroll_source != 0) {
+            return false;
+        }
         if(global.player_state != PlayerState.STOPPED) {
             if(event.direction == Gdk.ScrollDirection.DOWN) {
-                main_window.change_track(ControlButton.Function.PREVIOUS, true);
+                scroll_source = Timeout.add(100, () => {
+                    main_window.change_track(ControlButton.Function.PREVIOUS, true);
+                    Timeout.add(400, () => {
+                        scroll_source = 0;
+                        return false;
+                    });
+                    return false;
+                });
             }
             else if(event.direction == Gdk.ScrollDirection.UP) {
-                main_window.change_track(ControlButton.Function.NEXT, true);
+                scroll_source = Timeout.add(100, () => {
+                    main_window.change_track(ControlButton.Function.NEXT, true);
+                    Timeout.add(400, () => {
+                        scroll_source = 0;
+                        return false;
+                    });
+                    return false;
+                });
             }
         }
         return false;
@@ -185,8 +206,7 @@ public class Xnoise.TrayIcon : StatusIcon {
         state = Markup.escape_text(state);
     
         if(global.player_state == PlayerState.STOPPED || uri == null || uri == EMPTYSTRING) {
-            tp.set_markup(" xnoise media player \n" +
-                          "<span rise=\"6000\" style =\"italic\"> %s ;)</span>".printf(_("ready to rock")));
+            tp.set_markup(" xnoise media player ");
             return true;
         }
     

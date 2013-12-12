@@ -101,17 +101,27 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 });
             }
         });
-        MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
-        cbr.cb = reset_change_cb;
-        media_importer.register_reset_callback(cbr);
+//        MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
+//        cbr.cb = reset_change_cb;
+//        media_importer.register_reset_callback(cbr);
         global.notify["collection-sort-mode"].connect( () => {
             filter();
         });
+        media_importer.changed_library.connect( () => {
+            Idle.add(() => {
+                //print("music browser refresh\n");
+                filter();
+                return false;
+            });
+        });
+//        global.notify["media-import-in-progress"].connect( () => {
+//            filter();
+//        });
     }
     
-    private void reset_change_cb() {
-        this.remove_all();
-    }
+//    private void reset_change_cb() {
+//        this.remove_all();
+//    }
     
     // this function is running in db thread so use idle
     private void database_change_cb(Writer.ChangeType changetype, Item? item) {

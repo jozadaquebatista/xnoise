@@ -24,7 +24,7 @@ $(service_DATA): $(service_in_files) Makefile
 
 bin_PROGRAMS = xnoise_image_extractor_service
 
-INCLUDES = \
+AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
     -I$(top_srcdir)/libxnoise \
     $(XNOISE_CFLAGS) \

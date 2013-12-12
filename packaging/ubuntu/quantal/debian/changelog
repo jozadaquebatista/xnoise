@@ -1,24 +1,39 @@
-xnoise (0.2.18-1ppa1~saucy) saucy; urgency=low
-  * Improvements for 'various artists' albums
-  * Make use of disk number tag
-  * Change caching strategy for album art
-  * New sort mode for music browser: ALBUM-ARTIST-TITLE
-  * Change panel icon
-  * Prevent backlight dimming in fullscreen mode
-  * Use spin button for year tag editing in albums
-  * Make insertion of imported tracks into music browser faster
-  * Improve album art discovery
-  * Work around memory leak
-  * Require libtaginfo version 0.1.6
-  * Changes for possible build with clang
-  * Automatically expire notifications on xfce
-  * Do not switch main view if device is plugged in
-  * Separate handling of toolbars with 'Ambiance' / 'Radiance' theme
-  * Add some possibility for runtime reference tracking
-  * Translation updates
-  * Various bug fixes
-  * Cleanups
+xnoise (0.2.20-1ppa1~quantal) quantal; urgency=low
+  * Redo the import dialog
+  * Real-Time Monitor media folders for changes
+  * Check media folders for changes that happened
+    during the time xnoise wasn't running
+  * GUI improvements/changes
+  * Change drawing of album art
+  * Trim Settings dialog
+  * Use application menu, only
+  * Remove title-to-decoration plugin
+  * Automatically activate some of the plugins
+  * Use new libtaginfo API for tag reading/writing
+  * Udate tag editing mechanism
+  * Many Bug fixes
+  * update translations
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 10 May 2013 23:27:19 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 11 Dec 2013 22:41:27 +0100
+
+
+
+
+
+xnoise (0.2.19-3ppa1~quantal) quantal; urgency=low
+  * Don't ignore last song in random mode.
+  * GUI updates
+  * Allow compilation with valac 0.22
+  * Changes for Settings dialog
+  * AsyncQueues for background worker threads
+  * Add media browser visibility option to app menu
+  * Media browser rendering fixes for Adwaita
+  * Fix rendering of background on Manjaro + Adwaita
+  * Desktop file fixes
+  * Localization fixes
+  * More bug fixes
+  * update translations
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 17 Sep 2013 12:24:02 +0200
 
 

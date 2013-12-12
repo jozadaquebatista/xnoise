@@ -422,7 +422,9 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                             Environment.get_user_special_dir(UserDirectory.MUSIC),
                                             (string)job.get_arg("artist"),
                                             (string)job.get_arg("album"));
-                    media_importer.import_media_folder(folder_path);
+                    File f = File.new_for_path(folder_path);
+                    //Item item = Item(ItemType.LOCAL_FOLDER, f.get_uri());
+                    //media_importer.add_import_target_folder(item, false);
                     return false;
                 });
             }
@@ -557,7 +559,8 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     }
 
     private MagnatuneTreeStore? create_model() {
-        return new MagnatuneTreeStore(this.dock, this, MagnatunePlugin.cancel);
+        var x = new MagnatuneTreeStore(this.dock, this, MagnatunePlugin.cancel);
+        return (owned) x;
     }
 
     private bool in_update_view = false;

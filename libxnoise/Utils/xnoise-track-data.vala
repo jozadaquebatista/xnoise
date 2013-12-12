@@ -36,18 +36,14 @@
  */
 namespace Xnoise {
     
-    public class TrackData 
-#if REF_TRACKING_ENABLED
-    : BaseObject {
-#else
-    {
-#endif
+    public class TrackData {
         public string? artist = null;
         public string? albumartist = null;
         public string? album = null;
         public string? title = null;
         public string? genre = null;
         public string? name = null;
+        public string? media_folder = null;
         public string? mimetype = null;
         public int disk_number = 1;
         public uint year = 0;
@@ -58,6 +54,7 @@ namespace Xnoise {
         public bool has_embedded_image = false;
         public Item? item = Item(ItemType.UNKNOWN);
         public Gdk.Pixbuf? pixbuf = null;
+        public int32 change_time = 0;
         public int32 dat1 = -1;
         public int32 dat2 = -1;
         public int32 dat3 = -1;
@@ -72,6 +69,8 @@ namespace Xnoise {
         td_new.album       = td.album;
         td_new.title       = td.title;
         td_new.genre       = td.genre;
+        td_new.name        = td.name;
+        td_new.media_folder= td.media_folder;
         td_new.mimetype    = td.mimetype;
         td_new.disk_number = td.disk_number;
         td_new.year        = td.year;
@@ -82,6 +81,7 @@ namespace Xnoise {
         td_new.is_compilation     = td.is_compilation;
         td_new.has_embedded_image = td.has_embedded_image;
         td_new.pixbuf      = td.pixbuf;
+        td_new.change_time = td.change_time;
         td_new.dat1        = td.dat1;
         td_new.dat2        = td.dat2;
         td_new.dat3        = td.dat3;

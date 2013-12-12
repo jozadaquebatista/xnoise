@@ -56,7 +56,7 @@ plugins/magnatune/magnatune-dockable.c
 plugins/magnatune/magnatune-treeview.c
 plugins/magnatune/magnatune-widget.c
 package_result
-libxnoise/AlbumImages/xnoise-album-image.c
+libxnoise/AlbumImage/xnoise-album-image.c
 plugins/app_indicator/xnoise-app-indicator.c
 plugins/app_indicator/xnoise-app-indicator.xnplugin.desktop.in
 libxnoise/ItemHandlers/RemoveCover/xnoise-handler-remove-cover.c

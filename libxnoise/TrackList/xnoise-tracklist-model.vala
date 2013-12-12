@@ -216,7 +216,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         }
         //RANDOM FUNCTION
         var rand = new Rand();
-        uint32 rand_val = rand.int_range((int32)0, (int32)(n_children - 1));
+        uint32 rand_val = rand.int_range((int32)0, (int32)n_children);
 
         treepath = new TreePath.from_indices((int)rand_val);
 
@@ -589,8 +589,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                 item.type = Xnoise.ItemType.STREAM;
         
         // TODO: maybe a check for remote schemes is necessary to avoid blocking
-        TagReader tr = new TagReader();
-        td = tr.read_tag(file.get_path()); // move to worker thread
+        td = TagReader.read_tag(file.get_path()); // move to worker thread
         
         if(td == null) { //This is a possible URL
             td = new TrackData();

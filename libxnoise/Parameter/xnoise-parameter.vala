@@ -282,7 +282,7 @@ eq_combo=0
 MainViewName=TrackListView
 media_source_selector_type=tree
 album_art_view_sorting=ARTIST
-activated_plugins=lastfm;soundmenu2;mpris
+activated_plugins=soundmenu2;Magnatune;DatabaseLyrics;mprisone;libxnoiseappindicator;azlyrics;mpris;lastfm;Lyricwiki;chartlyrics
 """;
 }
 

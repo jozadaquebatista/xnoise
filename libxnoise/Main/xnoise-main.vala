@@ -44,7 +44,7 @@ public class Xnoise.Main : GLib.Object {
     internal static unowned Xnoise.Application app;
     
 
-    internal bool use_notifications { get; set; }
+//    internal bool use_notifications { get; set; }
 
     public Main() {
         _instance = this;
@@ -94,15 +94,6 @@ public class Xnoise.Main : GLib.Object {
                 if(show_plugin_state) 
                     print("\n");
             }
-            bool tmp = false;
-            foreach(string name in plugin_loader.lyrics_plugins_htable.get_keys()) {
-                if(plugin_loader.lyrics_plugins_htable.lookup(name).activated == true) {
-                    tmp = true;
-                    break;
-                }
-                tmp = false;
-            }
-            main_window.active_lyrics = tmp;
         }
         
         // POSIX SIGNALS
@@ -253,6 +244,8 @@ public class Xnoise.Main : GLib.Object {
     }
     
     public void quit() {
+        if(global.current_uri != null && global.current_uri != "")
+            Params.set_string_value("current_uri", global.current_uri);
         GlobalAccess.main_cancellable.cancel();
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;

@@ -65,52 +65,6 @@ All library media will be available in the media browser.</property>
                     <property name="border_width">3</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="margin_bottom">5</property>
-                        <child>
-                          <object class="GtkCheckButton" id="fullrescan_check">
-                            <property name="label" translatable="yes">Do full rescan</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <style>
-                              <class name="GTK_STYLE_CLASS_BACKGROUND"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkDrawingArea" id="drawingarea2">
-                            <property name="width_request">30</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <style>
-                              <class name="GTK_STYLE_CLASS_BACKGROUND"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkBox" id="vbox">
                         <property name="width_request">450</property>
                         <property name="visible">True</property>
@@ -173,28 +127,6 @@ All library media will be available in the media browser.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="streambutton">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="tooltip_markup" translatable="yes">okokok</property>
-                                        <property name="label" translatable="yes">Add Stream</property>
-                                        <property name="icon_name">network-transmit-symbolic</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparatorToolItem" id="toolbutton1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkToolButton" id="removebutton">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -214,25 +146,6 @@ All library media will be available in the media browser.</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkButton" id="okbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <child>
-                                      <object class="GtkImage" id="image1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="stock">gtk-apply</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
                               </object>
                             </child>
                             <child type="label_item">
@@ -249,7 +162,7 @@ All library media will be available in the media browser.</property>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>

@@ -376,7 +376,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         uint i = 0;
         for(;;i++) {
             string media_type;
-            Gst.Structure cstruct;
+            unowned Gst.Structure cstruct;
             int imgtype;
             taglist.get_sample_index(Gst.Tags.IMAGE, i, out sample);
             if(sample == null)

@@ -34,7 +34,7 @@
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box5">
@@ -65,103 +65,6 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">2</property>
                                 <child>
-                                  <object class="GtkBox" id="box7">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="margin_left">5</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="cb_usestop">
-                                        <property name="label" translatable="yes">Use stop button</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="box8">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="margin_left">5</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="cb_compact">
-                                        <property name="label" translatable="yes">Use Compact mode</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="cb_compact_media_selector">
-                                    <property name="label" translatable="yes">Use compact selector for media sources</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="margin_left">5</property>
-                                    <property name="xalign">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="box9">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="margin_left">5</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="cb_showlines">
-                                        <property name="label" translatable="yes">Use helper lines in media browsercheckbutton</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkBox" id="box13">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -185,7 +88,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">4</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -212,17 +115,17 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">5</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box18">
+                                  <object class="GtkBox" id="box19">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">5</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="cb_use_notifications">
-                                        <property name="label" translatable="yes">Use desktop notifications</property>
+                                      <object class="GtkCheckButton" id="cb_continue_last_song">
+                                        <property name="label" translatable="yes">Continue last played song</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="receives_default">False</property>
@@ -239,7 +142,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">6</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -268,10 +171,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkBox" id="box20">
+                          <object class="GtkBox" id="box21">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
@@ -297,7 +200,31 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">2</property>
                                 <child>
-                                  <placeholder/>
+                                  <object class="GtkBox" id="box2_l">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="margin_left">5</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="cb_uselyrics">
+                                        <property name="label" translatable="yes">Download lyrics</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </object>
                               <packing>
@@ -325,10 +252,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkBox" id="box19">
+                          <object class="GtkBox" id="box20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
@@ -382,7 +309,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">4</property>
-                        <property name="margin_bottom">4</property>
+                        <property name="margin_bottom">2</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="additionals_box">
@@ -412,9 +339,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box21">
+                                  <object class="GtkBox" id="box22">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
                                     <child>
                                       <placeholder/>
                                     </child>

@@ -38,8 +38,7 @@ using Xnoise.Resources;
 using Xnoise.Utilities;
 
 private class Xnoise.AlbumImage : Gtk.EventBox {
-    internal static const int SIZE = 48;
-    private const double radius = SIZE / 2.4;
+    internal static const int SIZE = 44;
     private const double SELECTED_BACKGROUND_ALPHA = 0.4;
     private Gdk.Pixbuf? prelit_image = null;
     private Gdk.Pixbuf? seleted_image = null;
@@ -82,7 +81,7 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
                               "\n" +
                               _("<Ctrl+B>")
         );
-        global.image_loader.notify["image-small"].connect(on_image_changed);
+        global.image_loader.notify["image-small"   ].connect(on_image_changed);
         global.image_loader.notify["image-embedded"].connect(on_image_changed);
         this.set_visible_window(false);
         
@@ -109,37 +108,58 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
             queue_draw();
             return false;
         });
+        Gtk.StyleContext context = this.get_style_context();
+        context.add_class(STYLE_CLASS_BUTTON);
     }
+    
+    private uint image_change_src = 0;
     
     private void on_image_changed() {
-        if(global.image_loader.image_embedded != null) {
-            this.pixbuf = global.image_loader.image_embedded.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-        }
-        else if(global.image_loader.image_small != null) {
-            this.pixbuf = global.image_loader.image_small.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
-        }
-        else
-            this.pixbuf = null;
-        queue_draw();
+        if(image_change_src != 0)
+            Source.remove(image_change_src);
+        image_change_src = Timeout.add(100, () => {
+            if(global.image_loader.image_embedded != null) {
+                this.pixbuf = global.image_loader.image_embedded.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+            }
+            else if(global.image_loader.image_small != null) {
+                this.pixbuf = global.image_loader.image_small.scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+            }
+            else
+                this.pixbuf = null;
+            queue_draw();
+            image_change_src = 0;
+            return false;
+        });
     }
     
+    private double x = 0.0;
+    private double y = 0.0;
+    private double radius = 6.0;
+    private double width  = SIZE * 1.0;
+    private double height = SIZE * 1.0;
+    private double degrees = Math.PI / 180.0;
+    
     public override bool draw(Cairo.Context cr) {
-        Allocation allocation;
+        Gtk.StyleContext context = this.get_style_context();
+        Gdk.RGBA col = context.get_color(StateFlags.NORMAL);
         assert(icon_repo.album_art_default_icon != null);
-        this.get_allocation(out allocation);
-        cr.set_source_rgb(0.0, 0.0, 0.0);
+        
+        //Background
+        cr.set_source_rgb(col.red, col.green, col.blue);
         cr.set_line_width(0);
-        cr.arc(SIZE / 2.0, 
-               SIZE / 2.0,
-               radius + 1, 
-               0.0, 
-               2.0 * Math.PI);
+        cr.arc(x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+        cr.arc(x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+        cr.arc(x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+        cr.arc(x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+        cr.close_path ();
         cr.fill();
-        cr.arc(SIZE / 2.0, 
-               SIZE / 2.0,
-               radius, 
-               0.0, 
-               2.0 * Math.PI);
+        //---------
+        
+        cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+        cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+        cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+        cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
+        cr.close_path ();
         cr.clip ();
         cr.new_path();
         if(this.pixbuf == null) {
@@ -151,13 +171,14 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         StateFlags flags = this.get_state_flags();
         if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && !_selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
+            cr.set_source_rgba(col.red, col.green, col.blue, 2.0 * SELECTED_BACKGROUND_ALPHA / 3.0);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(prelit_image == null)
@@ -173,13 +194,14 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         }
         else if((flags & StateFlags.PRELIGHT) != StateFlags.PRELIGHT && _selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(seleted_image == null)
@@ -195,13 +217,14 @@ private class Xnoise.AlbumImage : Gtk.EventBox {
         }
         else if((flags & StateFlags.PRELIGHT) == StateFlags.PRELIGHT && _selected) {
             cr.paint();
-            cr.set_source_rgba(0.0, 0.0, 0.0, SELECTED_BACKGROUND_ALPHA);
+            cr.set_source_rgba(col.red, col.green, col.blue, SELECTED_BACKGROUND_ALPHA);
             cr.set_line_width(0);
-            cr.arc(SIZE / 2.0, 
-                   SIZE / 2.0,
-                   radius + 1, 
-                   0.0, 
-                   2.0 * Math.PI);
+            
+            cr.arc(x + width - radius - 0.5, y + radius + 0.5, radius, -90 * degrees, 0 * degrees);
+            cr.arc(x + width - radius -0.5, y + height - radius -0.5, radius, 0 * degrees, 90 * degrees);
+            cr.arc(x + radius +0.5, y + height - radius -0.5, radius, 90 * degrees, 180 * degrees);
+            cr.arc(x + radius +0.5, y + radius +0.5, radius, 180 * degrees, 270 * degrees);
+            cr.close_path ();
             cr.fill();
             cr.paint();
             if(prelitseleted_image == null)

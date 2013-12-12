@@ -7,7 +7,7 @@ SUBDIRS = \
 
 bin_PROGRAMS = xnoise
 
-INCLUDES = \
+AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
     -I$(top_srcdir)/libxnoise \
     $(XNOISE_CFLAGS) \
@@ -28,10 +28,6 @@ VALAFLAGS = \
     --save-temps \
     @XNOISE_PACKAGES@ \
     $(NULL)
-
-if REF_TRACKING_ENABLED
-    VALAFLAGS+= -D REF_TRACKING_ENABLED
-endif
 
 
 xnoise_LDADD = \

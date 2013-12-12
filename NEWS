@@ -1,3 +1,43 @@
+xnoise (0.2.20)
+
+Changes
+======================
+  * Redo the import dialog
+  * Real-Time Monitor media folders for changes
+  * Check media folders for changes that happened
+    during the time xnoise wasn't running
+  * GUI improvements/changes
+  * Change drawing of album art
+  * Trim Settings dialog
+  * Use application menu, only
+  * Remove title-to-decoration plugin
+  * Automatically activate some of the plugins
+  * Use new libtaginfo API for tag reading/writing
+  * Udate tag editing mechanism
+  * Many Bug fixes
+  * update translations
+
+
+
+xnoise (0.2.19)
+
+Changes
+======================
+  * Don't ignore last song in random mode.
+  * GUI updates
+  * Allow compilation with valac 0.22
+  * Changes for Settings dialog
+  * AsyncQueues for background worker threads
+  * Add media browser visibility option to app menu
+  * Media browser rendering fixes for Adwaita
+  * Fix rendering of background on Manjaro + Adwaita
+  * Desktop file fixes
+  * Localization fixes
+  * More bug fixes
+  * update translations
+
+
+
 xnoise (0.2.18)
 
 Changes

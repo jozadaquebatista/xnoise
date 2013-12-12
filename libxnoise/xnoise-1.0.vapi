@@ -21,6 +21,8 @@ namespace Xnoise {
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item[] get_artists (string searchtext, Xnoise.CollectionSortMode sort_mode, GLib.HashTable<Xnoise.ItemType,Xnoise.Item?>? items = null);
 			public override unowned string get_datasource_name ();
+			public Xnoise.FileData? get_file_data (string uri);
+			public bool get_file_in_db (string uri);
 			public Xnoise.Item? get_genreitem_by_genreid (string searchtext, int32 id, uint32 stmp);
 			public Xnoise.Item[] get_genres_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);
@@ -39,6 +41,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public override bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
+			public Xnoise.FileData[] get_uris (int32 offset, int32 limit = 100);
 			public Xnoise.Item[]? get_video_items (string searchtext);
 			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
@@ -65,10 +68,12 @@ namespace Xnoise {
 			}
 			public delegate void ChangeNotificationCallback (Xnoise.Database.Writer.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
+			public const string STMT_REMOVE_MEDIA_FOLDER_ITEMS;
 			public Writer () throws Xnoise.Database.DbError;
 			public bool add_single_folder_to_collection (Xnoise.Item? mfolder);
 			public bool add_single_stream_to_collection (Xnoise.Item? i);
 			public void begin_transaction ();
+			public void cleanup_database ();
 			public void commit_transaction ();
 			public void do_callback_transaction (Xnoise.Database.Writer.WriterCallback cb);
 			public string[] get_media_folders ();
@@ -77,6 +82,8 @@ namespace Xnoise {
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
+			public void remove_folder (string uri, bool check_media_folders = false);
+			public bool remove_single_media_folder (Xnoise.Item? mfolder);
 			public void remove_uri (string uri);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public void update_stream_name (Xnoise.Item? item);
@@ -116,6 +123,7 @@ namespace Xnoise {
 			public weak GLib.Mount mount;
 			public Device ();
 			public abstract void cancel ();
+			public virtual Gtk.Image? get_icon ();
 			public virtual string get_identifier ();
 			public abstract Xnoise.ItemHandler? get_item_handler ();
 			public abstract DeviceMainView? get_main_view_widget ();
@@ -561,13 +569,13 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagReader {
 			public TagReader ();
-			public Xnoise.TrackData? read_tag (string? filename, bool try_read_image_data = false);
+			public static Xnoise.TrackData? read_tag (string? filename, bool try_read_image_data = false);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {
 			public TagWriter ();
-			public bool remove_compilation_flag (GLib.File? file);
-			public bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
+			public static bool remove_compilation_flag (GLib.File? file);
+			public static bool write_tag (GLib.File? file, Xnoise.TrackData? td, bool read_before_write = false);
 		}
 	}
 	namespace Utilities {
@@ -654,10 +662,6 @@ namespace Xnoise {
 		public static bool hidden_window { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public abstract class BaseObject : GLib.Object {
-		protected BaseObject ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {
 		protected int source_id;
 		public DataSource ();
@@ -710,6 +714,12 @@ namespace Xnoise {
 		public signal void category_removed (Xnoise.DockableMedia.Category category);
 		public signal void media_inserted (string key);
 		public signal void media_removed (string key);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class FileData {
+		public int32 change_time;
+		public string uri;
+		public FileData (string uri = null, int32 change_time = 0);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
@@ -887,6 +897,10 @@ namespace Xnoise {
 			ALL,
 			RANDOM
 		}
+		public enum SettingsDialog {
+			EDIT_SETTINGS,
+			ADD_OR_REMOVE_MEDIA
+		}
 		public bool is_fullscreen;
 		public Xnoise.SerialButton main_view_sbutton;
 		public Gtk.Box media_browser_box;
@@ -898,7 +912,6 @@ namespace Xnoise {
 		public void toggle_window_visbility ();
 		public bool active_lyrics { get; set; }
 		public bool album_art_view_visible { get; set; }
-		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public Xnoise.LyricsView lyricsView { get; private set; }
 		public Xnoise.MainViewNotebook mainview_box { get; private set; }
@@ -906,8 +919,7 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public Gtk.UIManager ui_manager { get; set; }
-		public bool usestop { get; set; }
-		public bool window_in_foreground { get; private set; }
+		public bool window_in_foreground { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaExtensions {
@@ -916,23 +928,25 @@ namespace Xnoise {
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaImporter : GLib.Object {
-		public struct ResetNotificationData {
-			public weak Xnoise.MediaImporter.DatabaseResetCallback cb;
-		}
-		public delegate void DatabaseResetCallback ();
+	public class MediaImporter {
 		public MediaImporter ();
-		public void import_media_file (string file_path);
-		public void import_media_folder (string folder_path, bool create_user_info = false, bool add_folder_to_media_folders = false);
-		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
-		public void reimport_media_files (string[] file_paths);
+		public void add_import_target_folder (Xnoise.Item? target, bool add_folder_to_media_folders = false);
+		public GLib.List<Xnoise.Item?> get_media_folder_list ();
+		public void import_uris (string[] uris);
+		public void remove_uris (string[] file_uris);
+		public signal void changed_library ();
+		public signal void folder_list_changed ();
+		public signal void media_folder_state_change ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaSoureWidget : Gtk.Box, Xnoise.IParams {
+	public class MediaMonitor : GLib.Object {
+		public MediaMonitor ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaSoureWidget : Gtk.Box {
 		public MediaSoureWidget (Xnoise.MainWindow mwindow);
 		public void select_dockable_by_name (string name, bool emmit_signal = false);
 		public void set_focus_on_selector ();
-		public string media_source_selector_type { get; set; }
 		public Gtk.Entry search_entry { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1009,6 +1023,7 @@ namespace Xnoise {
 		public string? albumartist;
 		public string? artist;
 		public int bitrate;
+		public int32 change_time;
 		public int32 dat1;
 		public int32 dat2;
 		public int32 dat3;
@@ -1018,6 +1033,7 @@ namespace Xnoise {
 		public bool is_compilation;
 		public Xnoise.Item? item;
 		public int32 length;
+		public string? media_folder;
 		public string? mimetype;
 		public string? name;
 		public Gdk.Pixbuf? pixbuf;
@@ -1107,6 +1123,7 @@ namespace Xnoise {
 			public int counter[4];
 			public Xnoise.DndData[] dnd_data;
 			public Xnoise.Worker.ExecutionType execution_type;
+			public Xnoise.FileData[] file_data;
 			public weak Xnoise.Worker.FinishFunc? finish_func;
 			public weak Xnoise.Worker.WorkFunc? func;
 			public Xnoise.Item? item;
@@ -1114,6 +1131,7 @@ namespace Xnoise {
 			public Xnoise.Worker.Priority priority;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
+			public string[] uris;
 			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.ONCE, Xnoise.Worker.WorkFunc? func = null, Xnoise.Worker.Priority priority = Priority.NORMAL, Xnoise.Worker.FinishFunc? finish_func = null);
 			public unowned GLib.Value? get_arg (string name);
 			public void set_arg (string? name, owned GLib.Value? val);
@@ -1129,6 +1147,7 @@ namespace Xnoise {
 		public delegate void FinishFunc ();
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
+		public int get_queue_length ();
 		public bool is_same_thread ();
 		public void push_job (Xnoise.Worker.Job j);
 		public GLib.Thread<int> thread { get; }
@@ -1307,6 +1326,8 @@ namespace Xnoise {
 	public static Xnoise.MainWindow main_window;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.MediaImporter media_importer;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.MediaMonitor media_monitor;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

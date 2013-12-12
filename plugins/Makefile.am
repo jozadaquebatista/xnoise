@@ -15,7 +15,6 @@ DIST_SUBDIRS =  \
     mpris \
     mpris_one \
     soundmenu2 \
-    titleToDecoration \
     $(NULL)
 
 if ENABLE_APPINDICATOR
@@ -58,8 +57,6 @@ endif
 if ENABLE_SOUNDMENU
     SUBDIRS += soundmenu2
 endif
-
-SUBDIRS += titleToDecoration
 
 DISTCLEANFILES = \
     Makefile.in \

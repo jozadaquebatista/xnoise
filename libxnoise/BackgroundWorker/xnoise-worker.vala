@@ -1,6 +1,6 @@
 /* xnoise-worker.vala
  *
- * Copyright (C) 2009-2012  Jörn Magens
+ * Copyright (C) 2009-2013  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,7 +111,10 @@ public class Xnoise.Worker : Object {
         public Priority priority;
         // payload
         public Item? item;
+//        public ImportTarget? import_target;
         public Item[] items;
+        public FileData[] file_data;
+        public string[] uris;
         public TrackData[] track_dat; 
         public DndData[] dnd_data;
         public Gtk.TreeRowReference[] treerowrefs;
@@ -167,6 +170,10 @@ public class Xnoise.Worker : Object {
             return;
         }
         job_queue.push_sorted(j, compare_func);
+    }
+    
+    public int get_queue_length() {
+        return job_queue.length();
     }
 }
 

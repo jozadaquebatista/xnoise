@@ -178,91 +178,38 @@ private class Xnoise.TagGenreEditor : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tags_job);
         job.set_arg("new_content_name", new_content_name);
         job.item = this.item;
+        job.track_dat = td_old;
+        if(job.track_dat == null)
+            return;
+        foreach(TrackData td in job.track_dat)
+            td.genre = new_content_name;
         io_worker.push_job(job);
     }
 
-    private bool update_tags_job(Worker.Job tag_job) {
-        if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
-            var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-            job.track_dat = td_old;//item_converter.to_trackdata(tag_job.item, global.searchtext);
-            if(job.track_dat == null)
-                return false;
-            job.item = tag_job.item;
-            foreach(TrackData td in job.track_dat)
-                td.genre = new_content_name;
-            print("push filetags job\n");
+    private bool update_tags_job(Worker.Job job) {
+        return_val_if_fail(io_worker.is_same_thread(), false);
+        if(job.item.type == ItemType.COLLECTION_CONTAINER_GENRE) {
             global.in_tag_rename = true;
-            io_worker.push_job(job);
-        }
-        return false;
-    }
-
-    private bool update_filetags_job(Worker.Job job) {
-        string[] paths = {};
-        //print("job.track_dat len : %d\n", job.track_dat.length);
-//        if(job.track_dat.length > 0) {
-//            var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
-//            db_worker.push_job(bjob);
-//        }
-        for(int i = 0; i<job.track_dat.length; i++) {
-            File f = File.new_for_uri(job.track_dat[i].item.uri);
-            if(!f.query_exists(null))
-                continue;
-//            var tw = new TagWriter();
-            bool ret = false;
-            var tw = new TagWriter();
-            ret = tw.write_tag(f, job.track_dat[i], false);
-            
-            if(ret) {
-                paths += f.get_path();
+            for(int i = 0; i < job.track_dat.length; i++) {
+                if(job.track_dat[i] == null ||
+                   job.track_dat[i].item == null ||
+                   job.track_dat[i].item.uri == null)
+                    continue;
+                File? f = File.new_for_uri(job.track_dat[i].item.uri);
+                if(f == null || !f.query_exists(null))
+                    continue;
+                if(!TagWriter.write_tag(f, job.track_dat[i], true)) {
+                    print("No success for path : %s !!!\n", f.get_path());
+                }
             }
-            else {
-                print("No success for path : %s !!!\n", f.get_path());
-            }
-//            //print("%s\n", job.item.type.to_string());
-//            if(job.item.type == ItemType.COLLECTION_CONTAINER_GENRE)
-//                ret = tw.write_genre(f, job.track_dat[i].genre);
-//            if(ret) {
-//                var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-//                TrackData td = job.track_dat[i];
-//                dbjob.set_arg("td", td);
-//                dbjob.item = job.item;
-//                db_worker.push_job(dbjob);
-//            }
         }
-        media_importer.reimport_media_files(paths);
-        var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-        
-        db_worker.push_job(fin_job);
-        return false;
-    }
-    
-//    private bool begin_job(Worker.Job job) {
-//        db_writer.begin_transaction();
-//        return false;
-//    }
-    
-    private bool finish_job(Worker.Job job) {
-//        db_writer.commit_transaction();
-        Timeout.add(200, () => {
-            main_window.musicBr.music_browser_model.filter();
-            main_window.album_art_view.icons_model.filter();
+        Timeout.add_seconds(1, () => {
             global.in_tag_rename = false;
-            return false;
-        });
-        Timeout.add(300, () => {
             this.sign_finish();
             return false;
         });
         return false;
     }
-
-//    private bool update_db_job(Worker.Job job) {
-//        TrackData td = (TrackData)job.get_arg("td");
-//        media_importer.update_item_tag(ref job.item, ref td);
-//        return false;
-//    }
 
     private void on_cancel_button_clicked(Gtk.Button sender) {
         Idle.add( () => {

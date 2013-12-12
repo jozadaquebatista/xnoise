@@ -41,12 +41,7 @@ public enum Xnoise.ExtDev.DeviceType {
     CDROM
 }
 
-public abstract class Xnoise.ExtDev.Device : 
-#if REF_TRACKING_ENABLED
-    BaseObject {
-#else
-    GLib.Object {
-#endif
+public abstract class Xnoise.ExtDev.Device : GLib.Object {
     public unowned Mount mount;
     private string? identifier = null;
     protected ItemHandler? handler = null;
@@ -82,6 +77,10 @@ public abstract class Xnoise.ExtDev.Device :
         //print("id = %s\n", ret);
         identifier = ret;
         return ret;
+    }
+    
+    public virtual Gtk.Image? get_icon() {
+        return icon_repo.get_themed_image_icon("multimedia-player-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
     }
 }
 

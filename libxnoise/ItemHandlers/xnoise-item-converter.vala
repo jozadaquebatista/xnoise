@@ -81,8 +81,7 @@ public class Xnoise.ItemConverter : Object {
                         File file = File.new_for_uri(item.uri);
                         if(!file.query_exists(null))
                             return null;
-                        var tr = new TagReader();
-                        TrackData? tags = tr.read_tag(file.get_path());
+                        TrackData? tags = TagReader.read_tag(file.get_path());
                         if(tags == null) {
                             tags = new TrackData();
                             tags.title = prepare_name_from_filename(file.get_basename());

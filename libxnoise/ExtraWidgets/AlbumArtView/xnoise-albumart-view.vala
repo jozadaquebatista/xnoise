@@ -95,16 +95,15 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_width(ICON_LARGE_PIXELSIZE);
         this.set_model(icons_model);
         icon_cache.sign_new_album_art_loaded.connect( (p) => {
-            print("queue_draw\n");
-            queue_draw();
+            //print("queue_draw\n");
+            Idle.add(() => {
+                queue_draw();
+                return false;
+            });
         });
         this.item_activated.connect(this.on_row_activated);
         this.button_press_event.connect(this.on_button_press);
         this.key_release_event.connect(this.on_key_released);
-        
-        MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
-        cbr.cb = reset_change_cb;
-        media_importer.register_reset_callback(cbr);
         
         this.notify.connect( (s,p) => {
             if(p.name != "in-import")
@@ -113,24 +112,39 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 black = false;
                 this.override_background_color(StateFlags.NORMAL, null);
                 this.override_background_color(StateFlags.SELECTED, null);
-                queue_draw();
+                Idle.add(() => {
+                    queue_draw();
+                    return false;
+                });
             }
             else {
                 black = true;
                 this.override_background_color(StateFlags.NORMAL, black_color);
                 this.override_background_color(StateFlags.SELECTED, grey_color);
-                queue_draw();
+                Idle.add(() => {
+                    queue_draw();
+                    return false;
+                });
             }
         });
         
         global.notify["media-import-in-progress"].connect( () => {
-            if(!global.media_import_in_progress) {
-                Idle.add(() => {
-                    this.in_import = false;
-                    this.icons_model.filter();
-                    return false;
-                });
+            if(global.media_import_in_progress) {
+                this.in_import = true;
             }
+            else {
+                this.in_import = false;
+            }
+        });
+        media_importer.changed_library.connect( () => {
+//        global.notify["media-import-in-progress"].connect( () => {
+//            if(!global.media_import_in_progress) {
+            Idle.add(() => {
+//                this.in_import = false;
+                this.icons_model.filter();
+                return false;
+            });
+//            }
         });
         
         Idle.add(() => {
@@ -146,14 +160,6 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     
     private CellArea area = null;
 
-    private void reset_change_cb() {
-        Idle.add(() => {
-            this.in_import = true;
-            this.icons_model.remove_all();
-            return false;
-        });
-    }
-    
     private void on_row_activated(Gtk.IconView sender, TreePath path) {
         Item? item = Item(ItemType.UNKNOWN);
         TreeIter iter;

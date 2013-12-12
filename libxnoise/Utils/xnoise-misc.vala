@@ -48,8 +48,10 @@ namespace Xnoise {
     public static Worker plugin_worker = null;
     
     private static DbusImageExtractor dbus_image_extractor = null;
+    private static MediaChangeDetector media_change_detector = null;
     
     public static MediaImporter media_importer = null;
+    public static MediaMonitor media_monitor = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
     public static DockableMediaManager dockable_media_sources;
@@ -112,9 +114,6 @@ namespace Xnoise {
         itemhandler_manager = new ItemHandlerManager();
         item_converter = new ItemConverter();
         
-        // MEDIA IMPORTER
-        media_importer = new MediaImporter();
-        
         // WORKERS
         db_worker     = new Worker(MainContext.default());
         io_worker     = new Worker(MainContext.default());
@@ -164,6 +163,23 @@ namespace Xnoise {
         register_data_source(db_reader);
         //print("source id: %d\n", dbid);
         
+        // MEDIA IMPORTER
+        media_importer = new MediaImporter();
+        
+        // MEDIA MONITOR
+        media_monitor = new MediaMonitor();
+        
+        //check for offline file changes
+        media_change_detector = new MediaChangeDetector();
+        media_change_detector.finished.connect( () => {
+            
+            Timeout.add_seconds(5, () => {
+                //remove after usage
+                media_change_detector = null;
+                return false;
+            });
+        });
+        
         statistics = new Statistics();
         
         // PLAYER
@@ -185,8 +201,8 @@ namespace Xnoise {
         dockable_media_sources.insert(d);
         d = new DockableVideos();               // VIDEOS
         dockable_media_sources.insert(d);
-        d = new DockableStreams();              // STREAMS
-        dockable_media_sources.insert(d);
+//        d = new DockableStreams();              // STREAMS
+//        dockable_media_sources.insert(d);
         
         dbus_image_extractor = new DbusImageExtractor();
         
@@ -327,6 +343,16 @@ public enum Xnoise.CollectionSortMode {
     ARTIST_ALBUM_TITLE = 0,
     GENRE_ARTIST_ALBUM,
     ALBUM_ARTIST_TITLE
+}
+
+public class Xnoise.FileData {
+    public string uri;
+    public int32 change_time;
+    
+    public FileData(string uri = null, int32 change_time = 0) {
+        this.uri = uri;
+        this.change_time = change_time;
+    }
 }
 
 //public enum Xnoise.SortDirection {

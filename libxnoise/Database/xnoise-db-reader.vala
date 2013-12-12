@@ -129,6 +129,59 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
             cb(db);
     }
 
+    private static const string STMT_GET_FILE_DATA =
+        "SELECT name, change_time FROM uris WHERE name=?";
+    
+    public FileData? get_file_data(string uri) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_FILE_DATA, -1, out stmt);
+        if(stmt.bind_text (1, uri) != Sqlite.OK) {
+            this.db_error();
+            return null;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            return new FileData(stmt.column_text(0), stmt.column_int(1));
+        }
+        else {
+            return null;
+        }
+    }
+    
+    private static const string STMT_GET_FILE_IN_DB =
+        "SELECT * FROM uris WHERE name=?";
+    
+    public bool get_file_in_db(string uri) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_FILE_IN_DB, -1, out stmt);
+        if(stmt.bind_text (1, uri) != Sqlite.OK) {
+            this.db_error();
+            return false;
+        }
+        if(stmt.step() == Sqlite.ROW)
+            return true;
+        else
+            return false;
+    }
+    
+    private static const string STMT_GET_URIS_WITH_LIMIT_AND_OFFSET =
+        "SELECT name, change_time FROM uris LIMIT ? OFFSET ?";
+    
+    public FileData[] get_uris(int32 offset, int32 limit = 100) {
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_URIS_WITH_LIMIT_AND_OFFSET, -1, out stmt);
+        
+        FileData[] fd = {};
+        if(stmt.bind_int (1, limit) != Sqlite.OK ||
+           stmt.bind_int (2, offset) != Sqlite.OK) {
+            this.db_error();
+            return fd;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            fd += new FileData(stmt.column_text(0), stmt.column_int(1));
+        }
+        return fd;
+    }
+    
     private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND (utf8_lower(t.title) LIKE ?)";
     public int32 count_videos(string searchtext) {
         Statement stmt;
@@ -395,7 +448,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT name FROM media_folders GROUP BY utf8_lower(name)";
+        "SELECT name FROM paths GROUP BY utf8_lower(name)";
 
     public Item[] get_media_folders() {
         Statement stmt;
@@ -416,6 +469,27 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)mfolders;
     }
 
+    private static const string STMT_GET_PATHS =
+        "SELECT name FROM paths GROUP BY utf8_lower(name)";
+
+    internal string get_fitting_parent_path(string pth) {
+        Statement stmt;
+        
+        this.db.prepare_v2(STMT_GET_PATHS, -1, out stmt);
+        string result = "";
+        string nme = "";
+        while(stmt.step() == Sqlite.ROW) {
+            nme = stmt.column_text(0);
+            if(pth.has_prefix(nme)) {
+                if(result.length < nme.length) {
+                    result = nme;
+                }
+            }
+        }
+        //print("result : %s\n", result);
+        return result;
+    }
+    
     private static const string STMT_GET_STREAM_ITEMS_WITH_SEARCH =
         "SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY utf8_lower(s.name) COLLATE CUSTOM01 DESC";
 

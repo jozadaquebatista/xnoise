@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = icons \
     $(NULL)
 
-INCLUDES = \
+AM_CPPFLAGS = \
     $(XNOISE_CFLAGS) \
     -DXN_UIDIR=\"$(datadir)/xnoise/ui/\" \
     -DXN_PACKAGE_DATADIR=\""$(pkgdatadir)"\" \
@@ -42,10 +42,6 @@ liblastfm_la_VALAFLAGS = \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \
     $(NULL)
-
-if REF_TRACKING_ENABLED
-    liblastfm_la_VALAFLAGS+= -D REF_TRACKING_ENABLED
-endif
 
 
 liblastfm_la_LDFLAGS = \
