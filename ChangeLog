@@ -1,3 +1,75 @@
+commit 1965ac1b97d2eab4aeda01b7fc22bfaf4227aca8
+Merge: 5f9e94d 0ce1ce7
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Thu Dec 12 17:55:18 2013 +0100
+
+    Merged in yoseforb/xnoise (pull request #18)
+    
+    Updated Hebrew translation
+
+commit 0ce1ce7a1a69ddb0d03323ec9ec55f0c2c4ed071
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Dec 12 14:08:36 2013 +0200
+
+    Updated Hebrew translation
+    
+    Signed-off-by: Yosef Or Boczko <yoseforb@gmail.com>
+
+commit 6385c54d4bef9334cfaacbfaee5edba465e93763
+Merge: 6dcc4e5 5f9e94d
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Dec 12 14:00:27 2013 +0200
+
+    Merged shuerhaaken/xnoise into master
+
+commit 5f9e94d054dca1c4949a8866a300ac9d5fda80f3
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Thu Dec 12 12:23:30 2013 +0100
+
+    update po/pt.po
+
+commit a5f3bbbc48c6c08b2f2f2336fdd5fe745b11498b
+Author: Francisco Pérez Cuadrado <fsistemas@gmail.com>
+Date:   Thu Dec 12 10:59:10 2013 +0100
+
+    update po/es.po and po/es_CO.po
+
+commit d5b7acb6d9abf2a36258544010c75386e8d0832a
+Merge: ccf7739 6dcc4e5
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Thu Dec 12 10:50:34 2013 +0100
+
+    Merged in yoseforb/xnoise (pull request #17)
+    
+    Fix the arrow icon in the tracklist in RTL
+
+commit 6dcc4e5986e35225ca395b6aded5dffec56209c8
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Dec 12 04:23:08 2013 +0200
+
+    Set the arrow icon in the tracklist according to locale's text direction
+    
+    Signed-off-by: Yosef Or Boczko <yoseforb@gmail.com>
+
+commit b85ce35094678c8eb88ce124e6b77fe0a14403bc
+Merge: 63f2f68 ccf7739
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Dec 12 04:22:42 2013 +0200
+
+    Merged shuerhaaken/xnoise into master
+
+commit ccf77399309c7d103b549779a017fe8c85c05600
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Dec 11 12:49:11 2013 +0100
+
+    packaging updates
+
+commit 51d3a55f89cc1e90ac811a75814424b0de5368ea
+Author: Pavel Fric <pavelfric@seznam.cz>
+Date:   Wed Dec 11 12:48:45 2013 +0100
+
+    update po/cs.po
+
 commit af463f840c04fc5c3ea083b6672be52f4f28be8f
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Dec 11 11:44:08 2013 +0100

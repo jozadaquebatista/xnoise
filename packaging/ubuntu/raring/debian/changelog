@@ -1,4 +1,4 @@
-xnoise (0.2.20-1ppa1~raring) raring; urgency=low
+xnoise (0.2.20-1ppa1~raring) raring; urgency=medium
   * Redo the import dialog
   * Real-Time Monitor media folders for changes
   * Check media folders for changes that happened
@@ -14,7 +14,7 @@ xnoise (0.2.20-1ppa1~raring) raring; urgency=low
   * Many Bug fixes
   * update translations
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 11 Dec 2013 22:41:27 +0100
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 12 Dec 2013 18:03:41 +0100
 
 
 
