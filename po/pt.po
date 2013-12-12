@@ -8,13 +8,13 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
-"Language: Portuguese\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.2\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
 msgid "Xnoise"
@@ -215,9 +215,8 @@ msgid "External Player Device"
 msgstr "Dispositivo externo"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:70
-#, fuzzy
 msgid "Manage media folders"
-msgstr "Selecione a pasta"
+msgstr "Gerir pastas multimédia"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:80
 msgid "Add local folder"
@@ -229,13 +228,12 @@ msgid "Remove"
 msgstr "Remover"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:87
-#, fuzzy
 msgid ""
 "Select local media folders. \n"
 "All found media files will be available via xnoise's library."
 msgstr ""
-"Selecione as pastas locais e/ou as emissões web.\n"
-"Todas as fontes multimédia ficarão disponíveis na coleção."
+"Selecione as pastas locais.\n"
+"Todos os ficheiros multimédia ficarão disponíveis na coleção."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:130
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:192
@@ -260,14 +258,12 @@ msgid "Media"
 msgstr "Multimédia"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:209
-#, fuzzy
 msgid "Download lyrics"
-msgstr "A transferir álbum"
+msgstr "Transferir letra"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:210
-#, fuzzy
 msgid "Automatic lyrics fetching from the internet"
-msgstr "Transferência de letras na Internet"
+msgstr "Transferência automática de letras na Internet"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:214
 msgid "Use systray icon"
@@ -329,9 +325,8 @@ msgid "Fullscreen"
 msgstr "Ecrã completo"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
-#, fuzzy
 msgid "Show Tracklist"
-msgstr "Lista de faixas"
+msgstr "Mostrar lista de faixas"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
@@ -827,9 +822,8 @@ msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
-#, fuzzy
 msgid "Return to normal view"
-msgstr "Adicionar à lista de faixas"
+msgstr "Voltar à vista normal"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2079
@@ -1035,7 +1029,7 @@ msgstr "Transferência de letras na Internet"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Download lyrics from the internet and save them locally"
-msgstr ""
+msgstr "Transferir letras na Internet e gravar localmente"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:410
 #: ../plugins/lastfm/xnoise-lastfm.vala:532
@@ -1215,7 +1209,7 @@ msgstr "Serviço Mpris v2"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr "Controlar xnoise através de uma interface MPRIS v2"
+msgstr "Controlar o xnoise através de uma interface MPRIS v2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Mpris v1 Dbus Service"
@@ -1223,7 +1217,7 @@ msgstr "Serviço Mpris v1"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr "Controlar xnoise através de uma interface MPRIS v1"
+msgstr "Controlar o xnoise através de uma interface MPRIS v1"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Ubuntu Soundmenu Integration"

@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-11 10:26+0100\n"
-"PO-Revision-Date: 2013-09-16 22:15-0500\n"
-"Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
+"PO-Revision-Date: 2013-12-12 10:57+0100\n"
+"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -44,12 +44,10 @@ msgid "Stop"
 msgstr "Detener"
 
 #: ../data/misc/xnoise.desktop.in.in.h:7
-#, fuzzy
 msgid "Goto next track"
 msgstr "Ir a la siguiente pista"
 
 #: ../data/misc/xnoise.desktop.in.in.h:8
-#, fuzzy
 msgid "Goto previous track"
 msgstr "Ir a la pista anterior"
 
@@ -86,7 +84,7 @@ msgid "no lyrics found..."
 msgstr "No se encontraron letras..."
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:633
-#, fuzzy, c-format
+#, c-format
 msgid "unknown"
 msgstr "título desconocido"
 
@@ -153,7 +151,6 @@ msgid "Most Played"
 msgstr "Más reproducido"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
-#, fuzzy
 msgid "Streams"
 msgstr "Flujos de internet"
 
@@ -175,24 +172,20 @@ msgid "Android Player Device"
 msgstr "Dispositivo Reproductor Android"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:102
-#, fuzzy
 msgid "Do you want to delete the selected file from the device?"
 msgstr "Desea mover el archivo seleccionado a la papelera?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:125
-#, fuzzy
 msgid "Do you want to delete the selected album from the device?"
 msgstr "Desea mover el archivo seleccionado a la papelera?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:156
-#, fuzzy
 msgid "Do you want to delete the selected artist from the device?"
 msgstr "Desea mover el archivo seleccionado a la papelera?"
 
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-item-handler.vala:237
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:110
 #: ../libxnoise/ExtDev/AudioPlayer/xnoise-audio-player-tree-view.vala:338
-#, fuzzy
 msgid "Please wait while moving media to the device."
 msgstr ""
 "Por favor, espera\n"
@@ -213,7 +206,6 @@ msgid "Total space: "
 msgstr "Espacio total:"
 
 #: ../libxnoise/ExtDev/GenericPlayer/xnoise-generic-player-device.vala:97
-#, fuzzy
 msgid "Player"
 msgstr "Reproducir"
 
@@ -226,7 +218,6 @@ msgid "External Player Device"
 msgstr "Dispositivo Reproductor Externo"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:70
-#, fuzzy
 msgid "Manage media folders"
 msgstr "Seleccione una carpeta multimedia"
 
@@ -240,7 +231,6 @@ msgid "Remove"
 msgstr "Eliminar"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:87
-#, fuzzy
 msgid ""
 "Select local media folders. \n"
 "All found media files will be available via xnoise's library."
@@ -250,7 +240,6 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:130
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:192
-#, fuzzy
 msgid "Location"
 msgstr "_Abrir Ubicación"
 
@@ -268,17 +257,14 @@ msgid "General"
 msgstr "General"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:202
-#, fuzzy
 msgid "Media"
 msgstr "Mostrar medios"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:209
-#, fuzzy
 msgid "Download lyrics"
 msgstr "Descargando album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:210
-#, fuzzy
 msgid "Automatic lyrics fetching from the internet"
 msgstr "Descargar letras  desde internet"
 
@@ -293,12 +279,10 @@ msgstr ""
 "Usar un icono de estado en el panel para mostrar, ocultar y controlar xnoise"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:219
-#, fuzzy
 msgid "Quit on window close"
 msgstr "Salir de la aplicación cuando se cierre la ventana"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:220
-#, fuzzy
 msgid "Quit xnoise if the main window is closed"
 msgstr "Salir de la aplicación cuando se cierre la ventana"
 
@@ -311,22 +295,18 @@ msgid "After restart continue with last played song"
 msgstr "Al iniciar continuar con la última canción reproducida"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:247
-#, fuzzy
 msgid "User Interface:"
 msgstr "Usuario:"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:251
-#, fuzzy
 msgid "Lyrics:"
 msgstr "_Letra"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:255
-#, fuzzy
 msgid "Additional:"
 msgstr "Adicional"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:259
-#, fuzzy
 msgid "Web Services:"
 msgstr "Dispositivos"
 
@@ -347,7 +327,6 @@ msgid "Fullscreen"
 msgstr "Pantalla completa"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
-#, fuzzy
 msgid "Show Tracklist"
 msgstr "Lista de reproducción"
 
@@ -365,7 +344,6 @@ msgid "Volume"
 msgstr "Volumen"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:118
-#, fuzzy
 msgid "Add Media"
 msgstr "Agregar medios de reproducción"
 
@@ -389,12 +367,10 @@ msgid "You can start listening to your music by selecting '%s'"
 msgstr "Usted puede empezar a escuchar su musica seleccionando '%s'"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:141
-#, fuzzy
 msgid "Add more media folders"
 msgstr "Agregar carpeta local"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:164
-#, fuzzy
 msgid "Media Folders:"
 msgstr "Reproductor Multimedia"
 
@@ -407,14 +383,12 @@ msgid "This is the first time you start xnoise."
 msgstr "Esta es la primer vez que ejecutas xnoise"
 
 #: ../libxnoise/ExtraWidgets/xnoise-first-start-widget.vala:206
-#, fuzzy
 msgid "Do you want to import media into your library?"
 msgstr ""
 "Esta es la primer vez que inicia xnoise. Usted desea importar medios de "
 "reproducción en su biblioteca de reproducción?"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
-#, fuzzy
 msgid "Add all tracks to tracklist"
 msgstr "Añadir todas las pistas visibles a la lista de reproducción"
 
@@ -483,37 +457,30 @@ msgid "Album:"
 msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:180
-#, fuzzy
 msgid "Album data"
 msgstr "Cambiar nombre del álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:183
-#, fuzzy
 msgid "Please enter new album data."
 msgstr "Cambiar nombre del álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:184
-#, fuzzy
 msgid "Album Artist:"
 msgstr "Artista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:186
-#, fuzzy
 msgid "Year:"
 msgstr "Año"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-album-editor.vala:187
-#, fuzzy
 msgid "Genre:"
 msgstr "Género"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#, fuzzy
 msgid "Title Artist"
 msgstr "Artista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#, fuzzy
 msgid "Album Artist"
 msgstr "Artista"
 
@@ -560,17 +527,14 @@ msgstr "Disco #"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
-#, fuzzy
 msgid "Edit data for track"
 msgstr "Editar metadatos de la pista"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
-#, fuzzy
 msgid "Change album data"
 msgstr "Cambiar nombre del álbum"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
-#, fuzzy
 msgid "Change artist data"
 msgstr "Cambiar nombre del artista"
 
@@ -650,7 +614,6 @@ msgid "open file"
 msgstr "Abrir archivo"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:225
-#, fuzzy
 msgid "Open _Stream"
 msgstr "Flujos de internet"
 
@@ -722,12 +685,10 @@ msgstr "Ir a la siguiente pista"
 
 #. icon
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "E_qualizer"
 msgstr "Ecualizador"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:235
-#, fuzzy
 msgid "Open equalizer window"
 msgstr "Usar ecualizador"
 
@@ -756,7 +717,6 @@ msgid "_Now Playing"
 msgstr "_Reproduciendo"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:241
-#, fuzzy
 msgid "Go to the 'Now Playing' screen in the main window."
 msgstr "Ir a la pantalla de reproducción en la ventana principal"
 
@@ -777,7 +737,6 @@ msgid "_Keyboard Shortcuts"
 msgstr "Combinaciones de teclas para acceso rápido"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:245
-#, fuzzy
 msgid "_Open Keyboard Shortcuts in web browser"
 msgstr "_Abrir Preguntas Más Frecuentes en el navegador"
 
@@ -786,12 +745,10 @@ msgid "_Config"
 msgstr "_Configuración"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:304
-#, fuzzy
 msgid "_Show Media Browser"
 msgstr "_Navegador de medios"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:313
-#, fuzzy
 msgid "Show _Video Fullscreen"
 msgstr "_Video"
 
@@ -800,7 +757,7 @@ msgid "Show _Album Art view"
 msgstr "Mostrar vista de álbum"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is quite a lot and can slow down "
 "the startup of xnoise."
@@ -820,12 +777,10 @@ msgid "No repeat, one after another"
 msgstr "No repetir, reproducción continua"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:734
-#, fuzzy
 msgid "Repeat single track"
 msgstr "repetir una vez"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:746
-#, fuzzy
 msgid "Repeat all"
 msgstr "repetir todo"
 
@@ -838,7 +793,6 @@ msgid "Settings"
 msgstr "Configuración"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1411
-#, fuzzy
 msgid "Enter the URL for playing"
 msgstr "Ingrese la dirección URL del archivo para abrir"
 
@@ -851,12 +805,10 @@ msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1767
-#, fuzzy
 msgid "Repeat Mode"
 msgstr "repetir todo"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1789
-#, fuzzy
 msgid "Remove selected tracks"
 msgstr "Eliminar pista seleccionada"
 
@@ -880,7 +832,6 @@ msgid "Show application main menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
-#, fuzzy
 msgid "Return to normal view"
 msgstr "Añadir a la lista de reproducción."
 
@@ -1020,17 +971,14 @@ msgid "Tracklist"
 msgstr "Lista de reproducción"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:73
-#, fuzzy
 msgid "Lyrics"
 msgstr "_Letra"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:74
-#, fuzzy
 msgid "Hide Media Library"
 msgstr "Ocultar biblioteca"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:75
-#, fuzzy
 msgid "Show Media Library"
 msgstr "Mostrar biblioteca"
 
@@ -1046,13 +994,11 @@ msgstr "Duración"
 
 #. TRACKNUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1405
-#, fuzzy
 msgid "Track number"
 msgstr "Número de pista"
 
 #. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1414
-#, fuzzy
 msgid "Disk number"
 msgstr "Número de pista"
 
@@ -1097,7 +1043,7 @@ msgstr "Descargar letras  desde internet"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Download lyrics from the internet and save them locally"
-msgstr ""
+msgstr "Descargar letras de internet y guardarlas localmente"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:410
 #: ../plugins/lastfm/xnoise-lastfm.vala:532
@@ -1135,7 +1081,6 @@ msgid "Password:"
 msgstr "Password:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:519
-#, fuzzy
 msgid "'Scrobble' played tracks on lastfm"
 msgstr "Enviar las canciones que se reproducen a lastfm"
 
@@ -1156,7 +1101,6 @@ msgid "Use lastfm's web services"
 msgstr "Usar los servicios web de last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Lyricwiki"
 msgstr "_Letra"
 
@@ -1165,7 +1109,6 @@ msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "Cargar letras desde http://www.lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Azlyrics"
 msgstr "Letras"
 
@@ -1186,7 +1129,6 @@ msgid "Show xnoise"
 msgstr "Mostrar xnoise"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Media Control Keys"
 msgstr "Colecciónes multimedia"
 
@@ -1195,12 +1137,10 @@ msgid "Control xnoise using mediakeys"
 msgstr "Controlar xnoise usando teclas multimedia"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Magnatune Music Subscription"
 msgstr "Ubuntu One Music Store"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
-#, fuzzy
 msgid "Magnatune Music Store"
 msgstr "Ubuntu One Music Store"
 
@@ -1269,12 +1209,11 @@ msgid "Username or Password not available"
 msgstr "Usuario o clave no disponible"
 
 #: ../plugins/magnatune/magnatune.vala:242
-#, fuzzy
 msgid "Visit Magnatune for an account."
 msgstr "Visitar LastFm para una cuenta"
 
 #: ../plugins/magnatune/magnatune.vala:253
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter your Magnatune username and password."
 msgstr "Por favor ingrese su usuario y contraseña de last.fm"
 
@@ -1295,7 +1234,6 @@ msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Controlar xnoise con la interfaz dbus MPRIS v1"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Ubuntu Soundmenu Integration"
 msgstr "Usar menu de integración de ubuntu/ayatana"
 
