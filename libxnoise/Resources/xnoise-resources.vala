@@ -74,6 +74,14 @@ namespace Xnoise.Resources {
     internal static const string HIDE_LIBRARY           = _("Hide Media Library");
     internal static const string SHOW_LIBRARY           = _("Show Media Library");
 
+    internal static const string AUTHORS[] = {
+        "Jörn Magens",
+        "Andi",
+        "Francisco Pérez Cuadrado",
+        "Tal",
+        "Dominique Lasserre",
+        null
+    };
     internal static const string COPYRIGHT       = "Copyright \xc2\xa9 2008-2013 Jörn Magens";
     internal static const string PROGRAM_NAME    = "xnoise";
     internal static const string WEBSITE         = "http://www.xnoise-media-player.com/";

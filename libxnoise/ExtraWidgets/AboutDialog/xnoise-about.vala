@@ -45,11 +45,13 @@ private class Xnoise.AboutDialog : Gtk.AboutDialog {
         set_default_icon_name(PROGRAM_NAME);
         this.set_logo_icon_name(PROGRAM_NAME);
 
-        this.program_name     = PROGRAM_NAME;
-        this.version          = Config.PACKAGE_VERSION;
-        this.website          = WEBSITE;
-        this.website_label    = "Xnoise media player - Home";
-        this.copyright        = COPYRIGHT;
+        this.authors            = AUTHORS;
+        this.program_name       = PROGRAM_NAME;
+        this.version            = Config.PACKAGE_VERSION;
+        this.website            = WEBSITE;
+        this.website_label      = "Xnoise media player - Home";
+        this.copyright          = COPYRIGHT;
+        this.translator_credits = _("translator-credits");
     }
 }
 
