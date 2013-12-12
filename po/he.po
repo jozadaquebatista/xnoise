@@ -2,20 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2010.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2013.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-11 10:26+0100\n"
-"PO-Revision-Date: 2013-09-15 20:21+0200\n"
-"Last-Translator: tal <tal_hd@hotmail.com>\n"
-"Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
+"POT-Creation-Date: 2013-12-12 13:58+0200\n"
+"PO-Revision-Date: 2013-12-12 14:04+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Gtranslator 2.91.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.6.1\n"
@@ -70,7 +72,6 @@ msgid "<Ctrl+B>"
 msgstr "<Ctrl+B>"
 
 #: ../libxnoise/Application/xnoise-application.vala:244 ../src/xnoise.vala:158
-#, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise הוא נגן המדיה עבור Gtk+."
 
@@ -83,6 +84,7 @@ msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
 #. the 'no lyrics found...' also appears in the db provider !!
+#. already buffered in database
 #: ../libxnoise/Database/xnoise-db-reader.vala:224
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:164
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:135
@@ -90,7 +92,6 @@ msgid "no lyrics found..."
 msgstr "לא נמצאו כתוביות..."
 
 #: ../libxnoise/Database/xnoise-db-writer.vala:633
-#, c-format
 msgid "unknown"
 msgstr "לא ידוע"
 
@@ -101,7 +102,6 @@ msgstr "לא ידוע"
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1610
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1640
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:251
-#, c-format
 msgid "by"
 msgstr "של"
 
@@ -112,7 +112,6 @@ msgstr "של"
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1612
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1642
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:253
-#, c-format
 msgid "on"
 msgstr "מהאלבום"
 
@@ -222,9 +221,8 @@ msgid "External Player Device"
 msgstr "נגן מכשיר חיצוני"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:70
-#, fuzzy
 msgid "Manage media folders"
-msgstr "בחירת תיקיית מדיה"
+msgstr "ניהול תיקיות מדיה"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:80
 msgid "Add local folder"
@@ -236,12 +234,11 @@ msgid "Remove"
 msgstr "הסרה"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:87
-#, fuzzy
 msgid ""
 "Select local media folders. \n"
 "All found media files will be available via xnoise's library."
 msgstr ""
-"בחר את תיקיות המדיה הנוכחיות או תזרימי מדיה אינטרנטיים. \n"
+"יש לבחור תיקיית מדיה מקומית.\n"
 "כל מקורות המדיה יהיו זמינים בספריית Xnoise."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:130
@@ -267,12 +264,10 @@ msgid "Media"
 msgstr "מדיה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:209
-#, fuzzy
 msgid "Download lyrics"
-msgstr "אלבום בהורדה"
+msgstr "הורדת מילות השיר"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:210
-#, fuzzy
 msgid "Automatic lyrics fetching from the internet"
 msgstr "הורדת מילות השיר מהאינטרנט"
 
@@ -334,9 +329,8 @@ msgid "Fullscreen"
 msgstr "מסך מלא"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
-#, fuzzy
 msgid "Show Tracklist"
-msgstr "רשימת רצועות"
+msgstr "רשימת שירים"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
@@ -830,9 +824,8 @@ msgid "Show application main menu"
 msgstr "הצגת התפריט הראשי"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
-#, fuzzy
 msgid "Return to normal view"
-msgstr "הוספה לרשימת הרצועות"
+msgstr "חזרה למצב רגיל"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2079
@@ -885,10 +878,12 @@ msgstr "באס מרבי"
 msgid "Classic"
 msgstr "קלאסי"
 
+#. "Custom" always has to be in this position
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:211
 msgid "Custom"
 msgstr "מותאם אישית"
 
+#. "Default" always has to be in this position
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:217
 msgid "Default"
 msgstr "ברירת המחדל"
@@ -899,29 +894,24 @@ msgid ""
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! התעלמות מקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:690
-#, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr "הצלחה בעת התקנת פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:694
-#, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr "ההתקנת הפלאגין החסר של GStreamer בוטלה על ידי המשתמש/ת"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:698
-#, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr "פלאגין חסר של GStreamer לא נמצא במאגר"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:704
-#, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr "שגיאה קריטית בעת התקנת פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:749
 #: ../libxnoise/Player/xnoise-gst-player.vala:760
 #: ../libxnoise/Player/xnoise-gst-player.vala:773
-#, c-format
 msgid "Missing gstreamer plugin"
 msgstr "פלאגין חסר של GStreamer"
 
@@ -977,6 +967,7 @@ msgstr "החבאת ספריית המדיה"
 msgid "Show Media Library"
 msgstr "הצגת ספריית המדיה"
 
+#. DISK_NUMBER
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1211
 msgid "Disk"
 msgstr "דיסק"
@@ -1037,11 +1028,12 @@ msgstr "הורדת מילות השיר מהאינטרנט"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Download lyrics from the internet and save them locally"
-msgstr ""
+msgstr "הורדת מילות השיר מהאינטרנט ושמירה שלהן באופן מקומי"
 
+#. show if user is logged in
+#. print("do_user_feedback\n");
 #: ../plugins/lastfm/xnoise-lastfm.vala:410
 #: ../plugins/lastfm/xnoise-lastfm.vala:532
-#, c-format
 msgid "User logged in!"
 msgstr "משתמש/ת מחובר/ת!"
 
@@ -1049,7 +1041,6 @@ msgstr "משתמש/ת מחובר/ת!"
 #: ../plugins/lastfm/xnoise-lastfm.vala:414
 #: ../plugins/lastfm/xnoise-lastfm.vala:530
 #: ../plugins/lastfm/xnoise-lastfm.vala:535
-#, c-format
 msgid "User not logged in!"
 msgstr "משתמש/ת מנותק/ת!"
 
@@ -1058,19 +1049,16 @@ msgid "Visit LastFm for an account."
 msgstr "ביקור באתר LastFm עבור חשבון."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:484
-#, c-format
 msgid "Please enter your lastfm username and password."
 msgstr "נא להכניס את שם המשתמש/ת והססמה של חשבון ה-Last.fm שלך."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:493
 #: ../plugins/magnatune/magnatune.vala:263
-#, c-format
 msgid "Username:"
 msgstr "שם משתמש/ת:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:502
 #: ../plugins/magnatune/magnatune.vala:272
-#, c-format
 msgid "Password:"
 msgstr "ססמה:"
 
@@ -1207,7 +1195,6 @@ msgid "Visit Magnatune for an account."
 msgstr "ביקור באתר LastFm עבור חשבון."
 
 #: ../plugins/magnatune/magnatune.vala:253
-#, c-format
 msgid "Please enter your Magnatune username and password."
 msgstr "נא להכניס את שם המשתמש/ת והססמה של חשבון ה-Magnatune שלך."
 
