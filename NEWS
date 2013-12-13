@@ -13,7 +13,7 @@ Changes
   * Remove title-to-decoration plugin
   * Automatically activate some of the plugins
   * Use new libtaginfo API for tag reading/writing
-  * Udate tag editing mechanism
+  * Update tag editing mechanism
   * Many Bug fixes
   * update translations
 

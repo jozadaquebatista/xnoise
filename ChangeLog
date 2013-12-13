@@ -1,3 +1,9 @@
+commit 0cc80f46692ba05a5517d9452199e0d8e31b938e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Dec 12 18:28:20 2013 +0100
+
+    packaging updates
+
 commit 1965ac1b97d2eab4aeda01b7fc22bfaf4227aca8
 Merge: 5f9e94d 0ce1ce7
 Author: shuerhaaken <shuerhaaken@googlemail.com>

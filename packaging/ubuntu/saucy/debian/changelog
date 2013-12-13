@@ -1,4 +1,4 @@
-xnoise (0.2.20-1ppa1~saucy) saucy; urgency=medium
+xnoise (0.2.20-2ppa1~saucy) saucy; urgency=medium
   * Redo the import dialog
   * Real-Time Monitor media folders for changes
   * Check media folders for changes that happened
