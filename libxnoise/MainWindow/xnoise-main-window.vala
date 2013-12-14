@@ -1963,9 +1963,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             var serialTI = new ToolItem();
             var mvsb_box = new Gtk.Box(Orientation.VERTICAL, 0);
-            mvsb_box.pack_start(new DrawingArea(), true, true, 0);
+            var ebs = new EventBox();
+            ebs.visible_window = false;
+            mvsb_box.pack_start(ebs, true, true, 0);
             mvsb_box.pack_start(main_view_sbutton, true, true, 0);
-            mvsb_box.pack_start(new DrawingArea(), true, true, 0);
+            ebs = new EventBox();
+            ebs.visible_window = false;
+            mvsb_box.pack_start(ebs, true, true, 0);
             serialTI.add(mvsb_box);
             
             //PROGRESS BAR
