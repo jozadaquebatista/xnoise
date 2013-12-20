@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-11 10:26+0100\n"
-"PO-Revision-Date: 2013-09-15 21:59+0100\n"
+"PO-Revision-Date: 2013-12-16 22:36+0100\n"
 "Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
 "Language-Team: Basque\n"
 "Language: eu\n"
@@ -213,9 +213,8 @@ msgid "External Player Device"
 msgstr "Kanpoko erreprodukzio-gailua"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:70
-#, fuzzy
 msgid "Manage media folders"
-msgstr "Hautatu multimedia karpeta"
+msgstr "Kudeatu multimedia-karpetak"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:80
 msgid "Add local folder"
@@ -227,12 +226,11 @@ msgid "Remove"
 msgstr "Kendu"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:87
-#, fuzzy
 msgid ""
 "Select local media folders. \n"
 "All found media files will be available via xnoise's library."
 msgstr ""
-"Hautatu multimedia-karpeta lokalak edo Interneteko korronteak. \n"
+"Hautatu multimedia-karpeta lokalak. \n"
 "Multimedia-jatorri guztiak eskuragarri egongo dira xnoise-ren liburutegian."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:130
@@ -258,14 +256,12 @@ msgid "Media"
 msgstr "Multimedia"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:209
-#, fuzzy
 msgid "Download lyrics"
-msgstr "Albuma deskargatzen"
+msgstr "Deskargatu hitzak"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:210
-#, fuzzy
 msgid "Automatic lyrics fetching from the internet"
-msgstr "Hitzak Internetetik deskargatzen"
+msgstr "Hitzak Internetetik automatikoki deskargatzen"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:214
 msgid "Use systray icon"
@@ -326,9 +322,8 @@ msgid "Fullscreen"
 msgstr "Pantaila osoan"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:226
-#, fuzzy
 msgid "Show Tracklist"
-msgstr "Pista-zerrenda"
+msgstr "Erakutsi pista-zerrenda"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:134
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2069
@@ -825,9 +820,8 @@ msgid "Show application main menu"
 msgstr "Erakutsi aplikazioaren menu nagusia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2021
-#, fuzzy
 msgid "Return to normal view"
-msgstr "Itzuli pista-zerrendara"
+msgstr "Itzuli ikuspegi arruntera"
 
 #. ARTIST
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:2079
@@ -1035,7 +1029,7 @@ msgstr "Hitzak Internetetik deskargatzen"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Download lyrics from the internet and save them locally"
-msgstr ""
+msgstr "Deskargatu hitzak Internetetik eta gorde ordenagailuan"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:410
 #: ../plugins/lastfm/xnoise-lastfm.vala:532
