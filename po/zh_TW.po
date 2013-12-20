@@ -28,7 +28,7 @@ msgstr "組織和播放您收藏的音樂和影片"
 
 #: ../data/misc/xnoise.desktop.in.in.h:4
 msgid "Media;Audio;Video;Player;Mediaplayer;Movie;MP3;"
-msgstr "媒體；音訊；影片；播放器；媒體播放器；電影；MP3；"
+msgstr "媒體;音訊;影片;播放器;媒體播放器;電影;MP3;"
 
 #: ../data/misc/xnoise.desktop.in.in.h:5
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:73
