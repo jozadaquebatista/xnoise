@@ -33,39 +33,144 @@
 
 namespace Xnoise {
     
-    class ScreenSaverManager {
-        private SSMBackend backend = null;
-        private bool backlight_dim_prevent;
+    private class ScreenSaverManager {
+        
+        private SSMBackend[] backends = {};
         
         
         public ScreenSaverManager() {
-            backlight_dim_prevent = true;
             var xdgssm = new XdgSSM();
-            if(xdgssm.is_available()) backend = xdgssm;
-            if(backend == null)
-                return;
-            if (!backend.init()) backend = null;
+            if(xdgssm != null && xdgssm.is_available()) {
+                if(xdgssm.init())
+                    backends += xdgssm;
+            }
+            
+            var dbus_ssm = new DBusSSM();
+            if(dbus_ssm != null && dbus_ssm.is_available()) {
+                if(dbus_ssm.init())
+                    backends += dbus_ssm;
+            }
+            //print("%d screensaver manager backends running\n", backends.length);
         }
         
         
         public bool inhibit() {
             message("calling Inhibit");
-            backlight_dim_prevent = true;
-            if (backend == null) {
-                print("cannot suspend screensaver, install xdg-utils");
+            if (backends.length == 0) {
+                print("cannot suspend screensaver, install xdg-utils or gnome screensaver ");
                 return false;
             }
-            return backend.inhibit();
+            foreach(SSMBackend be in backends)
+                be.inhibit();
+            return true;
         }
     
         public bool uninhibit() {
             message("calling UnInhibit");
-            backlight_dim_prevent = false;
-            if (backend == null)
+            if (backends.length == 0)
                 return false;
-            return backend.uninhibit();
+            foreach(SSMBackend be in backends)
+                be.uninhibit();
+            return true;
         }
     }
+
+
+    [DBus(name = "org.gnome.ScreenSaver")]
+    private interface IDBusScreensaver : GLib.Object {
+        public abstract void simulate_user_activity() throws IOError;
+    }
+
+
+    private class DBusSSM : GLib.Object, SSMBackend {
+        private uint watch = 0;
+        
+        private IDBusScreensaver screensaver_proxy = null;
+        private bool setup_success = false;
+        
+        public DBusSSM() {
+        }
+        
+        
+        public bool is_available() {
+            return true;
+        }
+        
+        public bool init() {
+            get_dbus_proxy.begin();
+            return true;
+        }
+        
+        private uint activity_src = 0;
+        
+        public bool inhibit() {
+            if(activity_src != 0)
+                Source.remove(activity_src);
+            activity_src = Timeout.add_seconds(10, () => {
+                if(!setup_success) {
+                    activity_src = 0;
+                    return false;
+                }
+                send_activity();
+                return true;
+            });
+            return true;
+        }
+        
+        public bool uninhibit() {
+            if(activity_src != 0) {
+                Source.remove(activity_src);
+                activity_src = 0;
+            }
+            return true;
+        }
+        
+        public void send_activity() {
+            if(screensaver_proxy == null || !setup_success)
+                return;
+            //print("send dbus activity\n");
+            try {
+                screensaver_proxy.simulate_user_activity();
+            }
+            catch(IOError e) {
+                print("%s\n", e.message);
+            }
+        }
+        
+        private void on_name_appeared(DBusConnection conn, string name) {
+            if(screensaver_proxy == null) {
+                print("Dbus: screensaver's name appeared but proxy is not available\n");
+                return;
+            }
+            //print("Dbus screensaver setup success\n");
+            setup_success = true;
+        }
+
+        private void on_name_vanished(DBusConnection conn, string name) {
+            print("DBus: screensaver dbus name disappeared\n");
+        }
+        
+        private async void get_dbus_proxy() {
+            try {
+                screensaver_proxy = yield Bus.get_proxy(BusType.SESSION,
+                                                        "org.gnome.ScreenSaver",
+                                                        "/",
+                                                        0,
+                                                        null
+                                                        );
+            } 
+            catch(IOError er) {
+                print("%s\n", er.message);
+            }
+            
+            watch = Bus.watch_name(BusType.SESSION,
+                                  "org.gnome.ScreenSaver",
+                                  BusNameWatcherFlags.NONE,
+                                  on_name_appeared,
+                                  on_name_vanished);
+        }
+    }
+
 
 
     private interface SSMBackend : GLib.Object {
