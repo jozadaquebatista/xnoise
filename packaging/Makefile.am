@@ -54,6 +54,19 @@ noinst_DATA = \
     ubuntu/saucy/debian/xnoise.manpages \
     ubuntu/saucy/debian/source/format \
     ubuntu/saucy/debian/source/include-binaries \
+    ubuntu/trusty/debian/changelog \
+    ubuntu/trusty/debian/compat \
+    ubuntu/trusty/debian/control \
+    ubuntu/trusty/debian/copyright \
+    ubuntu/trusty/debian/docs \
+    ubuntu/trusty/debian/rules \
+    ubuntu/trusty/debian/watch \
+    ubuntu/trusty/debian/xnoise.1 \
+    ubuntu/trusty/debian/xnoise-dev.install \
+    ubuntu/trusty/debian/xnoise.install \
+    ubuntu/trusty/debian/xnoise.manpages \
+    ubuntu/trusty/debian/source/format \
+    ubuntu/trusty/debian/source/include-binaries \
     $(NULL)
 
 

@@ -1,0 +1,2 @@
+version=3
+http://bitbucket.org/shuerhaaken/xnoise/downloads ^.*xnoise-(.+)\.tar\.gz
