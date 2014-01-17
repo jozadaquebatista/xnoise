@@ -85,7 +85,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal Gtk.ActionGroup action_group;
     internal FullscreenToolbar fullscreentoolbar;
     internal Box videovbox;
-    internal unowned VideoScreen videoscreen;
+    internal VideoScreen videoscreen;
     internal ThinPaned hpaned;
     internal Entry search_entry;
     internal TrackInfobar track_infobar;
@@ -1879,7 +1879,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tracklist_scrollbar = (Gtk.Scrollbar)trackListScrollWin.get_vscrollbar();
             mainview_box.add_main_view(tracklistview_widget);
             
-            videoview_widget = new VideoViewWidget(this);
+            videoview_widget = new VideoViewWidget();
             videoscreen = gst_player.videoscreen;
             videovbox = videoview_widget.videovbox;
             mainview_box.add_main_view(videoview_widget);

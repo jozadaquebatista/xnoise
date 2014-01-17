@@ -1,7 +1,7 @@
 /* xnoise-screensaver-manager.vala
  *
  * Copyright (C) 2010  Andreas Obergrusberger
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011, 2013, 2014  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@
  */
 
 
-using GLib;
 
 namespace Xnoise {
+    
     class ScreenSaverManager {
         private SSMBackend backend = null;
         private bool backlight_dim_prevent;
@@ -42,10 +42,12 @@ namespace Xnoise {
             backlight_dim_prevent = true;
             var xdgssm = new XdgSSM();
             if(xdgssm.is_available()) backend = xdgssm;
-            if(backend == null) return;
+            if(backend == null)
+                return;
             if (!backend.init()) backend = null;
         }
-            
+        
+        
         public bool inhibit() {
             message("calling Inhibit");
             backlight_dim_prevent = true;
@@ -53,76 +55,18 @@ namespace Xnoise {
                 print("cannot suspend screensaver, install xdg-utils");
                 return false;
             }
-            Timeout.add_seconds(10, () => {
-                //print("event\n");
-                Idle.add(() => {
-                    Gdk.KeymapKey[] keys;
-                    Gdk.Keymap keymap = Gdk.Keymap.get_default();
-                    keymap.get_entries_for_keyval(Gdk.Key.Shift_L, out keys);
-                    unowned Gdk.DisplayManager display_manager = Gdk.DisplayManager.@get();
-                    unowned Gdk.Display display = null;
-                    unowned Gdk.DeviceManager dev_manager = null;
-                    if(display_manager != null) {
-                        display = display_manager.get_default_display();
-                        if(display != null)
-                            dev_manager = display.get_device_manager();
-                    }
-                    
-                    Gdk.Event e = new Gdk.Event(Gdk.EventType.KEY_PRESS);
-                    if(dev_manager != null)
-                        e.set_device(dev_manager.list_devices(Gdk.DeviceType.MASTER).nth_data(0));
-                    e.key.keyval = Gdk.Key.Shift_L;
-                    e.key.window = main_window.get_window();
-                    e.key.send_event = 1;
-                    e.key.time = Gdk.CURRENT_TIME;
-                    e.key.state = Gdk.ModifierType.SHIFT_MASK;
-                    e.key.keyval = Gdk.Key.Shift_L;
-                    e.key.hardware_keycode = (uint16)keys[0].keycode;
-                    e.key.group = (uint8)keys[0].group;
-                    
-                    display.put_event(e);
-                    return false;
-                });
-                Idle.add(() => {
-                    Gdk.KeymapKey[] keys;
-                    Gdk.Keymap keymap = Gdk.Keymap.get_default();
-                    keymap.get_entries_for_keyval(Gdk.Key.Shift_L, out keys);
-                    unowned Gdk.DisplayManager display_manager = Gdk.DisplayManager.@get();
-                    unowned Gdk.Display display = null;
-                    unowned Gdk.DeviceManager dev_manager = null;
-                    if(display_manager != null) {
-                        display = display_manager.get_default_display();
-                        if(display != null)
-                            dev_manager = display.get_device_manager();
-                    }
-                    
-                    Gdk.Event e = new Gdk.Event(Gdk.EventType.KEY_RELEASE);
-                    if(dev_manager != null)
-                        e.set_device(dev_manager.list_devices(Gdk.DeviceType.MASTER).nth_data(0));
-                    e.key.keyval = Gdk.Key.Shift_L;
-                    e.key.window = main_window.get_window();
-                    e.key.send_event = 1;
-                    e.key.time = Gdk.CURRENT_TIME;
-                    e.key.state = 0;
-                    e.key.keyval = Gdk.Key.Shift_L;
-                    e.key.hardware_keycode = (uint16)keys[0].keycode;
-                    e.key.group = (uint8)keys[0].group;
-                    
-                    display.put_event(e);
-                    return false;
-                });
-                return backlight_dim_prevent;
-            });
             return backend.inhibit();
         }
     
         public bool uninhibit() {
             message("calling UnInhibit");
             backlight_dim_prevent = false;
-            if (backend == null) return false;
+            if (backend == null)
+                return false;
             return backend.uninhibit();
         }
     }
+
 
     private interface SSMBackend : GLib.Object {
         public abstract bool is_available();
@@ -130,7 +74,6 @@ namespace Xnoise {
         public abstract bool inhibit();
         public abstract bool uninhibit();
     }
-
 
 
     private class XdgSSM : GLib.Object, SSMBackend {
@@ -158,51 +101,51 @@ namespace Xnoise {
             }
             return false;
         }
-    
+        
         public bool is_available() {
             return get_path();
         }
-
+        
         public bool init() {
             if (path == null) return get_path();
             return true;
         }
-
+        
         public bool inhibit() {
             //int id = get_window_id();
             //print ("%i", id);
             try {
-                Process.spawn_sync (null, {path, inhibit_param, get_window_id().to_string()}, null, 
-                                    SpawnFlags.STDOUT_TO_DEV_NULL, 
-                                    null, 
-                                    null, 
-                                    null, 
-                                    out exit_status);
+                Process.spawn_sync(null, {path, inhibit_param, get_window_id().to_string()}, null, 
+                                   SpawnFlags.STDOUT_TO_DEV_NULL, 
+                                   null, 
+                                   null, 
+                                   null, 
+                                   out exit_status);
             }
             catch(GLib.Error e) {
                 print("Failed to inhibit screensaver using xdg-screensaver: %s\n", e.message);
                 return false;
             }
-        
-            if(exit_status == 0) return true;
+            if(exit_status == 0)
+                return true;
             return true;
         }
 
         public bool uninhibit() {
             try {
-                Process.spawn_sync (null, {path, uninhibit_param, get_window_id().to_string()}, null, 
-                                    SpawnFlags.STDOUT_TO_DEV_NULL, 
-                                    null, 
-                                    null, 
-                                    null, 
-                                    out exit_status);
+                Process.spawn_sync(null, {path, uninhibit_param, get_window_id().to_string()}, null, 
+                                   SpawnFlags.STDOUT_TO_DEV_NULL, 
+                                   null, 
+                                   null, 
+                                   null, 
+                                   out exit_status);
             }
             catch(GLib.Error e) {
                 print("Failed to uninhibit screensaver using xdg-screensaver: %s", e.message);
                 return false;
             }
-        
-            if(exit_status == 0) return true;
+            if(exit_status == 0)
+                return true;
             return false;
         }
     }

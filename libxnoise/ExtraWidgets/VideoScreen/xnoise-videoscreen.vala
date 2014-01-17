@@ -39,13 +39,11 @@ using Xnoise.Utilities;
 private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.XN_UIDIR + "video.ui";
     
-    private unowned MainWindow win;
     internal Gtk.Box videovbox;
-    internal unowned VideoScreen videoscreen;
+    internal VideoScreen videoscreen;
     
-    public VideoViewWidget(MainWindow win) {
+    public VideoViewWidget() {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
-        this.win = win;
         setup_widgets();
     }
     
