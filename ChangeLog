@@ -1,3 +1,84 @@
+commit d05536486b87dfdad28c77631ce44a5d60e488fb
+Author: Claudio Arseni <claudio.arseni@gmail.com>
+Date:   Sat Jan 25 11:33:34 2014 +0100
+
+    update po/it.po
+
+commit 9dbbc53cb51c7fb81a7a248ec36bef99977dc986
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 17 16:18:53 2014 +0100
+
+    add another SSM Backend
+
+commit 94df95c0edfa6767f1aec6ca76f780b9f3684777
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 17 14:51:25 2014 +0100
+
+    Fix issue #72 : xnoise crash on fullscreen
+
+commit 1a936a1c0823499865b9283d2098896502093db4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Jan 17 14:50:16 2014 +0100
+
+    add ubuntu trusty packaging data
+
+commit 21481443970687f6a09c198d564e18749a6d91a1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 22 12:04:34 2013 +0100
+
+    version update
+
+commit c161256636a453cc29e274fcc2b25452e723144b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Dec 22 12:03:40 2013 +0100
+
+    packaging fixes
+
+commit 7fe9846cf89952283cb90b8075806d04dc0a5462
+Merge: 5a82321 f70d8c1
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Dec 20 20:32:45 2013 +0100
+
+    Merged in michel-slm/xnoise/fix-#70-desktop-file-validation (pull request #20)
+    
+    Fix zh_TW translation of desktop file keywords
+
+commit f70d8c176d660b01cc83f0e70f8fd0f18c519b6e
+Author: Michel Alexandre Salim <salimma@fedoraproject.org>
+Date:   Sat Dec 21 02:23:33 2013 +0700
+
+    Fix zh_TW translation of desktop file keywords
+    
+    Use the standard ; as separator instead of the Unicode equivalent -
+    needed by Freedesktop tools
+
+commit 5a823216ec25a376032227b7896308444626fd72
+Author: Ibai Oihanguren Sala <oihanguren@gmail.com>
+Date:   Fri Dec 20 16:48:01 2013 +0100
+
+    update po/eu.po
+
+commit f6bfcdec7e5a120e7e94f4e7b93636b9a149e6ad
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Dec 14 09:14:49 2013 +0100
+
+    Fix a Ambience/Radience rendering issue with main toolbar
+
+commit 0a056ecf02cd398a5fa39ef3314a6a93b0acea96
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Dec 13 14:47:17 2013 +0100
+
+    packaging updates
+
+commit 685c034defbbe15b4824d128c14e31478eadb18b
+Merge: 0cc80f4 038feaa
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Dec 13 09:14:50 2013 +0100
+
+    Merged in yoseforb/xnoise (pull request #19)
+    
+    Add the authors and a translator credits to the about dialog
+
 commit 0cc80f46692ba05a5517d9452199e0d8e31b938e
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Thu Dec 12 18:28:20 2013 +0100
@@ -12,6 +93,14 @@ Date:   Thu Dec 12 17:55:18 2013 +0100
     Merged in yoseforb/xnoise (pull request #18)
     
     Updated Hebrew translation
+
+commit 038feaafb760f6bdec431c72cef4e07caebc5215
+Author: Yosef Or Boczko <yoseforb@gmail.com>
+Date:   Thu Dec 12 14:27:15 2013 +0200
+
+    Add the authors and a translator credits to the about dialog
+    
+    Signed-off-by: Yosef Or Boczko <yoseforb@gmail.com>
 
 commit 0ce1ce7a1a69ddb0d03323ec9ec55f0c2c4ed071
 Author: Yosef Or Boczko <yoseforb@gmail.com>
