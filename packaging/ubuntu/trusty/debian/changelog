@@ -1,3 +1,12 @@
+xnoise (0.2.21-1ppa1~trusty) trusty; urgency=medium
+  * Fix crasher bug with screen saver management
+  * Add new screen saver manager
+  * Update some translations
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 27 Jan 2014 10:54:45 +0100
+
+
+
 xnoise (0.2.20-2ppa1~trusty) trusty; urgency=medium
   * Redo the import dialog
   * Real-Time Monitor media folders for changes
