@@ -204,6 +204,7 @@ private class Xnoise.TrackInfobar : Gtk.ToolItem {
             if(global.player_state != PlayerState.STOPPED)
                 //offset in seconds
                 this.player.request_time_offset((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+            scroll_source = 0;
             return false;
         });
         return true;

@@ -116,13 +116,14 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         if(redraw_source != 0)
             Source.remove(redraw_source);
         redraw_source = Timeout.add(300, () => {
-            queue_draw();
             redraw_source = 0;
+            queue_draw();
             return false;
         });
-        if(refresh_source != 0)
+        if(refresh_source != 0) {
             Source.remove(refresh_source);
-        
+            refresh_source = 0;
+        }
         refresh_source = Timeout.add(500, () => {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_job);
             io_worker.push_job(job);
@@ -254,15 +255,19 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     }
 
     private void on_image_changed() {
-        if(refresh_source != 0)
-            Source.remove(refresh_source);
-        if(redraw_source != 0)
+        if(redraw_source != 0) {
             Source.remove(redraw_source);
+            redraw_source = 0;
+        }
         
+        if(refresh_source != 0) {
+            Source.remove(refresh_source);
+            refresh_source = 0;
+        }
         refresh_source = Timeout.add(500, () => {
+            refresh_source = 0;
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_image_job);
             io_worker.push_job(job);
-            refresh_source = 0;
             return false;
         });
     }

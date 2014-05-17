@@ -198,6 +198,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
             GLib.Source.remove(source);
         source = Idle.add( () => {
             set_text(text);
+            source = 0;
             return false;
         });
     }

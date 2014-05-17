@@ -73,7 +73,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     Source.remove(search_idlesource);
                 search_idlesource = Timeout.add_seconds(1, () => {
                     this.filter();
-                    this.search_idlesource = 0;
+                    search_idlesource = 0;
                     return false;
                 });
             }
@@ -82,7 +82,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     Source.remove(search_idlesource);
                 search_idlesource = Timeout.add(200, () => {
                     this.filter();
-                    this.search_idlesource = 0;
+                    search_idlesource = 0;
                     return false;
                 });
             }
@@ -176,7 +176,6 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                             uri_array += s;
                         thumbnailer.queue_uris(uri_array);
                         uri_list = null;
-                        thumbnailer_src = 0;
                         return false;
                     });
                 }

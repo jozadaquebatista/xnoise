@@ -123,6 +123,7 @@ public class Xnoise.AzlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
                     return false;
                 }); 
             }
+            deactivation_source = 0;
             return false;
         });
     }

@@ -326,6 +326,7 @@ public class ImageExtractorService : GLib.Object {
         quit_timeout_source = Timeout.add_seconds(QUIT_TIMEOUT, () => {
             print("DONE\n"); // after 60 of inactivity
             loop.quit();
+	    quit_timeout_source = 0;
             return false;
         });
     }

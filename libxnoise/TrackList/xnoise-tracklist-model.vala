@@ -105,6 +105,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                     Source.remove(upd_tl_data_src);
                 upd_tl_data_src = Timeout.add_seconds(2, () => {
                     HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
+                    upd_tl_data_src = 0;
                     if(global.current_uri != null)
                         ntags.insert(Column.ITEM,   global.current_uri); // cheating - the uri is not an item
                     else
@@ -118,7 +119,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                     if(global.current_genre != null)
                         ntags.insert(Column.GENRE,  global.current_genre);
                     // TODO: Add year, tracknumber
-                    upd_tl_data_src = 0;
                     update_tracklist_data(ntags);
                     return false;
                 });

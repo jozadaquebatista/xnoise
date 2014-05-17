@@ -947,6 +947,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(imarge_src != 0)
                     Source.remove(imarge_src);
                 imarge_src = Timeout.add(500,() => { // TODO: move to io worker
+                    imarge_src = 0;
                     string ar = null;
                     string al = null;
                     if(taglist_buffer == null)
@@ -989,7 +990,6 @@ public class Xnoise.GstPlayer : GLib.Object {
                             });
                         }
                     }
-                    imarge_src = 0;
                     return false;
                 });
                 break;

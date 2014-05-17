@@ -266,6 +266,7 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
     private int w = 0;
     private int w_last = 0;
     private bool set_column_count_idle() {
+        col_count_source = 0;
         w = this.get_allocated_width();
         if(w == w_last) {
             col_count_source = 0;
@@ -274,7 +275,6 @@ private class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_columns(3);
         this.set_columns(-1);
         w_last = w;
-        col_count_source = 0;
         return false;
     }
 

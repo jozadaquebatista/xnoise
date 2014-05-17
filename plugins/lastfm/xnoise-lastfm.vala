@@ -318,6 +318,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     private bool timeout_elapsed() {
         this.timeout_done = true;
         this.unref();
+        timeout = 0;
         return false;
     }
     

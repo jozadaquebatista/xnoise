@@ -253,7 +253,7 @@ namespace Xnoise.Utilities {
         
         try {
             GLib.Regex r = new GLib.Regex("\n");
-            return (owned)r.replace(val, -1, 0, " ");
+            return r.replace(val, -1, 0, " ");
         }
         catch(GLib.RegexError e) {
             print("%s\n", e.message);
@@ -306,13 +306,13 @@ namespace Xnoise.Utilities {
             end_idx = prep.length;
         
         prep = prep.substring(start_idx, end_idx - start_idx).replace("_", " ").replace("%20", " ");
-        return (owned)prep;
+        return prep;
     }
 
     public static string replace_underline_with_blank_encoded(string value) {
         try {
             GLib.Regex r = new GLib.Regex("_");
-            return (owned)r.replace(value, -1, 0, "%20");
+            return r.replace(value, -1, 0, "%20");
         }
         catch(GLib.RegexError e) {
             print("%s\n", e.message);
