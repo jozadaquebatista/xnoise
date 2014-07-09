@@ -203,6 +203,8 @@ namespace Xnoise {
         dockable_media_sources.insert(d);
 //        d = new DockableStreams();              // STREAMS
 //        dockable_media_sources.insert(d);
+		d = new DockableFolderStructure();
+		dockable_media_sources.insert(d);
         
         dbus_image_extractor = new DbusImageExtractor();
         

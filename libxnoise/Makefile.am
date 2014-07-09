@@ -76,6 +76,9 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-dockable-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
+    DockableMedia/FolderStructure/xnoise-dockable-folder-structure.vala \
+    DockableMedia/FolderStructure/xnoise-folder-structure.vala \
+    DockableMedia/FolderStructure/xnoise-folder-structure-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     DockableMedia/xnoise-dockable-media-manager.vala \
     ExtDev/AndroidPlayer/xnoise-android-item-handler.vala \
@@ -266,6 +269,7 @@ DISTCLEANFILES = \
     DockableMedia/MostPlayed/*.c \
     DockableMedia/StreamListing/*.c \
     DockableMedia/VideoListing/*.c \
+    DockableMedia/FolderStructure/*.c \
     ExtraWidgets/*.c \
     ExtraWidgets/AboutDialog/*.c \
     ExtraWidgets/AddMedia/*.c \
