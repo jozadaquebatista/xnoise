@@ -69,12 +69,13 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
     	this.ow = ow;
     	this.dock = dock;
     	Params.iparams_register(this);
-    	folder_structure_model = new FolderStructureModel(dock);
+    	folder_structure_model = new FolderStructureModel(dock, this);
     	this.get_style_context().add_class(STYLE_CLASS_SIDEBAR);
     	
     	//setup_view();
     	//Idle.add(this.populate_model);
     	this.get_selection().set_mode(SelectionMode.MULTIPLE);
+    	this.headers_visible = false;
     	
         Gtk.drag_source_set(this,
 		                    Gdk.ModifierType.BUTTON1_MASK,
@@ -90,6 +91,17 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
         
         //Signals
         //TODO: connect signals and do stuff
+        
+        var column = new TreeViewColumn();
+        int hsepar = 0;
+        this.style_get("horizontal-separator", out hsepar);
+        var renderer = new ListFlowingTextRenderer(column, hsepar);
+        column.pack_start(renderer, true);
+        column.add_attribute(renderer, "itype"  , FolderStructureModel.Column.ITEMTYPE);
+        column.add_attribute(renderer, "text", FolderStructureModel.Column.VIS_TEXT);
+        column.add_attribute(renderer, "pix" , FolderStructureModel.Column.ICON);
+        
+        this.insert_column(column, -1);
 	}
 	
 	    // IParams functions

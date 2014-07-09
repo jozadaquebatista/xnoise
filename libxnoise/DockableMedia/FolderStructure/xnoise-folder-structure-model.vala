@@ -31,8 +31,9 @@
  using Gtk;
  using Xnoise;
  
- public class Xnoise.FolderStructureModel : Gtk.TreeStore, Gtk.TreeModel {
+ private class Xnoise.FolderStructureModel : Gtk.TreeStore, Gtk.TreeModel {
  	private unowned DockableMedia dock;
+ 	private FolderStructure view;
 	public bool populating_model { get; private set; default = false; }
 	
  	public enum Column {
@@ -50,8 +51,9 @@
  		typeof(ItemType) 		//LEVEL
  	};
  	
- 	public FolderStructureModel(DockableMedia dock) {
+ 	public FolderStructureModel(DockableMedia dock, FolderStructure view) {
  		this.dock = dock;
+ 		this.view = view;
  		set_column_types(col_types);
  		
  		//TODO: connect signals
@@ -70,6 +72,8 @@
 			Column.VIS_TEXT, "test text",
 			Column.ITEM, null,
 			Column.ITEMTYPE, ItemType.LOCAL_AUDIO_TRACK);
+		view.model = this;
+        populating_model = false;
 		return true;
  	}
 }
