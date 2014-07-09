@@ -172,6 +172,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             return _uri;
         }
         set {
+        	print(value + "\n");
             is_stream = false; //reset
             _uri = value;
             if((value == EMPTYSTRING)||(value == null)) {
