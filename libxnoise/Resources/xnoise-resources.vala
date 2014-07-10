@@ -49,6 +49,7 @@ namespace Xnoise.Resources {
     public static const string GENRE_ICON_SYMBOLIC      = "emblem-documents-symbolic";
     public static const string VIDEO_ICON_SYMBOLIC      = "video-x-generic-symbolic";
     public static const string STREAM_ICON_SYMBOLIC     = "network-cellular-signal-excellent-symbolic";
+    public static const string FOLDER_ICON_SYMBOLIC		= "folder-symbolic";
     
     public static const string MAIN_DATABASE_NAME       = "db.sqlite";
     public static const string INIFILE                  = "xnoise.ini";
