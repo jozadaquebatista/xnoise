@@ -136,27 +136,50 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
     public GLib.List<TreePath>? query_selection() {
         return this.get_selection().get_selected_rows(null);
     }
+        
+    public Item[] get_row_items(TreePath treePath) {
+    	Item baseItem;
+    	TreeIter baseIter;
+    	this.model.get_iter(out baseIter, treePath);
+    	this.model.get(baseIter, FolderStructureModel.Column.ITEM, out baseItem);
+    	Item[] items = {};
+    	
+    	Queue<TreeIter?> stack = new Queue<TreeIter?>();
+    	stack.push_head(baseIter);
+    	while(!stack.is_empty())
+    	{
+    		TreeIter iter = stack.pop_head();
+    		TreeIter child;
+	    	if(this.model.iter_children(out child, iter)) { //do we have children?
+	    		do {
+	    			stack.push_head(child);
+	    		} while(this.model.iter_next(ref child));
+	    	}
+	    	else { //No children, should be a track but check to be sure
+	    		Item item;
+	    		this.model.get(iter, FolderStructureModel.Column.ITEM, out item);
+	    		//if(item.type == ItemType.LOCAL_AUDIO_TRACK) {
+	    			items += item;
+	    			stdout.printf("Found item %s\n", item.uri);
+	    		//}
+	    	}
+    	}
+    	return items;
+    }
     
     public void on_row_activated(Gtk.Widget sender, TreePath treePath, TreeViewColumn treeColumn) {
-    	print("on_row_activated\n");
-        Item? item = null;
-        TreeIter iter;
-        this.model.get_iter(out iter, treePath);
-        this.model.get(iter, FolderStructureModel.Column.ITEM, out item);
-        if(item == null) {
-        	print("item was null\n");
-        	return;
-        }
-        stdout.printf("Adding item with type %i, id %i, source_id %i", (int)item.type, item.db_id, item.source_id);
+    	print("on_row_activated\n");                
         ItemHandler? itemHandler = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
         if(itemHandler == null) {
             print("itemHandler was null\n");
             return;
         }
-        unowned Action? action = itemHandler.get_action(item.type, ActionContext.QUERYABLE_EXTERNAL_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
-        
+        Item[] items = get_row_items(treePath);
+        Worker.Job job = new Worker.Job();
+        job.items = items;
+        unowned Action? action = itemHandler.get_action(ItemType.UNKNOWN, ActionContext.REQUESTED, ItemSelectionType.MULTIPLE);
         if(action != null)
-            action.action(item, null, null);
+            action.action(Item(), null, job);
         else
             print("action was null\n");
 	}
