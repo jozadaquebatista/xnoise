@@ -49,6 +49,10 @@ public class Xnoise.ItemConverter : Object {
         TrackData[] result = {};
         
         switch(item.type) {
+        	case ItemType.LOCAL_FOLDER:
+        		//TODO: handle this
+        		print("Folder added...");
+        		break;
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.LOCAL_VIDEO_TRACK:
                 if(item.db_id > -1 && db_worker.is_same_thread()) {
@@ -63,18 +67,20 @@ public class Xnoise.ItemConverter : Object {
                 else if(item.uri != null) {
                     TrackData? tmp = null;
                     DataSource ds = get_data_source(item.source_id);
-                    assert(ds != null);
-                    return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
-                    if(db_worker.is_same_thread() && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
-                        if(tmp != null) {
-                            if(tmp.item.type == ItemType.UNKNOWN)
-                                tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
-                            if(tmp.item.type != ItemType.UNKNOWN)
-                                result += tmp;
-                        }
-                        else {
-                            return null;
-                        }
+                    if(ds != null)
+                    {
+                        return_val_if_fail(get_current_stamp(ds.get_source_id()) == item.stamp, null);
+	                    if(db_worker.is_same_thread() && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
+	                        if(tmp != null) {
+	                            if(tmp.item.type == ItemType.UNKNOWN)
+	                                tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
+	                            if(tmp.item.type != ItemType.UNKNOWN)
+	                                result += tmp;
+	                        }
+	                        else {
+	                            return null;
+	                        }
+	                    }
                     }
                     else {
                         print("Using tag reader in item converter.\n");
@@ -239,8 +245,6 @@ public class Xnoise.ItemConverter : Object {
                     result = ds.get_trackdata_for_item(global.searchtext, item);
                     break;
                 }
-                break;
-            case ItemType.LOCAL_FOLDER:
                 break;
             default:
                 break;
