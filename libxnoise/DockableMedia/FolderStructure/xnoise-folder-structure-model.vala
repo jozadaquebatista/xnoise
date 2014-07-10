@@ -65,23 +65,7 @@
 		if(populating_model)
 			return false;
 		populating_model = true;
-		
-		TreeIter test_iter0;
-		this.append(out test_iter0, null);
-		this.set(test_iter0, 
-			Column.ICON, null,
-			Column.VIS_TEXT, "test text",
-			Column.ITEM, null,
-			Column.ITEMTYPE, ItemType.LOCAL_FOLDER);
-		
-		TreeIter test_iter1;
-		this.append(out test_iter1, test_iter0);
-		this.set(test_iter1,
-			Column.ICON, null,
-			Column.VIS_TEXT, "test text2",
-			Column.ITEM, null,
-			Column.ITEMTYPE, ItemType.LOCAL_FOLDER);
-		
+				
 		foreach(Item? item in media_importer.get_media_folder_list()) {
             if(item == null || item.uri == null) {
                 continue;
@@ -111,30 +95,20 @@
  		return suffix == "mp3" || suffix == "mp4" || suffix == "wav";
  	}
  	
- 	private void add_file(File file, TreeIter? parentIter)
+ 	private TreeIter add_file_item(File file, TreeIter? parentIter, ItemType type)
  	{
- 		Item item = new Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri());
+ 		Item item = Item(type, file.get_uri());
+ 		item.source_id = -1;
  		TreeIter iter;
  		this.append(out iter, parentIter);
  		this.set(iter,  
  			Column.ICON, null,
 			Column.VIS_TEXT, file.get_basename(),
 			Column.ITEM, item,
-			Column.ITEMTYPE, item.type);
- 	}
- 	
- 	private TreeIter add_folder(File file, TreeIter? parentIter)
- 	{
-        TreeIter iter;
-        this.append(out iter, parentIter);
-        this.set(iter, 
-        		Column.ICON, null,
-				Column.VIS_TEXT, file.get_basename(),
-				Column.ITEM, null,
-				Column.ITEMTYPE, ItemType.LOCAL_FOLDER);
+			Column.ITEMTYPE, type);
 		return iter;
  	}
- 	
+ 	 	
  	private bool add_folder_recursive(File dir, TreeIter? parentIter)
  	{
  		FileEnumerator enumerator;
@@ -155,7 +129,7 @@
             if(filename.has_prefix("."))
                 continue;
             if(filetype == FileType.DIRECTORY) {
-				TreeIter iter = add_folder(file, parentIter);
+				TreeIter iter = add_file_item(file, parentIter, ItemType.LOCAL_FOLDER);
 				if(add_folder_recursive(file, iter))
 					found_playable_files = true;
 				else
@@ -165,7 +139,7 @@
                 string suffix = get_suffix_from_filename(uri_lc);
                 if(suffix_supported(suffix))
                 {
-                	add_file(file, parentIter);
+                	add_file_item(file, parentIter, ItemType.LOCAL_AUDIO_TRACK);
                 	found_playable_files = true;
                 }
             }

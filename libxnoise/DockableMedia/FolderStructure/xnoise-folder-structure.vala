@@ -101,6 +101,8 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
         column.add_attribute(renderer, "text", FolderStructureModel.Column.VIS_TEXT);
         column.add_attribute(renderer, "pix" , FolderStructureModel.Column.ICON);
         
+        this.row_activated.connect(this.on_row_activated);
+        
         this.insert_column(column, -1);
 	}
 	
@@ -134,6 +136,29 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
     public GLib.List<TreePath>? query_selection() {
         return this.get_selection().get_selected_rows(null);
     }
+    
+    public void on_row_activated(Gtk.Widget sender, TreePath treePath, TreeViewColumn treeColumn) {
+    	print("on_row_activated\n");
+        Item? item = null;
+        TreeIter iter;
+        this.model.get_iter(out iter, treePath);
+        this.model.get(iter, FolderStructureModel.Column.ITEM, out item);
+        if(item == null) {
+        	print("item was null\n");
+        	return;
+        }
+        ItemHandler? itemHandler = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+        if(itemHandler == null) {
+            print("itemHandler was null\n");
+            return;
+        }
+        unowned Action? action = itemHandler.get_action(item.type, ActionContext.QUERYABLE_EXTERNAL_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+        
+        if(action != null)
+            action.action(item, null, null);
+        else
+            print("action was null\n");
+	}
 }
 	
 	
