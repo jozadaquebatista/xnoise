@@ -138,7 +138,7 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
     }
         
     public Item[] get_row_items(TreePath treePath) {
-    	Item baseItem;
+    	Item? baseItem = null;
     	TreeIter baseIter;
     	this.model.get_iter(out baseIter, treePath);
     	this.model.get(baseIter, FolderStructureModel.Column.ITEM, out baseItem);
@@ -156,7 +156,7 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
 	    		} while(this.model.iter_next(ref child));
 	    	}
 	    	else { //No children, should be a track but check to be sure
-	    		Item item;
+	    		Item? item = null;
 	    		this.model.get(iter, FolderStructureModel.Column.ITEM, out item);
 	    		//if(item.type == ItemType.LOCAL_AUDIO_TRACK) {
 	    			items += item;
