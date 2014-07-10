@@ -65,26 +65,26 @@
 		if(populating_model)
 			return false;
 		populating_model = true;
-				
-		foreach(Item? item in media_importer.get_media_folder_list()) {
-            if(item == null || item.uri == null) {
-                continue;
-            }
-            File f = File.new_for_uri(item.uri);
-            //if(GlobalAccess.main_cancellable.is_cancelled()) {
-            //    return;
-            //}
-            
-            add_folder_recursive(f, null);
-            //var job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job, Worker.Priority.HIGH);
-            //job.set_arg("media_folder", f.get_path());
-            //job.item = item;
-            //this.worker.push_job(job);
-        }
 		
-		view.model = this;
-        populating_model = false;
-		return true;
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, populate_model_job);
+        db_worker.push_job(job);
+        return true;
+ 	}
+ 	
+ 	private bool populate_model_job(Worker.Job job) {
+ 		Idle.add( () => {
+	 		foreach(Item? item in media_importer.get_media_folder_list()) {
+	            if(item == null || item.uri == null)
+	                continue;
+	            File f = File.new_for_uri(item.uri);          
+	            add_folder_recursive(f, null);
+	        }
+			
+			view.model = this;
+	        populating_model = false;
+			return false;
+ 		});
+ 		return false;
  	}
  	
     private const string attr = FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE;
@@ -97,8 +97,14 @@
  	
  	private TreeIter add_file_item(File file, TreeIter? parentIter, ItemType type)
  	{
- 		Item item = Item(type, file.get_uri());
- 		item.source_id = -1;
+ 		Item? item = null;
+ 		if(type != ItemType.LOCAL_FOLDER) {
+ 			item = db_reader.get_item_by_uri(file.get_uri());
+ 		}
+ 		if(item == null) {
+ 			item = Item(type, file.get_uri());
+ 			item.source_id = -1;
+ 		}
  		TreeIter iter;
  		this.append(out iter, parentIter);
  		this.set(iter,  

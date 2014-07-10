@@ -147,6 +147,7 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
         	print("item was null\n");
         	return;
         }
+        stdout.printf("Adding item with type %i, id %i, source_id %i", (int)item.type, item.db_id, item.source_id);
         ItemHandler? itemHandler = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
         if(itemHandler == null) {
             print("itemHandler was null\n");
