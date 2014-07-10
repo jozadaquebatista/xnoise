@@ -427,6 +427,9 @@ private class Xnoise.ListFlowingTextRenderer : CellRendererText {
                 case ItemType.LOCAL_AUDIO_TRACK:
                     name = TITLE_ICON_SYMBOLIC;
                     break;
+                case ItemType.LOCAL_FOLDER:
+                	name = FOLDER_ICON_SYMBOLIC;
+                	break;
                 case ItemType.UNKNOWN:
                 default:
                     break;
