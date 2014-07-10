@@ -593,6 +593,25 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return (owned)val;
     }
 
+	private static const string STMT_GET_ITEM_BY_URI = 
+		"SELECT DISTINCT t.id, t.mediatype FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
+		
+	public Item? get_item_by_uri(string uri) {
+		Item? item = null;
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_ITEM_BY_URI, -1, out stmt);
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+		}
+		else if(stmt.step() == Sqlite.ROW) {
+			item = Item((ItemType)stmt.column_int(1), uri, stmt.column_int(0));
+			item.source_id = get_source_id();
+			item.stamp = get_current_stamp(get_source_id());
+		}
+		return item;
+	}
+
     private static const string STMT_GET_VIDEO_ITEMS =
         "SELECT DISTINCT t.title, t.id, u.name FROM items t, uris u WHERE t.uri = u.id AND t.mediatype = ? AND (t.caseless_name LIKE ?) GROUP BY t.caseless_name ORDER BY t.caseless_name DESC";
 
