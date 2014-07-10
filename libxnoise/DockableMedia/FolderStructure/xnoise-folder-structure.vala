@@ -148,7 +148,7 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
     	stack.push_head(baseIter);
     	while(!stack.is_empty())
     	{
-    		TreeIter iter = stack.pop_head();
+    		TreeIter iter = stack.pop_tail();
     		TreeIter child;
 	    	if(this.model.iter_children(out child, iter)) { //do we have children?
 	    		do {
@@ -158,17 +158,15 @@ private class Xnoise.FolderStructure : TreeView, IParams, TreeQueryable {
 	    	else { //No children, should be a track but check to be sure
 	    		Item? item = null;
 	    		this.model.get(iter, FolderStructureModel.Column.ITEM, out item);
-	    		//if(item.type == ItemType.LOCAL_AUDIO_TRACK) {
+	    		if(item.type == ItemType.LOCAL_AUDIO_TRACK) {
 	    			items += item;
-	    			stdout.printf("Found item %s\n", item.uri);
-	    		//}
+	    		}
 	    	}
     	}
     	return items;
     }
     
-    public void on_row_activated(Gtk.Widget sender, TreePath treePath, TreeViewColumn treeColumn) {
-    	print("on_row_activated\n");                
+    public void on_row_activated(Gtk.Widget sender, TreePath treePath, TreeViewColumn treeColumn) {          
         ItemHandler? itemHandler = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
         if(itemHandler == null) {
             print("itemHandler was null\n");
