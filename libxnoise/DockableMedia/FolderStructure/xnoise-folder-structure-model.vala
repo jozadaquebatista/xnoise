@@ -67,12 +67,12 @@
 		populating_model = true;
 		
 		var job = new Worker.Job(Worker.ExecutionType.ONCE, populate_model_job);
-        db_worker.push_job(job);
+        mediamon_worker.push_job(job);
         return true;
  	}
  	
  	private bool populate_model_job(Worker.Job job) {
- 		Idle.add( () => {
+ 		//Idle.add( () => {
 	 		foreach(Item? item in media_importer.get_media_folder_list()) {
 	            if(item == null || item.uri == null)
 	                continue;
@@ -83,7 +83,7 @@
 			view.model = this;
 	        populating_model = false;
 			return false;
- 		});
+ 		//});
  		return false;
  	}
  	
