@@ -62,6 +62,8 @@ public class Xnoise.MediaMonitor : GLib.Object {
 
     private unowned Thread<int> thread;
     
+    private bool setup_monitors_called_once = false;
+    
     
     public MediaMonitor() {
         if (!Thread.supported ()) {
@@ -76,16 +78,29 @@ public class Xnoise.MediaMonitor : GLib.Object {
         }
         Source source = new TimeoutSource(2000); 
         source.set_callback(() => {
-            setup_monitors();
+            if(!setup_monitors_called_once)
+            	insert_setup_monitors_job();
             return false;
         });
         media_importer.folder_list_changed.connect( () => {
-            setup_monitors();
+        	insert_setup_monitors_job();
         });
         
         source.attach(local_context);
     }
     
+    private void insert_setup_monitors_job()
+    {
+		setup_monitors_called_once = true;
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.setup_monitors_job);
+		mediamon_worker.push_job(job);
+    }
+    
+    private bool setup_monitors_job(Worker.Job job)
+    {
+    	setup_monitors();
+    	return false;
+    }
     
     private int thread_func() {
         local_context = new MainContext();

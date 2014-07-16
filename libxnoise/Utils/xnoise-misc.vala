@@ -46,6 +46,7 @@ namespace Xnoise {
     public static Worker cache_worker = null;
     public static Worker device_worker = null;
     public static Worker plugin_worker = null;
+    public static Worker mediamon_worker = null;
     
     private static DbusImageExtractor dbus_image_extractor = null;
     private static MediaChangeDetector media_change_detector = null;
@@ -120,6 +121,7 @@ namespace Xnoise {
         cache_worker  = new Worker(MainContext.default());
         device_worker = new Worker(MainContext.default());
         plugin_worker = new Worker(MainContext.default());
+        mediamon_worker = new Worker(MainContext.default());
         
         // THUMBNAILER DBUS PROXY
         thumbnailer = new DbusThumbnailer();
